@@ -17,15 +17,14 @@ export const axiosSetting = {
   },
 };
 
-console.log(axiosSetting.server());
 
-export const axios = Axios.create({
+export const api = Axios.create({
   baseURL: axiosSetting.server(),
   withCredentials: true,
 });
 
 // Add a response interceptor
-axios.interceptors.response.use(
+api.interceptors.response.use(
   (response) => {
     const { resCode, resMsg } = response.data;
 

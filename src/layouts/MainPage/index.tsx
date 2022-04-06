@@ -1,16 +1,9 @@
 import type { GetServerSideProps, NextPage } from 'next';
-import styles from '../../../styles/Home.module.css';
-import { useState } from 'react';
-import { getCurrentForecast } from '../../common/api/test';
+import styles from '@styles/common.module.scss';
 
 const MainPage: NextPage = (res) => {
   return (
-    <div className={styles.container}>
-      <img
-        src="/assets/images/logo.png"
-        width={144} // Desired size with correct aspect ratio
-        alt="Your Name"
-      />
+    <div className={styles.globalContainer}>
       <h1>Welcome to Mirim</h1>
     </div>
   );

@@ -1,11 +1,11 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import styles from '@styles/common.module.scss';
 import Link from 'next/link';
 
-export function GlobalNavigationBar() {
+export function HeaderBar() {
   return (
-    <Header>
-      <ContentContainer className={styles.globalContainer}>
+    <Header className={styles.globalContainer}>
+      <ContentContainer>
         <img
           src="/assets/images/logo.png"
           height={24}
@@ -13,13 +13,13 @@ export function GlobalNavigationBar() {
         />
         <NavContainer>
           <Link href="/">
-            <a>네비게이션1</a>
+            <a>Link1</a>
           </Link>
           <Link href="/">
-            <a>네비게이션2</a>
+            <a>Link2</a>
           </Link>
           <Link href="/">
-            <a>네비게이션3</a>
+            <a>Link3</a>
           </Link>
         </NavContainer>
       </ContentContainer>
@@ -28,17 +28,8 @@ export function GlobalNavigationBar() {
 }
 
 const Header = styled.header`
-  border-radius: 0;
   width: 100%;
-  height: auto;
-  background-color: #FFFFFF;
-  border-color: #E5E5E5;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 101;
-  box-shadow: rgb(0 0 0 / 4%) 0px 1px 0px 0px;
+  height: 100%;
 `;
 
 const ContentContainer = styled.div`

@@ -1,8 +1,8 @@
-import '@styles/reset.scss'
+import '@styles/reset.scss';
 
 import { AppProps } from 'next/app';
-import { ManagedUIContext } from '@components/ui/context';
 import { FC } from 'react';
+import { ManagedUIContext } from '@components/ui';
 
 const Noop: FC = ({ children }) => <>{children}</>;
 

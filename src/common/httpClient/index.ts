@@ -54,7 +54,7 @@ export const requestPOST = async (
   }
 };
 
-const handleError = (error: AxiosError) => {
+const handleError = (error: AxiosError | any) => {
   if (error.response) {
     throw error.response;
   }

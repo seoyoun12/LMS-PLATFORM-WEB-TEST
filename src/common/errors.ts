@@ -16,7 +16,7 @@ export class BadRequestError<Response = any> extends BaseResponseError {
   constructor(message?: string, options?: { response: Response }) {
     super(message ?? '잘못된 요청입니다. 입력값을 확인해주세요.');
     if (options !== null) {
-      this.response = options.response;
+      // this.response = options.response;
     }
   }
 }

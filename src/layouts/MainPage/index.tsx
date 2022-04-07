@@ -1,10 +1,12 @@
-import type { GetServerSideProps, NextPage } from 'next';
+import type { NextPage } from 'next';
 import styles from '@styles/common.module.scss';
+import * as React from 'react';
+import Button from '@mui/material/Button';
 
 const MainPage: NextPage = (res) => {
   return (
     <div className={styles.globalContainer}>
-      <h1>Welcome to Mirim</h1>
+      <Button color='secondary' variant='contained'>Welcome to Mirim</Button>
     </div>
   );
 };

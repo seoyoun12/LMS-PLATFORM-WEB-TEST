@@ -1,7 +1,5 @@
-import axios from 'axios';
+import { requestGET } from '@common/httpClient';
 
-const API_KEY = 'f14d909bd5b9daee0e3e7b68e05f848a';
-
-const result = await axios(
-  `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`
-);
+export function healthCheck() {
+  return requestGET('api/v1/example');
+}

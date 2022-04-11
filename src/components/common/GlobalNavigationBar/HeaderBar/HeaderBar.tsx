@@ -1,8 +1,13 @@
 import styled from '@emotion/styled';
 import styles from '@styles/common.module.scss';
-import Link from 'next/link';
+import { Button, Typography } from '@mui/material';
+import { useRouter } from 'next/router';
+import { Link, Searchbar } from '@components/common';
+import { grey } from '@mui/material/colors';
 
 export function HeaderBar() {
+  const router = useRouter();
+
   return (
     <Header className={styles.globalContainer}>
       <ContentContainer>
@@ -12,16 +17,33 @@ export function HeaderBar() {
           alt="Your Name"
         />
         <NavContainer>
-          <Link href="/">
-            <a>Link1</a>
+          <Link
+            href="/"
+            underline="none"
+            color={router.pathname === '/' ? 'primary' : grey[800]}
+          >
+            <Typography variant="h6" className="bold-600">클래스</Typography>
           </Link>
-          <Link href="/">
-            <a>Link2</a>
-          </Link>
-          <Link href="/">
-            <a>Link3</a>
+          <Link
+            href="/link2"
+            underline="none"
+            color={router.pathname === '/link2' ? 'primary' : grey[800]}
+          >
+            <Typography variant="h6" className="bold-600">Link2</Typography>
           </Link>
         </NavContainer>
+        <SearchbarContainer>
+          <Searchbar/>
+        </SearchbarContainer>
+        <RightSection>
+          <Link href="/sign-in" underline="none">
+            <Button
+              className="align-left"
+              color="neutral"
+              href="#text-buttons"
+            >로그인</Button>
+          </Link>
+        </RightSection>
       </ContentContainer>
     </Header>
   );
@@ -51,7 +73,19 @@ const NavContainer = styled.div`
   align-content: center;
   margin-left: 20px;
 
-  a {
+  a:not(:first-child) {
     margin-left: 16px;
   }
+
+  .bold-600 {
+    font-weight: 600;
+  }
+`;
+
+const SearchbarContainer = styled.div`
+  padding: 0 0 0 36px;
+`;
+
+const RightSection = styled.div`
+  margin-left: auto;
 `;

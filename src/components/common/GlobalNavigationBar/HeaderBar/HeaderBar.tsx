@@ -40,7 +40,6 @@ export function HeaderBar() {
             <Button
               className="align-left"
               color="neutral"
-              href="#text-buttons"
             >로그인</Button>
           </Link>
         </RightSection>

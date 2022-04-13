@@ -2,8 +2,8 @@ import { FC } from 'react';
 import styles from '@styles/common.module.scss';
 import s from './Footer.module.scss';
 import styled from '@emotion/styled';
-import Link from 'next/link';
 import { Button, Typography } from '@mui/material';
+import { Link } from '@components/common';
 
 interface Props {
   className?: string;
@@ -23,32 +23,32 @@ export const Footer: FC<Props> = () => {
           </IntroductionSection>
           <ContentItem className="m-l-auto">
             <Typography variant="h6" className="desc">러닝핏</Typography>
-            <Link href="/">
-              <Button className="align-left" color="neutral" href="#text-buttons">홈</Button>
+            <Link href="/" underline="none">
+              <Button className="align-left" color="neutral">홈</Button>
             </Link>
-            <Link href="/">
-              <Button className="align-left" color="neutral" href="#text-buttons">기업교육</Button>
+            <Link href="/" underline="none">
+              <Button className="align-left" color="neutral">기업교육</Button>
             </Link>
-            <Link href="/">
-              <Button className="align-left" color="neutral" href="#text-buttons">채용</Button>
+            <Link href="/" underline="none">
+              <Button className="align-left" color="neutral">채용</Button>
             </Link>
-            <Link href="/">
-              <Button className="align-left" color="neutral" href="#text-buttons">도움말</Button>
+            <Link href="/" underline="none">
+              <Button className="align-left" color="neutral">도움말</Button>
             </Link>
           </ContentItem>
           <ContentItem>
             <Typography variant="h6" className="logo">튜터</Typography>
-            <Link href="/">
-              <Button className="align-left" color="neutral" href="#text-buttons">튜터 센터</Button>
+            <Link href="/" underline="none">
+              <Button className="align-left" color="neutral">튜터 센터</Button>
             </Link>
-            <Link href="/">
-              <Button className="align-left" color="neutral" href="#text-buttons">정큐 과정 지원하기</Button>
+            <Link href="/" underline="none">
+              <Button className="align-left" color="neutral">정큐 과정 지원하기</Button>
             </Link>
-            <Link href="/">
-              <Button className="align-left" color="neutral" href="#text-buttons">원포인트 과정 지원하기</Button>
+            <Link href="/" underline="none">
+              <Button className="align-left" color="neutral">원포인트 과정 지원하기</Button>
             </Link>
-            <Link href="/">
-              <Button className="align-left" color="neutral" href="#text-buttons">도움말</Button>
+            <Link href="/" underline="none">
+              <Button className="align-left" color="neutral">도움말</Button>
             </Link>
           </ContentItem>
         </ContentContainer>

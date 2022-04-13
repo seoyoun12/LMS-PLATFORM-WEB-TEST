@@ -2,20 +2,41 @@ import type { NextPage } from 'next';
 import styles from '@styles/common.module.scss';
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { ContentCard } from '@components/ui';
+import { ContentCard, Carousel } from '@components/ui';
 import cn from 'clsx';
 
 const MainPage: NextPage = (res) => {
+  const bannerData = [
+    {
+      id: 1,
+      img: "/assets/images/banner.jpg",
+      title: "test 1",
+      description: "description 1"
+    },
+    {
+      id: 2,
+      img: "/assets/images/banner.jpg",
+      title: "test 2",
+      description: "description 2"
+    },
+    {
+      id: 3,
+      img: "/assets/images/banner.jpg",
+      title: "test 3",
+      description: "description 3"
+    },
+  ]
   return (
     <Host>
-      <BannerContainer>
+      <Carousel datas={bannerData} />
+      {/* <BannerContainer>
         <div className={styles.globalContainer}>
           <img
             src="/assets/images/banner.jpg" alt=""
             width="676px"
           />
         </div>
-      </BannerContainer>
+      </BannerContainer> */}
       <div className={cn(styles.globalContainer, 'padding-top')}>
         <ContentCardContainer>
           {[ 0, 0, 0, 0 ].map((v, idx) => (

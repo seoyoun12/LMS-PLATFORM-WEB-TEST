@@ -22,16 +22,16 @@ type Response = {
 export const tokenInterceptor = () => {
   api.interceptors.response.use(
     (response) => response,
-    (err: AxiosError<Response>) => {
+    async (err: AxiosError<Response>) => {
       const { response } = err;
       if (response?.status === STATUS_CODE.ACCESS_TOKEN_EXPIRED) {
         const authorization = localStore.getItem(ACCESS_TOKEN);
         const refreshToken = localStore.getItem(REFRESH_TOKEN);
 
         if (!!authorization && !!refreshToken) {
-          // const res = await getNewToken(authorization, refreshToken);
-          // const newAccessToken = res.data.authorization;
-          // localStore.setItem(ACCESS_TOKEN, newAccessToken);
+          const res = await getNewToken(authorization, refreshToken);
+          const newAccessToken = res.data.authorization;
+          localStore.setItem(ACCESS_TOKEN, newAccessToken);
         }
       } else {
         return Promise.reject(err);

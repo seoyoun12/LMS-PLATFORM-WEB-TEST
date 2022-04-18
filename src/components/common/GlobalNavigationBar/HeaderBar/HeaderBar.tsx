@@ -4,9 +4,16 @@ import { Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { Link, Searchbar } from '@components/common';
 import { grey } from '@mui/material/colors';
+import * as React from 'react';
+import { logout } from '@common/api/auth';
 
 export function HeaderBar() {
   const router = useRouter();
+
+  const handleClick = () => {
+    const res = logout();
+    console.log(res);
+  };
 
   return (
     <Header className={styles.globalContainer}>
@@ -42,6 +49,11 @@ export function HeaderBar() {
               color="neutral"
             >로그인</Button>
           </Link>
+          <Button
+            className="align-left"
+            color="neutral"
+            onClick={handleClick}
+          >로그아웃</Button>
         </RightSection>
       </ContentContainer>
     </Header>

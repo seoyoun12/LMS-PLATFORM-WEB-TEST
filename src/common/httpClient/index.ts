@@ -47,7 +47,7 @@ export const post = async (
 ) => {
   try {
     const response = await api.post(url, data, { params, headers });
-    return response.data;
+    return response?.data;
   } catch (error) {
     return handleError(error);
   }
@@ -66,8 +66,8 @@ function triggerInterceptors() {
   jwpInterceptor();
 
   // response interceptors
-  tokenInterceptor();
   responseInterceptor();
+  tokenInterceptor();
 }
 
 

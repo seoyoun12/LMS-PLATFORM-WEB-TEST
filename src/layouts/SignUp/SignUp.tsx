@@ -11,17 +11,27 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Link } from '@components/common';
+import { signUp } from '@common/api/auth';
 
 export function SignUp() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const name = data.get('name') as string;
+    const username = data.get('username') as string;
+    const password = data.get('password') as string;
+
 
     console.log({
       name: data.get('name'),
-      email: data.get('email'),
+      username: data.get('username'),
       password: data.get('password'),
     });
+
+    if (!!name && !!username && !!password) {
+      const res = signUp({ name, password, username, emailYn: 'N', smsYn: 'N' });
+      console.log(res);
+    }
   };
 
   return (
@@ -63,10 +73,10 @@ export function SignUp() {
               <TextField
                 required
                 fullWidth
-                id="email"
+                id="username"
                 label="이메일"
-                name="email"
-                autoComplete="email"
+                name="username"
+                autoComplete="username"
               />
             </Grid>
             <Grid item xs={12}>

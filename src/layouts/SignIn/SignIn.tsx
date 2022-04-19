@@ -10,15 +10,26 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { signIn } from '@common/api/auth';
+import { useSetRecoilState } from 'recoil';
+import { isLoginState } from '@common/recoil';
+import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 
 export function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const isLogin = useIsLoginStatus();
+  const setIsLoginState = useSetRecoilState(isLoginState);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const username = data.get('username') as string;
     const password = data.get('password') as string;
-    const res = signIn(username, password);
-    console.log(res);
+
+    try {
+      await signIn(username, password);
+      setIsLoginState(true);
+    } catch (err) {
+      return Promise.reject(err);
+    }
   };
 
   return (

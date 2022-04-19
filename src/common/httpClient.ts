@@ -29,9 +29,10 @@ export const api = Axios.create({
 });
 triggerInterceptors();
 
-export const get = async (
+export const get = async <T>(
   url: string,
-  { params = {}, headers = {}, } = {}) => {
+  { params = {}, headers = {}, } = {}
+): Promise<T> => {
   try {
     const response = await api.get(url, { params, headers });
     return response.data;

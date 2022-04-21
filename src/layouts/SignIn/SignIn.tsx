@@ -13,10 +13,19 @@ import { signIn } from '@common/api/auth';
 import { useSetRecoilState } from 'recoil';
 import { isLoginState } from '@common/recoil';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 export function SignIn() {
+  const router = useRouter();
   const isLogin = useIsLoginStatus();
   const setIsLoginState = useSetRecoilState(isLoginState);
+
+  useEffect(() => {
+    if (isLogin) {
+      router.push('/');
+    }
+  }, [ isLogin ]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -25,8 +34,11 @@ export function SignIn() {
     const password = data.get('password') as string;
 
     try {
-      await signIn(username, password);
-      setIsLoginState(true);
+      const res = await signIn(username, password);
+      if (res.success) {
+        setIsLoginState(true);
+        return router.push('/');
+      }
     } catch (err) {
       return Promise.reject(err);
     }

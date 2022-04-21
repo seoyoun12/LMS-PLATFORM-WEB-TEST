@@ -1,28 +1,27 @@
 import styled from '@emotion/styled';
 import styles from '@styles/common.module.scss';
-import { Button, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { Link, Searchbar } from '@components/common';
 import { grey } from '@mui/material/colors';
 import * as React from 'react';
-import { logout } from '@common/api/auth';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
-import { useSetRecoilState } from 'recoil';
-import { isLoginState } from '@common/recoil';
+import { useEffect, useState } from 'react';
+import { getMyUser } from '@common/api/user';
+import { AccountMenu } from '@components/ui';
 
 export function HeaderBar() {
-  const isLogin = useIsLoginStatus();
-  const setIsLoginState = useSetRecoilState(isLoginState);
   const router = useRouter();
+  const isLogin = useIsLoginStatus();
+  const [ myUser, setMyUser ] = useState({});
 
-  const handleClick = async () => {
-    try {
-      await logout();
-      setIsLoginState(false);
-    } catch (err) {
-      return Promise.reject(err);
-    }
-  };
+
+  useEffect(() => {
+    (async () => {
+      const res = await getMyUser();
+      setMyUser(res);
+    })();
+  }, [ myUser ]);
 
   return (
     <Header className={styles.globalContainer}>
@@ -53,18 +52,33 @@ export function HeaderBar() {
         </SearchbarContainer>
         <RightSection>
           {!isLogin ? (
-            <Link href="/sign-in" underline="none">
-              <Button
-                className="align-left"
-                color="neutral"
-              >로그인</Button>
-            </Link>
+            <div>
+              <Link href="/apply-tutor" underline="none">
+                <Button
+                  className="align-left"
+                  color="neutral"
+                >튜터 지원</Button>
+              </Link>
+              <Link href="/sign-in" underline="none">
+                <Button
+                  className="align-left"
+                  color="neutral"
+                >로그인</Button>
+              </Link>
+            </div>
           ) : (
-            <Button
-              className="align-left"
-              color="neutral"
-              onClick={handleClick}
-            >로그아웃</Button>
+            <Stack
+              direction="row"
+              alignItems="center"
+            >
+              <Link href="/apply-tutor" underline="none">
+                <Button
+                  className="align-left"
+                  color="neutral"
+                >튜터 센터</Button>
+              </Link>
+              <AccountMenu/>
+            </Stack>
           )}
         </RightSection>
       </ContentContainer>

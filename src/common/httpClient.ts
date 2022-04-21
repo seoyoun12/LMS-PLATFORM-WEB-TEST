@@ -35,7 +35,7 @@ export const get = async <T>(
 ): Promise<T> => {
   try {
     const response = await api.get(url, { params, headers });
-    return response.data;
+    return response?.data;
   } catch (error) {
     return handleError(error);
   }

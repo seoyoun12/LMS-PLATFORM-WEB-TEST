@@ -5,8 +5,8 @@ import { localStore } from '@common/storage';
 export async function logout() {
   return await post('/api/v1/auth/logout')
     .then(onLogoutSuccess)
-    .catch(error => {
-      console.log(error);
+    .catch(err => {
+      return Promise.reject(err);
     });
 }
 

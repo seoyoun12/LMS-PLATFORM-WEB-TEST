@@ -7,17 +7,15 @@ import { getProfile, healthCheck } from '@common/test';
 export default function Home() {
   useEffect(() => {
     (async () => {
-      const hi = await healthCheck();
-      // console.log(hi);
+      const loadHealthCheck = await healthCheck();
     })();
-  });
+  }, []);
 
   useEffect(() => {
     (async () => {
-      const hi = await getProfile();
-      // console.log(hi);
+      const profile = await getProfile();
     })();
-  });
+  }, []);
 
   return (
     <>

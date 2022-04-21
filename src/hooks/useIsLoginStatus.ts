@@ -8,9 +8,9 @@ export function useIsLoginStatus(): boolean {
   const [ isLogin, setIsLogin ] = useRecoilState(isLoginState);
 
   useEffect(() => {
-    const aT = localStore.getItem(ACCESS_TOKEN);
-    const rT = localStore.getItem(REFRESH_TOKEN);
-    setIsLogin(!!aT && !!rT);
+    const at = localStore.getItem(ACCESS_TOKEN);
+    const rt = localStore.getItem(REFRESH_TOKEN);
+    setIsLogin(!!at && !!rt);
   }, [ isLogin ]);
 
   return isLogin;

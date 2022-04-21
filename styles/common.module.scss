@@ -1,6 +1,10 @@
+$maxWidth: 1176px;
+$sidePadding: 20px;
+
 .globalContainer {
-  max-width: 1176px;
+  max-width: calc(#{$maxWidth} + #{$sidePadding} * 2);
   width: 100%;
   height: 100%;
   margin: 0 auto;
+  padding: 0 $sidePadding;
 }

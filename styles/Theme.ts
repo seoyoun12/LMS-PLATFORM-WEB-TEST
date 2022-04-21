@@ -32,6 +32,19 @@ const theme = createTheme({
       '"Segoe UI Symbol"',
     ].join(','),
   },
+
+  components: {
+    MuiContainer: {
+      defaultProps: {
+        disableGutters: true
+      },
+    },
+    MuiLink: {
+      defaultProps: {
+        underline: 'none'
+      }
+    }
+  }
 });
 
 declare module '@mui/material/styles' {

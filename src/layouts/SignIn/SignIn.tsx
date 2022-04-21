@@ -9,15 +9,27 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { signIn } from '@common/api/auth';
+import { useSetRecoilState } from 'recoil';
+import { isLoginState } from '@common/recoil';
+import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 
 export function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const isLogin = useIsLoginStatus();
+  const setIsLoginState = useSetRecoilState(isLoginState);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const username = data.get('username') as string;
+    const password = data.get('password') as string;
+
+    try {
+      await signIn(username, password);
+      setIsLoginState(true);
+    } catch (err) {
+      return Promise.reject(err);
+    }
   };
 
   return (
@@ -48,10 +60,10 @@ export function SignIn() {
             margin="normal"
             required
             fullWidth
-            id="email"
+            id="username"
             label="이메일"
-            name="email"
-            autoComplete="email"
+            name="username"
+            autoComplete="username"
             autoFocus
           />
           <TextField

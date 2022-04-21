@@ -4,9 +4,25 @@ import { Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { Link, Searchbar } from '@components/common';
 import { grey } from '@mui/material/colors';
+import * as React from 'react';
+import { logout } from '@common/api/auth';
+import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
+import { useSetRecoilState } from 'recoil';
+import { isLoginState } from '@common/recoil';
 
 export function HeaderBar() {
+  const isLogin = useIsLoginStatus();
+  const setIsLoginState = useSetRecoilState(isLoginState);
   const router = useRouter();
+
+  const handleClick = async () => {
+    try {
+      await logout();
+      setIsLoginState(false);
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  };
 
   return (
     <Header className={styles.globalContainer}>
@@ -36,12 +52,20 @@ export function HeaderBar() {
           <Searchbar/>
         </SearchbarContainer>
         <RightSection>
-          <Link href="/sign-in" underline="none">
+          {!isLogin ? (
+            <Link href="/sign-in" underline="none">
+              <Button
+                className="align-left"
+                color="neutral"
+              >로그인</Button>
+            </Link>
+          ) : (
             <Button
               className="align-left"
               color="neutral"
-            >로그인</Button>
-          </Link>
+              onClick={handleClick}
+            >로그아웃</Button>
+          )}
         </RightSection>
       </ContentContainer>
     </Header>

@@ -1,4 +1,6 @@
 import Axios, { AxiosError } from 'axios';
+import { jwpInterceptor, responseInterceptor } from '@common/httpInterceptor';
+import { tokenInterceptor } from '@common/httpInterceptor/tokenInterceptor';
 
 /**
  *  * Basic
@@ -8,6 +10,7 @@ import Axios, { AxiosError } from 'axios';
 
 const headers = {
   'Api-Key': 'bWlyaW06MTIzNA==',
+  withCredentials: true
 };
 
 export const axiosSetting = {
@@ -24,10 +27,12 @@ export const api = Axios.create({
   baseURL: axiosSetting.server(),
   headers,
 });
+triggerInterceptors();
 
-export const requestGET = async (
+export const get = async <T>(
   url: string,
-  { params = {}, headers = {}, } = {}) => {
+  { params = {}, headers = {}, } = {}
+): Promise<T> => {
   try {
     const response = await api.get(url, { params, headers });
     return response.data;
@@ -36,14 +41,14 @@ export const requestGET = async (
   }
 };
 
-export const requestPOST = async (
+export const post = async (
   url: string,
   data: object = {},
   { params = {}, headers = {}, } = {}
 ) => {
   try {
     const response = await api.post(url, data, { params, headers });
-    return response.data;
+    return response?.data;
   } catch (error) {
     return handleError(error);
   }
@@ -57,29 +62,14 @@ const handleError = (error: AxiosError | any) => {
   throw (error);
 };
 
+function triggerInterceptors() {
+  // request interceptors
+  jwpInterceptor();
 
-// Add a response interceptor
-api.interceptors.response.use(
-  (response) => {
-    const { resCode, resMsg } = response.data;
+  // response interceptors
+  responseInterceptor();
+  tokenInterceptor();
+}
 
-    if (resCode !== 201) {
-      if (!resMsg) {
-        // eslint-disable-next-line no-param-reassign
-        response.data.resMsg = '네트워크 오류';
-      }
-      const error = { response };
-      return Promise.reject(error);
-    }
-    return response;
-  },
-  (error) => {
-    console.error(`error`, error);
 
-    if (!error?.response?.data) {
-      // eslint-disable-next-line no-param-reassign
-      error.response = { data: { resMsg: '네트워크 오류' } };
-    }
-    return Promise.reject(error);
-  },
-);
+

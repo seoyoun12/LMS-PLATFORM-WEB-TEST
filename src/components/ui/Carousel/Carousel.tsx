@@ -1,208 +1,224 @@
-import { Navigation, Pagination, Controller, Autoplay } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
-import styled from '@emotion/styled';
-import { useRef, useState } from 'react';
+import { Navigation, Pagination, Controller, Autoplay } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import styled from "@emotion/styled";
+import { useEffect, useRef, useState } from "react";
+import { Typography } from "@mui/material";
 
-export const Carousel = ({datas}) => {
-    console.log(datas)
-    const [controlleredSlider, setControlleredSlider] = useState(null);
+type Datas = {
+  id: number;
+  img: string;
+  title: string;
+  description: string;
+};
 
-    const navigationPrevRef = useRef(null);
-    const navigationNextRef = useRef(null);
+export const Carousel = ({ datas }: { datas: Array<any> }) => {
+  const [firstSwiper, setFirstSwiper] = useState();
+  const [secondSwiper, setSecondSwiper] = useState();
 
-    const paginationRef = useRef(null);
+  const navigationPrevRef = useRef(null);
+  const navigationNextRef = useRef(null);
+  const paginationRef = useRef(null);
 
-    const chkPages = (num) => {
-        return num < 10 ? "0" + num : num;
-    }
+  const chkPages = (num: number) => {
+    return num < 10 ? "0" + num : num;
+  };
 
-    const slideChangeAuto = () => {
-        const timeline = document.querySelector('.timeline-current');
-        timeline?.classList.add('timeline');
+  const progress = () => {
+    const progressbar = document.querySelector('.timeline-current');
+    progressbar?.animate({'width': '100%'}, 4000);
+  };
 
-        setTimeout(() => {
-            timeline?.classList.remove('timeline');
-        }, 4000);
-    }
-    
-    return (
-        <Slider>
-            <SliderLayout>
-                <Swiper
-                    modules={[Navigation, Pagination, Controller]}
-                    spaceBetween={300}
-                    slidesPerView={1}
-                    loop={true}
-                    touchRatio={0}
-                    onSwiper={setControlleredSlider}
-                    style={{maxWidth: "676px", marginLeft: "0", top: "32px"}}
-                >
-                    <SwiperSlide>
-                        <img src="/assets/images/banner.jpg" width="676px" alt="" style={ {paddingRight: "16px"} } />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/assets/images/banner.jpg" width="676px" alt="" style={ {paddingRight: "16px"} } />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src="/assets/images/banner.jpg" width="676px" alt="" style={ {paddingRight: "16px"} } />
-                    </SwiperSlide>
-                </Swiper>
+  const [isMobile, setIsMobile] = useState(false);
 
-                <Swiper
-                    modules={[Navigation, Pagination, Controller, Autoplay]}
-                    spaceBetween={300}
-                    slidesPerView={1}
-                    loop={true}
-                    navigation={{
-                        prevEl: navigationPrevRef.current,
-                        nextEl: navigationNextRef.current
-                    }}
-                    pagination={{
-                        type: "custom",
-                        el: paginationRef.current,
-                        renderCustom: function(swiper, current, total){
-                            return(`
-                                <span>${chkPages(current)}</span>
-                                <span style="font-size: 12px; margin: 0 4px">|</span>
-                                <span>${chkPages(total)}</span>
-                            `)
-                        }
-                    }}
-                    autoplay={{ 
-                        delay: 4000,
-                        disableOnInteraction: false
-                    }}
-                    onActiveIndexChange={slideChangeAuto}
-                    touchRatio={0}
-                    controller={{control: controlleredSlider}}
-                    style={{maxWidth: "450px", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "32px 0"}}
-                >
-                    <SwiperSlide>
-                        <SlideInfo>
-                            <h1>Test1</h1>
-                            <span>description 1</span>
-                        </SlideInfo>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <SlideInfo>
-                            <h1>Test2</h1>
-                            <span>description 2</span>
-                        </SlideInfo>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <SlideInfo>
-                            <h1>Test3</h1>
-                            <span>description 3</span>
-                        </SlideInfo>
-                    </SwiperSlide>
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      let width = window.innerWidth;
+      width < 767 ? setIsMobile(true) : setIsMobile(false);
+    });
+  }, []);
 
-                    <div style={{display: "flex", alignItems: "center"}}>
-                        <>
-                            <div ref={paginationRef} style={{display: "inline-flex", alignItems: "center", color: "#fff", width: "initial"}} />
-                        </>
-                        <>
-                            <Timeline>
-                                <div className='timeline-bg'>
-                                    <div className='timeline-current'></div>
-                                </div>
-                            </Timeline>
-                        </>
-                        <>
-                            <SliderButton ref={navigationPrevRef}><span className='swiper-button-prev'></span></SliderButton>
-                            <SliderButton ref={navigationNextRef}><span className='swiper-button-next'></span></SliderButton>
-                        </>
-                    </div>
-                </Swiper>
-            </SliderLayout>
-        </Slider>
-    );
-}
+  return (
+    <Slider>
+      <SliderLayout style={isMobile ? {flexDirection: "column-reverse"} : {flexDirection: "row"}}>
+        <Swiper
+          modules={[Navigation, Pagination, Controller, Autoplay]}
+          spaceBetween={300}
+          slidesPerView={1}
+          loop={true}
+          autoplay={{
+            delay: 4000,
+            disableOnInteraction: false,
+          }}
+          onSwiper={(swiper: any) => setFirstSwiper(swiper)}
+          controller={{control: secondSwiper}}
+          style={{ maxWidth: "676px", width: "100%", marginLeft: "0", top: "32px" }}
+        >
+          {datas.map((data:Datas) => {
+            return(
+              <SwiperSlide key={data.id}>
+                {isMobile ? (
+                  <img src={data.img} alt="" style={{ paddingRight: "16px", width: "100%", height: "192px", objectFit: "cover" }} />
+                ) : (
+                  <img src={data.img} alt="" style={{ paddingRight: "16px", width: "100%" }} />
+                )}
+                
+              </SwiperSlide>    
+            )
+          })}
+        </Swiper>
+
+        <Swiper
+          modules={[Navigation, Pagination, Controller, Autoplay]}
+          spaceBetween={300}
+          slidesPerView={1}
+          loop={true}
+          navigation={{
+            prevEl: navigationPrevRef.current,
+            nextEl: navigationNextRef.current,
+          }}
+          pagination={{
+            type: "custom",
+            el: paginationRef.current,
+            renderCustom: function (swiper, current, total) {
+              return (`
+                <span>${chkPages(current)}</span>
+                <span style="font-size: 12px; margin: 0 4px">|</span>
+                <span>${chkPages(total)}</span>
+              `);  
+            },
+          }}
+          resizeObserver={false}
+          autoplay={{
+            delay: 4000,
+            disableOnInteraction: false,
+          }}
+          onRealIndexChange={progress}
+          onInit={progress}
+          onSwiper={(swiper: any) => setSecondSwiper(swiper)}
+          controller={{control: firstSwiper}}
+          style={isMobile ? {
+            margin: "20px 0",
+          } : {
+            maxWidth: "450px", width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "32px 0",
+          }}
+        >
+          {datas.map((data:Datas) => {
+            return(
+              <SwiperSlide key={data.id}>
+                <SlideInfo>
+                  <Typography variant="h1" className="bold-700">{data.title}</Typography>
+                  <Typography variant="inherit">{data.description}</Typography>
+                </SlideInfo>
+              </SwiperSlide>    
+            );
+          })}
+
+          {!isMobile ? 
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                ref={paginationRef}
+                style={{ display: "inline-flex", alignItems: "center", color: "#fff", width: "initial", }}
+              />
+              <Timeline>
+                <div className="timeline-bg">
+                  <div className="timeline-current"></div>
+                </div>
+              </Timeline>
+              <>
+                <SliderButton ref={navigationPrevRef}>
+                  <span className="swiper-button-prev"></span>
+                </SliderButton>
+                <SliderButton ref={navigationNextRef}>
+                  <span className="swiper-button-next"></span>
+                </SliderButton>
+              </>
+            </div> 
+          : ``}
+          
+        </Swiper>
+      </SliderLayout>     
+    </Slider>
+  );
+};
 
 const Slider = styled.div`
-    background: linear-gradient(270.44deg, rgb(255, 122, 0) 0.21%, rgba(255, 122, 0, 0.4) 99.18%) 0% 0% / 100%;
-    margin-bottom: 32px;
+  background: linear-gradient(
+      270.44deg,
+      rgb(255, 122, 0) 0.21%,
+      rgba(255, 122, 0, 0.4) 99.18%
+    )
+    0% 0% / 100%;
+  margin-bottom: 32px;
 `;
 
 const SliderLayout = styled.div`
-    max-width: 1176px;
-    width: 100%;
-    display: flex;
-    margin: 0 auto;
+  max-width: 1176px;
+  width: 100%;
+  display: flex;
+  margin: 0 auto;
+  padding: 0 20px;
 `;
 
 const SlideInfo = styled.div`
-    h1{
-        font-size: 34px;
-        font-weight: 900;
-        word-break: keep-all;
-        padding: 16px 0;
-        color: #fff;
-    }
+  color: #fff;
 
-    span{
-        font-size: 16px;
-        padding: 16px 0;
-        color: #fff;
-    }
+  h1 {
+    font-size: 34px;
+    font-weight: 900;
+    word-break: keep-all;
+    padding: 16px 0 8px 0;
+  }
+
+  p {
+    font-size: 16px;
+    padding: 8px 0;
+  }
 `;
 
 const Timeline = styled.div`
-    display: flex;
-    padding: 0 14px;
-    flex: 1;
+  display: flex;
+  padding: 0 14px;
+  flex: 1;
 
-    .timeline-bg{
-        width: 100%;
-        background-color: rgba(255, 255, 255, 0.4);
-        height: 2px;
-        overflow: hidden;
-    }
+  .timeline-bg {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.4);
+    height: 2px;
+    overflow: hidden;
+  }
 
-    .timeline-current{
-        width: 0%;
-        height: 2px;
-        background: #fff;
-    }
-
-    .timeline{
-        animation: progressbar 4s linear;
-    }
-
-    @keyframes progressbar{
-        0%{
-            width: 0%;
-        }
-        100%{
-            width: 100%;
-        }
-    }
+  .timeline-current {
+    width: 0%;
+    height: 2px;
+    background: #fff;
+  }
 `;
 
 const SliderButton = styled.div`
-    width: 24px;
-    height: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 
-    :hover{
-        background: rgba(255, 255, 255, 0.4)
+  :hover {
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  span {
+    position: inherit;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+
+    &::after {
+      font-size: 16px;
+      color: #fff;
     }
-
-    span{
-        position: inherit;
-        width: 100%;
-        height: 100%;
-        margin: 0;
-
-        &::after{
-            font-size: 16px;
-            color: #fff;
-        }
-    }
+  }
 `;

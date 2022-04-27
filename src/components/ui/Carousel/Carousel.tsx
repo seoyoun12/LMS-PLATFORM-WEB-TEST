@@ -16,8 +16,8 @@ type Datas = {
 };
 
 export const Carousel = ({ datas }: { datas: Array<any> }) => {
-  const [firstSwiper, setFirstSwiper] = useState();
-  const [secondSwiper, setSecondSwiper] = useState();
+  const [ firstSwiper, setFirstSwiper ] = useState();
+  const [ secondSwiper, setSecondSwiper ] = useState();
 
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);
@@ -29,12 +29,13 @@ export const Carousel = ({ datas }: { datas: Array<any> }) => {
 
   const progress = () => {
     const progressbar = document.querySelector('.timeline-current');
-    progressbar?.animate({'width': '100%'}, 4000);
+    progressbar?.animate({ 'width': '100%' }, 4000);
   };
 
-  const [isMobile, setIsMobile] = useState(false);
+  const [ isMobile, setIsMobile ] = useState(false);
 
   useEffect(() => {
+    console.log('triggered');
     window.addEventListener('resize', () => {
       let width = window.innerWidth;
       width < 767 ? setIsMobile(true) : setIsMobile(false);
@@ -43,9 +44,9 @@ export const Carousel = ({ datas }: { datas: Array<any> }) => {
 
   return (
     <Slider>
-      <SliderLayout style={isMobile ? {flexDirection: "column-reverse"} : {flexDirection: "row"}}>
+      <SliderLayout style={isMobile ? { flexDirection: "column-reverse" } : { flexDirection: "row" }}>
         <Swiper
-          modules={[Navigation, Pagination, Controller, Autoplay]}
+          modules={[ Navigation, Pagination, Controller, Autoplay ]}
           spaceBetween={300}
           slidesPerView={1}
           loop={true}
@@ -54,25 +55,26 @@ export const Carousel = ({ datas }: { datas: Array<any> }) => {
             disableOnInteraction: false,
           }}
           onSwiper={(swiper: any) => setFirstSwiper(swiper)}
-          controller={{control: secondSwiper}}
+          controller={{ control: secondSwiper }}
           style={{ maxWidth: "676px", width: "100%", marginLeft: "0", top: "32px" }}
         >
-          {datas.map((data:Datas) => {
-            return(
+          {datas.map((data: Datas) => {
+            return (
               <SwiperSlide key={data.id}>
                 {isMobile ? (
-                  <img src={data.img} alt="" style={{ paddingRight: "16px", width: "100%", height: "192px", objectFit: "cover" }} />
+                  <img src={data.img} alt=""
+                       style={{ paddingRight: "16px", width: "100%", height: "192px", objectFit: "cover" }}/>
                 ) : (
-                  <img src={data.img} alt="" style={{ paddingRight: "16px", width: "100%" }} />
+                  <img src={data.img} alt="" style={{ paddingRight: "16px", width: "100%" }}/>
                 )}
-                
-              </SwiperSlide>    
-            )
+
+              </SwiperSlide>
+            );
           })}
         </Swiper>
 
         <Swiper
-          modules={[Navigation, Pagination, Controller, Autoplay]}
+          modules={[ Navigation, Pagination, Controller, Autoplay ]}
           spaceBetween={300}
           slidesPerView={1}
           loop={true}
@@ -88,7 +90,7 @@ export const Carousel = ({ datas }: { datas: Array<any> }) => {
                 <span>${chkPages(current)}</span>
                 <span style="font-size: 12px; margin: 0 4px">|</span>
                 <span>${chkPages(total)}</span>
-              `);  
+              `);
             },
           }}
           resizeObserver={false}
@@ -99,25 +101,30 @@ export const Carousel = ({ datas }: { datas: Array<any> }) => {
           onRealIndexChange={progress}
           onInit={progress}
           onSwiper={(swiper: any) => setSecondSwiper(swiper)}
-          controller={{control: firstSwiper}}
+          controller={{ control: firstSwiper }}
           style={isMobile ? {
             margin: "20px 0",
           } : {
-            maxWidth: "450px", width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "32px 0",
+            maxWidth: "450px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            padding: "32px 0",
           }}
         >
-          {datas.map((data:Datas) => {
-            return(
+          {datas.map((data: Datas) => {
+            return (
               <SwiperSlide key={data.id}>
                 <SlideInfo>
                   <Typography variant="h1" className="bold-700">{data.title}</Typography>
                   <Typography variant="inherit">{data.description}</Typography>
                 </SlideInfo>
-              </SwiperSlide>    
+              </SwiperSlide>
             );
           })}
 
-          {!isMobile ? 
+          {!isMobile ?
             <div style={{ display: "flex", alignItems: "center" }}>
               <div
                 ref={paginationRef}
@@ -136,22 +143,19 @@ export const Carousel = ({ datas }: { datas: Array<any> }) => {
                   <span className="swiper-button-next"></span>
                 </SliderButton>
               </>
-            </div> 
-          : ``}
-          
+            </div>
+            : ``}
+
         </Swiper>
-      </SliderLayout>     
+      </SliderLayout>
     </Slider>
   );
 };
 
 const Slider = styled.div`
-  background: linear-gradient(
-      270.44deg,
-      rgb(255, 122, 0) 0.21%,
-      rgba(255, 122, 0, 0.4) 99.18%
-    )
-    0% 0% / 100%;
+  background: linear-gradient(270.44deg,
+  rgb(255, 122, 0) 0.21%,
+  rgba(255, 122, 0, 0.4) 99.18%) 0% 0% / 100%;
   margin-bottom: 32px;
 `;
 

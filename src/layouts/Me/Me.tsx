@@ -8,7 +8,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 export function Me() {
   const myInfoList = [
-    { name: '정보 수정', href: '' },
+    { name: '정보 수정', href: '/me/edit' },
     { name: '주문 내역', href: '' },
     { name: '내 쿠폰', href: '' },
     { name: '내 후기', href: '' },
@@ -19,12 +19,12 @@ export function Me() {
     <Container
       sx={{
         marginBottom: 8,
-        padding: '72px 0px 48px'
+        padding: '72px 0px 48px',
       }}
     >
       <Box
         sx={{
-          marginBottom: '60px'
+          marginBottom: '60px',
         }}
       >
         <div className={s.myInfo}>
@@ -50,15 +50,15 @@ export function Me() {
           <Box
             component="section"
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              marginBottom: "48px"
+              display: 'flex',
+              flexDirection: 'column',
+              marginBottom: '48px'
             }}
           >
             <Typography
               variant="h5"
               sx={{
-                marginBottom: "16px"
+                marginBottom: '16px'
               }}
             >
               내 정보
@@ -73,8 +73,8 @@ export function Me() {
                 <Typography variant="body2">{name}</Typography>
                 <ArrowForwardIosIcon
                   sx={{
-                    width: "15px",
-                    height: "15px",
+                    width: '15px',
+                    height: '15px',
                     color: grey[500]
                   }}
                 />
@@ -87,7 +87,7 @@ export function Me() {
             width: '100%',
           }}
         >
-          <Typography variant="h5" sx={{ marginBottom: "16px" }}>
+          <Typography variant="h5" sx={{ marginBottom: '16px' }}>
             내 클래스
           </Typography>
           <Grid

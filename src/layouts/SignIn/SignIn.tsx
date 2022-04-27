@@ -104,7 +104,7 @@ export function SignIn() {
             </Grid>
             <Grid item>
               <Link href="/sign-up" variant="body2">
-                {"회원 가입하기"}
+                {'회원 가입하기'}
               </Link>
             </Grid>
           </Grid>

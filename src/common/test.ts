@@ -1,7 +1,10 @@
 import { get, post } from '@common/httpClient';
 
 export function healthCheck() {
-  return get('api/v1/example');
+  return post('http://192.168.0.145:8080/example', {
+      title: 'blabla'
+    },
+  );
 }
 
 export function getProfile() {

@@ -8,6 +8,7 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       const loadHealthCheck = await healthCheck();
+      console.log(loadHealthCheck);
     })();
   }, []);
 

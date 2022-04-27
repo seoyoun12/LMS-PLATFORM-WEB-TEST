@@ -10,6 +10,7 @@ import { tokenInterceptor } from '@common/httpInterceptor/tokenInterceptor';
 
 const headers = {
   'Api-Key': 'bWlyaW06MTIzNA==',
+  'Content-Type': 'application/json',
   withCredentials: true
 };
 

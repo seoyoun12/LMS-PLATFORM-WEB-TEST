@@ -15,14 +15,10 @@ export type ConfirmDialogProps = {
 }
 
 export function Confirm({ open, title, content, confirmText, cancelText, onClose }: ConfirmDialogProps) {
-  const handleClose = (isConfirm: boolean) => {
-    onClose(isConfirm);
-  };
-
   return (
     <Dialog
       open={open}
-      onClose={() => handleClose(false)}
+      onClose={() => onClose(false)}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -35,8 +31,8 @@ export function Confirm({ open, title, content, confirmText, cancelText, onClose
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleClose(false)}>{cancelText}</Button>
-        <Button onClick={() => handleClose(true)} autoFocus>
+        <Button onClick={() => onClose(false)}>{cancelText}</Button>
+        <Button onClick={() => onClose(true)} autoFocus>
           {confirmText}
         </Button>
       </DialogActions>

@@ -18,10 +18,10 @@ export function HeaderBar() {
 
   useEffect(() => {
     (async () => {
-      const res = await getMyUser();
-      setMyUser(res);
+      // const res = await getMyUser();
+      // setMyUser(res);
     })();
-  }, [ myUser ]);
+  }, []);
 
   return (
     <Header className={styles.globalContainer}>

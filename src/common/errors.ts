@@ -9,7 +9,7 @@ abstract class BaseResponseError extends Error {
 }
 
 export class BadRequestError<Response = any> extends BaseResponseError {
-  public statusCode = 400;
+  public status = 400;
   public errorType = 'bad_request';
   public response?: Response;
 
@@ -22,7 +22,7 @@ export class BadRequestError<Response = any> extends BaseResponseError {
 }
 
 export class InvalidCredentialsError extends BaseResponseError {
-  public statusCode = 403;
+  public status = 403;
   public errorType = 'invalid_credentials';
 
   constructor(message?: string) {
@@ -31,7 +31,7 @@ export class InvalidCredentialsError extends BaseResponseError {
 }
 
 export class InternalServerError extends BaseResponseError {
-  public statusCode = 500;
+  public status = 500;
   public errorType = 'internal_server';
 
   constructor(message?: string) {

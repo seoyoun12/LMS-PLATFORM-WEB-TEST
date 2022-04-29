@@ -4,10 +4,10 @@ import { localStore } from '@common/storage';
 import { AxiosError } from 'axios';
 
 type ErrorResponse = {
-  "success": boolean
-  "statusCode": number
-  "message": string
-  "data": string | object
+  'success': boolean
+  'status': number
+  'message': string
+  'data': string | object
 }
 
 type Response = {
@@ -30,7 +30,7 @@ export const tokenInterceptor = () => {
 
         if (!!authorization && !!refreshToken) {
           const res = await getNewToken(authorization, refreshToken);
-          const newAccessToken = res.data.authorization;
+          const newAccessToken = res.data.accessToken;
           localStore.setItem(ACCESS_TOKEN, newAccessToken);
         }
       } else {
@@ -40,10 +40,10 @@ export const tokenInterceptor = () => {
   );
 
 
-  const getNewToken = async (authorization: string, refreshToken: string) => {
-    return await post(`/api/v1/auth/token`, {
-        authorization: `Bearer ${authorization}`,
-        'refresh-token': refreshToken
+  const getNewToken = async (accessToken: string, refreshToken: string) => {
+    return await post(`/api/v1/auth/token/refresh`, {
+        accessToken: `Bearer ${accessToken}`,
+        refreshToken: refreshToken
       },
     )
       .catch(err => {

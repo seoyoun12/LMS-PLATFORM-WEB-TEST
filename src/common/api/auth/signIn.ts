@@ -4,7 +4,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from '@common/constant';
 
 type Response = {
   success: boolean;
-  statusCode: number;
+  status: number;
   message: string;
   data: {
     accessToken: string;
@@ -13,7 +13,7 @@ type Response = {
 }
 
 export async function signIn(username: string, password: string): Promise<Response> {
-  return await post('/api/v1/auth/login', { username, password })
+  return await post('/api/v1/auth/signin', { username, password })
     .then(onSignInSuccess)
     .catch(error => {
       return Promise.reject(error);

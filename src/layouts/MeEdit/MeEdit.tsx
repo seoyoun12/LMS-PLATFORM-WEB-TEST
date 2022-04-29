@@ -49,8 +49,10 @@ export function MeEdit() {
     <Container
       sx={{
         marginBottom: 8,
-        padding: '72px 120px 48px'
+        padding: '72px 30px 48px',
+        minWidth: '375px'
       }}
+      maxWidth='sm'
     >
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{
         display: 'flex',

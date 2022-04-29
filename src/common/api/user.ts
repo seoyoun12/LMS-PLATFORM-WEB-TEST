@@ -2,7 +2,7 @@ import { get, post } from '@common/httpClient';
 
 export type MyUser = {
   message: string;
-  statusCode: number;
+  status: number;
   success: boolean;
   data: {
     createdAt: string;

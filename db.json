@@ -1,0 +1,28 @@
+{
+  "course": [
+    {
+      "id": 1,
+      "createdAt": "2022-04-29T01:20:06.427Z",
+      "updatedAt": "2022-04-29T01:20:06.427Z",
+      "status": 0,
+      "seq": 0,
+      "courseName": "string",
+      "courseSubName": "string",
+      "lessonTerm": 0,
+      "lessonTime": 0,
+      "price": 0,
+      "courseFile": "string",
+      "courseThumblink": "string",
+      "fullScore": 0,
+      "limitTotalScore": 0,
+      "limitPeopleYn": "string",
+      "limitPeople": 0,
+      "restudyYn": "string",
+      "restudyDay": 0,
+      "content1Title": "string",
+      "content1": "string",
+      "saleYn": "string",
+      "displayYn": "string"
+    }
+  ]
+}

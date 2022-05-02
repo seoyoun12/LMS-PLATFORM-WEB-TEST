@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material';
+import { createStyles, createTheme, makeStyles, Theme } from '@mui/material';
 
 const theme = createTheme({
   palette: {
@@ -13,9 +13,9 @@ const theme = createTheme({
       dark: '#0369E0',
     },
     neutral: {
-      light: '#616161',
-      main: '#424242',
-      dark: '#212121',
+      light: '#f5f5f5',
+      main: '#eeeeee',
+      dark: '#e0e0e0',
     },
   },
   typography: {
@@ -32,12 +32,16 @@ const theme = createTheme({
       '"Segoe UI Symbol"',
     ].join(','),
   },
-
   components: {
     MuiContainer: {
       defaultProps: {
         disableGutters: true
       },
+    },
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true
+      }
     },
     MuiLink: {
       defaultProps: {

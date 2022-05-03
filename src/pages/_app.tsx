@@ -1,4 +1,5 @@
 import '@styles/reset.scss';
+import '@styles/muiButton.scss';
 
 import { AppProps } from 'next/app';
 import { FC } from 'react';

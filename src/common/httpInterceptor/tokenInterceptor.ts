@@ -41,7 +41,7 @@ export const tokenInterceptor = () => {
 
 
   const getNewToken = async (accessToken: string, refreshToken: string) => {
-    return await post(`/api/v1/auth/token/refresh`, {
+    return await post(`/auth/token/refresh`, {
         accessToken: `Bearer ${accessToken}`,
         refreshToken: refreshToken
       },

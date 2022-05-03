@@ -20,7 +20,7 @@ export const axiosSetting = {
   host: process.env.NEXT_PUBLIC_HOST,
   port: process.env.NEXT_PUBLIC_PORT,
   server() {
-    return `${this.scheme}://${this.host}${this.port ? `:${this.port}` : ''}`;
+    return `${this.scheme}://${this.host}${this.port ? `:${this.port}` : ''}/api/v1`;
   },
 };
 
@@ -49,6 +49,19 @@ export const post = async (
 ) => {
   try {
     const response = await api.post(url, data, { params, headers });
+    return response?.data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export const put = async (
+  url: string,
+  data: object = {},
+  { params = {}, headers = {}, } = {}
+) => {
+  try {
+    const response = await api.put(url, data, { params, headers });
     return response?.data;
   } catch (error) {
     return handleError(error);

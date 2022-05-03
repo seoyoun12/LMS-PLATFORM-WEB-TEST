@@ -1,6 +1,7 @@
 import { post } from '@common/httpClient';
 import { localStore } from '@common/storage';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@common/constant';
+import { userLoginHistory } from '@common/api/user';
 
 type Response = {
   success: boolean;
@@ -10,11 +11,12 @@ type Response = {
     accessToken: string;
     refreshToken: string;
   };
-}
+};
 
 export async function signIn(username: string, password: string): Promise<Response> {
-  return await post('/api/v1/auth/signin', { username, password })
+  return await post('/auth/signin', { username, password })
     .then(onSignInSuccess)
+    .then(getUserLoginHistory)
     .catch(error => {
       return Promise.reject(error);
     });
@@ -25,6 +27,11 @@ const onSignInSuccess = (response: Response) => {
   localStore.setItem(ACCESS_TOKEN, accessToken);
   localStore.setItem(REFRESH_TOKEN, refreshToken);
 
+  return response;
+};
+
+const getUserLoginHistory = async (response: Response) => {
+  await userLoginHistory();
   return response;
 };
 

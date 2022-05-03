@@ -12,5 +12,5 @@ type Params = {
 }
 
 export async function signUp(params: Params) {
-  return await post('/api/v1/user/register/common', { ...params });
+  return await post('/auth/signup/common', { ...params });
 }

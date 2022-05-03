@@ -29,8 +29,7 @@ export function SignUp() {
     });
 
     if (!!name && !!username && !!password) {
-      const res = signUp({ name, password, username, emailYn: 'N', smsYn: 'N' });
-      console.log(res);
+      return signUp({ name, password, username, emailYn: 'N', smsYn: 'N' });
     }
   };
 

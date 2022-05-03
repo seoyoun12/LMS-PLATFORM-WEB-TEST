@@ -1,12 +1,29 @@
 import { HeaderBar } from '@components/common/GlobalNavigationBar/HeaderBar';
 import { NavBar } from '@components/common/GlobalNavigationBar/NavBar';
 import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+
+const navigation = [
+  { href: '/course/[courseId]' }
+];
 
 export function GlobalNavigationBar() {
+  const router = useRouter();
+  const [ isHideNavbar, setIsHideNavbar ] = useState(false);
+
+  useEffect(
+    () => {
+      const hide = navigation.some(e => router.route === e.href);
+      setIsHideNavbar(hide);
+    },
+    [ router ]
+  );
+
   return (
     <GlobalNavigationContainer>
       <HeaderBar/>
-      <NavBar/>
+      {isHideNavbar || <NavBar/>}
     </GlobalNavigationContainer>
   );
 }

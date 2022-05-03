@@ -1,4 +1,4 @@
-import { get, post } from '@common/httpClient';
+import { get, post, put } from '@common/httpClient';
 
 export type MyUser = {
   message: string;
@@ -26,15 +26,23 @@ export type MyUser = {
 
 export async function getMyUser(): Promise<MyUser> {
   try {
-    return await get<MyUser>(`/api/v1/user/personal`);
+    return await get<MyUser>(`/user/myinfo`);
   } catch (err) {
     return Promise.reject(err);
   }
 }
 
+export async function userLoginHistory() {
+  try {
+    return await post(`/user/login-history`);
+  } catch(e) {
+    return Promise.reject(e);
+  }
+}
+
 export async function modifyMyUser({ name, emailYn, smsYn }: { name: string, emailYn: 'Y' | 'N', smsYn: 'Y' | 'N' }) {
   try {
-    return await post(`/api/v1/user/modification/info`, {
+    return await put(`/user/myinfo/modify`, {
       emailYn, smsYn
     });
   } catch (err) {
@@ -46,7 +54,7 @@ export async function modifyMyUserPassword(
   { currentPassword, newPassword }: { currentPassword: string, newPassword: string }
 ) {
   try {
-    return await post(`/api/v1/user/modification/password`, {
+    return await put(`/user/myinfo/modify/password`, {
       currentPw: currentPassword,
       modifiedPw: newPassword
     });

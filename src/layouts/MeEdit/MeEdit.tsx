@@ -1,26 +1,24 @@
 import * as React from 'react';
 import { Container, Box, Switch, Button, TextField, Typography } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
-import { getMyUser, modifyMyUser, MyUser } from '@common/api/user';
+import { useEffect, useState } from 'react';
+import { getMyUser, modifyMyUser } from '@common/api/user';
 import { Confirm } from '@components/common';
 import { useRouter } from 'next/router';
 import { PasswordChangeModal } from './PasswordChangeModal/PasswordChangeModal';
 
 export function MeEdit() {
   const router = useRouter();
-  const [ loading, setLoading ] = useState<boolean>(true);
-  const [ myInfo, setMyInfo ] = useState<MyUser['data'] | {}>({});
   const [ openConfirmDialog, setOpenConfirmDialog ] = useState(false);
   const [ openPromptDialog, setOpenPromptDialog ] = useState(false);
   const [ nameInput, setNameInput ] = useState('');
-  const emailYnRef = useRef<boolean>(false);
-  const smsYnRef = useRef<boolean>(false);
+  const [ emailChecked, setEmailChecked ] = useState(false);
+  const [ smsChecked, setSmsChecked ] = useState(false);
 
   useEffect(() => {
     (async () => {
       const { data } = await getMyUser();
-      setLoading(false);
-      setMyInfo(data);
+      setEmailChecked(data.emailYn === 'Y');
+      setSmsChecked(data.smsYn === 'Y');
       setNameInput(data.name);
     })();
   }, []);
@@ -35,8 +33,8 @@ export function MeEdit() {
 
     if (isConfirm) {
       try {
-        const emailYn = emailYnRef.current ? 'Y' : 'N';
-        const smsYn = smsYnRef.current ? 'Y' : 'N';
+        const emailYn = emailChecked ? 'Y' : 'N';
+        const smsYn = smsChecked ? 'Y' : 'N';
         await modifyMyUser({ name: nameInput, emailYn, smsYn });
         return router.push('/me');
       } catch (e) {
@@ -52,7 +50,7 @@ export function MeEdit() {
         padding: '72px 30px 48px',
         minWidth: '375px'
       }}
-      maxWidth='sm'
+      maxWidth="sm"
     >
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{
         display: 'flex',
@@ -83,8 +81,9 @@ export function MeEdit() {
           <Switch
             name="emailYn"
             sx={{ ml: 'auto' }}
+            checked={emailChecked}
             onChange={(e, checked) => {
-              emailYnRef.current = checked;
+              setEmailChecked(checked);
             }}
           />
         </Box>
@@ -98,8 +97,9 @@ export function MeEdit() {
           <Switch
             name="smsYn"
             sx={{ ml: 'auto' }}
+            checked={smsChecked}
             onChange={(e, checked) => {
-              smsYnRef.current = checked;
+              setSmsChecked(checked);
             }}
           />
         </Box>

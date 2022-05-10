@@ -23,6 +23,11 @@ export type Course = {
   content1: string;
   saleYn: string;
   displayYn: string;
+  curriculum: {
+    title: string;
+    contents: { title: string }[];
+    panel: number;
+  }[]
 }
 
 export async function getCourse({ courseId }: { courseId: number }): Promise<Course> {

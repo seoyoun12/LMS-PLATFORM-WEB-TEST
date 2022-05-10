@@ -1,50 +1,35 @@
-import { AxiosError } from 'axios';
+import { AxiosResponse } from 'axios';
 
-abstract class BaseResponseError extends Error {
-  public isResponseError = true;
+export class HttpError<TCode extends number = number> extends Error {
+  public readonly cause?: Error;
+  public readonly statusCode: TCode;
+  public readonly message: string;
+  public readonly url: string | undefined;
+  public readonly method: string | undefined;
 
-  constructor(message: string) {
-    super(message);
-  }
-}
+  constructor(opts: { url?: string; method?: string; message?: string; statusCode: TCode; cause?: Error }) {
+    super(opts.message ?? `HTTP Error ${opts.statusCode} `);
 
-export class BadRequestError<Response = any> extends BaseResponseError {
-  public status = 400;
-  public errorType = 'bad_request';
-  public response?: Response;
+    Object.setPrototypeOf(this, HttpError.prototype);
+    this.name = HttpError.prototype.constructor.name;
 
-  constructor(message?: string, options?: { response: Response }) {
-    super(message ?? '잘못된 요청입니다. 입력값을 확인해주세요.');
-    if (options !== null) {
-      // this.response = options.response;
+    this.cause = opts.cause;
+    this.statusCode = opts.statusCode;
+    this.url = opts.url;
+    this.method = opts.method;
+    this.message = opts.message ?? `HTTP Error ${opts.statusCode}`;
+
+    if (opts.cause instanceof Error && opts.cause.stack) {
+      this.stack = opts.cause.stack;
     }
   }
-}
 
-export class InvalidCredentialsError extends BaseResponseError {
-  public status = 403;
-  public errorType = 'invalid_credentials';
-
-  constructor(message?: string) {
-    super(message ?? '올바른 인증 정보가 아닙니다.');
+  public static fromRequest(response: AxiosResponse) {
+    return new HttpError({
+      message: response.statusText,
+      url: response.data.url,
+      method: 'GET',
+      statusCode: response.status,
+    });
   }
-}
-
-export class InternalServerError extends BaseResponseError {
-  public status = 500;
-  public errorType = 'internal_server';
-
-  constructor(message?: string) {
-    super(message ?? '네트워크에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
-  }
-}
-
-export type ResponseError = BadRequestError | InvalidCredentialsError | InternalServerError;
-
-export function isResponseError(error: any): error is ResponseError {
-  return error != null && error.isResponseError;
-}
-
-export function isAxiosError<E = any>(error: any): error is AxiosError<E> {
-  return error != null && error.isAxiosError === true;
 }

@@ -6,5 +6,12 @@ export enum STATUS_CODE {
   REFRESH_TOKEN_EXPIRED = 998
 }
 
+export enum FetchingStatus {
+  PENDING = 'pending',
+  LOADING = 'loading',
+  RESOLVED = 'resolved',
+  REJECTED = 'rejected',
+}
+
 
 export const JSON_SERVER = 'http://localhost:8080';

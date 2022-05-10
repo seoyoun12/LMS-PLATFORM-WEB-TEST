@@ -1,6 +1,7 @@
 import Axios, { AxiosError } from 'axios';
 import { jwpInterceptor, responseInterceptor } from '@common/httpInterceptor';
 import { tokenInterceptor } from '@common/httpInterceptor/tokenInterceptor';
+import { HttpError } from '@common/errors';
 
 /**
  *  * Basic
@@ -36,7 +37,7 @@ export const get = async <T>(
 ): Promise<T> => {
   try {
     const response = await api.get(url, { params, headers });
-    return response?.data;
+    return response.data;
   } catch (error) {
     return handleError(error);
   }
@@ -49,7 +50,8 @@ export const post = async (
 ) => {
   try {
     const response = await api.post(url, data, { params, headers });
-    return response?.data;
+    console.log('response', response);
+    return response.data;
   } catch (error) {
     return handleError(error);
   }
@@ -62,7 +64,7 @@ export const put = async (
 ) => {
   try {
     const response = await api.put(url, data, { params, headers });
-    return response?.data;
+    return response.data;
   } catch (error) {
     return handleError(error);
   }

@@ -22,7 +22,54 @@
       "content1Title": "string",
       "content1": "string",
       "saleYn": "string",
-      "displayYn": "string"
+      "displayYn": "string",
+      "curriculum": [
+        {
+          "title": "커리큘럼 1",
+          "contents": [
+            {
+              "title": "강의 1"
+            },
+            {
+              "title": "강의 2"
+            },
+            {
+              "title": "강의 3"
+            }
+          ],
+          "panel": 1
+        },
+        {
+          "title": "커리큘럼 2",
+          "contents": [
+            {
+              "title": "강의 1"
+            },
+            {
+              "title": "강의 2"
+            },
+            {
+              "title": "강의 3"
+            }
+          ],
+          "panel": 2
+        },
+        {
+          "title": "커리큘럼 3",
+          "contents": [
+            {
+              "title": "강의 1"
+            },
+            {
+              "title": "강의 2"
+            },
+            {
+              "title": "강의 3"
+            }
+          ],
+          "panel": 3
+        }
+      ]
     }
   ]
 }

@@ -1,4 +1,5 @@
 import { get, post, put } from '@common/httpClient';
+import useSWR from 'swr';
 
 export type MyUser = {
   message: string;
@@ -25,40 +26,33 @@ export type MyUser = {
 }
 
 export async function getMyUser(): Promise<MyUser> {
-  try {
-    return await get<MyUser>(`/user/myinfo`);
-  } catch (err) {
-    return Promise.reject(err);
-  }
+  return await get<MyUser>(`/user/myinfo`);
 }
 
+// export function useMyUser(): { user: MyUser | undefined; isLoading: boolean; isError: any } {
+//   const { data, error } = useSWR<MyUser>(`/user/myinfo`, get);
+//   return {
+//     isLoading: !data && !error,
+//     user: data,
+//     isError: error
+//   };
+// }
+
 export async function userLoginHistory() {
-  try {
-    return await post(`/user/login-history`);
-  } catch(e) {
-    return Promise.reject(e);
-  }
+  return await post(`/user/login-history`);
 }
 
 export async function modifyMyUser({ name, emailYn, smsYn }: { name: string, emailYn: 'Y' | 'N', smsYn: 'Y' | 'N' }) {
-  try {
-    return await put(`/user/myinfo/modify`, {
-      emailYn, smsYn
-    });
-  } catch (err) {
-    return Promise.reject(err);
-  }
+  return await put(`/user/myinfo/modify`, {
+    emailYn, smsYn
+  });
 }
 
 export async function modifyMyUserPassword(
   { currentPassword, newPassword }: { currentPassword: string, newPassword: string }
 ) {
-  try {
-    return await put(`/user/myinfo/modify/password`, {
-      currentPw: currentPassword,
-      modifiedPw: newPassword
-    });
-  } catch (err) {
-    return Promise.reject(err);
-  }
+  return await put(`/user/myinfo/modify/password`, {
+    currentPw: currentPassword,
+    modifiedPw: newPassword
+  });
 }

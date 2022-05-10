@@ -2,8 +2,9 @@ import { post } from '@common/httpClient';
 import { localStore } from '@common/storage';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@common/constant';
 import { userLoginHistory } from '@common/api/user';
+import { useSnackbar } from '@hooks/useSnackbar';
 
-type Response = {
+export type SignInResponse = {
   success: boolean;
   status: number;
   message: string;
@@ -13,16 +14,13 @@ type Response = {
   };
 };
 
-export async function signIn(username: string, password: string): Promise<Response> {
+export async function signIn(username: string, password: string): Promise<SignInResponse> {
   return await post('/auth/signin', { username, password })
     .then(onSignInSuccess)
-    .then(getUserLoginHistory)
-    .catch(error => {
-      return Promise.reject(error);
-    });
+    .then(getUserLoginHistory);
 }
 
-const onSignInSuccess = (response: Response) => {
+const onSignInSuccess = (response: SignInResponse) => {
   const { accessToken, refreshToken } = response.data;
   localStore.setItem(ACCESS_TOKEN, accessToken);
   localStore.setItem(REFRESH_TOKEN, refreshToken);
@@ -30,7 +28,7 @@ const onSignInSuccess = (response: Response) => {
   return response;
 };
 
-const getUserLoginHistory = async (response: Response) => {
+const getUserLoginHistory = async (response: SignInResponse) => {
   await userLoginHistory();
   return response;
 };

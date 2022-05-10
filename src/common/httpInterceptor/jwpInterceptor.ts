@@ -26,6 +26,8 @@ export const jwpInterceptor = () => {
 
       return config;
     },
-    (err) => Promise.reject(err)
+    (err) => {
+      return Promise.reject(err);
+    }
   );
 };

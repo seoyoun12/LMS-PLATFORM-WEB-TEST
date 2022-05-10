@@ -4,10 +4,10 @@ import { localStore } from '@common/storage';
 import { AxiosError } from 'axios';
 
 type ErrorResponse = {
-  'success': boolean
-  'status': number
-  'message': string
-  'data': string | object
+  success: boolean
+  status: number
+  message: string
+  data: string | object
 }
 
 type Response = {

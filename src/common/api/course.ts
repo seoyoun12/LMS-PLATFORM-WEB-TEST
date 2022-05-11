@@ -45,6 +45,15 @@ export interface Course {
   saleYn: string;
   seq: number;
   status: number;
+
+  // 임시용 타입
+  curriculum: {
+    title: string;
+    panel: number;
+    contents: {
+      title: string
+    }[];
+  }[];
 }
 
 export async function uploadCourse(formData: FormData) {

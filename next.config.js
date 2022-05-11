@@ -8,7 +8,8 @@ const nextConfig = {
   },
   images: {
     domains: [
-      'picsum.photos'
+      'picsum.photos',
+      'dnkwhodfjmev10929056.cdn.ntruss.com'
     ]
   }
 };

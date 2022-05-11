@@ -1,17 +1,18 @@
-import Container from '@mui/material/Container';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor as EditorType } from '@toast-ui/react-editor';
 import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import styles from '@styles/common.module.scss';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, FormControlLabel, Switch, TextField, Typography } from '@mui/material';
 import { TuiEditor } from '@components/common/TuiEditor';
-import { CourseData, uploadCourse } from '@common/api/tutor';
 import styled from '@emotion/styled';
+import { CourseData, uploadCourse } from '@common/api/course';
+import * as React from 'react';
 
-export function ApplyTutor() {
+export function CourseUpload() {
   const editorRef = useRef<EditorType>(null);
   const courseNameRef = useRef<HTMLInputElement>(null);
   const courseSubNameRef = useRef<HTMLInputElement>(null);
+  const displayYnRef = useRef(false);
   const [ thumbnail, setThumbnail ] = useState<Blob | string>('');
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -26,13 +27,15 @@ export function ApplyTutor() {
       const markdownContent = editorRef.current.getInstance().getMarkdown();
 
       const courseData: CourseData = {
-        courseName, courseSubName, content1: markdownContent
+        courseName,
+        courseSubName,
+        content1: markdownContent,
+        displayYn: displayYnRef.current ? 'Y' : 'N',
       };
 
       const formData = new FormData();
       formData.append('courseFileOriginal', thumbnail);
       formData.append('data', new Blob([ JSON.stringify(courseData) ], { type: 'application/json' }));
-
       return uploadCourse(formData);
     } catch (e) {
       console.error(e);
@@ -48,18 +51,17 @@ export function ApplyTutor() {
   };
 
   return (
-    <Container
-      className={styles.globalContainer}
-      component="div"
-      sx={{
-        marginBottom: 8
-      }}
-    >
+    <Container className={styles.globalContainer}>
       <Box
         component="form"
         encType="multipart/form-data"
         onSubmit={handleSubmit}
-        noValidate sx={{ mt: 1 }}
+        noValidate
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          mt: 1
+        }}
       >
         <InputContainer>
           <TextField
@@ -91,6 +93,17 @@ export function ApplyTutor() {
           ref={editorRef}
         />
 
+        <FormControlLabel
+          className="form-control"
+          label="과정 보이기"
+          name="displayYn"
+          sx={{ ml: 'auto' }}
+          onChange={(e, checked) => {
+            displayYnRef.current = checked;
+          }}
+          control={<Switch/>}
+        />
+
         <Button
           variant="contained"
           type="submit"
@@ -104,6 +117,14 @@ export function ApplyTutor() {
     </Container>
   );
 }
+
+const Container = styled.div`
+  margin-bottom: 8px;
+
+  .form-control {
+    margin: 12px auto 12px 0;
+  }
+`;
 
 
 const InputContainer = styled.div`

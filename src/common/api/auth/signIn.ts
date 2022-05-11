@@ -4,7 +4,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from '@common/constant';
 import { userLoginHistory } from '@common/api/user';
 import { useSnackbar } from '@hooks/useSnackbar';
 
-export type SignInResponse = {
+export interface SignInResponse {
   success: boolean;
   status: number;
   message: string;

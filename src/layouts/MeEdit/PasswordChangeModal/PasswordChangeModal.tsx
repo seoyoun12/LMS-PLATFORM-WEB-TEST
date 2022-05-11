@@ -8,12 +8,12 @@ import { ChangeEvent, useCallback, useReducer } from 'react';
 import { modifyMyUserPassword } from '@common/api/user';
 import { useSnackbar } from '@hooks/useSnackbar';
 
-export type Props = {
+export interface Props {
   open: boolean;
   onClose: (isConfirm: boolean) => void;
 }
 
-type State = {
+interface State {
   currentPassword: string;
   newPassword: string;
   newPasswordValid: string;

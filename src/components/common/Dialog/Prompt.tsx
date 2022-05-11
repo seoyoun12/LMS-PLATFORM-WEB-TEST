@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
 import { ConfirmDialogProps } from '@components/common/Dialog/Confirm';
 
-export type PromptDialogProps = {
+export interface PromptDialogProps {
   open: boolean;
   title: string;
   content: string;

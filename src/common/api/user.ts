@@ -1,7 +1,7 @@
 import { get, post, put } from '@common/httpClient';
 import useSWR from 'swr';
 
-export type MyUser = {
+export interface MyUser {
   message: string;
   status: number;
   success: boolean;
@@ -22,7 +22,7 @@ export type MyUser = {
     regCategory: string;
     loginFailedCount: number;
     failedYn: string;
-  }
+  };
 }
 
 export async function getMyUser(): Promise<MyUser> {

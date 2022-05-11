@@ -15,11 +15,13 @@ import { isLoginState } from '@common/recoil';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { useSnackbar } from '@hooks/useSnackbar';
 
 export function SignIn() {
   const router = useRouter();
   const isLogin = useIsLoginStatus();
   const setIsLoginState = useSetRecoilState(isLoginState);
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     if (isLogin) {
@@ -37,10 +39,11 @@ export function SignIn() {
       const res = await signIn(username, password);
       if (res.success) {
         setIsLoginState(true);
+        snackbar({ type: 'success', text: '로그인이 되었습니다.' });
         return router.push('/');
       }
-    } catch (err) {
-      return Promise.reject(err);
+    } catch (e) {
+      snackbar({ type: 'error', text: e.data.message });
     }
   };
 

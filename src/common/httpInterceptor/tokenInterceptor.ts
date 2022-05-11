@@ -3,20 +3,20 @@ import { api, post } from '@common/httpClient';
 import { localStore } from '@common/storage';
 import { AxiosError } from 'axios';
 
-type ErrorResponse = {
-  success: boolean
-  status: number
-  message: string
-  data: string | object
+interface ErrorResponse {
+  success: boolean;
+  status: number;
+  message: string;
+  data: string | object;
 }
 
-type Response = {
+interface Response {
   config: any;
   data: ErrorResponse;
   headers: any;
   request: any;
   status: number;
-  statusText: string
+  statusText: string;
 }
 
 export const tokenInterceptor = () => {

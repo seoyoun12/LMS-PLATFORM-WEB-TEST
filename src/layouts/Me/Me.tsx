@@ -88,7 +88,7 @@ export function Me() {
           }}
         >
           <Typography variant="h5" sx={{ marginBottom: '16px' }}>
-            내 클래스
+            내 강의
           </Typography>
           <Grid
             container
@@ -97,7 +97,9 @@ export function Me() {
             columns={{ xs: 1, sm: 2, md: 3 }}>
             {Array.from(Array(10)).map((v, idx) => (
               <Grid item xs={1} sm={1} md={1}>
-                <ContentCard maxWidth={250} key={idx}/>
+                <Link href="/course/1/content/1">
+                  <ContentCard maxWidth={250} key={idx}/>
+                </Link>
               </Grid>
             ))}
           </Grid>

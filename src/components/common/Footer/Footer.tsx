@@ -1,15 +1,32 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from '@styles/common.module.scss';
 import s from './Footer.module.scss';
 import styled from '@emotion/styled';
 import { Button, Typography } from '@mui/material';
 import { Link } from '@components/common';
+import { useRouter } from 'next/router';
 
 interface Props {
   className?: string;
 }
 
+const hideNavList = [
+  { href: '/tutor-center' }
+];
+
 export const Footer: FC<Props> = () => {
+  const router = useRouter();
+  const [ isHideFooter, setIsHideFooter ] = useState(false);
+
+  useEffect(
+    () => {
+      const hide = hideNavList.some(e => router.route.includes(e.href));
+      setIsHideFooter(hide);
+    },
+    [ router ]
+  );
+
+  if (isHideFooter) return null;
   return (
     <footer className={s.root}>
       <div className={styles.globalContainer}>

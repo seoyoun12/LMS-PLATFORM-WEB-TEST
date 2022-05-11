@@ -4,8 +4,9 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-const navigation = [
-  { href: '/course/[courseId]' }
+const hideNavList = [
+  { href: '/course/[courseId]' },
+  { href: '/tutor-center' }
 ];
 
 export function GlobalNavigationBar() {
@@ -14,7 +15,7 @@ export function GlobalNavigationBar() {
 
   useEffect(
     () => {
-      const hide = navigation.some(e => router.route === e.href);
+      const hide = hideNavList.some(e => router.route.includes(e.href));
       setIsHideNavbar(hide);
     },
     [ router ]
@@ -22,8 +23,8 @@ export function GlobalNavigationBar() {
 
   return (
     <GlobalNavigationContainer>
-      <HeaderBar/>
-      {isHideNavbar || <NavBar/>}
+      <HeaderBar />
+      {isHideNavbar || <NavBar />}
     </GlobalNavigationContainer>
   );
 }
@@ -38,6 +39,6 @@ const GlobalNavigationContainer = styled.div`
   position: sticky;
   top: 0;
   left: 0;
-  z-index: 101;
-  box-shadow: rgb(0 0 0 / 4%) 0 1px 0 0;
+  z-index: 9999;
+  box-shadow: rgb(0 0 0 / 12%) 0 1px 0 0;
 `;

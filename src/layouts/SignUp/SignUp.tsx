@@ -12,8 +12,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Link } from '@components/common';
 import { signUp } from '@common/api/auth';
+import { useSnackbar } from '@hooks/useSnackbar';
 
 export function SignUp() {
+  const snackbar = useSnackbar();
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -29,7 +32,11 @@ export function SignUp() {
     });
 
     if (!!name && !!username && !!password) {
-      return signUp({ name, password, username, emailYn: 'N', smsYn: 'N' });
+      try {
+        return signUp({ name, password, username, emailYn: 'N', smsYn: 'N' });
+      } catch (e) {
+        snackbar({ type: 'error', text: e.data.message });
+      }
     }
   };
 

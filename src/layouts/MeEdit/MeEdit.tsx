@@ -32,14 +32,10 @@ export function MeEdit() {
     setOpenConfirmDialog(false);
 
     if (isConfirm) {
-      try {
-        const emailYn = emailChecked ? 'Y' : 'N';
-        const smsYn = smsChecked ? 'Y' : 'N';
-        await modifyMyUser({ name: nameInput, emailYn, smsYn });
-        return router.push('/me');
-      } catch (e) {
-
-      }
+      const emailYn = emailChecked ? 'Y' : 'N';
+      const smsYn = smsChecked ? 'Y' : 'N';
+      await modifyMyUser({ name: nameInput, emailYn, smsYn });
+      return router.push('/me');
     }
   };
 

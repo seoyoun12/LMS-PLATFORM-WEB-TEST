@@ -1,13 +1,13 @@
-import * as React from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import { CardActionArea } from "@mui/material";
+import * as React from 'react';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { CardActionArea } from '@mui/material';
 
-export function ContentCard({ maxWidth = 345 }) {
+export function ContentCard({ maxWidth = 345, minWidth = 272 }) {
   return (
-    <Card sx={{ maxWidth }}>
+    <Card sx={{ maxWidth, minWidth }}>
       <CardActionArea>
         <CardMedia
           component="img"

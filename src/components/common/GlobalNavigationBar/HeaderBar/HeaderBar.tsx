@@ -37,7 +37,7 @@ export function HeaderBar() {
             underline="none"
             color={router.pathname === '/' ? 'primary' : grey[800]}
           >
-            <Typography variant="h6" className="bold-600">클래스</Typography>
+            <Typography variant="h6" className="bold-600">강의</Typography>
           </Link>
           <Link
             href="/link2"
@@ -48,12 +48,12 @@ export function HeaderBar() {
           </Link>
         </NavContainer>
         <SearchbarContainer>
-          <Searchbar/>
+          <Searchbar />
         </SearchbarContainer>
         <RightSection>
           {!isLogin ? (
             <div>
-              <Link href="/apply-tutor" underline="none">
+              <Link href="/tutor-center/apply-tutor" underline="none">
                 <Button
                   className="align-left"
                   color="neutral"
@@ -71,13 +71,13 @@ export function HeaderBar() {
               direction="row"
               alignItems="center"
             >
-              <Link href="/apply-tutor" underline="none">
+              <Link href="/tutor-center" underline="none">
                 <Button
                   className="align-left"
                   color="neutral"
                 >튜터 센터</Button>
               </Link>
-              <AccountMenu/>
+              <AccountMenu />
             </Stack>
           )}
         </RightSection>

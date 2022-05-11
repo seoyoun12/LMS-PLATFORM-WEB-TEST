@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import { ContentCard, Carousel } from '@components/ui';
 import cn from 'clsx';
 import { Link } from '@components/common';
+import { Grid } from '@mui/material';
 
 const MainPage: NextPage = (res) => {
   const bannerData = [
@@ -28,37 +29,36 @@ const MainPage: NextPage = (res) => {
     },
   ];
   return (
-    <Host>
+    <div>
       <Carousel datas={bannerData}/>
-      <div className={cn(styles.globalContainer, 'padding-top')}>
-        <ContentCardContainer>
-          {[ 0, 0, 0, 0 ].map((v, idx) => (
-            <Link href="course/1">
-              <ContentCard key={idx}/>
-            </Link>
+      <ContentContainer className={cn(styles.globalContainer)}>
+        <Grid
+          container
+          rowSpacing={2}
+          columnSpacing={3}
+          columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+        >
+          {Array.from(Array(15)).map((v, idx) => (
+            <Grid
+              item xs={1} sm={1} md={1} lg={1}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center'
+              }}
+            >
+              <Link href={`course/${idx + 1}`}>
+                <ContentCard key={idx}/>
+              </Link>
+            </Grid>
           ))}
-        </ContentCardContainer>
-        <ContentCardContainer>
-          {[ 0, 0, 0, 0 ].map((v, idx) => (
-            <Link href="course/1">
-              <ContentCard key={idx}/>
-            </Link>
-          ))}
-        </ContentCardContainer>
-        <ContentCardContainer>
-          {[ 0, 0, 0, 0 ].map((v, idx) => (
-            <ContentCard key={idx}/>
-          ))}
-        </ContentCardContainer>
-      </div>
-    </Host>
+        </Grid>
+      </ContentContainer>
+    </div>
   );
 };
 
-const Host = styled.div`
-  .padding-top {
-    padding: 76px 0;
-  }
+const ContentContainer = styled.div`
+  padding: 76px 20px 0 20px !important;
 `;
 
 const BannerContainer = styled.div`

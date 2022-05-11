@@ -4,124 +4,111 @@ import styles from '@styles/common.module.scss';
 import { getCourse, Course } from '@common/api';
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import ShareIcon from '@mui/icons-material/Share';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { Menubar } from '@components/ui';
+import { CurriculumAccordion } from '@components/ui';
 import { headerHeight } from '@styles/variables';
-
-import '@toast-ui/editor/dist/toastui-editor.css';
-import { Viewer } from '@toast-ui/react-editor';
+import { TuiViewer } from '@components/common/TuiEditor';
+import { useRouter } from 'next/router';
+import { STATUS_CODE } from '@common/constant';
 
 export function Course() {
+  const router = useRouter();
+  const { courseId } = router.query;
   const [ course, setCourse ] = useState<Course>();
-  const [ loading, setLoading ] = useState(false);
-  const editorRef = useRef();
+  const [ error, setError ] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-      const res = await getCourse({ courseId: 1 });
-      setCourse(res);
-      setLoading(false);
-    })();
+    setError(false);
 
-  }, []);
+    (async () => {
+      try {
+        const res = await getCourse({ courseId: Number(courseId) });
+        setCourse(res);
+      } catch (e) {
+        if (e.status === STATUS_CODE.NOT_FOUND) {
+          setError(true);
+        }
+      }
+    })();
+  }, [ courseId ]);
 
   const onHandleSubmit = () => {
   };
 
-  if (!course) return null;
+  if (!course && error) return (<div>NOT FOUND</div>);
+  if (!course) return (<div>...loading</div>);
   return (
-    loading ? <div>...loading</div> :
-      <Container
-        sx={{
-          display: 'flex',
-        }}
-        className={styles.globalContainer}
-      >
-        <MainSection>
-          <div>
-            <Image
-              src={course.courseThumblink}
-              layout="responsive"
-              width="100%"
-              height="100%"
-            />
-          </div>
-
-          <Menubar/>
-
-          <Viewer
-            initialValue="# hello react editor world!"
-            previewStyle="vertical"
-            height="600px"
-            initialEditType="markdown"
-            useCommandShortcut={true}
-            ref={editorRef}
+    <Container
+      sx={{
+        display: 'flex',
+      }}
+      className={styles.globalContainer}
+    >
+      <MainSection>
+        <ThumbnailImg>
+          <Image
+            className="thumbnailImg"
+            src={course.courseFile}
+            layout="responsive"
+            width="100%"
+            height="56.25"
           />
-        </MainSection>
+        </ThumbnailImg>
 
-        <StickySideBar>
-          <TopSection>
-            <Typography variant="subtitle2">
-              {course.courseName}
-            </Typography>
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 700
-              }}
+        {(course && !error) && <TuiViewer initialValue={course.content1}/>}
+
+        <CurriculumContainer>
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 700,
+              marginBottom: '12px'
+            }}
+          >
+            커리큘럼
+          </Typography>
+          {/*<CurriculumAccordion curriculum={course.curriculum}/>*/}
+        </CurriculumContainer>
+      </MainSection>
+
+      <StickySideBar>
+        <TopSection>
+          <Typography variant="subtitle2">
+            {course.courseName}
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 700
+            }}
+          >
+            {course.courseSubName}
+          </Typography>
+          <Divider
+            light
+            sx={{ margin: '20px 0' }}
+          />
+          <ButtonSection>
+            <Button
+              fullWidth
+              variant="contained" color="primary"
+              onClick={onHandleSubmit}
             >
-              {course.courseName}
-            </Typography>
-            <ContentSection>
-              <Typography
-                variant="subtitle1"
-                sx={{
-                  fontSize: '18px',
-                  fontWeight: 700
-                }}
-              >
-                {course.price} 원
-              </Typography>
-            </ContentSection>
-            <Divider
-              light
-              sx={{ margin: '20px 0' }}
-            />
-            <ButtonSection>
-              <div className="subButtons">
-                <Button
-                  startIcon={<FavoriteBorderIcon/>}
-                  variant="contained" color="neutral"
-                >
-                  252
-                </Button>
-                <Button
-                  variant="contained" color="neutral"
-                  startIcon={<ShareIcon/>}
-                >
-                  공유하기
-                </Button>
-              </div>
-              <Button
-                fullWidth
-                variant="contained" color="primary"
-                onClick={onHandleSubmit}
-              >
-                구매하기
-              </Button>
-            </ButtonSection>
-          </TopSection>
-          <div className="bottomSection"></div>
-        </StickySideBar>
-      </Container>
+              수강하기
+            </Button>
+          </ButtonSection>
+        </TopSection>
+        <div className="bottomSection"></div>
+      </StickySideBar>
+    </Container>
   );
 }
 
 const MainSection = styled.div`
   flex: 1;
-  height: 200vh;
+`;
+
+const ThumbnailImg = styled.div`
+  padding-bottom: 30px;
 `;
 
 const StickySideBar = styled.div`
@@ -143,18 +130,9 @@ const TopSection = styled.div`
 `;
 
 const ButtonSection = styled.div`
-  .subButtons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 8px;
 
-    > Button {
-      width: 48%;
-    }
-  }
 `;
 
-const ContentSection = styled.div`
-  padding: 8px 0 12px;
+const CurriculumContainer = styled.div`
+  padding-top: 30px;
 `;

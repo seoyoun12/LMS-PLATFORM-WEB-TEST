@@ -47,7 +47,7 @@ export function PasswordChangeModal({ open, onClose }: Props) {
       } else {
         snackbar({ type: 'error', text: '새로운 비밀번호가 동일하지 않습니다.' });
       }
-    } catch (e) {
+    } catch (e: any) {
       switch (e.data.status) {
         case 400:
           snackbar({ type: 'error', text: '현재 비밀번호가 일치하지 않습니다.' });

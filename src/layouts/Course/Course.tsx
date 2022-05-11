@@ -4,11 +4,10 @@ import styles from '@styles/common.module.scss';
 import { getCourse, Course } from '@common/api';
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import { CurriculumAccordion } from '@components/ui';
 import { headerHeight } from '@styles/variables';
 import { TuiViewer } from '@components/common/TuiEditor';
 import { useRouter } from 'next/router';
-import { STATUS_CODE } from '@common/constant';
+import { ErrorType, STATUS_CODE } from '@common/constant';
 
 export function Course() {
   const router = useRouter();
@@ -23,8 +22,8 @@ export function Course() {
       try {
         const res = await getCourse({ courseId: Number(courseId) });
         setCourse(res);
-      } catch (e) {
-        if (e.status === STATUS_CODE.NOT_FOUND) {
+      } catch (err: any) {
+        if (err.status === STATUS_CODE.NOT_FOUND) {
           setError(true);
         }
       }
@@ -54,7 +53,7 @@ export function Course() {
           />
         </ThumbnailImg>
 
-        {(course && !error) && <TuiViewer initialValue={course.content1}/>}
+        {(course && !error) && <TuiViewer initialValue={course.content1} />}
 
         <CurriculumContainer>
           <Typography

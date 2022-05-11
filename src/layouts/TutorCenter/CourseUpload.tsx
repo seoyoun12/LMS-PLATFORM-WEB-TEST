@@ -37,7 +37,7 @@ export function CourseUpload() {
       formData.append('courseFileOriginal', thumbnail);
       formData.append('data', new Blob([ JSON.stringify(courseData) ], { type: 'application/json' }));
       return uploadCourse(formData);
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
     }
   };

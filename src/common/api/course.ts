@@ -68,7 +68,7 @@ export async function getCourse({ courseId }: { courseId: number }): Promise<Cou
   try {
     // return await get<Course>(`${JSON_SERVER}/course/${courseId}`);
     return (await get<CourseResponse>(`/course/${courseId}`)).data;
-  } catch (err) {
+  } catch (err: any) {
     return Promise.reject(err);
   }
 }

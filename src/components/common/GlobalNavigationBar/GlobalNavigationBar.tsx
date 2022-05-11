@@ -1,8 +1,9 @@
 import { HeaderBar } from '@components/common/GlobalNavigationBar/HeaderBar';
 import { NavBar } from '@components/common/GlobalNavigationBar/NavBar';
-import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { AppBar } from '@mui/material';
+import * as React from 'react';
 
 const hideNavList = [
   { href: '/course/[courseId]' },
@@ -22,23 +23,17 @@ export function GlobalNavigationBar() {
   );
 
   return (
-    <GlobalNavigationContainer>
+    <AppBar
+      position="sticky"
+      sx={{
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+        backgroundColor: '#FFFFFF',
+        borderColor: '#E5E5E5',
+        boxShadow: 'rgb(0 0 0 / 12%) 0 1px 0 0'
+      }}
+    >
       <HeaderBar />
       {isHideNavbar || <NavBar />}
-    </GlobalNavigationContainer>
+    </AppBar>
   );
 }
-
-const GlobalNavigationContainer = styled.div`
-  border-radius: 0;
-  width: 100%;
-  height: auto;
-  background-color: #FFFFFF;
-  border-color: #E5E5E5;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  box-shadow: rgb(0 0 0 / 12%) 0 1px 0 0;
-`;

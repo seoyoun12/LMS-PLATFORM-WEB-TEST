@@ -5,12 +5,12 @@ import { useEffect } from 'react';
 import { getProfile, healthCheck } from '@common/test';
 
 export default function Home() {
-  useEffect(() => {
-    (async () => {
-      const loadHealthCheck = await healthCheck();
-      console.log(loadHealthCheck);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const loadHealthCheck = await healthCheck();
+  //     console.log(loadHealthCheck);
+  //   })();
+  // }, []);
 
   useEffect(() => {
     (async () => {
@@ -22,9 +22,9 @@ export default function Home() {
     <>
       <Head>
         <title>TITLE</title>
-        <meta name="description" content="lms platform service"/>
+        <meta name="description" content="lms platform service" />
       </Head>
-      <MainPage/>
+      <MainPage />
     </>
   );
 }

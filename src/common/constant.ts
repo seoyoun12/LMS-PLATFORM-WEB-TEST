@@ -1,6 +1,12 @@
 export const ACCESS_TOKEN = 'ACCESS_TOKEN';
 export const REFRESH_TOKEN = 'REFRESH_TOKEN';
 
+export interface ErrorType {
+  status: number;
+  message: string;
+  data: any;
+}
+
 export enum STATUS_CODE {
   NOT_FOUND = 404,
   ACCESS_TOKEN_EXPIRED = 999,

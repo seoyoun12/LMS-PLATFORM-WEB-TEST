@@ -31,7 +31,7 @@ const Accordion =
 
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
   <MuiAccordionSummary
-    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }}/>}
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
     {...props}
   />
 ))(({ theme }) => ({
@@ -80,11 +80,11 @@ export function CurriculumAccordion({ curriculum }: { curriculum: Course['curric
                   >
                     <ListItem disablePadding>
                       <ListItemButton>
-                        <ListItemText primary={title}/>
+                        <ListItemText primary={title} />
                       </ListItemButton>
                     </ListItem>
                     <>
-                      {idx === (contents.length - 1) || <Divider light/>}
+                      {idx === (contents.length - 1) || <Divider light />}
                     </>
                   </Link>
                 ))}

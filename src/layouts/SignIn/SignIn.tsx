@@ -42,7 +42,7 @@ export function SignIn() {
         snackbar({ type: 'success', text: '로그인이 되었습니다.' });
         return router.push('/');
       }
-    } catch (e) {
+    } catch (e: any) {
       snackbar({ type: 'error', text: e.data.message });
     }
   };

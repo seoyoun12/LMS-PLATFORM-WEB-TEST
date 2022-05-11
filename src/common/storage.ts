@@ -7,7 +7,7 @@ function storageFactory(getStorage: () => Storage): Storage {
       getStorage().setItem(testKey, testKey);
       getStorage().removeItem(testKey);
       return true;
-    } catch (e) {
+    } catch (e: any) {
       return false;
     }
   }

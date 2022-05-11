@@ -34,7 +34,7 @@ export function SignUp() {
     if (!!name && !!username && !!password) {
       try {
         return signUp({ name, password, username, emailYn: 'N', smsYn: 'N' });
-      } catch (e) {
+      } catch (e: any) {
         snackbar({ type: 'error', text: e.data.message });
       }
     }

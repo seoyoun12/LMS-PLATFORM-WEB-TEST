@@ -1,8 +1,8 @@
 import React from 'react';
-import { Drawer } from '@components/tutor-center';
+import { Drawer } from '@components/admin-center';
 import { Layout } from '@layouts/Layout';
 
-export const TutorCenterLayout: React.FC = ({ children }) => {
+export const AdminCenterLayout: React.FC = ({ children }) => {
   return (
     <Layout>
       <Drawer>

@@ -7,7 +7,7 @@ import * as React from 'react';
 
 const hideNavList = [
   { href: '/course/[courseId]' },
-  { href: '/tutor-center' }
+  { href: '/admin-center' }
 ];
 
 export function GlobalNavigationBar() {

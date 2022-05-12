@@ -1,11 +1,6 @@
-import { get, post } from '@common/httpClient';
-
-export interface CourseResponse {
-  data: Course;
-  message: string;
-  status: number;
-  success: boolean;
-}
+import { get, post, put } from '@common/httpClient';
+import useSWR from 'swr';
+import { FetchResponse } from '@common/constant';
 
 export interface CourseData {
   content1: string;
@@ -64,11 +59,34 @@ export async function uploadCourse(formData: FormData) {
   });
 }
 
+export async function modifyCourse(formData: FormData) {
+  return await put(`/course/adm`, formData, {
+    headers: {
+      'content-type': 'multipart/form-data'
+    }
+  });
+}
+
+
 export async function getCourse({ courseId }: { courseId: number }): Promise<Course> {
   try {
     // return await get<Course>(`${JSON_SERVER}/course/${courseId}`);
-    return (await get<CourseResponse>(`/course/${courseId}`)).data;
+    return (await get<FetchResponse<Course>>(`/course/${courseId}`)).data;
   } catch (err: any) {
     return Promise.reject(err);
   }
 }
+
+export function useCourse({ courseId }: { courseId: number }): {
+  isLoading: boolean;
+  isError: any;
+  data?: Course
+} {
+  const { data, error } = useSWR<FetchResponse<Course>>(`/course/${courseId}`, get);
+  return {
+    data: data?.data,
+    isLoading: !data && !error,
+    isError: error
+  };
+}
+

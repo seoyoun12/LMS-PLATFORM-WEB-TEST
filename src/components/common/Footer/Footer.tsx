@@ -11,7 +11,7 @@ interface Props {
 }
 
 const hideNavList = [
-  { href: '/tutor-center' }
+  { href: '/admin-center' }
 ];
 
 export const Footer: FC<Props> = () => {

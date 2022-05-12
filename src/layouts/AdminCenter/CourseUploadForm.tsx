@@ -1,46 +1,41 @@
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor as EditorType } from '@toast-ui/react-editor';
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import styles from '@styles/common.module.scss';
 import { Box, Button, FormControlLabel, Switch, TextField, Typography } from '@mui/material';
 import { TuiEditor } from '@components/common/TuiEditor';
 import styled from '@emotion/styled';
-import { CourseData, uploadCourse } from '@common/api/course';
-import * as React from 'react';
+import { CourseData } from '@common/api/course';
 
-export function CourseUpload() {
+export function CourseUploadForm(
+  {
+    mode = 'upload',
+    course,
+    onHandleSubmit,
+  }: {
+    mode?: 'upload' | 'modify',
+    course?: any,
+    onHandleSubmit: (event: FormEvent<HTMLFormElement>, formData: FormData) => void,
+  }
+) {
   const editorRef = useRef<EditorType>(null);
   const courseNameRef = useRef<HTMLInputElement>(null);
   const courseSubNameRef = useRef<HTMLInputElement>(null);
-  const displayYnRef = useRef(false);
+  const [ isDisplay, setIsDisplay ] = useState(false);
   const [ thumbnail, setThumbnail ] = useState<Blob | string>('');
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!editorRef.current || !courseNameRef.current || !courseSubNameRef.current) {
-      return;
+  useEffect(() => {
+    if (mode === 'modify') {
+      const { courseName, courseSubName, courseFile, displayYn } = course;
+      if (!!courseNameRef.current && !!courseSubNameRef.current) {
+        courseNameRef.current.value = courseName;
+        courseSubNameRef.current.value = courseSubName;
+        setIsDisplay(displayYn === 'Y');
+        setThumbnail(courseFile);
+        console.log('isDisplay', isDisplay, thumbnail);
+      }
     }
-
-    try {
-      const courseName = courseNameRef.current.value;
-      const courseSubName = courseSubNameRef.current.value;
-      const markdownContent = editorRef.current.getInstance().getMarkdown();
-
-      const courseData: CourseData = {
-        courseName,
-        courseSubName,
-        content1: markdownContent,
-        displayYn: displayYnRef.current ? 'Y' : 'N',
-      };
-
-      const formData = new FormData();
-      formData.append('courseFileOriginal', thumbnail);
-      formData.append('data', new Blob([ JSON.stringify(courseData) ], { type: 'application/json' }));
-      return uploadCourse(formData);
-    } catch (e: any) {
-      console.error(e);
-    }
-  };
+  }, [ mode, course ]);
 
   const uploadFile = (e: ChangeEvent) => {
     e.preventDefault();
@@ -48,6 +43,29 @@ export function CourseUpload() {
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setThumbnail(files[0]);
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!editorRef.current || !courseNameRef.current || !courseSubNameRef.current) {
+      return;
+    }
+
+    const courseName = courseNameRef.current.value;
+    const courseSubName = courseSubNameRef.current.value;
+    const markdownContent = editorRef.current.getInstance().getMarkdown();
+
+    const courseData: CourseData = {
+      courseName,
+      courseSubName,
+      content1: markdownContent,
+      displayYn: isDisplay ? 'Y' : 'N',
+    };
+
+    const formData = new FormData();
+    formData.append('courseFileOriginal', thumbnail);
+    formData.append('data', new Blob([ JSON.stringify(courseData) ], { type: 'application/json' }));
+    onHandleSubmit(e, formData);
   };
 
   return (
@@ -80,12 +98,12 @@ export function CourseUpload() {
           />
           <div className="thumbnail-uploader">
             <Typography variant="subtitle1" className="subtitle">썸네일</Typography>
-            <input type="file" multiple name="thumbnailImg" onChange={uploadFile}/>
+            <input type="file" multiple name="thumbnailImg" onChange={uploadFile} />
           </div>
         </InputContainer>
 
         <TuiEditor
-          initialValue=""
+          initialValue={mode === 'modify' ? course.content1 : ''}
           previewStyle="vertical"
           height="600px"
           initialEditType="wysiwyg"
@@ -98,10 +116,11 @@ export function CourseUpload() {
           label="과정 보이기"
           name="displayYn"
           sx={{ ml: 'auto' }}
+          checked={isDisplay}
           onChange={(e, checked) => {
-            displayYnRef.current = checked;
+            setIsDisplay(checked);
           }}
-          control={<Switch/>}
+          control={<Switch />}
         />
 
         <Button
@@ -111,7 +130,7 @@ export function CourseUpload() {
             margin: '30px 30px 30px 0',
           }}
         >
-          submit
+          {mode === 'upload' ? '업로드하기' : '수정하기'}
         </Button>
       </Box>
     </Container>
@@ -125,7 +144,6 @@ const Container = styled.div`
     margin: 12px auto 12px 0;
   }
 `;
-
 
 const InputContainer = styled.div`
   display: flex;

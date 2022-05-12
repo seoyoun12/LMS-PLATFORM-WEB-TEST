@@ -1,7 +1,7 @@
 import '@toast-ui/editor/dist/toastui-editor.css';
 
-export function TutorCenter() {
+export function AdminCenter() {
   return (
-    <div>Tutor Center</div>
+    <div>Admin Center</div>
   );
 }

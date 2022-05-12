@@ -50,7 +50,7 @@ export const post = async (
 ) => {
   try {
     const response = await api.post(url, data, { params, headers });
-    console.log('response', response);
+    console.log('POST response', response);
     return response.data;
   } catch (error: any) {
     return handleError(error);

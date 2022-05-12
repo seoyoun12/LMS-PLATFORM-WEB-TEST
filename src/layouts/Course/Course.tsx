@@ -7,7 +7,8 @@ import Image from 'next/image';
 import { headerHeight } from '@styles/variables';
 import { TuiViewer } from '@components/common/TuiEditor';
 import { useRouter } from 'next/router';
-import { ErrorType, STATUS_CODE } from '@common/constant';
+import { STATUS_CODE } from '@common/constant';
+import { Link } from '@components/common';
 
 export function Course() {
   const router = useRouter();
@@ -96,6 +97,9 @@ export function Course() {
             </Button>
           </ButtonSection>
         </TopSection>
+        <Link color="primary" href={`/admin-center/course-modify/${course.seq}`}>
+          <Button>수정하기</Button>
+        </Link>
         <div className="bottomSection"></div>
       </StickySideBar>
     </Container>

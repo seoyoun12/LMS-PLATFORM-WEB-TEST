@@ -11,8 +11,8 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 const initialConfig: SnackbarConfig = {
-  text: '',
-  type: 'success'
+  message: '',
+  variant: 'success'
 };
 
 export function SnackbarProvider({ children }: { children: ReactNode | undefined }) {
@@ -30,8 +30,8 @@ export function SnackbarProvider({ children }: { children: ReactNode | undefined
     <SnackbarContext.Provider value={openSnackbar}>
       {children}
       <Snackbar open={open} autoHideDuration={3000} onClose={closeSnackbar}>
-        <Alert onClose={closeSnackbar} severity={config.type} sx={{ width: '100%' }}>
-          {config.text}
+        <Alert onClose={closeSnackbar} severity={config.variant} sx={{ width: '100%' }}>
+          {config.message}
         </Alert>
       </Snackbar>
     </SnackbarContext.Provider>

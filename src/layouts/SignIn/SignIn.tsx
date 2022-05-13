@@ -39,11 +39,11 @@ export function SignIn() {
       const res = await signIn(username, password);
       if (res.success) {
         setIsLoginState(true);
-        snackbar({ type: 'success', text: '로그인이 되었습니다.' });
+        snackbar({ variant: 'success', message: '로그인이 되었습니다.' });
         return router.push('/');
       }
     } catch (e: any) {
-      snackbar({ type: 'error', text: e.data.message });
+      snackbar({ variant: 'error', message: e.data.message });
     }
   };
 

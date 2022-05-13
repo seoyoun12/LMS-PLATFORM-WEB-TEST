@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react';
 
 export interface SnackbarConfig {
-  type?: 'success' | 'warning' | 'info' | 'error';
-  text: string;
+  variant?: 'success' | 'warning' | 'info' | 'error';
+  message: string;
 }
 
 // @ts-ignore

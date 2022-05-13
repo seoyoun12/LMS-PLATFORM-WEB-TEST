@@ -35,7 +35,7 @@ export function SignUp() {
       try {
         return signUp({ name, password, username, emailYn: 'N', smsYn: 'N' });
       } catch (e: any) {
-        snackbar({ type: 'error', text: e.data.message });
+        snackbar({ variant: 'error', message: e.data.message });
       }
     }
   };

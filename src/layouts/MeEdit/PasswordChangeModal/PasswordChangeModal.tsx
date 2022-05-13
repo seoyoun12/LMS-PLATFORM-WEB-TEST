@@ -45,16 +45,16 @@ export function PasswordChangeModal({ open, onClose }: Props) {
         await modifyMyUserPassword({ currentPassword, newPassword });
         handleClose(true);
       } else {
-        snackbar({ type: 'error', text: '새로운 비밀번호가 동일하지 않습니다.' });
+        snackbar({ variant: 'error', message: '새로운 비밀번호가 동일하지 않습니다.' });
       }
     } catch (e: any) {
       switch (e.data.status) {
         case 400:
-          snackbar({ type: 'error', text: '현재 비밀번호가 일치하지 않습니다.' });
+          snackbar({ variant: 'error', message: '현재 비밀번호가 일치하지 않습니다.' });
           break;
 
         default:
-          snackbar({ type: 'error', text: e.data.message });
+          snackbar({ variant: 'error', message: e.data.message });
       }
       return Promise.reject(e);
     }

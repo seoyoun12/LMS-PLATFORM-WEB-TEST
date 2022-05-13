@@ -23,22 +23,22 @@ export function Course() {
   const { data, error } = useCourseList({ page });
 
   const onChangePage = async (page: number) => {
-    const isConfirm = await dialog({
-      variant: 'confirm',
-      title: 'hello',
-      description: 'test'
-    });
-
-    console.log(isConfirm);
-
     setPage(page);
   };
 
-  const onRemoveCourse = (courseId: number) => {
+  const onRemoveCourse = async (courseId: number) => {
     try {
-      return removeCourse({ courseId });
+      const dialogConfirmed = await dialog({
+        title: '과정 삭제하기',
+        description: '정말로 삭제하시겠습니까?',
+        confirmText: '삭제하기',
+        cancelText: '취소'
+      });
+      if (dialogConfirmed) {
+        return removeCourse({ courseId });
+      }
     } catch (e: any) {
-      snackbar({ type: 'error', text: e.message });
+      snackbar({ variant: 'error', message: e.message });
     }
   };
 

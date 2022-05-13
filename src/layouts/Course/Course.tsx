@@ -1,19 +1,18 @@
 import { Button, Container, Divider, Typography } from '@mui/material';
 import { useRef, useEffect, useState } from 'react';
 import styles from '@styles/common.module.scss';
-import { getCourse, Course } from '@common/api';
+import { getCourse, CourseData } from '@common/api';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { headerHeight } from '@styles/variables';
 import { TuiViewer } from '@components/common/TuiEditor';
 import { useRouter } from 'next/router';
 import { STATUS_CODE } from '@common/constant';
-import { Link } from '@components/common';
 
 export function Course() {
   const router = useRouter();
   const { courseId } = router.query;
-  const [ course, setCourse ] = useState<Course>();
+  const [ course, setCourse ] = useState<CourseData>();
   const [ error, setError ] = useState(false);
 
   useEffect(() => {
@@ -97,9 +96,6 @@ export function Course() {
             </Button>
           </ButtonSection>
         </TopSection>
-        <Link color="primary" href={`/admin-center/course-modify/${course.seq}`}>
-          <Button>수정하기</Button>
-        </Link>
         <div className="bottomSection"></div>
       </StickySideBar>
     </Container>

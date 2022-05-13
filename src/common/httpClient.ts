@@ -50,7 +50,6 @@ export const post = async (
 ) => {
   try {
     const response = await api.post(url, data, { params, headers });
-    console.log('POST response', response);
     return response.data;
   } catch (error: any) {
     return handleError(error);
@@ -69,6 +68,19 @@ export const put = async (
     return handleError(error);
   }
 };
+
+export const deleteRequest = async (
+  url: string,
+  data: object = {}
+) => {
+  try {
+    const response = await api.delete(url, data);
+    return response.data;
+  } catch (error: any) {
+    return handleError(error);
+  }
+};
+
 
 const handleError = (error: AxiosError | any) => {
   if (error.response) {

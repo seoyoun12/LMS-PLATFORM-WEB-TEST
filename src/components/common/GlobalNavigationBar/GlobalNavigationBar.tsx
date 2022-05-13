@@ -33,7 +33,9 @@ export function GlobalNavigationBar() {
       }}
     >
       <HeaderBar />
-      {isHideNavbar || <NavBar />}
+      <>
+        {isHideNavbar || <NavBar />}
+      </>
     </AppBar>
   );
 }

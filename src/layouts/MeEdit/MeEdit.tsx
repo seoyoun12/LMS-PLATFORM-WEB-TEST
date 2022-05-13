@@ -2,13 +2,13 @@ import * as React from 'react';
 import { Container, Box, Switch, Button, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getMyUser, modifyMyUser } from '@common/api/user';
-import { Confirm } from '@components/common';
 import { useRouter } from 'next/router';
 import { PasswordChangeModal } from './PasswordChangeModal/PasswordChangeModal';
+import { useDialog } from '@hooks/useDialog';
 
 export function MeEdit() {
   const router = useRouter();
-  const [ openConfirmDialog, setOpenConfirmDialog ] = useState(false);
+  const dialog = useDialog();
   const [ openPromptDialog, setOpenPromptDialog ] = useState(false);
   const [ nameInput, setNameInput ] = useState('');
   const [ emailChecked, setEmailChecked ] = useState(false);
@@ -23,14 +23,18 @@ export function MeEdit() {
     })();
   }, []);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setOpenConfirmDialog(true);
+    const dialogConfirmed = await dialog({
+      title: '회원 정보 수정',
+      description: '회원 정보를 수정하시겠습니까?',
+      confirmText: '수정하기',
+      cancelText: '취소하기'
+    });
+    await handleOnCloseConfirm(dialogConfirmed);
   };
 
   const handleOnCloseConfirm = async (isConfirm: boolean) => {
-    setOpenConfirmDialog(false);
-
     if (isConfirm) {
       const emailYn = emailChecked ? 'Y' : 'N';
       const smsYn = smsChecked ? 'Y' : 'N';
@@ -119,14 +123,6 @@ export function MeEdit() {
         </Button>
       </Box>
 
-      <Confirm
-        open={openConfirmDialog}
-        title={'회원 정보 수정'}
-        content={'회원 정보를 수정하시겠습니까?'}
-        confirmText="수정하기"
-        cancelText="취소하기"
-        onClose={handleOnCloseConfirm}
-      />
       <PasswordChangeModal
         open={openPromptDialog}
         onClose={() => setOpenPromptDialog(false)}

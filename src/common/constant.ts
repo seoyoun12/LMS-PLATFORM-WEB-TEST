@@ -1,5 +1,3 @@
-import { Course } from '@common/api';
-
 export const ACCESS_TOKEN = 'ACCESS_TOKEN';
 export const REFRESH_TOKEN = 'REFRESH_TOKEN';
 
@@ -8,6 +6,48 @@ export interface FetchResponse<T> {
   message: string;
   status: number;
   success: boolean;
+}
+
+export interface FetchPaginationResponse<T> {
+  data: PaginationResult<T>;
+  message: string;
+  status: number;
+  success: boolean;
+}
+
+export interface PaginationResult<T> {
+  content: T;
+  empty: boolean;
+  first: boolean;
+  last: boolean;
+  number: number;
+  numberOfElements: number;
+  pageable: {
+    offset: number;
+    pageSize: number;
+    pageNumber: number;
+    paged: boolean;
+    unpaged: boolean;
+    sort: {
+      unsorted: boolean;
+      sorted: boolean;
+      empty: boolean
+    };
+  };
+  size: number;
+  sort: {
+    unsorted: boolean;
+    sorted: boolean;
+    empty: boolean;
+  };
+  totalElements: number;
+  totalPages: number;
+}
+
+export interface SwrResponse<T> {
+  data: T;
+  isLoading: boolean;
+  isError: any;
 }
 
 export enum STATUS_CODE {

@@ -15,14 +15,16 @@ interface AccordionList {
   contents: {
     name: string;
     href: string;
+    isActive: boolean;
   }[];
 }
 
-export default function Accordion({ accordionList }: { accordionList: AccordionList[] }) {
+export function Accordion({ accordionList }: { accordionList: AccordionList[] }) {
   return (
     <>
       {accordionList.map(({ title, icon, contents }, idx) => (
         <MuiAccordion
+          key={title}
           disableGutters elevation={0}
           sx={{
             '&:before': {
@@ -45,13 +47,18 @@ export default function Accordion({ accordionList }: { accordionList: AccordionL
           <AccordionDetails>
             <nav aria-label="secondary mailbox folders">
               <List disablePadding={true}>
-                {contents.map(({ name, href }, idx) => (
+                {contents.map(({ name, href, isActive }, idx) => (
                   <Link
                     href={href}
                     color={grey[900]}
-                    key={idx}
+                    key={name}
                   >
-                    <ListItem disablePadding>
+                    <ListItem
+                      disablePadding
+                      sx={{
+                        backgroundColor: `${true ? grey[50] : 'inherit'}`,
+                      }}
+                    >
                       <ListItemButton>
                         <ListItemText primary={name} />
                       </ListItemButton>

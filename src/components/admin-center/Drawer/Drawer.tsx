@@ -14,47 +14,51 @@ import { ReactNode } from 'react';
 import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
 import { useRouter } from 'next/router';
-import Accordion from '@components/ui/Accordion/Accordion';
+import { Accordion } from '@components/ui';
 
 const drawerWidth = 240;
 
-const accordionList = [
-  {
-    title: '과정관리',
-    contents: [
-      { name: '과정 리스트', href: '/admin-center/course-list' },
-      { name: 'child2', href: '' },
-    ],
-    icon: <SchoolOutlinedIcon sx={{ mr: '32px' }} />,
-  },
-  {
-    title: '콘텐츠관리',
-    contents: [
-      { name: 'child1', href: '' },
-      { name: 'child2', href: '' },
-    ],
-    icon: <SourceOutlinedIcon sx={{ mr: '32px' }} />,
-  },
-  {
-    title: '통계',
-    contents: [
-      { name: 'child1', href: '' },
-      { name: 'child2', href: '' },
-    ],
-    icon: <AnalyticsOutlinedIcon sx={{ mr: '32px' }} />,
-  },
-  {
-    title: '설정',
-    contents: [
-      { name: 'child1', href: '' },
-      { name: 'child2', href: '' },
-    ],
-    icon: <SettingsOutlinedIcon sx={{ mr: '32px' }} />,
-  },
-];
-
 export function Drawer({ children }: { children: ReactNode }) {
   const router = useRouter();
+
+  const accordionList = [
+    {
+      title: '과정관리',
+      contents: [
+        {
+          name: '과정 리스트',
+          href: '/admin-center/course',
+          isActive: router.pathname === '/admin-center/course'
+        },
+        { name: 'child2', href: '/admin-center/course/child', isActive: router.pathname === '' },
+      ],
+      icon: <SchoolOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    },
+    {
+      title: '콘텐츠관리',
+      contents: [
+        { name: 'child1', href: '/admin-center/content', isActive: router.pathname === '' },
+        { name: 'child2', href: '/admin-center/content', isActive: router.pathname === '' },
+      ],
+      icon: <SourceOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    },
+    {
+      title: '통계',
+      contents: [
+        { name: 'child1', href: '/admin-center/statics', isActive: router.pathname === '' },
+        { name: 'child2', href: '/admin-center/statics', isActive: router.pathname === '' },
+      ],
+      icon: <AnalyticsOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    },
+    {
+      title: '설정',
+      contents: [
+        { name: 'child1', href: '/admin-center/setting', isActive: router.pathname === '' },
+        { name: 'child2', href: '/admin-center/setting', isActive: router.pathname === '' },
+      ],
+      icon: <SettingsOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    },
+  ];
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -92,9 +96,9 @@ export function Drawer({ children }: { children: ReactNode }) {
                 }}
               >
                 <ListItemIcon>
-                  <DashboardOutlinedIcon />
+                  <DashboardOutlinedIcon sx={{ color: grey[700] }} />
                 </ListItemIcon>
-                <ListItemText primary="dashboard" />
+                <ListItemText primary="대시보드" />
               </ListItem>
             </Link>
             <Accordion accordionList={accordionList} />

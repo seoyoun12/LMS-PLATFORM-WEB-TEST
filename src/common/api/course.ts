@@ -1,25 +1,12 @@
-import { get, post, put } from '@common/httpClient';
+import { deleteRequest, get, post, put } from '@common/httpClient';
 import useSWR from 'swr';
-import { FetchResponse } from '@common/constant';
+import {
+  FetchPaginationResponse,
+  FetchResponse,
+  PaginationResult,
+} from '@common/constant';
 
 export interface CourseData {
-  content1: string;
-  courseName: string;
-  courseSubName: string;
-  displayYn?: string;
-  fullScore?: number;
-  lessonTerm?: number;
-  lessonTime?: number;
-  limitPeople?: number;
-  limitPeopleYn?: string;
-  limitTotalScore?: number;
-  price?: number;
-  restudyDay?: number;
-  restudyYn?: string;
-  saleYn?: string;
-}
-
-export interface Course {
   content1: string;
   courseFile: string;
   courseName: string;
@@ -59,8 +46,8 @@ export async function uploadCourse(formData: FormData) {
   });
 }
 
-export async function modifyCourse(formData: FormData) {
-  return await put(`/course/adm`, formData, {
+export async function modifyCourse({ courseId, formData }: { courseId: number, formData: FormData }) {
+  return await put(`/course/adm/${courseId}`, formData, {
     headers: {
       'content-type': 'multipart/form-data'
     }
@@ -68,10 +55,9 @@ export async function modifyCourse(formData: FormData) {
 }
 
 
-export async function getCourse({ courseId }: { courseId: number }): Promise<Course> {
+export async function getCourse({ courseId }: { courseId: number }): Promise<CourseData> {
   try {
-    // return await get<Course>(`${JSON_SERVER}/course/${courseId}`);
-    return (await get<FetchResponse<Course>>(`/course/${courseId}`)).data;
+    return (await get<FetchResponse<CourseData>>(`/course/${courseId}`)).data;
   } catch (err: any) {
     return Promise.reject(err);
   }
@@ -80,13 +66,39 @@ export async function getCourse({ courseId }: { courseId: number }): Promise<Cou
 export function useCourse({ courseId }: { courseId: number }): {
   isLoading: boolean;
   isError: any;
-  data?: Course
+  data?: CourseData
 } {
-  const { data, error } = useSWR<FetchResponse<Course>>(`/course/${courseId}`, get);
+  const { data, error } = useSWR<FetchResponse<CourseData>>(`/course/${courseId}`, get);
   return {
     data: data?.data,
     isLoading: !data && !error,
     isError: error
+  };
+}
+
+export function removeCourse({ courseId }: { courseId: number }) {
+  return deleteRequest(`/course/adm/${courseId}`);
+}
+
+export function useCourseList({ page, courseTitle, elementCnt, sort }: {
+  page: number,
+  courseTitle?: string,
+  elementCnt?: number,
+  sort?: string
+}): {
+  error: any;
+  data?: PaginationResult<CourseData[]>
+} {
+  const { data, error } = useSWR<FetchPaginationResponse<CourseData[]>>(
+    [ `/course/adm`, {
+      params: { page, courseTitle, elementCnt, sort }
+    } ],
+    get
+  );
+
+  return {
+    data: data?.data,
+    error
   };
 }
 

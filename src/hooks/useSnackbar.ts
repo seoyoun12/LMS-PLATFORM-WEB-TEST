@@ -9,3 +9,4 @@ export interface SnackbarConfig {
 export const SnackbarContext = createContext<(config: SnackbarConfig) => void>(null);
 
 export const useSnackbar = () => useContext(SnackbarContext);
+

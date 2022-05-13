@@ -5,3 +5,4 @@ export { Menubar } from './Menubar';
 export { CurriculumAccordion } from './curriculumAccordion';
 export { Accordion } from './Accordion';
 export { Carousel } from './Carousel';
+export { Table } from './Table';

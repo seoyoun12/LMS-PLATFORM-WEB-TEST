@@ -64,7 +64,7 @@ export function HeaderBar() {
               direction="row"
               alignItems="center"
             >
-              <Link href="/admin-center" underline="none">
+              <Link href="/admin-center/dashboard" underline="none">
                 <Button
                   className="align-left"
                   color="neutral"

@@ -5,8 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useState } from 'react';
-import { ConfirmDialogProps } from '@components/common/Dialog/Confirm';
+import { DialogConfig } from '@hooks/useDialog';
 
 export interface PromptDialogProps {
   open: boolean;
@@ -17,7 +16,7 @@ export interface PromptDialogProps {
   onClose: (isConfirm: boolean) => void;
 }
 
-export function Prompt({ open, title, content, confirmText, cancelText, onClose }: ConfirmDialogProps) {
+export function Prompt({ open, title, content, confirmText, cancelText, onClose }: any) {
   const handleClose = (isConfirm: boolean) => {
     onClose(isConfirm);
   };

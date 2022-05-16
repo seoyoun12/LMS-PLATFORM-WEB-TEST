@@ -1,29 +1,48 @@
 import { removeCourse, useCourseList } from '@common/api/course';
 import { Table } from '@components/ui';
-import { Button, TableBody, TableHead, Typography } from '@mui/material';
+import { Button, Chip, TableBody, TableHead, Typography } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
+import * as React from 'react';
+import { useRouter } from 'next/router';
+import styles from '@styles/common.module.scss';
+import { Container } from '@mui/material';
+import dateFormat from 'dateformat';
+import { YN } from '@common/constant';
 
 const headRows = [
   { name: 'seq' },
-  { name: '강의명' },
-  { name: '생성 날짜' }
+  { name: '과정명' },
+  { name: '생성 날짜' },
+  { name: '노출 여부' },
+  { name: '상태' }
 ];
 
 export function Course() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
+  const router = useRouter();
   const [ page, setPage ] = useState(0);
   const { data, error } = useCourseList({ page });
 
+  useEffect(() => {
+    const { page } = router.query;
+    setPage(!isNaN(Number(page)) ? Number(page) : 0);
+  }, [ router ]);
+
+
   const onChangePage = async (page: number) => {
-    setPage(page);
+    await router.push({
+      pathname: router.pathname,
+      query: {
+        page
+      }
+    });
   };
 
   const onRemoveCourse = async (courseId: number) => {
@@ -45,7 +64,7 @@ export function Course() {
   if (error) return <div>Error</div>;
   if (!data) return <div>Loading</div>;
   return (
-    <>
+    <Container className={styles.globalContainer}>
       <Typography
         variant="h5"
         sx={{
@@ -56,6 +75,7 @@ export function Course() {
       <Table
         totalNum={data.totalElements}
         onChangePage={onChangePage}
+        size="small"
       >
         <TableHead>
           <TableRow>
@@ -67,33 +87,51 @@ export function Course() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.content.map(({ seq, courseName, createdDtime }) => (
-            <TableRow key={seq} hover>
+          {data.content.map((content) => (
+            <TableRow key={content.seq} hover>
               <TableCell style={{ width: 50 }} component="th" scope="row">
-                {seq}
+                {content.seq}
               </TableCell>
               <TableCell style={{ width: 300 }} align="right">
                 <Link
-                  href={`/course/${seq}`}
+                  href={`/course/${content.seq}`}
                   underline="hover"
                   color={grey[900]}
                 >
-                  {courseName}
+                  {content.courseName}
                 </Link>
               </TableCell>
               <TableCell style={{ width: 250 }} align="right">
-                {createdDtime}
+                {dateFormat(content.createdDtime, 'isoDate')}
               </TableCell>
-              <TableCell style={{ width: 115 }} align="right">
-                <Link href={`/admin-center/course/modify/${seq}`}>
-                  <Button variant="text" color="neutral">
+              <TableCell style={{ width: 10 }} align="right">
+                <Chip
+                  label={content.displayYn === YN.YES ? '보임' : '숨김'}
+                  variant="outlined"
+                  size="small"
+                  color={content.displayYn === YN.YES ? 'secondary' : 'default'}
+                />
+              </TableCell>
+              <TableCell style={{ width: 10 }} align="right">
+                <Chip
+                  label={content.status ? '정상' : '중지'}
+                  variant="outlined"
+                  size="small"
+                  color={content.status ? 'secondary' : 'default'}
+                />
+              </TableCell>
+
+              <TableCell style={{ width: 10 }} align="right">
+                <Link href={`/admin-center/course/modify/${content.seq}`}>
+                  <Button variant="text" color="neutral" size="small">
                     수정
                   </Button>
                 </Link>
                 <Button
                   variant="text"
                   color="warning"
-                  onClick={() => onRemoveCourse(seq)}
+                  onClick={() => onRemoveCourse(content.seq)}
+                  size="small"
                 >
                   삭제
                 </Button>
@@ -102,6 +140,6 @@ export function Course() {
           ))}
         </TableBody>
       </Table>
-    </>
+    </Container>
   );
 }

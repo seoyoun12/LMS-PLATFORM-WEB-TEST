@@ -1,5 +1,6 @@
 import { get, post, put } from '@common/httpClient';
 import useSWR from 'swr';
+import { YN } from '@common/constant';
 
 export interface MyUser {
   message: string;
@@ -42,7 +43,7 @@ export async function userLoginHistory() {
   return await post(`/user/login-history`);
 }
 
-export async function modifyMyUser({ name, emailYn, smsYn }: { name: string, emailYn: 'Y' | 'N', smsYn: 'Y' | 'N' }) {
+export async function modifyMyUser({ name, emailYn, smsYn }: { name: string, emailYn: YN, smsYn: YN }) {
   return await put(`/user/myinfo/modify`, {
     emailYn, smsYn
   });

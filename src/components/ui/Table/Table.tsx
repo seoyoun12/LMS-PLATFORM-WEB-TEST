@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import MuiTable from '@mui/material/Table';
+import MuiTable, { TableProps } from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
@@ -12,7 +12,7 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import { ReactNode } from 'react';
+import { ReactNode, useCallback } from 'react';
 
 interface TablePaginationActionsProps {
   count: number;
@@ -84,10 +84,14 @@ export function Table(
   {
     totalNum,
     children,
-    onChangePage
+    onChangePage,
+    ...restProps
   }: {
-    totalNum: number, children: ReactNode, onChangePage: (page: number) => void
-  }) {
+    totalNum: number,
+    children: ReactNode,
+    onChangePage: (page: number) => void,
+  } & TableProps
+) {
   const [ page, setPage ] = React.useState(0);
   const [ rowsPerPage, setRowsPerPage ] = React.useState(10);
 
@@ -95,13 +99,13 @@ export function Table(
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - totalNum) : 0;
 
-  const handleChangePage = (
+  const handleChangePage = useCallback((
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
   ) => {
-    onChangePage(newPage);
     setPage(newPage);
-  };
+    onChangePage(newPage);
+  }, []);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -111,8 +115,20 @@ export function Table(
   };
 
   return (
-    <TableContainer component={Paper}>
-      <MuiTable sx={{ minWidth: 500 }} aria-label="custom pagination table">
+    <TableContainer
+      component={Paper}
+      sx={{
+        width: '100%',
+        overflow: 'scroll'
+      }}
+    >
+      <MuiTable
+        sx={{
+          width: '100%',
+        }}
+        aria-label="custom pagination table"
+        {...restProps}
+      >
         {children}
         <TableFooter>
           <TableRow>

@@ -1,4 +1,5 @@
 import { post } from '@common/httpClient';
+import { YN } from '@common/constant';
 
 interface Params {
   username: string;
@@ -7,8 +8,8 @@ interface Params {
   birth?: string;
   gender?: string;
   phone?: string;
-  emailYn: 'Y' | 'N';
-  smsYn: 'Y' | 'N';
+  emailYn: YN;
+  smsYn: YN;
 }
 
 export async function signUp(params: Params) {

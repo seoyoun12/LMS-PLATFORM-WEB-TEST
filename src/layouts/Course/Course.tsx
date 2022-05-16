@@ -1,7 +1,8 @@
 import { Button, Container, Divider, Typography } from '@mui/material';
 import { useRef, useEffect, useState } from 'react';
 import styles from '@styles/common.module.scss';
-import { getCourse, CourseData } from '@common/api';
+import { getCourse } from '@common/api';
+import { CourseData } from '@common/api/course';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { headerHeight } from '@styles/variables';

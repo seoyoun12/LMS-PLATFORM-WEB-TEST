@@ -23,36 +23,40 @@ export function Drawer({ children }: { children: ReactNode }) {
 
   const accordionList = [
     {
-      title: '과정관리',
-      contents: [
+      name: '과정관리',
+      children: [
         {
-          name: '과정 리스트',
+          name: '과정 목록',
           href: '/admin-center/course',
           isActive: router.pathname === '/admin-center/course'
         },
-        { name: 'child2', href: '/admin-center/course/child', isActive: router.pathname === '' },
+        {
+          name: '과정 등록',
+          href: '/admin-center/course/upload',
+          isActive: router.pathname === '/admin-center/course/upload'
+        },
       ],
       icon: <SchoolOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
     },
     {
-      title: '콘텐츠관리',
-      contents: [
+      name: '콘텐츠관리',
+      children: [
         { name: 'child1', href: '/admin-center/content', isActive: router.pathname === '' },
         { name: 'child2', href: '/admin-center/content', isActive: router.pathname === '' },
       ],
       icon: <SourceOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
     },
     {
-      title: '통계',
-      contents: [
+      name: '통계',
+      children: [
         { name: 'child1', href: '/admin-center/statics', isActive: router.pathname === '' },
         { name: 'child2', href: '/admin-center/statics', isActive: router.pathname === '' },
       ],
       icon: <AnalyticsOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
     },
     {
-      title: '설정',
-      contents: [
+      name: '설정',
+      children: [
         { name: 'child1', href: '/admin-center/setting', isActive: router.pathname === '' },
         { name: 'child2', href: '/admin-center/setting', isActive: router.pathname === '' },
       ],

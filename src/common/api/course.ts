@@ -6,6 +6,12 @@ import {
   PaginationResult,
 } from '@common/constant';
 
+
+export enum COURSE_STATUS {
+  REJECT = 1,
+  APPROVE = -1
+}
+
 export interface CourseData {
   content1: string;
   courseFile: string;
@@ -26,7 +32,7 @@ export interface CourseData {
   restudyYn: string;
   saleYn: string;
   seq: number;
-  status: number;
+  status: COURSE_STATUS;
 
   // 임시용 타입
   curriculum: {

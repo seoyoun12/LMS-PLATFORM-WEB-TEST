@@ -11,7 +11,7 @@ import { Divider, List, ListItem, ListItemButton, ListItemText } from '@mui/mate
 import { Link } from '@components/common';
 import { useRouter } from 'next/router';
 import { grey } from '@mui/material/colors';
-import { CourseData } from '@common/api';
+import { CourseData } from '@common/api/course';
 
 const Accordion =
   styled((props: AccordionProps) => (

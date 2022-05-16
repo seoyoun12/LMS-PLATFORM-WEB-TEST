@@ -5,6 +5,7 @@ import { getMyUser, modifyMyUser } from '@common/api/user';
 import { useRouter } from 'next/router';
 import { PasswordChangeModal } from './PasswordChangeModal/PasswordChangeModal';
 import { useDialog } from '@hooks/useDialog';
+import { YN } from '@common/constant';
 
 export function MeEdit() {
   const router = useRouter();
@@ -17,8 +18,8 @@ export function MeEdit() {
   useEffect(() => {
     (async () => {
       const { data } = await getMyUser();
-      setEmailChecked(data.emailYn === 'Y');
-      setSmsChecked(data.smsYn === 'Y');
+      setEmailChecked(data.emailYn === YN.YES);
+      setSmsChecked(data.smsYn === YN.YES);
       setNameInput(data.name);
     })();
   }, []);
@@ -36,8 +37,8 @@ export function MeEdit() {
 
   const handleOnCloseConfirm = async (isConfirm: boolean) => {
     if (isConfirm) {
-      const emailYn = emailChecked ? 'Y' : 'N';
-      const smsYn = smsChecked ? 'Y' : 'N';
+      const emailYn = emailChecked ? YN.YES : YN.NO;
+      const smsYn = smsChecked ? YN.YES : YN.NO;
       await modifyMyUser({ name: nameInput, emailYn, smsYn });
       return router.push('/me');
     }

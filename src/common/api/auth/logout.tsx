@@ -3,7 +3,7 @@ import { post } from '@common/httpClient';
 import { localStore } from '@common/storage';
 
 export async function logout() {
-  return await post('/api/v1/auth/logout')
+  return await post('/auth/signout')
     .then(onLogoutSuccess)
     .catch(err => {
       return Promise.reject(err);

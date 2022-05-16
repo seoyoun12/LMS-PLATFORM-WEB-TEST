@@ -1,11 +1,11 @@
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor as EditorType } from '@toast-ui/react-editor';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
-import styles from '@styles/common.module.scss';
 import { Box, Button, FormControlLabel, Switch, TextField, Typography } from '@mui/material';
 import { TuiEditor } from '@components/common/TuiEditor';
 import styled from '@emotion/styled';
-import { CourseData } from '@common/api';
+import { COURSE_STATUS, CourseData } from '@common/api/course';
+import { YN } from '@common/constant';
 
 export function CourseUploadForm(
   {
@@ -25,17 +25,19 @@ export function CourseUploadForm(
   const editorRef = useRef<EditorType>(null);
   const courseNameRef = useRef<HTMLInputElement>(null);
   const courseSubNameRef = useRef<HTMLInputElement>(null);
-  const [ isDisplay, setIsDisplay ] = useState(false);
   const [ thumbnail, setThumbnail ] = useState<Blob | string>('');
   const [ courseId, setCourseId ] = useState<number | undefined>();
+  const [ isDisplay, setIsDisplay ] = useState(false);
+  const [ status, setStatus ] = useState(false);
 
   useEffect(() => {
     if (mode === 'modify' && !!course) {
-      const { courseName, courseSubName, courseFile, displayYn, seq } = course;
+      const { courseName, courseSubName, courseFile, displayYn, seq, status } = course;
       if (!!courseNameRef.current && !!courseSubNameRef.current) {
         courseNameRef.current.value = courseName;
         courseSubNameRef.current.value = courseSubName;
-        setIsDisplay(displayYn === 'Y');
+        setIsDisplay(displayYn === YN.YES);
+        setStatus(status === COURSE_STATUS.APPROVE);
         setThumbnail(courseFile);
         setCourseId(seq);
       }
@@ -64,7 +66,8 @@ export function CourseUploadForm(
       courseName,
       courseSubName,
       content1: markdownContent,
-      displayYn: isDisplay ? 'Y' : 'N',
+      displayYn: isDisplay ? YN.YES : YN.NO,
+      status: status ? COURSE_STATUS.APPROVE : COURSE_STATUS.REJECT,
     };
 
     const formData = new FormData();
@@ -74,7 +77,7 @@ export function CourseUploadForm(
   };
 
   return (
-    <Container className={styles.globalContainer}>
+    <Container>
       <Box
         component="form"
         encType="multipart/form-data"
@@ -88,15 +91,17 @@ export function CourseUploadForm(
       >
         <InputContainer>
           <TextField
+            size="small"
             className="text-field"
-            label="courseName"
+            label="과정명"
             variant="outlined"
             name="courseName"
             inputRef={courseNameRef}
           />
           <TextField
+            size="small"
             className="text-field"
-            label="courseSubName"
+            label="부제목"
             variant="outlined"
             name="courseSubName"
             inputRef={courseSubNameRef}
@@ -114,6 +119,18 @@ export function CourseUploadForm(
           initialEditType="wysiwyg"
           useCommandShortcut={true}
           ref={editorRef}
+        />
+
+        <FormControlLabel
+          className="form-control"
+          label="상태"
+          name="status"
+          sx={{ ml: 'auto' }}
+          checked={status}
+          onChange={(e, checked) => {
+            setStatus(checked);
+          }}
+          control={<Switch />}
         />
 
         <FormControlLabel
@@ -155,7 +172,7 @@ const InputContainer = styled.div`
   flex-direction: column;
 
   > .text-field {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
   }
 
   .thumbnail-uploader {

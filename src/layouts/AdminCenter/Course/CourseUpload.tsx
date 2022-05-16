@@ -1,10 +1,16 @@
 import { FormEvent } from 'react';
 import { uploadCourse } from '@common/api/course';
 import { CourseUploadForm } from '@layouts/AdminCenter/Course/CourseUploadForm';
+import styles from '@styles/common.module.scss';
+import { Container } from '@mui/material';
 
 export function CourseUpload() {
-  const handleSubmit = (e: FormEvent<HTMLFormElement>, formData: FormData) => {
-    e.preventDefault();
+  const handleSubmit = (
+    {
+      event,
+      formData
+    }: { event: FormEvent<HTMLFormElement>, formData: FormData }) => {
+    event.preventDefault();
     try {
       return uploadCourse(formData);
     } catch (e: any) {
@@ -14,6 +20,8 @@ export function CourseUpload() {
 
 
   return (
-    <CourseUploadForm onHandleSubmit={handleSubmit} />
+    <Container className={styles.globalContainer}>
+      <CourseUploadForm onHandleSubmit={handleSubmit} />
+    </Container>
   );
 }

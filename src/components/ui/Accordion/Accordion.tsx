@@ -10,9 +10,9 @@ import { grey } from '@mui/material/colors';
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 
 interface AccordionList {
-  title: string;
+  name: string;
   icon: EmotionJSX.Element;
-  contents: {
+  children: {
     name: string;
     href: string;
     isActive: boolean;
@@ -22,9 +22,9 @@ interface AccordionList {
 export function Accordion({ accordionList }: { accordionList: AccordionList[] }) {
   return (
     <>
-      {accordionList.map(({ title, icon, contents }, idx) => (
+      {accordionList.map(({ name, icon, children }, idx) => (
         <MuiAccordion
-          key={title}
+          key={name}
           disableGutters elevation={0}
           sx={{
             '&:before': {
@@ -42,12 +42,12 @@ export function Accordion({ accordionList }: { accordionList: AccordionList[] })
             }}
           >
             {icon}
-            <Typography>{title}</Typography>
+            <Typography>{name}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <nav aria-label="secondary mailbox folders">
               <List disablePadding={true}>
-                {contents.map(({ name, href, isActive }, idx) => (
+                {children.map(({ name, href, isActive }, idx) => (
                   <Link
                     href={href}
                     color={grey[900]}
@@ -56,7 +56,7 @@ export function Accordion({ accordionList }: { accordionList: AccordionList[] })
                     <ListItem
                       disablePadding
                       sx={{
-                        backgroundColor: `${true ? grey[50] : 'inherit'}`,
+                        backgroundColor: `${isActive ? grey[50] : 'inherit'}`,
                       }}
                     >
                       <ListItemButton>

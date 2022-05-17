@@ -5,3 +5,4 @@ export { Course } from './Course/Course';
 export { CourseUpload } from './Course/CourseUpload';
 export { CourseModify } from './Course/CourseModify';
 export { LectureList } from './Course/LectureList';
+export { EvaluationInfo } from './Course/EvaluationInfo';

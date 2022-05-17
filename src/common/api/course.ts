@@ -3,13 +3,13 @@ import useSWR from 'swr';
 import {
   FetchPaginationResponse,
   FetchResponse,
-  PaginationResult,
+  PaginationResult, YN,
 } from '@common/constant';
 
 
 export enum COURSE_STATUS {
-  REJECT = 1,
-  APPROVE = -1
+  APPROVE = 1,
+  REJECT = -1,
 }
 
 export interface CourseData {
@@ -19,7 +19,7 @@ export interface CourseData {
   courseSubName: string;
   courseThumbLink: string;
   createdDtime: string;
-  displayYn: string;
+  displayYn: YN;
   fullScore: number;
   lessonTerm: number;
   lessonTime: number;

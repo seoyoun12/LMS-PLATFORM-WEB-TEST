@@ -14,6 +14,7 @@ import styles from '@styles/common.module.scss';
 import { Container } from '@mui/material';
 import dateFormat from 'dateformat';
 import { YN } from '@common/constant';
+import { mutate } from 'swr';
 
 const headRows = [
   { name: 'seq' },
@@ -54,7 +55,9 @@ export function Course() {
         cancelText: '취소'
       });
       if (dialogConfirmed) {
-        return removeCourse({ courseId });
+        await removeCourse({ courseId });
+        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
+        await mutate([ `/course/adm`, { params: { page } } ]);
       }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.message });
@@ -74,6 +77,7 @@ export function Course() {
       >과정 목록</Typography>
       <Table
         totalNum={data.totalElements}
+        page={data.number}
         onChangePage={onChangePage}
         size="small"
       >
@@ -89,10 +93,10 @@ export function Course() {
         <TableBody>
           {data.content.map((content) => (
             <TableRow key={content.seq} hover>
-              <TableCell style={{ width: 50 }} component="th" scope="row">
+              <TableCell style={{ width: 10 }} component="th" scope="row">
                 {content.seq}
               </TableCell>
-              <TableCell style={{ width: 300 }} align="right">
+              <TableCell style={{ width: 200 }} align="right">
                 <Link
                   href={`/course/${content.seq}`}
                   underline="hover"
@@ -101,7 +105,7 @@ export function Course() {
                   {content.courseName}
                 </Link>
               </TableCell>
-              <TableCell style={{ width: 250 }} align="right">
+              <TableCell style={{ width: 70 }} align="right">
                 {dateFormat(content.createdDtime, 'isoDate')}
               </TableCell>
               <TableCell style={{ width: 10 }} align="right">
@@ -121,7 +125,7 @@ export function Course() {
                 />
               </TableCell>
 
-              <TableCell style={{ width: 10 }} align="right">
+              <TableCell style={{ width: 120 }} align="right">
                 <Link href={`/admin-center/course/modify/${content.seq}`}>
                   <Button variant="text" color="neutral" size="small">
                     수정

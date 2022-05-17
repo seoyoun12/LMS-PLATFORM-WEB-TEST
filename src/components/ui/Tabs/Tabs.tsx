@@ -23,7 +23,7 @@ export function Tabs({ tabsConfig }: { tabsConfig: TabsConfig[] }) {
         }
       });
     }
-  }, []);
+  }, [ pathname, query, tabsConfig ]);
 
   const handleChange = useCallback((event: SyntheticEvent, newValue: string) => {
     router.push({
@@ -44,7 +44,7 @@ export function Tabs({ tabsConfig }: { tabsConfig: TabsConfig[] }) {
       }}
     >
       <MuiTabs
-        value={query.tab}
+        value={query.tab || tabsConfig[0].value}
         onChange={handleChange}
         aria-label="basic tabs example"
       >

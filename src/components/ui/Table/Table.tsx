@@ -84,26 +84,22 @@ export function Table(
   {
     totalNum,
     children,
+    page,
     onChangePage,
     ...restProps
   }: {
     totalNum: number,
     children: ReactNode,
+    page: number,
     onChangePage: (page: number) => void,
   } & TableProps
 ) {
-  const [ page, setPage ] = React.useState(0);
   const [ rowsPerPage, setRowsPerPage ] = React.useState(10);
-
-  // Avoid a layout jump when reaching the last page with empty bodyRows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - totalNum) : 0;
 
   const handleChangePage = useCallback((
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
   ) => {
-    setPage(newPage);
     onChangePage(newPage);
   }, []);
 
@@ -111,7 +107,6 @@ export function Table(
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
   };
 
   return (

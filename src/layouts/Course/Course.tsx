@@ -13,7 +13,7 @@ import { STATUS_CODE } from '@common/constant';
 export function Course() {
   const router = useRouter();
   const { courseId } = router.query;
-  const [ course, setCourse ] = useState<CourseData>();
+  const [ course, setCourse ] = useState<CourseData | null>(null);
   const [ error, setError ] = useState(false);
 
   useEffect(() => {
@@ -21,8 +21,10 @@ export function Course() {
 
     (async () => {
       try {
-        const res = await getCourse({ courseId: Number(courseId) });
-        setCourse(res);
+        if (courseId) {
+          const res = await getCourse({ courseId: Number(courseId) });
+          setCourse(res);
+        }
       } catch (err: any) {
         if (err.status === STATUS_CODE.NOT_FOUND) {
           setError(true);

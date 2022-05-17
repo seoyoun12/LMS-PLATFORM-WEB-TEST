@@ -13,6 +13,7 @@ import Container from '@mui/material/Container';
 import { Link } from '@components/common';
 import { signUp } from '@common/api/auth';
 import { useSnackbar } from '@hooks/useSnackbar';
+import { YN } from '@common/constant';
 
 export function SignUp() {
   const snackbar = useSnackbar();
@@ -33,7 +34,7 @@ export function SignUp() {
 
     if (!!name && !!username && !!password) {
       try {
-        return signUp({ name, password, username, emailYn: 'N', smsYn: 'N' });
+        return signUp({ name, password, username, emailYn: YN.NO, smsYn: YN.NO });
       } catch (e: any) {
         snackbar({ variant: 'error', message: e.data.message });
       }
@@ -48,7 +49,7 @@ export function SignUp() {
         marginBottom: 8
       }}
     >
-      <CssBaseline/>
+      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,
@@ -58,7 +59,7 @@ export function SignUp() {
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon/>
+          <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
           회원가입
@@ -98,7 +99,7 @@ export function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary"/>}
+                control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive inspiration, marketing promotions and updates via email."
               />
             </Grid>

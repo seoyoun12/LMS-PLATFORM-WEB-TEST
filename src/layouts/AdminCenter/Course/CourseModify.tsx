@@ -2,11 +2,12 @@ import { FormEvent } from 'react';
 import { modifyCourse, useCourse } from '@common/api/course';
 import { useRouter } from 'next/router';
 import { CourseUploadForm } from '@layouts/AdminCenter/Course/CourseUploadForm';
-import { useDialog } from '@hooks/useDialog';
 import { Tabs } from '@components/ui';
 import styles from '@styles/common.module.scss';
 import { Box, Container } from '@mui/material';
 import { LectureList } from '@layouts/AdminCenter';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { EvaluationInfo } from '@layouts/AdminCenter/Course/EvaluationInfo';
 
 const tabsConfig = [
   { label: '과정 정보', value: 'course-info' },
@@ -16,7 +17,7 @@ const tabsConfig = [
 
 export function CourseModify() {
   const router = useRouter();
-  const dialog = useDialog();
+  const snackbar = useSnackbar();
   const { courseId, tab } = router.query;
   const { data, isError, isLoading } = useCourse({ courseId: Number(courseId) });
 
@@ -28,13 +29,9 @@ export function CourseModify() {
     }: { event: FormEvent<HTMLFormElement>, formData: FormData, courseId: number }) => {
     event.preventDefault();
     try {
-      await dialog({
-        variant: 'confirm',
-        title: 'dialog test',
-        description: 'dialog test descript'
-      });
-
-      return modifyCourse({ formData, courseId });
+      await modifyCourse({ formData, courseId });
+      snackbar({ variant: 'success', message: '성공적으로 수정되었습니다.' });
+      router.push('/admin-center/course');
     } catch (e: any) {
       console.error(e);
     }
@@ -58,11 +55,7 @@ export function CourseModify() {
           'lecture-list':
             <LectureList />,
           'evaluation-info':
-            <CourseUploadForm
-              mode="modify"
-              course={data}
-              onHandleSubmit={handleSubmit}
-            />,
+            <EvaluationInfo />,
         }[tab as string]
       }
     </Container>

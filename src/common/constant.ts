@@ -44,7 +44,7 @@ export interface PaginationResult<T> {
   totalPages: number;
 }
 
-export interface SwrResponse<T> {
+export interface SWRResponse<T> {
   data: T;
   isLoading: boolean;
   isError: any;

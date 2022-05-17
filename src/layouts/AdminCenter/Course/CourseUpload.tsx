@@ -5,19 +5,17 @@ import styles from '@styles/common.module.scss';
 import { Container } from '@mui/material';
 
 export function CourseUpload() {
-  const handleSubmit = (
-    {
-      event,
-      formData
-    }: { event: FormEvent<HTMLFormElement>, formData: FormData }) => {
+  const handleSubmit = ({ event, courseInput }: {
+    event: FormEvent<HTMLFormElement>,
+    courseInput: FormData
+  }) => {
     event.preventDefault();
     try {
-      return uploadCourse(formData);
+      return uploadCourse(courseInput);
     } catch (e: any) {
       console.error(e);
     }
   };
-
 
   return (
     <Container className={styles.globalContainer}>

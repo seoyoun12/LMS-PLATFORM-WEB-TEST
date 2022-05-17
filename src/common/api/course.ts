@@ -7,7 +7,7 @@ import {
 } from '@common/constant';
 
 
-export enum COURSE_STATUS {
+export enum PRODUCT_STATUS {
   APPROVE = 1,
   REJECT = -1,
 }
@@ -32,7 +32,7 @@ export interface CourseData {
   restudyYn: string;
   saleYn: string;
   seq: number;
-  status: COURSE_STATUS;
+  status: PRODUCT_STATUS;
 
   // 임시용 타입
   curriculum: {
@@ -44,16 +44,16 @@ export interface CourseData {
   }[];
 }
 
-export async function uploadCourse(formData: FormData) {
-  return await post(`/course/adm`, formData, {
+export async function uploadCourse(courseInput: FormData) {
+  return await post(`/course/adm`, courseInput, {
     headers: {
       'content-type': 'multipart/form-data'
     }
   });
 }
 
-export async function modifyCourse({ courseId, formData }: { courseId: number, formData: FormData }) {
-  return await put(`/course/adm/${courseId}`, formData, {
+export async function modifyCourse({ courseId, courseInput }: { courseId: number, courseInput: FormData }) {
+  return await put(`/course/adm/${courseId}`, courseInput, {
     headers: {
       'content-type': 'multipart/form-data'
     }
@@ -92,15 +92,14 @@ export function useCourseList({ page, courseTitle, elementCnt, sort }: {
   elementCnt?: number,
   sort?: string
 }): {
-  error: any;
   data?: PaginationResult<CourseData[]>
+  error: any;
 } {
-  const { data, error } = useSWR<FetchPaginationResponse<CourseData[]>>(
-    [ `/course/adm`, {
+  const { data, error } = useSWR<FetchPaginationResponse<CourseData[]>>([
+    `/course/adm`, {
       params: { page, courseTitle, elementCnt, sort }
-    } ],
-    get
-  );
+    }
+  ], get);
 
   return {
     data: data?.data,

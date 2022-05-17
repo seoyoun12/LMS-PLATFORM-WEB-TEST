@@ -41,8 +41,16 @@ export function Drawer({ children }: { children: ReactNode }) {
     {
       name: '콘텐츠관리',
       children: [
-        { name: 'child1', href: '/admin-center/content', isActive: router.pathname === '' },
-        { name: 'child2', href: '/admin-center/content', isActive: router.pathname === '' },
+        {
+          name: '콘텐츠 목록',
+          href: '/admin-center/content',
+          isActive: router.pathname === '/admin-center/content'
+        },
+        {
+          name: '콘텐츠 등록',
+          href: '/admin-center/content/upload',
+          isActive: router.pathname === '/admin-center/content/upload'
+        },
       ],
       icon: <SourceOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
     },

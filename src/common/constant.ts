@@ -46,8 +46,8 @@ export interface PaginationResult<T> {
 
 export interface SWRResponse<T> {
   data: T;
-  isLoading: boolean;
-  isError: any;
+  error: any;
+  loading?: boolean;
 }
 
 export enum STATUS_CODE {

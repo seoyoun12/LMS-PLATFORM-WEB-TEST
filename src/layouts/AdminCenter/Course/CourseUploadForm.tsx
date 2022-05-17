@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { TuiEditor } from '@components/common/TuiEditor';
 import styled from '@emotion/styled';
-import { COURSE_STATUS, CourseData } from '@common/api/course';
+import { PRODUCT_STATUS, CourseData } from '@common/api/course';
 import { YN } from '@common/constant';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
@@ -27,10 +27,10 @@ export function CourseUploadForm(
   }: {
     mode?: 'upload' | 'modify',
     course?: CourseData,
-    onHandleSubmit: ({ event, formData, courseId }: {
+    onHandleSubmit: ({ event, courseInput, courseId }: {
       event: FormEvent<HTMLFormElement>,
-      formData: FormData,
-      courseId: number
+      courseInput: FormData,
+      courseId?: number
     }) => void,
   }
 ) {
@@ -42,7 +42,7 @@ export function CourseUploadForm(
   const [ thumbnail, setThumbnail ] = useState<Blob | string>('');
   const [ courseId, setCourseId ] = useState<number | undefined>();
   const [ displayYn, setIsDisplay ] = useState<YN>(YN.YES);
-  const [ status, setStatus ] = useState<COURSE_STATUS>(COURSE_STATUS.APPROVE);
+  const [ status, setStatus ] = useState<PRODUCT_STATUS>(PRODUCT_STATUS.APPROVE);
 
   useEffect(() => {
     if (mode === 'modify' && !!course) {
@@ -66,7 +66,7 @@ export function CourseUploadForm(
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!editorRef.current || !courseNameRef.current || !courseSubNameRef.current || !courseId) {
+    if (!editorRef.current || !courseNameRef.current || !courseSubNameRef.current) {
       return;
     }
 
@@ -85,7 +85,7 @@ export function CourseUploadForm(
     const formData = new FormData();
     formData.append('courseFileOriginal', thumbnail);
     formData.append('data', new Blob([ JSON.stringify(courseData) ], { type: 'application/json' }));
-    onHandleSubmit({ event, formData, courseId });
+    onHandleSubmit({ event, courseInput: formData, courseId });
   };
 
   return (
@@ -177,16 +177,16 @@ export function CourseUploadForm(
           <FormLabel focused={false}>상태</FormLabel>
           <RadioGroup
             row
-            aria-labelledby="demo-row-radio-buttons-group-label"
+            aria-labelledby="group-label"
             name="row-radio-buttons-group"
             value={status}
             onChange={(e, value: unknown) => {
-              const status = value as COURSE_STATUS;
+              const status = value as PRODUCT_STATUS;
               setStatus(status);
             }}
           >
-            <FormControlLabel value={COURSE_STATUS.APPROVE} control={<Radio />} label="정상" />
-            <FormControlLabel value={COURSE_STATUS.REJECT} control={<Radio />} label="중지" />
+            <FormControlLabel value={PRODUCT_STATUS.APPROVE} control={<Radio />} label="정상" />
+            <FormControlLabel value={PRODUCT_STATUS.REJECT} control={<Radio />} label="중지" />
           </RadioGroup>
         </FormControl>
 
@@ -194,7 +194,7 @@ export function CourseUploadForm(
           <FormLabel focused={false}>과정 보이기</FormLabel>
           <RadioGroup
             row
-            aria-labelledby="demo-row-radio-buttons-group-label"
+            aria-labelledby="group-label"
             name="row-radio-buttons-group"
             value={displayYn}
             onChange={(e, value) => {

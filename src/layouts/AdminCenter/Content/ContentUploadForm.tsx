@@ -46,7 +46,10 @@ export function ContentUploadForm(
   }: {
     mode?: 'upload' | 'modify',
     content?: ContentData,
-    onHandleSubmit: ({ contentInput, contentId }: { contentInput: ContentInput, contentId: number }) => void,
+    onHandleSubmit: ({ contentInput, contentId }: {
+      contentInput: ContentInput,
+      contentId: number
+    }) => void,
   }
 ) {
   const {

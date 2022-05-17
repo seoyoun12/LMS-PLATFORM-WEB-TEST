@@ -4,9 +4,11 @@ import { ContentUploadForm } from '@layouts/AdminCenter';
 import { ContentInput, uploadContent } from '@common/api/contentData';
 
 export function ContentUpload() {
-  const handleSubmit = ({ formData }: { formData: ContentInput }) => {
+  const handleSubmit = ({ contentInput }: {
+    contentInput: ContentInput
+  }) => {
     try {
-      return uploadContent(formData);
+      return uploadContent(contentInput);
     } catch (e: any) {
       console.error(e);
     }

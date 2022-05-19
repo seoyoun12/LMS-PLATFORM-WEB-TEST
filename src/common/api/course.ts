@@ -91,10 +91,7 @@ export function useCourseList({ page, courseTitle, elementCnt, sort }: {
   courseTitle?: string,
   elementCnt?: number,
   sort?: string
-}): {
-  data?: PaginationResult<CourseData[]>
-  error: any;
-} {
+}) {
   const { data, error } = useSWR<FetchPaginationResponse<CourseData[]>>([
     `/course/adm`, {
       params: { page, courseTitle, elementCnt, sort }

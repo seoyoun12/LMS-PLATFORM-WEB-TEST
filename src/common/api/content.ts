@@ -3,8 +3,14 @@ import { PRODUCT_STATUS } from '@common/api/course';
 import useSWR from 'swr';
 import { FetchPaginationResponse, PaginationResult, SWRResponse } from '@common/constant';
 
+export enum ContentType {
+  CONTENT_HTML = 'CONTENT_HTML',
+  CONTENT_MP4 = 'CONTENT_MP4',
+  CONTENT_EXTERNAL = 'CONTENT_EXTERNAL'
+}
+
 export interface ContentInput {
-  contentType: 'CONTENT_HTML' | 'CONTENT_MP4' | 'CONTENT_EXTERNAL' | string;
+  contentType: ContentType | string;
   contentName: string;
   contentWidth: number;
   contentHeight: number;
@@ -15,7 +21,7 @@ export interface ContentData {
   code: string;
   contentHeight: number;
   contentName: string;
-  contentType: 'CONTENT_HTML' | 'CONTENT_MP4' | 'CONTENT_EXTERNAL';
+  contentType: ContentType;
   contentWidth: number;
   createdDtime: string;
   examCnt: number;
@@ -52,10 +58,10 @@ export function useContentList({ page, elementCnt }: {
 }
 
 export function useContent(contentId: number) {
-  const { data, error } = useSWR<SWRResponse<ContentData>>([ `content/adm/${contentId}` ], get);
+  const { data, error } = useSWR<SWRResponse<ContentData>>([ contentId ? `content/adm/${contentId}` : null ], get);
 
   return {
-    data,
+    data: data?.data,
     error
   };
 }

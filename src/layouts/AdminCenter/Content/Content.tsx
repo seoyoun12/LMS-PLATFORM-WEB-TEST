@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 // import { removeContent, useContentList } from '@common/api/content';
 import { mutate } from 'swr';
 import { PRODUCT_STATUS } from '@common/api/course';
-import { useContentList } from '@common/api/contentData';
+import { useContentList } from '@common/api/content';
 
 const headRows = [
   { name: 'seq' },
@@ -75,6 +75,7 @@ export function Content() {
         }}
       >콘텐츠 목록</Typography>
       <Table
+        pagination={true}
         totalNum={data.totalElements}
         page={data.number}
         onChangePage={onChangePage}

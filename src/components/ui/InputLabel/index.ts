@@ -1,0 +1,1 @@
+export { CustomInputLabel } from './InputLabel';

@@ -17,7 +17,7 @@ import TextField from '@mui/material/TextField';
 import styles from '@styles/common.module.scss';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
-import { ContentData, ContentInput } from '@common/api/contentData';
+import { ContentData, ContentInput, ContentType } from '@common/api/content';
 import * as React from 'react';
 
 const CustomInputLabel = forwardRef<HTMLLabelElement, InputLabelProps & { size: 'small' | 'medium' }>((
@@ -27,9 +27,9 @@ const CustomInputLabel = forwardRef<HTMLLabelElement, InputLabelProps & { size: 
 );
 
 const contentTypeOptions = [
-  { value: 'CONTENT_HTML', name: '웹콘텐츠(HTML5)' },
-  { value: 'CONTENT_MP4', name: 'mp4' },
-  { value: 'CONTENT_EXTERNAL', name: '외부링크' }
+  { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
+  { value: ContentType.CONTENT_MP4, name: 'mp4' },
+  { value: ContentType.CONTENT_EXTERNAL, name: '외부링크' }
 ];
 
 const defaultValues = {
@@ -48,7 +48,7 @@ export function ContentUploadForm(
     content?: ContentData,
     onHandleSubmit: ({ contentInput, contentId }: {
       contentInput: ContentInput,
-      contentId: number
+      contentId?: number
     }) => void,
   }
 ) {
@@ -67,9 +67,7 @@ export function ContentUploadForm(
   }, [ mode, content ]);
 
   const onSubmit: SubmitHandler<ContentInput> = (contentInput: ContentInput) => {
-    if (!!content) {
-      onHandleSubmit({ contentInput: contentInput, contentId: content.seq });
-    }
+    onHandleSubmit({ contentInput: contentInput, contentId: content?.seq });
   };
 
   return (

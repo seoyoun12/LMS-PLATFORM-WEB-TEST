@@ -5,14 +5,20 @@ import { CourseUploadForm } from '@layouts/AdminCenter/Course/CourseUploadForm';
 import { Tabs } from '@components/ui';
 import styles from '@styles/common.module.scss';
 import { Box, Container } from '@mui/material';
-import { LectureList } from '@layouts/AdminCenter';
+import { LessonList } from '@layouts/AdminCenter';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { EvaluationInfo } from '@layouts/AdminCenter/Course/EvaluationInfo';
 
+enum TabValue {
+  CourseInfo = 'course-info',
+  LessonList = 'lesson-list',
+  EvaluationInfo = 'evaluation-info',
+}
+
 const tabsConfig = [
-  { label: '과정 정보', value: 'course-info' },
-  { label: '강의 목차', value: 'lecture-list' },
-  { label: '평가 정보', value: 'evaluation-info' },
+  { label: '과정 정보', value: TabValue.CourseInfo },
+  { label: '강의 목차', value: TabValue.LessonList },
+  { label: '평가 정보', value: TabValue.EvaluationInfo },
 ];
 
 export function CourseModify() {
@@ -47,15 +53,15 @@ export function CourseModify() {
       </Box>
       {
         {
-          'course-info':
+          [TabValue.CourseInfo]:
             <CourseUploadForm
               mode="modify"
               course={data}
               onHandleSubmit={handleSubmit}
             />,
-          'lecture-list':
-            <LectureList />,
-          'evaluation-info':
+          [TabValue.LessonList]:
+            <LessonList />,
+          [TabValue.EvaluationInfo]:
             <EvaluationInfo />,
         }[tab as string]
       }

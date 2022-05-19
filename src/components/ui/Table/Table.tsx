@@ -82,16 +82,18 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 
 export function Table(
   {
-    totalNum,
+    pagination = false,
+    totalNum = 0,
+    page = 0,
     children,
-    page,
     onChangePage,
     ...restProps
   }: {
-    totalNum: number,
+    pagination?: boolean,
+    totalNum?: number,
+    page?: number,
+    onChangePage?: (page: number) => void,
     children: ReactNode,
-    page: number,
-    onChangePage: (page: number) => void,
   } & TableProps
 ) {
   const [ rowsPerPage, setRowsPerPage ] = React.useState(10);
@@ -100,7 +102,7 @@ export function Table(
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
   ) => {
-    onChangePage(newPage);
+    onChangePage && onChangePage(newPage);
   }, []);
 
   const handleChangeRowsPerPage = (
@@ -125,26 +127,29 @@ export function Table(
         {...restProps}
       >
         {children}
-        <TableFooter>
-          <TableRow>
-            <TablePagination
-              rowsPerPageOptions={[ 10, 25, { label: 'All', value: -1 } ]}
-              colSpan={3}
-              count={totalNum}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: {
-                  'aria-label': 'rows per page',
-                },
-                native: true,
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </TableRow>
-        </TableFooter>
+        {
+          pagination &&
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[ 10, 25, { label: 'All', value: -1 } ]}
+                colSpan={3}
+                count={totalNum}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                SelectProps={{
+                  inputProps: {
+                    'aria-label': 'rows per page',
+                  },
+                  native: true,
+                }}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActions}
+              />
+            </TableRow>
+          </TableFooter>
+        }
       </MuiTable>
     </TableContainer>
   );

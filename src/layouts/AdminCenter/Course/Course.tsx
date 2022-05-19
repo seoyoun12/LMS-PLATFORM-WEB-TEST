@@ -76,6 +76,7 @@ export function Course() {
         }}
       >과정 목록</Typography>
       <Table
+        pagination={true}
         totalNum={data.totalElements}
         page={data.number}
         onChangePage={onChangePage}

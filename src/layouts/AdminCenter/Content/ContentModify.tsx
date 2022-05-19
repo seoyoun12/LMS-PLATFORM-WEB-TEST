@@ -1,22 +1,32 @@
-import { FormEvent } from 'react';
-import { modifyCourse, useCourse } from '@common/api/course';
 import { useRouter } from 'next/router';
-import { CourseUploadForm } from '@layouts/AdminCenter/Course/CourseUploadForm';
 import { Tabs } from '@components/ui';
 import styles from '@styles/common.module.scss';
 import { Box, Container } from '@mui/material';
-import { ContentUploadForm, LectureList } from '@layouts/AdminCenter';
+import { ContentUploadForm } from '@layouts/AdminCenter';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { EvaluationInfo } from '@layouts/AdminCenter/Course/EvaluationInfo';
-import { ContentInput, modifyContent, useContent } from '@common/api/contentData';
+import { ContentInput, modifyContent, useContent } from '@common/api/content';
+import { Question } from './Question';
+import { Examination } from './Examination';
+import { Homework } from './Homework';
+import { Forum } from './Forum';
+import { LessonList } from './LessonList';
+
+enum TabValue {
+  ContentInfo = 'content-info',
+  LessonList = 'lesson-list',
+  Question = 'question',
+  Exam = 'exam',
+  Homework = 'homework',
+  Forum = 'forum',
+}
 
 const tabsConfig = [
-  { label: '콘텐츠 정보', value: 'content-info' },
-  { label: '강의 목차', value: 'lecture-list' },
-  { label: '문제은행', value: 'question' },
-  { label: '시험', value: 'exam' },
-  { label: '과제', value: 'homework' },
-  { label: '토론', value: 'forum' },
+  { label: '콘텐츠 정보', value: TabValue.ContentInfo },
+  { label: '강의 목차', value: TabValue.LessonList },
+  { label: '문제은행', value: TabValue.Question },
+  { label: '시험', value: TabValue.Exam },
+  { label: '과제', value: TabValue.Homework },
+  { label: '토론', value: TabValue.Forum },
 ];
 
 export function ContentModify() {
@@ -27,12 +37,14 @@ export function ContentModify() {
 
   const handleSubmit = async ({ contentInput, contentId }: {
     contentInput: ContentInput,
-    contentId: number
+    contentId?: number
   }) => {
     try {
-      await modifyContent({ contentInput, contentId });
-      snackbar({ variant: 'success', message: '성공적으로 수정되었습니다.' });
-      router.push('/admin-center/course');
+      if (contentId) {
+        await modifyContent({ contentInput, contentId });
+        snackbar({ variant: 'success', message: '성공적으로 수정되었습니다.' });
+        router.push('/admin-center/content');
+      }
     } catch (e: any) {
       console.error(e);
     }
@@ -47,16 +59,22 @@ export function ContentModify() {
       </Box>
       {
         {
-          'content-info':
+          [TabValue.ContentInfo]:
             <ContentUploadForm
               mode="modify"
               onHandleSubmit={handleSubmit}
-              content={data.data}
+              content={data}
             />,
-          'lecture-list':
-            <LectureList />,
-          'evaluation-info':
-            <EvaluationInfo />,
+          [TabValue.LessonList]:
+            <LessonList />,
+          [TabValue.Question]:
+            <Question />,
+          [TabValue.Exam]:
+            <Examination />,
+          [TabValue.Homework]:
+            <Homework />,
+          [TabValue.Forum]:
+            <Forum />,
         }[tab as string]
       }
     </Container>

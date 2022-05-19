@@ -17,7 +17,7 @@ const headRows = [
   { name: '상태' },
 ];
 
-export function LectureList() {
+export function LessonList() {
   const router = useRouter();
 
   const onChangePage = async (page: number) => {
@@ -32,6 +32,7 @@ export function LectureList() {
   return (
     <Container className={styles.globalContainer}>
       <Table
+        pagination={true}
         totalNum={10}
         onChangePage={onChangePage}
         page={0}

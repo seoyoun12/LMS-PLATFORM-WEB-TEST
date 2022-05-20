@@ -1,7 +1,7 @@
 import { FormEvent } from 'react';
 import { modifyCourse, useCourse } from '@common/api/course';
 import { useRouter } from 'next/router';
-import { CourseUploadForm } from '@layouts/AdminCenter/Course/CourseUploadForm';
+import { CourseUploadForm } from '@components/admin-center/CourseUploadForm';
 import { Tabs } from '@components/ui';
 import styles from '@styles/common.module.scss';
 import { Box, Container } from '@mui/material';
@@ -40,7 +40,7 @@ export function CourseModify() {
         router.push('/admin-center/course');
       }
     } catch (e: any) {
-      console.error(e);
+      snackbar({ variant: 'error', message: e.data.message });
     }
   };
 

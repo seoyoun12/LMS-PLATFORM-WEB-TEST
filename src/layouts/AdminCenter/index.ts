@@ -10,4 +10,4 @@ export { EvaluationInfo } from './Course/EvaluationInfo';
 export { Content } from './Content/Content';
 export { ContentUpload } from './Content/ContentUpload';
 export { ContentModify } from './Content/ContentModify';
-export { ContentUploadForm } from './Content/ContentUploadForm';
+export { ContentUploadForm } from '@components/admin-center/ContentUploadForm';

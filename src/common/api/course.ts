@@ -74,7 +74,7 @@ export function useCourse({ courseId }: { courseId: number }): {
   isError: any;
   data?: CourseData
 } {
-  const { data, error } = useSWR<FetchResponse<CourseData>>(`/course/${courseId}`, get);
+  const { data, error } = useSWR<FetchResponse<CourseData>>(courseId ? `/course/${courseId}` : null, get);
   return {
     data: data?.data,
     isLoading: !data && !error,

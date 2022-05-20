@@ -12,10 +12,12 @@ export interface LessonInput {
   sort?: number;
   totalPage?: number;
   totalTime?: number;
+  min?: number;
+  sec?: number;
 }
 
 export interface Lesson {
-  completeTime: number,
+  completeTime: number;
   contentSeq: number;
   contentType: ContentType;
   createdDtime: string;
@@ -23,20 +25,32 @@ export interface Lesson {
   mobileUrl: string;
   modifiedDtime: string;
   pcUrl: string;
+  fileName: string;
   seq: number;
-  sort: number,
+  sort: number;
   status: PRODUCT_STATUS;
-  totalPage: number,
-  totalTime: number
+  totalPage: number;
+  totalTime: number;
+  min: number;
+  sec: number;
 }
 
 export function useLessonList(contentId: number) {
   const { data, error, mutate } = useSWR<SWRResponse<Lesson[]>>(contentId ? `/lesson/adm/${contentId}` : null, get);
 
   return {
-    data: data?.data,
-    error,
+    lessonList: data?.data,
+    lessonListError: error,
     mutate
+  };
+}
+
+export function useLesson(lessonId: number | null) {
+  const { data, error } = useSWR<SWRResponse<Lesson>>(lessonId ? `/lesson/adm/detail/${lessonId}` : null, get);
+
+  return {
+    lesson: data?.data,
+    lessonError: error,
   };
 }
 
@@ -45,6 +59,17 @@ export function uploadLessons({ contentId, lessonInput }: {
   lessonInput: LessonInput[]
 }) {
   return post(`/lesson/adm/${contentId}`, lessonInput);
+}
+
+export function modifyLesson({ lessonId, formData }: {
+  lessonId: number,
+  formData: FormData
+}) {
+  return put(`/lesson/adm/modification/${lessonId}`, formData, {
+    headers: {
+      'content-type': 'multipart/form-data'
+    }
+  });
 }
 
 export async function removeLesson(lessonId: number) {

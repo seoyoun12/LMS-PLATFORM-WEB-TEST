@@ -1,19 +1,21 @@
 import styles from '@styles/common.module.scss';
 import { Button, Chip, Container, TableBody, TableHead } from '@mui/material';
-import { Table } from '@components/ui';
+import { Modal, Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import styled from '@emotion/styled';
-import { LessonUploadModal } from './LessonUploadModal';
-import { removeLesson, useLessonList } from '@common/api/lesson';
+import { LessonBulkUploadModal } from '@components/admin-center/LessonBulkUploadModal';
+import { Lesson, removeLesson, useLesson, useLessonList } from '@common/api/lesson';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { ContentType } from '@common/api/content';
 import { PRODUCT_STATUS } from '@common/api/course';
+import { LessonUploadModal } from '@components/admin-center/LessonUploadModal';
+import { totalSecToMinSec } from '@common/util';
 
 const headRows = [
   { name: '차시' },
@@ -36,12 +38,15 @@ export function LessonList() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const dialog = useDialog();
-  const [ openModal, setOpenModal ] = useState(false);
+  const [ openBulkUploadModal, setOpenBulkUploadModal ] = useState(false);
+  const [ openUploadModal, setOpenUploadModal ] = useState(false);
+  const [ lessonId, setLessonId ] = useState<number | null>(null);
   const { contentId } = router.query;
-  const { data, error, mutate } = useLessonList(Number(contentId));
+  const { lessonList, lessonListError, mutate } = useLessonList(Number(contentId));
+  const { lesson, lessonError } = useLesson(lessonId);
 
   const openLessonUploadModal = () => {
-    setOpenModal(true);
+    setOpenBulkUploadModal(true);
   };
 
   const onRemoveLesson = async (lessonId: number) => {
@@ -58,12 +63,25 @@ export function LessonList() {
         await mutate();
       }
     } catch (e: any) {
-      snackbar({ variant: 'error', message: e.message });
+      snackbar({ variant: 'error', message: e.data.message });
     }
   };
 
-  if (error) return <div>error</div>;
-  if (!data) return <div>loading</div>;
+  const modifyLesson = (lessonId: number) => {
+    setOpenUploadModal(true);
+    setLessonId(lessonId);
+  };
+
+  const closeBulkModal = async (isSubmit: boolean) => {
+    if (isSubmit) {
+      await mutate();
+    }
+
+    setOpenBulkUploadModal(false);
+  };
+
+  if (lessonListError) return <div>error</div>;
+  if (!lessonList) return <div>loading</div>;
   return (
     <Container className={styles.globalContainer}>
       <LessonUploadBtn>
@@ -89,56 +107,70 @@ export function LessonList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((lesson) =>
-            <TableRow key={lesson.seq} hover>
-              <TableCell style={{ width: 60 }} align="left">
-                {lesson.sort}
-              </TableCell>
-              <TableCell style={{ width: 80 }} align="right">
-                {contentType[lesson.contentType]}
-              </TableCell>
-              <TableCell style={{ width: 200 }} align="right">
-                {lesson.lessonNm}
-              </TableCell>
-              <TableCell style={{ width: 100 }} align="right">
-                {lesson.totalTime}
-              </TableCell>
-              <TableCell style={{ width: 100 }} align="right">
-                {lesson.completeTime}
-              </TableCell>
-              <TableCell style={{ width: 100 }} align="right">
-                {lesson.totalPage}
-              </TableCell>
-              <TableCell style={{ width: 10 }} align="right">
-                <Chip
-                  label={lesson.status === PRODUCT_STATUS.APPROVE ? '정상' : '중지'}
-                  variant="outlined"
-                  size="small"
-                  color={lesson.status === PRODUCT_STATUS.APPROVE ? 'secondary' : 'default'}
-                />
-              </TableCell>
-              <TableCell style={{ width: 135 }} align="right">
-                <Button variant="text" color="neutral" size="small">
-                  수정
-                </Button>
-                <Button
-                  variant="text"
-                  color="warning"
-                  onClick={() => onRemoveLesson(lesson.seq)}
-                  size="small"
-                >
-                  삭제
-                </Button>
-              </TableCell>
-            </TableRow>
+          {lessonList.map((lesson) => {
+              const { min, sec } = totalSecToMinSec(lesson.completeTime);
+              return (
+                <TableRow key={lesson.seq} hover>
+                  <TableCell style={{ width: 60 }} align="left">
+                    {lesson.sort}
+                  </TableCell>
+                  <TableCell style={{ width: 80 }} align="right">
+                    {contentType[lesson.contentType]}
+                  </TableCell>
+                  <TableCell style={{ width: 200 }} align="right">
+                    {lesson.lessonNm}
+                  </TableCell>
+                  <TableCell style={{ width: 100 }} align="right">
+                    {lesson.min}분 {lesson.sec}초
+                  </TableCell>
+                  <TableCell style={{ width: 100 }} align="right">
+                    {min}분 {sec}초
+                  </TableCell>
+                  <TableCell style={{ width: 100 }} align="right">
+                    {lesson.totalPage}
+                  </TableCell>
+                  <TableCell style={{ width: 10 }} align="right">
+                    <Chip
+                      label={lesson.status === PRODUCT_STATUS.APPROVE ? '정상' : '중지'}
+                      variant="outlined"
+                      size="small"
+                      color={lesson.status === PRODUCT_STATUS.APPROVE ? 'secondary' : 'default'}
+                    />
+                  </TableCell>
+                  <TableCell style={{ width: 135 }} align="right">
+                    <Button
+                      variant="text"
+                      color="neutral"
+                      size="small"
+                      onClick={() => modifyLesson(lesson.seq)}
+                    >
+                      수정
+                    </Button>
+                    <Button
+                      variant="text"
+                      color="warning"
+                      onClick={() => onRemoveLesson(lesson.seq)}
+                      size="small"
+                    >
+                      삭제
+                    </Button>
+                  </TableCell>
+                </TableRow>);
+            }
           )}
         </TableBody>
       </Table>
 
+      <LessonBulkUploadModal
+        open={openBulkUploadModal}
+        handleClose={closeBulkModal}
+      />
       <LessonUploadModal
-        open={openModal}
-        handleClose={() => setOpenModal(false)}
-        maxWidth="md"
+        mode="modify"
+        open={openUploadModal}
+        lesson={lesson}
+        error={lessonError}
+        handleClose={() => setOpenUploadModal(false)}
       />
     </Container>
   );

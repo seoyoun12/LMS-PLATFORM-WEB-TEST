@@ -59,7 +59,7 @@ export function Content() {
         // await mutate([ `/content/adm`, { params: { page } } ]);
       }
     } catch (e: any) {
-      snackbar({ variant: 'error', message: e.message });
+      snackbar({ variant: 'error', message: e.data.message });
     }
   };
 

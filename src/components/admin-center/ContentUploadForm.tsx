@@ -1,4 +1,4 @@
-import { forwardRef, useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   Box,
   Button,
@@ -6,7 +6,6 @@ import {
   FormControlLabel,
   FormHelperText,
   FormLabel,
-  InputLabel, InputLabelProps,
   MenuItem, Radio,
   RadioGroup,
   Select,
@@ -19,12 +18,7 @@ import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { ContentData, ContentInput, ContentType } from '@common/api/content';
 import * as React from 'react';
-
-const CustomInputLabel = forwardRef<HTMLLabelElement, InputLabelProps & { size: 'small' | 'medium' }>((
-    props
-    , ref
-  ) => <InputLabel {...props} ref={ref} />
-);
+import { CustomInputLabel } from '@components/ui/InputLabel';
 
 const contentTypeOptions = [
   { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },

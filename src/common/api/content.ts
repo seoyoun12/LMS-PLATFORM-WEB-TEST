@@ -1,7 +1,7 @@
 import { get, post, put } from '@common/httpClient';
 import { PRODUCT_STATUS } from '@common/api/course';
 import useSWR from 'swr';
-import { FetchPaginationResponse, PaginationResult, SWRResponse } from '@common/constant';
+import { FetchPaginationResponse, SWRResponse } from '@common/constant';
 
 export enum ContentType {
   CONTENT_HTML = 'CONTENT_HTML',
@@ -58,7 +58,7 @@ export function useContentList({ page, elementCnt }: {
 }
 
 export function useContent(contentId: number) {
-  const { data, error } = useSWR<SWRResponse<ContentData>>([ contentId ? `content/adm/${contentId}` : null ], get);
+  const { data, error } = useSWR<SWRResponse<ContentData>>(contentId ? [ `content/adm/${contentId}` ] : null, get);
 
   return {
     data: data?.data,

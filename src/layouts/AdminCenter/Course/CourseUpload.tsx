@@ -1,6 +1,6 @@
 import { FormEvent } from 'react';
 import { uploadCourse } from '@common/api/course';
-import { CourseUploadForm } from '@layouts/AdminCenter/Course/CourseUploadForm';
+import { CourseUploadForm } from '@components/admin-center/CourseUploadForm';
 import styles from '@styles/common.module.scss';
 import { Container } from '@mui/material';
 

@@ -14,7 +14,11 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
-      const profile = await getProfile();
+      try {
+        const profile = await getProfile();
+      } catch (e) {
+        console.log('e', e);
+      }
     })();
   }, []);
 

@@ -7,3 +7,4 @@ export { Accordion } from './Accordion';
 export { Carousel } from './Carousel';
 export { Table } from './Table';
 export { Tabs } from './Tabs';
+export { Modal } from './Modal';

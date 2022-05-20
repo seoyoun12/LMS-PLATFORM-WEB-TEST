@@ -149,14 +149,13 @@ export function CourseUploadForm(
         </InputContainer>
 
         <TuiEditor
-          initialValue={mode === 'modify' ? course?.content1 : ''}
+          initialValue={(course && course.content1) || ''}
           previewStyle="vertical"
           height="600px"
           initialEditType="wysiwyg"
           useCommandShortcut={true}
           ref={editorRef}
         />
-
         <TextField
           sx={{
             width: '30%',

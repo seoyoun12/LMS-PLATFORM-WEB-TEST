@@ -2,6 +2,14 @@
   color: #212121;
 }
 
+.MuiButton-outlinedNeutral {
+  border: 1px solid var(--grey400);
+
+  &:hover {
+    border: 1px solid var(--grey600);
+  }
+}
+
 .MuiButton-textNeutral:hover {
   background-color: rgba(238, 238, 238, .8);
 }

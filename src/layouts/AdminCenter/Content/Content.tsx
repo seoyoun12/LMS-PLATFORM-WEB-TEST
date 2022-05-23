@@ -6,7 +6,6 @@ import TableCell from '@mui/material/TableCell';
 import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
 import dateFormat from 'dateformat';
-import { YN } from '@common/constant';
 import * as React from 'react';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
@@ -16,7 +15,6 @@ import { useEffect, useState } from 'react';
 import { mutate } from 'swr';
 import { PRODUCT_STATUS } from '@common/api/course';
 import { useContentList } from '@common/api/content';
-import { FileUpload, FileUpload2 } from '@components/ui/FileUploader';
 
 const headRows = [
   { name: 'seq' },
@@ -137,8 +135,6 @@ export function Content() {
           ))}
         </TableBody>
       </Table>
-      <FileUpload />
-      <FileUpload2 />
     </Container>
   );
 }

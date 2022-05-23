@@ -23,9 +23,9 @@ import { Modal } from '@components/ui';
 import { Lesson, modifyLesson, useLesson } from '@common/api/lesson';
 import TextField from '@mui/material/TextField';
 import { PRODUCT_STATUS } from '@common/api/course';
-import { totalSecToMinSec } from '@common/util';
 import { useSnackbar } from '@hooks/useSnackbar';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
+import { Files } from '@common/constant';
 
 const contentTypeOptions = [
   { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
@@ -50,7 +50,7 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
   error?: any;
 }) {
   const snackbar = useSnackbar();
-  const [ video, setVideo ] = useState<Partial<File> | null>(null);
+  const [ videoFiles, setVideoFiles ] = useState<Files | null>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const {
     register,
@@ -62,10 +62,13 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
 
   useEffect(() => {
     if (mode === 'modify' && !!lesson && open) {
-      setVideo({ name: lesson.fileName });
-      reset({
-        ...lesson
-      });
+      setVideoFiles(lesson.files.length
+        ? [ {
+          name: lesson.files[0].name,
+          path: lesson.files[0].path
+        } ]
+        : []);
+      reset({ ...lesson });
     }
   }, [ mode, lesson, open ]);
 
@@ -73,24 +76,30 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
     e.preventDefault();
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
-    console.log(files);
-    setVideo(files[0]);
+    setVideoFiles([ { name: files[0].name, path: '' } ]);
   };
 
   const onSubmit: SubmitHandler<FormType> = async (lesson) => {
     const files = fileInputRef.current?.files;
-    if (!files?.length) return null;
-    const videoFile = files[0];
-
     const formData = new FormData();
-    formData.append('file', videoFile);
-    formData.append('data', new Blob([ JSON.stringify(lesson) ], { type: 'application/json' }));
-    console.log(formData.get('file'), lesson);
+    if (!!files?.length) {
+      const videoFile = files[0];
+      formData.append('file', videoFile, videoFile.name);
+    }
+
+    formData.append('data', new Blob([
+        JSON.stringify({
+          ...lesson,
+          files: videoFiles
+        }) ],
+      { type: 'application/json' })
+    );
+
     try {
       await modifyLesson({ lessonId: lesson.seq, formData });
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
-      snackbar(e.message);
+      snackbar(e.data.message);
     }
     handleClose();
   };
@@ -160,13 +169,13 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
             >
               파일 선택
             </Button>
-            {video && <Chip
+            {!!videoFiles?.length && <Chip
               sx={{ mt: '8px' }}
               icon={<OndemandVideoOutlinedIcon />}
-              label={video.name}
+              label={videoFiles[0].name}
               onDelete={() => {
-                fileInputRef.current = null;
-                setVideo(null);
+                fileInputRef.current!.value = '';
+                setVideoFiles(null);
               }}
             />}
           </FormControl>

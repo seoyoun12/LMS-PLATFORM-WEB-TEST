@@ -1,15 +1,15 @@
 import styles from '@styles/common.module.scss';
 import { Button, Chip, Container, TableBody, TableHead } from '@mui/material';
-import { Modal, Table } from '@components/ui';
+import { Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import styled from '@emotion/styled';
 import { LessonBulkUploadModal } from '@components/admin-center/LessonBulkUploadModal';
-import { Lesson, removeLesson, useLesson, useLessonList } from '@common/api/lesson';
+import { removeLesson, useLesson, useLessonList } from '@common/api/lesson';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { ContentType } from '@common/api/content';
@@ -24,7 +24,6 @@ const headRows = [
   { name: '학습시간' },
   { name: '인정시간' },
   { name: '페이지' },
-  // { name: '페이지 정보' },
   { name: '상태' },
 ];
 
@@ -45,10 +44,6 @@ export function LessonList() {
   const { lessonList, lessonListError, mutate } = useLessonList(Number(contentId));
   const { lesson, lessonError } = useLesson(lessonId);
 
-  const openLessonUploadModal = () => {
-    setOpenBulkUploadModal(true);
-  };
-
   const onRemoveLesson = async (lessonId: number) => {
     try {
       const dialogConfirmed = await dialog({
@@ -68,8 +63,8 @@ export function LessonList() {
   };
 
   const modifyLesson = (lessonId: number) => {
-    setOpenUploadModal(true);
     setLessonId(lessonId);
+    setOpenUploadModal(true);
   };
 
   const closeBulkModal = async (isSubmit: boolean) => {
@@ -90,7 +85,7 @@ export function LessonList() {
           color="secondary"
           variant="contained"
           startIcon={<FileUploadIcon />}
-          onClick={openLessonUploadModal}
+          onClick={() => setOpenBulkUploadModal(true)}
         >
           강의 등록
         </Button>

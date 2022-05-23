@@ -1,3 +1,5 @@
+import { string } from 'prop-types';
+
 export const ACCESS_TOKEN = 'ACCESS_TOKEN';
 export const REFRESH_TOKEN = 'REFRESH_TOKEN';
 
@@ -54,6 +56,19 @@ export enum STATUS_CODE {
   NOT_FOUND = 404,
   ACCESS_TOKEN_EXPIRED = 999,
   REFRESH_TOKEN_EXPIRED = 998
+}
+
+export interface File {
+  downloadCnt?: number;
+  name?: string;
+  path?: string;
+  realName?: string;
+  seq?: number;
+  size?: number;
+  type?: 'video/mp4';
+}
+
+export interface Files extends Array<File> {
 }
 
 export enum FetchingStatus {

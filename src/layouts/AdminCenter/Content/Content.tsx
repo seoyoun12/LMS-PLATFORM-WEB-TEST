@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react';
 import { mutate } from 'swr';
 import { PRODUCT_STATUS } from '@common/api/course';
 import { useContentList } from '@common/api/content';
+import { FileUpload, FileUpload2 } from '@components/ui/FileUploader';
 
 const headRows = [
   { name: 'seq' },
@@ -136,6 +137,8 @@ export function Content() {
           ))}
         </TableBody>
       </Table>
+      <FileUpload />
+      <FileUpload2 />
     </Container>
   );
 }

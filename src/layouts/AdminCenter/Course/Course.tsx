@@ -15,6 +15,8 @@ import { Container } from '@mui/material';
 import dateFormat from 'dateformat';
 import { YN } from '@common/constant';
 import { mutate } from 'swr';
+import { Spinner } from '@components/ui';
+
 
 const headRows = [
   { name: 'seq' },
@@ -65,7 +67,7 @@ export function Course() {
   };
 
   if (error) return <div>Error</div>;
-  if (!data) return <div>Loading</div>;
+  if (data) return <Spinner />;
   return (
     <Container className={styles.globalContainer}>
       <Typography

@@ -13,15 +13,17 @@ import { removeLesson, useLesson, useLessonList } from '@common/api/lesson';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { PRODUCT_STATUS } from '@common/api/course';
+import { LessonUploadModal } from '@components/admin-center/LessonUploadModal';
+import { Spinner } from '@components/ui';
 import { totalSecToMinSec } from '@utils/totalSecToMinSec';
-import { QuestionUploadModal } from '@components/admin-center/QuestionUploadModal';
+
 
 const headRows = [
   { name: '' },
   { name: '콘텐츠' },
   { name: '시험유형' },
   { name: '차시' },
-  { name: '무넺' },
+  { name: '문제' },
   { name: '난이도' },
   { name: '문제유형' },
   { name: '미리보기' },
@@ -71,7 +73,7 @@ export function Question() {
   };
 
   if (lessonListError) return <div>error</div>;
-  if (!lessonList) return <div>loading</div>;
+  if (!lessonList) return <Spinner />;
   return (
     <Container className={styles.globalContainer}>
       <LessonUploadBtn>

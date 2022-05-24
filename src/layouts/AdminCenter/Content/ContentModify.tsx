@@ -10,6 +10,8 @@ import { Examination } from './Examination';
 import { Homework } from './Homework';
 import { Forum } from './Forum';
 import { LessonList } from './LessonList';
+import { Spinner } from '@components/ui';
+
 
 enum TabValue {
   ContentInfo = 'content-info',
@@ -51,7 +53,7 @@ export function ContentModify() {
   };
 
   if (error) return <div>error</div>;
-  if (!data) return <div>loading</div>;
+  if (!data) return <Spinner />;
   return (
     <Container className={styles.globalContainer}>
       <Box sx={{ mb: '30px' }}>

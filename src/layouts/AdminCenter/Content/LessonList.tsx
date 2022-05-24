@@ -16,6 +16,9 @@ import { ContentType } from '@common/api/content';
 import { PRODUCT_STATUS } from '@common/api/course';
 import { LessonUploadModal } from '@components/admin-center/LessonUploadModal';
 import { totalSecToMinSec } from '@common/util';
+import { Spinner } from '@components/ui';
+
+
 
 const headRows = [
   { name: '차시' },
@@ -76,7 +79,7 @@ export function LessonList() {
   };
 
   if (lessonListError) return <div>error</div>;
-  if (!lessonList) return <div>loading</div>;
+  if (!lessonList) return <Spinner />;
   return (
     <Container className={styles.globalContainer}>
       <LessonUploadBtn>

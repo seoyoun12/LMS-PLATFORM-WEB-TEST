@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { mutate } from 'swr';
 import { PRODUCT_STATUS } from '@common/api/course';
 import { useContentList } from '@common/api/content';
+import { Spinner } from '@components/ui';
 
 const headRows = [
   { name: 'seq' },
@@ -63,7 +64,7 @@ export function Content() {
   };
 
   if (error) return <div>Error</div>;
-  if (!data) return <div>Loading</div>;
+  if (!data) return <Spinner />;
   return (
     <Container className={styles.globalContainer}>
       <Typography

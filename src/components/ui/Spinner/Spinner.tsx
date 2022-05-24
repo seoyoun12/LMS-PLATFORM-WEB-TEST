@@ -7,9 +7,7 @@ import styled from '@emotion/styled';
 export function Spinner() {
 	return (
 		<Container>
-			<CircularProgress sx={{
-				color: "rgb(33, 56, 109)"
-			}} />
+			<CircularProgress />
 		</Container>
 	);
 }
@@ -21,4 +19,8 @@ const Container = styled(Box)`
   height: 86.5vh;
   align-items : center;
   justify-content: center;
+`;
+
+const SpinCircle = styled(CircularProgress)`
+	color: rgb(33, 56, 109);
 `;

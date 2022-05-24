@@ -11,6 +11,7 @@
     "json-server": "json-server --watch db.json --port 8080"
   },
   "dependencies": {
+    "@emotion/css": "^11.9.0",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@hookform/error-message": "^2.0.0",

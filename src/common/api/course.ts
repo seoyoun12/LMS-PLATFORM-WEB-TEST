@@ -1,10 +1,7 @@
 import { deleteRequest, get, post, put } from '@common/httpClient';
 import useSWR from 'swr';
-import {
-  FetchPaginationResponse,
-  FetchResponse,
-  PaginationResult, YN,
-} from '@common/constant';
+import { YN } from '@common/constant';
+import { FetchPaginationResponse, FetchResponse } from 'types/fetch';
 
 
 export enum PRODUCT_STATUS {

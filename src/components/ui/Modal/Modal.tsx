@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
+import { LoadingButton } from '@mui/lab';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -11,6 +12,7 @@ type ModalProps = {
   open: boolean,
   handleClose: () => void;
   onSubmit?: () => void;
+  submitLoading?: boolean;
   action?: string | React.ReactNode;
 } & DialogProps
 
@@ -44,7 +46,17 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-export function Modal({ open, children, title, action, handleClose, onSubmit, ...dialogProps }: ModalProps) {
+export function Modal(
+  {
+    open,
+    children,
+    title,
+    action,
+    handleClose,
+    onSubmit,
+    submitLoading,
+    ...dialogProps
+  }: ModalProps) {
 
   return (
     <Dialog
@@ -62,9 +74,13 @@ export function Modal({ open, children, title, action, handleClose, onSubmit, ..
       <DialogActions>
         {
           typeof action !== 'string' ? action :
-            <Button autoFocus onClick={onSubmit}>
+            <LoadingButton
+              autoFocus
+              onClick={onSubmit}
+              loading={submitLoading || false}
+            >
               {action}
-            </Button>
+            </LoadingButton>
         }
       </DialogActions>
     </Dialog>

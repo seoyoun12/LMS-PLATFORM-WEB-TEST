@@ -82,9 +82,19 @@ export function Question() {
           color="secondary"
           variant="contained"
           startIcon={<FileUploadIcon />}
+          onClick={() => setOpenUploadModal(true)}
+        >
+          문제 등록
+        </Button>
+
+        <Button
+          className="upload-btn"
+          color="secondary"
+          variant="contained"
+          startIcon={<FileUploadIcon />}
           onClick={() => setOpenBulkUploadModal(true)}
         >
-          강의 등록
+          문제 일괄 등록
         </Button>
       </LessonUploadBtn>
 
@@ -107,7 +117,6 @@ export function Question() {
                     {lesson.sort}
                   </TableCell>
                   <TableCell style={{ width: 80 }} align="right">
-
                   </TableCell>
                   <TableCell style={{ width: 200 }} align="right">
                     {lesson.lessonNm}
@@ -121,6 +130,8 @@ export function Question() {
                   <TableCell style={{ width: 100 }} align="right">
                     {lesson.totalPage}
                   </TableCell>
+                  <TableCell style={{ width: 80 }} align="right">문제유형</TableCell>
+                  <TableCell style={{ width: 80 }} align="right">미리보기</TableCell>
                   <TableCell style={{ width: 10 }} align="right">
                     <Chip
                       label={lesson.status === PRODUCT_STATUS.APPROVE ? '정상' : '중지'}
@@ -157,8 +168,8 @@ export function Question() {
         open={openBulkUploadModal}
         handleClose={closeBulkModal}
       />
-      <LessonUploadModal
-        mode="modify"
+      <QuestionUploadModal
+        mode={lessonId ? 'modify' : 'upload'}
         open={openUploadModal}
         lesson={lesson}
         error={lessonError}

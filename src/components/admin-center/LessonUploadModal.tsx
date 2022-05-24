@@ -20,12 +20,12 @@ import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import { grey } from '@mui/material/colors';
 import { CustomInputLabel } from '@components/ui/InputLabel';
 import { Modal } from '@components/ui';
-import { Lesson, modifyLesson, useLesson } from '@common/api/lesson';
+import { Lesson, modifyLesson } from '@common/api/lesson';
 import TextField from '@mui/material/TextField';
 import { PRODUCT_STATUS } from '@common/api/course';
 import { useSnackbar } from '@hooks/useSnackbar';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
-import { Files } from '@common/constant';
+import { S3Files } from 'types/file';
 
 
 const contentTypeOptions = [
@@ -52,7 +52,8 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
   error?: any;
 }) {
   const snackbar = useSnackbar();
-  const [ videoFiles, setVideoFiles ] = useState<Files | null>([]);
+  const [ s3Files, setS3Files ] = useState<S3Files | null>([]);
+  const [ submitLoading, setSubmitLoading ] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const {
     register,
@@ -64,46 +65,57 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
 
   useEffect(() => {
     if (mode === 'modify' && !!lesson && open) {
-      setVideoFiles(lesson.files.length
-        ? [ {
-          name: lesson.files[0].name,
-          path: lesson.files[0].path
-        } ]
-        : []);
+      setS3Files(
+        lesson.s3Files.length
+          ? [ { name: lesson.s3Files[0].name, path: lesson.s3Files[0].path } ]
+          : []
+      );
       reset({ ...lesson });
     }
   }, [ mode, lesson, open ]);
 
   const uploadFile = (e: ChangeEvent) => {
     e.preventDefault();
+    // const reader = new FileReader();
+    // reader.readAsArrayBuffer(e.target.files[0]);
+    // reader.onload = (e) => {
+    //   console.log('e', e);
+    // };
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
-    setVideoFiles([ { name: files[0].name, path: '' } ]);
+    setS3Files([ { name: files[0].name, path: '' } ]);
   };
 
   const onSubmit: SubmitHandler<FormType> = async (lesson) => {
     const files = fileInputRef.current?.files;
     const formData = new FormData();
-    if (!!files?.length) {
-      const videoFile = files[0];
-      formData.append('file', videoFile, videoFile.name);
-    }
+    const videoFile = !!files?.length ? files[0] : new Blob([]);
+    const fileName = !!files?.length ? files[0].name : undefined;
 
+    formData.append('files', videoFile, fileName);
     formData.append('data', new Blob([
         JSON.stringify({
           ...lesson,
-          files: videoFiles
+          s3Files: s3Files
         }) ],
       { type: 'application/json' })
     );
 
     try {
+      setSubmitLoading(true);
       await modifyLesson({ lessonId: lesson.seq, formData });
+      setSubmitLoading(false);
+      snackbar({ variant: 'success', message: '업로드 되었습니다.' });
     } catch (e: any) {
       console.log(e);
       snackbar(e.data.message);
     }
     handleClose();
+  };
+
+  const removeFile = () => {
+    fileInputRef.current!.value = '';
+    setS3Files([]);
   };
 
   if (error) return <div>error</div>;
@@ -115,6 +127,7 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
       title="강의 업로드"
       maxWidth="md"
       open={open}
+      submitLoading={submitLoading}
       handleClose={handleClose}
       onSubmit={handleSubmit(onSubmit)}
     >
@@ -172,14 +185,11 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
             >
               파일 선택
             </Button>
-            {!!videoFiles?.length && <Chip
+            {!!s3Files?.length && <Chip
               sx={{ mt: '8px' }}
               icon={<OndemandVideoOutlinedIcon />}
-              label={videoFiles[0].name}
-              onDelete={() => {
-                fileInputRef.current!.value = '';
-                setVideoFiles(null);
-              }}
+              label={s3Files[0].name}
+              onDelete={removeFile}
             />}
           </FormControl>
 

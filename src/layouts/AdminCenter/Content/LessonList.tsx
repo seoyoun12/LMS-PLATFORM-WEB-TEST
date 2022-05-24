@@ -15,9 +15,8 @@ import { useDialog } from '@hooks/useDialog';
 import { ContentType } from '@common/api/content';
 import { PRODUCT_STATUS } from '@common/api/course';
 import { LessonUploadModal } from '@components/admin-center/LessonUploadModal';
-import { totalSecToMinSec } from '@common/util';
 import { Spinner } from '@components/ui';
-
+import { totalSecToMinSec } from 'src/utils/totalSecToMinSec';
 
 
 const headRows = [

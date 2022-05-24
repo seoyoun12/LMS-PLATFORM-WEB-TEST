@@ -67,7 +67,7 @@ export function Course() {
   };
 
   if (error) return <div>Error</div>;
-  if (!data) return <Spinner />;
+  if (data) return <Spinner />;
   return (
     <Container className={styles.globalContainer}>
       <Typography

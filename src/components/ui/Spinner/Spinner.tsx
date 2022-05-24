@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 export function Spinner() {
 	return (
 		<Container>
-			<CircularProgress />
+			<SpinCircle />
 		</Container>
 	);
 }

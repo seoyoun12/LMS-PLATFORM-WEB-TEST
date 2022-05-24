@@ -1,7 +1,7 @@
 import { get, post, put } from '@common/httpClient';
 import { PRODUCT_STATUS } from '@common/api/course';
-import useSWR from 'swr';
-import { FetchPaginationResponse, SWRResponse } from '@common/constant';
+import useSWR, { SWRResponse } from 'swr';
+import { FetchPaginationResponse } from 'types/fetch';
 
 export enum ContentType {
   CONTENT_HTML = 'CONTENT_HTML',

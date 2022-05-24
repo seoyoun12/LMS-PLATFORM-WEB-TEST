@@ -2,7 +2,7 @@ import { deleteRequest, get, post, put } from '@common/httpClient';
 import { ContentInput, ContentType } from '@common/api/content';
 import { PRODUCT_STATUS } from '@common/api/course';
 import useSWR, { SWRResponse } from 'swr';
-import { Files } from '@common/constant';
+import { S3Files } from 'types/file';
 
 export interface LessonInput {
   contentType?: ContentType;
@@ -27,7 +27,7 @@ export interface Lesson {
   modifiedDtime: string;
   pcUrl: string;
   fileName: string;
-  files: Files;
+  s3Files: S3Files;
   seq: number;
   sort: number;
   status: PRODUCT_STATUS;

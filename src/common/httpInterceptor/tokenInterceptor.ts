@@ -1,7 +1,8 @@
-import { REFRESH_TOKEN, ACCESS_TOKEN, STATUS_CODE } from '@common/constant';
+import { REFRESH_TOKEN, ACCESS_TOKEN } from '@common/constant';
 import { api, post } from '@common/httpClient';
 import { localStore } from '@common/storage';
 import { AxiosError } from 'axios';
+import { STATUS_CODE } from 'types/fetch';
 
 interface ErrorResponse {
   success: boolean;

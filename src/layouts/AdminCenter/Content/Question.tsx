@@ -9,21 +9,20 @@ import { useRouter } from 'next/router';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import styled from '@emotion/styled';
 import { LessonBulkUploadModal } from '@components/admin-center/LessonBulkUploadModal';
-import { removeLesson, useLesson, useLessonList } from '@common/api/lesson';
+import { removeLesson } from '@common/api/lesson';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { PRODUCT_STATUS } from '@common/api/course';
-import { totalSecToMinSec } from '@utils/totalSecToMinSec';
 import { QuestionUploadModal } from '@components/admin-center/QuestionUploadModal';
+import { useQuestion, useQuestionList } from '@common/api/question';
 
 const headRows = [
-  { name: '' },
+  { name: 'ID' },
   { name: '콘텐츠' },
-  { name: '시험유형' },
-  { name: '차시' },
-  { name: '무넺' },
-  { name: '난이도' },
   { name: '문제유형' },
+  { name: '차시' },
+  { name: '문제' },
+  { name: '난이도' },
   { name: '미리보기' },
   { name: '상태' },
 ];
@@ -34,10 +33,14 @@ export function Question() {
   const dialog = useDialog();
   const [ openBulkUploadModal, setOpenBulkUploadModal ] = useState(false);
   const [ openUploadModal, setOpenUploadModal ] = useState(false);
-  const [ lessonId, setLessonId ] = useState<number | null>(null);
+  const [ questionId, setQuestionId ] = useState<number | null>(null);
+  const [ page, setPage ] = useState(0);
   const { contentId } = router.query;
-  const { lessonList, lessonListError, mutate } = useLessonList(Number(contentId));
-  const { lesson, lessonError } = useLesson(lessonId);
+  const {
+    questionPaginationResult,
+    questionPaginationResultError,
+    mutate
+  } = useQuestionList({ contentId: Number(contentId), page });
 
   const onRemoveLesson = async (lessonId: number) => {
     try {
@@ -57,8 +60,8 @@ export function Question() {
     }
   };
 
-  const modifyLesson = (lessonId: number) => {
-    setLessonId(lessonId);
+  const modifyLesson = (questionId: number) => {
+    setQuestionId(questionId);
     setOpenUploadModal(true);
   };
 
@@ -70,13 +73,16 @@ export function Question() {
     setOpenBulkUploadModal(false);
   };
 
-  if (lessonListError) return <div>error</div>;
-  if (!lessonList) return <div>loading</div>;
+  const onChangePage = (page: number) => {
+    setPage(page);
+  };
+
+  if (questionPaginationResultError) return <div>error</div>;
+  if (!questionPaginationResult) return <div>loading</div>;
   return (
     <Container className={styles.globalContainer}>
       <LessonUploadBtn>
         <Button
-          className="upload-btn"
           color="secondary"
           variant="contained"
           startIcon={<FileUploadIcon />}
@@ -86,7 +92,6 @@ export function Question() {
         </Button>
 
         <Button
-          className="upload-btn"
           color="secondary"
           variant="contained"
           startIcon={<FileUploadIcon />}
@@ -96,7 +101,13 @@ export function Question() {
         </Button>
       </LessonUploadBtn>
 
-      <Table size="small">
+      <Table
+        size="small"
+        pagination
+        totalNum={questionPaginationResult.totalElements}
+        page={questionPaginationResult.number}
+        onChangePage={onChangePage}
+      >
         <TableHead>
           <TableRow>
             <TableCell align="left">{headRows[0].name}</TableCell>
@@ -107,35 +118,34 @@ export function Question() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {lessonList.map((lesson) => {
-              const { min, sec } = totalSecToMinSec(lesson.completeTime);
+          {questionPaginationResult.content.map((question) => {
               return (
-                <TableRow key={lesson.seq} hover>
+                <TableRow key={question.seq} hover>
                   <TableCell style={{ width: 60 }} align="left">
-                    {lesson.sort}
+                    {question.seq}
                   </TableCell>
                   <TableCell style={{ width: 80 }} align="right">
+                    {question.question}
                   </TableCell>
                   <TableCell style={{ width: 200 }} align="right">
-                    {lesson.lessonNm}
+                    {question.examType}
                   </TableCell>
                   <TableCell style={{ width: 100 }} align="right">
-                    {lesson.min}분 {lesson.sec}초
+                    {question.chapter}
                   </TableCell>
                   <TableCell style={{ width: 100 }} align="right">
-                    {min}분 {sec}초
+                    {question.question}
                   </TableCell>
                   <TableCell style={{ width: 100 }} align="right">
-                    {lesson.totalPage}
+                    {question.level}
                   </TableCell>
-                  <TableCell style={{ width: 80 }} align="right">문제유형</TableCell>
-                  <TableCell style={{ width: 80 }} align="right">미리보기</TableCell>
+                  <TableCell style={{ width: 74 }} align="right">미리보기</TableCell>
                   <TableCell style={{ width: 10 }} align="right">
                     <Chip
-                      label={lesson.status === PRODUCT_STATUS.APPROVE ? '정상' : '중지'}
+                      label={question.status === PRODUCT_STATUS.APPROVE ? '정상' : '중지'}
                       variant="outlined"
                       size="small"
-                      color={lesson.status === PRODUCT_STATUS.APPROVE ? 'secondary' : 'default'}
+                      color={question.status === PRODUCT_STATUS.APPROVE ? 'secondary' : 'default'}
                     />
                   </TableCell>
                   <TableCell style={{ width: 135 }} align="right">
@@ -143,14 +153,14 @@ export function Question() {
                       variant="text"
                       color="neutral"
                       size="small"
-                      onClick={() => modifyLesson(lesson.seq)}
+                      onClick={() => modifyLesson(question.seq)}
                     >
                       수정
                     </Button>
                     <Button
                       variant="text"
                       color="warning"
-                      onClick={() => onRemoveLesson(lesson.seq)}
+                      onClick={() => onRemoveLesson(question.seq)}
                       size="small"
                     >
                       삭제
@@ -167,10 +177,10 @@ export function Question() {
         handleClose={closeBulkModal}
       />
       <QuestionUploadModal
-        mode={lessonId ? 'modify' : 'upload'}
+        mode={questionId ? 'modify' : 'upload'}
+        questionId={questionId}
         open={openUploadModal}
-        lesson={lesson}
-        error={lessonError}
+        error={questionPaginationResultError}
         handleClose={() => setOpenUploadModal(false)}
       />
     </Container>
@@ -182,8 +192,9 @@ const LessonUploadBtn = styled.div`
   align-items: center;
   width: 100%;
   padding-bottom: 30px;
+  justify-content: flex-end;
 
-  .upload-btn {
-    margin-left: auto;
+  > button:last-of-type {
+    margin-left: 12px;
   }
 `;

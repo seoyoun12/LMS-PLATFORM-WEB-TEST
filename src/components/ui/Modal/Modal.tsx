@@ -56,8 +56,8 @@ export function Modal(
     onSubmit,
     submitLoading,
     ...dialogProps
-  }: ModalProps) {
-
+  }: ModalProps
+) {
   return (
     <Dialog
       onClose={handleClose}

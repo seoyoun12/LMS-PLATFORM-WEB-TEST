@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { headerHeight } from '@styles/variables';
 import { TuiViewer } from '@components/common/TuiEditor';
 import { useRouter } from 'next/router';
-import { STATUS_CODE } from '@common/constant';
+import { STATUS_CODE } from 'types/fetch';
 
 export function Course() {
   const router = useRouter();

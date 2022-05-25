@@ -43,6 +43,7 @@ export interface PaginationResult<T> {
 
 export enum STATUS_CODE {
   NOT_FOUND = 404,
+  AUTHORIZATION_LOCKED = 400,
   ACCESS_TOKEN_EXPIRED = 999,
   REFRESH_TOKEN_EXPIRED = 998
 }

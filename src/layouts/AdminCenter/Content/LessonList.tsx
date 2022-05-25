@@ -107,7 +107,7 @@ export function LessonList() {
               return (
                 <TableRow key={lesson.seq} hover>
                   <TableCell style={{ width: 60 }} align="left">
-                    {lesson.sort}
+                    {lesson.chapter}
                   </TableCell>
                   <TableCell style={{ width: 80 }} align="right">
                     {contentType[lesson.contentType]}

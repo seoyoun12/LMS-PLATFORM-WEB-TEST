@@ -83,15 +83,15 @@ export function removeCourse({ courseId }: { courseId: number }) {
   return deleteRequest(`/course/adm/${courseId}`);
 }
 
-export function useCourseList({ page, courseTitle, elementCnt, sort }: {
+export function useCourseList({ page, courseTitle, elementCnt, chapter }: {
   page: number,
   courseTitle?: string,
   elementCnt?: number,
-  sort?: string
+  chapter?: string
 }) {
   const { data, error } = useSWR<FetchPaginationResponse<CourseData[]>>([
     `/course/adm`, {
-      params: { page, courseTitle, elementCnt, sort }
+      params: { page, courseTitle, elementCnt, chapter }
     }
   ], get);
 

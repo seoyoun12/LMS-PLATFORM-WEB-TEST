@@ -1,5 +1,6 @@
 import { deleteRequest, get, post, put } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
+import { PaginationResult } from 'types/fetch';
 
 export enum ExamType {
   QUESTION_OBJ = 'QUESTION_OBJ',
@@ -49,29 +50,33 @@ export interface Question {
   status: number;
 }
 
-export function useQuestionList(contentId: number) {
-  const { data, error, mutate } = useSWR<SWRResponse<Question[]>>(contentId ? `/lesson/adm/${contentId}` : null, get);
+export function useQuestionList({ contentId, page, elementCnt }: {
+  contentId: number, page: number, elementCnt?: number
+}) {
+  const key = contentId
+    ? [ `/question/adm`, { params: { contentSeq: contentId, page, elementCnt } } ]
+    : null;
+
+  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Question[]>>>(key, get);
 
   return {
-    lessonList: data?.data,
-    lessonListError: error,
+    questionPaginationResult: data?.data,
+    questionPaginationResultError: error,
     mutate
   };
 }
 
-export function useQuestion(lessonId: number | null) {
-  const { data, error } = useSWR<SWRResponse<Question>>(lessonId ? `/lesson/adm/detail/${lessonId}` : null, get);
+export function useQuestion(questionId: number | null) {
+  const { data, error } = useSWR<SWRResponse<Question>>(questionId ? `/question/adm/${questionId}` : null, get);
 
   return {
-    lesson: data?.data,
-    lessonError: error,
+    question: data?.data,
+    questionError: error,
   };
 }
 
 export function uploadQuestion(questionInput: QuestionInput) {
-  return post(`/question/adm`, {
-    questionInput
-  });
+  return post(`/question/adm`, questionInput);
 }
 
 export function modifyQuestion({ lessonId, formData }: {

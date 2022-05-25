@@ -10,7 +10,7 @@ export interface LessonInput {
   lessonNm?: string;
   mobileUrl?: string;
   pcUrl?: string;
-  sort?: number;
+  chapter?: number;
   totalPage?: number;
   totalTime?: number;
   min?: number;
@@ -29,7 +29,7 @@ export interface Lesson {
   fileName: string;
   s3Files: S3Files;
   seq: number;
-  sort: number;
+  chapter: number;
   status: PRODUCT_STATUS;
   totalPage: number;
   totalTime: number;

@@ -1,4 +1,4 @@
-import { get, post, put } from '@common/httpClient';
+import { GET, POST, PUT } from '@common/httpClient';
 import useSWR from 'swr';
 import { YN } from '@common/constant';
 
@@ -27,7 +27,7 @@ export interface MyUser {
 }
 
 export async function getMyUser(): Promise<MyUser> {
-  return await get<MyUser>(`/user/myinfo`);
+  return await GET<MyUser>(`/user/myinfo`);
 }
 
 // export function useMyUser(): { user: MyUser | undefined; isLoading: boolean; isError: any } {
@@ -40,11 +40,11 @@ export async function getMyUser(): Promise<MyUser> {
 // }
 
 export async function userLoginHistory() {
-  return await post(`/user/login-history`);
+  return await POST(`/user/login-history`);
 }
 
 export async function modifyMyUser({ name, emailYn, smsYn }: { name: string, emailYn: YN, smsYn: YN }) {
-  return await put(`/user/myinfo/modify`, {
+  return await PUT(`/user/myinfo/modify`, {
     emailYn, smsYn
   });
 }
@@ -52,7 +52,7 @@ export async function modifyMyUser({ name, emailYn, smsYn }: { name: string, ema
 export async function modifyMyUserPassword(
   { currentPassword, newPassword }: { currentPassword: string, newPassword: string }
 ) {
-  return await put(`/user/myinfo/modify/password`, {
+  return await PUT(`/user/myinfo/modify/password`, {
     currentPw: currentPassword,
     modifiedPw: newPassword
   });

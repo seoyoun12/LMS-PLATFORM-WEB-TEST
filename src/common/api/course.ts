@@ -1,4 +1,4 @@
-import { deleteRequest, get, post, put } from '@common/httpClient';
+import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR from 'swr';
 import { YN } from '@common/constant';
 import { FetchPaginationResponse, FetchResponse } from 'types/fetch';
@@ -42,7 +42,7 @@ export interface CourseData {
 }
 
 export async function uploadCourse(courseInput: FormData) {
-  return await post(`/course/adm`, courseInput, {
+  return await POST(`/course/adm`, courseInput, {
     headers: {
       'content-type': 'multipart/form-data'
     }
@@ -50,7 +50,7 @@ export async function uploadCourse(courseInput: FormData) {
 }
 
 export async function modifyCourse({ courseId, courseInput }: { courseId: number, courseInput: FormData }) {
-  return await put(`/course/adm/${courseId}`, courseInput, {
+  return await PUT(`/course/adm/${courseId}`, courseInput, {
     headers: {
       'content-type': 'multipart/form-data'
     }
@@ -60,7 +60,7 @@ export async function modifyCourse({ courseId, courseInput }: { courseId: number
 
 export async function getCourse({ courseId }: { courseId: number }): Promise<CourseData> {
   try {
-    return (await get<FetchResponse<CourseData>>(`/course/${courseId}`)).data;
+    return (await GET<FetchResponse<CourseData>>(`/course/${courseId}`)).data;
   } catch (err: any) {
     return Promise.reject(err);
   }
@@ -71,7 +71,7 @@ export function useCourse({ courseId }: { courseId: number }): {
   isError: any;
   data?: CourseData
 } {
-  const { data, error } = useSWR<FetchResponse<CourseData>>(courseId ? `/course/${courseId}` : null, get);
+  const { data, error } = useSWR<FetchResponse<CourseData>>(courseId ? `/course/${courseId}` : null, GET);
   return {
     data: data?.data,
     isLoading: !data && !error,
@@ -80,7 +80,7 @@ export function useCourse({ courseId }: { courseId: number }): {
 }
 
 export function removeCourse({ courseId }: { courseId: number }) {
-  return deleteRequest(`/course/adm/${courseId}`);
+  return DELETE(`/course/adm/${courseId}`);
 }
 
 export function useCourseList({ page, courseTitle, elementCnt, chapter }: {
@@ -93,7 +93,7 @@ export function useCourseList({ page, courseTitle, elementCnt, chapter }: {
     `/course/adm`, {
       params: { page, courseTitle, elementCnt, chapter }
     }
-  ], get);
+  ], GET);
 
   return {
     data: data?.data,

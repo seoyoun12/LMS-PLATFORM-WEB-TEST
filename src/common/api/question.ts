@@ -1,4 +1,4 @@
-import { deleteRequest, get, post, put } from '@common/httpClient';
+import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { PaginationResult } from 'types/fetch';
 
@@ -57,7 +57,7 @@ export function useQuestionList({ contentId, page, elementCnt }: {
     ? [ `/question/adm`, { params: { contentSeq: contentId, page, elementCnt } } ]
     : null;
 
-  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Question[]>>>(key, get);
+  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Question[]>>>(key, GET);
 
   return {
     questionPaginationResult: data?.data,
@@ -67,7 +67,7 @@ export function useQuestionList({ contentId, page, elementCnt }: {
 }
 
 export function useQuestion(questionId: number | null) {
-  const { data, error } = useSWR<SWRResponse<Question>>(questionId ? `/question/adm/${questionId}` : null, get);
+  const { data, error } = useSWR<SWRResponse<Question>>(questionId ? `/question/adm/${questionId}` : null, GET);
 
   return {
     question: data?.data,
@@ -76,13 +76,13 @@ export function useQuestion(questionId: number | null) {
 }
 
 export function uploadQuestion(questionInput: QuestionInput) {
-  return post(`/question/adm`, questionInput);
+  return POST(`/question/adm`, questionInput);
 }
 
 export function modifyQuestion(questionId: number, questionInput: QuestionInput) {
-  return put(`/question/adm/${questionId}`, questionInput);
+  return PUT(`/question/adm/${questionId}`, questionInput);
 }
 
 export async function removeQuestion(questionId: number) {
-  return await deleteRequest(`/question/adm/exam/${questionId}`);
+  return await DELETE(`/question/adm/exam/${questionId}`);
 }

@@ -1,5 +1,5 @@
 import { REFRESH_TOKEN, ACCESS_TOKEN } from '@common/constant';
-import { api, post } from '@common/httpClient';
+import { api, POST } from '@common/httpClient';
 import { localStore } from '@common/storage';
 import { AxiosError } from 'axios';
 import { STATUS_CODE } from 'types/fetch';
@@ -42,7 +42,7 @@ export const tokenInterceptor = () => {
 
 
   const getNewToken = async (accessToken: string, refreshToken: string) => {
-    return await post(`/auth/token/refresh`, {
+    return await POST(`/auth/token/refresh`, {
         accessToken: `Bearer ${accessToken}`,
         refreshToken: refreshToken
       },

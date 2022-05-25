@@ -1,4 +1,4 @@
-import { post } from '@common/httpClient';
+import { POST } from '@common/httpClient';
 import { localStore } from '@common/storage';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@common/constant';
 import { userLoginHistory } from '@common/api/user';
@@ -15,7 +15,7 @@ export interface SignInResponse {
 };
 
 export async function signIn(username: string, password: string): Promise<SignInResponse> {
-  return await post('/auth/signin', { username, password })
+  return await POST('/auth/signin', { username, password })
     .then(onSignInSuccess)
     .then(getUserLoginHistory);
 }

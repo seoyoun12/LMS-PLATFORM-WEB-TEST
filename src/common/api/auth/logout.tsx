@@ -1,9 +1,9 @@
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@common/constant';
-import { post } from '@common/httpClient';
+import { POST } from '@common/httpClient';
 import { localStore } from '@common/storage';
 
 export async function logout() {
-  return await post('/auth/signout')
+  return await POST('/auth/signout')
     .then(onLogoutSuccess)
     .catch(err => {
       return Promise.reject(err);

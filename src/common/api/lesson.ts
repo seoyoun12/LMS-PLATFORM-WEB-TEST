@@ -1,4 +1,4 @@
-import { deleteRequest, get, post, put } from '@common/httpClient';
+import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import { ContentInput, ContentType } from '@common/api/content';
 import { PRODUCT_STATUS } from '@common/api/course';
 import useSWR, { SWRResponse } from 'swr';
@@ -38,7 +38,7 @@ export interface Lesson {
 }
 
 export function useLessonList(contentId: number) {
-  const { data, error, mutate } = useSWR<SWRResponse<Lesson[]>>(contentId ? `/lesson/adm/${contentId}` : null, get);
+  const { data, error, mutate } = useSWR<SWRResponse<Lesson[]>>(contentId ? `/lesson/adm/${contentId}` : null, GET);
 
   return {
     lessonList: data?.data,
@@ -48,7 +48,7 @@ export function useLessonList(contentId: number) {
 }
 
 export function useLesson(lessonId: number | null) {
-  const { data, error } = useSWR<SWRResponse<Lesson>>(lessonId ? `/lesson/adm/detail/${lessonId}` : null, get);
+  const { data, error } = useSWR<SWRResponse<Lesson>>(lessonId ? `/lesson/adm/detail/${lessonId}` : null, GET);
 
   return {
     lesson: data?.data,
@@ -60,14 +60,14 @@ export function uploadLessons({ contentId, lessonInput }: {
   contentId: number,
   lessonInput: LessonInput[]
 }) {
-  return post(`/lesson/adm/${contentId}`, lessonInput);
+  return POST(`/lesson/adm/${contentId}`, lessonInput);
 }
 
 export function modifyLesson({ lessonId, formData }: {
   lessonId: number,
   formData: FormData
 }) {
-  return put(`/lesson/adm/modification/${lessonId}`, formData, {
+  return PUT(`/lesson/adm/modification/${lessonId}`, formData, {
     headers: {
       'content-type': 'multipart/form-data'
     }
@@ -75,5 +75,5 @@ export function modifyLesson({ lessonId, formData }: {
 }
 
 export async function removeLesson(lessonId: number) {
-  return await deleteRequest(`/lesson/adm/delete/${lessonId}`);
+  return await DELETE(`/lesson/adm/delete/${lessonId}`);
 }

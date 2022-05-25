@@ -1,4 +1,4 @@
-import { get, post, put } from '@common/httpClient';
+import { GET, POST, PUT } from '@common/httpClient';
 import { PRODUCT_STATUS } from '@common/api/course';
 import useSWR, { SWRResponse } from 'swr';
 import { FetchPaginationResponse } from 'types/fetch';
@@ -34,11 +34,11 @@ export interface ContentData {
 }
 
 export async function uploadContent(contentInput: ContentInput) {
-  return await post(`/content/adm`, contentInput);
+  return await POST(`/content/adm`, contentInput);
 }
 
 export async function modifyContent({ contentId, contentInput }: { contentId: number, contentInput: ContentInput }) {
-  return await put(`/content/adm/${contentId}`, contentInput);
+  return await PUT(`/content/adm/${contentId}`, contentInput);
 }
 
 export function useContentList({ page, elementCnt }: {
@@ -49,7 +49,7 @@ export function useContentList({ page, elementCnt }: {
     `/content/adm`, {
       params: { page, elementCnt }
     }
-  ], get);
+  ], GET);
 
   return {
     data: data?.data,
@@ -58,7 +58,7 @@ export function useContentList({ page, elementCnt }: {
 }
 
 export function useContent(contentId: number) {
-  const { data, error } = useSWR<SWRResponse<ContentData>>(contentId ? [ `content/adm/${contentId}` ] : null, get);
+  const { data, error } = useSWR<SWRResponse<ContentData>>(contentId ? [ `content/adm/${contentId}` ] : null, GET);
 
   return {
     data: data?.data,

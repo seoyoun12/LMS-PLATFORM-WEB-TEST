@@ -1,4 +1,4 @@
-import { post } from '@common/httpClient';
+import { POST } from '@common/httpClient';
 import { YN } from '@common/constant';
 
 interface Params {
@@ -13,5 +13,5 @@ interface Params {
 }
 
 export async function signUp(params: Params) {
-  return await post('/auth/signup/common', { ...params });
+  return await POST('/auth/signup/common', { ...params });
 }

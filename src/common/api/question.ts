@@ -79,17 +79,10 @@ export function uploadQuestion(questionInput: QuestionInput) {
   return post(`/question/adm`, questionInput);
 }
 
-export function modifyQuestion({ lessonId, formData }: {
-  lessonId: number,
-  formData: FormData
-}) {
-  return put(`/lesson/adm/modification/${lessonId}`, formData, {
-    headers: {
-      'content-type': 'multipart/form-data'
-    }
-  });
+export function modifyQuestion(questionId: number, questionInput: QuestionInput) {
+  return put(`/question/adm/${questionId}`, questionInput);
 }
 
-export async function removeQuestion(lessonId: number) {
-  return await deleteRequest(`/lesson/adm/delete/${lessonId}`);
+export async function removeQuestion(questionId: number) {
+  return await deleteRequest(`/question/adm/exam/${questionId}`);
 }

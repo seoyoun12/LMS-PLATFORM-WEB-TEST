@@ -12,7 +12,8 @@ type ModalProps = {
   open: boolean,
   handleClose: () => void;
   onSubmit?: () => void;
-  submitLoading?: boolean;
+  actionLoading?: boolean;
+  actionDisabled?: boolean;
   action?: string | React.ReactNode;
 } & DialogProps
 
@@ -54,7 +55,8 @@ export function Modal(
     action,
     handleClose,
     onSubmit,
-    submitLoading,
+    actionLoading,
+    actionDisabled,
     ...dialogProps
   }: ModalProps
 ) {
@@ -77,7 +79,8 @@ export function Modal(
             <LoadingButton
               autoFocus
               onClick={onSubmit}
-              loading={submitLoading || false}
+              disabled={actionDisabled}
+              loading={actionLoading || false}
             >
               {action}
             </LoadingButton>

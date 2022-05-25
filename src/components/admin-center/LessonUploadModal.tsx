@@ -127,7 +127,7 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
       title="강의 업로드"
       maxWidth="md"
       open={open}
-      submitLoading={submitLoading}
+      actionLoading={submitLoading}
       handleClose={handleClose}
       onSubmit={handleSubmit(onSubmit)}
     >

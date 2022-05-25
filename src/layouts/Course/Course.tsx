@@ -1,5 +1,5 @@
 import { Button, Container, Divider, Typography } from '@mui/material';
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '@styles/common.module.scss';
 import { getCourse } from '@common/api';
 import { CourseData } from '@common/api/course';

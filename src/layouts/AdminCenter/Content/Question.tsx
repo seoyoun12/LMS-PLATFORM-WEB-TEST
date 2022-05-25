@@ -1,5 +1,5 @@
 import styles from '@styles/common.module.scss';
-import { Button, Chip, Container, TableBody, TableHead } from '@mui/material';
+import { Button, Chip, Container, TableBody, TableHead, Typography } from '@mui/material';
 import { Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -14,19 +14,30 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { PRODUCT_STATUS } from '@common/api/course';
 import { QuestionUploadModal } from '@components/admin-center/QuestionUploadModal';
-import { useQuestionList } from '@common/api/question';
+import { ExamLevel, ExamType, removeQuestion, useQuestionList } from '@common/api/question';
 import { Spinner } from '@components/ui';
+import { css } from '@emotion/css';
+import { setLineClamp } from '@styles/mixins';
 
+const examType = {
+  [ExamType.QUESTION_OBJ]: '객관식',
+  [ExamType.QUESTION_SUBJ]: '주관식'
+};
 
-const headRows = [
-  { name: 'ID' },
-  { name: '콘텐츠' },
-  { name: '문제유형' },
-  { name: '차시' },
-  { name: '문제' },
-  { name: '난이도' },
-  { name: '미리보기' },
-  { name: '상태' },
+const level = {
+  [ExamLevel.LEVEL_EASY]: '하',
+  [ExamLevel.LEVEL_MEDIUM]: '중',
+  [ExamLevel.LEVEL_HARD]: '상'
+};
+
+const headRows: { name: string, align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
+  { name: 'ID', align: 'left' },
+  { name: '문제', align: 'left' },
+  { name: '문제유형', align: 'right' },
+  { name: '차시', align: 'right' },
+  { name: '난이도', align: 'right' },
+  { name: '미리보기', align: 'right' },
+  { name: '상태', align: 'right' },
 ];
 
 export function Question() {
@@ -44,7 +55,7 @@ export function Question() {
     mutate
   } = useQuestionList({ contentId: Number(contentId), page });
 
-  const onRemoveLesson = async (lessonId: number) => {
+  const onRemoveLesson = async (questionId: number) => {
     try {
       const dialogConfirmed = await dialog({
         title: '콘텐츠 삭제하기',
@@ -53,7 +64,7 @@ export function Question() {
         cancelText: '취소'
       });
       if (dialogConfirmed) {
-        await removeLesson(lessonId);
+        await removeQuestion(questionId);
         snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
         await mutate();
       }
@@ -112,9 +123,8 @@ export function Question() {
       >
         <TableHead>
           <TableRow>
-            <TableCell align="left">{headRows[0].name}</TableCell>
-            {headRows.slice(1).map(({ name }: { name: string }) =>
-              <TableCell key={name} align="right">{name}</TableCell>
+            {headRows.map(({ name, align }) =>
+              <TableCell key={name} align={align}>{name}</TableCell>
             )}
             <TableCell>{}</TableCell>
           </TableRow>
@@ -123,25 +133,24 @@ export function Question() {
           {questionPaginationResult.content.map((question) => {
               return (
                 <TableRow key={question.seq} hover>
-                  <TableCell style={{ width: 60 }} align="left">
+                  <TableCell style={{ width: 10 }} align="left">
                     {question.seq}
                   </TableCell>
-                  <TableCell style={{ width: 80 }} align="right">
-                    {question.question}
-                  </TableCell>
-                  <TableCell style={{ width: 200 }} align="right">
-                    {question.examType}
+                  <TableCell align="left">
+                    <Typography className={ellipsis}>
+                      {question.question}
+                    </Typography>
                   </TableCell>
                   <TableCell style={{ width: 100 }} align="right">
+                    {examType[question.examType]}
+                  </TableCell>
+                  <TableCell style={{ width: 60 }} align="right">
                     {question.chapter}
                   </TableCell>
-                  <TableCell style={{ width: 100 }} align="right">
-                    {question.question}
+                  <TableCell style={{ width: 80 }} align="right">
+                    {level[question.level]}
                   </TableCell>
-                  <TableCell style={{ width: 100 }} align="right">
-                    {question.level}
-                  </TableCell>
-                  <TableCell style={{ width: 74 }} align="right">미리보기</TableCell>
+                  <TableCell style={{ width: 100 }} align="right">미리보기</TableCell>
                   <TableCell style={{ width: 10 }} align="right">
                     <Chip
                       label={question.status === PRODUCT_STATUS.APPROVE ? '정상' : '중지'}
@@ -150,7 +159,7 @@ export function Question() {
                       color={question.status === PRODUCT_STATUS.APPROVE ? 'secondary' : 'default'}
                     />
                   </TableCell>
-                  <TableCell style={{ width: 135 }} align="right">
+                  <TableCell style={{ width: 160 }} align="right">
                     <Button
                       variant="text"
                       color="neutral"
@@ -180,9 +189,9 @@ export function Question() {
       />
       <QuestionUploadModal
         mode={questionId ? 'modify' : 'upload'}
+        contentId={Number(contentId)}
         questionId={questionId}
         open={openUploadModal}
-        error={questionPaginationResultError}
         handleClose={() => setOpenUploadModal(false)}
       />
     </Container>
@@ -200,3 +209,8 @@ const LessonUploadBtn = styled.div`
     margin-left: 12px;
   }
 `;
+
+const ellipsis = css`
+  ${setLineClamp(2)}
+`;
+

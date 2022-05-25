@@ -11,17 +11,23 @@ import { ErrorMessage } from '@hookform/error-message';
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { CustomInputLabel } from '@components/ui/InputLabel';
-import { Modal } from '@components/ui';
-import { Lesson } from '@common/api/lesson';
+import { Modal, Spinner } from '@components/ui';
 import TextField from '@mui/material/TextField';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { ExamLevel, ExamType, Question, QuestionInput, uploadQuestion, useQuestion } from '@common/api/question';
-import { PRODUCT_STATUS } from '@common/api/course';
+import {
+  ExamLevel,
+  ExamType,
+  modifyQuestion,
+  Question,
+  QuestionInput,
+  uploadQuestion,
+  useQuestion
+} from '@common/api/question';
 
 type FormType = {} & QuestionInput
 
 const examTypeOptions = [
-  { name: '단답식', value: ExamType.QUESTION_SUBJ },
+  { name: '주관식', value: ExamType.QUESTION_SUBJ },
   { name: '객관식', value: ExamType.QUESTION_OBJ },
 ];
 
@@ -44,15 +50,16 @@ const objExamTypeItems: {
 
 const defaultValues = {
   examType: ExamType.QUESTION_OBJ,
-  answer: ''
+  answer: '',
+  level: ExamLevel.LEVEL_EASY,
 };
 
-export function QuestionUploadModal({ open, handleClose, questionId, mode = 'upload', error }: {
+export function QuestionUploadModal({ open, handleClose, questionId, contentId, mode = 'upload' }: {
   open: boolean;
   handleClose: () => void;
   questionId?: number | null;
+  contentId?: number;
   mode?: 'modify' | 'upload';
-  error?: any;
 }) {
   const { question, questionError } = useQuestion(Number(questionId));
   const snackbar = useSnackbar();
@@ -67,30 +74,35 @@ export function QuestionUploadModal({ open, handleClose, questionId, mode = 'upl
   const examType = useWatch({ control, name: 'examType' });
 
   useEffect(() => {
-    if (mode === 'modify' && !!question && open) {
-      reset({ ...question });
-    }
+    reset(
+      mode === 'modify' && !!question && open
+        ? { ...question }
+        : { ...defaultValues }
+    );
   }, [ mode, question, open ]);
 
   const onSubmit: SubmitHandler<FormType> = async (question) => {
+    const inputParams = { ...question, contentSeq: contentId };
+    setSubmitLoading(true);
     try {
-      console.log(question);
-      setSubmitLoading(true);
-      await uploadQuestion({
-        ...question,
-        contentSeq: question.contentSeq
-      });
+      if (mode === 'upload') {
+        await uploadQuestion(inputParams);
+      } else {
+        if (questionId) {
+          await modifyQuestion(questionId, inputParams);
+        }
+      }
       setSubmitLoading(false);
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
     } catch (e: any) {
-      console.log(e);
+      setSubmitLoading(false);
       snackbar(e.message || e.data?.message);
     }
-    // handleClose();
+    handleClose();
   };
 
-  if (error) return <div>error</div>;
-  if (open && mode === 'modify' && !question) return <div>loading</div>;
+  if (open && questionError) return <div>error</div>;
+  if (open && mode === 'modify' && !question) return <LoadingModal />;
   return (
     <Modal
       action="저장"
@@ -99,7 +111,7 @@ export function QuestionUploadModal({ open, handleClose, questionId, mode = 'upl
       fullWidth
       open={open}
       handleClose={handleClose}
-      submitLoading={false}
+      actionLoading={submitLoading}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Box component="form">
@@ -221,6 +233,16 @@ export function QuestionUploadModal({ open, handleClose, questionId, mode = 'upl
     </Modal>
   );
 }
+
+const LoadingModal = () => (
+  <Modal
+    action="저장" title="문제 업로드" maxWidth="sm" open={true} fullWidth actionDisabled
+    handleClose={() => {
+    }}
+  >
+    <Spinner />
+  </Modal>
+);
 
 const FormContainer = styled.div`
   display: flex;

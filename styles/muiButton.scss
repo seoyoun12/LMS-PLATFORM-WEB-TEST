@@ -1,15 +1,15 @@
 .MuiButton-containedNeutral, .MuiButton-outlinedNeutral, .MuiButton-textNeutral {
-  color: #212121;
+  color: #212121 !important;
 }
 
 .MuiButton-outlinedNeutral {
-  border: 1px solid var(--grey400);
+  border: 1px solid var(--grey400) !important;
 
   &:hover {
-    border: 1px solid var(--grey600);
+    border: 1px solid var(--grey600) !important;
   }
 }
 
 .MuiButton-textNeutral:hover {
-  background-color: rgba(238, 238, 238, .8);
+  background-color: rgba(238, 238, 238, .8) !important;
 }

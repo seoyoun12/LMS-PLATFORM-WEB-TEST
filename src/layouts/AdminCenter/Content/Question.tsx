@@ -14,7 +14,9 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { PRODUCT_STATUS } from '@common/api/course';
 import { QuestionUploadModal } from '@components/admin-center/QuestionUploadModal';
-import { useQuestion, useQuestionList } from '@common/api/question';
+import { useQuestionList } from '@common/api/question';
+import { Spinner } from '@components/ui';
+
 
 const headRows = [
   { name: 'ID' },
@@ -78,7 +80,7 @@ export function Question() {
   };
 
   if (questionPaginationResultError) return <div>error</div>;
-  if (!questionPaginationResult) return <div>loading</div>;
+  if (!questionPaginationResult) return <Spinner />;
   return (
     <Container className={styles.globalContainer}>
       <LessonUploadBtn>

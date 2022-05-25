@@ -13,7 +13,7 @@ export function Spinner() {
 
 const Container = styled(Box)`
   display: flex;
-  height: 86.5vh;
+  min-height: 50vh;
   align-items : center;
   justify-content: center;
 `;

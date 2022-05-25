@@ -8,8 +8,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import styled from '@emotion/styled';
-import { LessonBulkUploadModal } from '@components/admin-center/LessonBulkUploadModal';
-import { removeLesson } from '@common/api/lesson';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { PRODUCT_STATUS } from '@common/api/course';
@@ -55,7 +53,7 @@ export function Question() {
     mutate
   } = useQuestionList({ contentId: Number(contentId), page });
 
-  const onRemoveLesson = async (questionId: number) => {
+  const handleRemoveQuestion = async (questionId: number) => {
     try {
       const dialogConfirmed = await dialog({
         title: '콘텐츠 삭제하기',
@@ -73,7 +71,7 @@ export function Question() {
     }
   };
 
-  const modifyLesson = (questionId: number) => {
+  const modifyQuestion = (questionId: number) => {
     setQuestionId(questionId);
     setOpenUploadModal(true);
   };
@@ -94,7 +92,7 @@ export function Question() {
   if (!questionPaginationResult) return <Spinner />;
   return (
     <Container className={styles.globalContainer}>
-      <LessonUploadBtn>
+      <UploadBtn>
         <Button
           color="secondary"
           variant="contained"
@@ -112,7 +110,7 @@ export function Question() {
         >
           문제 일괄 등록
         </Button>
-      </LessonUploadBtn>
+      </UploadBtn>
 
       <Table
         size="small"
@@ -164,14 +162,14 @@ export function Question() {
                       variant="text"
                       color="neutral"
                       size="small"
-                      onClick={() => modifyLesson(question.seq)}
+                      onClick={() => modifyQuestion(question.seq)}
                     >
                       수정
                     </Button>
                     <Button
                       variant="text"
                       color="warning"
-                      onClick={() => onRemoveLesson(question.seq)}
+                      onClick={() => handleRemoveQuestion(question.seq)}
                       size="small"
                     >
                       삭제
@@ -183,10 +181,10 @@ export function Question() {
         </TableBody>
       </Table>
 
-      <LessonBulkUploadModal
-        open={openBulkUploadModal}
-        handleClose={closeBulkModal}
-      />
+      {/*<LessonBulkUploadModal*/}
+      {/*  open={openBulkUploadModal}*/}
+      {/*  handleClose={closeBulkModal}*/}
+      {/*/>*/}
       <QuestionUploadModal
         mode={questionId ? 'modify' : 'upload'}
         contentId={Number(contentId)}
@@ -198,7 +196,7 @@ export function Question() {
   );
 }
 
-const LessonUploadBtn = styled.div`
+const UploadBtn = styled.div`
   display: flex;
   align-items: center;
   width: 100%;

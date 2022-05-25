@@ -84,5 +84,5 @@ export function modifyQuestion(questionId: number, questionInput: QuestionInput)
 }
 
 export async function removeQuestion(questionId: number) {
-  return await DELETE(`/question/adm/exam/${questionId}`);
+  return await DELETE(`/question/adm/${questionId}`);
 }

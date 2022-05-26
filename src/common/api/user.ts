@@ -1,6 +1,7 @@
 import { GET, POST, PUT } from '@common/httpClient';
-import useSWR from 'swr';
+import useSWR, { SWRResponse } from 'swr';
 import { YN } from '@common/constant';
+import { PaginationResult } from 'types/fetch';
 
 export interface MyUser {
   message: string;
@@ -26,11 +27,47 @@ export interface MyUser {
   };
 }
 
+export interface User {
+  birth: string;
+  createdDtime: string;
+  emailYn: string;
+  failedYn: string;
+  gender: string;
+  lastPwUpdDtime: string;
+  loginFailedCount: number;
+  modifiedDtime: String;
+  name: string;
+  phone: string;
+  regCategory: string;
+  seq: number;
+  smsYn: string;
+  status: number;
+  username: string;
+}
+
 export async function getMyUser(): Promise<MyUser> {
   return await GET<MyUser>(`/user/myinfo`);
 }
 
-// export function useMyUser(): { user: MyUser | undefined; isLoading: boolean; isError: any } {
+
+export function userList({ page, elementCnt }: {
+  page: number,
+  elementCnt?: number,
+}) {
+  const { data, error } = useSWR<SWRResponse<PaginationResult<User[]>>>([
+    `/user/adm`, {
+      params: { page, elementCnt }
+    }
+  ], GET);
+
+  return {
+    data: data?.data,
+    error
+  };
+}
+
+
+// export function useMyUser(): { user: MyUser | undined; isLoading: boolean; isError: any } {
 //   const { data, error } = useSWR<MyUser>(`/user/myinfo`, get);
 //   return {
 //     isLoading: !data && !error,

@@ -10,6 +10,7 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import SourceOutlinedIcon from '@mui/icons-material/SourceOutlined';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import { ReactNode } from 'react';
 import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
@@ -53,6 +54,22 @@ export function Drawer({ children }: { children: ReactNode }) {
         },
       ],
       icon: <SourceOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    },
+    {
+      name: '회원관리',
+      children: [
+        {
+          name: '회원 목록',
+          href: '/admin-center/user',
+          isActive: router.pathname === '/admin-center/user'
+        },
+        {
+          name: '회원 등록',
+          href: '/admin-center/user',
+          isActive: router.pathname === '/admin-center/user'
+        }
+      ],
+      icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
     },
     {
       name: '통계',

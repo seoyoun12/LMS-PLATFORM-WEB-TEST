@@ -6,7 +6,9 @@ import TableCell from '@mui/material/TableCell';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { userList } from '@common/api/user';
+import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
+
 
 const headRows = [
   { name: 'seq'},
@@ -42,19 +44,15 @@ export function UserList() {
   if (!data) return <Spinner />;
   return (
     <Container className={styles.globalContainer}>
-      <Typography
-        variant="h5"
-        sx={{
-          mb: '12px',
-          fontWeight: 700
-        }}
-      >회원 목록</Typography>
+      <UserTypo variant='h5'>
+        회원 목록
+      </UserTypo>
       <Table>
         <TableHead>
           <TableRow>
             <TableCell>{headRows[0].name}</TableCell>
             {headRows.slice(1).map(({ name }: { name: string }) =>
-              <TableCell key={name} align="center">{name}</TableCell>
+              <TableCell key={name} align="right">{name}</TableCell>
             )}            
           </TableRow> 
         </TableHead>
@@ -83,3 +81,8 @@ export function UserList() {
     </Container>
   );
 }
+
+const UserTypo = styled(Typography)`
+  margin-bottom: 12px;
+  font-weight: 700;
+`

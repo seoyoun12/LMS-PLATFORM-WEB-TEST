@@ -30,7 +30,7 @@ const headRows = [
 ];
 
 const contentType = {
-  [ContentType.CONTENT_HTML]: '웹톤텐츠(HTML5)',
+  [ContentType.CONTENT_HTML]: '웹콘텐츠(HTML5)',
   [ContentType.CONTENT_MP4]: 'mp4',
   [ContentType.CONTENT_EXTERNAL]: '외부링크',
 };

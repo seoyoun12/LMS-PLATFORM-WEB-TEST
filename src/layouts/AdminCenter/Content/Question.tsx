@@ -16,6 +16,7 @@ import { ExamLevel, ExamType, removeQuestion, useQuestionList } from '@common/ap
 import { Spinner } from '@components/ui';
 import { css } from '@emotion/css';
 import { setLineClamp } from '@styles/mixins';
+import { QuestionPreviewModal } from '@components/admin-center';
 
 const examType = {
   [ExamType.QUESTION_OBJ]: '객관식',
@@ -44,6 +45,7 @@ export function Question() {
   const dialog = useDialog();
   const [ openBulkUploadModal, setOpenBulkUploadModal ] = useState(false);
   const [ openUploadModal, setOpenUploadModal ] = useState(false);
+  const [ openPreviewModal, setOpenPreviewModal ] = useState(false);
   const [ questionId, setQuestionId ] = useState<number | null>(null);
   const [ page, setPage ] = useState(0);
   const { contentId } = router.query;
@@ -84,9 +86,6 @@ export function Question() {
     setOpenBulkUploadModal(false);
   };
 
-  const onChangePage = (page: number) => {
-    setPage(page);
-  };
 
   if (questionPaginationResultError) return <div>error</div>;
   if (!questionPaginationResult) return <Spinner />;
@@ -97,14 +96,17 @@ export function Question() {
           color="secondary"
           variant="contained"
           startIcon={<FileUploadIcon />}
-          onClick={() => setOpenUploadModal(true)}
+          onClick={() => {
+            setQuestionId(null);
+            setOpenUploadModal(true);
+          }}
         >
           문제 등록
         </Button>
 
         <Button
           color="secondary"
-          variant="contained"
+          variant="outlined"
           startIcon={<FileUploadIcon />}
           onClick={() => setOpenBulkUploadModal(true)}
         >
@@ -117,7 +119,7 @@ export function Question() {
         pagination
         totalNum={questionPaginationResult.totalElements}
         page={questionPaginationResult.number}
-        onChangePage={onChangePage}
+        onChangePage={() => setPage(page)}
       >
         <TableHead>
           <TableRow>
@@ -148,7 +150,19 @@ export function Question() {
                   <TableCell style={{ width: 80 }} align="right">
                     {level[question.level]}
                   </TableCell>
-                  <TableCell style={{ width: 100 }} align="right">미리보기</TableCell>
+                  <TableCell style={{ width: 100 }} align="right">
+                    <Button
+                      variant="text"
+                      color="neutral"
+                      size="small"
+                      onClick={() => {
+                        setQuestionId(question.seq);
+                        setOpenPreviewModal(true);
+                      }}
+                    >
+                      미리보기
+                    </Button>
+                  </TableCell>
                   <TableCell style={{ width: 10 }} align="right">
                     <Chip
                       label={question.status === PRODUCT_STATUS.APPROVE ? '정상' : '중지'}
@@ -188,9 +202,15 @@ export function Question() {
       <QuestionUploadModal
         mode={questionId ? 'modify' : 'upload'}
         contentId={Number(contentId)}
-        questionId={questionId}
+        questionId={Number(questionId)}
         open={openUploadModal}
         handleClose={() => setOpenUploadModal(false)}
+      />
+
+      <QuestionPreviewModal
+        questionId={Number(questionId)}
+        open={openPreviewModal}
+        handleClose={() => setOpenPreviewModal(false)}
       />
     </Container>
   );

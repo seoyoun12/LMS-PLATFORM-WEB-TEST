@@ -11,14 +11,13 @@ import { ErrorMessage } from '@hookform/error-message';
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { CustomInputLabel } from '@components/ui/InputLabel';
-import { Modal, Spinner } from '@components/ui';
+import { Modal } from '@components/ui';
 import TextField from '@mui/material/TextField';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
   ExamLevel,
   ExamType,
   modifyQuestion,
-  Question,
   QuestionInput,
   uploadQuestion,
   useQuestion

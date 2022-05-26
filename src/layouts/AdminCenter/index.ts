@@ -11,3 +11,5 @@ export { Content } from './Content/Content';
 export { ContentUpload } from './Content/ContentUpload';
 export { ContentModify } from './Content/ContentModify';
 export { ContentUploadForm } from '@components/admin-center/ContentUploadForm';
+
+export { UserList } from './User/User';

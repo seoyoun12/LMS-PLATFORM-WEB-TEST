@@ -35,7 +35,6 @@ const headRows: { name: string, align: 'inherit' | 'left' | 'center' | 'right' |
   { name: '문제유형', align: 'right' },
   { name: '차시', align: 'right' },
   { name: '난이도', align: 'right' },
-  { name: '미리보기', align: 'right' },
   { name: '상태', align: 'right' },
 ];
 
@@ -104,14 +103,14 @@ export function Question() {
           문제 등록
         </Button>
 
-        <Button
-          color="secondary"
-          variant="outlined"
-          startIcon={<FileUploadIcon />}
-          onClick={() => setOpenBulkUploadModal(true)}
-        >
-          문제 일괄 등록
-        </Button>
+        {/*<Button*/}
+        {/*  color="secondary"*/}
+        {/*  variant="outlined"*/}
+        {/*  startIcon={<FileUploadIcon />}*/}
+        {/*  onClick={() => setOpenBulkUploadModal(true)}*/}
+        {/*>*/}
+        {/*  문제 일괄 등록*/}
+        {/*</Button>*/}
       </UploadBtn>
 
       <Table
@@ -149,19 +148,6 @@ export function Question() {
                   </TableCell>
                   <TableCell style={{ width: 80 }} align="right">
                     {level[question.level]}
-                  </TableCell>
-                  <TableCell style={{ width: 100 }} align="right">
-                    <Button
-                      variant="text"
-                      color="neutral"
-                      size="small"
-                      onClick={() => {
-                        setQuestionId(question.seq);
-                        setOpenPreviewModal(true);
-                      }}
-                    >
-                      미리보기
-                    </Button>
                   </TableCell>
                   <TableCell style={{ width: 10 }} align="right">
                     <Chip

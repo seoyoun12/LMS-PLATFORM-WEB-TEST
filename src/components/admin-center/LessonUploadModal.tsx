@@ -27,7 +27,6 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { S3Files } from 'types/file';
 
-
 const contentTypeOptions = [
   { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
   { value: ContentType.CONTENT_MP4, name: 'mp4' },
@@ -42,7 +41,6 @@ type FormType = {
 const defaultValues = {
   contentType: ContentType.CONTENT_MP4
 };
-
 
 export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', error }: {
   open: boolean;
@@ -119,8 +117,6 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
   };
 
   if (error) return <div>error</div>;
-  if (open) return <div>loading</div>;
-  // if (open && !lesson) return <div>loading</div>; //////////////////////
   return (
     <Modal
       action="저장"

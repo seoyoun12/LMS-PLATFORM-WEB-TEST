@@ -11,14 +11,13 @@ import { ErrorMessage } from '@hookform/error-message';
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { CustomInputLabel } from '@components/ui/InputLabel';
-import { Modal, Spinner } from '@components/ui';
+import { Modal } from '@components/ui';
 import TextField from '@mui/material/TextField';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
   ExamLevel,
   ExamType,
   modifyQuestion,
-  Question,
   QuestionInput,
   uploadQuestion,
   useQuestion
@@ -72,6 +71,7 @@ export function QuestionUploadModal({ open, handleClose, questionId, contentId, 
     reset,
   } = useForm<FormType>({ defaultValues });
   const examType = useWatch({ control, name: 'examType' });
+  const loading = (open && mode === 'modify' && !question);
 
   useEffect(() => {
     reset(
@@ -102,13 +102,13 @@ export function QuestionUploadModal({ open, handleClose, questionId, contentId, 
   };
 
   if (open && questionError) return <div>error</div>;
-  if (open && mode === 'modify' && !question) return <LoadingModal />;
   return (
     <Modal
       action="저장"
       title="문제 업로드"
       maxWidth="sm"
       fullWidth
+      loading={loading}
       open={open}
       handleClose={handleClose}
       actionLoading={submitLoading}
@@ -233,16 +233,6 @@ export function QuestionUploadModal({ open, handleClose, questionId, contentId, 
     </Modal>
   );
 }
-
-const LoadingModal = () => (
-  <Modal
-    action="저장" title="문제 업로드" maxWidth="sm" open={true} fullWidth actionDisabled
-    handleClose={() => {
-    }}
-  >
-    <Spinner />
-  </Modal>
-);
 
 const FormContainer = styled.div`
   display: flex;

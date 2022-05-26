@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import { LoadingButton } from '@mui/lab';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -7,6 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { Spinner } from '@components/ui';
 
 type ModalProps = {
   open: boolean,
@@ -14,6 +14,7 @@ type ModalProps = {
   onSubmit?: () => void;
   actionLoading?: boolean;
   actionDisabled?: boolean;
+  loading?: boolean;
   action?: string | React.ReactNode;
 } & DialogProps
 
@@ -57,6 +58,7 @@ export function Modal(
     onSubmit,
     actionLoading,
     actionDisabled,
+    loading = false,
     ...dialogProps
   }: ModalProps
 ) {
@@ -67,25 +69,30 @@ export function Modal(
       open={open}
       {...dialogProps}
     >
-      <BootstrapDialogTitle id="modal-title" onClose={handleClose}>
-        {title}
-      </BootstrapDialogTitle>
-      <DialogContent dividers>
-        {children}
-      </DialogContent>
-      <DialogActions>
-        {
-          typeof action !== 'string' ? action :
-            <LoadingButton
-              autoFocus
-              onClick={onSubmit}
-              disabled={actionDisabled}
-              loading={actionLoading || false}
-            >
-              {action}
-            </LoadingButton>
-        }
-      </DialogActions>
+      {
+        loading ? <Spinner /> :
+          <>
+            <BootstrapDialogTitle id="modal-title" onClose={handleClose}>
+              {title}
+            </BootstrapDialogTitle>
+            <DialogContent dividers>
+              {children}
+            </DialogContent>
+            <DialogActions>
+              {
+                typeof action !== 'string' ? action :
+                  <LoadingButton
+                    autoFocus
+                    onClick={onSubmit}
+                    disabled={actionDisabled}
+                    loading={actionLoading || false}
+                  >
+                    {action}
+                  </LoadingButton>
+              }
+            </DialogActions>
+          </>
+      }
     </Dialog>
   );
 }

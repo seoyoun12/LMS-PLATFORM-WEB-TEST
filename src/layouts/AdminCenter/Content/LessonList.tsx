@@ -13,7 +13,7 @@ import { removeLesson, useLesson, useLessonList } from '@common/api/lesson';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { ContentType } from '@common/api/content';
-import { PRODUCT_STATUS } from '@common/api/course';
+import { ProductStatus } from '@common/api/course';
 import { LessonUploadModal } from '@components/admin-center/LessonUploadModal';
 import { Spinner } from '@components/ui';
 import { totalSecToMinSec } from 'src/utils/totalSecToMinSec';
@@ -69,12 +69,18 @@ export function LessonList() {
     setOpenUploadModal(true);
   };
 
-  const closeBulkModal = async (isSubmit: boolean) => {
+  const handleModalClose = async (isSubmit: boolean) => {
     if (isSubmit) {
       await mutate();
     }
 
-    setOpenBulkUploadModal(false);
+    if (openUploadModal) {
+      setOpenUploadModal(false);
+    }
+
+    if (openBulkUploadModal) {
+      setOpenBulkUploadModal(false);
+    }
   };
 
   if (lessonListError) return <div>error</div>;
@@ -128,10 +134,10 @@ export function LessonList() {
                   </TableCell>
                   <TableCell style={{ width: 10 }} align="right">
                     <Chip
-                      label={lesson.status === PRODUCT_STATUS.APPROVE ? '정상' : '중지'}
+                      label={lesson.status === ProductStatus.APPROVE ? '정상' : '중지'}
                       variant="outlined"
                       size="small"
-                      color={lesson.status === PRODUCT_STATUS.APPROVE ? 'secondary' : 'default'}
+                      color={lesson.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
                     />
                   </TableCell>
                   <TableCell style={{ width: 135 }} align="right">
@@ -160,14 +166,14 @@ export function LessonList() {
 
       <LessonBulkUploadModal
         open={openBulkUploadModal}
-        handleClose={closeBulkModal}
+        handleClose={(isSubmit) => handleModalClose(isSubmit)}
       />
       <LessonUploadModal
         mode="modify"
         open={openUploadModal}
         lesson={lesson}
         error={lessonError}
-        handleClose={() => setOpenUploadModal(false)}
+        handleClose={(isSubmit) => handleModalClose(isSubmit)}
       />
     </Container>
   );

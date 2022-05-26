@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { TuiEditor } from '@components/common/TuiEditor';
 import styled from '@emotion/styled';
-import { PRODUCT_STATUS, CourseData } from '@common/api/course';
+import { ProductStatus, CourseData } from '@common/api/course';
 import { YN } from '@common/constant';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
@@ -42,7 +42,7 @@ export function CourseUploadForm(
   const [ thumbnail, setThumbnail ] = useState<Blob | string>('');
   const [ courseId, setCourseId ] = useState<number | undefined>();
   const [ displayYn, setIsDisplay ] = useState<YN>(YN.YES);
-  const [ status, setStatus ] = useState<PRODUCT_STATUS>(PRODUCT_STATUS.APPROVE);
+  const [ status, setStatus ] = useState<ProductStatus>(ProductStatus.APPROVE);
 
   useEffect(() => {
     if (mode === 'modify' && !!course) {
@@ -180,12 +180,12 @@ export function CourseUploadForm(
             name="row-radio-buttons-group"
             value={status}
             onChange={(e, value: unknown) => {
-              const status = value as PRODUCT_STATUS;
+              const status = value as ProductStatus;
               setStatus(status);
             }}
           >
-            <FormControlLabel value={PRODUCT_STATUS.APPROVE} control={<Radio />} label="정상" />
-            <FormControlLabel value={PRODUCT_STATUS.REJECT} control={<Radio />} label="중지" />
+            <FormControlLabel value={ProductStatus.APPROVE} control={<Radio />} label="정상" />
+            <FormControlLabel value={ProductStatus.REJECT} control={<Radio />} label="중지" />
           </RadioGroup>
         </FormControl>
 

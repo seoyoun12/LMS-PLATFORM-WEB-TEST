@@ -10,7 +10,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
-import { PRODUCT_STATUS } from '@common/api/course';
+import { ProductStatus } from '@common/api/course';
 import { QuestionUploadModal } from '@components/admin-center/QuestionUploadModal';
 import { ExamLevel, ExamType, removeQuestion, useQuestionList } from '@common/api/question';
 import { Spinner } from '@components/ui';
@@ -151,10 +151,10 @@ export function Question() {
                   </TableCell>
                   <TableCell style={{ width: 10 }} align="right">
                     <Chip
-                      label={question.status === PRODUCT_STATUS.APPROVE ? '정상' : '중지'}
+                      label={question.status === ProductStatus.APPROVE ? '정상' : '중지'}
                       variant="outlined"
                       size="small"
-                      color={question.status === PRODUCT_STATUS.APPROVE ? 'secondary' : 'default'}
+                      color={question.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
                     />
                   </TableCell>
                   <TableCell style={{ width: 160 }} align="right">

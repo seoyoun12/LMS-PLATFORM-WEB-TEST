@@ -4,7 +4,7 @@ import { YN } from '@common/constant';
 import { FetchPaginationResponse, FetchResponse } from 'types/fetch';
 
 
-export enum PRODUCT_STATUS {
+export enum ProductStatus {
   APPROVE = 1,
   REJECT = -1,
 }
@@ -29,7 +29,7 @@ export interface CourseData {
   restudyYn: string;
   saleYn: string;
   seq: number;
-  status: PRODUCT_STATUS;
+  status: ProductStatus;
 
   // 임시용 타입
   curriculum: {

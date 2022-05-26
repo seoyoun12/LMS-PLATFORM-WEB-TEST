@@ -1,6 +1,6 @@
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import { ContentInput, ContentType } from '@common/api/content';
-import { PRODUCT_STATUS } from '@common/api/course';
+import { ProductStatus } from '@common/api/course';
 import useSWR, { SWRResponse } from 'swr';
 import { S3Files } from 'types/file';
 
@@ -30,7 +30,7 @@ export interface Lesson {
   s3Files: S3Files;
   seq: number;
   chapter: number;
-  status: PRODUCT_STATUS;
+  status: ProductStatus;
   totalPage: number;
   totalTime: number;
   min: number;

@@ -11,7 +11,7 @@ import {
   Select,
 } from '@mui/material';
 import styled from '@emotion/styled';
-import { PRODUCT_STATUS } from '@common/api/course';
+import { ProductStatus } from '@common/api/course';
 import TextField from '@mui/material/TextField';
 import styles from '@styles/common.module.scss';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
@@ -27,7 +27,7 @@ const contentTypeOptions = [
 ];
 
 const defaultValues = {
-  status: PRODUCT_STATUS.APPROVE,
+  status: ProductStatus.APPROVE,
   contentType: '',
   contentName: ''
 };
@@ -111,12 +111,12 @@ export function ContentUploadForm(
             render={({ field }) => (
               <RadioGroup row {...field}>
                 <FormControlLabel
-                  value={PRODUCT_STATUS.APPROVE}
+                  value={ProductStatus.APPROVE}
                   control={<Radio />}
                   label="정상"
                 />
                 <FormControlLabel
-                  value={PRODUCT_STATUS.REJECT}
+                  value={ProductStatus.REJECT}
                   control={<Radio />}
                   label="중지"
                 />

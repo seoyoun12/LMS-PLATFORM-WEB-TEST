@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 // import { removeContent, useContentList } from '@common/api/content';
 import { mutate } from 'swr';
-import { PRODUCT_STATUS } from '@common/api/course';
+import { ProductStatus } from '@common/api/course';
 import { useContentList } from '@common/api/content';
 import { Spinner } from '@components/ui';
 
@@ -112,8 +112,8 @@ export function Content() {
                 <Chip
                   variant="outlined"
                   size="small"
-                  label={content.status === PRODUCT_STATUS.APPROVE ? '정상' : '중지'}
-                  color={content.status === PRODUCT_STATUS.APPROVE ? 'secondary' : 'default'}
+                  label={content.status === ProductStatus.APPROVE ? '정상' : '중지'}
+                  color={content.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
                 />
               </TableCell>
 

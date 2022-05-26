@@ -74,11 +74,13 @@ export function QuestionUploadModal({ open, handleClose, questionId, contentId, 
   const loading = (open && mode === 'modify' && !question);
 
   useEffect(() => {
-    reset(
-      mode === 'modify' && !!question && open
-        ? { ...question }
-        : { ...defaultValues }
-    );
+    if (open) {
+      reset(
+        mode === 'modify' && !!question
+          ? { ...question }
+          : { ...defaultValues }
+      );
+    }
   }, [ mode, question, open ]);
 
   const onSubmit: SubmitHandler<FormType> = async (question) => {
@@ -92,6 +94,7 @@ export function QuestionUploadModal({ open, handleClose, questionId, contentId, 
           await modifyQuestion(questionId, inputParams);
         }
       }
+
       setSubmitLoading(false);
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
     } catch (e: any) {

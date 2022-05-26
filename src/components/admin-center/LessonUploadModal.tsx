@@ -22,7 +22,7 @@ import { CustomInputLabel } from '@components/ui/InputLabel';
 import { Modal } from '@components/ui';
 import { Lesson, modifyLesson } from '@common/api/lesson';
 import TextField from '@mui/material/TextField';
-import { PRODUCT_STATUS } from '@common/api/course';
+import { ProductStatus } from '@common/api/course';
 import { useSnackbar } from '@hooks/useSnackbar';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { S3Files } from 'types/file';
@@ -39,12 +39,13 @@ type FormType = {
 } & Lesson
 
 const defaultValues = {
-  contentType: ContentType.CONTENT_MP4
+  contentType: ContentType.CONTENT_MP4,
+  status: ProductStatus.APPROVE
 };
 
 export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', error }: {
   open: boolean;
-  handleClose: () => void;
+  handleClose: (isSubmit: boolean) => void;
   lesson?: Lesson;
   mode?: 'modify' | 'upload';
   error?: any;
@@ -108,7 +109,7 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
       console.log(e);
       snackbar(e.message || e.data?.message);
     }
-    handleClose();
+    handleClose(true);
   };
 
   const removeFile = () => {
@@ -123,12 +124,23 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
       title="강의 업로드"
       maxWidth="md"
       open={open}
+      loading={!lesson}
       actionLoading={submitLoading}
-      handleClose={handleClose}
+      handleClose={() => handleClose(false)}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Box component="form">
         <FormContainer>
+          <FormControl className="form-control">
+            <TextField
+              {...register('chapter', { required: '차시를 입력해주세요.' })}
+              size="small"
+              label="차시"
+              variant="outlined"
+            />
+            <ErrorMessage errors={errors} name="chapter" as={<FormHelperText error />} />
+          </FormControl>
+
           <FormControl className="form-control">
             <TextField
               {...register('lessonNm', { required: '강의명을 입력해주세요.' })}
@@ -222,12 +234,12 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
               render={({ field }) => (
                 <RadioGroup row {...field}>
                   <FormControlLabel
-                    value={PRODUCT_STATUS.APPROVE}
+                    value={ProductStatus.APPROVE}
                     control={<Radio />}
                     label="정상"
                   />
                   <FormControlLabel
-                    value={PRODUCT_STATUS.REJECT}
+                    value={ProductStatus.REJECT}
                     control={<Radio />}
                     label="중지"
                   />

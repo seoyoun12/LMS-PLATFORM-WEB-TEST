@@ -72,6 +72,7 @@ export function LessonBulkUploadModal({ open, handleClose }: {
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
     }
+
     handleClose(true);
   };
 

@@ -1,5 +1,5 @@
 import { GET, POST, PUT } from '@common/httpClient';
-import { PRODUCT_STATUS } from '@common/api/course';
+import { ProductStatus } from '@common/api/course';
 import useSWR, { SWRResponse } from 'swr';
 import { FetchPaginationResponse } from 'types/fetch';
 
@@ -14,7 +14,7 @@ export interface ContentInput {
   contentName: string;
   contentWidth: number;
   contentHeight: number;
-  status: PRODUCT_STATUS;
+  status: ProductStatus;
 }
 
 export interface ContentData {
@@ -30,7 +30,7 @@ export interface ContentData {
   modifiedDtime: string;
   questionCnt: number;
   seq: number;
-  status: PRODUCT_STATUS;
+  status: ProductStatus;
 }
 
 export async function uploadContent(contentInput: ContentInput) {

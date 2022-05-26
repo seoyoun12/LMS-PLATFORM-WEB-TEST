@@ -106,7 +106,6 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
       setSubmitLoading(false);
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
     } catch (e: any) {
-      console.log(e);
       snackbar(e.message || e.data?.message);
     }
     handleClose(true);

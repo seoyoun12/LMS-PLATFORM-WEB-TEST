@@ -18,12 +18,12 @@ import { mutate } from 'swr';
 import { Spinner } from '@components/ui';
 
 
-const headRows = [
-  { name: 'seq' },
-  { name: '과정명' },
-  { name: '생성 날짜' },
-  { name: '노출 여부' },
-  { name: '상태' }
+const headRows: { name: string, align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
+  { name: 'seq', align: 'left' },
+  { name: '과정명', align: 'right' },
+  { name: '생성 날짜', align: 'right' },
+  { name: '노출 여부', align: 'right' },
+  { name: '상태', align: 'right' },
 ];
 
 export function Course() {
@@ -86,9 +86,8 @@ export function Course() {
       >
         <TableHead>
           <TableRow>
-            <TableCell>{headRows[0].name}</TableCell>
-            {headRows.slice(1).map(({ name }: { name: string }) =>
-              <TableCell key={name} align="right">{name}</TableCell>
+            {headRows.map(({ name, align }) =>
+              <TableCell key={name} align={align}>{name}</TableCell>
             )}
             <TableCell>{}</TableCell>
           </TableRow>

@@ -264,7 +264,7 @@ const FormContainer = styled.div`
         display: flex;
         flex-direction: column;
         align-items: center;
-
+        
         > :not(:last-child) {
           margin-bottom: 12px;
         }

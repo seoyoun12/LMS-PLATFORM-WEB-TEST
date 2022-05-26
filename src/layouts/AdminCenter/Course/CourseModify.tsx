@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { BaseSyntheticEvent } from 'react';
 import { modifyCourse, useCourse } from '@common/api/course';
 import { useRouter } from 'next/router';
 import { CourseUploadForm } from '@components/admin-center/CourseUploadForm';
@@ -28,11 +28,11 @@ export function CourseModify() {
   const { data, isError, isLoading } = useCourse({ courseId: Number(courseId) });
 
   const handleSubmit = async ({ event, courseInput, courseId }: {
-    event: FormEvent<HTMLFormElement>,
+    event?: BaseSyntheticEvent,
     courseInput: FormData,
     courseId?: number
   }) => {
-    event.preventDefault();
+    event?.preventDefault();
     try {
       if (courseId) {
         await modifyCourse({ courseInput, courseId });

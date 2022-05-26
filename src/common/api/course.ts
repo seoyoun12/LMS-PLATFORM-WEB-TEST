@@ -2,6 +2,7 @@ import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR from 'swr';
 import { YN } from '@common/constant';
 import { FetchPaginationResponse, FetchResponse } from 'types/fetch';
+import { S3Files } from 'types/file';
 
 
 export enum ProductStatus {
@@ -30,6 +31,7 @@ export interface CourseData {
   saleYn: string;
   seq: number;
   status: ProductStatus;
+  s3Files: S3Files;
 
   // 임시용 타입
   curriculum: {

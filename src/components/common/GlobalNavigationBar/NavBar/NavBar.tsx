@@ -89,7 +89,7 @@ const NavContainer = styled.div`
   a {
     margin-right: 24px;
 
-    &:first-child {
+    &:first-of-type {
       margin-left: 0;
     }
   }

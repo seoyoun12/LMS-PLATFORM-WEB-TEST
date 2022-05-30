@@ -7,30 +7,31 @@ import cn from 'clsx';
 import { Link } from '@components/common';
 import { Grid } from '@mui/material';
 
+const bannerData = [
+  {
+    id: 1,
+    img: '/assets/images/banner.jpg',
+    title: 'test 1',
+    description: 'description 1',
+  },
+  {
+    id: 2,
+    img: '/assets/images/banner.jpg',
+    title: 'test 2',
+    description: 'description 2',
+  },
+  {
+    id: 3,
+    img: '/assets/images/banner.jpg',
+    title: 'test 3',
+    description: 'description 3',
+  },
+];
+
 const MainPage: NextPage = (res) => {
-  const bannerData = [
-    {
-      id: 1,
-      img: '/assets/images/banner.jpg',
-      title: 'test 1',
-      description: 'description 1',
-    },
-    {
-      id: 2,
-      img: '/assets/images/banner.jpg',
-      title: 'test 2',
-      description: 'description 2',
-    },
-    {
-      id: 3,
-      img: '/assets/images/banner.jpg',
-      title: 'test 3',
-      description: 'description 3',
-    },
-  ];
   return (
     <div>
-      <Carousel datas={bannerData}/>
+      <Carousel datas={bannerData} />
       <ContentContainer className={cn(styles.globalContainer)}>
         <Grid
           container
@@ -40,14 +41,16 @@ const MainPage: NextPage = (res) => {
         >
           {Array.from(Array(15)).map((v, idx) => (
             <Grid
-              item xs={1} sm={1} md={1} lg={1}
+              key={idx}
+              item
+              xs={1} sm={1} md={1} lg={1}
               sx={{
                 display: 'flex',
                 justifyContent: 'center'
               }}
             >
-              <Link href={`course/${idx + 1}`}>
-                <ContentCard key={idx}/>
+              <Link href={`/course/${idx + 1}`}>
+                <ContentCard />
               </Link>
             </Grid>
           ))}

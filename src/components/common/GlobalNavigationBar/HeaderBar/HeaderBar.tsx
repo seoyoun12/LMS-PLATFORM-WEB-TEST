@@ -103,7 +103,7 @@ const NavContainer = styled.div`
   align-content: center;
   margin-left: 20px;
 
-  a:not(:first-child) {
+  a:not(:first-of-type) {
     margin-left: 16px;
   }
 

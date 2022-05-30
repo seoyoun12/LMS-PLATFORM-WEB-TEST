@@ -12,15 +12,15 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { ProductStatus } from '@common/api/course';
 import { QuestionUploadModal } from '@components/admin-center/QuestionUploadModal';
-import { ExamLevel, ExamType, removeQuestion, useQuestionList } from '@common/api/question';
+import { ExamLevel, QuestionType, removeQuestion, useQuestionList } from '@common/api/question';
 import { Spinner } from '@components/ui';
 import { css } from '@emotion/css';
 import { setLineClamp } from '@styles/mixins';
 import { QuestionPreviewModal } from '@components/admin-center';
 
-const examType = {
-  [ExamType.QUESTION_OBJ]: '객관식',
-  [ExamType.QUESTION_SUBJ]: '주관식'
+const questionType = {
+  [QuestionType.QUESTION_OBJ]: '객관식',
+  [QuestionType.QUESTION_SUBJ]: '주관식'
 };
 
 const level = {
@@ -141,7 +141,7 @@ export function Question() {
                     </Typography>
                   </TableCell>
                   <TableCell style={{ width: 100 }} align="right">
-                    {examType[question.examType]}
+                    {questionType[question.questionType]}
                   </TableCell>
                   <TableCell style={{ width: 60 }} align="right">
                     {question.chapter}

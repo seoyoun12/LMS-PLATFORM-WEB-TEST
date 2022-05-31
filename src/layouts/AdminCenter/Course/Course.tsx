@@ -17,8 +17,7 @@ import { YN } from '@common/constant';
 import { mutate } from 'swr';
 import { Spinner } from '@components/ui';
 
-
-const headRows: { name: string, align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
+const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
   { name: 'seq', align: 'left' },
   { name: '과정명', align: 'right' },
   { name: '생성 날짜', align: 'right' },
@@ -37,7 +36,6 @@ export function Course() {
     const { page } = router.query;
     setPage(!isNaN(Number(page)) ? Number(page) : 0);
   }, [ router ]);
-
 
   const onChangePage = async (page: number) => {
     await router.push({
@@ -130,7 +128,7 @@ export function Course() {
               <TableCell style={{ width: 120 }} align="right">
                 <Link href={`/admin-center/course/modify/${content.seq}`}>
                   <Button variant="text" color="neutral" size="small">
-                    수정
+                    상세
                   </Button>
                 </Link>
                 <Button

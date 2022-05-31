@@ -16,7 +16,7 @@ import TextField from '@mui/material/TextField';
 import styles from '@styles/common.module.scss';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
-import { ContentData, ContentInput, ContentType } from '@common/api/content';
+import { ContentRes, ContentInput, ContentType } from '@common/api/content';
 import * as React from 'react';
 import { CustomInputLabel } from '@components/ui/InputLabel';
 
@@ -39,7 +39,7 @@ export function ContentUploadForm(
     onHandleSubmit,
   }: {
     mode?: 'upload' | 'modify',
-    content?: ContentData,
+    content?: ContentRes,
     onHandleSubmit: ({ contentInput, contentId }: {
       contentInput: ContentInput,
       contentId?: number

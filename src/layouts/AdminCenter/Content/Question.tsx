@@ -29,7 +29,7 @@ const level = {
   [ExamLevel.LEVEL_HARD]: '상'
 };
 
-const headRows: { name: string, align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
+const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
   { name: 'ID', align: 'left' },
   { name: '문제', align: 'left' },
   { name: '문제유형', align: 'right' },
@@ -42,7 +42,6 @@ export function Question() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const dialog = useDialog();
-  const [ openBulkUploadModal, setOpenBulkUploadModal ] = useState(false);
   const [ openUploadModal, setOpenUploadModal ] = useState(false);
   const [ openPreviewModal, setOpenPreviewModal ] = useState(false);
   const [ questionId, setQuestionId ] = useState<number | null>(null);
@@ -77,15 +76,6 @@ export function Question() {
     setOpenUploadModal(true);
   };
 
-  const closeBulkModal = async (isSubmit: boolean) => {
-    if (isSubmit) {
-      await mutate();
-    }
-
-    setOpenBulkUploadModal(false);
-  };
-
-
   if (questionPaginationResultError) return <div>error</div>;
   if (!questionPaginationResult) return <Spinner />;
   return (
@@ -102,15 +92,6 @@ export function Question() {
         >
           문제 등록
         </Button>
-
-        {/*<Button*/}
-        {/*  color="secondary"*/}
-        {/*  variant="outlined"*/}
-        {/*  startIcon={<FileUploadIcon />}*/}
-        {/*  onClick={() => setOpenBulkUploadModal(true)}*/}
-        {/*>*/}
-        {/*  문제 일괄 등록*/}
-        {/*</Button>*/}
       </UploadBtn>
 
       <Table
@@ -181,10 +162,6 @@ export function Question() {
         </TableBody>
       </Table>
 
-      {/*<LessonBulkUploadModal*/}
-      {/*  open={openBulkUploadModal}*/}
-      {/*  handleClose={closeBulkModal}*/}
-      {/*/>*/}
       <QuestionUploadModal
         mode={questionId ? 'modify' : 'upload'}
         contentId={Number(contentId)}

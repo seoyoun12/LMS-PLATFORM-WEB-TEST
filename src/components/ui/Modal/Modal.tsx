@@ -78,19 +78,18 @@ export function Modal(
             <DialogContent dividers>
               {children}
             </DialogContent>
-            <DialogActions>
-              {
-                typeof action !== 'string' ? action :
-                  <LoadingButton
-                    autoFocus
-                    onClick={onSubmit}
-                    disabled={actionDisabled}
-                    loading={actionLoading || false}
-                  >
-                    {action}
-                  </LoadingButton>
+            {action ? <DialogActions>
+              {typeof action !== 'string' ? action :
+                <LoadingButton
+                  autoFocus
+                  onClick={onSubmit}
+                  disabled={actionDisabled}
+                  loading={actionLoading || false}
+                >
+                  {action}
+                </LoadingButton>
               }
-            </DialogActions>
+            </DialogActions> : null}
           </>
       }
     </Dialog>

@@ -4,7 +4,7 @@ export { AdminCenterLayout } from './AdminCenterLayout';
 export { Course } from './Course/Course';
 export { CourseUpload } from './Course/CourseUpload';
 export { CourseModify } from './Course/CourseModify';
-export { LessonList } from './Course/LessonList';
+export { ContentList } from './Course/ContentList';
 export { EvaluationInfo } from './Course/EvaluationInfo';
 
 export { Content } from './Content/Content';

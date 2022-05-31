@@ -9,9 +9,8 @@ import { HttpError } from '@common/errors';
  *  * HTTP Authorization Scheme  basic
  */
 
-const headers = {
+export const axiosHeaders = {
   'Api-Key': 'bWlyaW06MTIzNA==',
-  'Content-Type': 'application/json',
   withCredentials: true
 };
 
@@ -27,7 +26,7 @@ export const axiosSetting = {
 
 export const api = Axios.create({
   baseURL: axiosSetting.server(),
-  headers,
+  headers: axiosHeaders,
 });
 triggerInterceptors();
 

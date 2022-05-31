@@ -4,7 +4,6 @@ import { YN } from '@common/constant';
 import { FetchPaginationResponse, FetchResponse } from 'types/fetch';
 import { S3Files } from 'types/file';
 
-
 export enum ProductStatus {
   APPROVE = 1,
   REJECT = -1,
@@ -59,7 +58,6 @@ export async function modifyCourse({ courseId, courseInput }: { courseId: number
   });
 }
 
-
 export async function getCourse({ courseId }: { courseId: number }): Promise<CourseData> {
   try {
     return (await GET<FetchResponse<CourseData>>(`/course/${courseId}`)).data;
@@ -103,3 +101,10 @@ export function useCourseList({ page, courseTitle, elementCnt, chapter }: {
   };
 }
 
+export const connectCourseToContent = async ({ courseSeq, contentSeq }: { courseSeq: number, contentSeq: number }) => {
+  return await POST(`/course/adm/link/content`, { courseSeq, contentSeq });
+};
+
+export const disConnectContent = async (courseSeq: number) => {
+  return await DELETE(`/course/adm/link/content/${courseSeq}`);
+};

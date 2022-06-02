@@ -9,6 +9,12 @@ export enum ContentType {
   CONTENT_EXTERNAL = 'CONTENT_EXTERNAL'
 }
 
+export enum ContentTypeHuman {
+  CONTENT_HTML = '웹콘텐츠(HTML5)',
+  CONTENT_MP4 = 'mp4',
+  CONTENT_EXTERNAL = '외부링크'
+}
+
 export interface ContentInput {
   contentType: ContentType | string;
   contentName: string;

@@ -15,7 +15,6 @@ import { connectCourseToContent, disConnectContent } from '@common/api/course';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import ReplayIcon from '@mui/icons-material/Replay';
-import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 
 interface Props {
   open: boolean;

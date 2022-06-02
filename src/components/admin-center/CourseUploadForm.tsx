@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { TuiEditor } from '@components/common/TuiEditor';
 import styled from '@emotion/styled';
-import { ProductStatus, CourseData } from '@common/api/course';
+import { ProductStatus, CourseRes } from '@common/api/course';
 import { YN } from '@common/constant';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
@@ -32,7 +32,7 @@ const defaultValues = {
 
 interface Props {
   mode?: 'upload' | 'modify',
-  course?: CourseData,
+  course?: CourseRes,
   onHandleSubmit: ({ event, courseInput, courseId }: {
     event?: BaseSyntheticEvent,
     courseInput: FormData,
@@ -51,7 +51,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
     formState: { errors },
     control,
     reset
-  } = useForm<CourseData>({ defaultValues });
+  } = useForm<CourseRes>({ defaultValues });
 
   useEffect(() => {
     if (mode === 'modify' && !!course) {
@@ -72,7 +72,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
     setThumbnails([ { name: files[0].name, path: '' } ]);
   };
 
-  const onSubmit: SubmitHandler<CourseData> = async (course, event) => {
+  const onSubmit: SubmitHandler<CourseRes> = async (course, event) => {
     if (!editorRef.current) return;
 
     const files = fileInputRef.current?.files;

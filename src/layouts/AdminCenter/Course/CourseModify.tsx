@@ -25,7 +25,7 @@ export function CourseModify() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const { courseId, tab } = router.query;
-  const { data, isError, isLoading } = useCourse({ courseId: Number(courseId) });
+  const { data, isError, isLoading } = useCourse(Number(courseId));
 
   const handleSubmit = async ({ event, courseInput, courseId }: {
     event?: BaseSyntheticEvent,

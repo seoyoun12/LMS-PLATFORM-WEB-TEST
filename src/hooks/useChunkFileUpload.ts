@@ -1,8 +1,8 @@
-import { useState, ChangeEvent, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Resumable from 'resumablejs';
 import { axiosHeaders, axiosSetting } from '@common/httpClient';
 import { localStore } from '@common/storage';
-import { completeFileUpload, initFileConfig } from '@common/api/file';
+import { completeFileUpload, FileUploadType, initFileConfig, UPLOAD_URL } from '@common/api/file';
 
 type ResumableFile = Resumable.ResumableFile;
 type ResumableChunk = Resumable.ResumableChunk;
@@ -16,29 +16,26 @@ interface ChunkResponse {
 }
 
 const CHUNK_SIZE = 6291456;
-const UPLOAD_URL = '/file/adm/multipart/upload';
 
-export const useFileUpload = () => {
+const round = (number: number, decimalPlaces: number) => {
+  const factorOfTen = Math.pow(10, decimalPlaces);
+  return Math.round(number * factorOfTen) / factorOfTen;
+};
+
+export const useFileUpload = (fileUploadType: FileUploadType) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [ inputFile, setInputFile ] = useState<FileList | null>(null);
   const [ uploadPercentage, setUploadPercentage ] = useState(0);
   const [ progressbar, showProgressbar ] = useState<any>(false);
   const [ spinner, setSpinner ] = useState<any>(false);
   const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
 
-  const round = (number: number, decimalPlaces: number) => {
-    const factorOfTen = Math.pow(10, decimalPlaces);
-    return Math.round(number * factorOfTen) / factorOfTen;
-  };
-
-  const fileChanges = async (e: ChangeEvent<HTMLInputElement>) => {
-    setInputFile(e.target.files);
-  };
-
-  const upload = useCallback(async () => {
-    if (inputFile !== null) {
-      const { encFileName, uploadRequestKey } = await initFileConfig({ contentType: '', fileName: '' });
-      const file = inputFile[0];
+  const handleUpload = useCallback(async () => {
+    if (!!fileInputRef.current && !!fileInputRef.current.files?.length) {
+      const { encFileName, uploadRequestKey } = await initFileConfig({
+        fileUploadType,
+        fileName: fileInputRef.current.files[0].name
+      });
+      const file = fileInputRef.current.files[0];
       const accessToken = localStore.getItem('ACCESS_TOKEN');
       const options = {
         target: `${axiosSetting.server() + UPLOAD_URL}`,
@@ -70,7 +67,7 @@ export const useFileUpload = () => {
           encFileName,
           uploadRequestKey,
           etagList,
-          uploadType: 'RESOURCE_LESSON_FILE',
+          uploadType: fileUploadType,
           dataSeq: 1,
           fileOriginalName: file.fileName
         };
@@ -102,12 +99,11 @@ export const useFileUpload = () => {
         }
       });
     }
-  }, [ inputFile, errorMessage ]);
+  }, [ fileInputRef.current, fileUploadType, errorMessage ]);
 
   return {
     fileInputRef,
-    fileChanges,
-    upload
+    handleUpload
   };
 };
 

@@ -8,10 +8,8 @@ import { ContentInput, modifyContent, useContent } from '@common/api/content';
 import { Question } from './Question';
 import { Examination } from './Examination';
 import { Homework } from './Homework';
-import { Forum } from './Forum';
 import { LessonList } from './LessonList';
 import { Spinner } from '@components/ui';
-
 
 enum TabValue {
   ContentInfo = 'content-info',
@@ -19,7 +17,6 @@ enum TabValue {
   Question = 'question',
   Exam = 'exam',
   Homework = 'homework',
-  Forum = 'forum',
 }
 
 const tabsConfig = [
@@ -28,7 +25,6 @@ const tabsConfig = [
   { label: '문제은행', value: TabValue.Question },
   { label: '시험', value: TabValue.Exam },
   { label: '과제', value: TabValue.Homework },
-  { label: '토론', value: TabValue.Forum },
 ];
 
 export function ContentModify() {
@@ -75,8 +71,6 @@ export function ContentModify() {
             <Examination />,
           [TabValue.Homework]:
             <Homework />,
-          [TabValue.Forum]:
-            <Forum />,
         }[tab as string]
       }
     </Container>

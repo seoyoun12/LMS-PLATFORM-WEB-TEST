@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { ErrorMessage } from '@hookform/error-message';
 import { ContentType } from '@common/api/content';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import { grey } from '@mui/material/colors';
@@ -26,6 +26,8 @@ import { ProductStatus } from '@common/api/course';
 import { useSnackbar } from '@hooks/useSnackbar';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { S3Files } from 'types/file';
+import { useFileUpload } from '@hooks/useChunkFileUpload';
+import { FileUploadType } from '@common/api/file';
 
 const contentTypeOptions = [
   { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
@@ -53,7 +55,7 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
   const snackbar = useSnackbar();
   const [ s3Files, setS3Files ] = useState<S3Files | null>([]);
   const [ submitLoading, setSubmitLoading ] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { fileInputRef, handleUpload } = useFileUpload(FileUploadType.LESSON_FILE);
   const {
     register,
     handleSubmit,
@@ -75,23 +77,17 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
 
   const uploadFile = (e: ChangeEvent) => {
     e.preventDefault();
-    // const reader = new FileReader();
-    // reader.readAsArrayBuffer(e.target.files[0]);
-    // reader.onload = (e) => {
-    //   console.log('e', e);
-    // };
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setS3Files([ { name: files[0].name, path: '' } ]);
   };
 
   const onSubmit: SubmitHandler<FormType> = async (lesson) => {
-    const files = fileInputRef.current?.files;
     const formData = new FormData();
-    const videoFile = !!files?.length ? files[0] : new Blob([]);
-    const fileName = !!files?.length ? files[0].name : undefined;
+    // const files = fileInputRef.current?.files;
+    // const videoFile = !!files?.length ? files[0] : new Blob([]);
+    // const fileName = !!files?.length ? files[0].name : undefined;
 
-    formData.append('files', videoFile, fileName);
     formData.append('data', new Blob([
         JSON.stringify({
           ...lesson,
@@ -102,7 +98,9 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
 
     try {
       setSubmitLoading(true);
+      await handleUpload();
       await modifyLesson({ lessonId: lesson.seq, formData });
+      setSubmitLoading(false);
       setSubmitLoading(false);
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
     } catch (e: any) {
@@ -121,7 +119,8 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
     <Modal
       action="저장"
       title="강의 업로드"
-      maxWidth="md"
+      maxWidth="sm"
+      fullWidth
       open={open}
       loading={!lesson}
       actionLoading={submitLoading}

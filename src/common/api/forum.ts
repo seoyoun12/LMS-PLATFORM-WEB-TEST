@@ -3,15 +3,16 @@ import useSWR, { SWRResponse } from 'swr';
 import { PaginationResult } from 'types/fetch';
 
 export interface ForumInput {
-  courseSeq: number;
-  createdDtime: string;
-  modifiedDtime: string;
-  regIp: string;
-  seq: number;
-  status: number;
-  subject: string;
-  updIp: string;
-  userSeq: number;
+  courseSeq?: number;
+  createdDtime?: string;
+  modifiedDtime?: string;
+  regIp?: string;
+  seq?: number;
+  status?: number;
+  subject?: string;
+  updIp?: string;
+  userSeq?: number;
+  content?: string;
 }
 
 export interface Forum {
@@ -46,16 +47,16 @@ export function useForum(forumId: number | null) {
   const { data, error } = useSWR<SWRResponse<Forum>>(forumId ? `/forum/tutor/${forumId}` : null, GET);
 
   return {
-    Forum: data?.data,
-    ForumError: error,
+    forum: data?.data,
+    forumError: error,
   };
 }
 
-export function uploadForum(forumInput: ForumInput) {
+export function uploadForum(forumInput: FormData) {
   return POST(`/forum/tutor`, forumInput);
 }
 
-export function modifyForum(forumId: number, forumInput: ForumInput) {
+export function modifyForum(forumId: number, forumInput: FormData) {
   return PUT(`/forum/tutor/${forumId}`, forumInput);
 }
 

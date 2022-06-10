@@ -1,9 +1,8 @@
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { YN } from '@common/constant';
-import { FetchPaginationResponse, FetchResponse } from 'types/fetch';
+import { FetchPaginationResponse } from 'types/fetch';
 import { S3Files } from 'types/file';
-import { Property } from 'csstype';
 import { ContentRes } from '@common/api/content';
 
 export enum ProductStatus {
@@ -59,14 +58,6 @@ export async function modifyCourse({ courseId, courseInput }: { courseId: number
       'content-type': 'multipart/form-data'
     }
   });
-}
-
-export async function getCourse({ courseId }: { courseId: number }): Promise<CourseRes> {
-  try {
-    return (await GET<FetchResponse<CourseRes>>(`/course/${courseId}`)).data;
-  } catch (err: any) {
-    return Promise.reject(err);
-  }
 }
 
 export function useCourse(courseId?: number) {

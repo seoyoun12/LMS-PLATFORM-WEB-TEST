@@ -1,109 +1,82 @@
 import { Button, Container, Divider, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
 import styles from '@styles/common.module.scss';
-import { getCourse } from '@common/api';
-import { CourseRes } from '@common/api/course';
+import { useCourse } from '@common/api/course';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { headerHeight } from '@styles/variables';
 import { TuiViewer } from '@components/common/TuiEditor';
 import { useRouter } from 'next/router';
-import { STATUS_CODE } from 'types/fetch';
+import { Spinner } from '@components/ui';
+import { css, cx } from '@emotion/css';
 
 export function Course() {
   const router = useRouter();
   const { courseId } = router.query;
-  const [ course, setCourse ] = useState<CourseRes | null>(null);
-  const [ error, setError ] = useState(false);
-
-  useEffect(() => {
-    setError(false);
-
-    (async () => {
-      try {
-        if (courseId) {
-          const res = await getCourse({ courseId: Number(courseId) });
-          setCourse(res);
-        }
-      } catch (err: any) {
-        if (err.status === STATUS_CODE.NOT_FOUND) {
-          setError(true);
-        }
-      }
-    })();
-  }, [ courseId ]);
+  const { data, isError } = useCourse(Number(courseId));
 
   const onHandleSubmit = () => {
   };
 
-  if (!course && error) return (<div>NOT FOUND</div>);
-  if (!course) return (<div>...loading</div>);
+  if (!data && isError) return (<div>NOT FOUND</div>);
+  if (!data) return <Spinner />;
   return (
-    <Container
-      sx={{
-        display: 'flex',
-      }}
-      className={styles.globalContainer}
-    >
+    <Container className={cx(styles.globalContainer, containerStyle)}>
       <MainSection>
         <ThumbnailImg>
-          <Image
+          {data.courseFile ? <Image
             className="thumbnailImg"
-            src={course.courseFile}
+            src={data.courseFile}
             layout="responsive"
             width="100%"
             height="56.25"
-          />
+          /> : null}
         </ThumbnailImg>
 
-        {(course && !error) && <TuiViewer initialValue={course.content1} />}
+        <TuiViewer initialValue={data.content1} />
 
         <CurriculumContainer>
           <Typography
             variant="h5"
-            sx={{
-              fontWeight: 700,
-              marginBottom: '12px'
-            }}
+            className={curriculumTitle}
           >
             커리큘럼
           </Typography>
-          {/*<CurriculumAccordion curriculum={course.curriculum}/>*/}
+          {/*<CurriculumAccordion curriculum={data.curriculum}/>*/}
         </CurriculumContainer>
       </MainSection>
 
       <StickySideBar>
         <TopSection>
           <Typography variant="subtitle2">
-            {course.courseName}
+            {data.courseName}
           </Typography>
           <Typography
             variant="h6"
-            sx={{
-              fontWeight: 700
-            }}
+            className={fontWeightBold}
           >
-            {course.courseSubName}
+            {data.courseSubName}
           </Typography>
           <Divider
             light
-            sx={{ margin: '20px 0' }}
+            className={dividerStyle}
           />
-          <ButtonSection>
-            <Button
-              fullWidth
-              variant="contained" color="primary"
-              onClick={onHandleSubmit}
-            >
-              수강하기
-            </Button>
-          </ButtonSection>
+          <Button
+            fullWidth
+            variant="contained" color="primary"
+            onClick={onHandleSubmit}
+          >
+            수강하기
+          </Button>
         </TopSection>
         <div className="bottomSection"></div>
       </StickySideBar>
     </Container>
   );
 }
+
+const containerStyle = css`
+  display: flex;
+`;
 
 const MainSection = styled.div`
   flex: 1;
@@ -131,8 +104,17 @@ const TopSection = styled.div`
   border-radius: 16px;
 `;
 
-const ButtonSection = styled.div`
+const curriculumTitle = css`
+  font-weight: 700;
+  margin-bottom: 12px;
+`;
 
+const fontWeightBold = css`
+  font-weight: 700;
+`;
+
+const dividerStyle = css`
+  margin: 20px 0;
 `;
 
 const CurriculumContainer = styled.div`

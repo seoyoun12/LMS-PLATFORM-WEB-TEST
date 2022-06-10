@@ -109,14 +109,13 @@ export function useUser(userSeq: number | null) {
   };
 }
 
-// export function useMyUser(): { user: MyUser | undined; isLoading: boolean; isError: any } {
-//   const { data, error } = useSWR<MyUser>(`/user/myinfo`, get);
-//   return {
-//     isLoading: !data && !error,
-//     user: data,
-//     isError: error
-//   };
-// }
+export function useMyUser() {
+  const { data, error } = useSWR<MyUser>(`/user/myinfo`, GET);
+  return {
+    user: data?.data,
+    error
+  };
+}
 
 export async function userLoginHistory() {
   return await POST(`/user/login-history`);

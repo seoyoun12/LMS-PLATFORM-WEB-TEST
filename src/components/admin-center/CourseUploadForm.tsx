@@ -4,7 +4,7 @@ import { BaseSyntheticEvent, ChangeEvent, useEffect, useRef, useState } from 're
 import {
   Box,
   Button, Chip, FormControl,
-  FormControlLabel,
+  FormControlLabel, FormHelperText,
   FormLabel, InputAdornment,
   Radio,
   RadioGroup,
@@ -23,6 +23,7 @@ import { ContentType } from '@common/api/content';
 import * as React from 'react';
 import { S3Files } from 'types/file';
 import { css, cx } from '@emotion/css';
+import { ErrorMessage } from '@hookform/error-message';
 
 const defaultValues = {
   contentType: ContentType.CONTENT_MP4,
@@ -100,20 +101,25 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
         className={boxStyles}
       >
         <InputContainer>
-          <TextField
-            {...register('courseName', { required: '과정 명을 입력해주세요.' })}
-            size="small"
-            className={textField}
-            label="과정명"
-            variant="outlined"
-          />
-          <TextField
-            {...register('courseSubName', { required: '과정 부제목을 입력해주세요.' })}
-            size="small"
-            className={textField}
-            label="부제목"
-            variant="outlined"
-          />
+          <FormControl className={textField}>
+            <TextField
+              {...register('courseName', { required: '과정 명을 입력해주세요.' })}
+              size="small"
+              label="과정명"
+              variant="outlined"
+            />
+            <ErrorMessage errors={errors} name="courseName" as={<FormHelperText error />} />
+          </FormControl>
+
+          <FormControl className={textField}>
+            <TextField
+              {...register('courseSubName', { required: '과정 부제목을 입력해주세요.' })}
+              size="small"
+              label="부제목"
+              variant="outlined"
+            />
+            <ErrorMessage errors={errors} name="courseSubName" as={<FormHelperText error />} />
+          </FormControl>
           <div className="thumbnail-uploader">
             <Typography variant="subtitle2" className="subtitle">썸네일 이미지</Typography>
             <label htmlFor="input-file">
@@ -145,23 +151,26 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
         </InputContainer>
 
         <TuiEditor
-          initialValue={(course && course.content1) || ''}
+          initialValue={(course && course.content1) || ' '}
           previewStyle="vertical"
           height="600px"
           initialEditType="wysiwyg"
           useCommandShortcut={true}
           ref={editorRef}
         />
-        <TextField
-          {...register('lessonTime', { required: '교육 시간을 입력해주세요.' })}
-          size="small"
-          className={cx(textField, lessonTime)}
-          label="교육 시간"
-          variant="outlined"
-          InputProps={{
-            endAdornment: <InputAdornment position="end">시간</InputAdornment>,
-          }}
-        />
+
+        <FormControl className={cx(textField, lessonTime)}>
+          <TextField
+            {...register('lessonTime', { required: '교육 시간을 입력해주세요.' })}
+            size="small"
+            label="교육 시간"
+            variant="outlined"
+            InputProps={{
+              endAdornment: <InputAdornment position="end">시간</InputAdornment>,
+            }}
+          />
+          <ErrorMessage errors={errors} name="lessonTime" as={<FormHelperText error />} />
+        </FormControl>
 
         <FormControl className={pt20}>
           <FormLabel focused={false}>상태</FormLabel>

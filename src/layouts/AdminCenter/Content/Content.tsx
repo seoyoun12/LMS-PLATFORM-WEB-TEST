@@ -11,17 +11,15 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-// import { removeContent, useContentList } from '@common/api/content';
-import { mutate } from 'swr';
 import { ProductStatus } from '@common/api/course';
 import { useContentList } from '@common/api/content';
 import { Spinner } from '@components/ui';
 
-const headRows = [
-  { name: 'seq' },
-  { name: '콘텐츠명' },
-  { name: '생성 날짜' },
-  { name: '상태' }
+const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
+  { name: 'ID', align: 'left' },
+  { name: '콘텐츠명', align: 'right' },
+  { name: '생성 날짜', align: 'right' },
+  { name: '상태', align: 'right' },
 ];
 
 export function Content() {
@@ -83,9 +81,8 @@ export function Content() {
       >
         <TableHead>
           <TableRow>
-            <TableCell>{headRows[0].name}</TableCell>
-            {headRows.slice(1).map(({ name }: { name: string }) =>
-              <TableCell key={name} align="right">{name}</TableCell>
+            {headRows.map(({ name, align }) =>
+              <TableCell key={name} align={align}>{name}</TableCell>
             )}
             <TableCell>{}</TableCell>
           </TableRow>
@@ -120,7 +117,7 @@ export function Content() {
               <TableCell style={{ width: 120 }} align="right">
                 <Link href={`/admin-center/content/modify/${content.seq}`}>
                   <Button variant="text" color="neutral" size="small">
-                    수정
+                    상세
                   </Button>
                 </Link>
                 <Button

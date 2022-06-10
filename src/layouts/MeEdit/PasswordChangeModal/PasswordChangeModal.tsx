@@ -104,7 +104,7 @@ export function PasswordChangeModal({ open, onClose }: Props) {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleClose(false)}>취소</Button>
+        <Button color="neutral" onClick={() => handleClose(false)}>취소</Button>
         <Button onClick={handleOnSubmit}>변경하기</Button>
       </DialogActions>
     </Dialog>

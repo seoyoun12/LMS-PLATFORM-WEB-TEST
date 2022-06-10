@@ -8,17 +8,20 @@ import { Box, Container } from '@mui/material';
 import { ContentList } from '@layouts/AdminCenter';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { EvaluationInfo } from '@layouts/AdminCenter/Course/EvaluationInfo';
+import { Forum } from '@layouts/AdminCenter/Course/Forum';
 
 enum TabValue {
   CourseInfo = 'course-info',
   ContentList = 'content-list',
   EvaluationInfo = 'evaluation-info',
+  Forum = 'forum',
 }
 
 const tabsConfig = [
   { label: '과정 정보', value: TabValue.CourseInfo },
   { label: '콘텐츠 목록', value: TabValue.ContentList },
   { label: '평가 정보', value: TabValue.EvaluationInfo },
+  { label: '토론', value: TabValue.Forum },
 ];
 
 export function CourseModify() {
@@ -63,6 +66,8 @@ export function CourseModify() {
             <ContentList />,
           [TabValue.EvaluationInfo]:
             <EvaluationInfo />,
+          [TabValue.Forum]:
+            <Forum />
         }[tab as string]
       }
     </Container>

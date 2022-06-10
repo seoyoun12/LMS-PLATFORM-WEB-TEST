@@ -16,6 +16,8 @@ import dateFormat from 'dateformat';
 import { YN } from '@common/constant';
 import { mutate } from 'swr';
 import { Spinner } from '@components/ui';
+import styled from '@emotion/styled';
+import { css } from '@emotion/css';
 
 const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
   { name: 'seq', align: 'left' },
@@ -23,9 +25,12 @@ const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' |
   { name: '생성 날짜', align: 'right' },
   { name: '노출 여부', align: 'right' },
   { name: '상태', align: 'right' },
+  { name: '수강생', align: 'right' },
+  { name: '수료생', align: 'right' },
 ];
 
 export function Course() {
+  console.log('Course Triggered');
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const router = useRouter();
@@ -33,6 +38,7 @@ export function Course() {
   const { data, error } = useCourseList({ page });
 
   useEffect(() => {
+    console.log('useEffect Triggered');
     const { page } = router.query;
     setPage(!isNaN(Number(page)) ? Number(page) : 0);
   }, [ router ]);
@@ -85,7 +91,7 @@ export function Course() {
         <TableHead>
           <TableRow>
             {headRows.map(({ name, align }) =>
-              <TableCell key={name} align={align}>{name}</TableCell>
+              <TableCell className={spaceNoWrap} key={name} align={align}>{name}</TableCell>
             )}
             <TableCell>{}</TableCell>
           </TableRow>
@@ -93,10 +99,10 @@ export function Course() {
         <TableBody>
           {data.content.map((content) => (
             <TableRow key={content.seq} hover>
-              <TableCell style={{ width: 10 }} component="th" scope="row">
+              <TableCell>
                 {content.seq}
               </TableCell>
-              <TableCell style={{ width: 200 }} align="right">
+              <TableCell align="right">
                 <Link
                   href={`/course/${content.seq}`}
                   underline="hover"
@@ -105,10 +111,10 @@ export function Course() {
                   {content.courseName}
                 </Link>
               </TableCell>
-              <TableCell style={{ width: 70 }} align="right">
+              <TableCell align="right" className={spaceNoWrap}>
                 {dateFormat(content.createdDtime, 'isoDate')}
               </TableCell>
-              <TableCell style={{ width: 10 }} align="right">
+              <TableCell align="right">
                 <Chip
                   label={content.displayYn === YN.YES ? '보임' : '숨김'}
                   variant="outlined"
@@ -116,7 +122,7 @@ export function Course() {
                   color={content.displayYn === YN.YES ? 'secondary' : 'default'}
                 />
               </TableCell>
-              <TableCell style={{ width: 10 }} align="right">
+              <TableCell align="right">
                 <Chip
                   label={content.status ? '정상' : '중지'}
                   variant="outlined"
@@ -124,8 +130,10 @@ export function Course() {
                   color={content.status ? 'secondary' : 'default'}
                 />
               </TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
 
-              <TableCell style={{ width: 120 }} align="right">
+              <TableCell align="right" className={spaceNoWrap}>
                 <Link href={`/admin-center/course/modify/${content.seq}`}>
                   <Button variant="text" color="neutral" size="small">
                     상세
@@ -147,3 +155,8 @@ export function Course() {
     </Container>
   );
 }
+
+const spaceNoWrap = css`
+  white-space: nowrap;
+`;
+

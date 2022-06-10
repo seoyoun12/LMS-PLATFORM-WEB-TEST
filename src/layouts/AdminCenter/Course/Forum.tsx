@@ -11,12 +11,13 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/css';
 import { setLineClamp } from '@styles/mixins';
-import { removeQuestion, useQuestionList } from '@common/api/question';
+import { removeQuestion } from '@common/api/question';
 import { useRouter } from 'next/router';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { useState } from 'react';
 import { useForumList } from '@common/api/forum';
+import { ForumUploadModal } from '@components/admin-center/ForumUploadModal';
 
 const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
   { name: 'ID', align: 'left' },
@@ -33,7 +34,7 @@ export function Forum() {
   const [ openPreviewModal, setOpenPreviewModal ] = useState(false);
   const [ forumId, setForumId ] = useState<number | null>(null);
   const [ page, setPage ] = useState(0);
-  const { contentId: courseId } = router.query;
+  const { courseId } = router.query;
   const {
     forumPaginationResult,
     forumPaginationResultError,
@@ -59,8 +60,8 @@ export function Forum() {
     }
   };
 
-  const modifyQuestion = (questionId: number) => {
-    setForumId(questionId);
+  const modifyQuestion = (forumId: number) => {
+    setForumId(forumId);
     setOpenUploadModal(true);
   };
 
@@ -78,7 +79,7 @@ export function Forum() {
             setOpenUploadModal(true);
           }}
         >
-          문제 등록
+          토론 등록
         </Button>
       </UploadBtn>
 
@@ -100,18 +101,18 @@ export function Forum() {
         <TableBody>
           {forumPaginationResult.content.map((forum) =>
             <TableRow key={forum.seq} hover>
-              <TableCell style={{ width: 10 }} align="left">
+              <TableCell align="left">
                 {forum.seq}
               </TableCell>
               <TableCell align="left">
                 <Typography className={ellipsis}>
-                  {}
+                  {forum.subject}
                 </Typography>
               </TableCell>
-              <TableCell style={{ width: 60 }} align="right">
-                {}
+              <TableCell align="right">
+                {forum.createdDtime}
               </TableCell>
-              <TableCell style={{ width: 10 }} align="right">
+              <TableCell align="right">
                 <Chip
                   label={forum.status === ProductStatus.APPROVE ? '정상' : '중지'}
                   variant="outlined"
@@ -119,7 +120,7 @@ export function Forum() {
                   color={forum.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
                 />
               </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
+              <TableCell align="right">
                 <Button
                   variant="text"
                   color="neutral"
@@ -142,18 +143,12 @@ export function Forum() {
         </TableBody>
       </Table>
 
-      <QuestionUploadModal
+      <ForumUploadModal
         mode={forumId ? 'modify' : 'upload'}
-        contentId={Number(courseId)}
-        questionId={Number(forumId)}
+        forumId={Number(forumId)}
+        courseId={Number(courseId)}
         open={openUploadModal}
         handleClose={() => setOpenUploadModal(false)}
-      />
-
-      <QuestionPreviewModal
-        questionId={Number(forumId)}
-        open={openPreviewModal}
-        handleClose={() => setOpenPreviewModal(false)}
       />
     </Container>
   );

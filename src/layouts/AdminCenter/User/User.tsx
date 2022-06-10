@@ -13,7 +13,7 @@ import { UserModifyModal } from '@components/admin-center/UserModifyModal';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 
-const headRows = [ 
+const headRows = [
   { name: '회원번호' },
   { name: '아이디' },
   { name: '이름' },
@@ -22,13 +22,13 @@ const headRows = [
   { name: '계정생성일' },
   { name: '핸드폰번호' },
   { name: '문자수신동의' },
-  { name: '메일수신동의' },  
+  { name: '메일수신동의' },
   { name: '로그인실패횟수' },
   { name: '로그인잠김여부' },
   { name: '유저수정일' },
   { name: '암호변경일' },
   { name: '가입구분' },
-  { name: '수정' }, 
+  { name: '수정' },
   { name: '삭제' },
 ];
 
@@ -36,9 +36,9 @@ export function UserList() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const dialog = useDialog();
-  const [ page, setPage ] = useState(0);
+  const [page, setPage] = useState(0);
   const { data, error, mutate } = userList({ page });
-  const [ userSeq, setUserSeq ] = useState<number | null>(null);
+  const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
 
 
@@ -68,7 +68,7 @@ export function UserList() {
   useEffect(() => {
     const { page } = router.query;
     setPage(!isNaN(Number(page)) ? Number(page) : 0);
-  }, [router]);
+  }, [router.query]);
 
   const onChangePage = async (page: number) => {
     await router.push({
@@ -91,7 +91,7 @@ export function UserList() {
   if (!data) return <Spinner />;
 
   return (
-    <UserContainer className={styles.globalContainer}>
+    <Container className={styles.globalContainer}>
       <UserTypo variant='h5'>
         회원 목록
       </UserTypo>
@@ -159,19 +159,13 @@ export function UserList() {
         userData={data.content.find(item => item.seq === userSeq)!}
         error={error}
       />
-    </UserContainer>
+    </Container>
   );
 }
 
 const UserTypo = styled(Typography)`
   margin-bottom: 12px;
   font-weight: 700;
-`
-
-
-const UserContainer = styled(Container)`
-  /* border: 1px solid red; */
-  
 `
 
 const UserTableRow = styled(TableRow)`
@@ -181,34 +175,14 @@ const UserTableRow = styled(TableRow)`
 const UserTitleTableCell = styled(TableCell)`
   height: 1px;
   position: relative;
-  /* border-right: 1px solid lightgray; */
   font-weight: bold;
-
-  /* :nth-child(1) {
-    background-color: lightgreen;
-  }
-
-  :nth-child(2) {
-    background-color: lightblue;
-  } */
 `
 
 const UserTableCell = styled(TableCell)`
   white-space: nowrap;
   text-align: center;
-  /* border-right: 1px solid lightgray;
-  box-sizing: border-box; */
   padding-top: 10px;
   margin: 0; 
-  /* padding: 0; */
-
-  /* :first-child {
-    background-color: #ebebeb;
-  }
-
-  :nth-child(2) {
-    background-color: lightyellow;
-  } */
 `
 
 

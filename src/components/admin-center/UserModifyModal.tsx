@@ -38,7 +38,7 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
   useEffect(() => {
     reset({ ...userData })
   }, [userData, open])
- 
+
   const onSubmit: SubmitHandler<UserInput> = async (userInput) => {
 
     try {
@@ -48,7 +48,6 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
       setSubmitLoading(false);
       snackbar({ variant: 'success', message: `${userInput.name} 님이 수정 되었습니다.` });
     } catch (e: any) {
-      console.log("e", e);
       snackbar(e.message || e.data?.message);
       setSubmitLoading(false);
     }
@@ -78,7 +77,7 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
               variant='outlined'
               label="회원번호"
             />
-            
+
           </FormControl>
           <FormControl className="form-control">
             <TextField

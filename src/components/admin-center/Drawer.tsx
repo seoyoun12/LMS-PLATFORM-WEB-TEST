@@ -63,11 +63,6 @@ export function Drawer({ children }: { children: ReactNode }) {
           href: '/admin-center/user',
           isActive: router.pathname === '/admin-center/user'
         },
-        {
-          name: '회원 등록',
-          href: '/admin-center/user',
-          isActive: router.pathname === '/admin-center/user'
-        }
       ],
       icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
     },

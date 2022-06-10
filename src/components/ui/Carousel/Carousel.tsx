@@ -41,6 +41,7 @@ export const Carousel = ({ datas }: { datas: Array<any> }) => {
     });
   }, []);
 
+  if (!datas?.length) return <div>loading</div>;
   return (
     <Slider>
       <SliderLayout style={isMobile ? { flexDirection: 'column-reverse' } : { flexDirection: 'row' }}>
@@ -54,7 +55,7 @@ export const Carousel = ({ datas }: { datas: Array<any> }) => {
             disableOnInteraction: false,
           }}
           onSwiper={(swiper: any) => setFirstSwiper(swiper)}
-          controller={{ control: secondSwiper }}
+          // controller={{ control: secondSwiper }}
           style={{ maxWidth: '676px', width: '100%', marginLeft: '0', top: '32px' }}
         >
           {datas.map((data: Datas) => {
@@ -62,9 +63,9 @@ export const Carousel = ({ datas }: { datas: Array<any> }) => {
               <SwiperSlide key={data.id}>
                 {isMobile ? (
                   <img src={data.img} alt=""
-                       style={{ paddingRight: '16px', width: '100%', height: '192px', objectFit: 'cover' }}/>
+                       style={{ paddingRight: '16px', width: '100%', height: '192px', objectFit: 'cover' }} />
                 ) : (
-                  <img src={data.img} alt="" style={{ paddingRight: '16px', width: '100%' }}/>
+                  <img src={data.img} alt="" style={{ paddingRight: '16px', width: '100%' }} />
                 )}
 
               </SwiperSlide>
@@ -100,7 +101,7 @@ export const Carousel = ({ datas }: { datas: Array<any> }) => {
           onRealIndexChange={progress}
           onInit={progress}
           onSwiper={(swiper: any) => setSecondSwiper(swiper)}
-          controller={{ control: firstSwiper }}
+          // controller={{ control: firstSwiper }}
           style={isMobile ? {
             margin: '20px 0',
           } : {
@@ -195,7 +196,7 @@ const Timeline = styled.div`
   }
 
   .timeline-current {
-    width: 0%;
+    width: 0;
     height: 2px;
     background: #fff;
   }

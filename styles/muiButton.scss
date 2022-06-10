@@ -1,15 +1,17 @@
-.MuiButton-containedNeutral, .MuiButton-outlinedNeutral, .MuiButton-textNeutral {
-  color: #212121 !important;
+.MuiButton-root.MuiButton-containedNeutral,
+.MuiButton-root.MuiButton-outlinedNeutral,
+.MuiButton-root.MuiButton-textNeutral {
+  color: #212121;
 }
 
-.MuiButton-outlinedNeutral {
-  border: 1px solid var(--grey400) !important;
+.MuiButton-root.MuiButton-outlinedNeutral {
+  border: 1px solid var(--grey400);
 
   &:hover {
-    border: 1px solid var(--grey600) !important;
+    border: 1px solid var(--grey600);
   }
 }
 
-.MuiButton-textNeutral:hover {
-  background-color: rgba(238, 238, 238, .8) !important;
+.MuiButton-root.MuiButton-textNeutral:hover {
+  background-color: rgba(238, 238, 238, .8);
 }

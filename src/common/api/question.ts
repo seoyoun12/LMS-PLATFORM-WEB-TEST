@@ -2,7 +2,7 @@ import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { PaginationResult } from 'types/fetch';
 
-export enum ExamType {
+export enum QuestionType {
   QUESTION_OBJ = 'QUESTION_OBJ',
   QUESTION_SUBJ = 'QUESTION_SUBJ'
 }
@@ -18,7 +18,7 @@ export interface QuestionInput {
   chapter?: number;
   contentSeq?: number;
   description?: string;
-  examType: ExamType;
+  questionType: QuestionType;
   item1?: string;
   item2?: string;
   item3?: string;
@@ -36,7 +36,7 @@ export interface Question {
   contentSeq: number;
   createdDtime: string;
   description: string;
-  examType: ExamType;
+  questionType: QuestionType;
   item1: string;
   item2: string;
   item3: string;

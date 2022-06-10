@@ -67,7 +67,7 @@ export function DialogProvider({ children }: { children: ReactNode | undefined }
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>{config?.cancelText}</Button>
+          <Button color="neutral" onClick={onClose}>{config?.cancelText}</Button>
           <Button onClick={onSubmit} autoFocus>
             {config?.confirmText}
           </Button>

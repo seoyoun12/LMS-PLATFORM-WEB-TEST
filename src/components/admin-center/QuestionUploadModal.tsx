@@ -16,7 +16,7 @@ import TextField from '@mui/material/TextField';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
   ExamLevel,
-  ExamType,
+  QuestionType,
   modifyQuestion,
   QuestionInput,
   uploadQuestion,
@@ -25,9 +25,9 @@ import {
 
 type FormType = {} & QuestionInput
 
-const examTypeOptions = [
-  { name: '주관식', value: ExamType.QUESTION_SUBJ },
-  { name: '객관식', value: ExamType.QUESTION_OBJ },
+const questionTypeOptions = [
+  { name: '주관식', value: QuestionType.QUESTION_SUBJ },
+  { name: '객관식', value: QuestionType.QUESTION_OBJ },
 ];
 
 const examLevelOptions = [
@@ -36,7 +36,7 @@ const examLevelOptions = [
   { name: '상', value: ExamLevel.LEVEL_HARD },
 ];
 
-const objExamTypeItems: {
+const objQuestionTypeItems: {
   value: keyof Pick<QuestionInput, 'item1' | 'item2' | 'item3' | 'item4' | 'item5'>,
   name: string
 }[] = [
@@ -48,7 +48,7 @@ const objExamTypeItems: {
 ];
 
 const defaultValues = {
-  examType: ExamType.QUESTION_OBJ,
+  questionType: QuestionType.QUESTION_OBJ,
   answer: '',
   level: ExamLevel.LEVEL_EASY,
 };
@@ -70,7 +70,7 @@ export function QuestionUploadModal({ open, handleClose, questionId, contentId, 
     control,
     reset,
   } = useForm<FormType>({ defaultValues });
-  const examType = useWatch({ control, name: 'examType' });
+  const questionType = useWatch({ control, name: 'questionType' });
   const loading = (open && mode === 'modify' && !question);
 
   useEffect(() => {
@@ -143,26 +143,26 @@ export function QuestionUploadModal({ open, handleClose, questionId, contentId, 
             <Controller
               rules={{ required: '문제 유형을 선택해주세요.' }}
               control={control}
-              name="examType"
+              name="questionType"
               render={({ field }) => (
                 <Select
                   {...field}
                   size="small"
                   label="문제 유형"
                 >
-                  {examTypeOptions.map(({ value, name }) =>
+                  {questionTypeOptions.map(({ value, name }) =>
                     <MenuItem value={value} key={value}>{name}</MenuItem>
                   )}
                 </Select>
               )}
             />
-            <ErrorMessage errors={errors} name="examType" as={<FormHelperText error />} />
+            <ErrorMessage errors={errors} name="questionType" as={<FormHelperText error />} />
           </FormControl>
 
           <FormGroup className="form-control">
             {
               {
-                [ExamType.QUESTION_OBJ]:
+                [QuestionType.QUESTION_OBJ]:
                   <FormControl className="obj-type">
                     <Controller
                       rules={{ required: true }}
@@ -170,14 +170,14 @@ export function QuestionUploadModal({ open, handleClose, questionId, contentId, 
                       name="answer"
                       render={({ field }) => (
                         <RadioGroup row {...field} className="item-container radio">
-                          {objExamTypeItems.map(({ value, name }) =>
+                          {objQuestionTypeItems.map(({ value, name }) =>
                             <Radio key={value} value={value} />
                           )}
                         </RadioGroup>
                       )}
                     />
                     <div className="item-container text-field">
-                      {objExamTypeItems.map(({ value, name }) =>
+                      {objQuestionTypeItems.map(({ value, name }) =>
                         <TextField
                           key={value}
                           {...register(value, { required: '문제를 입력해주세요.' })}
@@ -190,7 +190,7 @@ export function QuestionUploadModal({ open, handleClose, questionId, contentId, 
                     </div>
                   </FormControl>,
 
-                [ExamType.QUESTION_SUBJ]:
+                [QuestionType.QUESTION_SUBJ]:
                   <TextField
                     {...register('answer', { required: '정답을 입력해주세요.' })}
                     size="small"
@@ -198,7 +198,7 @@ export function QuestionUploadModal({ open, handleClose, questionId, contentId, 
                     fullWidth
                     variant="outlined"
                   />,
-              }[examType]
+              }[questionType]
             }
           </FormGroup>
 
@@ -264,7 +264,7 @@ const FormContainer = styled.div`
         display: flex;
         flex-direction: column;
         align-items: center;
-
+        
         > :not(:last-child) {
           margin-bottom: 12px;
         }

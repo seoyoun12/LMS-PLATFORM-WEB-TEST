@@ -9,6 +9,12 @@ export enum ContentType {
   CONTENT_EXTERNAL = 'CONTENT_EXTERNAL'
 }
 
+export enum ContentTypeHuman {
+  CONTENT_HTML = '웹콘텐츠(HTML5)',
+  CONTENT_MP4 = 'mp4',
+  CONTENT_EXTERNAL = '외부링크'
+}
+
 export interface ContentInput {
   contentType: ContentType | string;
   contentName: string;
@@ -17,7 +23,7 @@ export interface ContentInput {
   status: ProductStatus;
 }
 
-export interface ContentData {
+export interface ContentRes {
   code: string;
   contentHeight: number;
   contentName: string;
@@ -31,6 +37,8 @@ export interface ContentData {
   questionCnt: number;
   seq: number;
   status: ProductStatus;
+  courseName: string;
+  courseSeq: number;
 }
 
 export async function uploadContent(contentInput: ContentInput) {
@@ -41,24 +49,26 @@ export async function modifyContent({ contentId, contentInput }: { contentId: nu
   return await PUT(`/content/adm/${contentId}`, contentInput);
 }
 
-export function useContentList({ page, elementCnt }: {
-  page: number,
-  elementCnt?: number,
+export function useContentList({ page, elementCnt, contentName }: {
+  page: number;
+  contentName?: string | null;
+  elementCnt?: number;
 }) {
-  const { data, error } = useSWR<FetchPaginationResponse<ContentData[]>>([
+  const { data, error, mutate } = useSWR<FetchPaginationResponse<ContentRes[]>>([
     `/content/adm`, {
-      params: { page, elementCnt }
+      params: { page, elementCnt, contentName }
     }
   ], GET);
 
   return {
     data: data?.data,
+    mutate,
     error
   };
 }
 
 export function useContent(contentId: number) {
-  const { data, error } = useSWR<SWRResponse<ContentData>>(contentId ? [ `content/adm/${contentId}` ] : null, GET);
+  const { data, error } = useSWR<SWRResponse<ContentRes>>(contentId ? [ `content/adm/${contentId}` ] : null, GET);
 
   return {
     data: data?.data,

@@ -1,6 +1,6 @@
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor as EditorType } from '@toast-ui/react-editor';
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import { BaseSyntheticEvent, ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   Box,
   Button, Chip, FormControl,
@@ -13,46 +13,54 @@ import {
 } from '@mui/material';
 import { TuiEditor } from '@components/common/TuiEditor';
 import styled from '@emotion/styled';
-import { ProductStatus, CourseData } from '@common/api/course';
+import { ProductStatus, CourseRes } from '@common/api/course';
 import { YN } from '@common/constant';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import { grey } from '@mui/material/colors';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { ContentType } from '@common/api/content';
+import * as React from 'react';
+import { S3Files } from 'types/file';
+import { css, cx } from '@emotion/css';
 
-export function CourseUploadForm(
-  {
-    mode = 'upload',
-    course,
-    onHandleSubmit,
-  }: {
-    mode?: 'upload' | 'modify',
-    course?: CourseData,
-    onHandleSubmit: ({ event, courseInput, courseId }: {
-      event: FormEvent<HTMLFormElement>,
-      courseInput: FormData,
-      courseId?: number
-    }) => void,
-  }
-) {
+const defaultValues = {
+  contentType: ContentType.CONTENT_MP4,
+  status: ProductStatus.APPROVE,
+  displayYn: YN.YES
+};
+
+interface Props {
+  mode?: 'upload' | 'modify',
+  course?: CourseRes,
+  onHandleSubmit: ({ event, courseInput, courseId }: {
+    event?: BaseSyntheticEvent,
+    courseInput: FormData,
+    courseId?: number
+  }) => void,
+}
+
+export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<EditorType>(null);
-  const courseNameRef = useRef<HTMLInputElement>(null);
-  const courseSubNameRef = useRef<HTMLInputElement>(null);
-  const lessonTime = useRef<HTMLInputElement>(null);
-  const [ thumbnail, setThumbnail ] = useState<Blob | string>('');
-  const [ courseId, setCourseId ] = useState<number | undefined>();
-  const [ displayYn, setIsDisplay ] = useState<YN>(YN.YES);
-  const [ status, setStatus ] = useState<ProductStatus>(ProductStatus.APPROVE);
+  const [ thumbnails, setThumbnails ] = useState<S3Files | null>([]);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    reset
+  } = useForm<CourseRes>({ defaultValues });
 
   useEffect(() => {
     if (mode === 'modify' && !!course) {
-      courseNameRef.current!.value = course.courseName;
-      courseSubNameRef.current!.value = course.courseSubName;
-      lessonTime.current!.value = String(course.lessonTime);
-      setIsDisplay(course.displayYn);
-      setStatus(course.status);
-      setThumbnail(course.courseFile);
-      setCourseId(course.seq);
+      reset({ ...course });
+      setThumbnails(
+        course.s3Files.length
+          ? [ { name: course.s3Files[0].name, path: course.s3Files[0].path } ]
+          : []
+      );
     }
   }, [ mode, course ]);
 
@@ -61,31 +69,25 @@ export function CourseUploadForm(
 
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
-    setThumbnail(files[0]);
+    setThumbnails([ { name: files[0].name, path: '' } ]);
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!editorRef.current || !courseNameRef.current || !courseSubNameRef.current) {
-      return;
-    }
+  const onSubmit: SubmitHandler<CourseRes> = async (course, event) => {
+    if (!editorRef.current) return;
 
-    const courseName = courseNameRef.current.value;
-    const courseSubName = courseSubNameRef.current.value;
+    const files = fileInputRef.current?.files;
+    const thumbnail = !!files?.length ? files[0] : new Blob([]);
+    const fileName = !!files?.length ? files[0].name : undefined;
     const markdownContent = editorRef.current.getInstance().getMarkdown();
-
-    const courseData: Partial<CourseData> = {
-      courseName,
-      courseSubName,
-      status,
-      displayYn,
+    const courseData = {
+      ...course,
       content1: markdownContent,
     };
 
     const formData = new FormData();
-    formData.append('courseFileOriginal', thumbnail);
+    formData.append('courseFileOriginal', thumbnail, fileName);
     formData.append('data', new Blob([ JSON.stringify(courseData) ], { type: 'application/json' }));
-    onHandleSubmit({ event, courseInput: formData, courseId });
+    onHandleSubmit({ event, courseInput: formData, courseId: course.seq });
   };
 
   return (
@@ -93,30 +95,24 @@ export function CourseUploadForm(
       <Box
         component="form"
         encType="multipart/form-data"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         noValidate
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          mt: 1
-        }}
+        className={boxStyles}
       >
         <InputContainer>
           <TextField
+            {...register('courseName', { required: '과정 명을 입력해주세요.' })}
             size="small"
-            className="text-field"
+            className={textField}
             label="과정명"
             variant="outlined"
-            name="courseName"
-            inputRef={courseNameRef}
           />
           <TextField
+            {...register('courseSubName', { required: '과정 부제목을 입력해주세요.' })}
             size="small"
-            className="text-field"
+            className={textField}
             label="부제목"
             variant="outlined"
-            name="courseSubName"
-            inputRef={courseSubNameRef}
           />
           <div className="thumbnail-uploader">
             <Typography variant="subtitle2" className="subtitle">썸네일 이미지</Typography>
@@ -139,11 +135,11 @@ export function CourseUploadForm(
               </Button>
             </label>
 
-            {thumbnail && <Chip
-              sx={{ mt: '8px' }}
+            {!!thumbnails?.length && <Chip
+              className={chipStyles}
               icon={<ImageOutlinedIcon />}
-              label={'썸네일 이미지'}
-              onDelete={() => setThumbnail('')}
+              label={thumbnails[0].name}
+              onDelete={() => setThumbnails([])}
             />}
           </div>
         </InputContainer>
@@ -157,64 +153,48 @@ export function CourseUploadForm(
           ref={editorRef}
         />
         <TextField
-          sx={{
-            width: '30%',
-            mt: '20px'
-          }}
+          {...register('lessonTime', { required: '교육 시간을 입력해주세요.' })}
           size="small"
-          className="text-field"
+          className={cx(textField, lessonTime)}
           label="교육 시간"
           variant="outlined"
-          name="lessonTime"
           InputProps={{
             endAdornment: <InputAdornment position="end">시간</InputAdornment>,
           }}
-          inputRef={lessonTime}
         />
 
-        <FormControl sx={{ pt: '20px' }}>
+        <FormControl className={pt20}>
           <FormLabel focused={false}>상태</FormLabel>
-          <RadioGroup
-            row
-            aria-labelledby="group-label"
-            name="row-radio-buttons-group"
-            value={status}
-            onChange={(e, value: unknown) => {
-              const status = value as ProductStatus;
-              setStatus(status);
-            }}
-          >
-            <FormControlLabel value={ProductStatus.APPROVE} control={<Radio />} label="정상" />
-            <FormControlLabel value={ProductStatus.REJECT} control={<Radio />} label="중지" />
-          </RadioGroup>
+          <Controller
+            rules={{ required: true }}
+            control={control}
+            name="status"
+            render={({ field }) => (
+              <RadioGroup row {...field}>
+                <FormControlLabel value={ProductStatus.APPROVE} control={<Radio />} label="정상" />
+                <FormControlLabel value={ProductStatus.REJECT} control={<Radio />} label="중지" /> </RadioGroup>
+            )}
+          />
         </FormControl>
 
-        <FormControl sx={{ pt: '20px' }}>
+        <FormControl className={pt20}>
           <FormLabel focused={false}>과정 보이기</FormLabel>
-          <RadioGroup
-            row
-            aria-labelledby="group-label"
-            name="row-radio-buttons-group"
-            value={displayYn}
-            onChange={(e, value) => {
-              const displayYn = value as YN;
-              setIsDisplay(displayYn);
-            }}
-          >
-            <FormControlLabel value={YN.YES} control={<Radio />} label="보이기" />
-            <FormControlLabel value={YN.NO} control={<Radio />} label="숨김" />
-          </RadioGroup>
+          <Controller
+            rules={{ required: true }}
+            control={control}
+            name="displayYn"
+            render={({ field }) => (
+              <RadioGroup row {...field}>
+                <FormControlLabel value={YN.YES} control={<Radio />} label="보이기" />
+                <FormControlLabel value={YN.NO} control={<Radio />} label="숨김" />
+              </RadioGroup>
+            )}
+          />
         </FormControl>
 
-        <Button
-          variant="contained"
-          type="submit"
-          sx={{
-            margin: '30px 30px 30px 0',
-          }}
-        >
+        <SubmitBtn variant="contained" type="submit">
           {mode === 'upload' ? '업로드하기' : '수정하기'}
-        </Button>
+        </SubmitBtn>
       </Box>
     </Container>
   );
@@ -232,10 +212,6 @@ const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  > .text-field {
-    margin-bottom: 20px;
-  }
-
   .thumbnail-uploader {
     display: flex;
     flex-direction: column;
@@ -248,3 +224,29 @@ const InputContainer = styled.div`
   }
 `;
 
+const SubmitBtn = styled(Button)`
+  margin: 30px 30px 30px 0;
+`;
+
+const textField = css`
+  margin-bottom: 20px;
+`;
+
+const boxStyles = css`
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+`;
+
+const chipStyles = css`
+  margin-top: 8px;
+`;
+
+const pt20 = css`
+  padding-top: 20px;
+`;
+
+const lessonTime = css`
+  width: 30%;
+  margin-top: 20px;
+`;

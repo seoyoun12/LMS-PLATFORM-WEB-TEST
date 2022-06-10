@@ -1,15 +1,17 @@
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
-import useSWR from 'swr';
+import useSWR, { SWRResponse } from 'swr';
 import { YN } from '@common/constant';
 import { FetchPaginationResponse, FetchResponse } from 'types/fetch';
-
+import { S3Files } from 'types/file';
+import { Property } from 'csstype';
+import { ContentRes } from '@common/api/content';
 
 export enum ProductStatus {
   APPROVE = 1,
   REJECT = -1,
 }
 
-export interface CourseData {
+export interface CourseRes {
   content1: string;
   courseFile: string;
   courseName: string;
@@ -30,6 +32,8 @@ export interface CourseData {
   saleYn: string;
   seq: number;
   status: ProductStatus;
+  s3Files: S3Files;
+  content: ContentRes;
 
   // 임시용 타입
   curriculum: {
@@ -57,25 +61,21 @@ export async function modifyCourse({ courseId, courseInput }: { courseId: number
   });
 }
 
-
-export async function getCourse({ courseId }: { courseId: number }): Promise<CourseData> {
+export async function getCourse({ courseId }: { courseId: number }): Promise<CourseRes> {
   try {
-    return (await GET<FetchResponse<CourseData>>(`/course/${courseId}`)).data;
+    return (await GET<FetchResponse<CourseRes>>(`/course/${courseId}`)).data;
   } catch (err: any) {
     return Promise.reject(err);
   }
 }
 
-export function useCourse({ courseId }: { courseId: number }): {
-  isLoading: boolean;
-  isError: any;
-  data?: CourseData
-} {
-  const { data, error } = useSWR<FetchResponse<CourseData>>(courseId ? `/course/${courseId}` : null, GET);
+export function useCourse(courseId?: number) {
+  const { data, error, mutate } = useSWR<SWRResponse<CourseRes>>(courseId ? `/course/${courseId}` : null, GET);
   return {
     data: data?.data,
     isLoading: !data && !error,
-    isError: error
+    isError: error,
+    mutate
   };
 }
 
@@ -89,7 +89,7 @@ export function useCourseList({ page, courseTitle, elementCnt, chapter }: {
   elementCnt?: number,
   chapter?: string
 }) {
-  const { data, error } = useSWR<FetchPaginationResponse<CourseData[]>>([
+  const { data, error } = useSWR<FetchPaginationResponse<CourseRes[]>>([
     `/course/adm`, {
       params: { page, courseTitle, elementCnt, chapter }
     }
@@ -101,3 +101,10 @@ export function useCourseList({ page, courseTitle, elementCnt, chapter }: {
   };
 }
 
+export const connectCourseToContent = async ({ courseSeq, contentSeq }: { courseSeq: number, contentSeq: number }) => {
+  return await POST(`/course/adm/link/content`, { courseSeq, contentSeq });
+};
+
+export const disConnectContent = async (courseSeq: number) => {
+  return await DELETE(`/course/adm/link/content/${courseSeq}`);
+};

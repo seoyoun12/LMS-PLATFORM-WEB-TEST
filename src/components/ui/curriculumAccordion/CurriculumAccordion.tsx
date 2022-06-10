@@ -11,7 +11,7 @@ import { Divider, List, ListItem, ListItemButton, ListItemText } from '@mui/mate
 import { Link } from '@components/common';
 import { useRouter } from 'next/router';
 import { grey } from '@mui/material/colors';
-import { CourseData } from '@common/api/course';
+import { CourseRes } from '@common/api/course';
 
 const Accordion =
   styled((props: AccordionProps) => (
@@ -53,7 +53,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
-export function CurriculumAccordion({ curriculum }: { curriculum: CourseData['curriculum'] }) {
+export function CurriculumAccordion({ curriculum }: { curriculum: CourseRes['curriculum'] }) {
   const router = useRouter();
   const [ expanded, setExpanded ] = React.useState<number | false>(false);
 

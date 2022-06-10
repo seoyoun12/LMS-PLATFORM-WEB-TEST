@@ -2,7 +2,7 @@ import { Button, Container, Divider, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import styles from '@styles/common.module.scss';
 import { getCourse } from '@common/api';
-import { CourseData } from '@common/api/course';
+import { CourseRes } from '@common/api/course';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { headerHeight } from '@styles/variables';
@@ -13,7 +13,7 @@ import { STATUS_CODE } from 'types/fetch';
 export function Course() {
   const router = useRouter();
   const { courseId } = router.query;
-  const [ course, setCourse ] = useState<CourseData | null>(null);
+  const [ course, setCourse ] = useState<CourseRes | null>(null);
   const [ error, setError ] = useState(false);
 
   useEffect(() => {

@@ -137,6 +137,10 @@ export function Table(
                 count={totalNum}
                 rowsPerPage={rowsPerPage}
                 page={page}
+                sx={{
+                  overflow: 'unset',
+                  justifyContent: 'start'
+                }}
                 SelectProps={{
                   inputProps: {
                     'aria-label': 'rows per page',

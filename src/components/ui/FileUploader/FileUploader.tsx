@@ -6,6 +6,7 @@ import { ChangeEvent, ReactNode, useRef } from 'react';
 import { UseFormRegister } from 'react-hook-form/dist/types/form';
 import { FileUploaderContext } from './useFileUploaderContext';
 
+// Compound Components 패턴으로 개발한 컴포넌트 (Google에 'Compound Components 패턴' 검색)
 interface Props {
   onFileChange: (e: ChangeEvent) => null | undefined | void;
   children: ReactNode;

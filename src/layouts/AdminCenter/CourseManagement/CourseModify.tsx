@@ -7,8 +7,8 @@ import styles from '@styles/common.module.scss';
 import { Box, Container } from '@mui/material';
 import { ContentList } from '@layouts/AdminCenter';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { EvaluationInfo } from '@layouts/AdminCenter/Course/EvaluationInfo';
-import { Forum } from '@layouts/AdminCenter/Course/Forum';
+import { EvaluationInfo } from '@layouts/AdminCenter/CourseManagement/EvaluationInfo';
+import { Forum } from '@layouts/AdminCenter/CourseManagement/Forum';
 
 enum TabValue {
   CourseInfo = 'course-info',

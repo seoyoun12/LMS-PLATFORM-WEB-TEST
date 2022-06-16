@@ -12,12 +12,7 @@ export function Content() {
   }, []);
 
   return (
-    <Container
-      sx={{
-        display: 'flex',
-      }}
-      className={styles.globalContainer}
-    >
+    <Container className={styles.globalContainer}>
       <MainSection>
         main section
       </MainSection>

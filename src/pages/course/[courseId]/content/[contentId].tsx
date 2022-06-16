@@ -8,7 +8,7 @@ export default function ContentPage() {
       <Head>
         <title>Content Page</title>
       </Head>
-      <Content/>
+      <Content />
     </>
   );
 }

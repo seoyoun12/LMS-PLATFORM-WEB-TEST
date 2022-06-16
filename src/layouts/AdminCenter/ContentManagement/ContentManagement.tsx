@@ -22,7 +22,7 @@ const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' |
   { name: '상태', align: 'right' },
 ];
 
-export function Content() {
+export function ContentManagement() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const router = useRouter();

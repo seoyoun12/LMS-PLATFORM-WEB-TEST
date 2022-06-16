@@ -28,7 +28,7 @@ const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' |
   { name: '수료생', align: 'right' },
 ];
 
-export function Course() {
+export function CourseManagement() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const router = useRouter();

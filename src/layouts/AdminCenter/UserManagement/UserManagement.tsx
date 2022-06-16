@@ -32,7 +32,7 @@ const headRows = [
   { name: '삭제' },
 ];
 
-export function UserList() {
+export function UserManagement() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const dialog = useDialog();

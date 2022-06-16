@@ -55,23 +55,26 @@ export function ContentList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow hover>
-            <TableCell align="left">
-              {data.content.seq}
-            </TableCell>
-            <TableCell align="right">
-              {data.content.contentName}
-            </TableCell>
-            <TableCell align="right">
-              {ContentTypeHuman[data.content.contentType]}
-            </TableCell>
-            <TableCell align="right">
-              {data.content.createdDtime}
-            </TableCell>
-            <TableCell align="right">
-              {data.content.status}
-            </TableCell>
-          </TableRow>
+          {data.content
+            ? <TableRow hover>
+              <TableCell align="left">
+                {data.content.seq}
+              </TableCell>
+              <TableCell align="right">
+                {data.content.contentName}
+              </TableCell>
+              <TableCell align="right">
+                {ContentTypeHuman[data.content.contentType]}
+              </TableCell>
+              <TableCell align="right">
+                {data.content.createdDtime}
+              </TableCell>
+              <TableCell align="right">
+                {data.content.status}
+              </TableCell>
+            </TableRow>
+            : null
+          }
         </TableBody>
       </Table>
 

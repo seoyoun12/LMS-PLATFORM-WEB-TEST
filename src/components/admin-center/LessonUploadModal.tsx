@@ -124,7 +124,7 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
       open={open}
       loading={!lesson}
       actionLoading={submitLoading}
-      handleClose={() => handleClose(false)}
+      onCloseModal={() => handleClose(false)}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Box component="form">

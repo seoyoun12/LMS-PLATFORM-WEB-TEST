@@ -90,7 +90,7 @@ export function ContentConnectModal({ open, handleClose, courseId }: Props) {
       loading={!data}
       open={open}
       onClose={handleClose}
-      handleClose={handleClose}
+      onCloseModal={handleClose}
       fullWidth
     >
       <ContentBody className={styles.globalContainer}>

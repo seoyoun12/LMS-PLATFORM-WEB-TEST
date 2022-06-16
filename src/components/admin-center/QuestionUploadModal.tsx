@@ -113,7 +113,7 @@ export function QuestionUploadModal({ open, handleClose, questionId, contentId, 
       fullWidth
       loading={loading}
       open={open}
-      handleClose={handleClose}
+      onCloseModal={handleClose}
       actionLoading={submitLoading}
       onSubmit={handleSubmit(onSubmit)}
     >

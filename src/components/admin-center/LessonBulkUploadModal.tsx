@@ -89,7 +89,7 @@ export function LessonBulkUploadModal({ open, handleClose }: {
       open={open}
       title="강의 등록"
       action="업로드"
-      handleClose={() => handleClose(false)}
+      onCloseModal={() => handleClose(false)}
       onSubmit={handleSubmit(onSubmit)}
       maxWidth="md"
     >

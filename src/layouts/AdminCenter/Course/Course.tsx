@@ -16,7 +16,6 @@ import dateFormat from 'dateformat';
 import { YN } from '@common/constant';
 import { mutate } from 'swr';
 import { Spinner } from '@components/ui';
-import styled from '@emotion/styled';
 import { css } from '@emotion/css';
 
 const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [

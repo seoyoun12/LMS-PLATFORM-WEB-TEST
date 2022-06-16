@@ -7,7 +7,7 @@ import { UseFormRegister } from 'react-hook-form/dist/types/form';
 import { FileUploaderContext } from './useFileUploaderContext';
 
 interface Props {
-  handleOnChange: (e: ChangeEvent) => null | undefined | void;
+  onFileChange: (e: ChangeEvent) => null | undefined | void;
   children: ReactNode;
   register: UseFormRegister<any>;
   regName: string;
@@ -17,14 +17,14 @@ function Label({ children }: { children: ReactNode }) {
   return (<Typography variant="subtitle2" className="subtitle">{children}</Typography>);
 }
 
-const FileUploaderRoot = ({ handleOnChange, register, regName, children }: Props) => {
+const FileUploaderRoot = ({ onFileChange, register, regName, children }: Props) => {
   const inputRef = useRef<HTMLDivElement>(null);
   const { onChange, onBlur, name, ref } = register(regName);
 
-  const changes = async (e: ChangeEvent) => {
+  const handleChanges = async (e: ChangeEvent) => {
     e.preventDefault();
     await onChange(e);
-    handleOnChange(e);
+    onFileChange(e);
   };
 
   return (
@@ -40,7 +40,7 @@ const FileUploaderRoot = ({ handleOnChange, register, regName, children }: Props
             onBlur={onBlur}
             name={name}
             ref={ref}
-            onChange={changes}
+            onChange={handleChanges}
           />
         </div>
         <Button

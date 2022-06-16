@@ -22,7 +22,7 @@ import { FileUploader } from '@components/ui/FileUploader';
 
 interface Props {
   open: boolean;
-  handleClose: () => void;
+  onClose: (isMutate: boolean) => void;
   forumId?: number | null;
   courseId?: number;
   mode?: 'modify' | 'upload';
@@ -38,7 +38,7 @@ const defaultValues = {
   s3Files: []
 };
 
-export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 'upload' }: Props) {
+export function ForumUploadModal({ open, onClose, forumId, courseId, mode = 'upload' }: Props) {
   const snackbar = useSnackbar();
   const { forum, forumError, mutate } = useForum(Number(forumId));
   const [ submitLoading, setSubmitLoading ] = useState(false);
@@ -68,7 +68,7 @@ export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 
     }
   }, [ mode, forum, open ]);
 
-  const uploadFile = (e: ChangeEvent) => {
+  const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();
 
     const files = (e.target as HTMLInputElement).files;
@@ -108,7 +108,7 @@ export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 
       setSubmitLoading(false);
       snackbar(e.message || e.data?.message);
     }
-    handleClose();
+    onClose(true);
   };
 
   if (open && forumError) return <div>error</div>;
@@ -120,8 +120,8 @@ export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 
       fullWidth
       loading={loading}
       open={open}
-      handleClose={handleClose}
       actionLoading={submitLoading}
+      onCloseModal={() => onClose(false)}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Box component="form">
@@ -140,7 +140,7 @@ export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 
             <FileUploader
               register={register}
               regName="files"
-              handleOnChange={uploadFile}
+              onFileChange={handleFileChange}
             >
               <FileUploader.Label>파일 업로드</FileUploader.Label>
             </FileUploader>

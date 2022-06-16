@@ -55,9 +55,17 @@ export function Forum() {
     }
   };
 
-  const modifyQuestion = (forumId: number) => {
+  const handleModifyForum = async (forumId: number) => {
     setForumId(forumId);
     setOpenUploadModal(true);
+  };
+
+  const handleModalClose = async (isMutate: boolean) => {
+    if (isMutate) {
+      await mutate();
+    }
+
+    setOpenUploadModal(false);
   };
 
   if (forumPaginationResultError) return <div>error</div>;
@@ -83,7 +91,7 @@ export function Forum() {
         pagination
         totalNum={forumPaginationResult.totalElements}
         page={forumPaginationResult.number}
-        onChangePage={() => setPage(page)}
+        onChangePage={(page) => setPage(page)}
       >
         <TableHead>
           <TableRow>
@@ -120,7 +128,7 @@ export function Forum() {
                   variant="text"
                   color="neutral"
                   size="small"
-                  onClick={() => modifyQuestion(forum.seq)}
+                  onClick={() => handleModifyForum(forum.seq)}
                 >
                   수정
                 </Button>
@@ -143,7 +151,7 @@ export function Forum() {
         forumId={Number(forumId)}
         courseId={Number(courseId)}
         open={openUploadModal}
-        handleClose={() => setOpenUploadModal(false)}
+        onClose={(isMutate) => handleModalClose(isMutate)}
       />
     </Container>
   );

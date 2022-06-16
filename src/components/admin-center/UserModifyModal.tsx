@@ -65,7 +65,7 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
       open={open}
       actionLoading={submitLoading}
       onSubmit={handleSubmit(onSubmit)}
-      handleClose={() => handleClose(false)}
+      onCloseModal={() => handleClose(false)}
     >
       <Box component="form">
         <FormContainer>

@@ -1,0 +1,59 @@
+import * as React from 'react';
+import { Button, Typography } from '@mui/material';
+import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
+import { grey } from '@mui/material/colors';
+import { ChangeEvent, ReactNode, useRef } from 'react';
+import { UseFormRegister } from 'react-hook-form/dist/types/form';
+import { FileUploaderContext } from './useFileUploaderContext';
+
+interface Props {
+  handleOnChange: (e: ChangeEvent) => null | undefined | void;
+  children: ReactNode;
+  register: UseFormRegister<any>;
+  regName: string;
+}
+
+function Label({ children }: { children: ReactNode }) {
+  return (<Typography variant="subtitle2" className="subtitle">{children}</Typography>);
+}
+
+const FileUploaderRoot = ({ handleOnChange, register, regName, children }: Props) => {
+  const inputRef = useRef<HTMLDivElement>(null);
+  const { onChange, onBlur, name, ref } = register(regName);
+
+  const changes = async (e: ChangeEvent) => {
+    e.preventDefault();
+    await onChange(e);
+    handleOnChange(e);
+  };
+
+  return (
+    <FileUploaderContext.Provider value={null}>
+      {children}
+      <label htmlFor="input-file">
+        <div ref={inputRef}>
+          <input
+            style={{ display: 'none' }}
+            id="input-file"
+            type="file"
+            multiple={true}
+            onBlur={onBlur}
+            name={name}
+            ref={ref}
+            onChange={changes}
+          />
+        </div>
+        <Button
+          color="neutral"
+          variant="outlined"
+          startIcon={<UploadOutlinedIcon htmlColor={grey[700]} />}
+          onClick={() => inputRef.current!.click()}
+        >
+          파일 선택
+        </Button>
+      </label>
+    </FileUploaderContext.Provider>
+  );
+};
+
+export const FileUploader = Object.assign(FileUploaderRoot, { Label });

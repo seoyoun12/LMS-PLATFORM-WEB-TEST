@@ -30,7 +30,6 @@ const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' |
 ];
 
 export function Course() {
-  console.log('Course Triggered');
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const router = useRouter();

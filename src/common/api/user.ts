@@ -86,18 +86,13 @@ export function userList({ page, elementCnt }: {
   };
 }
 
-
-
 export async function modifyUser(userInput: UserInput) {
   return await PUT(`/user/adm/${userInput.seq}`, userInput)
 }
 
-
 export async function removeUser(seq: number) {
   return await DELETE(`/user/adm/${seq}`);
 }
-
-
 
 
 export function useUser(userSeq: number | null) {

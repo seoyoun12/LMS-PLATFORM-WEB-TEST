@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-export let FileUploaderContext = createContext<{ value: string } | null>(null);
+export let FileUploaderContext = createContext<null>(null);
 FileUploaderContext.displayName = 'FileUploaderContext';
 
 export function useFileUploaderContext(component: string) {

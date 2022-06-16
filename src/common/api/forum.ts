@@ -1,6 +1,7 @@
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { PaginationResult } from 'types/fetch';
+import { S3Files } from 'types/file';
 
 export interface ForumInput {
   courseSeq?: number;
@@ -13,6 +14,7 @@ export interface ForumInput {
   updIp?: string;
   userSeq?: number;
   content?: string;
+  s3Files?: S3Files;
 }
 
 export interface Forum {
@@ -25,6 +27,7 @@ export interface Forum {
   subject: string;
   updIp: string;
   userSeq: number;
+  s3Files: S3Files;
 }
 
 export function useForumList({ courseId, page, elementCnt }: {
@@ -44,11 +47,12 @@ export function useForumList({ courseId, page, elementCnt }: {
 }
 
 export function useForum(forumId: number | null) {
-  const { data, error } = useSWR<SWRResponse<Forum>>(forumId ? `/forum/tutor/${forumId}` : null, GET);
+  const { data, error, mutate } = useSWR<SWRResponse<Forum>>(forumId ? `/forum/tutor/${forumId}` : null, GET);
 
   return {
     forum: data?.data,
     forumError: error,
+    mutate
   };
 }
 
@@ -60,6 +64,6 @@ export function modifyForum(forumId: number, forumInput: FormData) {
   return PUT(`/forum/tutor/${forumId}`, forumInput);
 }
 
-export async function removeForum(questionId: number) {
-  return await DELETE(`/forum/tutor/${questionId}`);
+export async function removeForum(forumId: number) {
+  return await DELETE(`/forum/tutor/${forumId}`);
 }

@@ -13,7 +13,7 @@ import styled from '@emotion/styled';
 import { Modal } from '@components/ui';
 import TextField from '@mui/material/TextField';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { ForumInput, useForum } from '@common/api/forum';
+import { ForumInput, modifyForum, uploadForum, useForum } from '@common/api/forum';
 import { ProductStatus } from '@common/api/course';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { css } from '@emotion/css';
@@ -40,7 +40,7 @@ const defaultValues = {
 
 export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 'upload' }: Props) {
   const snackbar = useSnackbar();
-  const { forum, forumError } = useForum(Number(forumId));
+  const { forum, forumError, mutate } = useForum(Number(forumId));
   const [ submitLoading, setSubmitLoading ] = useState(false);
   const [ s3Files, setS3Files ] = useState<S3Files | null>([]);
   const {
@@ -55,11 +55,6 @@ export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 
   const watchFiles = watch('files');
   const loading = (open && mode === 'modify' && !forum);
   const fileName = (watchFiles?.length && watchFiles[0].name) || (s3Files?.length && s3Files[0].name);
-
-  useEffect(() => {
-    const subscription = watch((value, { name, type }) => console.log(value, name, type));
-    return () => subscription.unsubscribe();
-  }, [ watch ]);
 
   useEffect(() => {
     if (open) {
@@ -97,17 +92,16 @@ export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 
     formData.append('files', file, fileName);
     formData.append('data', new Blob([ JSON.stringify(inputParams) ], { type: 'application/json' }));
 
-    console.log(forum);
-
     try {
       if (mode === 'upload') {
-        // await uploadForum(formData);
+        await uploadForum(formData);
       } else {
         if (forumId) {
-          // await modifyForum(forumId, formData);
+          await modifyForum(forumId, formData);
         }
       }
 
+      await mutate();
       setSubmitLoading(false);
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
     } catch (e: any) {

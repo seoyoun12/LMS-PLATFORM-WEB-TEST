@@ -1,4 +1,4 @@
-import { GET } from '@common/httpClient';
+import { GET, POST } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { YN } from '@common/constant';
 import { FetchPaginationResponse } from 'types/fetch';
@@ -70,4 +70,8 @@ export function useCourseList({ page, courseTitle, elementCnt, chapter }: {
     data: data?.data,
     error
   };
+}
+
+export function courseEnroll(courseId: number) {
+  return POST(`/course/enroll/${courseId}`);
 }

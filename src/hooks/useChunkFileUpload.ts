@@ -15,6 +15,10 @@ interface ChunkResponse {
   }>;
 }
 
+interface Props {
+  fileUploadType: FileUploadType;
+}
+
 const CHUNK_SIZE = 6291456;
 
 const round = (number: number, decimalPlaces: number) => {
@@ -22,14 +26,14 @@ const round = (number: number, decimalPlaces: number) => {
   return Math.round(number * factorOfTen) / factorOfTen;
 };
 
-export const useFileUpload = (fileUploadType: FileUploadType) => {
+export const useFileUpload = ({ fileUploadType }: Props) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [ uploadPercentage, setUploadPercentage ] = useState(0);
   const [ progressbar, showProgressbar ] = useState<any>(false);
   const [ spinner, setSpinner ] = useState<any>(false);
   const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
 
-  const handleUpload = useCallback(async () => {
+  const handleUpload = useCallback(async (dataId: number) => {
     if (!!fileInputRef.current && !!fileInputRef.current.files?.length) {
       const { encFileName, uploadRequestKey } = await initFileConfig({
         fileUploadType,
@@ -68,7 +72,7 @@ export const useFileUpload = (fileUploadType: FileUploadType) => {
           uploadRequestKey,
           etagList,
           uploadType: fileUploadType,
-          dataSeq: 1,
+          dataSeq: dataId,
           fileOriginalName: file.fileName
         };
         await completeFileUpload(requestInput);

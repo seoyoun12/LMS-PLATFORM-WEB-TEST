@@ -1,6 +1,6 @@
 import { Button, Container, Divider, Typography } from '@mui/material';
 import styles from '@styles/common.module.scss';
-import { useCourse } from '@common/api/course';
+import { courseEnroll, useCourse } from '@common/api/course';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { headerHeight } from '@styles/variables';
@@ -8,13 +8,28 @@ import { TuiViewer } from '@components/common/TuiEditor';
 import { useRouter } from 'next/router';
 import { Spinner } from '@components/ui';
 import { css, cx } from '@emotion/css';
+import { useDialog } from '@hooks/useDialog';
+import { useSnackbar } from '@hooks/useSnackbar';
 
 export function Course() {
   const router = useRouter();
   const { courseId } = router.query;
   const { data, isError } = useCourse(Number(courseId));
+  const dialog = useDialog();
+  const snackbar = useSnackbar();
 
-  const onHandleSubmit = () => {
+  const onHandleSubmit = async () => {
+    const dialogConfirmed = await dialog({
+      title: '수강 신청',
+      description: '해당 과정 수강을 신청하시겠습니까?',
+      confirmText: '신청하기',
+      cancelText: '취소하기'
+    });
+
+    if (dialogConfirmed) {
+      await courseEnroll(Number(courseId));
+      snackbar({ variant: 'success', message: '수강 신청이 완료되었습니다.' });
+    }
   };
 
   if (!data && isError) return (<div>NOT FOUND</div>);
@@ -65,7 +80,7 @@ export function Course() {
             variant="contained" color="primary"
             onClick={onHandleSubmit}
           >
-            수강하기
+            수강신청
           </Button>
         </TopSection>
         <div className="bottomSection"></div>

@@ -1,8 +1,8 @@
 import { BaseSyntheticEvent } from 'react';
-import { uploadCourse } from '@common/api/course';
 import { CourseUploadForm } from '@components/admin-center';
 import styles from '@styles/common.module.scss';
 import { Container } from '@mui/material';
+import { uploadCourse } from '@common/api/adm/course';
 
 export function CourseUpload() {
   const handleSubmit = ({ event, courseInput }: {

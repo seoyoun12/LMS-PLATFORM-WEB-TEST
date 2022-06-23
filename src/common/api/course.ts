@@ -1,4 +1,4 @@
-import { DELETE, GET, POST, PUT } from '@common/httpClient';
+import { GET } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { YN } from '@common/constant';
 import { FetchPaginationResponse } from 'types/fetch';
@@ -44,22 +44,6 @@ export interface CourseRes {
   }[];
 }
 
-export async function uploadCourse(courseInput: FormData) {
-  return await POST(`/course/adm`, courseInput, {
-    headers: {
-      'content-type': 'multipart/form-data'
-    }
-  });
-}
-
-export async function modifyCourse({ courseId, courseInput }: { courseId: number, courseInput: FormData }) {
-  return await PUT(`/course/adm/${courseId}`, courseInput, {
-    headers: {
-      'content-type': 'multipart/form-data'
-    }
-  });
-}
-
 export function useCourse(courseId?: number) {
   const { data, error, mutate } = useSWR<SWRResponse<CourseRes>>(courseId ? `/course/${courseId}` : null, GET);
   return {
@@ -70,10 +54,6 @@ export function useCourse(courseId?: number) {
   };
 }
 
-export function removeCourse({ courseId }: { courseId: number }) {
-  return DELETE(`/course/adm/${courseId}`);
-}
-
 export function useCourseList({ page, courseTitle, elementCnt, chapter }: {
   page: number,
   courseTitle?: string,
@@ -81,7 +61,7 @@ export function useCourseList({ page, courseTitle, elementCnt, chapter }: {
   chapter?: string
 }) {
   const { data, error } = useSWR<FetchPaginationResponse<CourseRes[]>>([
-    `/course/adm`, {
+    `/course`, {
       params: { page, courseTitle, elementCnt, chapter }
     }
   ], GET);
@@ -91,11 +71,3 @@ export function useCourseList({ page, courseTitle, elementCnt, chapter }: {
     error
   };
 }
-
-export const connectCourseToContent = async ({ courseSeq, contentSeq }: { courseSeq: number, contentSeq: number }) => {
-  return await POST(`/course/adm/link/content`, { courseSeq, contentSeq });
-};
-
-export const disConnectContent = async (courseSeq: number) => {
-  return await DELETE(`/course/adm/link/content/${courseSeq}`);
-};

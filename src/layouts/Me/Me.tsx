@@ -8,6 +8,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { css } from '@emotion/css';
 import styled from '@emotion/styled';
 import { useMyUser } from '@common/api/user';
+import { useEffect } from 'react';
 
 const myInfoList = [
   { name: '정보 수정', href: '/me/edit' },
@@ -16,6 +17,11 @@ const myInfoList = [
 
 export function Me() {
   const { user, error } = useMyUser();
+
+
+  useEffect(() => {
+    console.log(user);
+  }, []);
 
   if (error) return <div>error</div>;
   if (!user) return <Spinner />;
@@ -61,7 +67,7 @@ export function Me() {
             columns={{ xs: 1, sm: 1, md: 2, lg: 3 }}>
             {Array.from(Array(10)).map((_, idx) => (
               <Grid item xs={1} sm={1} md={1} lg={1} key={idx}>
-                <Link href="/course/1/content/1">
+                <Link href="/course/33/lesson/1">
                   <ContentCard maxWidth={250} minWidth={220} />
                 </Link>
               </Grid>

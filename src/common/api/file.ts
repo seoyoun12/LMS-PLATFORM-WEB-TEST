@@ -1,4 +1,4 @@
-import { POST } from '@common/httpClient';
+import { DELETE, POST, PUT } from '@common/httpClient';
 
 export const UPLOAD_URL = '/file/adm/multipart/upload';
 
@@ -50,4 +50,16 @@ export const initFileConfig = async ({ fileUploadType, fileName }: {
 
 export const completeFileUpload = (completeFileInput: CompleteFileInput) => {
   return POST(`/file/adm/multipart/complete`, completeFileInput);
+};
+
+export const uploadFile = () => {
+  return POST(`/file/adm/mu`);
+};
+
+export const updateFile = () => {
+  return PUT(``);
+};
+
+export const deleteFile = () => {
+  return DELETE(``);
 };

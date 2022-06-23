@@ -3,30 +3,10 @@ import Script from 'next/script';
 import * as React from 'react';
 import { Config, Ncplayer } from 'types/ncplayer';
 
-// https://excubyziwnor11320831.cdn.ntruss.com/hls/~6P5akOp~oAfEJ5KRQenoA__/resource/lesson/$2a$10$36Naa0lPsiSYyU3ne0kJOces51gktnHMEaM3MaDE9gFbPbQ331..mp4/index.m3u8
-
 const CDN_URL = 'https://dnkwhodfjmev10929056.cdn.ntruss.com/resource/js/ncplayer-1.2.5.umd.min-c808bb53.js';
-
-// const eventTypeList: { type: EventType, callback: keyof Omit<Props, 'config'> }[] = [
-//   { type: 'play', callback: 'onPlay' },
-//   { type: 'pause', callback: 'onPause' },
-//   { type: 'canplay', callback: 'onCanplay' },
-//   { type: 'error', callback: 'onError' },
-//   { type: 'playing', callback: 'onPlaying' },
-//   { type: 'ended', callback: 'onEnded' },
-//   { type: 'seeking', callback: 'onSeeking' },
-//   { type: 'seeked', callback: 'onSeeked' },
-//   { type: 'wating', callback: 'onWaiting' },
-//   { type: 'progress', callback: 'onProgress' },
-//   { type: 'timeupdate', callback: 'onTimeupdate' },
-//   { type: 'volumechange', callback: 'onVolumechange' },
-//   { type: 'blur', callback: 'onBlur' },
-//   { type: 'windowresize', callback: 'onWindowresize' },
-// ];
 
 type Props = {
   config: Config
-
   onReady?(player: Ncplayer): void;
   onPlay?(e: Event): void;
   onPause?(e: Event): void;
@@ -58,7 +38,7 @@ export function VideoPlayer(props: Props) {
     }
   }, [ props.config, props.onReady ]);
 
-  useEffect(() => {
+  React.useLayoutEffect(() => {
     if (!!window.ncplayer) {
       setNcPlayer();
     }
@@ -98,7 +78,7 @@ export function VideoPlayer(props: Props) {
   return (
     <>
       <Script
-        src="https://dnkwhodfjmev10929056.cdn.ntruss.com/resource/js/ncplayer-1.2.5.umd.min-c808bb53.js"
+        src={CDN_URL}
         strategy="lazyOnload"
         onLoad={handleOnload}
       />

@@ -1,7 +1,8 @@
 import styles from '@styles/common.module.scss';
 import { Container } from '@mui/material';
 import { ContentUploadForm } from '@layouts/AdminCenter';
-import { ContentInput, uploadContent } from '@common/api/content';
+import { ContentInput } from '@common/api/content';
+import { uploadContent } from '@common/api/adm/content';
 
 export function ContentUpload() {
   const handleSubmit = ({ contentInput }: {

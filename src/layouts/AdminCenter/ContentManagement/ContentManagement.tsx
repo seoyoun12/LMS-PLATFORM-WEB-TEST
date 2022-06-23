@@ -12,7 +12,7 @@ import { useDialog } from '@hooks/useDialog';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { ProductStatus } from '@common/api/course';
-import { useContentList } from '@common/api/content';
+import { useContentList } from '@common/api/adm/content';
 import { Spinner } from '@components/ui';
 
 const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [

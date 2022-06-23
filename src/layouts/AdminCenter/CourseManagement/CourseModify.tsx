@@ -1,5 +1,4 @@
 import { BaseSyntheticEvent } from 'react';
-import { modifyCourse, useCourse } from '@common/api/course';
 import { useRouter } from 'next/router';
 import { CourseUploadForm } from '@components/admin-center/CourseUploadForm';
 import { Tabs } from '@components/ui';
@@ -9,6 +8,7 @@ import { ContentList } from '@layouts/AdminCenter';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { EvaluationInfo } from '@layouts/AdminCenter/CourseManagement/EvaluationInfo';
 import { Forum } from '@layouts/AdminCenter/CourseManagement/Forum';
+import { modifyCourse, useCourse } from '@common/api/adm/course';
 
 enum TabValue {
   CourseInfo = 'course-info',

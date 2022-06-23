@@ -17,11 +17,13 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import {
   ExamLevel,
   QuestionType,
-  modifyQuestion,
   QuestionInput,
+} from '@common/api/question';
+import {
+  modifyQuestion,
   uploadQuestion,
   useQuestion
-} from '@common/api/question';
+} from '@common/api/adm/question';
 
 type FormType = {} & QuestionInput
 

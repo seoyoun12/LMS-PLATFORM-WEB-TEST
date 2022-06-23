@@ -1,4 +1,4 @@
-import { removeCourse, useCourseList } from '@common/api/course';
+import { removeCourse, useCourseList } from '@common/api/adm/course';
 import { Table } from '@components/ui';
 import { Button, Chip, TableBody, TableHead, Typography } from '@mui/material';
 import TableRow from '@mui/material/TableRow';

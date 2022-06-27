@@ -12,13 +12,14 @@ interface Props {
   children: ReactNode;
   register: UseFormRegister<any>;
   regName: string;
+  accept?: string | undefined;
 }
 
 function Label({ children }: { children: ReactNode }) {
   return (<Typography variant="subtitle2" className="subtitle">{children}</Typography>);
 }
 
-const FileUploaderRoot = ({ onFileChange, register, regName, children }: Props) => {
+const FileUploaderRoot = ({ onFileChange, register, regName, accept = undefined, children }: Props) => {
   const inputRef = useRef<HTMLDivElement>(null);
   const { onChange, onBlur, name, ref } = register(regName);
 
@@ -37,6 +38,7 @@ const FileUploaderRoot = ({ onFileChange, register, regName, children }: Props) 
             style={{ display: 'none' }}
             id="input-file"
             type="file"
+            accept={accept}
             multiple={true}
             onBlur={onBlur}
             name={name}

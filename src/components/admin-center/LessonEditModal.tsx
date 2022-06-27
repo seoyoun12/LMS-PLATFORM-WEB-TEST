@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import {
   Box, Chip,
@@ -16,8 +15,6 @@ import { ErrorMessage } from '@hookform/error-message';
 import { ContentType } from '@common/api/content';
 import { ChangeEvent, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
-import { grey } from '@mui/material/colors';
 import { CustomInputLabel } from '@components/ui/InputLabel';
 import { Modal } from '@components/ui';
 import { Lesson } from '@common/api/lesson';
@@ -26,9 +23,14 @@ import TextField from '@mui/material/TextField';
 import { ProductStatus } from '@common/api/course';
 import { useSnackbar } from '@hooks/useSnackbar';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
-import { S3Files } from 'types/file';
 import { useFileUpload } from '@hooks/useChunkFileUpload';
-import { FileUploadType } from '@common/api/file';
+import { FileType } from '@common/api/file';
+import { FileUploader } from '@components/ui/FileUploader';
+import { BbsType, deleteFile } from '@common/api/adm/file';
+import { S3Files } from 'types/file';
+import { convertBlobToFile } from '@utils/convertBlobToFile';
+import { GET } from '@common/httpClient';
+import axios from 'axios';
 
 interface Props {
   open: boolean;
@@ -37,10 +39,9 @@ interface Props {
   error?: any;
 }
 
-type FormType = {
-  min: number;
-  sec: number;
-} & Lesson
+interface FormType extends Lesson {
+  files: File[];
+}
 
 const contentTypeOptions = [
   { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
@@ -50,16 +51,16 @@ const contentTypeOptions = [
 
 const defaultValues = {
   contentType: ContentType.CONTENT_MP4,
-  status: ProductStatus.APPROVE
+  status: ProductStatus.APPROVE,
+  files: [],
 };
 
 export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   const snackbar = useSnackbar();
-  const [ s3Files, setS3Files ] = useState<S3Files | null>([]);
   const [ submitLoading, setSubmitLoading ] = useState(false);
-  const { fileInputRef, handleUpload } = useFileUpload({
-    fileUploadType: FileUploadType.LESSON_FILE
-  });
+  const [ isFileDelete, setIsFileDelete ] = useState(false);
+  const [ fileName, setFileName ] = useState<string | null>(null);
+  const { handleUpload } = useFileUpload();
   const {
     register,
     handleSubmit,
@@ -70,37 +71,38 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
 
   useEffect(() => {
     if (!!lesson && open) {
-      setS3Files(
-        lesson.s3Files.length
-          ? [ { name: lesson.s3Files[0].name, path: lesson.s3Files[0].path } ]
-          : []
-      );
       reset({ ...lesson });
+      setFileName(lesson?.s3Files[0]?.name || null);
     }
   }, [ lesson, open ]);
 
-  const uploadFile = (e: ChangeEvent) => {
-    e.preventDefault();
-    const files = (e.target as HTMLInputElement).files;
-    if (!files?.length) return null;
-    setS3Files([ { name: files[0].name, path: '' } ]);
+  const fileHandler = async (files: File[], lesson: Lesson) => {
+    const isFileUpload = files.length > 0;
+    if (isFileUpload) {
+      const file = files[0];
+      const fileName = files[0].name;
+      await handleUpload({
+        dataId: lesson.seq,
+        file,
+        fileName,
+        fileUploadType: FileType.LESSON_FILE
+      });
+    } else {
+      if (isFileDelete) {
+        await deleteFile({
+          fileTypeId: lesson.seq,
+          fileSeqList: lesson.s3Files.map(v => v.seq),
+          fileType: BbsType.TYPE_LESSON
+        });
+      }
+    }
   };
 
-  const onSubmit: SubmitHandler<FormType> = async (lesson) => {
-    const formData = new FormData();
-    formData.append('data', new Blob([
-        JSON.stringify({
-          ...lesson,
-          s3Files: s3Files
-        }) ],
-      { type: 'application/json' })
-    );
-
+  const onSubmit: SubmitHandler<FormType> = async ({ files, ...lesson }) => {
     try {
       setSubmitLoading(true);
-      await handleUpload(lesson.seq);
-      await modifyLesson({ lessonId: lesson.seq, formData });
-      setSubmitLoading(false);
+      await fileHandler(files, lesson);
+      await modifyLesson({ lessonId: lesson.seq, lesson });
       setSubmitLoading(false);
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
     } catch (e: any) {
@@ -109,9 +111,18 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
     handleClose(true);
   };
 
+  const handleFileChange = (e: ChangeEvent) => {
+    e.preventDefault();
+    const files = (e.target as HTMLInputElement).files;
+    if (!files?.length) return null;
+    setFileName(files[0].name);
+    setIsFileDelete(false);
+  };
+
   const removeFile = () => {
-    fileInputRef.current!.value = '';
-    setS3Files([]);
+    reset({ ...lesson, files: [] });
+    setFileName('');
+    setIsFileDelete(true);
   };
 
   if (error) return <div>error</div>;
@@ -171,32 +182,22 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
           </FormControl>
 
           <FormControl className="form-control">
-            <label htmlFor="input-file">
-              <input
-                style={{ display: 'none' }}
-                accept="video/mp4,video/mkv, video/x-m4v,video/*"
-                id="input-file"
-                type="file"
-                multiple={true}
-                ref={fileInputRef}
-                onChange={uploadFile}
-              />
-            </label>
-            <Label variant="body2">영상 업로드</Label>
-            <Button
-              color="neutral"
-              variant="outlined"
-              startIcon={<UploadOutlinedIcon htmlColor={grey[700]} />}
-              onClick={() => fileInputRef.current!.click()}
+            <FileUploader
+              register={register}
+              regName="files"
+              accept="video/mp4,video/mkv, video/x-m4v,video/*"
+              onFileChange={handleFileChange}
             >
-              파일 선택
-            </Button>
-            {!!s3Files?.length && <Chip
-              sx={{ mt: '8px' }}
-              icon={<OndemandVideoOutlinedIcon />}
-              label={s3Files[0].name}
-              onDelete={removeFile}
-            />}
+              <FileUploader.Label>파일 업로드</FileUploader.Label>
+            </FileUploader>
+            {fileName
+              ? <Chip
+                sx={{ mt: '8px' }}
+                icon={<OndemandVideoOutlinedIcon />}
+                label={fileName}
+                onDelete={removeFile} />
+              : null
+            }
           </FormControl>
 
           <FormControl className="form-control">

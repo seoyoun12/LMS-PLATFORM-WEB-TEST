@@ -2,7 +2,7 @@ import { DELETE, POST, PUT } from '@common/httpClient';
 
 export const UPLOAD_URL = '/file/adm/multipart/upload';
 
-export enum FileUploadType {
+export enum FileType {
   COURSE_IMAGE = 'RESOURCE_COURSE_IMAGE',
   COURSE_VIDEO = 'RESOURCE_COURSE_VIDEO',
   IMAGE = 'RESOURCE_IMAGE',
@@ -17,7 +17,7 @@ export enum FileUploadType {
   POST_REVIEW_FILE = 'RESOURCE_POST_REVIEW_FILE'
 }
 
-interface CompleteFileInput {
+export interface CompleteFileInput {
   encFileName: string;
   uploadRequestKey: string;
   etagList: {
@@ -29,37 +29,3 @@ interface CompleteFileInput {
   fileOriginalName: string;
 }
 
-export const initFileConfig = async ({ fileUploadType, fileName }: {
-  fileUploadType: FileUploadType,
-  fileName: string
-}): Promise<{
-  encFileName: string,
-  uploadRequestKey: string
-}> => {
-  const fileContentType = 'video/mp4';
-
-  const { data } = await POST(`/file/adm/multipart/init`, {
-      fileContentType,
-      fileName,
-      uploadType: fileUploadType
-    }
-  );
-
-  return data;
-};
-
-export const completeFileUpload = (completeFileInput: CompleteFileInput) => {
-  return POST(`/file/adm/multipart/complete`, completeFileInput);
-};
-
-export const uploadFile = () => {
-  return POST(`/file/adm/mu`);
-};
-
-export const updateFile = () => {
-  return PUT(``);
-};
-
-export const deleteFile = () => {
-  return DELETE(``);
-};

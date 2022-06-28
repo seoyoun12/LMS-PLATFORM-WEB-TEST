@@ -6,6 +6,8 @@ export { CourseUpload } from './CourseManagement/CourseUpload';
 export { CourseModify } from './CourseManagement/CourseModify';
 export { ContentList } from './CourseManagement/ContentList';
 export { EvaluationInfo } from './CourseManagement/EvaluationInfo';
+export { Library } from './CourseManagement/Library';
+
 
 export { ContentManagement } from './ContentManagement/ContentManagement';
 export { ContentUpload } from './ContentManagement/ContentUpload';

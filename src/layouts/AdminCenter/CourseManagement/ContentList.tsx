@@ -17,7 +17,7 @@ const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' |
   { name: 'ID', align: 'left' },
   { name: '콘텐츠명', align: 'right' },
   { name: '콘텐츠 유형', align: 'right' },
-  { name: '새성 날짜', align: 'right' },
+  { name: '생성 날짜', align: 'right' },
   { name: '상태', align: 'right' },
 ];
 

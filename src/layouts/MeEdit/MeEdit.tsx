@@ -17,7 +17,7 @@ export function MeEdit() {
 
   useEffect(() => {
     (async () => {
-      const { data } = await getMyUser();
+      const data = await getMyUser();
       setEmailChecked(data.emailYn === YN.YES);
       setSmsChecked(data.smsYn === YN.YES);
       setNameInput(data.name);

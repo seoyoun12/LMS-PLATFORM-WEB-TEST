@@ -29,7 +29,7 @@ export function useForumList({ courseId, page, elementCnt }: {
   courseId: number, page: number, elementCnt?: number
 }) {
   const key = courseId
-    ? [ `/forum/tutor`, { params: { courseSeq: courseId, page, elementCnt } } ]
+    ? [`/forum/tutor`, { params: { courseSeq: courseId, page, elementCnt } }]
     : null;
 
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Forum[]>>>(key, GET);

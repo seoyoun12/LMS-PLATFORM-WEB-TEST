@@ -1,7 +1,7 @@
 import { GET, POST } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { YN } from '@common/constant';
-import { FetchPaginationResponse } from 'types/fetch';
+import { FetchPaginationResponse, PaginationResult } from 'types/fetch';
 import { S3Files } from 'types/file';
 import { ContentRes } from '@common/api/content';
 import { Lesson } from '@common/api/lesson';

@@ -4,13 +4,17 @@ import { YN } from '@common/constant';
 import { FetchPaginationResponse } from 'types/fetch';
 import { S3Files } from 'types/file';
 import { ContentRes } from '@common/api/content';
+import { Lesson } from '@common/api/lesson';
 
 export enum ProductStatus {
   APPROVE = 1,
   REJECT = -1,
 }
 
+export type CourseInput = Partial<CourseRes>;
+
 export interface CourseRes {
+  content: ContentRes;
   content1: string;
   courseFile: string;
   courseName: string;
@@ -21,6 +25,7 @@ export interface CourseRes {
   fullScore: number;
   lessonTerm: number;
   lessonTime: number;
+  lessons: Lesson[];
   limitPeople: number;
   limitPeopleYn: string;
   limitTotalScore: number;
@@ -32,7 +37,6 @@ export interface CourseRes {
   seq: number;
   status: ProductStatus;
   s3Files: S3Files;
-  content: ContentRes;
 
   // 임시용 타입
   curriculum: {
@@ -47,9 +51,8 @@ export interface CourseRes {
 export function useCourse(courseId?: number) {
   const { data, error, mutate } = useSWR<SWRResponse<CourseRes>>(courseId ? `/course/${courseId}` : null, GET);
   return {
-    data: data?.data,
-    isLoading: !data && !error,
-    isError: error,
+    course: data?.data,
+    courseError: error,
     mutate
   };
 }

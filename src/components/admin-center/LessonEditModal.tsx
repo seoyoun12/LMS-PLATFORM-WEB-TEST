@@ -27,10 +27,6 @@ import { useFileUpload } from '@hooks/useChunkFileUpload';
 import { FileType } from '@common/api/file';
 import { FileUploader } from '@components/ui/FileUploader';
 import { BbsType, deleteFile } from '@common/api/adm/file';
-import { S3Files } from 'types/file';
-import { convertBlobToFile } from '@utils/convertBlobToFile';
-import { GET } from '@common/httpClient';
-import axios from 'axios';
 
 interface Props {
   open: boolean;
@@ -66,7 +62,8 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
     handleSubmit,
     formState: { errors },
     control,
-    reset
+    reset,
+    resetField
   } = useForm<FormType>({ defaultValues });
 
   useEffect(() => {
@@ -91,37 +88,40 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
       if (isFileDelete) {
         await deleteFile({
           fileTypeId: lesson.seq,
+          fileType: BbsType.TYPE_LESSON,
           fileSeqList: lesson.s3Files.map(v => v.seq),
-          fileType: BbsType.TYPE_LESSON
         });
       }
     }
   };
 
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...lesson }) => {
+    setSubmitLoading(true);
+
     try {
-      setSubmitLoading(true);
       await fileHandler(files, lesson);
       await modifyLesson({ lessonId: lesson.seq, lesson });
       setSubmitLoading(false);
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
     } catch (e: any) {
       snackbar(e.message || e.data?.message);
+      setSubmitLoading(false);
     }
     handleClose(true);
   };
 
   const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();
+
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setFileName(files[0].name);
     setIsFileDelete(false);
   };
 
-  const removeFile = () => {
-    reset({ ...lesson, files: [] });
-    setFileName('');
+  const handleDeleteFile = () => {
+    resetField('files');
+    setFileName(null);
     setIsFileDelete(true);
   };
 
@@ -195,7 +195,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                 sx={{ mt: '8px' }}
                 icon={<OndemandVideoOutlinedIcon />}
                 label={fileName}
-                onDelete={removeFile} />
+                onDelete={handleDeleteFile} />
               : null
             }
           </FormControl>

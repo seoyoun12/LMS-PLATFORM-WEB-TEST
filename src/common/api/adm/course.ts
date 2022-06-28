@@ -1,30 +1,21 @@
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { FetchPaginationResponse } from 'types/fetch';
-import { CourseRes } from '@common/api/course';
+import { CourseInput, CourseRes } from '@common/api/course';
 
-export async function uploadCourse(courseInput: FormData) {
-  return await POST(`/course/adm`, courseInput, {
-    headers: {
-      'content-type': 'multipart/form-data'
-    }
-  });
+export async function uploadCourse(courseInput: CourseInput) {
+  return await POST(`/course/adm`, courseInput);
 }
 
-export async function modifyCourse({ courseId, courseInput }: { courseId: number, courseInput: FormData }) {
-  return await PUT(`/course/adm/${courseId}`, courseInput, {
-    headers: {
-      'content-type': 'multipart/form-data'
-    }
-  });
+export async function modifyCourse({ courseId, courseInput }: { courseId: number, courseInput: CourseInput }) {
+  return await PUT(`/course/adm/${courseId}`, courseInput);
 }
 
 export function useCourse(courseId?: number) {
   const { data, error, mutate } = useSWR<SWRResponse<CourseRes>>(courseId ? `/course/${courseId}` : null, GET);
   return {
-    data: data?.data,
-    isLoading: !data && !error,
-    isError: error,
+    course: data?.data,
+    courseError: error,
     mutate
   };
 }

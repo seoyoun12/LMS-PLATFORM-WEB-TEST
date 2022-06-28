@@ -8,6 +8,5 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="ncplayer-1.2.5.umd.min-c808bb53" level="application" />
   </component>
 </module>

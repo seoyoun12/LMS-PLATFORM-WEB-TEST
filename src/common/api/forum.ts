@@ -2,19 +2,13 @@ import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { PaginationResult } from 'types/fetch';
 import { S3Files } from 'types/file';
+import { ProductStatus } from '@common/api/course';
 
 export interface ForumInput {
-  courseSeq?: number;
-  createdDtime?: string;
-  modifiedDtime?: string;
-  regIp?: string;
-  seq?: number;
-  status?: number;
-  subject?: string;
-  updIp?: string;
-  userSeq?: number;
   content?: string;
-  s3Files?: S3Files;
+  courseSeq?: number;
+  status?: ProductStatus.APPROVE,
+  subject?: string;
 }
 
 export interface Forum {
@@ -27,6 +21,7 @@ export interface Forum {
   subject: string;
   updIp: string;
   userSeq: number;
+  content: string;
   s3Files: S3Files;
 }
 
@@ -56,11 +51,11 @@ export function useForum(forumId: number | null) {
   };
 }
 
-export function uploadForum(forumInput: FormData) {
+export function uploadForum(forumInput: ForumInput) {
   return POST(`/forum/tutor`, forumInput);
 }
 
-export function modifyForum(forumId: number, forumInput: FormData) {
+export function modifyForum(forumId: number, forumInput: ForumInput) {
   return PUT(`/forum/tutor/${forumId}`, forumInput);
 }
 

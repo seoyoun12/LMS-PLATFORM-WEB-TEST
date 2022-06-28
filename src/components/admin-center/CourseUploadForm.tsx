@@ -1,6 +1,6 @@
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor as EditorType } from '@toast-ui/react-editor';
-import { BaseSyntheticEvent, ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   Box,
   Button, Chip, FormControl,
@@ -15,80 +15,83 @@ import { TuiEditor } from '@components/common/TuiEditor';
 import styled from '@emotion/styled';
 import { ProductStatus, CourseRes } from '@common/api/course';
 import { YN } from '@common/constant';
-import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
-import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
-import { grey } from '@mui/material/colors';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { ContentType } from '@common/api/content';
 import * as React from 'react';
-import { S3Files } from 'types/file';
 import { css, cx } from '@emotion/css';
 import { ErrorMessage } from '@hookform/error-message';
-
-const defaultValues = {
-  contentType: ContentType.CONTENT_MP4,
-  status: ProductStatus.APPROVE,
-  displayYn: YN.YES
-};
+import { FileUploader } from '@components/ui/FileUploader';
+import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 
 interface Props {
   mode?: 'upload' | 'modify',
   course?: CourseRes,
-  onHandleSubmit: ({ event, courseInput, courseId }: {
-    event?: BaseSyntheticEvent,
-    courseInput: FormData,
+  onHandleSubmit: ({ courseInput, files, courseId }: {
+    courseInput: CourseRes;
+    files: File[];
+    isFileDelete: boolean;
     courseId?: number
-  }) => void,
+  }) => void
 }
 
+interface FormType extends CourseRes {
+  files: File[];
+}
+
+const defaultValues = {
+  contentType: ContentType.CONTENT_MP4,
+  status: ProductStatus.APPROVE,
+  displayYn: YN.YES,
+  files: []
+};
+
 export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Props) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<EditorType>(null);
-  const [ thumbnails, setThumbnails ] = useState<S3Files | null>([]);
+  const [ isFileDelete, setIsFileDelete ] = useState(false);
+  const [ fileName, setFileName ] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    reset
-  } = useForm<CourseRes>({ defaultValues });
+    reset,
+    resetField
+  } = useForm<FormType>({ defaultValues });
 
   useEffect(() => {
     if (mode === 'modify' && !!course) {
       reset({ ...course });
-      setThumbnails(
-        course.s3Files.length
-          ? [ { name: course.s3Files[0].name, path: course.s3Files[0].path } ]
-          : []
-      );
+      setFileName(course.s3Files[0]?.name || null);
     }
   }, [ mode, course ]);
 
-  const uploadFile = (e: ChangeEvent) => {
+  const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();
 
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
-    setThumbnails([ { name: files[0].name, path: '' } ]);
+    setFileName(files[0].name);
+    setIsFileDelete(false);
   };
 
-  const onSubmit: SubmitHandler<CourseRes> = async (course, event) => {
+  const handleDeleteFile = () => {
+    resetField('files');
+    setFileName(null);
+    setIsFileDelete(true);
+  };
+
+  const onSubmit: SubmitHandler<FormType> = async ({ files, ...course }, event) => {
+    event?.preventDefault();
     if (!editorRef.current) return;
 
-    const files = fileInputRef.current?.files;
-    const thumbnail = !!files?.length ? files[0] : new Blob([]);
-    const fileName = !!files?.length ? files[0].name : undefined;
     const markdownContent = editorRef.current.getInstance().getMarkdown();
-    const courseData = {
+    const courseInput = {
       ...course,
       content1: markdownContent,
     };
 
-    const formData = new FormData();
-    formData.append('courseFileOriginal', thumbnail, fileName);
-    formData.append('data', new Blob([ JSON.stringify(courseData) ], { type: 'application/json' }));
-    onHandleSubmit({ event, courseInput: formData, courseId: course.seq });
+    onHandleSubmit({ courseInput, courseId: course.seq, files, isFileDelete });
   };
 
   return (
@@ -121,32 +124,23 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             <ErrorMessage errors={errors} name="courseSubName" as={<FormHelperText error />} />
           </FormControl>
           <div className="thumbnail-uploader">
-            <Typography variant="subtitle2" className="subtitle">썸네일 이미지</Typography>
-            <label htmlFor="input-file">
-              <input
-                style={{ display: 'none' }}
-                id="input-file"
-                type="file"
-                multiple={true}
-                ref={fileInputRef}
-                onChange={uploadFile}
-              />
-              <Button
-                color="neutral"
-                variant="outlined"
-                startIcon={<UploadOutlinedIcon htmlColor={grey[700]} />}
-                onClick={() => fileInputRef.current!.click()}
-              >
-                파일 선택
-              </Button>
-            </label>
+            <FileUploader
+              register={register}
+              regName="files"
+              onFileChange={handleFileChange}
+            >
+              <FileUploader.Label>썸네일 이미지</FileUploader.Label>
+            </FileUploader>
 
-            {!!thumbnails?.length && <Chip
-              className={chipStyles}
-              icon={<ImageOutlinedIcon />}
-              label={thumbnails[0].name}
-              onDelete={() => setThumbnails([])}
-            />}
+            <Typography variant="subtitle2" className="subtitle">썸네일 이미지</Typography>
+            {fileName
+              ? <Chip
+                sx={{ mt: '8px' }}
+                icon={<OndemandVideoOutlinedIcon />}
+                label={fileName}
+                onDelete={handleDeleteFile} />
+              : null
+            }
           </div>
         </InputContainer>
 

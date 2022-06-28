@@ -1,6 +1,7 @@
 import useSWR, { SWRResponse } from 'swr';
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import { Lesson, LessonInput } from '@common/api/lesson';
+import { BbsType, deleteFile } from '@common/api/adm/file';
 
 export function useLessonList(contentId: number) {
   const { data, error, mutate } = useSWR<SWRResponse<Lesson[]>>(contentId ? `/lesson/adm/${contentId}` : null, GET);
@@ -28,15 +29,11 @@ export function uploadLessons({ contentId, lessonInput }: {
   return POST(`/lesson/adm/${contentId}`, lessonInput);
 }
 
-export function modifyLesson({ lessonId, formData }: {
+export async function modifyLesson({ lessonId, lesson }: {
   lessonId: number,
-  formData: FormData
+  lesson: Lesson,
 }) {
-  return PUT(`/lesson/adm/modification/${lessonId}`, formData, {
-    headers: {
-      'content-type': 'multipart/form-data'
-    }
-  });
+  return PUT(`/lesson/adm/modification/${lessonId}`, lesson);
 }
 
 export async function removeLesson(lessonId: number) {

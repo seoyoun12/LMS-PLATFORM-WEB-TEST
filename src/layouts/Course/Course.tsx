@@ -14,7 +14,7 @@ import { useSnackbar } from '@hooks/useSnackbar';
 export function Course() {
   const router = useRouter();
   const { courseId } = router.query;
-  const { data, isError } = useCourse(Number(courseId));
+  const { course, courseError } = useCourse(Number(courseId));
   const dialog = useDialog();
   const snackbar = useSnackbar();
 
@@ -32,22 +32,22 @@ export function Course() {
     }
   };
 
-  if (!data && isError) return (<div>NOT FOUND</div>);
-  if (!data) return <Spinner />;
+  if (courseError) return (<div>NOT FOUND</div>);
+  if (!course) return <Spinner />;
   return (
     <Container className={cx(styles.globalContainer, containerStyle)}>
       <MainSection>
         <ThumbnailImg>
-          {data.courseFile ? <Image
+          {course.courseFile ? <Image
             className="thumbnailImg"
-            src={data.courseFile}
+            src={course.courseFile}
             layout="responsive"
             width="100%"
             height="56.25"
           /> : null}
         </ThumbnailImg>
 
-        <TuiViewer initialValue={data.content1} />
+        <TuiViewer initialValue={course.content1} />
 
         <CurriculumContainer>
           <Typography
@@ -56,20 +56,20 @@ export function Course() {
           >
             커리큘럼
           </Typography>
-          {/*<CurriculumAccordion curriculum={data.curriculum}/>*/}
+          {/*<CurriculumAccordion curriculum={course.curriculum}/>*/}
         </CurriculumContainer>
       </MainSection>
 
       <StickySideBar>
         <TopSection>
           <Typography variant="subtitle2">
-            {data.courseName}
+            {course.courseName}
           </Typography>
           <Typography
             variant="h6"
             className={fontWeightBold}
           >
-            {data.courseSubName}
+            {course.courseSubName}
           </Typography>
           <Divider
             light

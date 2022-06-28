@@ -1,34 +1,22 @@
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
-import useSWR from 'swr';
+import useSWR, { SWRResponse } from 'swr';
+import { S3Files } from 'types/file';
+import { Lesson } from '@common/api/lesson';
+import { CourseRes } from '@common/api/course';
 
 export enum YN {
   YES = 'YES',
   NO = 'NO'
 }
 
-export interface MyUser {
-  message: string;
-  status: number;
-  success: boolean;
-  data: {
-    createdAt: string;
-    updatedAt: string;
-    status: number;
-    seq: number;
-    username: string;
-    name: string;
-    birth: string;
-    gender: string;
-    phone: string;
-    emailYn: string;
-    smsYn: string;
-    pushToken: string;
-    lastPwUpdDtime: string;
-    regCategory: string;
-    loginFailedCount: number;
-    failedYn: string;
-
-  };
+export interface MyUser extends User {
+  accountNonExpired: boolean;
+  accountNonLocked: boolean;
+  authorities: { authority: string; }[];
+  credentialsNonExpired: boolean;
+  enabled: boolean;
+  learningCourses: CourseRes[];
+  pushToken: string;
 }
 
 export interface User {
@@ -65,7 +53,7 @@ export async function getMyUser(): Promise<MyUser> {
 }
 
 export function useMyUser() {
-  const { data, error } = useSWR<MyUser>(`/user/myinfo`, GET);
+  const { data, error } = useSWR<SWRResponse<MyUser>>(`/user/myinfo`, GET);
   return {
     user: data?.data,
     error

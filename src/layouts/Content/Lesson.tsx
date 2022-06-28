@@ -1,37 +1,63 @@
-import { Container } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import { headerHeight } from '@styles/variables';
-import { useLesson } from '@common/api/adm/lesson';
-import { Spinner } from '@components/ui';
+import { Spinner, Tabs } from '@components/ui';
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { VideoPlayer } from '@components/common';
+import { Link, VideoPlayer } from '@components/common';
+import { useCourse } from '@common/api/course';
+import { grey } from '@mui/material/colors';
+import PlayCircleOutlinedIcon from '@mui/icons-material/PlayCircleOutlined';
+import { totalSecToMinSec } from '@utils/totalSecToMinSec';
+
+const tabsConfig = [
+  { label: '커리큘럼', value: 'curriculum' },
+  { label: '수업자료', value: 'stuff' },
+  { label: '소식', value: 'notice' },
+];
 
 export function Lesson() {
   const router = useRouter();
-  const { lesson, lessonError } = useLesson(1);
-  console.log(router);
+  const { query } = router;
+  const { courseId, lessonId } = query;
+  const { course, courseError } = useCourse(Number(courseId));
 
-  React.useEffect(() => {
-    console.log(lesson);
-  }, []);
-
-  if (lessonError) return <div>error</div>;
-  if (!lesson) return <Spinner />;
+  if (courseError) return <div>error</div>;
+  if (!course) return <Spinner />;
+  console.log(course);
   return (
     <ContentContainer maxWidth={false}>
       <MainSection>
         <VideoPlayerContainer>
           <VideoPlayer
             config={{
-              playlist: 'https://excubyziwnor11320831.cdn.ntruss.com/hls/~6P5akOp~oAfEJ5KRQenoA__/resource/lesson/$2a$10$36Naa0lPsiSYyU3ne0kJOces51gktnHMEaM3MaDE9gFbPbQ331..mp4/index.m3u8'
+              playlist: course.lessons.filter(lesson => lesson.seq === Number(lessonId))[0].s3Files[0].path,
+              autostart: false
             }}
           />
         </VideoPlayerContainer>
       </MainSection>
 
       <StickySideBar>
-        side bar
+        <TabMenu tabsConfig={tabsConfig} showBorderBottom={false} />
+        {course.lessons.map(lesson => {
+            const { min, sec } = totalSecToMinSec(lesson.totalTime);
+            return (
+              <MenuCellLink
+                className={Number(lessonId) === lesson.seq ? 'active' : ''}
+                key={lesson.seq}
+                href={`/course/${course.seq}/lesson/${lesson.seq}`}
+                color={grey[900]}
+              >
+                <LessonTitle variant="body1">{lesson.lessonNm}</LessonTitle>
+                <LessonInfo>
+                  <PlayCircleOutlinedIcon fontSize="small" htmlColor={grey[500]} />
+                  <Typography className="typo" variant="body2" color={grey[500]}>{min}:{sec}</Typography>
+                </LessonInfo>
+              </MenuCellLink>
+            );
+          }
+        )}
       </StickySideBar>
     </ContentContainer>
   );
@@ -61,7 +87,6 @@ const StickySideBar = styled.aside`
   flex-direction: column;
   background-color: #fff;
   z-index: 1;
-  box-shadow: 0 2px 6px 0 rgb(0 0 0 / 10%), 0 0 1px 0 rgb(0 0 0 / 32%);
   flex-shrink: 0;
   overflow: hidden;
 `;
@@ -70,4 +95,33 @@ const VideoPlayerContainer = styled.div`
   height: calc(100vh - 160px);
 `;
 
+const TabMenu = styled(Tabs)`
+  padding-bottom: 30px;
+`;
 
+const LessonTitle = styled(Typography)`
+
+`;
+
+const MenuCellLink = styled(Link)`
+  display: block;
+  padding: 12px;
+  min-height: 36px;
+  cursor: pointer;
+
+  &.active {
+    ${LessonTitle} {
+      font-weight: 500;
+    }
+  }
+`;
+
+const LessonInfo = styled.div`
+  display: flex;
+  align-items: center;
+  padding-top: 4px;
+
+  .typo {
+    margin-left: 4px;
+  }
+`;

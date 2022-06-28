@@ -65,10 +65,10 @@ export function Me() {
             rowSpacing={4}
             columnSpacing={2}
             columns={{ xs: 1, sm: 1, md: 2, lg: 3 }}>
-            {Array.from(Array(10)).map((_, idx) => (
-              <Grid item xs={1} sm={1} md={1} lg={1} key={idx}>
-                <Link href="/course/33/lesson/1">
-                  <ContentCard maxWidth={250} minWidth={220} />
+            {user.learningCourses.map((res) => (
+              <Grid item xs={1} sm={1} md={1} lg={1} key={res.seq}>
+                <Link href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}>
+                  <ContentCard maxWidth={250} minWidth={220} title={res.courseName} />
                 </Link>
               </Grid>
             ))}

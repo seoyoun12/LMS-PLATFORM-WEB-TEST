@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { ContentConnectModal } from '@components/admin-center/ContentConnectModal';
 import { useCourse } from '@common/api/course';
 import { ContentTypeHuman } from '@common/api/content';
+import { Link } from '@components/common';
 
 const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
   { name: 'ID', align: 'left' },
@@ -24,15 +25,15 @@ export function ContentList() {
   const router = useRouter();
   const [ openModal, setOpenModal ] = useState(false);
   const { courseId } = router.query;
-  const { data, isError, mutate } = useCourse(Number(courseId));
+  const { course, courseError, mutate } = useCourse(Number(courseId));
 
   const handleCloseModal = async () => {
     setOpenModal(false);
     await mutate();
   };
 
-  if (isError) return <div>error</div>;
-  if (!data) return <Spinner />;
+  if (courseError) return <div>error</div>;
+  if (!course) return <Spinner />;
   return (
     <Container className={styles.globalContainer}>
       <ContentConnectButton
@@ -55,22 +56,24 @@ export function ContentList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.content
+          {course.content
             ? <TableRow hover>
               <TableCell align="left">
-                {data.content.seq}
+                {course.content.seq}
               </TableCell>
               <TableCell align="right">
-                {data.content.contentName}
+                <Link href={`/admin-center/content/modify/${course.content.seq}`}>
+                  {course.content.contentName}
+                </Link>
               </TableCell>
               <TableCell align="right">
-                {ContentTypeHuman[data.content.contentType]}
+                {ContentTypeHuman[course.content.contentType]}
               </TableCell>
               <TableCell align="right">
-                {data.content.createdDtime}
+                {course.content.createdDtime}
               </TableCell>
               <TableCell align="right">
-                {data.content.status}
+                {course.content.status}
               </TableCell>
             </TableRow>
             : null

@@ -1,5 +1,6 @@
 import { DELETE, POST, PUT } from '@common/httpClient';
 import { CompleteFileInput, FileType } from '@common/api/file';
+import { setFileConfig } from '@utils/setFileConfig';
 
 
 // TODO: FileType 값이랑 호환하게 할 수는 없나?
@@ -39,10 +40,14 @@ export const completeFileUpload = (completeFileInput: CompleteFileInput) => {
 };
 
 export const uploadFile = ({ fileType, fileTypeId, files }: {
-  fileType: FileType;
+  fileType: BbsType;
   fileTypeId: number;
-  files: FormData
+  files: File[]
 }) => {
+  const formData = new FormData();
+  const { file, fileName } = setFileConfig(files);
+  formData.append('files', file, fileName);
+
   return POST(`/file/adm/${fileType}/${fileTypeId}`, files);
 };
 

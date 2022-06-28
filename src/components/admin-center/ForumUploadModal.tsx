@@ -13,12 +13,12 @@ import styled from '@emotion/styled';
 import { Modal } from '@components/ui';
 import TextField from '@mui/material/TextField';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { ForumInput, modifyForum, uploadForum, useForum } from '@common/api/forum';
+import { Forum, modifyForum, uploadForum, useForum } from '@common/api/forum';
 import { ProductStatus } from '@common/api/course';
-import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { css } from '@emotion/css';
-import { S3Files } from 'types/file';
 import { FileUploader } from '@components/ui/FileUploader';
+import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
+import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
 
 interface Props {
   open: boolean;
@@ -28,21 +28,21 @@ interface Props {
   mode?: 'modify' | 'upload';
 }
 
-type FormType = {
+interface FormType extends Forum {
   files: File[];
-} & ForumInput
+}
 
 const defaultValues = {
   status: ProductStatus.APPROVE,
   files: [],
-  s3Files: []
 };
 
 export function ForumUploadModal({ open, onClose, forumId, courseId, mode = 'upload' }: Props) {
   const snackbar = useSnackbar();
   const { forum, forumError, mutate } = useForum(Number(forumId));
   const [ submitLoading, setSubmitLoading ] = useState(false);
-  const [ s3Files, setS3Files ] = useState<S3Files | null>([]);
+  const [ isFileDelete, setIsFileDelete ] = useState(false);
+  const [ fileName, setFileName ] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -50,20 +50,16 @@ export function ForumUploadModal({ open, onClose, forumId, courseId, mode = 'upl
     control,
     reset,
     resetField,
-    watch
   } = useForm<FormType>({ defaultValues });
-  const watchFiles = watch('files');
   const loading = (open && mode === 'modify' && !forum);
-  const fileName = (watchFiles?.length && watchFiles[0].name) || (s3Files?.length && s3Files[0].name);
 
   useEffect(() => {
     if (open) {
       if (mode === 'modify' && forum) {
-        setS3Files(forum.s3Files);
         reset({ ...forum });
+        setFileName(forum.s3Files[0]?.name || null);
       } else {
         reset({ ...defaultValues });
-        setS3Files([]);
       }
     }
   }, [ mode, forum, open ]);
@@ -73,31 +69,48 @@ export function ForumUploadModal({ open, onClose, forumId, courseId, mode = 'upl
 
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
-    // setFileName(files[0].name);
+    setFileName(files[0].name);
+    setIsFileDelete(false);
   };
 
-  const onDeleteFile = () => {
+  const handleDeleteFile = () => {
     resetField('files');
-    setS3Files([]);
+    setFileName(null);
+    setIsFileDelete(true);
   };
 
-  const onSubmit: SubmitHandler<FormType> = async (forum) => {
-    const inputParams = { ...forum, courseSeq: courseId, s3Files };
-    setSubmitLoading(true);
+  const fileHandler = async (files: File[], forum: Forum) => {
+    const isFileUpload = files.length > 0;
+    if (isFileUpload) {
+      // TODO: 이미 존재하는 포럼의 파일을 수정하는 것이 아니라 새로 생성하는 것이라면? 어떤 seq값을 넘겨야할까?
+      await uploadFile({
+        fileTypeId: forum.seq,
+        fileType: BbsType.TYPE_FORUM,
+        files
+      });
+    } else {
+      if (isFileDelete) {
+        await deleteFile({
+          fileTypeId: forum.seq,
+          fileType: BbsType.TYPE_FORUM,
+          fileSeqList: forum.s3Files.map(v => v.seq),
+        });
+      }
+    }
+  };
 
-    const files = forum.files;
-    const file = !!files?.length ? files[0] : new Blob([]);
-    const fileName = !!files?.length ? files[0].name : undefined;
-    const formData = new FormData();
-    formData.append('files', file, fileName);
-    formData.append('data', new Blob([ JSON.stringify(inputParams) ], { type: 'application/json' }));
+  const onSubmit: SubmitHandler<FormType> = async ({ files, ...forum }) => {
+    const inputParams = { ...forum, courseSeq: courseId };
+    setSubmitLoading(true);
 
     try {
       if (mode === 'upload') {
-        await uploadForum(formData);
+        const forum = await uploadForum(inputParams);
+        await fileHandler(files, forum);
       } else {
         if (forumId) {
-          await modifyForum(forumId, formData);
+          await modifyForum(forumId, inputParams);
+          await fileHandler(files, forum);
         }
       }
 
@@ -144,13 +157,13 @@ export function ForumUploadModal({ open, onClose, forumId, courseId, mode = 'upl
             >
               <FileUploader.Label>파일 업로드</FileUploader.Label>
             </FileUploader>
-            {watchFiles?.length || s3Files?.length
+            {fileName
               ? <Chip
-                className={chipStyles}
-                icon={<ImageOutlinedIcon />}
+                sx={{ mt: '8px' }}
+                icon={<OndemandVideoOutlinedIcon />}
                 label={fileName}
-                onDelete={onDeleteFile}
-              /> : null
+                onDelete={handleDeleteFile} />
+              : null
             }
           </FormControl>
 
@@ -224,8 +237,4 @@ const FormContainer = styled.div`
       }
     }
   }
-`;
-
-const chipStyles = css`
-  margin-top: 8px;
 `;

@@ -1,35 +1,42 @@
-import { Button, Chip, Container, TableBody, TableHead, Typography } from '@mui/material';
-import styles from '@styles/common.module.scss';
+import { removeCourse, useCourseList } from '@common/api/adm/course';
 import { Table } from '@components/ui';
+import { Button, Chip, TableBody, TableHead, Typography } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import { useEffect, useState } from 'react';
 import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
-import dateFormat from 'dateformat';
-import * as React from 'react';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
+import * as React from 'react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { ProductStatus } from '@common/api/course';
-import { useContentList } from '@common/api/content';
+import styles from '@styles/common.module.scss';
+import { Container } from '@mui/material';
+import dateFormat from 'dateformat';
+import { YN } from '@common/constant';
+import { mutate } from 'swr';
 import { Spinner } from '@components/ui';
+import { css } from '@emotion/css';
 
 const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
-  { name: 'ID', align: 'left' },
-  { name: '콘텐츠명', align: 'right' },
+  { name: 'seq', align: 'left' },
+  { name: '과정명', align: 'right' },
   { name: '생성 날짜', align: 'right' },
+  { name: '노출 여부', align: 'right' },
   { name: '상태', align: 'right' },
+  { name: '수강생', align: 'right' },
+  { name: '수료생', align: 'right' },
 ];
 
-export function Content() {
+export function CourseManagement() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const router = useRouter();
   const [ page, setPage ] = useState(0);
-  const { data, error } = useContentList({ page });
+  const { data, error } = useCourseList({ page });
 
   useEffect(() => {
+    console.log('useEffect Triggered');
     const { page } = router.query;
     setPage(!isNaN(Number(page)) ? Number(page) : 0);
   }, [ router ]);
@@ -43,18 +50,18 @@ export function Content() {
     });
   };
 
-  const onRemoveCourse = async (contentId: number) => {
+  const onRemoveCourse = async (courseId: number) => {
     try {
       const dialogConfirmed = await dialog({
-        title: '콘텐츠 삭제하기',
+        title: '과정 삭제하기',
         description: '정말로 삭제하시겠습니까?',
         confirmText: '삭제하기',
         cancelText: '취소'
       });
       if (dialogConfirmed) {
-        // await removeCourse({ contentId });
+        await removeCourse({ courseId });
         snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-        // await mutate([ `/content/adm`, { params: { page } } ]);
+        await mutate([ `/course/adm`, { params: { page } } ]);
       }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -71,7 +78,7 @@ export function Content() {
           mb: '12px',
           fontWeight: 700
         }}
-      >콘텐츠 목록</Typography>
+      >과정 목록</Typography>
       <Table
         pagination={true}
         totalNum={data.totalElements}
@@ -82,7 +89,7 @@ export function Content() {
         <TableHead>
           <TableRow>
             {headRows.map(({ name, align }) =>
-              <TableCell key={name} align={align}>{name}</TableCell>
+              <TableCell className={spaceNoWrap} key={name} align={align}>{name}</TableCell>
             )}
             <TableCell>{}</TableCell>
           </TableRow>
@@ -90,32 +97,42 @@ export function Content() {
         <TableBody>
           {data.content.map((content) => (
             <TableRow key={content.seq} hover>
-              <TableCell style={{ width: 10 }} component="th" scope="row">
+              <TableCell>
                 {content.seq}
               </TableCell>
-              <TableCell style={{ width: 200 }} align="right">
+              <TableCell align="right">
                 <Link
-                  href={`/content/${content.seq}`}
+                  href={`/course/${content.seq}`}
                   underline="hover"
                   color={grey[900]}
                 >
-                  {content.contentName}
+                  {content.courseName}
                 </Link>
               </TableCell>
-              <TableCell style={{ width: 70 }} align="right">
+              <TableCell align="right" className={spaceNoWrap}>
                 {dateFormat(content.createdDtime, 'isoDate')}
               </TableCell>
-              <TableCell style={{ width: 10 }} align="right">
+              <TableCell align="right">
                 <Chip
+                  label={content.displayYn === YN.YES ? '보임' : '숨김'}
                   variant="outlined"
                   size="small"
-                  label={content.status === ProductStatus.APPROVE ? '정상' : '중지'}
-                  color={content.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
+                  color={content.displayYn === YN.YES ? 'secondary' : 'default'}
                 />
               </TableCell>
+              <TableCell align="right">
+                <Chip
+                  label={content.status ? '정상' : '중지'}
+                  variant="outlined"
+                  size="small"
+                  color={content.status ? 'secondary' : 'default'}
+                />
+              </TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
 
-              <TableCell style={{ width: 120 }} align="right">
-                <Link href={`/admin-center/content/modify/${content.seq}`}>
+              <TableCell align="right" className={spaceNoWrap}>
+                <Link href={`/admin-center/course/modify/${content.seq}`}>
                   <Button variant="text" color="neutral" size="small">
                     상세
                   </Button>
@@ -136,3 +153,8 @@ export function Content() {
     </Container>
   );
 }
+
+const spaceNoWrap = css`
+  white-space: nowrap;
+`;
+

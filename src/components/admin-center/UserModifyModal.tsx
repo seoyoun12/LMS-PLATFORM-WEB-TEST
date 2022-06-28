@@ -10,7 +10,7 @@ import {
 import { useState } from 'react';
 import { Modal } from '@components/ui';
 import TextField from '@mui/material/TextField';
-import { modifyUser } from '@common/api/user';
+import { modifyUser } from '@common/api/adm/user';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useSnackbar } from '@hooks/useSnackbar';
 import styled from '@emotion/styled';
@@ -68,7 +68,7 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
       open={open}
       actionLoading={submitLoading}
       onSubmit={handleSubmit(onSubmit)}
-      handleClose={() => handleClose(false)}
+      onCloseModal={() => handleClose(false)}
     >
       <Box component="form">
         <FormContainer>

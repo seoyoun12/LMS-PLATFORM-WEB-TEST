@@ -1,9 +1,9 @@
-import { AdminCenterLayout, Content } from '@layouts/AdminCenter';
+import { AdminCenterLayout, ContentManagement } from '@layouts/AdminCenter';
 
-export default function ContentPage() {
+export default function ContentManagementPage() {
   return (
-    <Content />
+    <ContentManagement />
   );
 }
 
-ContentPage.Layout = AdminCenterLayout;
+ContentManagementPage.Layout = AdminCenterLayout;

@@ -4,12 +4,16 @@ import Box from '@mui/material/Box';
 import { useRouter } from 'next/router';
 import { SyntheticEvent, useCallback, useEffect } from 'react';
 
-interface TabsConfig {
-  label: string;
-  value: string;
+interface Props {
+  tabsConfig: {
+    label: string;
+    value: string;
+  }[];
+  showBorderBottom?: boolean;
 }
 
-export function Tabs({ tabsConfig }: { tabsConfig: TabsConfig[] }) {
+
+export function Tabs({ tabsConfig, showBorderBottom = true, ...props }: Props) {
   const router = useRouter();
   const { pathname, query } = router;
 
@@ -37,11 +41,16 @@ export function Tabs({ tabsConfig }: { tabsConfig: TabsConfig[] }) {
 
   return (
     <Box
-      sx={{
-        borderBottom: 1,
-        borderColor: 'divider',
-        width: '100%',
-      }}
+      sx={
+        showBorderBottom
+          ? {
+            width: '100%',
+            borderBottom: 1,
+            borderColor: 'divider'
+          }
+          : null
+      }
+      {...props}
     >
       <MuiTabs
         value={query.tab || tabsConfig[0].value}

@@ -5,7 +5,7 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { userList, removeUser } from '@common/api/user';
+import { userList, removeUser } from '@common/api/adm/user';
 import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
 import dateFormat from 'dateformat';
@@ -32,7 +32,7 @@ const headRows = [
   { name: '삭제' },
 ];
 
-export function UserList() {
+export function UserManagement() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const dialog = useDialog();

@@ -1,7 +1,5 @@
-import { css } from '@emotion/css';
-
 export const setLineClamp = (line: number) => (
-  css`
+  `
     word-wrap: break-word;
     -webkit-line-clamp: ${line};
     text-overflow: ellipsis;
@@ -14,4 +12,5 @@ export const setLineClamp = (line: number) => (
     }
   `
 );
+
 

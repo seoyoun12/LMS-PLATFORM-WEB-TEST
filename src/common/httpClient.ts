@@ -73,7 +73,7 @@ export const DELETE = async (
   data: object = {}
 ) => {
   try {
-    const response = await api.delete(url, data);
+    const response = await api.delete(url, { data });
     return response.data;
   } catch (error: any) {
     return handleError(error);

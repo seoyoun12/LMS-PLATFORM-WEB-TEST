@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import {
   Box, Chip,
@@ -16,18 +15,29 @@ import { ErrorMessage } from '@hookform/error-message';
 import { ContentType } from '@common/api/content';
 import { ChangeEvent, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
-import { grey } from '@mui/material/colors';
 import { CustomInputLabel } from '@components/ui/InputLabel';
 import { Modal } from '@components/ui';
-import { Lesson, modifyLesson } from '@common/api/lesson';
+import { Lesson } from '@common/api/lesson';
+import { modifyLesson } from '@common/api/adm/lesson';
 import TextField from '@mui/material/TextField';
 import { ProductStatus } from '@common/api/course';
 import { useSnackbar } from '@hooks/useSnackbar';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
-import { S3Files } from 'types/file';
 import { useFileUpload } from '@hooks/useChunkFileUpload';
-import { FileUploadType } from '@common/api/file';
+import { FileType } from '@common/api/file';
+import { FileUploader } from '@components/ui/FileUploader';
+import { BbsType, deleteFile } from '@common/api/adm/file';
+
+interface Props {
+  open: boolean;
+  handleClose: (isSubmit: boolean) => void;
+  lesson?: Lesson;
+  error?: any;
+}
+
+interface FormType extends Lesson {
+  files: File[];
+}
 
 const contentTypeOptions = [
   { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
@@ -35,83 +45,84 @@ const contentTypeOptions = [
   { value: ContentType.CONTENT_EXTERNAL, name: '외부링크' }
 ];
 
-type FormType = {
-  min: number;
-  sec: number;
-} & Lesson
-
 const defaultValues = {
   contentType: ContentType.CONTENT_MP4,
-  status: ProductStatus.APPROVE
+  status: ProductStatus.APPROVE,
+  files: [],
 };
 
-export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', error }: {
-  open: boolean;
-  handleClose: (isSubmit: boolean) => void;
-  lesson?: Lesson;
-  mode?: 'modify' | 'upload';
-  error?: any;
-}) {
+export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   const snackbar = useSnackbar();
-  const [ s3Files, setS3Files ] = useState<S3Files | null>([]);
   const [ submitLoading, setSubmitLoading ] = useState(false);
-  const { fileInputRef, handleUpload } = useFileUpload(FileUploadType.LESSON_FILE);
+  const [ isFileDelete, setIsFileDelete ] = useState(false);
+  const [ fileName, setFileName ] = useState<string | null>(null);
+  const { handleUpload } = useFileUpload();
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    reset
+    reset,
+    resetField
   } = useForm<FormType>({ defaultValues });
 
   useEffect(() => {
-    if (mode === 'modify' && !!lesson && open) {
-      setS3Files(
-        lesson.s3Files.length
-          ? [ { name: lesson.s3Files[0].name, path: lesson.s3Files[0].path } ]
-          : []
-      );
+    if (!!lesson && open) {
       reset({ ...lesson });
+      setFileName(lesson?.s3Files[0]?.name || null);
     }
-  }, [ mode, lesson, open ]);
+  }, [ lesson, open ]);
 
-  const uploadFile = (e: ChangeEvent) => {
-    e.preventDefault();
-    const files = (e.target as HTMLInputElement).files;
-    if (!files?.length) return null;
-    setS3Files([ { name: files[0].name, path: '' } ]);
+  const fileHandler = async (files: File[], lesson: Lesson) => {
+    const isFileUpload = files.length > 0;
+    if (isFileUpload) {
+      const file = files[0];
+      const fileName = files[0].name;
+      await handleUpload({
+        dataId: lesson.seq,
+        file,
+        fileName,
+        fileUploadType: FileType.LESSON_FILE
+      });
+    } else {
+      if (isFileDelete) {
+        await deleteFile({
+          fileTypeId: lesson.seq,
+          fileType: BbsType.TYPE_LESSON,
+          fileSeqList: lesson.s3Files.map(v => v.seq),
+        });
+      }
+    }
   };
 
-  const onSubmit: SubmitHandler<FormType> = async (lesson) => {
-    const formData = new FormData();
-    // const files = fileInputRef.current?.files;
-    // const videoFile = !!files?.length ? files[0] : new Blob([]);
-    // const fileName = !!files?.length ? files[0].name : undefined;
-
-    formData.append('data', new Blob([
-        JSON.stringify({
-          ...lesson,
-          s3Files: s3Files
-        }) ],
-      { type: 'application/json' })
-    );
+  const onSubmit: SubmitHandler<FormType> = async ({ files, ...lesson }) => {
+    setSubmitLoading(true);
 
     try {
-      setSubmitLoading(true);
-      await handleUpload();
-      await modifyLesson({ lessonId: lesson.seq, formData });
-      setSubmitLoading(false);
+      await fileHandler(files, lesson);
+      await modifyLesson({ lessonId: lesson.seq, lesson });
       setSubmitLoading(false);
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
     } catch (e: any) {
       snackbar(e.message || e.data?.message);
+      setSubmitLoading(false);
     }
     handleClose(true);
   };
 
-  const removeFile = () => {
-    fileInputRef.current!.value = '';
-    setS3Files([]);
+  const handleFileChange = (e: ChangeEvent) => {
+    e.preventDefault();
+
+    const files = (e.target as HTMLInputElement).files;
+    if (!files?.length) return null;
+    setFileName(files[0].name);
+    setIsFileDelete(false);
+  };
+
+  const handleDeleteFile = () => {
+    resetField('files');
+    setFileName(null);
+    setIsFileDelete(true);
   };
 
   if (error) return <div>error</div>;
@@ -121,10 +132,10 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
       title="강의 업로드"
       maxWidth="sm"
       fullWidth
-      open={open}
       loading={!lesson}
+      open={open}
       actionLoading={submitLoading}
-      handleClose={() => handleClose(false)}
+      onCloseModal={() => handleClose(false)}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Box component="form">
@@ -171,32 +182,22 @@ export function LessonUploadModal({ open, handleClose, lesson, mode = 'upload', 
           </FormControl>
 
           <FormControl className="form-control">
-            <label htmlFor="input-file">
-              <input
-                style={{ display: 'none' }}
-                accept="video/mp4,video/mkv, video/x-m4v,video/*"
-                id="input-file"
-                type="file"
-                multiple={true}
-                ref={fileInputRef}
-                onChange={uploadFile}
-              />
-            </label>
-            <Label variant="body2">영상 업로드</Label>
-            <Button
-              color="neutral"
-              variant="outlined"
-              startIcon={<UploadOutlinedIcon htmlColor={grey[700]} />}
-              onClick={() => fileInputRef.current!.click()}
+            <FileUploader
+              register={register}
+              regName="files"
+              accept="video/mp4,video/mkv, video/x-m4v,video/*"
+              onFileChange={handleFileChange}
             >
-              파일 선택
-            </Button>
-            {!!s3Files?.length && <Chip
-              sx={{ mt: '8px' }}
-              icon={<OndemandVideoOutlinedIcon />}
-              label={s3Files[0].name}
-              onDelete={removeFile}
-            />}
+              <FileUploader.Label>파일 업로드</FileUploader.Label>
+            </FileUploader>
+            {fileName
+              ? <Chip
+                sx={{ mt: '8px' }}
+                icon={<OndemandVideoOutlinedIcon />}
+                label={fileName}
+                onDelete={handleDeleteFile} />
+              : null
+            }
           </FormControl>
 
           <FormControl className="form-control">

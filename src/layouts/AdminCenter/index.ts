@@ -1,18 +1,17 @@
-
-
 export { AdminCenter } from './AdminCenter';
 export { AdminCenterLayout } from './AdminCenterLayout';
 
-export { Course } from './Course/Course';
-export { CourseUpload } from './Course/CourseUpload';
-export { CourseModify } from './Course/CourseModify';
-export { ContentList } from './Course/ContentList';
-export { EvaluationInfo } from './Course/EvaluationInfo';
-export { Library } from './Course/Library';
+export { CourseManagement } from './CourseManagement/CourseManagement';
+export { CourseUpload } from './CourseManagement/CourseUpload';
+export { CourseModify } from './CourseManagement/CourseModify';
+export { ContentList } from './CourseManagement/ContentList';
+export { EvaluationInfo } from './CourseManagement/EvaluationInfo';
+export { Library } from './CourseManagement/Library';
 
-export { Content } from './Content/Content';
-export { ContentUpload } from './Content/ContentUpload';
-export { ContentModify } from './Content/ContentModify';
+
+export { ContentManagement } from './ContentManagement/ContentManagement';
+export { ContentUpload } from './ContentManagement/ContentUpload';
+export { ContentModify } from './ContentManagement/ContentModify';
 export { ContentUploadForm } from '@components/admin-center/ContentUploadForm';
 
-export { UserList } from './User/User';
+export { UserManagement } from './UserManagement/UserManagement';

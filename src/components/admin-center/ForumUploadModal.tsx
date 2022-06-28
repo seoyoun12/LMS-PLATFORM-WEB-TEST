@@ -1,91 +1,126 @@
 import * as React from 'react';
-import { Controller, SubmitHandler, useForm, useWatch } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import {
-  Box, Button, Chip,
+  Box, Chip,
   FormControl, FormControlLabel,
   FormHelperText, FormLabel,
-  MenuItem, Radio, RadioGroup,
-  Select, TextareaAutosize, Typography
+  Radio, RadioGroup,
+  TextareaAutosize
 } from '@mui/material';
 import { ErrorMessage } from '@hookform/error-message';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { Modal } from '@components/ui';
 import TextField from '@mui/material/TextField';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { ForumInput, modifyForum, uploadForum, useForum } from '@common/api/forum';
+import { Forum, modifyForum, uploadForum, useForum } from '@common/api/forum';
 import { ProductStatus } from '@common/api/course';
-import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
-import { grey } from '@mui/material/colors';
-import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { css } from '@emotion/css';
+import { FileUploader } from '@components/ui/FileUploader';
+import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
+import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
 
-type FormType = {} & ForumInput
-
-const defaultValues = {
-  status: ProductStatus.APPROVE,
-};
-
-export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 'upload' }: {
+interface Props {
   open: boolean;
-  handleClose: () => void;
+  onClose: (isMutate: boolean) => void;
   forumId?: number | null;
   courseId?: number;
   mode?: 'modify' | 'upload';
-}) {
-  const input: HTMLInputElement | null = document.querySelector('#input-file');
+}
+
+interface FormType extends Forum {
+  files: File[];
+}
+
+const defaultValues = {
+  status: ProductStatus.APPROVE,
+  files: [],
+};
+
+export function ForumUploadModal({ open, onClose, forumId, courseId, mode = 'upload' }: Props) {
   const snackbar = useSnackbar();
-  const { forum, forumError } = useForum(Number(forumId));
+  const { forum, forumError, mutate } = useForum(Number(forumId));
   const [ submitLoading, setSubmitLoading ] = useState(false);
-  const [ fileName, setFileName ] = useState<string | null>();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const { register, handleSubmit, formState: { errors }, control, reset } = useForm<FormType>({ defaultValues });
+  const [ isFileDelete, setIsFileDelete ] = useState(false);
+  const [ fileName, setFileName ] = useState<string | null>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    reset,
+    resetField,
+  } = useForm<FormType>({ defaultValues });
   const loading = (open && mode === 'modify' && !forum);
 
   useEffect(() => {
     if (open) {
-      reset(
-        mode === 'modify' && !!forum
-          ? { ...forum }
-          : { ...defaultValues }
-      );
+      if (mode === 'modify' && forum) {
+        reset({ ...forum });
+        setFileName(forum.s3Files[0]?.name || null);
+      } else {
+        reset({ ...defaultValues });
+      }
     }
   }, [ mode, forum, open ]);
 
-  const uploadFile = (e: ChangeEvent) => {
+  const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setFileName(files[0].name);
+    setIsFileDelete(false);
   };
 
-  const onSubmit: SubmitHandler<FormType> = async (forum) => {
+  const handleDeleteFile = () => {
+    resetField('files');
+    setFileName(null);
+    setIsFileDelete(true);
+  };
+
+  const fileHandler = async (files: File[], forum: Forum) => {
+    const isFileUpload = files.length > 0;
+    if (isFileUpload) {
+      // TODO: 이미 존재하는 포럼의 파일을 수정하는 것이 아니라 새로 생성하는 것이라면? 어떤 seq값을 넘겨야할까?
+      await uploadFile({
+        fileTypeId: forum.seq,
+        fileType: BbsType.TYPE_FORUM,
+        files
+      });
+    } else {
+      if (isFileDelete) {
+        await deleteFile({
+          fileTypeId: forum.seq,
+          fileType: BbsType.TYPE_FORUM,
+          fileSeqList: forum.s3Files.map(v => v.seq),
+        });
+      }
+    }
+  };
+
+  const onSubmit: SubmitHandler<FormType> = async ({ files, ...forum }) => {
     const inputParams = { ...forum, courseSeq: courseId };
     setSubmitLoading(true);
 
-    const files = fileInputRef.current?.files;
-    const file = !!files?.length ? files[0] : new Blob([]);
-    const fileName = !!files?.length ? files[0].name : undefined;
-    const formData = new FormData();
-    formData.append('files', file, fileName);
-    formData.append('data', new Blob([ JSON.stringify(inputParams) ], { type: 'application/json' }));
-
     try {
       if (mode === 'upload') {
-        await uploadForum(formData);
+        const forum = await uploadForum(inputParams);
+        await fileHandler(files, forum);
       } else {
         if (forumId) {
-          await modifyForum(forumId, formData);
+          await modifyForum(forumId, inputParams);
+          await fileHandler(files, forum);
         }
       }
 
+      await mutate();
       setSubmitLoading(false);
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
     } catch (e: any) {
       setSubmitLoading(false);
       snackbar(e.message || e.data?.message);
     }
-    handleClose();
+    onClose(true);
   };
 
   if (open && forumError) return <div>error</div>;
@@ -97,8 +132,8 @@ export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 
       fullWidth
       loading={loading}
       open={open}
-      handleClose={handleClose}
       actionLoading={submitLoading}
+      onCloseModal={() => onClose(false)}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Box component="form">
@@ -114,37 +149,21 @@ export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 
           </FormControl>
 
           <FormControl className="form-control">
-            <Typography variant="subtitle2" className="subtitle">파일 업로드</Typography>
-            <label htmlFor="input-file">
-              <input
-                style={{ display: 'none' }}
-                id="input-file"
-                type="file"
-                multiple={true}
-                ref={fileInputRef}
-                onChange={uploadFile}
-              />
-              <Button
-                color="neutral"
-                variant="outlined"
-                startIcon={<UploadOutlinedIcon htmlColor={grey[700]} />}
-                onClick={() => fileInputRef.current!.click()}
-              >
-                파일 선택
-              </Button>
-            </label>
-
-            {!!fileInputRef.current?.files?.length && <Chip
-              className={chipStyles}
-              icon={<ImageOutlinedIcon />}
-              label={fileName}
-              onDelete={() => {
-                if (input) {
-                  input.value = '';
-                  setFileName(null);
-                }
-              }}
-            />}
+            <FileUploader
+              register={register}
+              regName="files"
+              onFileChange={handleFileChange}
+            >
+              <FileUploader.Label>파일 업로드</FileUploader.Label>
+            </FileUploader>
+            {fileName
+              ? <Chip
+                sx={{ mt: '8px' }}
+                icon={<OndemandVideoOutlinedIcon />}
+                label={fileName}
+                onDelete={handleDeleteFile} />
+              : null
+            }
           </FormControl>
 
           <FormControl className="form-control">
@@ -217,14 +236,4 @@ const FormContainer = styled.div`
       }
     }
   }
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-`;
-
-const chipStyles = css`
-  margin-top: 8px;
 `;

@@ -111,7 +111,7 @@ export function HomeworkModal({ open, handleClose, seq, contentSeq, mode = 'uplo
       fullWidth
       loading={loading}
       open={open}
-      handleClose={() => handleClose(false)}
+      onCloseModal={() => handleClose(false)}
       actionLoading={submitLoading}
       onSubmit={handleSubmit(onSubmit)}
     >

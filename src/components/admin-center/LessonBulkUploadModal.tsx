@@ -10,11 +10,13 @@ import { ChangeEvent, useRef } from 'react';
 import styled from '@emotion/styled';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import { grey } from '@mui/material/colors';
-import { LessonInput, uploadLessons } from '@common/api/lesson';
+import { LessonInput } from '@common/api/lesson';
+import { uploadLessons } from '@common/api/adm/lesson';
 import { CustomInputLabel } from '@components/ui/InputLabel';
 import { read, utils } from 'xlsx';
 import { Modal } from '@components/ui';
 import { useSnackbar } from '@hooks/useSnackbar';
+import { useRouter } from 'next/router';
 
 interface XlsxData extends LessonInput {
   min: number;
@@ -43,6 +45,8 @@ export function LessonBulkUploadModal({ open, handleClose }: {
     reset
   } = useForm<{ contentType: ContentType }>({ defaultValues });
   const snackbar = useSnackbar();
+  const router = useRouter();
+  const { query } = router;
 
   const onSubmit: SubmitHandler<{ contentType: ContentType }> = async ({ contentType }) => {
     const files = fileInputRef.current?.files;
@@ -67,7 +71,8 @@ export function LessonBulkUploadModal({ open, handleClose }: {
       );
 
     try {
-      await uploadLessons({ contentId: 1, lessonInput });
+      const contentId = Number(query.contentId);
+      await uploadLessons({ contentId, lessonInput });
       snackbar({ variant: 'success', message: '성공적으로 업로드 되었습니다.' });
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -89,7 +94,7 @@ export function LessonBulkUploadModal({ open, handleClose }: {
       open={open}
       title="강의 등록"
       action="업로드"
-      handleClose={() => handleClose(false)}
+      onCloseModal={() => handleClose(false)}
       onSubmit={handleSubmit(onSubmit)}
       maxWidth="md"
     >

@@ -5,3 +5,4 @@ export { Link } from './Link';
 export { SnackbarProvider } from './Snackbar';
 export { DialogProvider } from './Dialog';
 export { Alert } from './Alert';
+export { VideoPlayer } from './VideoPlayer';

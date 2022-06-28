@@ -1,5 +1,5 @@
 import { AdminCenterLayout } from '@layouts/AdminCenter';
-import { CourseUpload } from '@layouts/AdminCenter/Course/CourseUpload';
+import { CourseUpload } from '@layouts/AdminCenter/CourseManagement/CourseUpload';
 
 export default function CourseUploadPage() {
   return (

@@ -1,6 +1,6 @@
 import { Modal, Table } from '@components/ui';
 import { FormEvent, useRef, useState } from 'react';
-import { useContentList } from '@common/api/content';
+import { useContentList } from '@common/api/adm/content';
 import styles from '@styles/common.module.scss';
 import { Button, Chip, Container, InputBase, TableBody, TableHead, TextField, Typography } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
@@ -11,7 +11,7 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
-import { connectCourseToContent, disConnectContent } from '@common/api/course';
+import { connectCourseToContent, disConnectContent } from '@common/api/adm/course';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import ReplayIcon from '@mui/icons-material/Replay';
@@ -90,7 +90,7 @@ export function ContentConnectModal({ open, handleClose, courseId }: Props) {
       loading={!data}
       open={open}
       onClose={handleClose}
-      handleClose={handleClose}
+      onCloseModal={handleClose}
       fullWidth
     >
       <ContentBody className={styles.globalContainer}>

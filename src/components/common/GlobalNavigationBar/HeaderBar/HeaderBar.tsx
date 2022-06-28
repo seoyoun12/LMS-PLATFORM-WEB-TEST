@@ -15,7 +15,6 @@ export function HeaderBar() {
   const isLogin = useIsLoginStatus();
   const [ myUser, setMyUser ] = useState({});
 
-
   useEffect(() => {
     (async () => {
       // const res = await getMyUser();

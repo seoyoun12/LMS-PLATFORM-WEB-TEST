@@ -9,12 +9,12 @@ import { useRouter } from 'next/router';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import styled from '@emotion/styled';
 import { LessonBulkUploadModal } from '@components/admin-center/LessonBulkUploadModal';
-import { removeLesson, useLesson, useLessonList } from '@common/api/lesson';
+import { removeLesson, useLesson, useLessonList } from '@common/api/adm/lesson';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { ContentType } from '@common/api/content';
 import { ProductStatus } from '@common/api/course';
-import { LessonUploadModal } from '@components/admin-center/LessonUploadModal';
+import { LessonEditModal } from '@components/admin-center/LessonEditModal';
 import { Spinner } from '@components/ui';
 import { totalSecToMinSec } from 'src/utils/totalSecToMinSec';
 
@@ -168,8 +168,7 @@ export function LessonList() {
         open={openBulkUploadModal}
         handleClose={(isSubmit) => handleModalClose(isSubmit)}
       />
-      <LessonUploadModal
-        mode="modify"
+      <LessonEditModal
         open={openUploadModal}
         lesson={lesson}
         error={lessonError}

@@ -2,10 +2,12 @@ import type { NextPage } from 'next';
 import styles from '@styles/common.module.scss';
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { ContentCard, Carousel } from '@components/ui';
+import { ContentCard, Carousel, Spinner } from '@components/ui';
 import cn from 'clsx';
 import { Link } from '@components/common';
 import { Grid } from '@mui/material';
+import { useCourseList } from '@common/api/course';
+import { useState } from 'react';
 
 const bannerData = [
   {
@@ -29,6 +31,12 @@ const bannerData = [
 ];
 
 const MainPage: NextPage = (res) => {
+  const [ page, setPage ] = useState(0);
+  const { data, error } = useCourseList({ page });
+  console.log(data);
+
+  if (error) return <div>error</div>;
+  if (!data) return <Spinner />;
   return (
     <div>
       <Carousel datas={bannerData} />
@@ -39,20 +47,18 @@ const MainPage: NextPage = (res) => {
           columnSpacing={3}
           columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
         >
-          {Array.from(Array(15)).map((v, idx) => (
-            <Grid
-              key={idx}
+          {data.content.map((course) => (
+            <CourseGrid
+              key={course.seq}
               item
               xs={1} sm={1} md={1} lg={1}
-              sx={{
-                display: 'flex',
-                justifyContent: 'center'
-              }}
             >
-              <Link href={`/course/${idx + 1}`}>
-                <ContentCard />
+              <Link href={`/course/${course.seq}`}>
+                <ContentCard
+                  title={course.courseName}
+                />
               </Link>
-            </Grid>
+            </CourseGrid>
           ))}
         </Grid>
       </ContentContainer>
@@ -62,6 +68,11 @@ const MainPage: NextPage = (res) => {
 
 const ContentContainer = styled.div`
   padding: 76px 20px 0 20px !important;
+`;
+
+const CourseGrid = styled(Grid)`
+  display: flex;
+  justify-content: center;
 `;
 
 const BannerContainer = styled.div`

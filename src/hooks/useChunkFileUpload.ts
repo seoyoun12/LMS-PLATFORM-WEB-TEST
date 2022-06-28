@@ -2,7 +2,8 @@ import { useState, useRef, useCallback } from 'react';
 import Resumable from 'resumablejs';
 import { axiosHeaders, axiosSetting } from '@common/httpClient';
 import { localStore } from '@common/storage';
-import { completeFileUpload, FileUploadType, initFileConfig, UPLOAD_URL } from '@common/api/file';
+import { FileType, UPLOAD_URL } from '@common/api/file';
+import { completeFileUpload, initFileConfig } from '@common/api/adm/file';
 
 type ResumableFile = Resumable.ResumableFile;
 type ResumableChunk = Resumable.ResumableChunk;
@@ -15,32 +16,43 @@ interface ChunkResponse {
   }>;
 }
 
-const CHUNK_SIZE = 6291456;
+interface HandleUploadProps {
+  chunkSize?: number;
+  fileUploadType: FileType;
+  dataId: number;
+  file: File;
+  fileName: string;
+}
 
 const round = (number: number, decimalPlaces: number) => {
   const factorOfTen = Math.pow(10, decimalPlaces);
   return Math.round(number * factorOfTen) / factorOfTen;
 };
 
-export const useFileUpload = (fileUploadType: FileUploadType) => {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+export const useFileUpload = () => {
   const [ uploadPercentage, setUploadPercentage ] = useState(0);
   const [ progressbar, showProgressbar ] = useState<any>(false);
   const [ spinner, setSpinner ] = useState<any>(false);
   const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
 
-  const handleUpload = useCallback(async () => {
-    if (!!fileInputRef.current && !!fileInputRef.current.files?.length) {
+  const handleUpload = useCallback(async (
+    {
+      dataId,
+      file,
+      fileName,
+      fileUploadType,
+      chunkSize = 6291456
+    }: HandleUploadProps) => {
+    if (!!file) {
       const { encFileName, uploadRequestKey } = await initFileConfig({
         fileUploadType,
-        fileName: fileInputRef.current.files[0].name
+        fileName
       });
-      const file = fileInputRef.current.files[0];
       const accessToken = localStore.getItem('ACCESS_TOKEN');
       const options = {
         target: `${axiosSetting.server() + UPLOAD_URL}`,
         testChunks: false,
-        chunkSize: CHUNK_SIZE,
+        chunkSize,
         simultaneousUploads: 1,
         headers: {
           ...axiosHeaders,
@@ -68,7 +80,7 @@ export const useFileUpload = (fileUploadType: FileUploadType) => {
           uploadRequestKey,
           etagList,
           uploadType: fileUploadType,
-          dataSeq: 1,
+          dataSeq: dataId,
           fileOriginalName: file.fileName
         };
         await completeFileUpload(requestInput);
@@ -99,10 +111,9 @@ export const useFileUpload = (fileUploadType: FileUploadType) => {
         }
       });
     }
-  }, [ fileInputRef.current, fileUploadType, errorMessage ]);
+  }, [ errorMessage ]);
 
   return {
-    fileInputRef,
     handleUpload
   };
 };

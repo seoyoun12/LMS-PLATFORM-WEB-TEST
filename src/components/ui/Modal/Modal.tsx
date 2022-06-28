@@ -10,7 +10,7 @@ import { Spinner } from '@components/ui';
 
 type ModalProps = {
   open: boolean,
-  handleClose: () => void;
+  onCloseModal: () => void;
   onSubmit?: () => void;
   actionLoading?: boolean;
   actionDisabled?: boolean;
@@ -54,7 +54,7 @@ export function Modal(
     children,
     title,
     action,
-    handleClose,
+    onCloseModal,
     onSubmit,
     actionLoading,
     actionDisabled,
@@ -64,7 +64,7 @@ export function Modal(
 ) {
   return (
     <Dialog
-      onClose={handleClose}
+      onClose={onCloseModal}
       aria-labelledby="modal-title"
       open={open}
       {...dialogProps}
@@ -72,7 +72,7 @@ export function Modal(
       {
         loading ? <Spinner /> :
           <>
-            <BootstrapDialogTitle id="modal-title" onClose={handleClose}>
+            <BootstrapDialogTitle id="modal-title" onClose={onCloseModal}>
               {title}
             </BootstrapDialogTitle>
             <DialogContent dividers>

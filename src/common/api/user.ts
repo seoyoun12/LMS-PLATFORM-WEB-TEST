@@ -1,36 +1,22 @@
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
-import useSWR, { mutate, SWRResponse } from 'swr';
-import { PaginationResult } from 'types/fetch';
-
+import useSWR, { SWRResponse } from 'swr';
+import { S3Files } from 'types/file';
+import { Lesson } from '@common/api/lesson';
+import { CourseRes } from '@common/api/course';
 
 export enum YN {
-  YES = "YES",
-  NO = "NO"
+  YES = 'YES',
+  NO = 'NO'
 }
 
-
-export interface MyUser {
-  message: string;
-  status: number;
-  success: boolean;
-  data: {
-    createdAt: string;
-    updatedAt: string;
-    status: number;
-    seq: number;
-    username: string;
-    name: string;
-    birth: string;
-    gender: string;
-    phone: string;
-    emailYn: string;
-    smsYn: string;
-    pushToken: string;
-    lastPwUpdDtime: string;
-    regCategory: string;
-    loginFailedCount: number;
-    failedYn: string;
-  };
+export interface MyUser extends User {
+  accountNonExpired: boolean;
+  accountNonLocked: boolean;
+  authorities: { authority: string; }[];
+  credentialsNonExpired: boolean;
+  enabled: boolean;
+  learningCourses: CourseRes[];
+  pushToken: string;
 }
 
 export interface User {
@@ -62,53 +48,12 @@ export interface UserInput {
   password?: string;
 }
 
-
 export async function getMyUser(): Promise<MyUser> {
   return await GET<MyUser>(`/user/myinfo`);
 }
 
-
-export function userList({ page, elementCnt }: {
-  page: number,
-  elementCnt?: number,
-}) {
-  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<User[]>>>([
-    `/user/adm`, {
-      params: { page, elementCnt }
-    }
-  ], GET);
-
-  return {
-    data: data?.data,
-    error,
-    mutate
-  };
-}
-
-
-
-export async function modifyUser(userInput: UserInput) {
-  return await PUT(`/user/adm/${userInput.seq}`, userInput)
-}
-
-
-export async function removeUser(seq: number) {
-  return await DELETE(`/user/adm/${seq}`);
-}
-
-
-
-export function useUser(userSeq: number | null) {
-  const { data, error } = useSWR<SWRResponse<User>>(userSeq ? `/user/adm/${userSeq}` : null, GET);
-
-  return {
-    user: data?.data,
-    userError: error,
-  };
-}
-
 export function useMyUser() {
-  const { data, error } = useSWR<MyUser>(`/user/myinfo`, GET);
+  const { data, error } = useSWR<SWRResponse<MyUser>>(`/user/myinfo`, GET);
   return {
     user: data?.data,
     error

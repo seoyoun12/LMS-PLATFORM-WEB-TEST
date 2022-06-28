@@ -5,18 +5,15 @@ import { Spinner, Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { ProductStatus } from '@common/api/course';
-import { QuestionUploadModal } from '@components/admin-center/QuestionUploadModal';
-import { QuestionPreviewModal } from '@components/admin-center';
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/css';
 import { setLineClamp } from '@styles/mixins';
-import { removeQuestion } from '@common/api/question';
 import { useRouter } from 'next/router';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { useState } from 'react';
-import { useForumList } from '@common/api/forum';
+import { removeForum, useForumList } from '@common/api/forum';
 import { ForumUploadModal } from '@components/admin-center/ForumUploadModal';
 
 const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
@@ -31,7 +28,6 @@ export function Forum() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const [ openUploadModal, setOpenUploadModal ] = useState(false);
-  const [ openPreviewModal, setOpenPreviewModal ] = useState(false);
   const [ forumId, setForumId ] = useState<number | null>(null);
   const [ page, setPage ] = useState(0);
   const { courseId } = router.query;
@@ -41,8 +37,7 @@ export function Forum() {
     mutate
   } = useForumList({ courseId: Number(courseId), page });
 
-
-  const handleRemoveQuestion = async (questionId: number) => {
+  const handleRemoveForum = async (forumId: number) => {
     try {
       const dialogConfirmed = await dialog({
         title: '콘텐츠 삭제하기',
@@ -51,7 +46,7 @@ export function Forum() {
         cancelText: '취소'
       });
       if (dialogConfirmed) {
-        await removeQuestion(questionId);
+        await removeForum(forumId);
         snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
         await mutate();
       }
@@ -60,9 +55,17 @@ export function Forum() {
     }
   };
 
-  const modifyQuestion = (forumId: number) => {
+  const handleModifyForum = async (forumId: number) => {
     setForumId(forumId);
     setOpenUploadModal(true);
+  };
+
+  const handleModalClose = async (isMutate: boolean) => {
+    if (isMutate) {
+      await mutate();
+    }
+
+    setOpenUploadModal(false);
   };
 
   if (forumPaginationResultError) return <div>error</div>;
@@ -88,7 +91,7 @@ export function Forum() {
         pagination
         totalNum={forumPaginationResult.totalElements}
         page={forumPaginationResult.number}
-        onChangePage={() => setPage(page)}
+        onChangePage={(page) => setPage(page)}
       >
         <TableHead>
           <TableRow>
@@ -125,14 +128,14 @@ export function Forum() {
                   variant="text"
                   color="neutral"
                   size="small"
-                  onClick={() => modifyQuestion(forum.seq)}
+                  onClick={() => handleModifyForum(forum.seq)}
                 >
                   수정
                 </Button>
                 <Button
                   variant="text"
                   color="warning"
-                  onClick={() => handleRemoveQuestion(forum.seq)}
+                  onClick={() => handleRemoveForum(forum.seq)}
                   size="small"
                 >
                   삭제
@@ -148,7 +151,7 @@ export function Forum() {
         forumId={Number(forumId)}
         courseId={Number(courseId)}
         open={openUploadModal}
-        handleClose={() => setOpenUploadModal(false)}
+        onClose={(isMutate) => handleModalClose(isMutate)}
       />
     </Container>
   );

@@ -1,9 +1,9 @@
-import { AdminCenterLayout, UserList } from '@layouts/AdminCenter';
+import { AdminCenterLayout, UserManagement } from '@layouts/AdminCenter';
 
-export default function UserPage() {
+export default function UserManagementPage() {
   return (
-    <UserList />
+    <UserManagement />
   );
 }
 
-UserPage.Layout = AdminCenterLayout;
+UserManagementPage.Layout = AdminCenterLayout;

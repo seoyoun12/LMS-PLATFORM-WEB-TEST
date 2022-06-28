@@ -3,12 +3,12 @@ import s from './Layout.module.css';
 import { Footer, GlobalNavigationBar } from '@components/common';
 import React from 'react';
 
-export const Layout: React.FC = ({ children }) => {
+export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className={cn(s.root)}>
-      <GlobalNavigationBar/>
+      <GlobalNavigationBar />
       <main className="fit">{children}</main>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

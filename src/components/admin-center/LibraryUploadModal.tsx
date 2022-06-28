@@ -1,10 +1,10 @@
-import { 
-  LibraryInput, LibraryStatus, 
-  modifyLibrary, uploadLibrary, useLibrary 
-} from "@common/api/library";
-import { useSnackbar } from "@hooks/useSnackbar";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  LibraryInput, LibraryStatus,
+  modifyLibrary, uploadLibrary, useLibrary
+} from '@common/api/library';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import {
   Box, Button, Chip,
@@ -55,7 +55,7 @@ export function LibraryUploadModal({ open, handleClose, seq, courseId, mode = 'u
           : { ...defaultValues }
       );
     }
-  }, [mode, library, open, fileInputRef]);
+  }, [ mode, library, open, fileInputRef ]);
 
   const uploadFile = (e: ChangeEvent) => {
     e.preventDefault();
@@ -65,7 +65,7 @@ export function LibraryUploadModal({ open, handleClose, seq, courseId, mode = 'u
   };
 
   const onSubmit: SubmitHandler<LibraryInput> = async (library) => {
-    const s3Files = library?.s3Files?.length ? library.s3Files : []
+    const s3Files = library?.s3Files?.length ? library.s3Files : [];
     const inputParams = { ...library, courseSeq: courseId, s3Files };
     setSubmitLoading(true);
     const files = fileInputRef.current?.files;
@@ -73,7 +73,7 @@ export function LibraryUploadModal({ open, handleClose, seq, courseId, mode = 'u
     const fileName = !!files?.length ? files[0].name : undefined;
     const formData = new FormData();
     formData.append('files', file, fileName);
-    formData.append('data', new Blob([JSON.stringify(inputParams)], { type: 'application/json' }));
+    formData.append('data', new Blob([ JSON.stringify(inputParams) ], { type: 'application/json' }));
 
     if (fileName !== undefined) {
       try {
@@ -94,10 +94,10 @@ export function LibraryUploadModal({ open, handleClose, seq, courseId, mode = 'u
       }
       handleClose(true);
     } else {
-      alert("강의자료를 첨부해주십시오.");
+      alert('강의자료를 첨부해주십시오.');
       setSubmitLoading(false);
     }
-  } 
+  };
 
 
   if (open && libraryError) return <div>error</div>;
@@ -110,7 +110,7 @@ export function LibraryUploadModal({ open, handleClose, seq, courseId, mode = 'u
       fullWidth
       loading={loading}
       open={open}
-      handleClose={() => handleClose(false)}
+      onCloseModal={() => handleClose(false)}
       actionLoading={submitLoading}
       onSubmit={handleSubmit(onSubmit)}
     >

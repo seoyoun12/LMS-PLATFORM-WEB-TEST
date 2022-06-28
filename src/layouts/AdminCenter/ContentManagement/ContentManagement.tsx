@@ -1,44 +1,35 @@
-import { removeCourse, useCourseList } from '@common/api/course';
+import { Button, Chip, Container, TableBody, TableHead, Typography } from '@mui/material';
+import styles from '@styles/common.module.scss';
 import { Table } from '@components/ui';
-import { Button, Chip, TableBody, TableHead, Typography } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { useEffect, useState } from 'react';
 import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
+import dateFormat from 'dateformat';
+import * as React from 'react';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
-import * as React from 'react';
 import { useRouter } from 'next/router';
-import styles from '@styles/common.module.scss';
-import { Container } from '@mui/material';
-import dateFormat from 'dateformat';
-import { YN } from '@common/constant';
-import { mutate } from 'swr';
+import { useEffect, useState } from 'react';
+import { ProductStatus } from '@common/api/course';
+import { useContentList } from '@common/api/adm/content';
 import { Spinner } from '@components/ui';
-import styled from '@emotion/styled';
-import { css } from '@emotion/css';
 
 const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
-  { name: 'seq', align: 'left' },
-  { name: '과정명', align: 'right' },
+  { name: 'ID', align: 'left' },
+  { name: '콘텐츠명', align: 'right' },
   { name: '생성 날짜', align: 'right' },
-  { name: '노출 여부', align: 'right' },
   { name: '상태', align: 'right' },
-  { name: '수강생', align: 'right' },
-  { name: '수료생', align: 'right' },
 ];
 
-export function Course() {
-  console.log('Course Triggered');
+export function ContentManagement() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const router = useRouter();
   const [ page, setPage ] = useState(0);
-  const { data, error } = useCourseList({ page });
+  const { data, error } = useContentList({ page });
 
   useEffect(() => {
-    console.log('useEffect Triggered');
     const { page } = router.query;
     setPage(!isNaN(Number(page)) ? Number(page) : 0);
   }, [ router ]);
@@ -52,18 +43,18 @@ export function Course() {
     });
   };
 
-  const onRemoveCourse = async (courseId: number) => {
+  const onRemoveCourse = async (contentId: number) => {
     try {
       const dialogConfirmed = await dialog({
-        title: '과정 삭제하기',
+        title: '콘텐츠 삭제하기',
         description: '정말로 삭제하시겠습니까?',
         confirmText: '삭제하기',
         cancelText: '취소'
       });
       if (dialogConfirmed) {
-        await removeCourse({ courseId });
+        // await removeCourse({ contentId });
         snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-        await mutate([ `/course/adm`, { params: { page } } ]);
+        // await mutate([ `/content/adm`, { params: { page } } ]);
       }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -80,7 +71,7 @@ export function Course() {
           mb: '12px',
           fontWeight: 700
         }}
-      >과정 목록</Typography>
+      >콘텐츠 목록</Typography>
       <Table
         pagination={true}
         totalNum={data.totalElements}
@@ -91,7 +82,7 @@ export function Course() {
         <TableHead>
           <TableRow>
             {headRows.map(({ name, align }) =>
-              <TableCell className={spaceNoWrap} key={name} align={align}>{name}</TableCell>
+              <TableCell key={name} align={align}>{name}</TableCell>
             )}
             <TableCell>{}</TableCell>
           </TableRow>
@@ -99,42 +90,32 @@ export function Course() {
         <TableBody>
           {data.content.map((content) => (
             <TableRow key={content.seq} hover>
-              <TableCell>
+              <TableCell style={{ width: 10 }} component="th" scope="row">
                 {content.seq}
               </TableCell>
-              <TableCell align="right">
+              <TableCell style={{ width: 200 }} align="right">
                 <Link
-                  href={`/course/${content.seq}`}
+                  href={`/content/${content.seq}`}
                   underline="hover"
                   color={grey[900]}
                 >
-                  {content.courseName}
+                  {content.contentName}
                 </Link>
               </TableCell>
-              <TableCell align="right" className={spaceNoWrap}>
+              <TableCell style={{ width: 70 }} align="right">
                 {dateFormat(content.createdDtime, 'isoDate')}
               </TableCell>
-              <TableCell align="right">
+              <TableCell style={{ width: 10 }} align="right">
                 <Chip
-                  label={content.displayYn === YN.YES ? '보임' : '숨김'}
                   variant="outlined"
                   size="small"
-                  color={content.displayYn === YN.YES ? 'secondary' : 'default'}
+                  label={content.status === ProductStatus.APPROVE ? '정상' : '중지'}
+                  color={content.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
                 />
               </TableCell>
-              <TableCell align="right">
-                <Chip
-                  label={content.status ? '정상' : '중지'}
-                  variant="outlined"
-                  size="small"
-                  color={content.status ? 'secondary' : 'default'}
-                />
-              </TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
 
-              <TableCell align="right" className={spaceNoWrap}>
-                <Link href={`/admin-center/course/modify/${content.seq}`}>
+              <TableCell style={{ width: 120 }} align="right">
+                <Link href={`/admin-center/content/modify/${content.seq}`}>
                   <Button variant="text" color="neutral" size="small">
                     상세
                   </Button>
@@ -155,8 +136,3 @@ export function Course() {
     </Container>
   );
 }
-
-const spaceNoWrap = css`
-  white-space: nowrap;
-`;
-

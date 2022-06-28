@@ -1,5 +1,5 @@
 import { Modal } from '@components/ui';
-import { useQuestion } from '@common/api/question';
+import { useQuestion } from '@common/api/adm/question';
 
 interface Props {
   open: boolean;
@@ -18,7 +18,7 @@ export function QuestionPreviewModal({ open, handleClose, questionId }: Props) {
       fullWidth
       loading={!question}
       open={open}
-      handleClose={handleClose}
+      onCloseModal={handleClose}
       onSubmit={handleClose}
     >
     </Modal>

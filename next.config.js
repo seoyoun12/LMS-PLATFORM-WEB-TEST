@@ -11,6 +11,9 @@ const nextConfig = {
       'picsum.photos',
       'dnkwhodfjmev10929056.cdn.ntruss.com'
     ]
+  },
+  experimental: {
+    forceSwcTransforms: true,
   }
 };
 

@@ -1,56 +1,61 @@
-import * as React from 'react';
-import { Controller, SubmitHandler, useForm, useWatch } from 'react-hook-form';
+import { 
+  LibraryInput, LibraryStatus, 
+  modifyLibrary, uploadLibrary, useLibrary 
+} from "@common/api/library";
+import { useSnackbar } from "@hooks/useSnackbar";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller } from 'react-hook-form';
 import {
   Box, Button, Chip,
   FormControl, FormControlLabel,
   FormHelperText, FormLabel,
-  MenuItem, Radio, RadioGroup,
-  Select, TextareaAutosize, Typography
+  Radio, RadioGroup, TableCell, Typography
 } from '@mui/material';
 import { ErrorMessage } from '@hookform/error-message';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { Modal } from '@components/ui';
 import TextField from '@mui/material/TextField';
-import { useSnackbar } from '@hooks/useSnackbar';
-import { ForumInput, modifyForum, uploadForum, useForum } from '@common/api/forum';
-import { ProductStatus } from '@common/api/course';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import { grey } from '@mui/material/colors';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { css } from '@emotion/css';
 
-type FormType = {} & ForumInput
-
 const defaultValues = {
-  status: ProductStatus.APPROVE,
+  status: LibraryStatus.APPROVE
 };
 
-export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 'upload' }: {
+export function LibraryUploadModal({ open, handleClose, seq, courseId, mode = 'upload' }: {
   open: boolean;
-  handleClose: () => void;
-  forumId?: number | null;
+  handleClose: (isSubmit: boolean) => void;
+  seq?: number | null;
   courseId?: number;
   mode?: 'modify' | 'upload';
 }) {
   const input: HTMLInputElement | null = document.querySelector('#input-file');
   const snackbar = useSnackbar();
-  const { forum, forumError } = useForum(Number(forumId));
+  const { library, libraryError } = useLibrary(Number(seq));
   const [ submitLoading, setSubmitLoading ] = useState(false);
   const [ fileName, setFileName ] = useState<string | null>();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { register, handleSubmit, formState: { errors }, control, reset } = useForm<FormType>({ defaultValues });
-  const loading = (open && mode === 'modify' && !forum);
+  const loading = (open && mode === 'modify' && !library);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    reset
+  } = useForm<LibraryInput>({ defaultValues });
 
   useEffect(() => {
     if (open) {
       reset(
-        mode === 'modify' && !!forum
-          ? { ...forum }
+        mode === 'modify' && !!library
+          ? { ...library }
           : { ...defaultValues }
       );
     }
-  }, [ mode, forum, open ]);
+  }, [mode, library, open, fileInputRef]);
 
   const uploadFile = (e: ChangeEvent) => {
     e.preventDefault();
@@ -59,45 +64,53 @@ export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 
     setFileName(files[0].name);
   };
 
-  const onSubmit: SubmitHandler<FormType> = async (forum) => {
-    const inputParams = { ...forum, courseSeq: courseId };
+  const onSubmit: SubmitHandler<LibraryInput> = async (library) => {
+    const s3Files = library?.s3Files?.length ? library.s3Files : []
+    const inputParams = { ...library, courseSeq: courseId, s3Files };
     setSubmitLoading(true);
-
     const files = fileInputRef.current?.files;
     const file = !!files?.length ? files[0] : new Blob([]);
     const fileName = !!files?.length ? files[0].name : undefined;
     const formData = new FormData();
     formData.append('files', file, fileName);
-    formData.append('data', new Blob([ JSON.stringify(inputParams) ], { type: 'application/json' }));
+    formData.append('data', new Blob([JSON.stringify(inputParams)], { type: 'application/json' }));
 
-    try {
-      if (mode === 'upload') {
-        await uploadForum(formData);
-      } else {
-        if (forumId) {
-          await modifyForum(forumId, formData);
+    if (fileName !== undefined) {
+      try {
+        if (mode === 'upload') {
+          await uploadLibrary(formData);
+          setSubmitLoading(false);
+          snackbar({ variant: 'success', message: '업로드 되었습니다.' });
+        } else {
+          if (seq) {
+            await modifyLibrary(seq, formData);
+            setSubmitLoading(false);
+            snackbar({ variant: 'success', message: '수정 되었습니다.' });
+          }
         }
+      } catch (e: any) {
+        setSubmitLoading(false);
+        snackbar(e.message || e.data?.message);
       }
-
+      handleClose(true);
+    } else {
+      alert("강의자료를 첨부해주십시오.");
       setSubmitLoading(false);
-      snackbar({ variant: 'success', message: '업로드 되었습니다.' });
-    } catch (e: any) {
-      setSubmitLoading(false);
-      snackbar(e.message || e.data?.message);
     }
-    handleClose();
-  };
+  } 
 
-  if (open && forumError) return <div>error</div>;
+
+  if (open && libraryError) return <div>error</div>;
+
   return (
     <Modal
       action="저장"
-      title="토론 등록"
+      title="강의자료 등록"
       maxWidth="sm"
       fullWidth
       loading={loading}
       open={open}
-      handleClose={handleClose}
+      handleClose={() => handleClose(false)}
       actionLoading={submitLoading}
       onSubmit={handleSubmit(onSubmit)}
     >
@@ -105,9 +118,9 @@ export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 
         <FormContainer>
           <FormControl className="form-control">
             <TextField
-              {...register('subject', { required: '토론명을 입력해주세요.' })}
+              {...register('subject', { required: '제목을 입력해주세요.' })}
               size="small"
-              label="토론명"
+              label="강의자료명"
               variant="outlined"
             />
             <ErrorMessage errors={errors} name="subject" as={<FormHelperText error />} />
@@ -133,7 +146,6 @@ export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 
                 파일 선택
               </Button>
             </label>
-
             {!!fileInputRef.current?.files?.length && <Chip
               className={chipStyles}
               icon={<ImageOutlinedIcon />}
@@ -148,14 +160,6 @@ export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 
           </FormControl>
 
           <FormControl className="form-control">
-            <TextareaAutosize
-              {...register('content')}
-              className="text-area"
-              placeholder="토론 내용"
-            />
-          </FormControl>
-
-          <FormControl className="form-control">
             <FormLabel focused={false}>상태</FormLabel>
             <Controller
               rules={{ required: true }}
@@ -163,9 +167,11 @@ export function ForumUploadModal({ open, handleClose, forumId, courseId, mode = 
               name="status"
               render={({ field }) => (
                 <RadioGroup row {...field}>
-                  <FormControlLabel value={ProductStatus.APPROVE} control={<Radio />} label="정상" />
-                  <FormControlLabel value={ProductStatus.REJECT} control={<Radio />} label="중지" /> </RadioGroup>
+                  <FormControlLabel value={LibraryStatus.APPROVE} control={<Radio />} label="정상" />
+                  <FormControlLabel value={LibraryStatus.REJECT} control={<Radio />} label="중지" />
+                </RadioGroup>
               )}
+
             />
           </FormControl>
 
@@ -219,11 +225,6 @@ const FormContainer = styled.div`
   }
 `;
 
-const FormGroup = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-`;
 
 const chipStyles = css`
   margin-top: 8px;

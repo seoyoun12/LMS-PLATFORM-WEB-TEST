@@ -30,7 +30,6 @@ export interface MyUser {
     regCategory: string;
     loginFailedCount: number;
     failedYn: string;
-    
   };
 }
 
@@ -96,7 +95,6 @@ export async function modifyUser(userInput: UserInput) {
 export async function removeUser(seq: number) {
   return await DELETE(`/user/adm/${seq}`);
 }
-
 
 
 

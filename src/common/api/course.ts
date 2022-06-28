@@ -1,7 +1,7 @@
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { YN } from '@common/constant';
-import { FetchPaginationResponse } from 'types/fetch';
+import { FetchPaginationResponse, PaginationResult } from 'types/fetch';
 import { S3Files } from 'types/file';
 import { ContentRes } from '@common/api/content';
 
@@ -43,6 +43,8 @@ export interface CourseRes {
     }[];
   }[];
 }
+
+
 
 export async function uploadCourse(courseInput: FormData) {
   return await POST(`/course/adm`, courseInput, {

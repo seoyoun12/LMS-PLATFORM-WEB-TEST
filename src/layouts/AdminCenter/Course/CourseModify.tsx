@@ -5,16 +5,18 @@ import { CourseUploadForm } from '@components/admin-center/CourseUploadForm';
 import { Tabs } from '@components/ui';
 import styles from '@styles/common.module.scss';
 import { Box, Container } from '@mui/material';
-import { ContentList } from '@layouts/AdminCenter';
+import { ContentList, Library } from '@layouts/AdminCenter';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { EvaluationInfo } from '@layouts/AdminCenter/Course/EvaluationInfo';
 import { Forum } from '@layouts/AdminCenter/Course/Forum';
+
 
 enum TabValue {
   CourseInfo = 'course-info',
   ContentList = 'content-list',
   EvaluationInfo = 'evaluation-info',
   Forum = 'forum',
+  Library = 'library'
 }
 
 const tabsConfig = [
@@ -22,6 +24,7 @@ const tabsConfig = [
   { label: '콘텐츠 목록', value: TabValue.ContentList },
   { label: '평가 정보', value: TabValue.EvaluationInfo },
   { label: '토론', value: TabValue.Forum },
+  { label: '강의자료', value: TabValue.Library }
 ];
 
 export function CourseModify() {
@@ -67,7 +70,9 @@ export function CourseModify() {
           [TabValue.EvaluationInfo]:
             <EvaluationInfo />,
           [TabValue.Forum]:
-            <Forum />
+            <Forum />,
+          [TabValue.Library]:
+            <Library />
         }[tab as string]
       }
     </Container>

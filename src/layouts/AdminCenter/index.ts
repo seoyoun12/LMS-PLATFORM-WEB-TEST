@@ -1,3 +1,5 @@
+
+
 export { AdminCenter } from './AdminCenter';
 export { AdminCenterLayout } from './AdminCenterLayout';
 
@@ -6,6 +8,7 @@ export { CourseUpload } from './Course/CourseUpload';
 export { CourseModify } from './Course/CourseModify';
 export { ContentList } from './Course/ContentList';
 export { EvaluationInfo } from './Course/EvaluationInfo';
+export { Library } from './Course/Library';
 
 export { Content } from './Content/Content';
 export { ContentUpload } from './Content/ContentUpload';

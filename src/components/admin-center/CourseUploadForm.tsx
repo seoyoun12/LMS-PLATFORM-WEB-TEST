@@ -64,7 +64,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
       reset({ ...course });
       setFileName(course.s3Files[0]?.name || null);
     }
-  }, [ mode, course ]);
+  }, [ mode, course, reset ]);
 
   const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();

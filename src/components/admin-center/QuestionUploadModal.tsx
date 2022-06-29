@@ -25,7 +25,7 @@ import {
   useQuestion
 } from '@common/api/adm/question';
 
-type FormType = {} & QuestionInput
+type FormType = QuestionInput;
 
 const questionTypeOptions = [
   { name: '주관식', value: QuestionType.QUESTION_SUBJ },
@@ -83,7 +83,7 @@ export function QuestionUploadModal({ open, handleClose, questionId, contentId, 
           : { ...defaultValues }
       );
     }
-  }, [ mode, question, open ]);
+  }, [ mode, question, open, reset ]);
 
   const onSubmit: SubmitHandler<FormType> = async (question) => {
     const inputParams = { ...question, contentSeq: contentId };
@@ -266,7 +266,7 @@ const FormContainer = styled.div`
         display: flex;
         flex-direction: column;
         align-items: center;
-        
+
         > :not(:last-child) {
           margin-bottom: 12px;
         }

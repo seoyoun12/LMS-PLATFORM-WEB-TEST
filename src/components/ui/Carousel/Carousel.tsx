@@ -7,6 +7,7 @@ import 'swiper/css/scrollbar';
 import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
 import { Typography } from '@mui/material';
+import Image from 'next/image';
 
 interface Datas {
   id: number;
@@ -36,7 +37,7 @@ export const Carousel = ({ datas }: { datas: Array<any> }) => {
 
   useEffect(() => {
     window.addEventListener('resize', () => {
-      let width = window.innerWidth;
+      const width = window.innerWidth;
       width < 767 ? setIsMobile(true) : setIsMobile(false);
     });
   }, []);
@@ -56,16 +57,23 @@ export const Carousel = ({ datas }: { datas: Array<any> }) => {
           }}
           onSwiper={(swiper: any) => setFirstSwiper(swiper)}
           // controller={{ control: secondSwiper }}
-          style={{ maxWidth: '676px', width: '100%', marginLeft: '0', top: '32px' }}
+          style={{ maxWidth: '676px', width: '100%', minHeight: '370px', marginLeft: '0', top: '32px' }}
         >
           {datas.map((data: Datas) => {
             return (
               <SwiperSlide key={data.id}>
                 {isMobile ? (
-                  <img src={data.img} alt=""
-                       style={{ paddingRight: '16px', width: '100%', height: '192px', objectFit: 'cover' }} />
+                  <Image
+                    width="100%"
+                    height="192px"
+                    src={data.img} alt=""
+                    style={{ paddingRight: '16px', objectFit: 'cover' }} />
                 ) : (
-                  <img src={data.img} alt="" style={{ paddingRight: '16px', width: '100%' }} />
+                  <Image
+                    src={data.img} alt=""
+                    layout="fill"
+                    objectFit="cover"
+                    style={{ paddingRight: '16px' }} />
                 )}
 
               </SwiperSlide>

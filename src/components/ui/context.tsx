@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import { ThemeProvider as EmotionThemeProvider } from '@emotion/react';
 import theme from '@styles/Theme';

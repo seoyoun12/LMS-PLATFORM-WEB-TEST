@@ -5,6 +5,8 @@ export interface TuiViewerWithForwardedProps extends EditorProps {
   forwardedRef?: React.MutableRefObject<Viewer>;
 }
 
-export default (props: TuiViewerWithForwardedProps) => (
+const ViewerWrapper = (props: TuiViewerWithForwardedProps) => (
   <Viewer {...props} ref={props.forwardedRef} />
 );
+
+export default ViewerWrapper;

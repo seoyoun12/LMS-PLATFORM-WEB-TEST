@@ -10,5 +10,7 @@ interface EditorPropsWithHandlers extends EditorProps {
 const Editor = dynamic<TuiEditorWithForwardedProps>(() => import('./EditorWrapper'), { ssr: false });
 
 export const TuiEditor = React.forwardRef<EditorType | undefined, EditorPropsWithHandlers>((props, ref) => (
-  <Editor {...props} forwardedRef={ref as React.MutableRefObject<EditorType>}/>
+  <Editor {...props} forwardedRef={ref as React.MutableRefObject<EditorType>} />
 ));
+
+TuiEditor.displayName = 'TuiEditor';

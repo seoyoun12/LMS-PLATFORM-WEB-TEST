@@ -26,7 +26,7 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
   error?: any;
 }) {
   const snackbar = useSnackbar();
-  const [submitLoading, setSubmitLoading] = useState(false);
+  const [ submitLoading, setSubmitLoading ] = useState(false);
   const {
     register,
     handleSubmit,
@@ -36,8 +36,8 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
   } = useForm<UserInput>();
 
   useEffect(() => {
-    reset({ ...userData })
-  }, [userData, open])
+    reset({ ...userData });
+  }, [ userData, open, reset ]);
 
   const onSubmit: SubmitHandler<UserInput> = async (userInput) => {
 
@@ -52,9 +52,7 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
       setSubmitLoading(false);
     }
     handleClose(true);
-  }
-
-  
+  };
 
 
   if (error) return <div>error</div>;
@@ -75,39 +73,39 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
           <FormControl className="form-control">
             <TextField
               value={(userData?.seq)}
-              type='text'
+              type="text"
               size="small"
-              variant='outlined'
+              variant="outlined"
               label="회원번호"
             />
 
           </FormControl>
           <FormControl className="form-control">
             <TextField
-              {...register("name")}
-              type='text'
+              {...register('name')}
+              type="text"
               size="small"
-              variant='outlined'
+              variant="outlined"
               label="이름"
             />
             <ErrorMessage errors={errors} name="name" as={<FormHelperText error />} />
           </FormControl>
           <FormControl className="form-control">
             <TextField
-              {...register("phone")}
-              type='text'
+              {...register('phone')}
+              type="text"
               size="small"
-              variant='outlined'
+              variant="outlined"
               label="핸드폰번호"
             />
             <ErrorMessage errors={errors} name="phone" as={<FormHelperText error />} />
           </FormControl>
           <FormControl className="form-control">
             <TextField
-              {...register("birth")}
-              type='date'
+              {...register('birth')}
+              type="date"
               size="small"
-              variant='outlined'
+              variant="outlined"
               label="생년월일"
             />
             <ErrorMessage errors={errors} name="birth" as={<FormHelperText error />} />
@@ -121,12 +119,12 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
               render={({ field }) => (
                 <RadioGroup row {...field}>
                   <FormControlLabel
-                    value={"남성"}
+                    value={'남성'}
                     control={<Radio />}
                     label="남성"
                   />
                   <FormControlLabel
-                    value={"여성"}
+                    value={'여성'}
                     control={<Radio />}
                     label="여성"
                   />
@@ -144,12 +142,12 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
               render={({ field }) => (
                 <RadioGroup row {...field}>
                   <FormControlLabel
-                    value={"Y"}
+                    value={'Y'}
                     control={<Radio />}
                     label="동의"
                   />
                   <FormControlLabel
-                    value={"N"}
+                    value={'N'}
                     control={<Radio />}
                     label="거부"
                   />
@@ -167,12 +165,12 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
               render={({ field }) => (
                 <RadioGroup row {...field}>
                   <FormControlLabel
-                    value={"Y"}
+                    value={'Y'}
                     control={<Radio />}
                     label="동의"
                   />
                   <FormControlLabel
-                    value={"N"}
+                    value={'N'}
                     control={<Radio />}
                     label="거부"
                   />

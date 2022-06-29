@@ -11,5 +11,6 @@ interface ViewerPropsWithHandlers extends ViewerProps {
 const Viewer = dynamic<TuiViewerWithForwardedProps>(() => import('./ViewerWrapper'), { ssr: false });
 
 export const TuiViewer = React.forwardRef<ViewerType | undefined, ViewerPropsWithHandlers>((props, ref) => (
-  <Viewer {...props} forwardedRef={ref as React.MutableRefObject<ViewerType>}/>
+  <Viewer {...props} forwardedRef={ref as React.MutableRefObject<ViewerType>} />
 ));
+TuiViewer.displayName = 'TuiViewer';

@@ -2,7 +2,7 @@ import { Modal, Table } from '@components/ui';
 import { FormEvent, useRef, useState } from 'react';
 import { useContentList } from '@common/api/adm/content';
 import styles from '@styles/common.module.scss';
-import { Button, Chip, Container, InputBase, TableBody, TableHead, TextField, Typography } from '@mui/material';
+import { Button, Container, InputBase, TableBody, TableHead, Typography } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { Link } from '@components/common';
@@ -35,7 +35,7 @@ export function ContentConnectModal({ open, handleClose, courseId }: Props) {
   const [ page, setPage ] = useState(0);
   const [ keyword, setKeyword ] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
-  const { data, error, mutate } = useContentList({ page, contentName: keyword });
+  const { data, mutate } = useContentList({ page, contentName: keyword });
 
   const handleConnect = async (contentSeq: number) => {
     try {
@@ -70,7 +70,7 @@ export function ContentConnectModal({ open, handleClose, courseId }: Props) {
     setPage(page);
   };
 
-  const handleSearch = async (event: FormEvent, isReload: boolean = false) => {
+  const handleSearch = async (event: FormEvent, isReload = false) => {
     event.preventDefault();
     if (isReload) {
       setKeyword(null);

@@ -103,7 +103,7 @@ export function Table(
     newPage: number,
   ) => {
     onChangePage && onChangePage(newPage);
-  }, []);
+  }, [ onChangePage ]);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

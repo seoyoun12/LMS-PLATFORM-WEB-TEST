@@ -71,7 +71,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
       reset({ ...lesson });
       setFileName(lesson?.s3Files[0]?.name || null);
     }
-  }, [ lesson, open ]);
+  }, [ lesson, open, reset ]);
 
   const fileHandler = async (files: File[], lesson: Lesson) => {
     const isFileUpload = files.length > 0;

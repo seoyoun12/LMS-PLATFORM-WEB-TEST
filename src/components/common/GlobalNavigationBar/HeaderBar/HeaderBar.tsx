@@ -9,6 +9,7 @@ import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { useEffect, useState } from 'react';
 import { getMyUser } from '@common/api/user';
 import { AccountMenu } from '@components/ui';
+import Image from 'next/image';
 
 export function HeaderBar() {
   const router = useRouter();
@@ -25,9 +26,10 @@ export function HeaderBar() {
   return (
     <Header className={styles.globalContainer}>
       <ContentContainer>
-        <img
+        <Image
           src="/assets/images/logo.png"
           height={24}
+          width={80}
           alt="Your Name"
         />
         <NavContainer>

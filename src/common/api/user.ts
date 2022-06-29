@@ -3,11 +3,7 @@ import useSWR, { SWRResponse } from 'swr';
 import { S3Files } from 'types/file';
 import { Lesson } from '@common/api/lesson';
 import { CourseRes } from '@common/api/course';
-
-export enum YN {
-  YES = 'YES',
-  NO = 'NO'
-}
+import { YN } from '@common/constant';
 
 export interface MyUser extends User {
   accountNonExpired: boolean;

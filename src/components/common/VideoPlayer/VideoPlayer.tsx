@@ -36,7 +36,7 @@ export function VideoPlayer(props: Props) {
     if (props.onReady) {
       props.onReady(ncplayer);
     }
-  }, [ props.config, props.onReady ]);
+  }, [ props ]);
 
   React.useLayoutEffect(() => {
     if (!!window.ncplayer) {
@@ -69,7 +69,7 @@ export function VideoPlayer(props: Props) {
       player.on('blur', (e) => props.onBlur ? props.onBlur(e) : null);
       player.on('windowresize', (e) => props.onWindowresize ? props.onWindowresize(e) : null);
     }
-  }, [ player ]);
+  }, [ player, props ]);
 
   const handleOnload = () => {
     setNcPlayer();

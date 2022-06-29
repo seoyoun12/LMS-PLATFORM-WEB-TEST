@@ -58,7 +58,7 @@ export function ContentUploadForm(
     if (mode === 'modify' && !!content) {
       reset(content);
     }
-  }, [ mode, content ]);
+  }, [ mode, content, reset ]);
 
   const onSubmit: SubmitHandler<ContentInput> = (contentInput: ContentInput) => {
     onHandleSubmit({ contentInput: contentInput, contentId: content?.seq });

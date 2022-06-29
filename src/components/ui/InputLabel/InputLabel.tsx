@@ -7,3 +7,4 @@ export const CustomInputLabel = forwardRef<HTMLLabelElement, InputLabelProps & {
     , ref
   ) => <InputLabel {...props} ref={ref} />
 );
+CustomInputLabel.displayName = 'CustomInputLabel';

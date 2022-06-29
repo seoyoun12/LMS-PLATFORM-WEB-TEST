@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import { Divider, Tab } from '@mui/material';
+import { Divider } from '@mui/material';
 import { headerHeight } from '@styles/variables';
 
 const pages = [ '강의소개', '커리큘럼' ];

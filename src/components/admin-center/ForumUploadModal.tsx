@@ -62,7 +62,7 @@ export function ForumUploadModal({ open, onClose, forumId, courseId, mode = 'upl
         reset({ ...defaultValues });
       }
     }
-  }, [ mode, forum, open ]);
+  }, [ mode, forum, open, reset ]);
 
   const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();

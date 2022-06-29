@@ -50,7 +50,7 @@ const FileUploaderRoot = ({ onFileChange, register, regName, accept = undefined,
           color="neutral"
           variant="outlined"
           startIcon={<UploadOutlinedIcon htmlColor={grey[700]} />}
-          onClick={() => inputRef.current!.click()}
+          onClick={() => inputRef.current?.click()}
         >
           파일 선택
         </Button>

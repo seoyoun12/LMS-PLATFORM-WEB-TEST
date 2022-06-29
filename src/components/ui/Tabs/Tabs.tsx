@@ -18,26 +18,26 @@ export function Tabs({ tabsConfig, showBorderBottom = true, ...props }: Props) {
   const { pathname, query } = router;
 
   useEffect(() => {
-    if (!query.tab) {
+    if (!router.query.tab) {
       router.replace({
         pathname,
         query: {
-          ...query,
+          ...router.query,
           tab: tabsConfig[0].value
         }
       });
     }
-  }, [ pathname, query, tabsConfig ]);
+  }, [ pathname, router, tabsConfig ]);
 
   const handleChange = useCallback((event: SyntheticEvent, newValue: string) => {
     router.push({
       pathname,
       query: {
-        ...query,
+        ...router.query,
         tab: newValue
       }
     });
-  }, [ pathname, query ]);
+  }, [ pathname, router ]);
 
   return (
     <Box

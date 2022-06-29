@@ -1,35 +1,35 @@
-import { 
-  detailHomework, HomeworkInput, HomeworkStatus, 
-  modifyHomework, uploadHomework 
-} from "@common/api/homework";
-import { ErrorMessage } from "@hookform/error-message";
-import { useSnackbar } from "@hooks/useSnackbar";
-import { 
-  Box, Button, Chip, FormControl, FormControlLabel, FormHelperText, 
-  FormLabel, Radio, RadioGroup, TextField, Typography 
-} from "@mui/material";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import {
+  detailHomework, HomeworkInput, HomeworkStatus,
+  modifyHomework, uploadHomework
+} from '@common/api/homework';
+import { ErrorMessage } from '@hookform/error-message';
+import { useSnackbar } from '@hooks/useSnackbar';
+import {
+  Box, Button, Chip, FormControl, FormControlLabel, FormHelperText,
+  FormLabel, Radio, RadioGroup, TextField, Typography
+} from '@mui/material';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
-import { grey } from "@mui/material/colors";
+import { grey } from '@mui/material/colors';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
-import { css } from "@emotion/css";
+import { css } from '@emotion/css';
 import { Modal } from '@components/ui';
 
 const defaultValues = {
   status: HomeworkStatus.APPROVE
-}
+};
 
 export function HomeworkModal({ open, handleClose, seq, contentSeq, mode = 'upload' }: {
   open: boolean;
   handleClose: (isSubmit: boolean) => void;
   seq: number | null;
-  contentSeq: Number;
-  mode: "modify" | "upload"
+  contentSeq: number;
+  mode: 'modify' | 'upload'
 }) {
 
-  const input: HTMLInputElement | null = document.querySelector("#input-file");
+  const input: HTMLInputElement | null = document.querySelector('#input-file');
   const snackbar = useSnackbar();
   const { detailData, detailError } = detailHomework(Number(seq));
   const [ submitLoading, setSubmitLoading ] = useState(false);
@@ -53,7 +53,7 @@ export function HomeworkModal({ open, handleClose, seq, contentSeq, mode = 'uplo
           : { ...defaultValues }
       );
     }
-  }, [mode, detailData, open, fileInputRef]);
+  }, [ mode, detailData, open, fileInputRef, reset ]);
 
   // File Upload
   const uploadFile = (e: ChangeEvent) => {
@@ -74,7 +74,7 @@ export function HomeworkModal({ open, handleClose, seq, contentSeq, mode = 'uplo
     const fileName = !!files?.length ? files[0].name : undefined;
     const formData = new FormData();
     formData.append('files', file, fileName);
-    formData.append('data', new Blob([JSON.stringify(inputParams)], { type: 'application/json' }));
+    formData.append('data', new Blob([ JSON.stringify(inputParams) ], { type: 'application/json' }));
 
     if (fileName !== undefined) {
       try {
@@ -95,10 +95,10 @@ export function HomeworkModal({ open, handleClose, seq, contentSeq, mode = 'uplo
       }
       handleClose(true);
     } else {
-      alert("과제를 첨부해주십시오.");
+      alert('과제를 첨부해주십시오.');
       setSubmitLoading(false);
     }
-  }
+  };
 
 
   if (open && detailError) return <div>error</div>;
@@ -182,7 +182,6 @@ export function HomeworkModal({ open, handleClose, seq, contentSeq, mode = 'uplo
   );
 
 }
-
 
 
 const FormContainer = styled.div`

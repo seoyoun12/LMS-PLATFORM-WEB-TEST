@@ -55,7 +55,7 @@ export function LibraryUploadModal({ open, handleClose, seq, courseId, mode = 'u
           : { ...defaultValues }
       );
     }
-  }, [ mode, library, open, fileInputRef ]);
+  }, [ mode, library, open, fileInputRef, reset ]);
 
   const uploadFile = (e: ChangeEvent) => {
     e.preventDefault();

@@ -81,7 +81,6 @@ export function ForumUploadModal({ open, onClose, forumId, courseId, mode = 'upl
   const fileHandler = async (files: File[], forum: Forum) => {
     const isFileUpload = files.length > 0;
     if (isFileUpload) {
-      // TODO: 이미 존재하는 포럼의 파일을 수정하는 것이 아니라 새로 생성하는 것이라면? 어떤 seq값을 넘겨야할까?
       await uploadFile({
         fileTypeId: forum.seq,
         fileType: BbsType.TYPE_FORUM,

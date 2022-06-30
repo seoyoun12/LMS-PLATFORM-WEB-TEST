@@ -29,7 +29,7 @@ export function useForumList({ courseId, page, elementCnt }: {
   courseId: number, page: number, elementCnt?: number
 }) {
   const key = courseId
-    ? [`/forum/tutor`, { params: { courseSeq: courseId, page, elementCnt } }]
+    ? [ `/forum/tutor`, { params: { courseSeq: courseId, page, elementCnt } } ]
     : null;
 
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Forum[]>>>(key, GET);
@@ -51,8 +51,9 @@ export function useForum(forumId: number | null) {
   };
 }
 
-export function uploadForum(forumInput: ForumInput) {
-  return POST(`/forum/tutor`, forumInput);
+export async function uploadForum(forumInput: ForumInput): Promise<Forum> {
+  const { data } = await POST(`/forum/tutor`, forumInput);
+  return data;
 }
 
 export function modifyForum(forumId: number, forumInput: ForumInput) {

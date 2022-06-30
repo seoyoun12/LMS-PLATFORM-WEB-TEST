@@ -48,7 +48,11 @@ export const uploadFile = ({ fileType, fileTypeId, files }: {
   const { file, fileName } = setFileConfig(files);
   formData.append('files', file, fileName);
 
-  return POST(`/file/adm/${fileType}/${fileTypeId}`, files);
+  return POST(`/file/adm/${fileType}/${fileTypeId}`, formData, {
+    headers: {
+      contentType: 'multipart/form-data'
+    }
+  });
 };
 
 export const updateFile = () => {

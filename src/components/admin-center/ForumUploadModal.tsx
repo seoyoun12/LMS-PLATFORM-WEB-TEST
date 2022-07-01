@@ -15,7 +15,6 @@ import TextField from '@mui/material/TextField';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { Forum, modifyForum, uploadForum, useForum } from '@common/api/forum';
 import { ProductStatus } from '@common/api/course';
-import { css } from '@emotion/css';
 import { FileUploader } from '@components/ui/FileUploader';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';

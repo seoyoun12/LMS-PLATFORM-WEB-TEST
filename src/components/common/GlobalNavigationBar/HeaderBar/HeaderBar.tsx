@@ -6,22 +6,14 @@ import { Link, Searchbar } from '@components/common';
 import { grey } from '@mui/material/colors';
 import * as React from 'react';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
-import { useEffect, useState } from 'react';
-import { getMyUser } from '@common/api/user';
+import { useMyUser, UserRole } from '@common/api/user';
 import { AccountMenu } from '@components/ui';
 import Image from 'next/image';
 
 export function HeaderBar() {
   const router = useRouter();
   const isLogin = useIsLoginStatus();
-  const [ myUser, setMyUser ] = useState({});
-
-  useEffect(() => {
-    (async () => {
-      // const res = await getMyUser();
-      // setMyUser(res);
-    })();
-  }, []);
+  const { user } = useMyUser();
 
   return (
     <Header className={styles.globalContainer}>
@@ -65,12 +57,16 @@ export function HeaderBar() {
               direction="row"
               alignItems="center"
             >
-              <Link href="/admin-center/dashboard" underline="none">
-                <Button
-                  className="align-left"
-                  color="neutral"
-                >관리 센터</Button>
-              </Link>
+              {
+                !!user?.roles?.length && user.roles.some(role => role === UserRole.ROLE_ADMIN || role === UserRole.ROLE_MANAGER)
+                  ? <Link href="/admin-center/dashboard" underline="none">
+                    <Button
+                      className="align-left"
+                      color="neutral"
+                    >관리 센터</Button>
+                  </Link>
+                  : null
+              }
               <AccountMenu />
             </Stack>
           )}

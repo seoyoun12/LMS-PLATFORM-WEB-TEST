@@ -1,14 +1,19 @@
-import { DELETE, GET, POST, PUT } from '@common/httpClient';
+import { GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
-import { S3Files } from 'types/file';
-import { Lesson } from '@common/api/lesson';
 import { CourseRes } from '@common/api/course';
 import { YN } from '@common/constant';
+
+export enum UserRole {
+  ROLE_USER = 'ROLE_USER',
+  ROLE_ADMIN = 'ROLE_ADMIN',
+  ROLE_MANAGER = 'ROLE_MANAGER',
+  ROLE_TUTOR = 'ROLE_TUTOR'
+}
 
 export interface MyUser extends User {
   accountNonExpired: boolean;
   accountNonLocked: boolean;
-  authorities: { authority: string; }[];
+  roles: UserRole[];
   credentialsNonExpired: boolean;
   enabled: boolean;
   learningCourses: CourseRes[];

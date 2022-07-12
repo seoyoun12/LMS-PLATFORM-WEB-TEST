@@ -25,7 +25,7 @@ const tabsConfig = [
   { label: '문의내역조회', value: NoticeTab.CbLook },
 ]
 
-export function CategoryBoard() {
+export function CategoryBoard() { 
 
   const router = useRouter();
   const { tab } = router.query;

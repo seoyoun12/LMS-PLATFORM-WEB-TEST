@@ -12,20 +12,20 @@ export function NavBar() {
         <NavContainer>
           <DropdownItem className="dropdown"/>
           <Link
-            href="/"
+            href="/me"
             underline="none"
             color={grey[800]}
           >
-            <Typography variant="subtitle2" className="bold-600">네비게이션1</Typography>
+            <Typography variant="subtitle2" className="bold-600">마이페이지</Typography>
           </Link>
           <Link
             href="/"
             underline="none"
             color={grey[800]}
           >
-            <Typography variant="subtitle2" className="bold-600">네비게이션2</Typography>
+            <Typography variant="subtitle2" className="bold-600">학습지원</Typography>
           </Link>
-          <Link
+          {/* <Link
             href="/"
             underline="none"
             color={grey[800]}
@@ -59,7 +59,7 @@ export function NavBar() {
             color={grey[800]}
           >
             <Typography variant="subtitle2" className="bold-600">네비게이션7</Typography>
-          </Link>
+          </Link> */}
         </NavContainer>
       </ContentContainer>
     </nav>
@@ -70,7 +70,7 @@ const ContentContainer = styled.div`
   display: flex;
   align-items: center;
   height: 100%;
-  padding-bottom: 12px;
+  /* padding-bottom: 12px; */
 
   .bold-600 {
     font-weight: 600;

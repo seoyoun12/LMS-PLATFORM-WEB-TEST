@@ -9,6 +9,7 @@ import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { useMyUser, UserRole } from '@common/api/user';
 import { AccountMenu } from '@components/ui';
 import Image from 'next/image';
+import { NavBar } from '../NavBar';
 
 export function HeaderBar() {
   const router = useRouter();
@@ -18,13 +19,20 @@ export function HeaderBar() {
   return (
     <Header className={styles.globalContainer}>
       <ContentContainer>
-        <Image
+        {/* <Image
           src="/assets/images/logo.png"
           height={24}
           width={80}
           alt="Your Name"
-        />
-        <NavContainer>
+        /> */}
+        <Link
+          href="/"
+          underline="none"
+          color={grey[800]}
+        >
+          <TitleTypography>충남교통연수원</TitleTypography>
+        </Link>
+        {/* <NavContainer>
           <Link
             href="/"
             underline="none"
@@ -32,10 +40,12 @@ export function HeaderBar() {
           >
             <Typography variant="h6" className="bold-600">강의</Typography>
           </Link>
-        </NavContainer>
-        <SearchbarContainer>
+        </NavContainer> */}
+        {/* <SearchbarContainer>
           <Searchbar />
-        </SearchbarContainer>
+        </SearchbarContainer> */}
+        <NavBar></NavBar>
+
         <RightSection>
           {!isLogin ? (
             <div>
@@ -80,6 +90,17 @@ const Header = styled.header`
   width: 100%;
   height: 100%;
 `;
+
+const TitleTypography = styled(Typography)`
+  /* box-sizing: border-box;
+  border: 1px solid black; */
+  color: black;
+  width: 150px;
+  font-weight: bold;
+  font-size: 1.3rem;
+  white-space: nowrap;
+  margin-left: 50px;
+`
 
 const ContentContainer = styled.div`
   display: flex;

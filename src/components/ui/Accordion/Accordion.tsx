@@ -10,12 +10,12 @@ import { grey } from '@mui/material/colors';
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 
 interface AccordionList {
-  name: string;
-  icon: EmotionJSX.Element;
+  name?: string;
+  icon?: EmotionJSX.Element;
   children: {
-    name: string;
+    name?: string;
     href: string;
-    isActive: boolean;
+    isActive?: boolean;
   }[];
 }
 

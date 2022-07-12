@@ -4,7 +4,7 @@ export { AccountMenu } from './AccountMenu';
 export { Menubar } from './Menubar';
 export { CurriculumAccordion } from './CurriculumAccordion';
 export { Accordion } from './Accordion';
-export { Carousel } from './Carousel';
+export { CategoryCarousel } from './CategoryCarousel';
 export { Table } from './Table';
 export { Tabs } from './Tabs';
 export { Modal } from './Modal';

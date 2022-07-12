@@ -11,7 +11,8 @@ interface Props {
 }
 
 const hideNavList = [
-  { href: '/admin-center' }
+  { href: '/admin-center' },
+  // { href: '' } // 메인에서 제거
 ];
 
 export const Footer: FC<Props> = () => {
@@ -78,7 +79,7 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding-top: 24px;
+  padding-top: 224px;
 `;
 
 const ContentItem = styled.div`

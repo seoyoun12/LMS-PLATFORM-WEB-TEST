@@ -58,7 +58,8 @@ export function Tabs({ tabsConfig, showBorderBottom = true, ...props }: Props) {
         aria-label="basic tabs example"
       >
         {tabsConfig.map(({ value, label }) =>
-          <MuiTab key={value} label={label} value={value} />
+          // <MuiTab key={value} label={label} value={value}/>
+          <MuiTab key={value} label={label} value={value} className="Ntt"/>
         )}
       </MuiTabs>
     </Box>

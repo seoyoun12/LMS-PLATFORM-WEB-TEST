@@ -7,7 +7,8 @@ import * as React from 'react';
 
 const hideNavList = [
   { href: '/course/[courseId]' },
-  { href: '/admin-center' }
+  { href: '/admin-center' },
+  // { href: '/'}
 ];
 
 export function GlobalNavigationBar() {
@@ -22,6 +23,7 @@ export function GlobalNavigationBar() {
     [ router ]
   );
 
+  if (isHideNavbar) return null; // 추가
   return (
     <AppBar
       position="sticky"
@@ -34,7 +36,7 @@ export function GlobalNavigationBar() {
     >
       <HeaderBar />
       <>
-        {isHideNavbar || <NavBar />}
+        {/* {isHideNavbar || <NavBar />} */}
       </>
     </AppBar>
   );

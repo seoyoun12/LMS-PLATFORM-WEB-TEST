@@ -45,7 +45,7 @@ export function UserManagement() {
   const onClickRemoveUser = async (userSeq: number) => {
     try {
       const dialogConfirmed = await dialog({
-        title: '콘텐츠 삭제하기',
+        title: '유저 삭제하기',
         description: '정말로 삭제하시겠습니까?',
         confirmText: '삭제하기',
         cancelText: '취소'

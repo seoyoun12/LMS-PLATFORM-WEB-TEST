@@ -102,7 +102,7 @@ const TabMenu = styled(Tabs)`
 const LessonTitle = styled(Typography)`
 
 `;
-
+// 여기를 지우면 마이페이지 동영상 플레이어 확인 가능.
 const MenuCellLink = styled(Link)`
   display: block;
   padding: 12px;
@@ -110,9 +110,9 @@ const MenuCellLink = styled(Link)`
   cursor: pointer;
 
   &.active {
-    ${LessonTitle} {
+    /* ${LessonTitle} {
       font-weight: 500;
-    }
+    } */
   }
 `;
 

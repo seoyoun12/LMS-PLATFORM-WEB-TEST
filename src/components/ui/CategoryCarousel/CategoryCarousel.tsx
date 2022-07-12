@@ -16,7 +16,7 @@ interface Datas {
   description: string;
 }
 
-export const Carousel = ({ datas }: { datas: Array<any> }) => {
+export const CategoryCarousel = ({ datas }: { datas: Array<any> }) => {
   const [ firstSwiper, setFirstSwiper ] = useState();
   const [ secondSwiper, setSecondSwiper ] = useState();
 

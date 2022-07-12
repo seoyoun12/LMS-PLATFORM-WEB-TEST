@@ -2,7 +2,8 @@ import MuiTabs from "@mui/material/Tabs";
 import MuiTab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/router";
-import { SyntheticEvent, useCallback, useEffect } from "react";
+import React ,{ SyntheticEvent, useCallback, useEffect } from "react";
+import styled from "styled-components";
 
 interface Props {
   tabsConfig: {
@@ -10,39 +11,49 @@ interface Props {
     value: string;
   }[];
   showBorderBottom?: boolean;
+  variant: "fullWidth" | "standard" | "scrollable";
+  gap?:number
+  rendering?:boolean;
+  onChange?:(newValue : string)=>void;
+  value?:string;
 }
 
-export function Tabs({ tabsConfig, showBorderBottom = true, ...props }: Props) {
+export function Tabs({ tabsConfig, showBorderBottom = true ,variant = "standard", gap , rendering=true ,onChange , value ,  ...props }: Props) {
   const router = useRouter();
   const { pathname, query } = router;
 
   useEffect(() => {
-    if (!router.query.tab) {
-      router.replace({
-        pathname,
-        query: {
-          ...router.query,
-          tab: tabsConfig[0].value,
-        },
-      });
+      if (!router.query.tab && rendering) {
+        router.replace({
+          pathname,
+          query: {
+            ...router.query,
+            tab: tabsConfig[0].value,
+          },
+        });
     }
-  }, [pathname, router, tabsConfig]);
+  }, [pathname, router]);
 
   const handleChange = useCallback(
     (event: SyntheticEvent, newValue: string) => {
-      router.push({
-        pathname,
-        query: {
-          ...router.query,
-          tab: newValue,
-        },
-      });
+      if(!rendering && onChange){
+        onChange(newValue);
+      }else{
+        router.push({
+          pathname,
+          query: {
+            ...router.query,
+            tab: newValue,
+          },
+        });
+      }
+      
     },
     [pathname, router]
   );
 
   return (
-    <Box
+    <TabBox
       sx={
         showBorderBottom
           ? {
@@ -52,17 +63,34 @@ export function Tabs({ tabsConfig, showBorderBottom = true, ...props }: Props) {
             }
           : null
       }
+      variant={variant}
+      gap={gap}
       {...props}
     >
       <MuiTabs
-        value={query.tab || tabsConfig[0].value}
+        className="mui-tabs"
+        value={query.tab || value || tabsConfig[0].value}
         onChange={handleChange}
         aria-label="basic tabs example"
+        variant={variant}
       >
         {tabsConfig.map(({ value, label }) => (
-          <MuiTab key={value} label={label} value={value} />
+          <MuiTab key={value} className="mui-tabs-item" label={label} value={value} />
         ))}
       </MuiTabs>
-    </Box>
+    </TabBox>
   );
 }
+
+
+const TabBox = styled(Box)<{variant:string , gap?:number}>`
+  .mui-tabs{
+    display:flex;
+    }
+
+  
+  .mui-tabs-item{
+    margin : ${(({variant, gap})=> variant === "fullWidth" && gap  ? `0 ${gap}rem` : "0")};
+  }
+
+`

@@ -1,1 +1,1 @@
-export { isLoginState } from './atom';
+export { isLoginState , userInfo } from './atom';

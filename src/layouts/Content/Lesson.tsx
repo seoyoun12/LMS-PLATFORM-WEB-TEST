@@ -1,64 +1,64 @@
-import { Container, Typography } from '@mui/material';
+import { Box, Container, Divider, Typography } from '@mui/material';
 import styled from '@emotion/styled';
-import { headerHeight } from '@styles/variables';
 import { Spinner, Tabs } from '@components/ui';
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Link, VideoPlayer } from '@components/common';
 import { useCourse } from '@common/api/course';
-import { grey } from '@mui/material/colors';
-import PlayCircleOutlinedIcon from '@mui/icons-material/PlayCircleOutlined';
-import { totalSecToMinSec } from '@utils/totalSecToMinSec';
+import { TuiViewer } from '@components/common/TuiEditor';
+import { LessonSidebar } from './LessonSidebar';
+import { useRecoilState } from 'recoil';
+import { MainContent } from './MainContent';
 
 const tabsConfig = [
   { label: '커리큘럼', value: 'curriculum' },
+  { label: '공지사항', value: 'notice' },
   { label: '수업자료', value: 'stuff' },
-  { label: '소식', value: 'notice' },
 ];
+
+const testList = [
+  {title:"중간평가입니다." , score: 70 , description:"시험",type:"test", isTest:true , complete:true},
+  // {title:"과제평가입니다." , score: 0 , description:"과제",type:"report", isTest:false , complete:false} 보류
+]
+
+const noticeConfig = [
+  {seq:0, title:"오쩔" , type:"notice",content:"## 안녕하세요\n**수강완료!**\n잠이나 자세요!\n", date:"2022.04.12 18:46:21" , complete: true },
+  { seq:1, title:"오지사항 제목입니다." ,type:"notice", content:"요를레히후.",date:"2022.04.15 9:46:21" , complete: false },
+  {seq:2, title:"오지사항 제목입니다.지사항 제목입니다." , type:"notice", content:"요를레히요를레히요를레히요를레히요를레히요를레히요를레히후.",date:"2022.04.19 14:46:21" , complete: false }
+]
+
+const fileList = [
+  {seq:0, title:"어쩔파일입니다.pdf"},
+  {seq:1, title:"어쩔파일입니다2.pdf"},
+  {seq:2, title:"어쩔파일입니다3.pdf"}
+]
 
 export function Lesson() {
   const router = useRouter();
-  const { query } = router;
+  const { query , pathname } = router;
   const { courseId, lessonId } = query;
   const { course, courseError } = useCourse(Number(courseId));
+  console.log(course)
+  console.log(router)
 
   if (courseError) return <div>error</div>;
   if (!course) return <Spinner />;
   console.log(course);
   return (
-    <ContentContainer maxWidth={false}>
-      <MainSection>
-        <VideoPlayerContainer>
+    <ContentContainer maxWidth={false} >
+      {/* <MainSection>
+        {revealVideo ? <VideoPlayerContainer>
           <VideoPlayer
             config={{
               playlist: course.lessons.filter(lesson => lesson.seq === Number(lessonId))[0].s3Files[0].path,
               autostart: false
             }}
           />
-        </VideoPlayerContainer>
-      </MainSection>
+        </VideoPlayerContainer> : <TuiViewer initialValue={noticeConfig[0].content} />}
+      </MainSection> */}
+      <MainContent course={course} noticeConfig={noticeConfig} />
 
-      <StickySideBar>
-        <TabMenu tabsConfig={tabsConfig} showBorderBottom={false} />
-        {course.lessons.map(lesson => {
-            const { min, sec } = totalSecToMinSec(lesson.totalTime);
-            return (
-              <MenuCellLink
-                className={Number(lessonId) === lesson.seq ? 'active' : ''}
-                key={lesson.seq}
-                href={`/course/${course.seq}/lesson/${lesson.seq}`}
-                color={grey[900]}
-              >
-                <LessonTitle variant="body1">{lesson.lessonNm}</LessonTitle>
-                <LessonInfo>
-                  <PlayCircleOutlinedIcon fontSize="small" htmlColor={grey[500]} />
-                  <Typography className="typo" variant="body2" color={grey[500]}>{min}:{sec}</Typography>
-                </LessonInfo>
-              </MenuCellLink>
-            );
-          }
-        )}
-      </StickySideBar>
+      <LessonSidebar course={course} tabsConfig={tabsConfig} testList={testList} noticeConfig={noticeConfig} fileList={fileList} />
     </ContentContainer>
   );
 }
@@ -76,52 +76,57 @@ const MainSection = styled.div`
   flex: 1;
 `;
 
-const StickySideBar = styled.aside`
-  position: sticky;
-  top: ${headerHeight};
-  margin-left: 40px;
-  padding-top: 32px;
-  width: 480px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  z-index: 1;
-  flex-shrink: 0;
-  overflow: hidden;
-`;
+// const StickySideBar = styled.aside`
+//   position: sticky;
+//   top: ${headerHeight};
+//   margin-left: 40px;
+//   padding-top: 32px;
+//   width: 480px;
+//   height: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   background-color: #fff;
+//   z-index: 1;
+//   flex-shrink: 0;
+//   overflow: hidden;
+// `;
 
 const VideoPlayerContainer = styled.div`
   height: calc(100vh - 160px);
 `;
 
-const TabMenu = styled(Tabs)`
-  padding-bottom: 30px;
-`;
+// const TabMenu = styled(Tabs)`
+//   padding-bottom: 30px;
+// `;
 
-const LessonTitle = styled(Typography)`
+// const LessonTitle = styled(Typography)`
+// &.active {
+//     font-weight:500;
+//   }
+// `;
 
-`;
+// const MenuCellLink = styled(Link)`
+//   display: block;
+//   padding: 12px;
+//   min-height: 36px;
+//   cursor: pointer;
+//   display:flex;
+//   justify-content:space-between;
 
-const MenuCellLink = styled(Link)`
-  display: block;
-  padding: 12px;
-  min-height: 36px;
-  cursor: pointer;
+  
+// `;
 
-  &.active {
-    ${LessonTitle} {
-      font-weight: 500;
-    }
-  }
-`;
+// const LessonInfo = styled.div`
+//   display: flex;
+//   align-items: center;
+//   padding-top: 4px;
 
-const LessonInfo = styled.div`
-  display: flex;
-  align-items: center;
-  padding-top: 4px;
+//   .typo {
+//     margin-left: 4px;
+//   }
+// `;
 
-  .typo {
-    margin-left: 4px;
-  }
-`;
+// const LessonCheck = styled(Box)`
+//   display:flex;
+//   align-items:center;
+// `

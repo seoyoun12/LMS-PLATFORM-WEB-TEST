@@ -16,11 +16,16 @@ import { useIsLoginStatus } from "@hooks/useIsLoginStatus";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSnackbar } from "@hooks/useSnackbar";
+import { regCategory } from "@common/api/auth/signUp";
+import { userInfo } from "@common/recoil/user";
+
 
 export function SignIn() {
   const router = useRouter();
   const isLogin = useIsLoginStatus();
   const setIsLoginState = useSetRecoilState(isLoginState);
+  const setUsetInfo = useSetRecoilState(userInfo)
+  const [loginType , setLoginType] = React.useState<regCategory>("TYPE_TRANS_EDU")
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -36,9 +41,10 @@ export function SignIn() {
     const password = data.get("password") as string;
 
     try {
-      const res = await signIn(username, password);
+      const res = await signIn(username, password , loginType);
       if (res.success) {
         setIsLoginState(true);
+        setUsetInfo({username:res.data.username , regCategory:[...res.data.roles]}) // api가 있었음 필요없을듯
         snackbar({ variant: "success", message: "로그인이 되었습니다." });
         return router.push("/");
       }
@@ -71,12 +77,14 @@ export function SignIn() {
           로그인
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Typography component="div" variant="button" onClick={()=>setLoginType("TYPE_TRANS_EDU")} >저상/운수</Typography>
+          <Typography component="div" variant="button" onClick={()=>setLoginType("TYPE_TRAFFIC_SAFETY_EDU")} >도민</Typography>
           <TextField
             margin="normal"
             required
             fullWidth
             id="username"
-            label="이메일"
+            label="아이디"
             name="username"
             autoComplete="username"
             autoFocus

@@ -11,11 +11,11 @@ import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 
 interface AccordionList {
   name: string;
-  icon: EmotionJSX.Element;
+  icon?: EmotionJSX.Element;
   children: {
     name: string;
-    href: string;
-    isActive: boolean;
+    href?: string;
+    isActive?: boolean;
   }[];
 }
 
@@ -49,7 +49,7 @@ export function Accordion({ accordionList }: { accordionList: AccordionList[] })
               <List disablePadding={true}>
                 {children.map(({ name, href, isActive }, idx) => (
                   <Link
-                    href={href}
+                    href={href ? href : ''}
                     color={grey[900]}
                     key={name}
                   >

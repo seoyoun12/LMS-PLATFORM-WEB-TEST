@@ -4,7 +4,7 @@ import styles from '@styles/common.module.scss';
 import { Box } from "@mui/material";
 import MuiTab from '@mui/material/Tab';
 import { useRouter } from "next/router";
-import { SyntheticEvent, useCallback, useEffect } from "react";
+import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { CategoryBoardNotice } from "@layouts/Category/CategoryBoardNotice";
 import { CategoryBoardQna } from "@layouts/Category/CategoryBoardQna";
 import { CategoryBoardQuestion } from "@layouts/Category/CategoryBoardQuestion";
@@ -30,6 +30,11 @@ export function CategoryBoard() {
   const router = useRouter();
   const { tab } = router.query;
   const { pathname, query } = router;
+  // const [ value, setValue ] = useState(tabsConfig[0].label);
+
+  // const onChange = (newValue : string) => {
+  //   setValue(newValue)
+  // }
 
   return (
     <NoticeContainer>
@@ -39,9 +44,13 @@ export function CategoryBoard() {
           variant={"fullWidth"}
           rendering={false}
           showBorderBottom={true}
+          // onChange={onChange}
+          // value={value}
         />
       </Box>
-
+      {/* {tabsConfig.map((item)=>{
+        return <div key={item.label} hidden={value !== item.label} >나 보이니</div>
+      })} */}
       {
         {
           [NoticeTab.CbNotice]: <CategoryBoardNotice />,

@@ -24,46 +24,33 @@ import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 
 export function CategoryBoardNotice() {
 
-  const [ page, setPage ] = useState(0);
+  const [page, setPage] = useState(0);
   const { data, error, mutate } = categoryBoardNoticeList({ page, boardType: "TYPE_NOTICE" });
 
-  const accordionList = [
-    
-    {
-      name : data?.content[2].subject,
-      children: [
-        {
-          name: data?.content[0].content,
-          href: '',
-          // isActive: router.pathname === '/admin-center/course'
-        }
-      ],
-      // icon: <></>, //<SchoolOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
-    }
-  ]
+  // const accordionList = [
+
+    //   {
+    //     name : data?.content[2].subject,
+    //     children: [
+    //       {
+    //         name: data?.content[0].content,
+    //         href: '',
+    //         // isActive: router.pathname === '/admin-center/course'
+    //       }
+    //     ],
+    //     // icon: <></>, //<SchoolOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    //   }
+    // ]
 
   console.log("data.content : ", data?.content);
 
   return (
-    <>
-      {data?.content.map((cbList) => 
-        <CbNoticeContainer key={cbList.seq}>
-
-          {/* <Container>{cbList.seq}</Container> */}
-          <Typography className='cbnDateContainer'>
-            {dateFormat(cbList.createdDtime, 'isoDate')}
-            {/* <CbNoticeToggleButton>  
-              <KeyboardArrowUpSharpIcon className='ToggleArrowBtn'/>
-            </CbNoticeToggleButton> */}
-          </Typography>
-          {/* <Typography className='cbnSubjectContainer'>
-            {cbList.subject}
-          </Typography> */}
-          {/* <Typography className='cbnContentContainer'>{cbList.content}</Typography> */}
-          <Accordion accordionList={accordionList} />
-        </CbNoticeContainer>
-      )}
-    </>
+    <div>
+      {data && data?.content.map((content) => {
+        const accordionInfo = [{ name: content.subject, children: [{ name: content.content }] }]
+        return <Accordion accordionList={accordionInfo} />
+      })}
+    </div>
   )
 }
 

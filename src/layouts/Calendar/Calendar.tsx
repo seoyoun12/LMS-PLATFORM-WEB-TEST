@@ -19,7 +19,7 @@ export function CNCalendar() {
           plugins={[ dayGridPlugin ]}
         /> */}
         
-        <Typography>캘캘캘린더</Typography>
+        <Typography>캘캘캘린더더더더ddd</Typography>
         <Typography>★</Typography>
         <Typography>★★</Typography>
         <Typography>★★★</Typography>

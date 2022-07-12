@@ -17,6 +17,7 @@ const myInfoList = [
 
 export function Me() {
   const { user, error } = useMyUser();
+  console.log(user);
 
 
   useEffect(() => {
@@ -28,13 +29,13 @@ export function Me() {
   return (
     <Container className={containerStyle}>
       <UserInfoSection>
-        <div className={s.myInfo}>
+        <Link href={`/me/edit`} className={s.myInfo}>
           <UserProfile>M</UserProfile>
           <div>
             <Typography>{user.name}</Typography>
             <Typography>{user.username}</Typography>
           </div>
-        </div>
+        </Link>
       </UserInfoSection>
       <ContentBody>
         <SideBar>
@@ -64,11 +65,11 @@ export function Me() {
             container
             rowSpacing={4}
             columnSpacing={2}
-            columns={{ xs: 1, sm: 1, md: 2, lg: 3 }}>
+            columns={{ xs: 1, sm: 1, md: 2, lg: 2 }}>
             {user.learningCourses.map((res) => (
               <Grid item xs={1} sm={1} md={1} lg={1} key={res.seq}>
                 <Link href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}>
-                  <ContentCard maxWidth={250} minWidth={220} title={res.courseName} />
+                  <ContentCard  title={res.courseName} />
                 </Link>
               </Grid>
             ))}

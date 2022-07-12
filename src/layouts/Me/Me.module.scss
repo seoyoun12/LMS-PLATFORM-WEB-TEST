@@ -8,4 +8,8 @@
 
 .myInfo {
   display: flex;
+  align-items: center;
+}
+.myInfo:visited{
+  color:black;
 }

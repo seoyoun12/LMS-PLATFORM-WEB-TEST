@@ -3,9 +3,10 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { CardActionArea } from '@mui/material';
+import { CardActionArea, Divider } from '@mui/material';
 import styled from '@emotion/styled';
 import { setLineClamp } from '@styles/mixins';
+import { grey } from '@mui/material/colors';
 
 interface Props {
   maxWidth?: number;
@@ -13,7 +14,7 @@ interface Props {
   title: string;
 }
 
-export function ContentCard({ maxWidth = 345, minWidth = 272, title }: Props) {
+export function ContentCard({ maxWidth, minWidth , title }: Props) {
   return (
     <Card sx={{ maxWidth, minWidth }}>
       <CardActionArea>
@@ -27,10 +28,9 @@ export function ContentCard({ maxWidth = 345, minWidth = 272, title }: Props) {
           <Title gutterBottom variant="h5">
             {title}
           </Title>
-          <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
-          </Typography>
+          <TakeCourse>지금 바로 수강하기!</TakeCourse>
+          <Divider sx={{borderBottom:`2px solid ${grey[500]}` , width:"75%" , margin:"1rem 0"}} />
+          <OverDay>180일 남음</OverDay>
         </CardContent>
       </CardActionArea>
     </Card>
@@ -40,3 +40,12 @@ export function ContentCard({ maxWidth = 345, minWidth = 272, title }: Props) {
 const Title = styled(Typography)`
   ${setLineClamp(1)}
 `;
+
+const TakeCourse = styled(Typography)`
+  font-weight:bold;
+  color:#3498db;
+`
+
+const OverDay = styled(Typography)`
+font-weight:bold;
+`

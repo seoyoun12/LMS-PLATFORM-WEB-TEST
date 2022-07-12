@@ -6,6 +6,16 @@ import { useRouter } from 'next/router';
 import { PasswordChangeModal } from './PasswordChangeModal/PasswordChangeModal';
 import { useDialog } from '@hooks/useDialog';
 import { YN } from '@common/constant';
+import { TransAndLowFloor } from './TransAndLowFloor';
+import { Tabs } from '@components/ui';
+import { BoxProps } from '@material-ui/core';
+import { Educator } from './Educator';
+
+const tabsConfig = [
+  {label:"운수종사자" , value:"transport"},
+  {label:"저상버스 운전자" , value:"lowfloorbus"},
+  {label:"도민교통안전교육자" , value:"educator"}
+]
 
 export function MeEdit() {
   const router = useRouter();
@@ -45,15 +55,19 @@ export function MeEdit() {
   };
 
   return (
-    <Container
-      sx={{
-        marginBottom: 8,
-        padding: '72px 30px 48px',
-        minWidth: '375px'
-      }}
-      maxWidth="sm"
-    >
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{
+    <Container>
+    <Tabs tabsConfig={tabsConfig} variant={"fullWidth"} gap={5} />
+      {/* <Tabs tabsConfig={tabsConfig} variant={"fullWidth"} gap={5} rendering={false} onChange={onChange} value={value} /> */}
+      <TabPanel value={router.query.tab as string} index={tabsConfig[0].value} >
+        <TransAndLowFloor type="transport" /> 
+      </TabPanel>
+      <TabPanel value={router.query.tab as string} index={tabsConfig[1].value} >
+        <TransAndLowFloor type="lowfloorbus" /> 
+      </TabPanel>
+      <TabPanel value={router.query.tab as string} index={tabsConfig[2].value} >
+        <Educator /> 
+      </TabPanel>
+      {/* <Box component="form" onSubmit={handleSubmit} noValidate sx={{
         display: 'flex',
         flexDirection: 'column',
         mt: 1
@@ -127,7 +141,22 @@ export function MeEdit() {
       <PasswordChangeModal
         open={openPromptDialog}
         onClose={() => setOpenPromptDialog(false)}
-      />
+      /> */}
     </Container>
   );
+}
+
+interface TabPanelProps extends BoxProps {
+  children : React.ReactNode;
+  value:string;
+  index: string;
+}
+
+const TabPanel = (props : TabPanelProps) => {
+  const {children , value , index , ...rest} = props;
+  return(
+      <Box hidden={value !== index} {...rest} >
+          {children}
+      </Box>
+  )
 }

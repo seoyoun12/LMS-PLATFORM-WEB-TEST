@@ -1,6 +1,6 @@
-import { Layout } from '@layouts/Layout';
-import Head from 'next/head';
-import { Course } from '@layouts/Course';
+import { Layout } from "@layouts/Layout";
+import Head from "next/head";
+import { Course } from "@layouts/Course";
 
 export default function CoursePage() {
   return (
@@ -8,7 +8,7 @@ export default function CoursePage() {
       <Head>
         <title>Course Page</title>
       </Head>
-      <Course/>
+      <Course />
     </>
   );
 }

@@ -1,6 +1,6 @@
-import { Layout } from '@layouts/Layout';
-import Head from 'next/head';
-import { Lesson } from '@layouts/Content';
+import { Layout } from "@layouts/Layout";
+import Head from "next/head";
+import { Lesson } from "@layouts/Content";
 
 export default function LessonPage() {
   return (

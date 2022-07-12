@@ -1,24 +1,32 @@
 import { useMyUser } from '@common/api/user';
 import styled from '@emotion/styled';
-import { Autocomplete, Avatar, Box, Container, FormControl, MenuItem, Select, TextField } from '@mui/material';
+import { useInput } from '@hooks/useInput';
+import { Autocomplete, Avatar, Box, Button, Container, FormControl, InputBase, MenuItem, Select, Switch, TextField, Typography } from '@mui/material';
 import React , { useState } from 'react';
 
 interface Props{
     type:"transport" | "lowfloorbus" | "educator"
 }
-const options = [{title:'Option 1',value:1}, {title:'Option 2',value:2}];
+const phoneNumbers = ["010","02" , "032" , "031"]
+
 const occupationOptions1 = ["여객" , "화물"]
 const occupationOprions2 = ["버스","전세버스","특수여객","법인택시","법인화물","개인택시", "용달화물","개별화물"];
 
 export function TransAndLowFloor({type}:Props){
     const { user, error } = useMyUser();
-    const [ nameInput, setNameInput ] = useState('이미림');
+    const [ name, setName , onChangeName ] = useInput();
+    const [ occupation1, setOccupation1 , onChangeOcc1 ] = useInput();
+    const [ occupation2, setOccupation2 , onChangeOcc2 ] = useInput();
+    const [ company, setCompany , onChangeComp] = useInput();
+    const [ vehicleNumber, setVehicleNumber , onChangeVehicleNum ] = useInput();
+    const [ vehicleRegi, setVehicleRegi , onChangeVehicleRegi ] = useInput();
+    const [phone1, setPhone1 , onChagePhone1 ] = useInput();
+    const [phone2, setPhone2 , onChagePhone2 ] = useInput();
+    const [phone3, setPhone3 , onChagePhone3 ] = useInput();
     const [occOption1 , setValue] = useState<string | null>(occupationOptions1[0])
     const [inputValue, setInputValue] = useState("")
+    const [smsChecked, setSmsChecked] = useState(false);
     
-//   const [values, setValues] = React.useState<string | null>(options[0]);
-  const [values, setValues] = React.useState<number>(1);
-  const [inputValues, setInputValues] = React.useState('');
     return(
     <TransAndLowFloorContainer 
     sx={{
@@ -43,91 +51,105 @@ export function TransAndLowFloor({type}:Props){
             <TextField 
                 required
                 fullWidth 
-                id="name"
+                id="occupation1"
                 label="업종구분"
-                name="name"
-                value={nameInput}
-                disabled
+                name="occupation1"
+                value={occupation1}
+                onChange={onChangeOcc1}
             />
             <TextField 
                 required
                 fullWidth 
-                id="name"
+                id="occupation2"
                 label="업종구분2"
-                name="name"
-                value={nameInput}
-                disabled
+                name="occupation2"
+                value={occupation2}
+                onChange={onChangeOcc2}
             />
             <TextField 
                 required
                 fullWidth 
-                id="name"
+                id="company"
                 label="회사명"
-                name="name"
-                value={nameInput}
-                disabled
+                name="company"
+                value={company}
+                onChange={onChangeComp}
             />
             {(type === "transport") && <TextField 
                 required
                 fullWidth 
-                id="name"
+                id="vehicle-number"
                 label="차량번호"
-                name="name"
-                value={nameInput}
-                disabled
+                name="car-number"
+                value={vehicleNumber}
+                onChange={onChangeVehicleNum}
             />}
             <TextField 
                 required
                 fullWidth 
-                id="name"
+                id="vehicle-registration"
                 label="차량등록지"
-                name="name"
-                value={nameInput}
-                disabled
+                name="vehicle-registration"
+                value={vehicleRegi}
+                onChange={onChangeVehicleRegi}
             />
+            <Box display={"flex"} alignItems="center" gap="1rem" >
+            <FormControl fullWidth >
+                <Select onChange={(e)=>setPhone1(String(e.target.value))} >
+                    {phoneNumbers.map((phone)=> <MenuItem value={phone} >{phone}</MenuItem> )}
+                </Select>
+            </FormControl> - 
             <TextField 
                 required
                 fullWidth 
                 id="name"
-                label="휴대전화번호"
                 name="name"
-                value={nameInput}
-                disabled
-            />
-            {/* <Autocomplete 
-                value={values}
-                onChange={(event: any, newValue: string | null) => {
-                setValue(newValue);
+                value={phone2}
+                onChange={onChagePhone2}
+            /> - 
+            <TextField 
+                required
+                fullWidth 
+                id="name"
+                name="name"
+                value={phone3}
+                onChange={onChagePhone3}
+            /></Box>
+            <Box display={"flex"} alignItems="center" >
+                <Typography variant="body2">SMS 수신 여부</Typography>
+                <Switch
+                name="smsYn"
+                sx={{ ml: "auto" }}
+                checked={smsChecked}
+                onChange={(e, checked) => {
+                    setSmsChecked(checked);
                 }}
-                inputValue={inputValue}
-                onInputChange={(event, newInputValue) => {
-                setInputValue(newInputValue);
-                }}
-                id="controllable-states-demo"
-                options={options}
+                />
+            </Box>
+            <Button
+                type="submit"
                 fullWidth
-                renderInput={(params) => <Box className='뭐야' position="relative" ><TextField {...params} fullWidth /><Box position="absolute" top="0" width={"90%"} height={"56px"} >ddd</Box></Box>}  
-            /> */}
-            <FormControl sx={{position:"relative"}} fullWidth>
-                <Select onChange={(e)=>{setValues(Number(e.target.value));console.log(values)}} >
-                    {options.map((item)=><MenuItem value={item.value} >{item.title}</MenuItem>)}
-                </Select>
-                <Box className='front-box' position="absolute" top="0" width={"90%"}  display={"flex"} sx={{padding:"4px"}} >
-                    <Box>{values}</Box>
-                    <TextField sx={{}} fullWidth />
-                </Box>
-            </FormControl>
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+            >
+            수정하기
+            </Button>
+            
             
         </BoxForm>
     </TransAndLowFloorContainer>
 )}
 
 const TransAndLowFloorContainer = styled(Container)`
-.front-box .MuiInputBase-input{
-    padding: 12.5px 14px;
-    border-color:white;
-}
+    .front-box{
+        background:#fff
+    }
 `
+const CssTextField = styled(InputBase)({
+    padding:"15.5px 14px",
+      
+  });
+
 const BoxForm = styled(Box)`
     display:flex;
     flex-direction:column;

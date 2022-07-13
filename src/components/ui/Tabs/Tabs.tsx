@@ -2,7 +2,7 @@ import MuiTabs from "@mui/material/Tabs";
 import MuiTab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/router";
-import React ,{ SyntheticEvent, useCallback, useEffect } from "react";
+import React, { SyntheticEvent, useCallback, useEffect } from "react";
 import styled from "styled-components";
 
 interface Props {
@@ -12,33 +12,42 @@ interface Props {
   }[];
   showBorderBottom?: boolean;
   variant: "fullWidth" | "standard" | "scrollable";
-  gap?:number
-  rendering?:boolean;
-  onChange?:(newValue : string)=>void;
-  value?:string;
+  gap?: number;
+  rendering?: boolean; //spa로 할지 여부(default rendering)
+  onChange?: (newValue: string) => void; //부모단에서 상태변화시킬 함수
+  value?: string; //부모단에서 상태변화된 값
 }
 
-export function Tabs({ tabsConfig, showBorderBottom = true ,variant = "standard", gap , rendering=true ,onChange , value ,  ...props }: Props) {
+export function Tabs({
+  tabsConfig,
+  showBorderBottom = true,
+  variant = "standard",
+  gap,
+  rendering = true,
+  onChange,
+  value,
+  ...props
+}: Props) {
   const router = useRouter();
   const { pathname, query } = router;
 
   useEffect(() => {
-      if (!router.query.tab && rendering) {
-        router.replace({
-          pathname,
-          query: {
-            ...router.query,
-            tab: tabsConfig[0].value,
-          },
-        });
+    if (!router.query.tab && rendering) {
+      router.replace({
+        pathname,
+        query: {
+          ...router.query,
+          tab: tabsConfig[0].value,
+        },
+      });
     }
   }, [pathname, router]);
 
   const handleChange = useCallback(
     (event: SyntheticEvent, newValue: string) => {
-      if(!rendering && onChange){
+      if (!rendering && onChange) {
         onChange(newValue);
-      }else{
+      } else {
         router.push({
           pathname,
           query: {
@@ -47,7 +56,6 @@ export function Tabs({ tabsConfig, showBorderBottom = true ,variant = "standard"
           },
         });
       }
-      
     },
     [pathname, router]
   );
@@ -82,15 +90,12 @@ export function Tabs({ tabsConfig, showBorderBottom = true ,variant = "standard"
   );
 }
 
-
-const TabBox = styled(Box)<{variant:string , gap?:number}>`
-  .mui-tabs{
-    display:flex;
-    }
-
-  
-  .mui-tabs-item{
-    margin : ${(({variant, gap})=> variant === "fullWidth" && gap  ? `0 ${gap}rem` : "0")};
+const TabBox = styled(Box)<{ variant: string; gap?: number }>`
+  .mui-tabs {
+    display: flex;
   }
 
-`
+  .mui-tabs-item {
+    margin: ${({ variant, gap }) => (variant === "fullWidth" && gap ? `0 ${gap}rem` : "0")};
+  }
+`;

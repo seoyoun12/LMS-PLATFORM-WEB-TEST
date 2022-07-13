@@ -20,62 +20,104 @@ import {
 import { useState } from "react";
 import { PasswordChangeModal } from "../PasswordChangeModal/PasswordChangeModal";
 import Paper from "@mui/material/Paper";
-import { useMyUser } from "@common/api/user";
+import { getMyUser, modifyMyUser, modifyProvincialTrafficSafety, useMyUser, User, userRegistrationType, userSubjectEducationDetailType, userSubjectEducationType } from "@common/api/user";
+import { useEffect } from "react";
+import { useDialog } from "@hooks/useDialog";
+import { YN } from "@common/constant";
+import { useRouter } from "next/router";
+import { useInput } from "@hooks/useInput";
 
-const emailList = ["naver.com", "gmail.com", "daum.net"];
-
-const locationList = [
-  "천안",
-  "공주",
-  "보령",
-  "아산",
-  "서산",
-  "논산",
-  "계룡",
-  "당진",
-  "금산",
-  "부여",
-  "서천",
-  "청양",
-  "홍성",
-  "예산",
-  "태안",
-  "세종시",
-];
-const studentList = ["어린이", "청소년", "자가운전자", "어르신"];
-const studentCategoryList = [
-  { title: "유치원", ageList: ["만3세", "만4세", "만5세"] },
-  {
-    title: "초등학교",
-    ageList: ["1학년", "2학년", "3학년", "4학년", "5학년", "6학년"],
-  },
-  { title: "중학교", ageList: ["1학년", "2학년", "3학년"] },
-  { title: "고등학교", ageList: ["1학년", "2학년", "3학년"] },
-  { title: "자가운전자", ageList: ["자가운전자"] },
-  { title: "어르신", ageList: ["어르신"] },
+const studentList = [
+  {type:"어린이",enType:"CHILDREN" ,category:[{type: "유치원", enType:"KINDER", ageList: ["만3세", "만4세", "만5세"]}]}, 
+  {type:"청소년",enType:"TEENAGER" ,category:[
+    {type: "초등학교",enType:"ELEMENTARY_SCHOOL", ageList: ["1학년", "2학년", "3학년", "4학년", "5학년", "6학년"]},
+    { type: "중학교",enType:"MIDDLE_SCHOOL", ageList: ["1학년", "2학년", "3학년"]},
+    { type: "고등학교",enType:"HIGH_SCHOOL", ageList: ["1학년", "2학년", "3학년"] }]}, 
+  {type:"자가운전자",enType:"SELF_DRIVER" ,category:[{ type: "자가운전자",enType:"SELF_DRIVER", ageList: ["자가운전자"] }]}, 
+  {type:"어르신",enType:"OLD_MAN" ,category:[{ type: "어르신",enType:"OLD_MAN", ageList: ["어르신"] }]}
 ];
 
-export function Educator() {
+interface Props{
+  locationList:{ko:string , en:string}[]
+}
+
+export function Educator({locationList}:Props) {
   const [openPromptDialog, setOpenPromptDialog] = useState(false);
-  const { user, error } = useMyUser();
-  const [value, setValue] = useState<string | null>(emailList[0]);
-  const [address, setAddress] = useState("");
+  const {user , error} = useMyUser()
+  const [name , setName] = useState("")//닉네임
+  const [username, setUsername] = useState("")//아이디
+  const [phone, setPhone, onChangePhone] = useInput(""); //후에 폼에 관련됀 상탯값들을 하나로 통합관리.
   const [location, setLocation] = useState("");
   const [division, setDivision] = useState("");
+  const [period, setPeriod] = useState("");
+  const [student, setStudent] = useState("");
   const [category, setCategory] = useState("");
   const [smsChecked, setSmsChecked] = useState(false);
+
+  const dialog = useDialog();
+  const router = useRouter();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const dialogConfirmed = await dialog({
+      title: '회원 정보 수정',
+      description: '회원 정보를 수정하시겠습니까?',
+      confirmText: '수정하기',
+      cancelText: '취소하기'
+    });
+    await handleOnCloseConfirm(dialogConfirmed);
+  };
+
+  const handleOnCloseConfirm = async (isConfirm: boolean) => {
+    if (isConfirm) {
+      const smsYn = smsChecked ? YN.YES : YN.NO;
+      if(!user) return window.alert("수정 실패하였습니다.")
+      const data = {
+              company: "PRINCESS",
+              email: "PRINCESS@naver.com",
+              fifthGrade: 1,
+              fifthYearOldChild: 2,
+              firstGrade: 3,
+              fourthGrade: 4,
+              fourthYearOldChild: 5,
+              name: name,
+              oldMan: 6,
+              phone: phone,
+              secondGrade: 7,
+              selfDriver: 8,
+              sixthGrade: 9,
+              smsYn: "N",
+              thirdGrade: 11,
+              thirdYearOldChild: 12,
+              userRegistrationType: location,
+              userSeq: user.seq,
+              userSubjectEducationDetailType: category,
+              userSubjectEducationType: student,
+              username: username
+      }
+      
+      await modifyProvincialTrafficSafety(data);
+      return router.push('/me');
+    }
+  };
+
+  console.log(studentList)
+  // console.log(studentList.filter((item) => student === item.enType)[0]?.category.filter((item)=> category === item.enType)[0])
   return (
     <EducatorContainer
       sx={{
         marginBottom: 8,
         padding: "72px 30px 48px",
-        minWidth: "375px",
       }}
       maxWidth="sm"
     >
-      <BoxForm component={"form"}>
+      <Box component={"form"} onSubmit={handleSubmit} sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap:"1rem",
+        mt: 1
+      }} >
         <Box sx={{ padding: "2rem 0", margin: "auto" }}>
-          {" "}
           {/*어쨰서 이렇게 해야 되는것..? */}
           <UserProfile />
         </Box>
@@ -85,7 +127,7 @@ export function Educator() {
           id="name"
           label="이름"
           name="name"
-          value={user?.name ? user?.name : "Error"}
+          value={user?.name}
           disabled
         />
         <TextField
@@ -94,7 +136,7 @@ export function Educator() {
           id="id"
           label="아이디"
           name="id"
-          value={user?.username ? user?.username : "Error"}
+          value={user?.username}
           disabled
         />
         <Button
@@ -107,25 +149,11 @@ export function Educator() {
         >
           비밀번호 변경
         </Button>
-        <EmailBox>
-          <TextField label="Email" />
-          <span>@</span>
-          <TextField value={address} />
-          <FormControl sx={{ width: "25%" }}>
-            <InputLabel id="select">주소</InputLabel>
-            <Select
-              labelId="select"
-              id="select"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              label="address"
-            >
-              {emailList.map((item) => (
-                <MenuItem value={item}>{item}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </EmailBox>
+
+        <PhoneBox>
+          <TextField label="휴대전화" value={phone} onChange={onChangePhone} placeholder="'-'를 제외한 숫자만 입력해주세요." fullWidth />
+        </PhoneBox>
+
         <LocationBox>
           <FormControl fullWidth>
             <InputLabel id="location">지역</InputLabel>
@@ -133,11 +161,11 @@ export function Educator() {
               labelId="location"
               id="location"
               value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              onChange={(e) => setLocation(e.target.value as userRegistrationType)}
               label="location"
             >
               {locationList.map((item) => (
-                <MenuItem value={item}>{item}</MenuItem>
+                <MenuItem value={item.en}>{item.ko}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -157,12 +185,12 @@ export function Educator() {
             <Select
               labelId="student"
               id="student"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              value={student}
+              onChange={(e) => {setStudent(e.target.value);setCategory("")}}
               label="student"
             >
-              {studentList.map((item) => (
-                <MenuItem value={item}>{item}</MenuItem>
+              {studentList.map((item,index) => (
+                <MenuItem value={item.enType}>{item.type}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -177,16 +205,14 @@ export function Educator() {
               onChange={(e) => setCategory(e.target.value)}
               label="student-category"
             >
-              {studentCategoryList.map((item) => (
-                <MenuItem value={item.title}>{item.title}</MenuItem>
-              ))}
+              {studentList.filter((studentList)=>student === studentList.enType)[0]?.category.map(({type,enType,ageList})=><MenuItem value={enType}>{type}</MenuItem> )}
             </Select>
           </FormControl>
         </StudentCategory>
         <CustomInput
-          studentCategoryList={studentCategoryList.filter(
-            (item) => category === item.title
-          )}
+          studentInfo={studentList.filter(
+            (item) => student === item.enType
+          )[0]?.category.filter((item)=> category === item.enType)[0]} //뭐지??왜 옵셔널체이닝을 해야하지?
         />
         <Box
           sx={{
@@ -219,15 +245,15 @@ export function Educator() {
           open={openPromptDialog}
           onClose={() => setOpenPromptDialog(false)}
         />
-      </BoxForm>
+      </Box>
     </EducatorContainer>
   );
 }
 
 function CustomInput({
-  studentCategoryList,
+  studentInfo,
 }: {
-  studentCategoryList: { title: string; ageList: string[] }[];
+  studentInfo: { type: string; enType:string;  ageList: string[] };
 }) {
   return (
     <TableContainer
@@ -235,7 +261,7 @@ function CustomInput({
       sx={{ display: "flex", justifyContent: "center" }}
     >
       <TableBody sx={{ width: "80%" }}>
-        {studentCategoryList[0]?.ageList.map((item) => {
+        {studentInfo?.ageList.map((item) => {
           return (
             <TableRow key={item}>
               <TableCell sx={{ width: "50%" }}>{item}</TableCell>
@@ -261,6 +287,8 @@ const UserProfile = styled(Avatar)`
   width: 100px;
   height: 100px;
 `;
+
+const PhoneBox = styled(Box)``
 
 const EmailBox = styled(Box)`
   display: flex;

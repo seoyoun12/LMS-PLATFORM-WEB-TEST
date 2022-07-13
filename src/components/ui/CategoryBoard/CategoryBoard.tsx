@@ -19,22 +19,23 @@ enum NoticeTab {
 }
 
 const tabsConfig = [
-  { label: '공지사항', value: NoticeTab.CbNotice },
-  { label: '자주묻는질문', value: NoticeTab.CbQna },
-  { label: '교육문의', value: NoticeTab.CbQuestion },
-  { label: '문의내역조회', value: NoticeTab.CbLook },
+  { label: '공지사항', value: "cbNotice", href: <CategoryBoardNotice />},
+  { label: '자주묻는질문', value: "cbQna", href: <CategoryBoardQna />},
+  { label: '교육문의', value: "cbQuestion", href: <CategoryBoardQuestion />},
+  { label: '문의내역조회', value: "cbLook", href: <CategoryBoardLook />},
 ]
 
-export function CategoryBoard() { 
+export function CategoryBoard() {
 
   const router = useRouter();
   const { tab } = router.query;
   const { pathname, query } = router;
-  // const [ value, setValue ] = useState(tabsConfig[0].label);
+  const [value , setValue] = useState(tabsConfig[0].value)
 
-  // const onChange = (newValue : string) => {
-  //   setValue(newValue)
-  // }
+  const onChange = (newValue:string) =>{
+    setValue(newValue)
+  }
+  // console.log(value)
 
   return (
     <NoticeContainer>
@@ -43,23 +44,22 @@ export function CategoryBoard() {
           tabsConfig={tabsConfig}
           variant={"fullWidth"}
           rendering={false}
+          onChange={onChange}
+          value={value}
           showBorderBottom={true}
-          // onChange={onChange}
-          // value={value}
         />
       </Box>
-      {/* {tabsConfig.map((item)=>{
-        return <div key={item.label} hidden={value !== item.label} >나 보이니</div>
-      })} */}
-      {
-        {
-          [NoticeTab.CbNotice]: <CategoryBoardNotice />,
-          [NoticeTab.CbQna]: <CategoryBoardQna />,
-          [NoticeTab.CbQuestion]: <CategoryBoardQuestion />,
-          [NoticeTab.CbLook]: <CategoryBoardLook />
-        }[tab as string]
-      }
+      <Box>
 
+        {tabsConfig.map((item)=>{
+          return (
+            <Box hidden={item.value !== value} >
+              {item.href}
+            </Box>
+          )
+        })}
+      </Box>
+  
     </NoticeContainer>
   )
 }

@@ -42,55 +42,15 @@ export function CategoryBoardNotice() {
     //   }
     // ]
 
-  console.log("data.content : ", data?.content);
+  // console.log("data.content : ", data?.content);
 
   return (
-    <div>
+    <Container>
       {data && data?.content.map((content) => {
         const accordionInfo = [{ name: content.subject, children: [{ name: content.content }] }]
         return <Accordion accordionList={accordionInfo} />
       })}
-    </div>
+    </Container>
   )
 }
 
-
-const CbNoticeContainer = styled(Container)`
-  box-sizing: border-box;
-  border: 1px solid black;
-  width: 100%;
-  height: 20%;
-  position: relative;
-
-  .cbnDateContainer {
-    /* box-sizing: border-box;
-    border: 1px solid black; */
-    /* color: rgb(136, 136, 136); */
-    color: #888888;
-  }
-
-  .cbnSubjectContainer {
-    /* box-sizing: border-box;
-    border: 1px solid black; */
-    margin-top: 5px;
-    font-weight: bold;
-    font-size: 2.1rem;
-  }
-
-  .cbnContentContainer {
-    /* box-sizing: border-box;
-    border: 1px solid black; */
-  }
-`
-
-const CbNoticeToggleButton = styled(Button)`
-  float: right;
-  /* box-sizing: border-box;
-  border: 1px solid black; */
-  margin-top: 1%;
-
-  .ToggleArrowBtn {
-    font-size: 3rem;
-    color: black;
-  }
-`

@@ -6,15 +6,15 @@ export function CategoryBoardQuestion() {
 
   return (
 
-    <NtContainer className={styles.globalContainer}>CategoryNtQuestion</NtContainer>
+    <NtContainer className={styles.globalContainer}>CategoryBoardQuestion</NtContainer>
 
   )
 
 }
 
 const NtContainer = styled(Container)`
-  box-sizing: border-box;
-  border: 1px solid black;
+  /* box-sizing: border-box;
+  border: 1px solid black; */
   width: 100%;
   height: 100%;
 `

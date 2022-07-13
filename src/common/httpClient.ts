@@ -18,9 +18,10 @@ export const axiosSetting = {
   baseURL: process.env.BASE_URL,
   scheme: process.env.NEXT_PUBLIC_SCHEME,
   host: process.env.NEXT_PUBLIC_HOST,
-  port: process.env.NEXT_PUBLIC_PORT,
+  // port: process.env.NEXT_PUBLIC_PORT,
   server() {
-    return `${this.scheme}://${this.host}${this.port ? `:${this.port}` : ''}/api/v1`;
+    // return `${this.scheme}://${this.host}${this.port ? `:${this.port}` : ''}/api/v1`;
+    return `${this.scheme}://${this.host}/api/v1`;
   },
 };
 

@@ -6,15 +6,15 @@ export function CategoryBoardLook() {
 
   return (
 
-    <NtContainer className={styles.globalContainer}>CategoryNtLook</NtContainer>
+    <NtContainer className={styles.globalContainer}>CategoryBoardLook</NtContainer>
 
   )
 
 }
 
 const NtContainer = styled(Container)`
-  box-sizing: border-box;
-  border: 1px solid black;
+  /* box-sizing: border-box;
+  border: 1px solid black; */
   width: 100%;
   height: 100%;
 `

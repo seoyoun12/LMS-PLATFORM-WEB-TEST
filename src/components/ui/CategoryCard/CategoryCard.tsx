@@ -10,7 +10,8 @@ import { Link } from '@components/common';
 const categoryData = [
   {
     id: 1,
-    title: "운수종사자 교육일정",
+    title1: "운수종사자",
+    title2: "교육일정",
     href: "/calendar",
     icon: "CalendarMonthIcon",
     color: "#ffede9",
@@ -18,7 +19,8 @@ const categoryData = [
   },
   {
     id: 2,
-    title: "운수종사자 교육예약",
+    title1: "운수종사자",
+    title2: "교육예약",
     href: "/2",
     icon: "DirectionsCarIcon",
     color: "#fff6e7",
@@ -26,7 +28,8 @@ const categoryData = [
   },
   {
     id: 3,
-    title: "운수종사자 학습하기",
+    title1: "운수종사자",
+    title2: "학습하기",
     href: "/3",
     icon: "MenuBookOutlinedIcon",
     color: "#fffde2",
@@ -34,7 +37,8 @@ const categoryData = [
   },
   {
     id: 4,
-    title: "운수종사자 수료확인",
+    title1: "운수종사자",
+    title2: "수료확인",
     href: "/4",
     icon: "FeaturedPlayListOutlinedIcon",
     color: "#f8ffe2",
@@ -54,11 +58,12 @@ export function CategoryCard() {
       >
           {categoryData.map((categoryData) => (
             <GridContainer key={categoryData.id} cardcolor={categoryData.color}>
-              <div className='categoryIcon'/>
-              <div>{categoryData.title}</div>
-              <Link href={categoryData.href} underline="none">
+              {/* <div className='categoryIcon'/> */}
+              <GridTitleTypography className="cardTitleOne">{categoryData.title1}</GridTitleTypography>
+              <GridTitleTypography className='CardTitleTwo'>{categoryData.title2}</GridTitleTypography>
+              <GridLink href={categoryData.href} underline="none">
                 <Button>{categoryData.btnText}</Button>
-              </Link>
+              </GridLink>
             </GridContainer>
           ))}
       </GridWrap>
@@ -74,13 +79,11 @@ const GridWrap = styled(Grid)`
 
 
 const GridContainer = styled(Container)<{cardcolor:string}>`
-  display: flex;
+  /* display: flex; */
   width: 200px;
   height: 200px;
   border-radius: 20px;
-  background-color: rgb(255, 0, 0, 0.1);
-  justify-content: center;
-  align-items: center;
+  /* background-color: rgb(255, 0, 0, 0.1); */
   background-color: ${({cardcolor})=>cardcolor};
 
   .categoryIcon {
@@ -91,4 +94,28 @@ const GridContainer = styled(Container)<{cardcolor:string}>`
 
 const ContentContainer = styled.div`
   padding: 35px 0px 0 20px !important;
+`
+
+const GridTitleTypography = styled(Typography)`
+  position: relative;
+  top: 35%;
+  text-align: center;
+  /* border: 1px solid black; */
+  
+  .cardTitle1 {
+    font-size: 3rem;
+    color: red;
+  }
+
+  .cardTitle2 {
+    font-size: 3rem;
+    color: red;
+  }
+`
+
+const GridLink = styled(Link)`
+  position: relative;
+  top: 40%;
+  left: 30%;
+  text-align: center;
 `

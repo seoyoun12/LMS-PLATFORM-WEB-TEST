@@ -6,15 +6,15 @@ export function CategoryBoardQna() {
 
   return (
 
-    <NtContainer className={styles.globalContainer}>CategoryNtQna</NtContainer>
+    <NtContainer className={styles.globalContainer}>CategoryBoardQna</NtContainer>
 
   )
 
 }
 
 const NtContainer = styled(Container)`
-  box-sizing: border-box;
-  border: 1px solid black;
+  /* box-sizing: border-box;
+  border: 1px solid black; */
   width: 100%;
   height: 100%;
 `

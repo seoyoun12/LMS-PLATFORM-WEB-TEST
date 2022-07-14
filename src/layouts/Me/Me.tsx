@@ -1,24 +1,25 @@
-import * as React from 'react';
-import { Avatar, Box, Container, Grid, Typography } from '@mui/material';
-import { Link } from '@components/common';
-import s from './Me.module.scss';
-import { grey } from '@mui/material/colors';
-import { ContentCard, Spinner } from '@components/ui';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { css } from '@emotion/css';
-import styled from '@emotion/styled';
-import { useMyUser } from '@common/api/user';
-import { useEffect } from 'react';
+import * as React from "react";
+import { Avatar, Box, Container, Grid, Typography } from "@mui/material";
+import { Link } from "@components/common";
+import s from "./Me.module.scss";
+import { grey } from "@mui/material/colors";
+import { ContentCard, Spinner, Tabs } from "@components/ui";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { css } from "@emotion/css";
+import styled from "@emotion/styled";
+import { useMyUser } from "@common/api/user";
+import { useEffect } from "react";
 
 const myInfoList = [
-  { name: '정보 수정', href: '/me/edit' },
-  { name: '증명서 발급', href: '/me/certificate' },
+  { label: "내 강의", value: "myCourse" },
+  { label: "정보 수정", value: "editInfo" },
+  { label: "증명서 발급", value: "certificate" },
 ];
 
 export function Me() {
   const { user, error } = useMyUser();
   console.log(user);
-
+  const [value, setValue] = React.useState(myInfoList[0].value);
 
   useEffect(() => {
     console.log(user);
@@ -40,10 +41,16 @@ export function Me() {
       <ContentBody>
         <SideBar>
           <SideBarContent>
-            <SideBarTitle variant="h6">
-              내 정보
-            </SideBarTitle>
-            {myInfoList.map(({ href, name }) => (
+            <SideBarTitle variant="h6">내 정보</SideBarTitle>
+            <Tabs
+              tabsConfig={myInfoList}
+              orientation="vertical"
+              variant="fullWidth"
+              rendering={false}
+              onChange={(newValue: string) => setValue(newValue)}
+              value={value}
+            />
+            {/* {myInfoList.map(({ href, name }) => (
               <Link
                 key={name}
                 className={s.link}
@@ -54,22 +61,18 @@ export function Me() {
                 <Typography variant="body2">{name}</Typography>
                 <ArrowForwardIcon />
               </Link>
-            ))}
+            ))} */}
           </SideBarContent>
         </SideBar>
         <LessonListContainer>
-          <Typography variant="h6" sx={{ marginBottom: '16px' }}>
+          <Typography variant="h6" sx={{ marginBottom: "16px" }}>
             내 강의
           </Typography>
-          <Grid
-            container
-            rowSpacing={4}
-            columnSpacing={2}
-            columns={{ xs: 1, sm: 1, md: 2, lg: 2 }}>
+          <Grid container rowSpacing={4} columnSpacing={2} columns={{ xs: 1, sm: 1, md: 2, lg: 2 }}>
             {user.learningCourses.map((res) => (
               <Grid item xs={1} sm={1} md={1} lg={1} key={res.seq}>
                 <Link href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}>
-                  <ContentCard  title={res.courseName} />
+                  <ContentCard title={res.courseName} />
                 </Link>
               </Grid>
             ))}
@@ -97,6 +100,9 @@ const ContentBody = styled(Box)`
 const SideBar = styled.aside`
   min-width: 320px;
   margin-right: 78px;
+  .MuiTabs-indicator {
+    display: none;
+  }
 `;
 
 const SideBarContent = styled.section`

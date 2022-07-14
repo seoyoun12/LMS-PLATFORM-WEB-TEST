@@ -68,9 +68,25 @@ export function MeEdit() {
     if (user) setTabValue(user.regCategory);
   }, [user]);
 
-  // useEffect(() => {
-  //   if (user) router.push({ pathname: router.pathname, query: { ...router.query, tab: user.regCategory } });
-  // }, [user]);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const dialogConfirmed = await dialog({
+      title: "회원 정보 수정",
+      description: "회원 정보를 수정하시겠습니까?",
+      confirmText: "수정하기",
+      cancelText: "취소하기",
+    });
+    await handleOnCloseConfirm(dialogConfirmed);
+  };
+
+  const handleOnCloseConfirm = async (isConfirm: boolean) => {
+    if (isConfirm) {
+      const emailYn = emailChecked ? YN.YES : YN.NO;
+      const smsYn = smsChecked ? YN.YES : YN.NO;
+      await modifyMyUser({ name: nameInput, emailYn, smsYn });
+      return router.push("/me");
+    }
+  };
 
   if (!user) return <div></div>; //태그없으면 에러뜸
   return (
@@ -171,7 +187,7 @@ export function MeEdit() {
 
 interface TabPanelProps extends BoxProps {
   children: React.ReactNode;
-  value: string | undefined;
+  value: string;
   index: string;
 }
 

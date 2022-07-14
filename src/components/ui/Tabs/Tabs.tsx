@@ -11,11 +11,20 @@ interface Props {
     value: string;
   }[];
   showBorderBottom?: boolean;
+<<<<<<< HEAD
   variant: "fullWidth" | "standard" | "scrollable";
   gap?: number;
   rendering?: boolean; //spa로 할지 여부(default rendering)
   onChange?: (newValue: string) => void; //부모단에서 상태변화시킬 함수
   value?: string; //부모단에서 상태변화된 값
+=======
+  variant?: "fullWidth" | "standard" | "scrollable";
+  gap?: number;
+  rendering?: boolean;
+  onChange?: (newValue: string) => void;
+  value?: string;
+  orientation?: "vertical" | "horizontal" | undefined;
+>>>>>>> ae6544eb7b79b54bb875a425d552563f46ab0265
 }
 
 export function Tabs({
@@ -26,6 +35,10 @@ export function Tabs({
   rendering = true,
   onChange,
   value,
+<<<<<<< HEAD
+=======
+  orientation,
+>>>>>>> ae6544eb7b79b54bb875a425d552563f46ab0265
   ...props
 }: Props) {
   const router = useRouter();
@@ -81,6 +94,7 @@ export function Tabs({
         onChange={handleChange}
         aria-label="basic tabs example"
         variant={variant}
+        orientation={orientation}
       >
         {tabsConfig.map(({ value, label }) => (
           <MuiTab key={value} className="mui-tabs-item" label={label} value={value} />

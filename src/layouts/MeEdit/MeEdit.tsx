@@ -187,7 +187,7 @@ export function MeEdit() {
 
 interface TabPanelProps extends BoxProps {
   children: React.ReactNode;
-  value: string;
+  value: undefined | string;
   index: string;
 }
 

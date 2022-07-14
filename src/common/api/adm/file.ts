@@ -13,7 +13,8 @@ export enum BbsType {
   TYPE_COURSE = 'TYPE_COURSE',
   TYPE_HOMEWORK = 'TYPE_HOMEWORK',
   TYPE_LIBRARY = 'TYPE_LIBRARY',
-  TYPE_LESSON = 'TYPE_LESSON'
+  TYPE_LESSON = 'TYPE_LESSON',
+  TYPE_CATEGORY = 'TYPE_CATEGORY'
 }
 
 export const initFileConfig = async ({ fileUploadType, fileName }: {

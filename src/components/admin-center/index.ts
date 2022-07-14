@@ -5,3 +5,4 @@ export { ContentUploadForm } from './ContentUploadForm';
 export { QuestionPreviewModal } from './QuestionPreviewModal';
 export { UserModifyModal } from './UserModifyModal';
 export { LibraryUploadModal } from './LibraryUploadModal';
+export { CategoryUploadForm } from './CategoryUploadForm';

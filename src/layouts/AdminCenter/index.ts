@@ -15,3 +15,7 @@ export { ContentModify } from './ContentManagement/ContentModify';
 export { ContentUploadForm } from '@components/admin-center/ContentUploadForm';
 
 export { UserManagement } from './UserManagement/UserManagement';
+
+export { CategoryManagement } from './CategoryManagement/CategoryManagement';
+export { CategoryUpload } from './CategoryManagement/CategoryUpload';
+export { CategoryUploadForm } from '@components/admin-center/CategoryUploadForm';

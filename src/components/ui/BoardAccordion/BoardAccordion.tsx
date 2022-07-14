@@ -11,7 +11,7 @@ import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import dateFormat from 'dateformat';
 import styled from '@emotion/styled';
 
-interface AccordionList {
+interface BoardAccordionAccordionList {
   date?: string | undefined;
   name: string;
   icon?: EmotionJSX.Element;
@@ -22,10 +22,10 @@ interface AccordionList {
   }[];
 }
 
-export function Accordion({ accordionList }: { accordionList: AccordionList[] }) {
+export function BoardAccordion({ boardAccordionList }: { boardAccordionList: BoardAccordionAccordionList[] }) {
   return (
     <>
-      {accordionList.map(({ date, name, icon, children }, idx) => (
+      {boardAccordionList.map(({ date, name, icon, children }, idx) => (
         <MuiAccordion
           key={name}
           disableGutters elevation={0}
@@ -46,6 +46,7 @@ export function Accordion({ accordionList }: { accordionList: AccordionList[] })
           >
             {icon}
             <Box display="flex" flexDirection={"column"} width="100%" >
+              <Typography className='CategoryBoardOne'>{dateFormat(date, 'isoDate')}</Typography>
               <Typography className='CategoryBoardTwo'>{name}</Typography>
             </Box>
           </AccordionSummary>
@@ -80,3 +81,17 @@ export function Accordion({ accordionList }: { accordionList: AccordionList[] })
 }
 
 
+
+// const Box1 = styled(Box)`
+//   .CategoryBoardOne {
+//     color: #a59d9d;
+//   }
+
+//   .CategoryBoardTwo {
+//     font-weight: bold;
+//     font-size: 1.3rem;
+//     border-bottom: 1px solid lightgray;
+//     width: 100%;
+//     padding-bottom: 20px;
+//   }
+// `

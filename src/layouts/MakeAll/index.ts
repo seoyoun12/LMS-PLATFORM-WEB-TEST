@@ -1,1 +1,0 @@
-export { MakeAll } from './MakeAll'

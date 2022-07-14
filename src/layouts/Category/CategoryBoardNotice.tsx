@@ -11,6 +11,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpSharpIcon from '@mui/icons-material/KeyboardArrowUpSharp';
 import { grey } from '@mui/material/colors';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import { BoardAccordion } from '@components/ui/BoardAccordion';
 
 
 // const headRows = [
@@ -42,15 +43,39 @@ export function CategoryBoardNotice() {
     //   }
     // ]
 
-  // console.log("data.content : ", data?.content);
-
   return (
     <Container>
       {data && data?.content.map((content) => {
-        const accordionInfo = [{ name: content.subject, children: [{ name: content.content }] }]
-        return <Accordion accordionList={accordionInfo} />
+        const accordionInfo = [{ 
+          date: content.createdDtime, 
+          name: content.subject, 
+          children: [{ name: content.content}] 
+        }]
+        return <BoardAccordion boardAccordionList={accordionInfo}/>
       })}
     </Container>
   )
 }
 
+const AccordionTypographyFirst = styled(Typography)`
+  color: #a59d9d;
+`
+
+const AccordionTypographySecond = styled(Typography)`
+  font-weight: bold;
+  font-size: 1.3rem;
+  border-bottom: 1px solid lightgray;
+  width: 100%;
+`
+
+// .Typography {
+//   color: #a59d9d;
+// }
+
+// .CategoryBoardTwo {
+//   font-weight: bold;
+//   font-size: 1.3rem;
+//   border-bottom: 1px solid lightgray;
+//   width: 100%;
+//   padding-bottom: 20px;
+// }

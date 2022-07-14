@@ -24,6 +24,22 @@ export function Drawer({ children }: { children: ReactNode }) {
 
   const accordionList = [
     {
+      name: '공지관리',
+      children: [
+        {
+          name: '공지 목록',
+          href: '/admin-center/category',
+          isActive: router.pathname === '/admin-center/category'
+        },
+        {
+          name: '공지 등록',
+          href: '/admin-center/category/upload',
+          isActive: router.pathname === '/admin-center/category/upload'
+        },
+      ],
+      icon: <SchoolOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    },
+    {
       name: '과정관리',
       children: [
         {

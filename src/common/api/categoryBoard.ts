@@ -1,3 +1,4 @@
+import { YN } from "@common/constant";
 import { GET, POST, PUT, DELETE } from "@common/httpClient";
 import useSWR, { SWRResponse } from "swr";
 import { PaginationResult } from "types/fetch";
@@ -27,6 +28,15 @@ export interface CategoryBoard {
   username: string;
 }
 
+// 카테고리게시판 공지사항 input
+export interface CategoryBoardNoticeInput {
+  boardType: string;
+  content: string;
+  courseSeq: number;
+  noticeYn: string;
+  publicYn: string;
+  subject: string;
+}
 
 // 공지사항 리스트
 export function categoryBoardNoticeList({ page, elementCnt, boardType } : {
@@ -52,6 +62,25 @@ export function categoryBoardNoticeList({ page, elementCnt, boardType } : {
   };
   
 }
+
+// 공지사항 업로드
+export async function uploadCategoryBoardNotice(CategoryBoardNoticeInput : FormData) {
+  return await POST(`/post`, CategoryBoardNoticeInput);
+}
+
+// 공지사항 수정
+export async function modifyCategoryBoardNotice(seq: number, CategoryBoardNoticeInput : FormData) {
+  return await PUT(`/post/${seq}`, CategoryBoardNoticeInput);
+}
+
+// 공지사항 삭제
+export async function removeCategoryBoardNotice(seq: number) {
+  return await DELETE(`/post/${seq}`);
+}
+
+
+
+
 
 // 자주묻는질문(QnA) 리스트
 export function categoryBoardQnaList() {

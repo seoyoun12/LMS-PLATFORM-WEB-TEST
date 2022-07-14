@@ -66,7 +66,6 @@ export function CategoryBoard() {
 
 const NoticeContainer = styled(Container)`
   width: 900px;
-  height: 1000px;
 `
 
 const NoticeTabs = styled(Tabs2)`

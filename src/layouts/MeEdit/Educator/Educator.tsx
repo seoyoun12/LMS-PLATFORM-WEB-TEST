@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import {
-  Autocomplete,
   Avatar,
   Box,
   Button,
@@ -20,17 +19,7 @@ import {
 import { useState } from "react";
 import { PasswordChangeModal } from "../PasswordChangeModal/PasswordChangeModal";
 import Paper from "@mui/material/Paper";
-import {
-  getMyUser,
-  modifyMyUser,
-  modifyProvincialTrafficSafety,
-  useMyUser,
-  User,
-  userRegistrationType,
-  userSubjectEducationDetailType,
-  userSubjectEducationType,
-} from "@common/api/user";
-import { useEffect } from "react";
+import { modifyProvincialTrafficSafety, useMyUser, userRegistrationType } from "@common/api/user";
 import { useDialog } from "@hooks/useDialog";
 import { YN } from "@common/constant";
 import { useRouter } from "next/router";
@@ -40,7 +29,17 @@ const studentList = [
   {
     type: "어린이",
     enType: "CHILDREN",
-    category: [{ type: "유치원", enType: "KINDER", ageList: ["만3세", "만4세", "만5세"] }],
+    category: [
+      {
+        type: "유치원",
+        enType: "KINDER",
+        ageList: [
+          { age: "만3세", enAge: "fifthYearOldChild" },
+          { age: "만4세", enAge: "fourthYearOldChild" },
+          { age: "만5세", enAge: "thirdYearOldChild" },
+        ],
+      },
+    ],
   },
   {
     type: "청소년",
@@ -49,22 +48,53 @@ const studentList = [
       {
         type: "초등학교",
         enType: "ELEMENTARY_SCHOOL",
-        ageList: ["1학년", "2학년", "3학년", "4학년", "5학년", "6학년"],
+        ageList: [
+          { age: "1학년", enAge: "firstGrade" },
+          { age: "2학년", enAge: "secondGrade" },
+          { age: "3학년", enAge: "thirdGrade" },
+          { age: "4학년", enAge: "fourthGrade" },
+          { age: "5학년", enAge: "fifthGrade" },
+          { age: "6학년", enAge: "sixthGrade" },
+        ],
       },
-      { type: "중학교", enType: "MIDDLE_SCHOOL", ageList: ["1학년", "2학년", "3학년"] },
-      { type: "고등학교", enType: "HIGH_SCHOOL", ageList: ["1학년", "2학년", "3학년"] },
+      {
+        type: "중학교",
+        enType: "MIDDLE_SCHOOL",
+        ageList: [
+          { age: "1학년", enAge: "firstGrade" },
+          { age: "2학년", enAge: "secondGrade" },
+          { age: "3학년", enAge: "thirdGrade" },
+        ],
+      },
+      {
+        type: "고등학교",
+        enType: "HIGH_SCHOOL",
+        ageList: [
+          { age: "1학년", enAge: "firstGrade" },
+          { age: "2학년", enAge: "secondGrade" },
+          { age: "3학년", enAge: "thirdGrade" },
+        ],
+      },
     ],
   },
   {
     type: "자가운전자",
     enType: "SELF_DRIVER",
-    category: [{ type: "자가운전자", enType: "SELF_DRIVER", ageList: ["자가운전자"] }],
+    category: [{ type: "자가운전자", enType: "SELF_DRIVER", ageList: [{ age: "자가운전자", enAge: "selfDriver" }] }],
   },
-  { type: "어르신", enType: "OLD_MAN", category: [{ type: "어르신", enType: "OLD_MAN", ageList: ["어르신"] }] },
+  {
+    type: "어르신",
+    enType: "OLD_MAN",
+    category: [{ type: "어르신", enType: "OLD_MAN", ageList: [{ age: "어르신", enAge: "oldMan" }] }],
+  },
 ];
 
 interface Props {
   locationList: { ko: string; en: string }[];
+}
+
+interface detailCounts {
+  [prop: string]: any;
 }
 
 export function Educator({ locationList }: Props) {
@@ -79,6 +109,19 @@ export function Educator({ locationList }: Props) {
   const [student, setStudent] = useState("");
   const [category, setCategory] = useState("");
   const [smsChecked, setSmsChecked] = useState(false);
+  const [detailCounts, setDetailCounts] = useState<detailCounts>({
+    firstGrade: 0,
+    secondGrade: 0,
+    thirdGrade: 0,
+    fourthGrade: 0,
+    fifthGrade: 0,
+    sixthGrade: 0,
+    fifthYearOldChild: 0, //만 5세
+    fourthYearOldChild: 0, //만 4세
+    thirdYearOldChild: 0, //만 3세
+    oldMan: 0, //어르신
+    selfDriver: 0, //자가운전자
+  });
 
   const dialog = useDialog();
   const router = useRouter();
@@ -101,20 +144,10 @@ export function Educator({ locationList }: Props) {
       const data = {
         company: "PRINCESS",
         email: "PRINCESS@naver.com",
-        fifthGrade: 1,
-        fifthYearOldChild: 2,
-        firstGrade: 3,
-        fourthGrade: 4,
-        fourthYearOldChild: 5,
+        ...detailCounts,
         name: name,
-        oldMan: 6,
         phone: phone,
-        secondGrade: 7,
-        selfDriver: 8,
-        sixthGrade: 9,
         smsYn: "N",
-        thirdGrade: 11,
-        thirdYearOldChild: 12,
         userRegistrationType: location,
         userSeq: user.seq,
         userSubjectEducationDetailType: category,
@@ -229,7 +262,22 @@ export function Educator({ locationList }: Props) {
               labelId="student-category"
               id="student-category"
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) => {
+                setCategory(e.target.value);
+                setDetailCounts({
+                  firstGrade: 0,
+                  secondGrade: 0,
+                  thirdGrade: 0,
+                  fourthGrade: 0,
+                  fifthGrade: 0,
+                  sixthGrade: 0,
+                  fifthYearOldChild: 0,
+                  fourthYearOldChild: 0,
+                  thirdYearOldChild: 0,
+                  oldMan: 0,
+                  selfDriver: 0,
+                });
+              }}
               label="student-category"
             >
               {studentList
@@ -242,13 +290,17 @@ export function Educator({ locationList }: Props) {
             </Select>
           </FormControl>
         </StudentCategory>
-        <CustomInput
-          studentInfo={
-            studentList
+
+        <TableContainer component={Paper} sx={{ display: "flex", justifyContent: "center" }}>
+          <TableBody sx={{ width: "80%" }}>
+            {studentList
               .filter((item) => student === item.enType)[0]
-              ?.category.filter((item) => category === item.enType)[0]
-          } //뭐지??왜 옵셔널체이닝을 해야하지?
-        />
+              ?.category.filter((item) => category === item.enType)[0] //뭐지??왜 옵셔널체이닝을 해야하지?
+              ?.ageList.map((item) => (
+                <CustomInput ageInfo={item} setDetailCounts={setDetailCounts} detailCounts={detailCounts} />
+              ))}
+          </TableBody>
+        </TableContainer>
         <Box
           sx={{
             display: "flex",
@@ -277,22 +329,36 @@ export function Educator({ locationList }: Props) {
   );
 }
 
-function CustomInput({ studentInfo }: { studentInfo: { type: string; enType: string; ageList: string[] } }) {
+function CustomInput({
+  //부모에서 map해서 사용하도록 리팩토링
+  ageInfo,
+  setDetailCounts,
+  detailCounts,
+}: {
+  ageInfo: { age: string; enAge: string };
+  detailCounts: detailCounts;
+  setDetailCounts: React.Dispatch<React.SetStateAction<detailCounts>>;
+}) {
+  const keyName: string = ageInfo.enAge;
+  console.log(detailCounts);
+
   return (
-    <TableContainer component={Paper} sx={{ display: "flex", justifyContent: "center" }}>
-      <TableBody sx={{ width: "80%" }}>
-        {studentInfo?.ageList.map((item) => {
-          return (
-            <TableRow key={item}>
-              <TableCell sx={{ width: "50%" }}>{item}</TableCell>
-              <TableCell>
-                <TextField type={"number"} placeholder="0~000명" fullWidth />
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </TableContainer>
+    <TableRow>
+      <TableCell sx={{ width: "50%" }}>{ageInfo.age}</TableCell>
+      <TableCell>
+        <TextField
+          name={ageInfo.enAge}
+          type={"number"}
+          placeholder="0~000명"
+          value={detailCounts[keyName]}
+          onChange={(e) => {
+            // setValue(e.target.value);
+            setDetailCounts({ ...detailCounts, [e.target.name]: Number(e.target.value) });
+          }}
+          fullWidth
+        />
+      </TableCell>
+    </TableRow>
   );
 }
 

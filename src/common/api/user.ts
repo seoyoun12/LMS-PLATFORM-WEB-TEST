@@ -144,23 +144,23 @@ export async function transWorker({ currentPassword, newPassword }: { currentPas
   });
 }
 
-interface provincailTrafficSafety {
+export interface provincailTrafficSafety {
   company: string;
   email: string;
-  fifthGrade: number;
-  fifthYearOldChild: number;
-  firstGrade: number;
-  fourthGrade: number;
-  fourthYearOldChild: number;
+  firstGrade?: number; // 1학년
+  secondGrade?: number; // 2학년
+  thirdGrade?: number; // 3학년
+  fourthGrade?: number; // 4학년
+  fifthGrade?: number; // 5학년
+  sixthGrade?: number; // 6학년
+  thirdYearOldChild?: number; //만 3세
+  fourthYearOldChild?: number; //만 4세
+  fifthYearOldChild?: number; //만 5세
+  oldMan?: number; //어르신
+  selfDriver?: number; //자가운전자
   name: string;
-  oldMan: number;
   phone: string;
-  secondGrade: number;
-  selfDriver: number;
-  sixthGrade: number;
   smsYn: string;
-  thirdGrade: number;
-  thirdYearOldChild: number;
   userRegistrationType: string;
   userSeq: number;
   userSubjectEducationDetailType: string;
@@ -181,7 +181,7 @@ interface modifTransWorker {
   userBusinessTypeOne: string; //업종
   userBusinessTypeTwo: string; // 구분
   userRegistrationType: string; //지역
-  userSeq: 0;
+  userSeq: number;
 }
 
 export async function modifTransWorker(info: modifTransWorker) {

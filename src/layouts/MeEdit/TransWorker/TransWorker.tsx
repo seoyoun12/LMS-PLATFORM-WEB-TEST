@@ -1,4 +1,4 @@
-import { useMyUser } from "@common/api/user";
+import { modifTransWorker, useMyUser } from "@common/api/user";
 import { YN } from "@common/constant";
 import styled from "@emotion/styled";
 import { useDialog } from "@hooks/useDialog";
@@ -83,7 +83,7 @@ export function TransWorker({ type, locationList }: Props) {
   const [occupation1, setOccupation1, onChangeOcc1] = useInput();
   const [occupation2, setOccupation2, onChangeOcc2] = useInput();
   const [showCompany, setShowCompany] = useState(false);
-  const [companyOption, setCompanyOption, onCompanyOpt] = useInput(false);
+  // const [companyOption, setCompanyOption, onCompanyOpt] = useInput(false);
   const [company, setCompany, onChangeComp] = useInput();
   const [vehicleNumber, setVehicleNumber, onChangeVehicleNum] = useInput();
   const [vehicleRegi, setVehicleRegi, onChangeVehicleRegi] = useInput();
@@ -109,20 +109,20 @@ export function TransWorker({ type, locationList }: Props) {
     if (isConfirm) {
       const smsYn = smsChecked ? YN.YES : YN.NO;
       if (!user) return window.alert("수정 실패하였습니다.");
-      //   const data = {
-      //     carNumber: string,
-      //     company: string,
-      //     name: string,
-      //     phone: string,
-      //     smsYn: string,
-      //     userBusinessTypeOne: string, //업종
-      //     userBusinessTypeTwo: string, // 구분
-      //     userRegistrationType: string, //지역
-      //     userSeq: 0
-      //   }
+      const data = {
+        carNumber: vehicleNumber, //차번호
+        company: company, //회사
+        name: user.name, //이름
+        phone: phone1 + phone2 + phone3, //폰번
+        smsYn: smsYn, // 동의여부
+        userBusinessTypeOne: occupation1, //업종
+        userBusinessTypeTwo: occupation2, // 구분
+        userRegistrationType: vehicleRegi, //지역
+        userSeq: user.seq,
+      };
 
-      //   await modifyProvincialTrafficSafety(data);
-      //   return router.push('/me');
+      await modifTransWorker(data);
+      return router.push("/me");
     }
   };
 
@@ -135,7 +135,7 @@ export function TransWorker({ type, locationList }: Props) {
       }}
       maxWidth="sm"
     >
-      <BoxForm component={"form"}>
+      <Box display="flex" flexDirection={"column"} gap="1rem" component={"form"} onSubmit={handleSubmit}>
         <Box sx={{ margin: "auto" }}>
           {" "}
           {/*어쨰서 이렇게 해야 되는것..? */}
@@ -213,7 +213,7 @@ export function TransWorker({ type, locationList }: Props) {
             label="회사명"
             name="company"
             value={company}
-            onChange={onCompanyOpt}
+            onChange={onChangeComp}
           />
         )}
         <TextField
@@ -264,7 +264,7 @@ export function TransWorker({ type, locationList }: Props) {
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
           수정하기
         </Button>
-      </BoxForm>
+      </Box>
     </TransAndLowFloorContainer>
   );
 }

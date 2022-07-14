@@ -2,7 +2,7 @@ import MuiTabs from "@mui/material/Tabs";
 import MuiTab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/router";
-import React ,{ SyntheticEvent, useCallback, useEffect } from "react";
+import React, { SyntheticEvent, useCallback, useEffect } from "react";
 import styled from "styled-components";
 
 interface Props {
@@ -11,34 +11,45 @@ interface Props {
     value: string;
   }[];
   showBorderBottom?: boolean;
-  variant: "fullWidth" | "standard" | "scrollable";
-  gap?:number
-  rendering?:boolean;
-  onChange?:(newValue : string)=>void;
-  value?:string;
+  variant?: "fullWidth" | "standard" | "scrollable";
+  gap?: number;
+  rendering?: boolean;
+  onChange?: (newValue: string) => void;
+  value?: string;
+  orientation?: "vertical" | "horizontal" | undefined;
 }
 
-export function Tabs({ tabsConfig, showBorderBottom = true ,variant = "standard", gap , rendering=true ,onChange , value ,  ...props }: Props) {
+export function Tabs({
+  tabsConfig,
+  showBorderBottom = true,
+  variant = "standard",
+  gap,
+  rendering = true,
+  onChange,
+  value,
+  orientation,
+  ...props
+}: Props) {
   const router = useRouter();
   const { pathname, query } = router;
 
   useEffect(() => {
-      if (!router.query.tab && rendering) {
-        router.replace({
-          pathname,
-          query: {
-            ...router.query,
-            tab: tabsConfig[0].value,
-          },
-        });
+    if (!router.query.tab && rendering) {
+      router.replace({
+        pathname,
+        query: {
+          ...router.query,
+          tab: tabsConfig[0].value,
+        },
+      });
     }
   }, [pathname, router]);
 
   const handleChange = useCallback(
     (event: SyntheticEvent, newValue: string) => {
-      if(!rendering && onChange){
+      if (!rendering && onChange) {
         onChange(newValue);
-      }else{
+      } else {
         router.push({
           pathname,
           query: {
@@ -47,7 +58,6 @@ export function Tabs({ tabsConfig, showBorderBottom = true ,variant = "standard"
           },
         });
       }
-      
     },
     [pathname, router]
   );
@@ -73,6 +83,7 @@ export function Tabs({ tabsConfig, showBorderBottom = true ,variant = "standard"
         onChange={handleChange}
         aria-label="basic tabs example"
         variant={variant}
+        orientation={orientation}
       >
         {tabsConfig.map(({ value, label }) => (
           <MuiTab key={value} className="mui-tabs-item" label={label} value={value} />
@@ -82,15 +93,12 @@ export function Tabs({ tabsConfig, showBorderBottom = true ,variant = "standard"
   );
 }
 
-
-const TabBox = styled(Box)<{variant:string , gap?:number}>`
-  .mui-tabs{
-    display:flex;
-    }
-
-  
-  .mui-tabs-item{
-    margin : ${(({variant, gap})=> variant === "fullWidth" && gap  ? `0 ${gap}rem` : "0")};
+const TabBox = styled(Box)<{ variant: string; gap?: number }>`
+  .mui-tabs {
+    display: flex;
   }
 
-`
+  .mui-tabs-item {
+    margin: ${({ variant, gap }) => (variant === "fullWidth" && gap ? `0 ${gap}rem` : "0")};
+  }
+`;

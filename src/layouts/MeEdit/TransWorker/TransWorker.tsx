@@ -88,7 +88,7 @@ export function TransWorker({ type, locationList }: Props) {
   const [company, setCompany, onChangeComp] = useInput();
   const [vehicleNumber, setVehicleNumber, onChangeVehicleNum] = useInput();
   const [vehicleRegi, setVehicleRegi, onChangeVehicleRegi] = useInput();
-  const [phone1, setPhone1, onChagePhone1] = useInput();
+  const [phone, setPhone, onChagePhone] = useInput();
   const [phone2, setPhone2, onChagePhone2] = useInput();
   const [phone3, setPhone3, onChagePhone3] = useInput();
   const [smsChecked, setSmsChecked] = useState(false);
@@ -115,7 +115,7 @@ export function TransWorker({ type, locationList }: Props) {
         carNumber: vehicleNumber, //차번호
         company: company, //회사
         name: user.name, //이름
-        phone: phone1 + phone2 + phone3, //폰번
+        phone: phone + phone2 + phone3, //폰번
         smsYn: smsYn, // 동의여부
         userBusinessTypeOne: occupation1, //업종
         userBusinessTypeTwo: occupation2, // 구분
@@ -221,8 +221,8 @@ export function TransWorker({ type, locationList }: Props) {
           </Select>
         </FormControl>
         <Box display={"flex"} alignItems="center" gap="1rem">
-          <FormControl fullWidth>
-            <Select onChange={e => setPhone1(String(e.target.value))}>
+          {/* <FormControl fullWidth>
+            <Select onChange={e => setPhone(String(e.target.value))}>
               {phoneNumbers.map(phone => (
                 <MenuItem key={phone} value={phone}>
                   {phone}
@@ -230,9 +230,8 @@ export function TransWorker({ type, locationList }: Props) {
               ))}
             </Select>
           </FormControl>{" "}
-          -
-          <TextField required fullWidth id="name" name="name" value={phone2} onChange={onChagePhone2} /> -
-          <TextField required fullWidth id="name" name="name" value={phone3} onChange={onChagePhone3} />
+          - */}
+          <TextField required fullWidth id="name" label="휴대전화" placeholder="'-'를 제외한 숫자만 입력해주세요." name="name" value={phone} onChange={onChagePhone} />
         </Box>
         <Box display={"flex"} alignItems="center">
           <Typography variant="body2">SMS 수신 여부</Typography>

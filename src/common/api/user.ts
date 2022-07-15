@@ -124,7 +124,17 @@ export async function modifyMyUser({ name, emailYn, smsYn }: { name: string; ema
   });
 }
 
+<<<<<<< HEAD
 export async function modifyMyUserPassword({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) {
+=======
+export async function modifyMyUserPassword({
+  currentPassword,
+  newPassword,
+}: {
+  currentPassword: string;
+  newPassword: string;
+}) {
+>>>>>>> 771adef97cde7044459a07fed6c0f628ab088f77
   return await PUT(`/user/myinfo/modify/password`, {
     currentPw: currentPassword,
     modifiedPw: newPassword,

@@ -1,38 +1,72 @@
 import * as React from "react";
-import { Container, Box, Switch, Button, TextField, Typography } from "@mui/material";
+import { Container, Box, Switch, Button, TextField, Typography, tableBodyClasses } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getMyUser, modifyMyUser } from "@common/api/user";
+import { getMyUser, modifyMyUser, useMyUser } from "@common/api/user";
 import { useRouter } from "next/router";
 import { PasswordChangeModal } from "./PasswordChangeModal/PasswordChangeModal";
 import { useDialog } from "@hooks/useDialog";
 import { YN } from "@common/constant";
-import { TransAndLowFloor } from "./TransAndLowFloor";
+import { TransWorker } from "./TransWorker";
 import { Tabs } from "@components/ui";
 import { BoxProps } from "@material-ui/core";
 import { Educator } from "./Educator";
 
 const tabsConfig = [
-  { label: "운수종사자", value: "transport" },
-  { label: "저상버스 운전자", value: "lowfloorbus" },
-  { label: "도민교통안전교육자", value: "educator" },
+  { label: "운수종사자", value: "TRANS_WORKER" },
+  { label: "도민교통안전교육자", value: "TYPE_TRAFFIC_SAFETY_EDU" },
+];
+const locationList = [
+  { ko: "천안", en: "CHEONAN" },
+  { ko: "공주", en: "PRINCESS" },
+  { ko: "보령", en: "BORYEONG" },
+  { ko: "아산", en: "ASAN" },
+  { ko: "서산", en: "SEOSAN" },
+  { ko: "논산", en: "NONSAN" },
+  { ko: "계룡", en: "GYERYONG" },
+  { ko: "당진", en: "DANGJIN" },
+  { ko: "금산", en: "GEUMSAN" },
+  { ko: "부여", en: "GRANT" },
+  { ko: "서천", en: "SEOCHEON" },
+  { ko: "청양", en: "CHEONGYANG" },
+  { ko: "홍성", en: "HONGSEONG" },
+  { ko: "예산", en: "BUDGET" },
+  { ko: "태안", en: "TAEAN" },
+  { ko: "충남", en: "CHUNGNAM" },
+  { ko: "세종시", en: "SEJONG" },
+  { ko: "서울", en: "SEOUL" },
+  { ko: "부산", en: "BUSAN" },
+  { ko: "대구", en: "DAEGU" },
+  { ko: "인천", en: "INCHEON" },
+  { ko: "광주", en: "GWANGJU" },
+  { ko: "대전", en: "DAEJEON" },
+  { ko: "울산", en: "ULSAN" },
+  { ko: "경기", en: "GAME" },
+  { ko: "강원", en: "GANGWON" },
+  { ko: "충북", en: "CHUNGBUK" },
+  { ko: "전북", en: "JEONBUK" },
+  { ko: "전남", en: "JEONNAM" },
+  { ko: "경북", en: "GYEONGBUK" },
+  { ko: "경남", en: "GYEONGNAM" },
+  { ko: "제주", en: "JEJU" },
 ];
 
 export function MeEdit() {
   const router = useRouter();
+  const { user, error } = useMyUser();
   const dialog = useDialog();
   const [openPromptDialog, setOpenPromptDialog] = useState(false);
   const [nameInput, setNameInput] = useState("");
   const [emailChecked, setEmailChecked] = useState(false);
   const [smsChecked, setSmsChecked] = useState(false);
 
+  const [tabValue, setTabValue] = useState<string>();
+  const onChangeTabValue = (newString: string) => {
+    setTabValue(newString);
+  };
+
   useEffect(() => {
-    (async () => {
-      const data = await getMyUser();
-      setEmailChecked(data.emailYn === YN.YES);
-      setSmsChecked(data.smsYn === YN.YES);
-      setNameInput(data.name);
-    })();
-  }, []);
+    if (user) setTabValue(user.regCategory);
+  }, [user]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -54,18 +88,23 @@ export function MeEdit() {
     }
   };
 
+  if (!user) return <div></div>; //태그없으면 에러뜸
   return (
     <Container>
-      <Tabs tabsConfig={tabsConfig} variant={"fullWidth"} gap={5} />
+      <Tabs
+        tabsConfig={tabsConfig}
+        variant={"fullWidth"}
+        gap={5}
+        rendering={false}
+        onChange={onChangeTabValue}
+        value={tabValue}
+      />
       {/* <Tabs tabsConfig={tabsConfig} variant={"fullWidth"} gap={5} rendering={false} onChange={onChange} value={value} /> */}
-      <TabPanel value={router.query.tab as string} index={tabsConfig[0].value}>
-        <TransAndLowFloor type="transport" />
+      <TabPanel value={tabValue} index={tabsConfig[0].value}>
+        <TransWorker type="transport" locationList={locationList} />
       </TabPanel>
-      <TabPanel value={router.query.tab as string} index={tabsConfig[1].value}>
-        <TransAndLowFloor type="lowfloorbus" />
-      </TabPanel>
-      <TabPanel value={router.query.tab as string} index={tabsConfig[2].value}>
-        <Educator />
+      <TabPanel value={tabValue} index={tabsConfig[1].value}>
+        <Educator locationList={locationList} />
       </TabPanel>
       {/* <Box component="form" onSubmit={handleSubmit} noValidate sx={{
         display: 'flex',
@@ -148,7 +187,7 @@ export function MeEdit() {
 
 interface TabPanelProps extends BoxProps {
   children: React.ReactNode;
-  value: string;
+  value: undefined | string;
   index: string;
 }
 

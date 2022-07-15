@@ -172,7 +172,6 @@ export function HomeworkModal({ open, handleClose, seq, contentSeq, mode = 'uplo
                   <FormControlLabel value={HomeworkStatus.REJECT} control={<Radio />} label="중지" />
                 </RadioGroup>
               )}
-
             />
           </FormControl>
 

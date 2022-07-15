@@ -17,7 +17,6 @@ interface BoardAccordionAccordionList {
   icon?: EmotionJSX.Element;
   children: {
     name: string;
-    href?: string | null;
     isActive?: boolean;
   }[];
 }
@@ -45,35 +44,29 @@ export function BoardAccordion({ boardAccordionList }: { boardAccordionList: Boa
             }}
           >
             {icon}
-            <Box display="flex" flexDirection={"column"} width="100%" >
+            <BoardBox display="flex" flexDirection={"column"} width="100%" >
               <Typography className='CategoryBoardOne'>{dateFormat(date, 'isoDate')}</Typography>
               <Typography className='CategoryBoardTwo'>{name}</Typography>
-            </Box>
+            </BoardBox>
           </AccordionSummary>
-          <AccordionDetails>
+          <BoardAccordionDetails>
             <nav aria-label="secondary mailbox folders">
               <List disablePadding={true}>
-                {children.map(({ name, href, isActive }, idx) => (
-                  <Link
-                    href={href ? href : ''}
-                    color={grey[900]}
-                    key={name}
+                {children.map(({ name, isActive }, idx) => (
+                  <ListItem
+                    disablePadding
+                    sx={{
+                      backgroundColor: `${isActive ? grey[50] : 'inherit'}`,
+                    }}
                   >
-                    <ListItem
-                      disablePadding
-                      sx={{
-                        backgroundColor: `${isActive ? grey[50] : 'inherit'}`,
-                      }}
-                    >
-                      <ListItemButton>
-                        <ListItemText primary={name} />
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
+                    <ListItemButton>
+                      <ListItemText primary={name} />
+                    </ListItemButton>
+                  </ListItem>
                 ))}
               </List>
             </nav>
-          </AccordionDetails>
+          </BoardAccordionDetails>
         </MuiAccordion>
       ))}
     </>
@@ -81,17 +74,20 @@ export function BoardAccordion({ boardAccordionList }: { boardAccordionList: Boa
 }
 
 
+const BoardBox = styled(Box)`
+  .CategoryBoardOne {
+    color: #a59d9d;
+  }
 
-// const Box1 = styled(Box)`
-//   .CategoryBoardOne {
-//     color: #a59d9d;
-//   }
+  .CategoryBoardTwo {
+    font-weight: bold;
+    font-size: 1.3rem;
+    width: 100%;
+  }
+`
 
-//   .CategoryBoardTwo {
-//     font-weight: bold;
-//     font-size: 1.3rem;
-//     border-bottom: 1px solid lightgray;
-//     width: 100%;
-//     padding-bottom: 20px;
-//   }
-// `
+const BoardAccordionDetails = styled(AccordionDetails)`
+  background-color: #e0e0e0;
+  padding: 0px;
+  margin-bottom: 30px;
+`

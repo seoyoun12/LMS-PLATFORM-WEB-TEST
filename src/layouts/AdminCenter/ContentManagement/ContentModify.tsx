@@ -54,7 +54,7 @@ export function ContentModify() {
   return (
     <Container className={styles.globalContainer}>
       <Box sx={{ mb: '30px' }}>
-        <Tabs tabsConfig={tabsConfig} />
+        <Tabs tabsConfig={tabsConfig} variant={'standard'} />
       </Box>
       {
         {

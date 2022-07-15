@@ -1,4 +1,4 @@
-import { CategoryBoard, CategoryBoardNoticeInput } from "@common/api/categoryBoard"
+import { CategoryBoard, CategoryBoardInput } from "@common/api/categoryBoard"
 import { ProductStatus } from "@common/api/course";
 import { YN } from "@common/constant";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
@@ -23,12 +23,14 @@ import { css, cx } from '@emotion/css';
 import { ErrorMessage } from '@hookform/error-message';
 import { FileUploader } from '@components/ui/FileUploader';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
+import { useSnackbar } from '@hooks/useSnackbar';
+
 
 interface Props {
   mode? : 'upload' | 'modify',
   category?: CategoryBoard,
-  onHandleSubmit: ({ categoryBoardNoticeInput, files, categorySeq } :{
-    categoryBoardNoticeInput: CategoryBoard;
+  onHandleSubmit: ({ categoryBoardInput, files, categorySeq } :{
+    categoryBoardInput: CategoryBoard;
     files: File[];
     isFileDelete: boolean;
     categorySeq?: number;
@@ -40,8 +42,9 @@ interface FormType extends CategoryBoard {
 }
 
 const defaultValues = {
-  status: ProductStatus.APPROVE,
-  displayYn: YN.YES,
+  boardType: "TYPE_NOTICE",
+  noticeYn : YN.YES,
+  publicYn : YN.YES,
   files: []
 };
 
@@ -50,7 +53,8 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
   const editorRef = useRef<EditorType>(null);
   const [ isFileDelete, setIsFileDelete ] = useState(false);
   const [ fileName, setFileName ] = useState<string | null>(null);
-
+  const input: HTMLInputElement | null = document.querySelector('#input-file');
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const {
     register,
     handleSubmit,
@@ -67,32 +71,32 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
     }
   }, [ mode, category, reset ]);
 
-  // const handleFileChange = (e: ChangeEvent) => {
-  //   e.preventDefault();
+  const handleFileChange = (e: ChangeEvent) => {
+    e.preventDefault();
 
-  //   const files = (e.target as HTMLInputElement).files;
-  //   if (!files?.length) return null;
-  //   setFileName(files[0].name);
-  //   setIsFileDelete(false);
-  // };
+    const files = (e.target as HTMLInputElement).files;
+    if (!files?.length) return null;
+    setFileName(files[0].name);
+    setIsFileDelete(false);
+  };
 
-  // const handleDeleteFile = () => {
-  //   resetField('files');
-  //   setFileName(null);
-  //   setIsFileDelete(true);
-  // };
+  const handleDeleteFile = () => {
+    resetField('files');
+    setFileName(null);
+    setIsFileDelete(true);
+  };
 
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...category }, event) => {
     event?.preventDefault();
     if (!editorRef.current) return;
 
     const markdownContent = editorRef.current.getInstance().getMarkdown();
-    const categoryBoardNoticeInput = {
+    const categoryBoardInput = {
       ...category,
       content: markdownContent,
     };
 
-    onHandleSubmit({ categoryBoardNoticeInput, categorySeq: category.seq, files, isFileDelete });
+    onHandleSubmit({ categoryBoardInput, categorySeq: category.seq, files, isFileDelete });
   };
 
   
@@ -120,7 +124,6 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
                 <FormControlLabel value={"TYPE_NOTICE"} control={<Radio />} label="공지사항" />
                 <FormControlLabel value={"TYPE_FAQ"} control={<Radio />} label="자주묻는질문" />
                 {/* <FormControlLabel value={"TYPE_REVIEW"} control={<Radio />} label="문의 내역" /> */}
-                
                 {/* <FormControlLabel value={YN.NO} control={<Radio />} label="공개N" /> */}
               </RadioGroup>
             )}
@@ -139,17 +142,6 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
             <ErrorMessage errors={errors} name="subject" as={<FormHelperText error />} />
           </FormControl>
 
-          {/* <FormControl className={textField}>
-            <TextField
-              {...register('content', { required: '내용을 입력해주세요.' })}
-              size="small"
-              label="공지사항 본문"
-              variant="outlined"
-            />
-            <ErrorMessage errors={errors} name="content" as={<FormHelperText error />} />
-          </FormControl> */}
-          
-          
         </InputContainer>
 
         <TuiEditor
@@ -160,6 +152,23 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
           useCommandShortcut={true}
           ref={editorRef}
         />
+
+        <div className="board-uploader">
+          <FileUploader
+            register={register}
+            regName="files"
+            onFileChange={handleFileChange}
+          >
+          </FileUploader>
+          {fileName
+            ? <Chip
+              sx={{ mt: '8px' }}
+              icon={<OndemandVideoOutlinedIcon />}
+              label={fileName}
+              onDelete={handleDeleteFile} />
+            : null
+          }
+        </div>
 
         <FormControl className={pt20}>
           <FormLabel focused={false}>공지여부</FormLabel>

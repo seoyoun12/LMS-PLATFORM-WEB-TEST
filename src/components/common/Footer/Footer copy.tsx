@@ -33,19 +33,19 @@ export const Footer: FC<Props> = () => {
       <div className={styles.globalContainer}>
         <ContentContainer>
           <IntroductionSection>
-            <div className="logo">충남교통연수원</div>
+            <div className="logo">러닝핏</div>
             <Typography variant="body1" className="desc">
-              충남교통연수원 <br/>
-              충남교통연수원
+              미림미디어랩은 교육을 통하여 <br/>
+              평등한 세상을 구현하고자 합니다.
             </Typography>
           </IntroductionSection>
           <ContentItem className="m-l-auto">
-            <Typography variant="h6" className="desc">충남교통연수원</Typography>
+            <Typography variant="h6" className="desc">러닝핏</Typography>
             <Link href="/" underline="none">
               <Button className="align-left" color="neutral">홈</Button>
             </Link>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">공지사항</Button>
+              <Button className="align-left" color="neutral">기업교육</Button>
             </Link>
             <Link href="/" underline="none">
               <Button className="align-left" color="neutral">채용</Button>
@@ -55,7 +55,7 @@ export const Footer: FC<Props> = () => {
             </Link>
           </ContentItem>
           <ContentItem>
-            <Typography variant="h6" className="logo">충남교통연수원</Typography>
+            <Typography variant="h6" className="logo">튜터</Typography>
             <Link href="/" underline="none">
               <Button className="align-left" color="neutral">튜터 센터</Button>
             </Link>

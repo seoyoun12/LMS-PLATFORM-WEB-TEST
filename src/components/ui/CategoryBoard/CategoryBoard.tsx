@@ -11,12 +11,12 @@ import { CategoryBoardQuestion } from "@layouts/Category/CategoryBoardQuestion";
 import { CategoryBoardLook } from "@layouts/Category/CategoryBoardLook";
 import { Tabs2 } from '@components/ui/Tabs2';
 
-enum NoticeTab {
-  CbNotice = 'cbNotice',
-  CbQna = 'cbQna',
-  CbQuestion = 'cbQuestion',
-  CbLook = 'cbLook'
-}
+// enum NoticeTab {
+//   CbNotice = 'cbNotice',
+//   CbQna = 'cbQna',
+//   CbQuestion = 'cbQuestion',
+//   CbLook = 'cbLook'
+// }
 
 const tabsConfig = [
   { label: '공지사항', value: "cbNotice", href: <CategoryBoardNotice />},

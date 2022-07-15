@@ -1,7 +1,7 @@
 import styles from '@styles/common.module.scss';
 import { Container } from '@mui/material';
 import { CategoryUploadForm } from '@layouts/AdminCenter';
-import { CategoryBoard, CategoryBoardNoticeInput, uploadCategoryBoardNotice } from '@common/api/categoryBoard';
+import { CategoryBoard, CategoryBoardInput, uploadCategoryBoard } from '@common/api/categoryBoard';
 import { BbsType, uploadFile } from '@common/api/adm/file';
 
 export function CategoryUpload() {
@@ -11,18 +11,18 @@ export function CategoryUpload() {
     if (isFileUpload) {
       await uploadFile({
         fileTypeId: category.seq,
-        fileType: BbsType.TYPE_CATEGORY,
+        fileType: BbsType.TYPE_CATEGORY, // Type Setting 필요
         files
       });
     }
   };
 
-  const handleSubmit = async ({ files, categoryBoardNoticeInput } : {
+  const handleSubmit = async ({ files, categoryBoardInput } : {
     files: File[],
-    categoryBoardNoticeInput: CategoryBoardNoticeInput,
+    categoryBoardInput: CategoryBoardInput,
   }) => {
     try {
-      const category = await uploadCategoryBoardNotice(categoryBoardNoticeInput);
+      const category = await uploadCategoryBoard(categoryBoardInput);
       await fileHandler(files, category);
     } catch (e: any) {
       console.error(e);

@@ -11,8 +11,11 @@ import { useMyUser } from "@common/api/user";
 import { useEffect } from "react";
 
 const myInfoList = [
-  { label: "내 강의", value: "myCourse" },
-  { label: "정보 수정", value: "editInfo" },
+  // { label: "내 강의", value: "myCourse" },
+  // { label: "정보 수정", value: "editInfo" },
+  // { label: "증명서 발급", value: "certificate" },
+  { label: "학습중인 과정", value: "studyCourse" },
+  { label: "학습종료 과정", value: "endStudyCourse" },
   { label: "증명서 발급", value: "certificate" },
 ];
 
@@ -37,11 +40,16 @@ export function Me() {
             <Typography>{user.username}</Typography>
           </div>
         </Link>
+        <Link className={s.link} underline="hover" color={grey[900]} href={`/meEdit`}>
+          <Typography variant="body2">정보수정</Typography>
+          <ArrowForwardIcon />
+        </Link>
       </UserInfoSection>
       <ContentBody>
         <SideBar>
           <SideBarContent>
             <SideBarTitle variant="h6">내 정보</SideBarTitle>
+
             <Tabs
               tabsConfig={myInfoList}
               orientation="vertical"
@@ -66,12 +74,32 @@ export function Me() {
         </SideBar>
         <LessonListContainer>
           <Typography variant="h6" sx={{ marginBottom: "16px" }}>
-            내 강의
+            {value}
           </Typography>
           <Grid container rowSpacing={4} columnSpacing={2} columns={{ xs: 1, sm: 1, md: 2, lg: 2 }}>
             {user.learningCourses.map((res) => (
-              <Grid item xs={1} sm={1} md={1} lg={1} key={res.seq}>
-                <Link href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}>
+              <Grid item xs={1} sm={1} md={1} lg={1} key={res.seq} sx={{ display: value === myInfoList[0].value ? "display" : "none" }}>
+                <Link href={`/course/${res.seq}/lesson/${res.seq}`}>
+                  <ContentCard title={res.courseName} content1={res.courseSubName} content2={`${res.lessonTime}%`} />
+                </Link>
+              </Grid>
+            ))}
+            {user.learningCourses.map((res) => (
+              <Grid
+                item
+                xs={1}
+                sm={1}
+                md={1}
+                lg={1}
+                key={res.seq}
+                sx={{
+                  display:
+                    value === myInfoList[2].value && res.lessonTime <= res.lessons.reduce((prev, curr) => prev + curr.completeTime, 0)
+                      ? "display"
+                      : "none",
+                }}
+              >
+                <Link href={`/course/${res.seq}/lesson/${res.seq}`}>
                   <ContentCard title={res.courseName} />
                 </Link>
               </Grid>
@@ -90,7 +118,10 @@ const UserProfile = styled(Avatar)`
 `;
 
 const UserInfoSection = styled(Box)`
-  margin-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  margin-bottom: 30px;
 `;
 
 const ContentBody = styled(Box)`

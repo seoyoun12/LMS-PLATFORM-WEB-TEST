@@ -80,7 +80,7 @@ export function LessonSidebar({ course, tabsConfig, testList, noticeConfig, file
         showBorderBottom={false}
         onChangeMenu={onChangeMenu}
         rerender={false}
-        sortFull={true}
+        variant={"fullWidth"}
         changeMenu={changeMenu}
       />{" "}
       {/*메뉴바 헤더 */}

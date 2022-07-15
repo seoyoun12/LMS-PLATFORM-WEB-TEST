@@ -11,6 +11,7 @@ interface Props {
 }
 
 const hideNavList = [
+  { href: "/course/[courseId]" },
   { href: "/admin-center" },
   // { href: '' } // 메인에서 제거
 ];

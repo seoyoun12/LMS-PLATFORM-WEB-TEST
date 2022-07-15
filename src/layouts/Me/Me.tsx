@@ -9,6 +9,7 @@ import { css } from "@emotion/css";
 import styled from "@emotion/styled";
 import { useMyUser } from "@common/api/user";
 import { useEffect } from "react";
+import dateFormat from "dateformat";
 
 const myInfoList = [
   // { label: "내 강의", value: "myCourse" },
@@ -40,7 +41,7 @@ export function Me() {
             <Typography>{user.username}</Typography>
           </div>
         </Link>
-        <Link className={s.link} underline="hover" color={grey[900]} href={`/meEdit`}>
+        <Link className={s.link} underline="hover" color={grey[900]} href={`/me/edit`}>
           <Typography variant="body2">정보수정</Typography>
           <ArrowForwardIcon />
         </Link>
@@ -77,13 +78,21 @@ export function Me() {
             {value}
           </Typography>
           <Grid container rowSpacing={4} columnSpacing={2} columns={{ xs: 1, sm: 1, md: 2, lg: 2 }}>
-            {user.learningCourses.map((res) => (
-              <Grid item xs={1} sm={1} md={1} lg={1} key={res.seq} sx={{ display: value === myInfoList[0].value ? "display" : "none" }}>
-                <Link href={`/course/${res.seq}/lesson/${res.seq}`}>
-                  <ContentCard title={res.courseName} content1={res.courseSubName} content2={`${res.lessonTime}%`} />
-                </Link>
-              </Grid>
-            ))}
+            {user.learningCourses.map((res) => {
+              const period = new Date(res.createdDtime).setDate(res.lessonTerm);
+              const Days = Math.floor((period - new Date(res.createdDtime).getTime()) / (1000 * 60 * 60 * 24));
+              return (
+                <Grid item xs={1} sm={1} md={1} lg={1} key={res.seq} sx={{ display: value === myInfoList[0].value ? "display" : "none" }}>
+                  <Link href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}>
+                    <ContentCard
+                      title={res.courseName}
+                      content1={res.courseSubName}
+                      content2={`${Days < 10 ? `0${Days}` : Days}일 남았습니다.`}
+                    />
+                  </Link>
+                </Grid>
+              );
+            })}
             {user.learningCourses.map((res) => (
               <Grid
                 item

@@ -3,6 +3,7 @@ import { YN } from "@common/constant";
 import styled from "@emotion/styled";
 import { useDialog } from "@hooks/useDialog";
 import { useInput } from "@hooks/useInput";
+import { useSnackbar } from "@hooks/useSnackbar";
 import {
   Autocomplete,
   Avatar,
@@ -92,6 +93,7 @@ export function TransWorker({ type, locationList }: Props) {
   const [phone3, setPhone3, onChagePhone3] = useInput();
   const [smsChecked, setSmsChecked] = useState(false);
   const dialog = useDialog();
+  const snackbar = useSnackbar();
   const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -108,7 +110,7 @@ export function TransWorker({ type, locationList }: Props) {
   const handleOnCloseConfirm = async (isConfirm: boolean) => {
     if (isConfirm) {
       const smsYn = smsChecked ? YN.YES : YN.NO;
-      if (!user) return window.alert("수정 실패하였습니다.");
+      if (!user) return snackbar({ variant: "error", message: "수정 실패하였습니다." });
       const data = {
         carNumber: vehicleNumber, //차번호
         company: company, //회사
@@ -141,27 +143,19 @@ export function TransWorker({ type, locationList }: Props) {
           {/*어쨰서 이렇게 해야 되는것..? */}
           <UserProfile />
         </Box>
-        <TextField
-          required
-          fullWidth
-          id="name"
-          label="이름"
-          name="name"
-          value={user?.name ? user.name : "Error"}
-          disabled
-        />
+        <TextField required fullWidth id="name" label="이름" name="name" value={user?.name ? user.name : 'Error'} disabled />
         <FormControl fullWidth>
           <InputLabel id="occ1-select-label">업종</InputLabel>
           <Select
             labelId="occ1-select-label"
             id="occ1-select"
-            onChange={(e) => {
+            onChange={e => {
               onChangeOcc1(e);
               setShowCompany(false);
             }}
             required
           >
-            {occupationOptions1.map((occ) => (
+            {occupationOptions1.map(occ => (
               <MenuItem key={occ.enType} value={occ.enType}>
                 {occ.type}
               </MenuItem>
@@ -170,13 +164,13 @@ export function TransWorker({ type, locationList }: Props) {
         </FormControl>
         <FormControl fullWidth>
           <InputLabel id="occ2-select-label">업종구분</InputLabel>
-          <Select labelId="occ2-select-label" id="occ2-select" onChange={(e) => onChangeOcc2(e)} required>
+          <Select labelId="occ2-select-label" id="occ2-select" onChange={e => onChangeOcc2(e)} required>
             {
               // occupation1 === "PASSENGER"
               // ?
               occupationOptions2
-                .filter((item) => item.category === occupation1)
-                .map((item) => (
+                .filter(item => item.category === occupation1)
+                .map(item => (
                   <MenuItem
                     key={item.enType}
                     value={item.enType}
@@ -205,17 +199,7 @@ export function TransWorker({ type, locationList }: Props) {
           </Select>
         </FormControl>
 
-        {showCompany && (
-          <TextField
-            required
-            fullWidth
-            id="company"
-            label="회사명"
-            name="company"
-            value={company}
-            onChange={onChangeComp}
-          />
-        )}
+        {showCompany && <TextField required fullWidth id="company" label="회사명" name="company" value={company} onChange={onChangeComp} />}
         <TextField
           required
           fullWidth
@@ -228,8 +212,8 @@ export function TransWorker({ type, locationList }: Props) {
         />
         <FormControl fullWidth>
           <InputLabel id="regi-select-label">차량등록지</InputLabel>
-          <Select labelId="regi-select-label" id="regi-select" onChange={(e) => onChangeVehicleRegi(e)} required>
-            {locationList.map((locate) => (
+          <Select labelId="regi-select-label" id="regi-select" onChange={e => onChangeVehicleRegi(e)} required>
+            {locationList.map(locate => (
               <MenuItem key={locate.en} value={locate.en}>
                 {locate.ko}
               </MenuItem>
@@ -238,8 +222,8 @@ export function TransWorker({ type, locationList }: Props) {
         </FormControl>
         <Box display={"flex"} alignItems="center" gap="1rem">
           <FormControl fullWidth>
-            <Select onChange={(e) => setPhone1(String(e.target.value))}>
-              {phoneNumbers.map((phone) => (
+            <Select onChange={e => setPhone1(String(e.target.value))}>
+              {phoneNumbers.map(phone => (
                 <MenuItem key={phone} value={phone}>
                   {phone}
                 </MenuItem>

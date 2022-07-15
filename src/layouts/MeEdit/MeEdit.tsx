@@ -1,53 +1,54 @@
-import * as React from "react";
-import { Container, Box, Switch, Button, TextField, Typography, tableBodyClasses } from "@mui/material";
-import { useEffect, useState } from "react";
-import { getMyUser, modifyMyUser, useMyUser } from "@common/api/user";
-import { useRouter } from "next/router";
-import { PasswordChangeModal } from "./PasswordChangeModal/PasswordChangeModal";
-import { useDialog } from "@hooks/useDialog";
-import { YN } from "@common/constant";
-import { TransWorker } from "./TransWorker";
-import { Tabs } from "@components/ui";
-import { BoxProps } from "@material-ui/core";
-import { Educator } from "./Educator";
+import * as React from 'react';
+import { Container, Box, Switch, Button, TextField, Typography, tableBodyClasses } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { getMyUser, modifyMyUser, useMyUser } from '@common/api/user';
+import { useRouter } from 'next/router';
+import { PasswordChangeModal } from './PasswordChangeModal/PasswordChangeModal';
+import { useDialog } from '@hooks/useDialog';
+import { YN } from '@common/constant';
+import { TransWorker } from './TransWorker';
+import { Tabs } from '@components/ui';
+import { BoxProps } from '@material-ui/core';
+import { Educator } from './Educator';
+import { logout } from '@common/api';
 
 const tabsConfig = [
-  { label: "운수종사자", value: "TRANS_WORKER" },
-  { label: "도민교통안전교육자", value: "TYPE_TRAFFIC_SAFETY_EDU" },
+  { label: '운수종사자', value: 'TYPE_TRANS_EDU' },
+  { label: '도민교통안전교육자', value: 'TYPE_TRAFFIC_SAFETY_EDU' },
 ];
 const locationList = [
-  { ko: "천안", en: "CHEONAN" },
-  { ko: "공주", en: "PRINCESS" },
-  { ko: "보령", en: "BORYEONG" },
-  { ko: "아산", en: "ASAN" },
-  { ko: "서산", en: "SEOSAN" },
-  { ko: "논산", en: "NONSAN" },
-  { ko: "계룡", en: "GYERYONG" },
-  { ko: "당진", en: "DANGJIN" },
-  { ko: "금산", en: "GEUMSAN" },
-  { ko: "부여", en: "GRANT" },
-  { ko: "서천", en: "SEOCHEON" },
-  { ko: "청양", en: "CHEONGYANG" },
-  { ko: "홍성", en: "HONGSEONG" },
-  { ko: "예산", en: "BUDGET" },
-  { ko: "태안", en: "TAEAN" },
-  { ko: "충남", en: "CHUNGNAM" },
-  { ko: "세종시", en: "SEJONG" },
-  { ko: "서울", en: "SEOUL" },
-  { ko: "부산", en: "BUSAN" },
-  { ko: "대구", en: "DAEGU" },
-  { ko: "인천", en: "INCHEON" },
-  { ko: "광주", en: "GWANGJU" },
-  { ko: "대전", en: "DAEJEON" },
-  { ko: "울산", en: "ULSAN" },
-  { ko: "경기", en: "GAME" },
-  { ko: "강원", en: "GANGWON" },
-  { ko: "충북", en: "CHUNGBUK" },
-  { ko: "전북", en: "JEONBUK" },
-  { ko: "전남", en: "JEONNAM" },
-  { ko: "경북", en: "GYEONGBUK" },
-  { ko: "경남", en: "GYEONGNAM" },
-  { ko: "제주", en: "JEJU" },
+  { ko: '천안', en: 'CHEONAN' },
+  { ko: '공주', en: 'PRINCESS' },
+  { ko: '보령', en: 'BORYEONG' },
+  { ko: '아산', en: 'ASAN' },
+  { ko: '서산', en: 'SEOSAN' },
+  { ko: '논산', en: 'NONSAN' },
+  { ko: '계룡', en: 'GYERYONG' },
+  { ko: '당진', en: 'DANGJIN' },
+  { ko: '금산', en: 'GEUMSAN' },
+  { ko: '부여', en: 'GRANT' },
+  { ko: '서천', en: 'SEOCHEON' },
+  { ko: '청양', en: 'CHEONGYANG' },
+  { ko: '홍성', en: 'HONGSEONG' },
+  { ko: '예산', en: 'BUDGET' },
+  { ko: '태안', en: 'TAEAN' },
+  { ko: '충남', en: 'CHUNGNAM' },
+  { ko: '세종시', en: 'SEJONG' },
+  { ko: '서울', en: 'SEOUL' },
+  { ko: '부산', en: 'BUSAN' },
+  { ko: '대구', en: 'DAEGU' },
+  { ko: '인천', en: 'INCHEON' },
+  { ko: '광주', en: 'GWANGJU' },
+  { ko: '대전', en: 'DAEJEON' },
+  { ko: '울산', en: 'ULSAN' },
+  { ko: '경기', en: 'GAME' },
+  { ko: '강원', en: 'GANGWON' },
+  { ko: '충북', en: 'CHUNGBUK' },
+  { ko: '전북', en: 'JEONBUK' },
+  { ko: '전남', en: 'JEONNAM' },
+  { ko: '경북', en: 'GYEONGBUK' },
+  { ko: '경남', en: 'GYEONGNAM' },
+  { ko: '제주', en: 'JEJU' },
 ];
 
 export function MeEdit() {
@@ -55,12 +56,20 @@ export function MeEdit() {
   const { user, error } = useMyUser();
   const dialog = useDialog();
   const [openPromptDialog, setOpenPromptDialog] = useState(false);
-  const [nameInput, setNameInput] = useState("");
+  const [nameInput, setNameInput] = useState('');
   const [emailChecked, setEmailChecked] = useState(false);
   const [smsChecked, setSmsChecked] = useState(false);
 
   const [tabValue, setTabValue] = useState<string>();
-  const onChangeTabValue = (newString: string) => {
+  const onChangeTabValue = async (newString: string) => {
+    if (user?.regCategory !== newString) {
+      let confirm = window.confirm('다른 타입의 정보를 수정하시려면 재로그인이 필요합니다. 로그아웃 하시겠습니까?');
+      if (confirm) {
+        await logout();
+      } else {
+        return;
+      }
+    }
     setTabValue(newString);
   };
 
@@ -75,14 +84,7 @@ export function MeEdit() {
   if (!user) return <div></div>; //태그없으면 에러뜸
   return (
     <Container>
-      <Tabs
-        tabsConfig={tabsConfig}
-        variant={"fullWidth"}
-        gap={5}
-        rendering={false}
-        onChange={onChangeTabValue}
-        value={tabValue}
-      />
+      <Tabs tabsConfig={tabsConfig} variant={'fullWidth'} gap={5} rendering={false} onChange={onChangeTabValue} value={tabValue} />
       {/* <Tabs tabsConfig={tabsConfig} variant={"fullWidth"} gap={5} rendering={false} onChange={onChange} value={value} /> */}
       <TabPanel value={tabValue} index={tabsConfig[0].value}>
         <TransWorker type="transport" locationList={locationList} />

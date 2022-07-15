@@ -34,6 +34,7 @@ interface Props {
     files: File[];
     isFileDelete: boolean;
     categorySeq?: number;
+    courseSeq?: number;
   }) => void
 }
 
@@ -45,7 +46,8 @@ const defaultValues = {
   boardType: "TYPE_NOTICE",
   noticeYn : YN.YES,
   publicYn : YN.YES,
-  files: []
+  files: [],
+  courseSeq: 0
 };
 
 
@@ -53,8 +55,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
   const editorRef = useRef<EditorType>(null);
   const [ isFileDelete, setIsFileDelete ] = useState(false);
   const [ fileName, setFileName ] = useState<string | null>(null);
-  const input: HTMLInputElement | null = document.querySelector('#input-file');
-  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const {
     register,
     handleSubmit,

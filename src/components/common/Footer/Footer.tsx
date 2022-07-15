@@ -42,31 +42,31 @@ export const Footer: FC<Props> = () => {
           <ContentItem className="m-l-auto">
             <Typography variant="h6" className="desc">충남교통연수원</Typography>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">홈</Button>
+              <Button className="align-left" color="neutral">TEST1</Button>
             </Link>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">공지사항</Button>
+              <Button className="align-left" color="neutral">TEST2</Button>
             </Link>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">채용</Button>
+              <Button className="align-left" color="neutral">TEST3</Button>
             </Link>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">도움말</Button>
+              <Button className="align-left" color="neutral">TEST4</Button>
             </Link>
           </ContentItem>
           <ContentItem>
             <Typography variant="h6" className="logo">충남교통연수원</Typography>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">튜터 센터</Button>
+              <Button className="align-left" color="neutral">TEST5</Button>
             </Link>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">정큐 과정 지원하기</Button>
+              <Button className="align-left" color="neutral">TEST6</Button>
             </Link>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">원포인트 과정 지원하기</Button>
+              <Button className="align-left" color="neutral">TEST7</Button>
             </Link>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">도움말</Button>
+              <Button className="align-left" color="neutral">TEST8</Button>
             </Link>
           </ContentItem>
         </ContentContainer>

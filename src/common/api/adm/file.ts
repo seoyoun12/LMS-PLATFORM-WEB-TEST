@@ -14,7 +14,7 @@ export enum BbsType {
   TYPE_HOMEWORK = 'TYPE_HOMEWORK',
   TYPE_LIBRARY = 'TYPE_LIBRARY',
   TYPE_LESSON = 'TYPE_LESSON',
-  TYPE_CATEGORY = 'TYPE_CATEGORY'
+
 }
 
 export const initFileConfig = async ({ fileUploadType, fileName }: {
@@ -48,6 +48,8 @@ export const uploadFile = ({ fileType, fileTypeId, files }: {
   const formData = new FormData();
   const { file, fileName } = setFileConfig(files);
   formData.append('files', file, fileName);
+
+  console.log("fileTypeId: ", fileTypeId);
 
   return POST(`/file/adm/${fileType}/${fileTypeId}`, formData, {
     headers: {

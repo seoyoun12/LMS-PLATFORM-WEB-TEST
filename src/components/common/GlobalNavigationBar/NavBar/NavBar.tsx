@@ -31,7 +31,7 @@ export function NavBar() {
             underline="none"
             color={grey[800]}
           >
-            <Typography variant="subtitle2" className="bold-600">낙서장</Typography>
+            <Typography variant="subtitle2" className="bold-600">TEST</Typography>
           </Link>
 
           {/* <Link

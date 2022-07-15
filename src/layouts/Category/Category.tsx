@@ -40,6 +40,10 @@ export function Category() {
 
   // if (error) return <div>error</div>;
   // if (!data) return <Spinner />;
+
+  
+
+
   return (
     <div>
 

@@ -30,15 +30,15 @@ export interface CategoryBoard {
 
 // 카테고리게시판 공지사항 input
 
-export type CategoryBoardInput = Partial<CategoryBoard>;
-// export interface CategoryBoardInput {
-//   boardType: string;
-//   content: string;
-//   courseSeq: number;
-//   noticeYn: string;
-//   publicYn: string;
-//   subject: string;
-// }
+// export type CategoryBoardInput = Partial<CategoryBoard>;
+export interface CategoryBoardInput {
+  boardType: string;
+  content: string;
+  courseSeq: number;
+  noticeYn: string;
+  publicYn: string;
+  subject: string;
+}
 
 // 공지사항 리스트
 export function categoryBoardList({ page, elementCnt, boardType } : {
@@ -65,8 +65,25 @@ export function categoryBoardList({ page, elementCnt, boardType } : {
   
 }
 
+
+// 게시판 상세
+export function useCategoryBoard(seq: number) {
+  const { data, error, mutate } = useSWR<SWRResponse<CategoryBoard>>(seq? `/post/${seq}` : null, GET);
+
+  return {
+
+    data: data?.data,
+    error,
+    mutate
+
+  };
+  
+}
+
+
+
 // 게시판 업로드
-export async function uploadCategoryBoard(CategoryBoardNoticeInput : FormData) {
+export async function uploadCategoryBoard(CategoryBoardNoticeInput : CategoryBoardInput) {
   return await POST(`/post`, CategoryBoardNoticeInput);
 }
 

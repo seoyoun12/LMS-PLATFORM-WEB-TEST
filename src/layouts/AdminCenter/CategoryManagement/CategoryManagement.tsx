@@ -35,12 +35,12 @@ export function CategoryManagement() {
   const dialog = useDialog();
   const [ page, setPage ] = useState(0);
   const { data, error, mutate } = categoryBoardList({ 
-    boardType: "TYPE_FAQ",
+    boardType: "TYPE_NOTICE",
     page });
   const [ seq, setSeq ] = useState<number | null>(null);
   // const [ openCategoryNoticeBoardModal, setOpenCategoryNoticeBoardModal ] = useState(false); // 모달X
 
-  const onClickRemoveUser = async (seq: number) => {
+  const onClickRemoveCategory = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
         title: '공지사항 삭제하기',
@@ -74,7 +74,7 @@ export function CategoryManagement() {
   };
 
 
-  console.log("data?.content : ", data?.content);
+  console.log("[확인] data?.content : ", data?.content);
 
 
   return (
@@ -84,7 +84,7 @@ export function CategoryManagement() {
       <FormControl>
         <FormLabel>게시판 선택</FormLabel>
         <RadioGroup row>
-          <FormControlLabel value="TYPE_NOTICE" control={<Radio />} label="공지사항" />
+          <FormControlLabel value="TYPE_POST_NOTICE" control={<Radio />} label="공지사항" />
           <FormControlLabel value="TYPE_FAQ" control={<Radio />} label="자주묻는질문" />
           <FormControlLabel value="TYPE_REVIEW" control={<Radio />} label="문의내역조회" />
         </RadioGroup>
@@ -145,7 +145,7 @@ export function CategoryManagement() {
                   variant="text"
                   color="warning"
                   size="small"
-                  onClick={() => onClickRemoveUser(category.seq)}
+                  onClick={() => onClickRemoveCategory(category.seq)}
                 >
                   삭제
                 </Button>

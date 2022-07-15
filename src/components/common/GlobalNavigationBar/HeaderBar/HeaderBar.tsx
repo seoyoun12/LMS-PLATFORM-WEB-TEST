@@ -73,6 +73,7 @@ export function HeaderBar() {
                     <Button
                       className="align-left"
                       color="neutral"
+                      size='large'
                     >관리 센터</Button>
                   </Link>
                   : null

@@ -9,9 +9,10 @@ export function CategoryUpload() {
   const fileHandler =async (files: File[], category: CategoryBoard) => {
     const isFileUpload = files.length > 0;
     if (isFileUpload) {
+      console.log("categorySeq: ", category.seq);
       await uploadFile({
         fileTypeId: category.seq,
-        fileType: BbsType.TYPE_CATEGORY, // Type Setting 필요
+        fileType: BbsType.TYPE_POST_NOTICE, // Type Setting 필요
         files
       });
     }

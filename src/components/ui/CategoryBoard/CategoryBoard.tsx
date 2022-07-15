@@ -10,7 +10,9 @@ import { CategoryBoardQna } from "@layouts/Category/CategoryBoardQna";
 import { CategoryBoardQuestion } from "@layouts/Category/CategoryBoardQuestion";
 import { CategoryBoardLook } from "@layouts/Category/CategoryBoardLook";
 import { Tabs2 } from '@components/ui/Tabs2';
-
+import { useSnackbar } from "@hooks/useSnackbar";
+import { useDialog } from "@hooks/useDialog";
+import { useCategoryBoard } from '@common/api/categoryBoard';
 // enum NoticeTab {
 //   CbNotice = 'cbNotice',
 //   CbQna = 'cbQna',
@@ -28,8 +30,6 @@ const tabsConfig = [
 export function CategoryBoard() {
 
   const router = useRouter();
-  const { tab } = router.query;
-  const { pathname, query } = router;
   const [value , setValue] = useState(tabsConfig[0].value)
 
   const onChange = (newValue:string) =>{
@@ -37,10 +37,16 @@ export function CategoryBoard() {
   }
   // console.log(value)
 
+
+  const { categorySeq } = router.query;
+  const { data, error } = useCategoryBoard(Number(categorySeq));
+  const dialog = useDialog();
+  const snackbar = useSnackbar();
+
   return (
     <NoticeContainer>
       <Box sx={{ mb: '30px' }}>
-        <NoticeTabs
+        <Tabs2
           tabsConfig={tabsConfig}
           variant={"fullWidth"}
           rendering={false}
@@ -66,11 +72,4 @@ export function CategoryBoard() {
 
 const NoticeContainer = styled(Container)`
   width: 900px;
-`
-
-const NoticeTabs = styled(Tabs2)`
-
-  /* .Ntt {
-    width: 25%;
-  } */
 `

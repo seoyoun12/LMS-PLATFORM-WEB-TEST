@@ -3,6 +3,7 @@ import { YN } from "@common/constant";
 import styled from "@emotion/styled";
 import { useDialog } from "@hooks/useDialog";
 import { useInput } from "@hooks/useInput";
+import { useSnackbar } from "@hooks/useSnackbar";
 import {
   Autocomplete,
   Avatar,
@@ -17,6 +18,7 @@ import {
   Switch,
   TextField,
   Typography,
+  Checkbox
 } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -87,11 +89,12 @@ export function TransWorker({ type, locationList }: Props) {
   const [company, setCompany, onChangeComp] = useInput();
   const [vehicleNumber, setVehicleNumber, onChangeVehicleNum] = useInput();
   const [vehicleRegi, setVehicleRegi, onChangeVehicleRegi] = useInput();
-  const [phone1, setPhone1, onChagePhone1] = useInput();
+  const [phone, setPhone, onChagePhone] = useInput();
   const [phone2, setPhone2, onChagePhone2] = useInput();
   const [phone3, setPhone3, onChagePhone3] = useInput();
   const [smsChecked, setSmsChecked] = useState(false);
   const dialog = useDialog();
+  const snackbar = useSnackbar();
   const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -108,12 +111,12 @@ export function TransWorker({ type, locationList }: Props) {
   const handleOnCloseConfirm = async (isConfirm: boolean) => {
     if (isConfirm) {
       const smsYn = smsChecked ? YN.YES : YN.NO;
-      if (!user) return window.alert("수정 실패하였습니다.");
+      if (!user) return snackbar({ variant: "error", message: "수정 실패하였습니다." });
       const data = {
         carNumber: vehicleNumber, //차번호
         company: company, //회사
         name: user.name, //이름
-        phone: phone1 + phone2 + phone3, //폰번
+        phone: phone + phone2 + phone3, //폰번
         smsYn: smsYn, // 동의여부
         userBusinessTypeOne: occupation1, //업종
         userBusinessTypeTwo: occupation2, // 구분
@@ -141,27 +144,19 @@ export function TransWorker({ type, locationList }: Props) {
           {/*어쨰서 이렇게 해야 되는것..? */}
           <UserProfile />
         </Box>
-        <TextField
-          required
-          fullWidth
-          id="name"
-          label="이름"
-          name="name"
-          value={user?.name ? user.name : "Error"}
-          disabled
-        />
+        <TextField required fullWidth id="name" label="이름" name="name" value={user?.name ? user.name : 'Error'} disabled />
         <FormControl fullWidth>
           <InputLabel id="occ1-select-label">업종</InputLabel>
           <Select
             labelId="occ1-select-label"
             id="occ1-select"
-            onChange={(e) => {
+            onChange={e => {
               onChangeOcc1(e);
               setShowCompany(false);
             }}
             required
           >
-            {occupationOptions1.map((occ) => (
+            {occupationOptions1.map(occ => (
               <MenuItem key={occ.enType} value={occ.enType}>
                 {occ.type}
               </MenuItem>
@@ -170,13 +165,13 @@ export function TransWorker({ type, locationList }: Props) {
         </FormControl>
         <FormControl fullWidth>
           <InputLabel id="occ2-select-label">업종구분</InputLabel>
-          <Select labelId="occ2-select-label" id="occ2-select" onChange={(e) => onChangeOcc2(e)} required>
+          <Select labelId="occ2-select-label" id="occ2-select" onChange={e => onChangeOcc2(e)} required>
             {
               // occupation1 === "PASSENGER"
               // ?
               occupationOptions2
-                .filter((item) => item.category === occupation1)
-                .map((item) => (
+                .filter(item => item.category === occupation1)
+                .map(item => (
                   <MenuItem
                     key={item.enType}
                     value={item.enType}
@@ -205,17 +200,7 @@ export function TransWorker({ type, locationList }: Props) {
           </Select>
         </FormControl>
 
-        {showCompany && (
-          <TextField
-            required
-            fullWidth
-            id="company"
-            label="회사명"
-            name="company"
-            value={company}
-            onChange={onChangeComp}
-          />
-        )}
+        {showCompany && <TextField required fullWidth id="company" label="회사명" name="company" value={company} onChange={onChangeComp} />}
         <TextField
           required
           fullWidth
@@ -228,8 +213,8 @@ export function TransWorker({ type, locationList }: Props) {
         />
         <FormControl fullWidth>
           <InputLabel id="regi-select-label">차량등록지</InputLabel>
-          <Select labelId="regi-select-label" id="regi-select" onChange={(e) => onChangeVehicleRegi(e)} required>
-            {locationList.map((locate) => (
+          <Select labelId="regi-select-label" id="regi-select" onChange={e => onChangeVehicleRegi(e)} required>
+            {locationList.map(locate => (
               <MenuItem key={locate.en} value={locate.en}>
                 {locate.ko}
               </MenuItem>
@@ -237,29 +222,26 @@ export function TransWorker({ type, locationList }: Props) {
           </Select>
         </FormControl>
         <Box display={"flex"} alignItems="center" gap="1rem">
-          <FormControl fullWidth>
-            <Select onChange={(e) => setPhone1(String(e.target.value))}>
-              {phoneNumbers.map((phone) => (
+          {/* <FormControl fullWidth>
+            <Select onChange={e => setPhone(String(e.target.value))}>
+              {phoneNumbers.map(phone => (
                 <MenuItem key={phone} value={phone}>
                   {phone}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>{" "}
-          -
-          <TextField required fullWidth id="name" name="name" value={phone2} onChange={onChagePhone2} /> -
-          <TextField required fullWidth id="name" name="name" value={phone3} onChange={onChagePhone3} />
+          - */}
+          <TextField required fullWidth id="name" label="휴대전화" placeholder="'-'를 제외한 숫자만 입력해주세요." name="name" value={phone} onChange={onChagePhone} />
         </Box>
         <Box display={"flex"} alignItems="center">
-          <Typography variant="body2">SMS 수신 여부</Typography>
-          <Switch
+          <Checkbox
             name="smsYn"
-            sx={{ ml: "auto" }}
             checked={smsChecked}
             onChange={(e, checked) => {
               setSmsChecked(checked);
-            }}
-          />
+            }} />
+            <Typography variant="body2">SMS 수신 여부</Typography>
         </Box>
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
           수정하기

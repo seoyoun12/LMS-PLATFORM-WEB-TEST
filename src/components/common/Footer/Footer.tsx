@@ -11,7 +11,7 @@ interface Props {
 }
 
 const hideNavList = [
-  { href: "/course/[courseId]" },
+  // { href: "/course/[courseId]" },
   { href: "/admin-center" },
   // { href: '' } // 메인에서 제거
 ];
@@ -35,9 +35,13 @@ export const Footer: FC<Props> = () => {
             <Typography variant="body1" className="desc"></Typography>
           </IntroductionSection>
           {/* <ContentItem className="m-l-auto">
+<<<<<<< HEAD
             <Typography variant="h6" className="desc">
               러닝핏
             </Typography>
+=======
+            <Typography variant="h6" className="desc">러닝핏</Typography>
+>>>>>>> feat/meEdit
             <Link href="/" underline="none">
               <Button className="align-left" color="neutral">
                 홈

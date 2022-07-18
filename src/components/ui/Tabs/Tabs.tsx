@@ -1,9 +1,9 @@
-import MuiTabs from "@mui/material/Tabs";
-import MuiTab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
-import { useRouter } from "next/router";
-import React, { SyntheticEvent, useCallback, useEffect } from "react";
-import styled from "styled-components";
+import MuiTabs from '@mui/material/Tabs';
+import MuiTab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import { useRouter } from 'next/router';
+import React, { SyntheticEvent, useCallback, useEffect } from 'react';
+import styled from 'styled-components';
 
 interface Props {
   tabsConfig: {
@@ -22,7 +22,7 @@ interface Props {
 export function Tabs({
   tabsConfig,
   showBorderBottom = true,
-  variant = "standard",
+  variant = 'standard',
   gap,
   rendering = true,
   onChange,
@@ -67,9 +67,9 @@ export function Tabs({
       sx={
         showBorderBottom
           ? {
-              width: "100%",
+              width: '100%',
               borderBottom: 1,
-              borderColor: "divider",
+              borderColor: 'divider',
             }
           : null
       }
@@ -99,6 +99,6 @@ const TabBox = styled(Box)<{ variant: string; gap?: number }>`
   }
 
   .mui-tabs-item {
-    margin: ${({ variant, gap }) => (variant === "fullWidth" && gap ? `0 ${gap}rem` : "0")};
+    margin: ${({ variant, gap }) => (variant === 'fullWidth' && gap ? `0 ${gap}rem` : '0')};
   }
 `;

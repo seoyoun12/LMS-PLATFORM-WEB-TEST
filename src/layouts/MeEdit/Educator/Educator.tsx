@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   Button,
+  Checkbox,
   Container,
   FormControl,
   InputLabel,
@@ -308,15 +309,13 @@ export function Educator({ locationList }: Props) {
             mt: "8px",
           }}
         >
+        <Checkbox
+          name="smsYn"
+          checked={smsChecked}
+          onChange={(e, checked) => {
+            setSmsChecked(checked);
+          }} />
           <Typography variant="body2">SMS 수신 여부</Typography>
-          <Switch
-            name="smsYn"
-            sx={{ ml: "auto" }}
-            checked={smsChecked}
-            onChange={(e, checked) => {
-              setSmsChecked(checked);
-            }}
-          />
         </Box>
 
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>

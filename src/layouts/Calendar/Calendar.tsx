@@ -10,6 +10,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import { CalendarHeader } from './CalendarHeader';
 import dateFormat from 'dateformat';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
+import { CalendarBody } from './CalendarBody';
 
 export interface ClickedPlanInfo {
   year: number;
@@ -22,6 +23,25 @@ export interface ClickedPlanInfo {
   start: string;
   end: string;
 }
+export interface CalendarDatasRes {
+  title: string;
+  eduTypeAndTime: string;
+  description: string;
+  year: number;
+  jobType: string;
+  eduLegend: string;
+  currentJoin: number;
+  limit: number;
+  eduStart: string;
+  eduEnd: string;
+  start: string;
+  end: string;
+}
+
+export interface CalendarEvent extends CalendarDatasRes {
+  className: string;
+  color?: string;
+}
 
 export enum MonthClickType {
   BTN_CLICK = 'BTN_CLICK',
@@ -33,6 +53,57 @@ export enum FilterType {
   PASSENGER = 'PASSENGER',
   FREIGHT = 'FREIGHT',
 }
+
+const calendarDatas: CalendarEvent[] = [
+  {
+    className: 'PASSENGER',
+    title: `마감`,
+    eduTypeAndTime: '강화교육/종일',
+    description: '동영상(VOD)',
+    year: 9999,
+    jobType: '여객',
+    eduLegend: '강화교육',
+    currentJoin: 599,
+    limit: 999,
+    eduStart: '2022-07-10',
+    eduEnd: '2022-07-16',
+    start: '2022-07-02',
+    end: '2022-07-05',
+    color: '#4c0c0c',
+  },
+  {
+    className: 'FREIGHT',
+    title: `접수중`,
+    eduTypeAndTime: '신규교육/24시간',
+    description: '동영상(VOD)',
+    year: 999,
+    jobType: '화물',
+    eduLegend: '보수교육',
+    currentJoin: 59,
+    limit: 99,
+    eduStart: '2022-07-20',
+    eduEnd: '2022-07-26',
+    start: '2022-07-12',
+    end: '2022-07-15',
+    color: '#2980b9',
+  },
+  {
+    className: 'PASSENGER',
+    title: `접수중`,
+    eduTypeAndTime: '신규교육/24시간',
+    description: '동영상(VOD)',
+    year: 9929,
+    jobType: '화물',
+    eduLegend: '보수교육',
+    currentJoin: 592,
+    limit: 992,
+    eduStart: '2022-07-20',
+    eduEnd: '2022-07-26',
+    start: '2022-07-12',
+    end: '2022-07-15',
+    color: '#2980b9',
+  },
+];
 
 export const eduLegendList = [
   { title: '화물보수교육', color: '#27ae60' },
@@ -47,6 +118,8 @@ const filterList = [
   { type: '여객', enType: FilterType.PASSENGER },
   { type: '화물', enType: FilterType.FREIGHT },
 ];
+
+const modalInfoTItle = ['기수', '보수교육', '업종구분', '교육일', '신청/정원', '예약가능시간'];
 
 export function CNCalendar() {
   const [date, setDate] = useState(new Date());
@@ -80,91 +153,98 @@ export function CNCalendar() {
 
   return (
     <CalendarWrap>
-      <div className="App">
-        <Box sx={{ background: '#e0e0e0', textAlign: 'center', padding: '4rem 0' }}>
-          <Typography variant="h4" fontWeight="bold">
-            교육일정
-          </Typography>
-          <Typography>충남교통연수원은 올바르고 안전한 교통문화정착에 앞장섭니다.</Typography>
-        </Box>
-        <CalendarHeader onChangeMonth={onChangeMonth} date={date} filterList={filterList} onChangeFilter={onChangeFilter} filter={filter} />
-        <FullCalendar
-          ref={calendarRef}
-          plugins={[dayGridPlugin]}
-          headerToolbar={{ start: '', end: '' }} //헤더 제거
-          locale="ko"
-          eventContent={renderEventContent}
-          events={[
-            {
-              title: `접수중`,
-              eduTypeAndTime: '신규교육/24시간',
-              description: '동영상(VOD)',
-              year: 999,
-              jobType: '화물',
-              eduLegend: '보수교육',
-              currentJoin: 59,
-              limit: 99,
-              eduStart: '2022-07-20',
-              eduEnd: '2022-07-26',
-              start: '2022-07-12',
-              end: '2022-07-15',
-              color: '#2980b9',
+      <Box sx={{ background: '#e0e0e0', textAlign: 'center', padding: '4rem 0' }}>
+        <Typography variant="h4" fontWeight="bold">
+          교육일정
+        </Typography>
+        <Typography>충남교통연수원은 올바르고 안전한 교통문화정착에 앞장섭니다.</Typography>
+      </Box>
+      <CalendarHeader onChangeMonth={onChangeMonth} date={date} filterList={filterList} onChangeFilter={onChangeFilter} filter={filter} />
+      <CalendarBody
+        setOpenModal={setOpenModal}
+        setModalInfo={setModalInfo}
+        openModal={openModal}
+        modalInfo={modalInfo}
+        calendarRef={calendarRef}
+        CalendarEvent={calendarDatas}
+        filter={filter}
+      />
+      {/* <FullCalendar
+        ref={calendarRef}
+        plugins={[dayGridPlugin]}
+        headerToolbar={{ start: '', end: '' }} //헤더 제거
+        locale="ko"
+        eventContent={renderEventContent}
+        events={[
+          {
+            title: `접수중`,
+            eduTypeAndTime: '신규교육/24시간',
+            description: '동영상(VOD)',
+            year: 999,
+            jobType: '화물',
+            eduLegend: '보수교육',
+            currentJoin: 59,
+            limit: 99,
+            eduStart: '2022-07-20',
+            eduEnd: '2022-07-26',
+            start: '2022-07-12',
+            end: '2022-07-15',
+            color: '#2980b9',
+          },
+          {
+            title: `마감`,
+            eduTypeAndTime: '강화교육/종일',
+            description: '동영상(VOD)',
+            year: 999,
+            jobType: '여객',
+            eduLegend: '강화교육',
+            currentJoin: 59,
+            limit: 99,
+            eduStart: '2022-07-10',
+            eduEnd: '2022-07-16',
+            start: '2022-07-02',
+            end: '2022-07-05',
+            color: '#4c0c0c',
+          },
+          {
+            title: `마감`,
+            eduTypeAndTime: '강화교육/종일',
+            description: '동영상(VOD)',
+            year: 999,
+            jobType: '여객',
+            eduLegend: '강화교육',
+            currentJoin: 59,
+            limit: 99,
+            eduStart: '2022-07-10',
+            eduEnd: '2022-07-16',
+            start: '2022-07-02',
+            end: '2022-07-05',
+            color: '#4c0c0c',
+          },
+        ]}
+        eventClick={e => {
+          console.log(e);
+          const {
+            event: {
+              _def: { extendedProps },
+              start,
+              end,
             },
-            {
-              title: `마감`,
-              eduTypeAndTime: '강화교육/종일',
-              description: '동영상(VOD)',
-              year: 999,
-              jobType: '여객',
-              eduLegend: '강화교육',
-              currentJoin: 59,
-              limit: 99,
-              eduStart: '2022-07-10',
-              eduEnd: '2022-07-16',
-              start: '2022-07-02',
-              end: '2022-07-05',
-              color: '#4c0c0c',
-            },
-            {
-              title: `마감`,
-              eduTypeAndTime: '강화교육/종일',
-              description: '동영상(VOD)',
-              year: 999,
-              jobType: '여객',
-              eduLegend: '강화교육',
-              currentJoin: 59,
-              limit: 99,
-              eduStart: '2022-07-10',
-              eduEnd: '2022-07-16',
-              start: '2022-07-02',
-              end: '2022-07-05',
-              color: '#4c0c0c',
-            },
-          ]}
-          eventClick={e => {
-            console.log(e);
-            const {
-              event: {
-                _def: { extendedProps },
-                start,
-                end,
-              },
-            }: { event: { _def: { extendedProps: Partial<ClickedPlanInfo> }; start: Date | null; end: Date | null } } = e;
-            setModalInfo({
-              year: extendedProps.year ? extendedProps.year : -1,
-              jobType: extendedProps.jobType ? extendedProps.jobType : '',
-              eduLegend: extendedProps.eduLegend ? extendedProps.eduLegend : '',
-              currentJoin: extendedProps.currentJoin ? extendedProps.currentJoin : 0,
-              limit: extendedProps.limit ? extendedProps.limit : 0,
-              eduStart: extendedProps.eduStart ? extendedProps.eduStart : '',
-              eduEnd: extendedProps.eduEnd ? extendedProps.eduEnd : '',
-              start: start ? dateFormat(start, 'yyyy-mm-dd') : 'error',
-              end: end ? dateFormat(end, 'yyyy-mm-dd') : 'error',
-            });
-            setOpenModal(true);
-          }}
-        />
-      </div>
+          }: { event: { _def: { extendedProps: Partial<ClickedPlanInfo> }; start: Date | null; end: Date | null } } = e;
+          setModalInfo({
+            year: extendedProps.year ? extendedProps.year : -1,
+            jobType: extendedProps.jobType ? extendedProps.jobType : '',
+            eduLegend: extendedProps.eduLegend ? extendedProps.eduLegend : '',
+            currentJoin: extendedProps.currentJoin ? extendedProps.currentJoin : 0,
+            limit: extendedProps.limit ? extendedProps.limit : 0,
+            eduStart: extendedProps.eduStart ? extendedProps.eduStart : '',
+            eduEnd: extendedProps.eduEnd ? extendedProps.eduEnd : '',
+            start: start ? dateFormat(start, 'yyyy-mm-dd') : 'error',
+            end: end ? dateFormat(end, 'yyyy-mm-dd') : 'error',
+          });
+          setOpenModal(true);
+        }}
+      />
       <Modal
         open={openModal}
         onCloseModal={() => setOpenModal(false)}
@@ -213,23 +293,24 @@ export function CNCalendar() {
             )}
           </TableBody>
         </TableContainer>
-      </Modal>
+      </Modal> */}
     </CalendarWrap>
   );
 }
 
-function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
-  console.log(info);
-  return (
-    <>
-      <div>[{info && info?.event.title}]</div>
-      <div>{info && info?.event._def.extendedProps.eduTypeAndTime}</div>
-      <div>{info && info?.event._def.extendedProps.description}</div>
-    </>
-  );
-}
+// function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
+//   console.log(info);
+//   return (
+//     <>
+//       <div>[{info && info?.event.title}]</div>
+//       <div>{info && info?.event._def.extendedProps.eduTypeAndTime}</div>
+//       <div>{info && info?.event._def.extendedProps.description}</div>
+//     </>
+//   );
+// }
 
 const CalendarWrap = styled(Container)`
+  /* 
   .fc-col-header {
     // 헤더css
     .fc-scrollgrid-sync-inner {
@@ -245,7 +326,8 @@ const CalendarWrap = styled(Container)`
       /* background: #8e8e8e;
       color: white;
       padding: 5px;
-      border-radius: 220px; */
+      border-radius: 220px; 
     }
-  }
+  } 
+  */
 `;

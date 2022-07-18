@@ -18,6 +18,7 @@ import {
   Switch,
   TextField,
   Typography,
+  Checkbox
 } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -234,15 +235,13 @@ export function TransWorker({ type, locationList }: Props) {
           <TextField required fullWidth id="name" label="휴대전화" placeholder="'-'를 제외한 숫자만 입력해주세요." name="name" value={phone} onChange={onChagePhone} />
         </Box>
         <Box display={"flex"} alignItems="center">
-          <Typography variant="body2">SMS 수신 여부</Typography>
-          <Switch
+          <Checkbox
             name="smsYn"
-            sx={{ ml: "auto" }}
             checked={smsChecked}
             onChange={(e, checked) => {
               setSmsChecked(checked);
-            }}
-          />
+            }} />
+            <Typography variant="body2">SMS 수신 여부</Typography>
         </Box>
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
           수정하기

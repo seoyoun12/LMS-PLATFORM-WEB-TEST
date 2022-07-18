@@ -10,7 +10,7 @@ import { Grid3x3 } from '@mui/icons-material';
 
 interface Props {
   className?: string;
-}
+} 
 
 const hideNavList = [
   { href: '/admin-center' },

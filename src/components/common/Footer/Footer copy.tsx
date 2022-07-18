@@ -17,12 +17,15 @@ const hideNavList = [
 
 export const Footer: FC<Props> = () => {
   const router = useRouter();
-  const [isHideFooter, setIsHideFooter] = useState(false);
+  const [ isHideFooter, setIsHideFooter ] = useState(false);
 
-  useEffect(() => {
-    const hide = hideNavList.some(e => router.route.includes(e.href));
-    setIsHideFooter(hide);
-  }, [router]);
+  useEffect(
+    () => {
+      const hide = hideNavList.some(e => router.route.includes(e.href));
+      setIsHideFooter(hide);
+    },
+    [ router ]
+  );
 
   if (isHideFooter) return null;
   return (
@@ -32,58 +35,38 @@ export const Footer: FC<Props> = () => {
           <IntroductionSection>
             <div className="logo">러닝핏</div>
             <Typography variant="body1" className="desc">
-              미림미디어랩은 교육을 통하여 <br />
+              미림미디어랩은 교육을 통하여 <br/>
               평등한 세상을 구현하고자 합니다.
             </Typography>
           </IntroductionSection>
           <ContentItem className="m-l-auto">
-            <Typography variant="h6" className="desc">
-              러닝핏
-            </Typography>
+            <Typography variant="h6" className="desc">러닝핏</Typography>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                홈
-              </Button>
+              <Button className="align-left" color="neutral">홈</Button>
             </Link>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                기업교육
-              </Button>
+              <Button className="align-left" color="neutral">기업교육</Button>
             </Link>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                채용
-              </Button>
+              <Button className="align-left" color="neutral">채용</Button>
             </Link>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                도움말
-              </Button>
+              <Button className="align-left" color="neutral">도움말</Button>
             </Link>
           </ContentItem>
           <ContentItem>
-            <Typography variant="h6" className="logo">
-              튜터
-            </Typography>
+            <Typography variant="h6" className="logo">튜터</Typography>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                튜터 센터
-              </Button>
+              <Button className="align-left" color="neutral">튜터 센터</Button>
             </Link>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                정큐 과정 지원하기
-              </Button>
+              <Button className="align-left" color="neutral">정큐 과정 지원하기</Button>
             </Link>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                원포인트 과정 지원하기
-              </Button>
+              <Button className="align-left" color="neutral">원포인트 과정 지원하기</Button>
             </Link>
             <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                도움말
-              </Button>
+              <Button className="align-left" color="neutral">도움말</Button>
             </Link>
           </ContentItem>
         </ContentContainer>

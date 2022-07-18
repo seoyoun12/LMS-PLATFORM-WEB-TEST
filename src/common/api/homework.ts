@@ -27,7 +27,7 @@ export interface HomeworkInput {
   markingRole: string,
   s3Files: S3Files,
   status: number,
-  subject: string  
+  subject: string
 }
 
 // 전체 조회
@@ -68,7 +68,6 @@ export async function uploadHomework(homeworkInput : FormData) {
 export async function uploadBatchHomework() {
   // 잠시 보류
 }
-
 
 // 과제 수정
 export async function modifyHomework(seq : number, homeworkInput : FormData) {

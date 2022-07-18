@@ -18,4 +18,5 @@ export { UserManagement } from './UserManagement/UserManagement';
 
 export { CategoryManagement } from './CategoryManagement/CategoryManagement';
 export { CategoryUpload } from './CategoryManagement/CategoryUpload';
+export { CategoryModify } from './CategoryManagement/CategoryModify';
 export { CategoryUploadForm } from '@components/admin-center/CategoryUploadForm';

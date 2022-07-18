@@ -9,6 +9,7 @@ import { Table } from "@components/ui";
 import dateFormat from "dateformat";
 import styled from "@emotion/styled";
 import { Controller, useForm } from "react-hook-form";
+import { Link } from '@components/common';
 
 const headRows = [
   { name: "seq" }, // seq
@@ -38,8 +39,15 @@ export function CategoryManagement() {
     boardType: "TYPE_NOTICE",
     page });
   const [ seq, setSeq ] = useState<number | null>(null);
-  // const [ openCategoryNoticeBoardModal, setOpenCategoryNoticeBoardModal ] = useState(false); // 모달X
+  // const [ modifyPage, setModifyPage ] = useState();
+  // 수정
+  const onClickmodifyCategoryBoard = async (seq: number) => {
+    setSeq(seq);
+  }
 
+
+
+  // 삭제
   const onClickRemoveCategory = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
@@ -128,16 +136,19 @@ export function CategoryManagement() {
               <TableCell>{category.publicYn}</TableCell>
               <TableCell>{category.status}</TableCell>
               <TableCell>{category.hit}</TableCell>
-              <TableCell>{category.s3Files}</TableCell>
+              <TableCell>{category.s3Files[0] ? category.s3Files[0].name : "파일없음"}</TableCell>
               <TableCell>
-                <Button
-                  variant="text"
-                  color="neutral"
-                  size="small"
-                  // onClick={() => onClickModifyUser(category.seq)}
-                >
-                  수정
-                </Button>
+                <Link href={`/admin-center/category/modify/${category.seq}`}>
+                  <Button
+                    variant="text"
+                    color="neutral"
+                    size="small"
+                    // onClick={() => onClickmodifyCategoryBoard(category.seq)}
+                    // mode = { seq ? "modify" : "upload" }
+                  >
+                    수정
+                  </Button>
+                </Link>
               </TableCell>
 
               <TableCell>

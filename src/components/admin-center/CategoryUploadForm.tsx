@@ -1,4 +1,5 @@
 import { CategoryBoard, CategoryBoardInput } from "@common/api/categoryBoard"
+import { CourseRes } from "@common/api/course";
 import { ProductStatus } from "@common/api/course";
 import { YN } from "@common/constant";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
@@ -24,13 +25,15 @@ import { ErrorMessage } from '@hookform/error-message';
 import { FileUploader } from '@components/ui/FileUploader';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { useSnackbar } from '@hooks/useSnackbar';
+import { Link } from '@components/common';
 
 
 interface Props {
   mode? : 'upload' | 'modify',
-  category?: CategoryBoard,
-  onHandleSubmit: ({ categoryBoardInput, files, categorySeq } :{
-    categoryBoardInput: CategoryBoard;
+  category?: CategoryBoardInput,
+  courseSeq?: number;
+  onHandleSubmit: ({ categoryBoardInput, files, categorySeq, courseSeq } :{
+    categoryBoardInput: CategoryBoardInput;
     files: File[];
     isFileDelete: boolean;
     categorySeq?: number;
@@ -38,7 +41,7 @@ interface Props {
   }) => void
 }
 
-interface FormType extends CategoryBoard {
+interface FormType extends CategoryBoardInput {
   files: File[];
 }
 
@@ -47,15 +50,13 @@ const defaultValues = {
   noticeYn : YN.YES,
   publicYn : YN.YES,
   files: [],
-  courseSeq: 0
 };
 
 
-export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }: Props) {
+export function CategoryUploadForm({ mode = 'upload', category, courseSeq, onHandleSubmit }: Props) {
   const editorRef = useRef<EditorType>(null);
   const [ isFileDelete, setIsFileDelete ] = useState(false);
   const [ fileName, setFileName ] = useState<string | null>(null);
-
   const {
     register,
     handleSubmit,
@@ -87,17 +88,16 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
     setIsFileDelete(true);
   };
 
-  const onSubmit: SubmitHandler<FormType> = async ({ files, ...category }, event) => {
+  const onSubmit: SubmitHandler<FormType> = async ({files, ...category }, event) => {
     event?.preventDefault();
-    if (!editorRef.current) return;
 
+    if (!editorRef.current) return;
     const markdownContent = editorRef.current.getInstance().getMarkdown();
     const categoryBoardInput = {
       ...category,
       content: markdownContent,
     };
-
-    onHandleSubmit({ categoryBoardInput, categorySeq: category.seq, files, isFileDelete });
+    onHandleSubmit({ categoryBoardInput, files, isFileDelete });
   };
 
   
@@ -112,7 +112,6 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
         noValidate
         className={boxStyles}
       >
-
 
         <FormControl className={pt20}>
           <FormLabel focused={false}>게시판타입</FormLabel>
@@ -200,7 +199,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
             )}
           />
         </FormControl>
-
+      
         <SubmitBtn variant="contained" type="submit">
           {mode === 'upload' ? '업로드하기' : '수정하기'}
         </SubmitBtn>

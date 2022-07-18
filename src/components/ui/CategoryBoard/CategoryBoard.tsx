@@ -13,12 +13,7 @@ import { Tabs2 } from '@components/ui/Tabs2';
 import { useSnackbar } from "@hooks/useSnackbar";
 import { useDialog } from "@hooks/useDialog";
 import { useCategoryBoard } from '@common/api/categoryBoard';
-// enum NoticeTab {
-//   CbNotice = 'cbNotice',
-//   CbQna = 'cbQna',
-//   CbQuestion = 'cbQuestion',
-//   CbLook = 'cbLook'
-// }
+
 
 const tabsConfig = [
   { label: '공지사항', value: "cbNotice", href: <CategoryBoardNotice />},

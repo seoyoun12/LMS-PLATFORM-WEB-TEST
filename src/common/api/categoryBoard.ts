@@ -20,18 +20,19 @@ export interface CategoryBoard {
   modifiedDtime: string;
   noticeYn: string;
   publicYn: string;
-  s3Files: S3Files;
   seq: number;
   status: number;
   subject: string;
   userSeq: number;
   username: string;
+  s3Files: S3Files;
 }
 
 // 카테고리게시판 공지사항 input
 
 // export type CategoryBoardInput = Partial<CategoryBoard>;
 export interface CategoryBoardInput {
+  s3Files: S3Files;
   boardType: string;
   content: string;
   courseSeq: number;
@@ -42,55 +43,44 @@ export interface CategoryBoardInput {
 
 // 공지사항 리스트
 export function categoryBoardList({ page, elementCnt, boardType } : {
-  
   page: number;
   elementCnt?: number;
   boardType: string | null;
-
 }) {
-
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<CategoryBoard[]>>>([
     `/post`, {
       params: { page, elementCnt, boardType }
     }
   ], GET);
-
   return {
-
     data: data?.data,
     error,
     mutate
-
   };
-  
 }
-
 
 // 게시판 상세
-export function useCategoryBoard(seq: number) {
+export function useCategoryBoard(seq: number | null) {
   const { data, error, mutate } = useSWR<SWRResponse<CategoryBoard>>(seq? `/post/${seq}` : null, GET);
-
   return {
-
     data: data?.data,
     error,
     mutate
-
   };
-  
 }
 
-
-
 // 게시판 업로드
-export async function uploadCategoryBoard(CategoryBoardNoticeInput : CategoryBoardInput) {
-  return await POST(`/post`, CategoryBoardNoticeInput);
+export async function uploadCategoryBoard(CategoryBoardInput : CategoryBoardInput) {
+  return await POST(`/post`, CategoryBoardInput);
 }
 
 // 게시판 수정
-export async function modifyCategoryBoard(seq: number, CategoryBoardNoticeInput : FormData) {
-  return await PUT(`/post/${seq}`, CategoryBoardNoticeInput);
+export async function modifyCategoryBoard({seq, CategoryBoardInput} : {
+  seq: number, CategoryBoardInput : CategoryBoardInput
+}) {
+  return await PUT(`/post/${seq}`, CategoryBoardInput);
 }
+
 
 // 게시판 삭제
 export async function removeCategoryBoard(seq: number) {

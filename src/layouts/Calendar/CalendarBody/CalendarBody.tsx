@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
 import { CustomContentGenerator, EventContentArg } from '@fullcalendar/core';
-import { Box, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import { Box, Button, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import FullCalendar from '@fullcalendar/react';
 import { CalendarEvent, ClickedPlanInfo, FilterType } from '../Calendar';
 import { Modal } from '@components/ui/Modal';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import dateFormat from 'dateformat';
+import { useRouter } from 'next/router';
 
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo, calendarRef, CalendarEvent, filter }: Props) {
+  const router = useRouter();
   return (
     <CalendarWrap filter={filter}>
       <FullCalendar
@@ -37,6 +39,7 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
               end,
             },
           }: { event: { _def: { extendedProps: Partial<ClickedPlanInfo> }; start: Date | null; end: Date | null } } = e;
+          if (e.event._def.title === '마감') return window.alert('이 교육은 마감된 교육입니다!');
           setModalInfo({
             year: extendedProps.year ? extendedProps.year : -1,
             jobType: extendedProps.jobType ? extendedProps.jobType : '',
@@ -55,7 +58,16 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
         open={openModal}
         onCloseModal={() => setOpenModal(false)}
         title={'교육안내'}
-        action={<div onClick={() => setOpenModal(false)}>어쩌라구요</div>}
+        action={
+          <Box sx={{ display: 'flex', width: 'fit-content', margin: 'auto', gap: '1rem' }}>
+            <Button variant="contained" onClick={() => router.push({ pathname: '/stebMove/steb2', query: { ...modalInfo } })}>
+              교육신청
+            </Button>
+            <Button variant="contained" color="neutral" onClick={() => setOpenModal(false)}>
+              닫기
+            </Button>
+          </Box>
+        }
       >
         <TableContainer sx={{ width: '500px' }}>
           <Box display="flex" alignItems="center" fontWeight="bold" mb={2}>
@@ -107,9 +119,9 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
   console.log(info);
   return (
     <>
-      <div>[{info && info?.event.title}]</div>
-      <div>{info && info?.event._def.extendedProps.eduTypeAndTime}</div>
-      <div>{info && info?.event._def.extendedProps.description}</div>
+      <div>[{info && info.event.title}]</div>
+      <div>{info && info.event._def.extendedProps.eduTypeAndTime}</div>
+      <div>{info && info.event._def.extendedProps.description}</div>
     </>
   );
 }

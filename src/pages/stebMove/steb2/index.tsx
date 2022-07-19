@@ -1,19 +1,18 @@
-import { CNCalendar } from '@layouts/Calendar/Calendar';
 import { Layout } from '@layouts/Layout';
+import { Steb2 } from '@layouts/Steb';
 import { Container } from '@mui/material';
 import styles from '@styles/common.module.scss';
 import Head from 'next/head';
 
-export default function CalendarPage() {
-
+export default function Steb2Page() {
   return (
     <Container className={styles.globalContainer}>
       <Head>
-        <title>Calendar Page</title>
+        <title>Steb2 Page</title>
       </Head>
-      <CNCalendar />
-    </Container> 
-  )
+      <Steb2 />
+    </Container>
+  );
 }
 
-CalendarPage.Layout = Layout;
+Steb2Page.Layout = Layout;

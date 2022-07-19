@@ -11,6 +11,11 @@ export enum ProductStatus {
   REJECT = -1,
 }
 
+export enum businessType {
+  TYPE_PASSENGER = 'TYPE_PASSENGER',
+  TYPE_CARGO = 'TYPE_CARGO',
+}
+
 export type CourseInput = Partial<CourseRes>;
 
 export interface CourseRes {
@@ -43,9 +48,54 @@ export interface CourseRes {
     title: string;
     panel: number;
     contents: {
-      title: string
+      title: string;
     }[];
   }[];
+}
+
+export interface CourseClassData {
+  seq: number;
+  courseType: null;
+  courseCategoryType: null;
+  courseSubCategoryType: businessType;
+  courseName: string;
+  lessonTime: 1;
+  fileName: null;
+  s3Files: S3Files;
+  displayYn: YN;
+  contentSeq: null;
+  contentName: null;
+  createdDtime: string;
+  modifiedDtime: string;
+  status: ProductStatus;
+}
+
+export interface CourseClassRes {
+  // title: string;
+  // eduTypeAndTime: string;
+  // description: string;
+  // year: number;
+  // jobType: string;
+  // eduLegend: string;
+  // currentJoin: number;
+  // limit: number;
+  // eduStart: string;
+  // eduEnd: string;
+  // start: string;
+  // end: string;
+  seq: number;
+  course: CourseClassData;
+  year: number;
+  steb: number;
+  requestStartDate: string; //신청일
+  requestEndDate: string;
+  studyStartDate: string; //시작일
+  studyEndDate: string;
+  limit: number;
+  eduStart: string;
+  eduEnd: string;
+  start: string;
+  end: string;
 }
 
 export function useCourse(courseId?: number) {
@@ -53,28 +103,46 @@ export function useCourse(courseId?: number) {
   return {
     course: data?.data,
     courseError: error,
-    mutate
+    mutate,
   };
 }
 
-export function useCourseList({ page, courseTitle, elementCnt, chapter }: {
-  page: number,
-  courseTitle?: string,
-  elementCnt?: number,
-  chapter?: string
+export function useCourseList({
+  page,
+  courseTitle,
+  elementCnt,
+  chapter,
+}: {
+  page: number;
+  courseTitle?: string;
+  elementCnt?: number;
+  chapter?: string;
 }) {
-  const { data, error } = useSWR<FetchPaginationResponse<CourseRes[]>>([
-    `/course`, {
-      params: { page, courseTitle, elementCnt, chapter }
-    }
-  ], GET);
+  const { data, error } = useSWR<FetchPaginationResponse<CourseRes[]>>(
+    [
+      `/course`,
+      {
+        params: { page, courseTitle, elementCnt, chapter },
+      },
+    ],
+    GET
+  );
 
   return {
     data: data?.data,
-    error
+    error,
   };
 }
 
 export function courseEnroll(courseId: number) {
   return POST(`/course/enroll/${courseId}`);
+}
+
+export function useCourseClass({ businessType, date }: { businessType: businessType; date: string }) {
+  const { data, error, mutate } = useSWR<SWRResponse<CourseClassRes>>('/course-class', GET);
+  return {
+    data: data?.data,
+    error,
+    mutate,
+  };
 }

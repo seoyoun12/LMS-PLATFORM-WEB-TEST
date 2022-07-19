@@ -11,7 +11,7 @@ const categoryData = [
   {
     id: 1,
     title: "운수종사자 교육일정",
-    href: "/calendar",
+    href: "/stebMove/steb1",
     icon: "CalendarMonthIcon",
     color: "#ffede9",
     btnText: "확인하기"
@@ -19,7 +19,7 @@ const categoryData = [
   {
     id: 2,
     title: "운수종사자 교육예약",
-    href: "/2",
+    href: "/stebMove/steb2",
     icon: "DirectionsCarIcon",
     color: "#fff6e7",
     btnText: "예약하기"

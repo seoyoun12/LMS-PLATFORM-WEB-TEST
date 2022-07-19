@@ -153,12 +153,6 @@ export function CNCalendar() {
 
   return (
     <CalendarWrap>
-      <Box sx={{ background: '#e0e0e0', textAlign: 'center', padding: '4rem 0' }}>
-        <Typography variant="h4" fontWeight="bold">
-          교육일정
-        </Typography>
-        <Typography>충남교통연수원은 올바르고 안전한 교통문화정착에 앞장섭니다.</Typography>
-      </Box>
       <CalendarHeader onChangeMonth={onChangeMonth} date={date} filterList={filterList} onChangeFilter={onChangeFilter} filter={filter} />
       <CalendarBody
         setOpenModal={setOpenModal}

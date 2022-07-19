@@ -15,3 +15,6 @@ export { ContentModify } from './ContentManagement/ContentModify';
 export { ContentUploadForm } from '@components/admin-center/ContentUploadForm';
 
 export { UserManagement } from './UserManagement/UserManagement';
+
+export {CalendarManagement} from './CalendarManagement/CalendarManagement'
+export {CalendarUpload} from './CalendarManagement/CalendarUpload'

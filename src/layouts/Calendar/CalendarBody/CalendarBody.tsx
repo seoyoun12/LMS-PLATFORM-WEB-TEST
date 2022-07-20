@@ -8,6 +8,7 @@ import { Modal } from '@components/ui/Modal';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import dateFormat from 'dateformat';
 import { useRouter } from 'next/router';
+import { courseCategoryType, CourseClassRes } from '@common/api/course';
 
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,12 +16,57 @@ interface Props {
   setModalInfo: React.Dispatch<React.SetStateAction<ClickedPlanInfo | undefined>>;
   modalInfo: ClickedPlanInfo | undefined;
   calendarRef: React.RefObject<FullCalendar>;
-  CalendarEvent: CalendarEvent[];
+  // CalendarEvent: CalendarEvent[];
   filter: string;
+  schedule: CourseClassRes[];
 }
 
-export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo, calendarRef, CalendarEvent, filter }: Props) {
+const courseCategory = [
+  { type: courseCategoryType.TYPE_SUP_COMMON, ko: '보수일반' },
+  { type: courseCategoryType.TYPE_CONSTANT, ko: '수시' },
+  { type: courseCategoryType.TYPE_NEW, ko: '신규' },
+  { type: courseCategoryType.TYPE_ILLEGAL, ko: '법령위반자' },
+  { type: courseCategoryType.TYPE_HANDICAPPED, ko: '교통약자 이동편의 증진' },
+  { type: courseCategoryType.TYPE_DANGEROUS, ko: '위험물진 운송차량 운전자' },
+];
+
+// title: `접수중`,
+// eduTypeAndTime: '신규교육/24시간',
+// description: '동영상(VOD)',
+// year: 999,
+// jobType: '화물',
+// eduLegend: '보수교육',
+// currentJoin: 59,
+// limit: 99,
+// eduStart: '2022-07-20',
+// eduEnd: '2022-07-26',
+// start: '2022-07-12',
+// end: '2022-07-15',
+
+export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo, calendarRef, filter, schedule }: Props) {
   const router = useRouter();
+  const scheduleList = schedule.map(item => {
+    return {
+      ...item,
+      // title: item.course.courseName, //말
+      title: item.status === 1 ? '접수중' : '마감', //말
+      step: item.step, //기수
+      mediaType: '동영상(VOD)',
+      courseCategoryType: courseCategory.filter(categoryItem => {
+        console.log(categoryItem, item.course.courseCategoryType);
+        return categoryItem.type === item.course.courseCategoryType;
+      })[0], //eduType
+      courseSubCategoryType: item.course.courseSubCategoryType,
+      eduTypeAndTime: item.course.lessonTime, // eduTime
+      currentJoin: item.enrolledPeopleCnt, //현재 수강
+      limit: item.limitPeople, //수강 제한
+      studyStartDate: item.studyStartDate, //studyStartDate
+      studyEndDate: item.studyEndDate, //studyStartDate
+      start: item.requestStartDate, //start: requestStartDate
+      end: item.requestEndDate, //start: requestStartDate
+    };
+  });
+
   return (
     <CalendarWrap filter={filter}>
       <FullCalendar
@@ -29,7 +75,7 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
         headerToolbar={{ start: '', end: '' }} //헤더 제거
         locale="ko"
         eventContent={renderEventContent}
-        events={CalendarEvent}
+        events={scheduleList}
         eventClick={e => {
           console.log(e);
           const {
@@ -38,15 +84,15 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
               start,
               end,
             },
-          }: { event: { _def: { extendedProps: Partial<ClickedPlanInfo> }; start: Date | null; end: Date | null } } = e;
+          }: { event: { _def: { extendedProps: Partial<CourseClassRes> }; start: Date | null; end: Date | null } } = e;
           if (e.event._def.title === '마감') return window.alert('이 교육은 마감된 교육입니다!');
           setModalInfo({
             year: extendedProps.year ? extendedProps.year : -1,
-            jobType: extendedProps.jobType ? extendedProps.jobType : '',
-            eduLegend: extendedProps.eduLegend ? extendedProps.eduLegend : '',
+            courseSubCategoryType: extendedProps.courseSubCategoryType ? extendedProps.courseSubCategoryType : '',
+            courseCategoryType: extendedProps.course.courseCategoryType ? extendedProps.courseCategoryType : '',
             currentJoin: extendedProps.currentJoin ? extendedProps.currentJoin : 0,
             limit: extendedProps.limit ? extendedProps.limit : 0,
-            eduStart: extendedProps.eduStart ? extendedProps.eduStart : '',
+            studyStartDate: extendedProps.studyStartDate ? extendedProps.studyStartDate : '',
             eduEnd: extendedProps.eduEnd ? extendedProps.eduEnd : '',
             start: start ? dateFormat(start, 'yyyy-mm-dd') : 'error',
             end: end ? dateFormat(end, 'yyyy-mm-dd') : 'error',
@@ -116,12 +162,20 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
   );
 }
 function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
-  console.log(info);
+  console.log(info?.event._def);
+  const {
+    event: {
+      _def: {
+        extendedProps: { steb },
+      },
+      title,
+    },
+  } = info;
   return (
     <>
-      <div>[{info && info.event.title}]</div>
-      <div>{info && info.event._def.extendedProps.eduTypeAndTime}</div>
-      <div>{info && info.event._def.extendedProps.description}</div>
+      <div>[{title}]</div>
+      <div>{info && info.event._def.extendedProps.eduTypeAndTime} / </div>
+      <div>{info && info.event._def.extendedProps.mediaType}</div>
     </>
   );
 }
@@ -144,8 +198,8 @@ const CalendarWrap = styled(Box)<{ filter: string }>`
       border-radius: 220px; */
     }
   }
-  ${({ filter }) => (filter !== 'ALL' ? '.' + filter : '')} {
+  /* ${({ filter }) => (filter !== 'ALL' ? '.' + filter : '')} {
     //필터
     display: none;
-  }
+  } */
 `;

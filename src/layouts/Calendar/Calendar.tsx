@@ -11,6 +11,7 @@ import { CalendarHeader } from './CalendarHeader';
 import dateFormat from 'dateformat';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import { CalendarBody } from './CalendarBody';
+import { businessType, courseCategoryType, CourseClassRes, CourseRes, useCourseClass } from '@common/api/course';
 
 export interface ClickedPlanInfo {
   year: number;
@@ -25,6 +26,8 @@ export interface ClickedPlanInfo {
 }
 export interface CalendarDatasRes {
   title: string;
+  courseCategoryType: courseCategoryType;
+  lessonTime: number;
   eduTypeAndTime: string;
   description: string;
   year: number;
@@ -49,61 +52,67 @@ export enum MonthClickType {
 }
 
 export enum FilterType {
-  ALL = 'ALL',
-  PASSENGER = 'PASSENGER',
-  FREIGHT = 'FREIGHT',
+  TYPE_ALL = 'TYPE_ALL',
+  TYPE_PASSENGER = 'TYPE_PASSENGER',
+  TYPE_CARGO = 'TYPE_CARGO',
 }
 
-const calendarDatas: CalendarEvent[] = [
-  {
-    className: 'PASSENGER',
-    title: `마감`,
-    eduTypeAndTime: '강화교육/종일',
-    description: '동영상(VOD)',
-    year: 9999,
-    jobType: '여객',
-    eduLegend: '강화교육',
-    currentJoin: 599,
-    limit: 999,
-    eduStart: '2022-07-10',
-    eduEnd: '2022-07-16',
-    start: '2022-07-02',
-    end: '2022-07-05',
-    color: '#4c0c0c',
-  },
-  {
-    className: 'FREIGHT',
-    title: `접수중`,
-    eduTypeAndTime: '신규교육/24시간',
-    description: '동영상(VOD)',
-    year: 999,
-    jobType: '화물',
-    eduLegend: '보수교육',
-    currentJoin: 59,
-    limit: 99,
-    eduStart: '2022-07-20',
-    eduEnd: '2022-07-26',
-    start: '2022-07-12',
-    end: '2022-07-15',
-    color: '#2980b9',
-  },
-  {
-    className: 'PASSENGER',
-    title: `접수중`,
-    eduTypeAndTime: '신규교육/24시간',
-    description: '동영상(VOD)',
-    year: 9929,
-    jobType: '화물',
-    eduLegend: '보수교육',
-    currentJoin: 592,
-    limit: 992,
-    eduStart: '2022-07-20',
-    eduEnd: '2022-07-26',
-    start: '2022-07-12',
-    end: '2022-07-15',
-    color: '#2980b9',
-  },
-];
+// const calendarDatas: CalendarEvent[] = [
+//   {
+//     className: 'PASSENGER',
+//     title: `마감`, //status
+//     courseCategoryType: courseCategoryType.TYPE_SUP_COMMON,
+//     lessonTime: 24, //eduTime
+//     eduTypeAndTime: '강화교육/종일', //eduType
+//     description: '동영상(VOD)', //몰라
+//     year: 9999, // steb
+//     jobType: '여객', //courseSubCategoryType
+//     eduLegend: '강화교육', //courseCategoryType
+//     currentJoin: 599,
+//     limit: 999,
+//     eduStart: '2022-07-10', //studyStartDate
+//     eduEnd: '2022-07-16', //studyStartDate
+//     start: '2022-07-02', //start: requestStartDate
+//     end: '2022-07-05', //start: requestStartDate
+//     color: '#4c0c0c',
+//   },
+//   {
+//     className: 'FREIGHT',
+//     title: `접수중`,
+//     courseCategoryType: courseCategoryType.TYPE_SUP_COMMON,
+//     lessonTime: 24,
+//     eduTypeAndTime: '신규교육/24시간',
+//     description: '동영상(VOD)',
+//     year: 999,
+//     jobType: '화물',
+//     eduLegend: '보수교육',
+//     currentJoin: 59,
+//     limit: 99,
+//     eduStart: '2022-07-20',
+//     eduEnd: '2022-07-26',
+//     start: '2022-07-12',
+//     end: '2022-07-15',
+//     color: '#2980b9',
+//   },
+//   {
+//     className: 'PASSENGER',
+//     title: `접수중`,
+//     courseCategoryType: courseCategoryType.TYPE_SUP_COMMON,
+//     lessonTime: 24,
+//     eduTypeAndTime: '신규교육/24시간',
+//     description: '동영상(VOD)',
+//     year: 9929,
+//     jobType: '화물',
+//     eduLegend: '보수교육',
+//     currentJoin: 592,
+//     limit: 992,
+//     eduStart: '2022-07-20',
+//     eduEnd: '2022-07-26',
+//     start: '2022-07-12',
+//     end: '2022-07-15',
+//     color: '#2980b9',
+//   },
+// ];
 
 export const eduLegendList = [
   { title: '화물보수교육', color: '#27ae60' },
@@ -114,25 +123,31 @@ export const eduLegendList = [
 ];
 
 const filterList = [
-  { type: '전체', enType: FilterType.ALL },
-  { type: '여객', enType: FilterType.PASSENGER },
-  { type: '화물', enType: FilterType.FREIGHT },
+  { type: '전체', enType: FilterType.TYPE_ALL },
+  { type: '여객', enType: FilterType.TYPE_PASSENGER },
+  { type: '화물', enType: FilterType.TYPE_CARGO },
 ];
 
 const modalInfoTItle = ['기수', '보수교육', '업종구분', '교육일', '신청/정원', '예약가능시간'];
 
 export function CNCalendar() {
   const [date, setDate] = useState(new Date());
-  const [filter, setFilter] = useState('ALL');
+  const [filter, setFilter] = useState<businessType>(businessType.TYPE_ALL);
   const [openModal, setOpenModal] = useState(false);
   const [modalInfo, setModalInfo] = useState<ClickedPlanInfo>();
+  const { data, error, mutate } = useCourseClass({ businessType: filter, date: '2022-07' });
+  const [schedule, setSchedule] = useState<CourseClassRes[]>();
+  console.log(data);
 
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const calendarRef = useRef<FullCalendar>(null);
 
   //RadioButton Filter changer
   const onChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(e.target.value);
+    if (e.target.value === businessType.TYPE_ALL) setFilter(e.target.value);
+    if (e.target.value === businessType.TYPE_PASSENGER) setFilter(e.target.value);
+    if (e.target.value === businessType.TYPE_CARGO) setFilter(e.target.value);
+    mutate();
   };
 
   //Month changer
@@ -151,18 +166,27 @@ export function CNCalendar() {
     console.log(date.getMonth());
   }, [calendarRef, date]);
 
+  useEffect(() => {
+    setSchedule(data);
+    console.log(schedule);
+  }, [data]);
+
+  if (!data) return null;
   return (
     <CalendarWrap>
       <CalendarHeader onChangeMonth={onChangeMonth} date={date} filterList={filterList} onChangeFilter={onChangeFilter} filter={filter} />
-      <CalendarBody
-        setOpenModal={setOpenModal}
-        setModalInfo={setModalInfo}
-        openModal={openModal}
-        modalInfo={modalInfo}
-        calendarRef={calendarRef}
-        CalendarEvent={calendarDatas}
-        filter={filter}
-      />
+      {schedule && (
+        <CalendarBody
+          setOpenModal={setOpenModal}
+          setModalInfo={setModalInfo}
+          openModal={openModal}
+          modalInfo={modalInfo}
+          calendarRef={calendarRef}
+          // CalendarEvent={calendarDatas}
+          schedule={schedule}
+          filter={filter}
+        />
+      )}
       {/* <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin]}

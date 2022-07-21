@@ -61,7 +61,7 @@ export function categoryBoardList({ page, elementCnt, boardType } : {
 
 // 게시판 상세
 export function useCategoryBoard(seq: number | null) {
-  const { data, error, mutate } = useSWR<SWRResponse<CategoryBoard>>(seq? `/post/${seq}` : null, GET);
+  const { data, error, mutate } = useSWR<SWRResponse<CategoryBoard>>(seq? `/post/adm/${seq}` : null, GET);
   return {
     data: data?.data,
     error,
@@ -75,10 +75,10 @@ export async function uploadCategoryBoard(CategoryBoardInput : CategoryBoardInpu
 }
 
 // 게시판 수정
-export async function modifyCategoryBoard({seq, CategoryBoardInput} : {
-  seq: number, CategoryBoardInput : CategoryBoardInput
+export async function modifyCategoryBoard({seq, categoryBoardInput} : {
+  seq: number, categoryBoardInput : CategoryBoardInput
 }) {
-  return await PUT(`/post/${seq}`, CategoryBoardInput);
+  return await PUT(`/post/${seq}`, categoryBoardInput);
 }
 
 

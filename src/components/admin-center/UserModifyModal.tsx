@@ -124,11 +124,11 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
                     label="남성"
                   />
                   {/*  */}
-                  <FormControlLabel
+                  {/* <FormControlLabel
                     value={'중성'}
                     control={<Radio />}
                     label="중성"
-                  />
+                  /> */}
                   {/*  */}
                   <FormControlLabel
                     value={'여성'}

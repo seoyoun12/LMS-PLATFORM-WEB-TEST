@@ -1,6 +1,7 @@
 import { DELETE, POST, PUT } from '@common/httpClient';
 
-export const UPLOAD_URL = '/file/adm/multipart/upload';
+// export const UPLOAD_URL = '/file/adm/multipart/upload';
+export const UPLOAD_URL = '/file/multipart/upload';
 
 export enum FileType {
   COURSE_IMAGE = 'RESOURCE_COURSE_IMAGE',

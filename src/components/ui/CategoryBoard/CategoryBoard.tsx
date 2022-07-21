@@ -24,7 +24,7 @@ const tabsConfig = [
 
 export function CategoryBoard() {
 
-  const router = useRouter();
+  // const router = useRouter();
   const [value , setValue] = useState(tabsConfig[0].value)
 
   const onChange = (newValue:string) =>{
@@ -33,10 +33,10 @@ export function CategoryBoard() {
   // console.log(value)
 
 
-  const { categorySeq } = router.query;
-  const { data, error } = useCategoryBoard(Number(categorySeq));
-  const dialog = useDialog();
-  const snackbar = useSnackbar();
+  // const { categorySeq } = router.query;
+  //const { data, error } = useCategoryBoard(Number(categorySeq)); ////
+  // const dialog = useDialog();
+  // const snackbar = useSnackbar();
 
   return (
     <NoticeContainer>

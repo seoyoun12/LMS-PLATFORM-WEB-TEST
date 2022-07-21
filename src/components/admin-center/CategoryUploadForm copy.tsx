@@ -32,7 +32,7 @@ interface Props {
   mode? : 'upload' | 'modify',
   category?: CategoryBoardInput,
   courseSeq?: number;
-  onHandleSubmit: ({ categoryBoardInput, files, categorySeq, isFileDelete , courseSeq } :{
+  onHandleSubmit: ({ categoryBoardInput, files, categorySeq, courseSeq } :{
     categoryBoardInput: CategoryBoardInput;
     files: File[];
     isFileDelete: boolean;

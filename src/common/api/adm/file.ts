@@ -26,7 +26,8 @@ export const initFileConfig = async ({ fileUploadType, fileName }: {
 }> => {
   const fileContentType = 'video/mp4';
 
-  const { data } = await POST(`/file/adm/multipart/init`, {
+  // const { data } = await POST(`/file/adm/multipart/init`, {
+  const { data } = await POST(`/file/multipart/init`, {
       fileContentType,
       fileName,
       uploadType: fileUploadType
@@ -37,7 +38,8 @@ export const initFileConfig = async ({ fileUploadType, fileName }: {
 };
 
 export const completeFileUpload = (completeFileInput: CompleteFileInput) => {
-  return POST(`/file/adm/multipart/complete`, completeFileInput);
+  // return POST(`/file/adm/multipart/complete`, completeFileInput);
+  return POST(`/file/multipart/complete`, completeFileInput);
 };
 
 export const uploadFile = ({ fileType, fileTypeId, files }: {
@@ -51,7 +53,8 @@ export const uploadFile = ({ fileType, fileTypeId, files }: {
 
   console.log("fileTypeId: ", fileTypeId);
 
-  return POST(`/file/adm/${fileType}/${fileTypeId}`, formData, {
+  // return POST(`/file/adm/${fileType}/${fileTypeId}`, formData, {
+  return POST(`/file/${fileType}/${fileTypeId}`, formData, {
     headers: {
       contentType: 'multipart/form-data'
     }
@@ -67,5 +70,6 @@ export const deleteFile = ({ fileType, fileTypeId, fileSeqList }: {
   fileTypeId: number;
   fileSeqList: number[];
 }) => {
-  return DELETE(`/file/adm/${fileType}/${fileTypeId}`, { fileSeqList });
+  // return DELETE(`/file/adm/${fileType}/${fileTypeId}`, { fileSeqList });
+  return DELETE(`/file/${fileType}/${fileTypeId}`, { fileSeqList });
 };

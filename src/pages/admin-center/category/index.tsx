@@ -1,4 +1,5 @@
 import { AdminCenterLayout } from "@layouts/AdminCenter"
+<<<<<<< HEAD
 import { CategoryManagement } from "@layouts/AdminCenter";
 
 export default function CategoryManagementPage() {
@@ -6,4 +7,18 @@ export default function CategoryManagementPage() {
     <CategoryManagement/>
   )
 }
+=======
+import { CategoryManagement } from "@layouts/AdminCenter/CategoryManagement/CategoryManagement";
+
+export default function CategoryManagementPage() {
+
+  return (
+
+    <CategoryManagement/>
+
+  )
+
+}
+
+>>>>>>> feat/calendar
 CategoryManagementPage.Layout = AdminCenterLayout;

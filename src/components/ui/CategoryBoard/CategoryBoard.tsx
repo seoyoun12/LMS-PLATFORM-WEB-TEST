@@ -16,20 +16,40 @@ import { useCategoryBoard } from '@common/api/categoryBoard';
 
 
 const tabsConfig = [
+<<<<<<< HEAD
   { label: '공지사항', value: "cbNotice", href: <CategoryBoardNotice />},
   { label: '자주묻는질문', value: "cbQna", href: <CategoryBoardQna />},
   { label: '교육문의', value: "cbQuestion", href: <CategoryBoardQuestion />},
   { label: '문의내역조회', value: "cbLook", href: <CategoryBoardLook />},
+=======
+  { label: '공지사항', value: "cbNotice" },
+  { label: '자주묻는질문', value: "cbQna" },
+  { label: '교육문의', value: "cbQuestion"},
+  { label: '문의내역조회', value: "cbLook"},
+>>>>>>> feat/calendar
 ]
+// const tabsConfig = [
+//   { label: '공지사항', value: NoticeTab.CbNotice },
+//   { label: '자주묻는질문', value: NoticeTab.CbQna },
+//   { label: '교육문의', value: NoticeTab.CbQuestion },
+//   { label: '문의내역조회', value: NoticeTab.CbLook },
+// ]
 
 export function CategoryBoard() {
 
+<<<<<<< HEAD
   // const router = useRouter();
+=======
+  const router = useRouter();
+  const { tab } = router.query;
+  const { pathname, query } = router;
+>>>>>>> feat/calendar
   const [value , setValue] = useState(tabsConfig[0].value)
 
   const onChange = (newValue:string) =>{
     setValue(newValue)
   }
+<<<<<<< HEAD
   // console.log(value)
 
 
@@ -37,6 +57,9 @@ export function CategoryBoard() {
   //const { data, error } = useCategoryBoard(Number(categorySeq)); ////
   // const dialog = useDialog();
   // const snackbar = useSnackbar();
+=======
+  console.log(value)
+>>>>>>> feat/calendar
 
   return (
     <NoticeContainer>
@@ -51,6 +74,7 @@ export function CategoryBoard() {
         />
       </Box>
       <Box>
+<<<<<<< HEAD
 
         {tabsConfig.map((item)=>{
           return (
@@ -61,6 +85,21 @@ export function CategoryBoard() {
         })}
       </Box>
   
+=======
+        {tabsConfig.map((item)=>{
+          return <Box hidden={item.value !== value} >{item.label}</Box>
+        })}
+      </Box>
+      {
+        {
+          [NoticeTab.CbNotice]: <CategoryBoardNotice />,
+          [NoticeTab.CbQna]: <CategoryBoardQna />,
+          [NoticeTab.CbQuestion]: <CategoryBoardQuestion />,
+          [NoticeTab.CbLook]: <CategoryBoardLook />
+        }[tab as string]
+      }
+
+>>>>>>> feat/calendar
     </NoticeContainer>
   )
 }

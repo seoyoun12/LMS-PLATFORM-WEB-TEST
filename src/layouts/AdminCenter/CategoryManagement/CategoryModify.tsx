@@ -1,18 +1,16 @@
-import { BbsType, deleteFile, uploadFile } from "@common/api/adm/file";
-import { CategoryBoard, CategoryBoardInput, modifyCategoryBoard, useCategoryBoard } from "@common/api/categoryBoard";
-import { CategoryUploadForm } from "@components/admin-center";
-import { useSnackbar } from "@hooks/useSnackbar";
-import { Container } from "@mui/material";
-import { useRouter } from "next/router"
+import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
+import { CategoryBoard, CategoryBoardInput, modifyCategoryBoard, useCategoryBoard } from '@common/api/categoryBoard';
+import { CategoryUploadForm } from '@components/admin-center';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { Container } from '@mui/material';
+import { useRouter } from 'next/router';
 import styles from '@styles/common.module.scss';
-import { useCallback, useState } from "react";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { Spinner } from "@components/ui";
-
+import { useCallback, useState } from 'react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { Spinner } from '@components/ui';
 
 export function CategoryModify() {
-  
   const router = useRouter();
   const snackbar = useSnackbar();
   const categorySeq = router.query;
@@ -21,55 +19,53 @@ export function CategoryModify() {
   const fileHandler = async (files: File[], category: CategoryBoard, isFileDelete: boolean) => {
     const isFileUpload = files.length < 0;
     if (isFileUpload) {
-
       await uploadFile({
         fileTypeId: category.seq, // undefined
         fileType: BbsType.TYPE_POST_NOTICE, // Type Setting 필요
-        files
+        files,
       });
     } else {
       if (isFileDelete) {
-        console.log("소리질러!!")
+        console.log('소리질러!!');
         await deleteFile({
           fileTypeId: category.seq,
           fileType: BbsType.TYPE_POST_NOTICE,
           fileSeqList: category.s3Files.map(v => v.seq),
         });
       }
-    } 
+    }
   };
 
   // const handleSubmit = useCallback(async ({ files, isFileDelete, categoryBoardInput, categorySeq } : {
-  const handleSubmit = async ({ files, isFileDelete, categoryBoardInput, categorySeq } : {
-    files: File[],
-    isFileDelete: boolean,
-    categoryBoardInput: CategoryBoardInput,
+  const handleSubmit = async ({
+    files,
+    isFileDelete,
+    categoryBoardInput,
+    categorySeq,
+  }: {
+    files: File[];
+    isFileDelete: boolean;
+    categoryBoardInput: CategoryBoardInput;
     categorySeq?: number;
   }) => {
-    
     try {
       if (data?.seq) {
-        const category = await modifyCategoryBoard({seq: data?.seq, categoryBoardInput });
-        await fileHandler(files, category.data, isFileDelete ); // 파일업로드 
+        const category = await modifyCategoryBoard({ seq: data?.seq, categoryBoardInput });
+        await fileHandler(files, category.data, isFileDelete); // 파일업로드
         snackbar({ variant: 'success', message: '수정 되었습니다.' });
         router.push(`/admin-center/category`);
       }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
     }
-  }
+  };
 
-  if(error) return <div>...ERROR</div>;
-  if(!data) return <Spinner />;
+  if (error) return <div>...ERROR</div>;
+  if (!data) return <Spinner />;
 
   return (
     <Container className={styles.globalContainer}>
-      <CategoryUploadForm
-        mode="modify"
-        category={data}
-        courseSeq={data?.courseSeq}
-        onHandleSubmit={handleSubmit}
-      />
+      <CategoryUploadForm mode="modify" category={data} courseSeq={data?.courseSeq} onHandleSubmit={handleSubmit} />
     </Container>
-  )
+  );
 }

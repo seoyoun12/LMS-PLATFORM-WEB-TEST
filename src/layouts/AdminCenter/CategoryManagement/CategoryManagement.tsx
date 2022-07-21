@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 import { BoardType, categoryBoardList, removeCategoryBoard } from "@common/api/categoryBoard";
+=======
+import { categoryBoardList, removeCategoryBoard } from "@common/api/categoryBoard";
+>>>>>>> feat/calendar
 import { useDialog } from "@hooks/useDialog";
 import { useSnackbar } from "@hooks/useSnackbar";
 import { Button, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import styles from "@styles/common.module.scss";
+<<<<<<< HEAD
 import { createContext, useContext, useEffect, useState } from "react";
+=======
+import { useEffect, useState } from "react";
+>>>>>>> feat/calendar
 import { Table } from "@components/ui";
 import dateFormat from "dateformat";
 import styled from "@emotion/styled";
@@ -29,6 +37,7 @@ const headRows = [
   { name: "삭제" } // s3Files
 ];
 
+<<<<<<< HEAD
 const tabsConfig = [
   {name: "공지사항", value: "TYPE_NOTICE"},
   {name: "자주묻는질문", value: "TYPE_FAQ"},
@@ -38,11 +47,14 @@ const tabsConfig = [
 
 
 
+=======
+>>>>>>> feat/calendar
 export function CategoryManagement() {
 
   const router = useRouter();
   const snackbar = useSnackbar();
   const dialog = useDialog();
+<<<<<<< HEAD
 
   const [ page, setPage ] = useState(0);
   const [ seq, setSeq ] = useState<number | null>(null);
@@ -69,6 +81,21 @@ export function CategoryManagement() {
     // const categorySeq = seq;
   }
 
+=======
+  const [ page, setPage ] = useState(0);
+  const { data, error, mutate } = categoryBoardList({ 
+    boardType: "TYPE_NOTICE",
+    page });
+  const [ seq, setSeq ] = useState<number | null>(null);
+  // const [ modifyPage, setModifyPage ] = useState();
+  // 수정
+  const onClickmodifyCategoryBoard = async (seq: number) => {
+    setSeq(seq);
+  }
+
+
+
+>>>>>>> feat/calendar
   // 삭제
   const onClickRemoveCategory = async (seq: number) => {
     try {
@@ -103,6 +130,7 @@ export function CategoryManagement() {
     });
   };
 
+<<<<<<< HEAD
   
   // Radio Button check value
   // const [ TypeOfBoard, setTypeOfBoard ] = useState<string>("TYPE_NOTICE");
@@ -142,6 +170,25 @@ export function CategoryManagement() {
           />
         ))}
       </RadioGroup>
+=======
+
+  console.log("[확인] data?.content : ", data?.content);
+
+
+  return (
+
+    <div>
+
+      <FormControl>
+        <FormLabel>게시판 선택</FormLabel>
+        <RadioGroup row>
+          <FormControlLabel value="TYPE_POST_NOTICE" control={<Radio />} label="공지사항" />
+          <FormControlLabel value="TYPE_FAQ" control={<Radio />} label="자주묻는질문" />
+          <FormControlLabel value="TYPE_REVIEW" control={<Radio />} label="문의내역조회" />
+        </RadioGroup>
+      </FormControl>
+
+>>>>>>> feat/calendar
 
       <Typography variant="h5">게시판 글 목록</Typography>
 
@@ -155,15 +202,28 @@ export function CategoryManagement() {
         <TableHead>
           <TableRow>
             {headRows.map(({ name }: { name: string }) => (
+<<<<<<< HEAD
               <TableCell key={name} align="center">{name}</TableCell>
             ))}
           </TableRow>
         </TableHead>
+=======
+              <TableCell key={name} 
+                align="center"
+              >
+                {name}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+
+>>>>>>> feat/calendar
         
         <TableBody>
           {data?.content.map((category) => (
             <TableRow key={category.seq} hover>
               <TableCell align="center">{category.seq}</TableCell>
+<<<<<<< HEAD
               <TableCell align="center">{category.userSeq}</TableCell>
               <TableCell align="center">{category.username}</TableCell>
               <TableCell align="center"><SubjectTypography>{category.subject}</SubjectTypography></TableCell>
@@ -189,6 +249,35 @@ export function CategoryManagement() {
                 {/* </Link> */}
               </TableCell>
               <TableCell align="center">
+=======
+              <TableCell>{category.userSeq}</TableCell>
+              <TableCell>{category.username}</TableCell>
+              <TableCell><SubjectTypography>{category.subject}</SubjectTypography></TableCell>
+              <TableCell><ContentTypography>{category.content}</ContentTypography></TableCell>
+              <TableCell>{category.boardType}</TableCell>
+              <TableCell>{dateFormat(category.createdDtime, "isoDate")}</TableCell>
+              <TableCell>{dateFormat(category.modifiedDtime, "isoDate")}</TableCell>
+              <TableCell>{category.noticeYn}</TableCell>
+              <TableCell>{category.publicYn}</TableCell>
+              <TableCell>{category.status}</TableCell>
+              <TableCell>{category.hit}</TableCell>
+              <TableCell>{category.s3Files[0] ? category.s3Files[0].name : "파일없음"}</TableCell>
+              <TableCell>
+                <Link href={`/admin-center/category/modify/${category.seq}`}>
+                  <Button
+                    variant="text"
+                    color="neutral"
+                    size="small"
+                    // onClick={() => onClickmodifyCategoryBoard(category.seq)}
+                    // mode = { seq ? "modify" : "upload" }
+                  >
+                    수정
+                  </Button>
+                </Link>
+              </TableCell>
+
+              <TableCell>
+>>>>>>> feat/calendar
                 <Button
                   variant="text"
                   color="warning"
@@ -201,9 +290,19 @@ export function CategoryManagement() {
             </TableRow>
           ))}
         </TableBody>
+<<<<<<< HEAD
       </Table>
     </div>
   )
+=======
+
+      </Table>
+    
+    </div>
+
+  )
+
+>>>>>>> feat/calendar
 }
 
 

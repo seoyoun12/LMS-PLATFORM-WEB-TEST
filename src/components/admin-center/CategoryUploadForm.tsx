@@ -32,7 +32,11 @@ interface Props {
   mode? : 'upload' | 'modify',
   category?: CategoryBoardInput,
   courseSeq?: number;
+<<<<<<< HEAD
   onHandleSubmit: ({ categoryBoardInput, files, categorySeq, isFileDelete , courseSeq } :{
+=======
+  onHandleSubmit: ({ categoryBoardInput, files, categorySeq, courseSeq } :{
+>>>>>>> feat/calendar
     categoryBoardInput: CategoryBoardInput;
     files: File[];
     isFileDelete: boolean;
@@ -130,6 +134,10 @@ export function CategoryUploadForm({ mode = 'upload', category, courseSeq, onHan
           />
         </FormControl>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> feat/calendar
         <InputContainer>
           <FormControl className={textField}>
             <TextField

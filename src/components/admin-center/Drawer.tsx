@@ -16,6 +16,7 @@ import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
 import { useRouter } from 'next/router';
 import { Accordion } from '@components/ui';
+import EventNoteIcon from '@mui/icons-material/EventNote';
 
 const drawerWidth = 240;
 
@@ -78,6 +79,22 @@ export function Drawer({ children }: { children: ReactNode }) {
           name: '회원 목록',
           href: '/admin-center/user',
           isActive: router.pathname === '/admin-center/user'
+        },
+      ],
+      icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
+    },
+    {
+      name: '일정관리',
+      children: [
+        {
+          name: '일정 목록',
+          href: '/admin-center/calendar',
+          isActive: router.pathname === '/admin-center/calendar'
+        },
+        {
+          name: '일정 등록',
+          href: '/admin-center/calendar/upload',
+          isActive: router.pathname === '/admin-center/calendar/upload'
         },
       ],
       icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,

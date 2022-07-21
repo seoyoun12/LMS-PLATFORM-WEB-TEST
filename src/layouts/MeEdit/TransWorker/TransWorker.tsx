@@ -29,11 +29,11 @@ interface Props {
 }
 const phoneNumbers = ["010", "02", "032", "031"];
 
-const occupationOptions1 = [
+export const userBusinessTypeOne = [
   { type: "여객", enType: "PASSENGER" },
   { type: "화물", enType: "FREIGHT" },
 ];
-const occupationOptions2 = [
+export const userBusinessTypeTwo = [
   { category: "PASSENGER", type: "버스", enType: "BUS", isMoreInfo: true },
   {
     category: "PASSENGER",
@@ -156,7 +156,7 @@ export function TransWorker({ type, locationList }: Props) {
             }}
             required
           >
-            {occupationOptions1.map(occ => (
+            {userBusinessTypeOne.map(occ => (
               <MenuItem key={occ.enType} value={occ.enType}>
                 {occ.type}
               </MenuItem>
@@ -169,7 +169,7 @@ export function TransWorker({ type, locationList }: Props) {
             {
               // occupation1 === "PASSENGER"
               // ?
-              occupationOptions2
+              userBusinessTypeTwo
                 .filter(item => item.category === occupation1)
                 .map(item => (
                   <MenuItem

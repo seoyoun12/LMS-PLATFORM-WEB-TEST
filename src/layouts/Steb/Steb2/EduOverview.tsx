@@ -1,25 +1,42 @@
 import styled from '@emotion/styled';
 import { Box, FormControl, InputLabel, Select, Table, TableCell, TableContainer, TableRow, Typography, MenuItem } from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { courseCategoryType, courseSubCategoryType, getCourseClassStep, useSingleCourseClass } from '@common/api/courseClass';
+import { Spinner } from '@components/ui';
+import { courseCategory, courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 
-interface Props {
-  eduList: {
-    eduType: string;
-    eduEnType: string;
-    jobType: string;
-    jobEnType: string;
-  }[];
-  eduDate: { generation: number; eduStart: string; eduEnd: string }[];
-}
+export function EduOverview() {
+  const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(null); //교육과정
+  const [courseSubCategoryType, setCourseSubCategoryType] = useState<courseSubCategoryType | null>(null); //업종구분
+  const [step, setStep] = useState<number | null>(null); //업종구분
+  const [values, setValues] = useState<{ step: number; studyStartDate: string; studyEndDate: string }>();
+  const [stepsRes, setStepsRes] = useState<{ step: number; studyStartDate: string; studyEndDate: string }[]>([]); //기수 교육시작 교육끝
+  const router = useRouter();
+  const { data, error, mutate } = useSingleCourseClass(Number(router.query.seq));
 
-export function EduOverview({ eduList, eduDate }: Props) {
-  const [eduCourse, setEduCourse] = useState(''); //교육과정
-  const [jobType, setJobType] = useState(''); //업종구분
-  const [generation, setGeneration] = useState(''); //기수
-  const [eduStart, setEduStart] = useState(''); //교육시작일
-  const [eduEnd, setEduEnd] = useState(''); //교육시작일
+  useEffect(() => {
+    console.log(data);
+    if (data) {
+      setValues({ step: data.step, studyStartDate: data.studyStartDate, studyEndDate: data.studyEndDate });
+    }
+  }, [data]);
 
+  const getSteps = async () => {
+    if (!courseCategoryType || !courseSubCategoryType) return window.alert('기수 가져오기 실패');
+    const { data } = await getCourseClassStep(courseCategoryType, courseSubCategoryType);
+    setStepsRes([...data]);
+    console.log(data, stepsRes);
+  };
+
+  useEffect(() => {
+    if (courseCategoryType && courseSubCategoryType) {
+      getSteps();
+    }
+  }, [courseCategoryType, courseSubCategoryType]);
+
+  if (router.query.seq && !data) return <Spinner />;
   return (
     <EduOverviewWrap>
       <Box>
@@ -37,15 +54,15 @@ export function EduOverview({ eduList, eduDate }: Props) {
                   <Select
                     labelId="student"
                     id="student"
-                    value={eduCourse}
+                    value={courseCategoryType}
                     onChange={e => {
-                      setEduCourse(e.target.value);
+                      setCourseCategoryType(courseCategory.filter(cate => cate.type === e.target.value)[0].type);
                     }}
                     label="student"
                   >
-                    {eduList.map(item => (
-                      <MenuItem key={item.eduType} value={item.eduEnType}>
-                        {item.eduType}
+                    {courseCategory.map(item => (
+                      <MenuItem key={item.type} value={item.type}>
+                        {item.ko}
                       </MenuItem>
                     ))}
                   </Select>
@@ -60,15 +77,15 @@ export function EduOverview({ eduList, eduDate }: Props) {
                   <Select
                     labelId="student"
                     id="student"
-                    value={jobType}
+                    value={courseSubCategoryType}
                     onChange={e => {
-                      setJobType(e.target.value);
+                      setCourseSubCategoryType(courseSubCategory.filter(cate => cate.type === e.target.value)[0].type);
                     }}
                     label="student"
                   >
-                    {eduList.map(item => (
-                      <MenuItem key={item.jobType} value={item.jobEnType}>
-                        {item.jobType}
+                    {courseSubCategory.map(item => (
+                      <MenuItem key={item.type} value={item.type}>
+                        {item.ko}
                       </MenuItem>
                     ))}
                   </Select>
@@ -83,15 +100,15 @@ export function EduOverview({ eduList, eduDate }: Props) {
                   <Select
                     labelId="student"
                     id="student"
-                    value={generation}
+                    value={step}
                     onChange={e => {
-                      setGeneration(e.target.value);
+                      setStep(Number(e.target.value));
                     }}
                     label="student"
                   >
-                    {eduDate.map(item => (
-                      <MenuItem key={item.generation} value={item.generation}>
-                        {item.generation}기 / {item.eduStart} ~ {item.eduEnd}
+                    {stepsRes.map(item => (
+                      <MenuItem key={item.step} value={item.step}>
+                        {item.step}기 / {item.studyStartDate} ~ {item.studyEndDate}
                       </MenuItem>
                     ))}
                   </Select>

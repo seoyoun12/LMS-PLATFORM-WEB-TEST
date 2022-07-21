@@ -8,7 +8,7 @@ import { Modal } from '@components/ui/Modal';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import dateFormat from 'dateformat';
 import { useRouter } from 'next/router';
-import { courseCategoryType, CourseClassRes } from '@common/api/course';
+import { courseCategoryType, CourseClassRes, courseSubCategoryType } from '@common/api/courseClass';
 
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,7 +21,7 @@ interface Props {
   schedule: CourseClassRes[];
 }
 
-const courseCategory = [
+export const courseCategory = [
   { type: courseCategoryType.TYPE_SUP_COMMON, ko: '보수일반' },
   { type: courseCategoryType.TYPE_CONSTANT, ko: '수시' },
   { type: courseCategoryType.TYPE_NEW, ko: '신규' },
@@ -29,34 +29,34 @@ const courseCategory = [
   { type: courseCategoryType.TYPE_HANDICAPPED, ko: '교통약자 이동편의 증진' },
   { type: courseCategoryType.TYPE_DANGEROUS, ko: '위험물진 운송차량 운전자' },
 ];
-
-// title: `접수중`,
-// eduTypeAndTime: '신규교육/24시간',
-// description: '동영상(VOD)',
-// year: 999,
-// jobType: '화물',
-// eduLegend: '보수교육',
-// currentJoin: 59,
-// limit: 99,
-// eduStart: '2022-07-20',
-// eduEnd: '2022-07-26',
-// start: '2022-07-12',
-// end: '2022-07-15',
+export const courseSubCategory = [
+  { type: courseSubCategoryType.BUS, ko: '버스' },
+  { type: courseSubCategoryType.CHARTER_BUS, ko: '전세버스' },
+  { type: courseSubCategoryType.SPECIAL_PASSENGER, ko: '특수여객' },
+  { type: courseSubCategoryType.CORPORATE_TAXI, ko: '법인택시' },
+  { type: courseSubCategoryType.GENERAL_CARGO, ko: '일반화물' },
+  { type: courseSubCategoryType.PRIVATE_TAXI, ko: '개인택시' },
+  { type: courseSubCategoryType.INDIVIDUAL_CARGO, ko: '개별화물' },
+  { type: courseSubCategoryType.CONSIGNMENT, ko: '용달화물' },
+  { type: courseSubCategoryType.SPECIAL_TRANSPORTATION, ko: '특별교통수단' },
+  { type: courseSubCategoryType.KNEELING_BUS, ko: ' 저상버스' },
+  { type: courseSubCategoryType.DANGEROUS_GOODS, ko: '위험물' },
+  { type: courseSubCategoryType.DESIGNATED_WASTE, ko: '지정폐기물' },
+  { type: courseSubCategoryType.HAZARDOUS_CHEMICALS, ko: '유해화학물질' },
+  { type: courseSubCategoryType.HIGH_PRESSURE_GAS_FLAMMABLE, ko: '고압가스(가연성)' },
+  { type: courseSubCategoryType.HIGH_PRESSURE_GAS_TOXIC, ko: '고압가스(독성)' },
+];
 
 export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo, calendarRef, filter, schedule }: Props) {
   const router = useRouter();
   const scheduleList = schedule.map(item => {
     return {
       ...item,
-      // title: item.course.courseName, //말
       title: item.status === 1 ? '접수중' : '마감', //말
       step: item.step, //기수
       mediaType: '동영상(VOD)',
-      courseCategoryType: courseCategory.filter(categoryItem => {
-        console.log(categoryItem, item.course.courseCategoryType);
-        return categoryItem.type === item.course.courseCategoryType;
-      })[0], //eduType
-      courseSubCategoryType: item.course.courseSubCategoryType,
+      courseCategoryType: courseCategory.filter(categoryItem => categoryItem.type === item.course.courseCategoryType)[0], //eduType
+      courseSubCategoryType: courseSubCategory.filter(sub => sub.type === item.course.courseSubCategoryType)[0], //업종
       eduTypeAndTime: item.course.lessonTime, // eduTime
       currentJoin: item.enrolledPeopleCnt, //현재 수강
       limit: item.limitPeople, //수강 제한
@@ -77,25 +77,26 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
         eventContent={renderEventContent}
         events={scheduleList}
         eventClick={e => {
-          console.log(e);
           const {
             event: {
               _def: { extendedProps },
               start,
               end,
             },
-          }: { event: { _def: { extendedProps: Partial<CourseClassRes> }; start: Date | null; end: Date | null } } = e;
-          if (e.event._def.title === '마감') return window.alert('이 교육은 마감된 교육입니다!');
+          }: { event: { _def: { extendedProps: Partial<ClickedPlanInfo> }; start: Date | null; end: Date | null } } = e;
+          if (e.event._def.extendedProps.statue === -1) return window.alert('이 교육은 마감된 교육입니다!');
           setModalInfo({
-            year: extendedProps.year ? extendedProps.year : -1,
-            courseSubCategoryType: extendedProps.courseSubCategoryType ? extendedProps.courseSubCategoryType : '',
-            courseCategoryType: extendedProps.course.courseCategoryType ? extendedProps.courseCategoryType : '',
-            currentJoin: extendedProps.currentJoin ? extendedProps.currentJoin : 0,
-            limit: extendedProps.limit ? extendedProps.limit : 0,
-            studyStartDate: extendedProps.studyStartDate ? extendedProps.studyStartDate : '',
-            eduEnd: extendedProps.eduEnd ? extendedProps.eduEnd : '',
-            start: start ? dateFormat(start, 'yyyy-mm-dd') : 'error',
-            end: end ? dateFormat(end, 'yyyy-mm-dd') : 'error',
+            seq: extendedProps.seq as number,
+            step: extendedProps.step as number,
+            courseCategoryType: extendedProps.courseCategoryType as { type: courseCategoryType; ko: string },
+            courseSubCategoryType: extendedProps.courseSubCategoryType as { type: courseSubCategoryType; ko: string },
+
+            enrolledPeopleCnt: extendedProps.enrolledPeopleCnt as number,
+            limitPeople: extendedProps.limitPeople as number,
+            studyStartDate: extendedProps.studyStartDate as string,
+            studyEndDate: extendedProps.studyEndDate as string,
+            start: dateFormat(start as Date, 'yyyy-mm-dd'),
+            end: dateFormat(end as Date, 'yyyy-mm-dd'),
           });
           setOpenModal(true);
         }}
@@ -106,7 +107,7 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
         title={'교육안내'}
         action={
           <Box sx={{ display: 'flex', width: 'fit-content', margin: 'auto', gap: '1rem' }}>
-            <Button variant="contained" onClick={() => router.push({ pathname: '/stebMove/steb2', query: { ...modalInfo } })}>
+            <Button variant="contained" onClick={() => router.push({ pathname: '/stebMove/steb2', query: { seq: modalInfo?.seq } })}>
               교육신청
             </Button>
             <Button variant="contained" color="neutral" onClick={() => setOpenModal(false)}>
@@ -125,26 +126,30 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
               <>
                 <TableRow>
                   <TableCell sx={{ width: '30%', background: '#e0e0e0', borderBottom: '2px solid #b4b4b4' }}>기수</TableCell>
-                  <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>{modalInfo.year}</TableCell>
+                  <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>{modalInfo.step}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell sx={{ width: '30%', background: '#e0e0e0', borderBottom: '2px solid #b4b4b4' }}>교육과정</TableCell>
-                  <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>{modalInfo.eduLegend}</TableCell>
+                  <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>
+                    {modalInfo.courseCategoryType ? modalInfo.courseCategoryType.ko : '오류'}
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell sx={{ width: '30%', background: '#e0e0e0', borderBottom: '2px solid #b4b4b4' }}>업종구분</TableCell>
-                  <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>{modalInfo.jobType}</TableCell>
+                  <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>
+                    {modalInfo.courseSubCategoryType ? modalInfo.courseSubCategoryType.ko : '오류'}
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell sx={{ width: '30%', background: '#e0e0e0', borderBottom: '2px solid #b4b4b4' }}>교육일</TableCell>
                   <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>
-                    {modalInfo.eduStart} ~ {modalInfo.eduEnd}
+                    {dateFormat(modalInfo.studyStartDate, 'yyyy-mm-dd')} ~ {dateFormat(modalInfo.studyEndDate, 'yyyy-mm-dd')}
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell sx={{ width: '30%', background: '#e0e0e0', borderBottom: '2px solid #b4b4b4' }}>신청/정원</TableCell>
                   <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>
-                    {modalInfo.currentJoin} / {modalInfo.limit}명
+                    {modalInfo.enrolledPeopleCnt} / {modalInfo.limitPeople}명
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -162,11 +167,10 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
   );
 }
 function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
-  console.log(info?.event._def);
   const {
     event: {
       _def: {
-        extendedProps: { steb },
+        extendedProps: { step, courseCategoryType },
       },
       title,
     },
@@ -174,7 +178,9 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
   return (
     <>
       <div>[{title}]</div>
-      <div>{info && info.event._def.extendedProps.eduTypeAndTime} / </div>
+      <div>
+        {courseCategoryType?.ko ? courseCategoryType.ko : 'null'}교육 / {step ? (step === 0 ? '종일' : step) : 'null'}시간
+      </div>
       <div>{info && info.event._def.extendedProps.mediaType}</div>
     </>
   );

@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
-import { Box, FormControl, InputLabel, Select, Typography, MenuItem, TextField, Button } from '@mui/material';
+import { Box, FormControl, Select, Typography, MenuItem, TextField, Button } from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
-import React from 'react';
+import React, { useState } from 'react';
+import { userBusinessTypeOne, userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
 
 interface Props {
   isIndividual: boolean;
@@ -9,6 +10,10 @@ interface Props {
 }
 
 export function CompanyInfo({ isIndividual, setIsIndividual }: Props) {
+  const [businessTypeOne, setBusinessTypeOne] = useState<string | null>(null);
+  const [businessTypeTwo, setBusinessTypeTwo] = useState<string | null>(null);
+  const [companyName, setCompanyName] = useState<string | null>(null);
+
   return (
     <CompanyInfoWrap>
       <Box>
@@ -20,37 +25,33 @@ export function CompanyInfo({ isIndividual, setIsIndividual }: Props) {
       <Box>
         <Typography mb={1}>업종</Typography>
         <FormControl fullWidth>
-          {/* <InputLabel id="student">선택</InputLabel> */}
-          <Select
-            labelId="job"
-            id="job"
-            // value={generation}
-            // onChange={e => {
-            //   setGeneration(e.target.value);
-            // }}
-          >
-            {/* {eduDate.map(item => (
-                      <MenuItem key={item.generation} value={item.generation}>
-                        {item.generation}기 / {item.eduStart} ~ {item.eduEnd}
-                      </MenuItem>
-                    ))} */}
-            <MenuItem>zz</MenuItem>
+          <Select labelId="job" id="job" value={businessTypeOne} onChange={e => setBusinessTypeOne(e.target.value)}>
+            {userBusinessTypeOne.map(item => (
+              <MenuItem key={item.enType} value={item.enType}>
+                {item.type}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>
       <Box mt={2}>
         <Typography mb={1}>업종구분</Typography>
         <FormControl fullWidth>
-          {/* <InputLabel id="student">선택</InputLabel> */}
-          <Select labelId="jobType" id="jobType">
-            <MenuItem>zz</MenuItem>
+          <Select labelId="jobType" id="jobType" onChange={e => setBusinessTypeTwo(e.target.value)} value={businessTypeTwo}>
+            {userBusinessTypeTwo
+              .filter(filter => filter.category === businessTypeOne)
+              .map(item => (
+                <MenuItem key={item.enType} value={item.enType}>
+                  {item.type}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
       </Box>
       <Typography mt={2} mb={1}>
         회사명
       </Typography>
-      <TextField placeholder="회사명 또는 차량등록지역" fullWidth />
+      <TextField placeholder="회사명 또는 차량등록지역" onChange={e => setCompanyName(e.target.value)} value={companyName} fullWidth />
       <Box display="flex" mt={2}>
         <Box>※</Box>
         <Box display="flex" flexDirection="column" ml={1}>

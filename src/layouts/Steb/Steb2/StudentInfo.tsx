@@ -4,13 +4,14 @@ import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded
 import { useState } from 'react';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { locationList } from '@layouts/MeEdit/MeEdit';
 
 export function StudentInfo() {
   const [name, setName] = useState<string>(); //이름
   const [firstResiNumber, setFirstResiNumber] = useState<string>(); //주민앞
   const [secondResiNumber, setSecondResiNumber] = useState<string>(); //주민뒷
-  const [vehicleNumber, setVehicleNumber] = useState<string>(); //차량번호
-  const [vehicleLocate, setVehicleLocate] = useState<string>(); //차량등록지
+  const [vehicleNumber, setVehicleNumber] = useState<string | null>(null); //차량번호
+  const [vehicleLocate, setVehicleLocate] = useState<string | null>(null); //차량등록지
   const [isIndividualCheck, setIsIndividualCheck] = useState(false);
 
   return (
@@ -52,7 +53,11 @@ export function StudentInfo() {
         <Typography>차량 등록지</Typography>
         <FormControl fullWidth>
           <Select>
-            <MenuItem>아이고</MenuItem>
+            {locationList.map(item => (
+              <MenuItem key={item.en} value={item.en}>
+                {item.ko}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>

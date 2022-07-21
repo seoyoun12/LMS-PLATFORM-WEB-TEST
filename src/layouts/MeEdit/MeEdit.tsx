@@ -16,7 +16,7 @@ const tabsConfig = [
   { label: '운수종사자', value: 'TYPE_TRANS_EDU' },
   { label: '도민교통안전교육자', value: 'TYPE_TRAFFIC_SAFETY_EDU' },
 ];
-const locationList = [
+export const locationList = [
   { ko: '천안', en: 'CHEONAN' },
   { ko: '공주', en: 'PRINCESS' },
   { ko: '보령', en: 'BORYEONG' },

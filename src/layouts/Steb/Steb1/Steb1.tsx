@@ -1,5 +1,5 @@
 import { CNCalendar } from '@layouts/Calendar';
-import { Box, Container, styled, Typography } from '@mui/material';
+import { Box, Container, styled } from '@mui/material';
 import { StebHeader } from '../StebHeader';
 
 export function Steb1() {

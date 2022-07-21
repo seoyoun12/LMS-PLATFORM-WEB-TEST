@@ -10,28 +10,16 @@ import { Link } from '@components/common';
 const categoryData = [
   {
     id: 1,
-<<<<<<< HEAD
-    title1: "운수종사자",
-    title2: "교육일정",
-    href: "/calendar",
-=======
     title: "운수종사자 교육일정",
     href: "/stebMove/steb1",
->>>>>>> feat/calendar
     icon: "CalendarMonthIcon",
     color: "#ffede9",
     btnText: "확인하기"
   },
   {
     id: 2,
-<<<<<<< HEAD
-    title1: "운수종사자",
-    title2: "교육예약",
-    href: "/2",
-=======
     title: "운수종사자 교육예약",
     href: "/stebMove/steb2",
->>>>>>> feat/calendar
     icon: "DirectionsCarIcon",
     color: "#fff6e7",
     btnText: "예약하기"

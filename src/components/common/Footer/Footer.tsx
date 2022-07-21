@@ -28,10 +28,9 @@ export const Footer: FC<Props> = () => {
 
   if (isHideFooter) return null;
   return (
-    <footer className={s.root}>
+    <footer>
       <div className={styles.globalContainer}>
         <ContentContainer>
-<<<<<<< HEAD
           {/* <IntroductionSection> */}
             {/* <div className="logo">충남교통연수원</div> */}
             {/* <Typography variant="body1" className="desc">개인정보처리방침</Typography>
@@ -90,63 +89,6 @@ export const Footer: FC<Props> = () => {
             </Link>
             <Link href="/" underline="none">
               <Button className="align-left" color="neutral">TEST8</Button>
-=======
-          <IntroductionSection>
-            <div className="logo">러닝핏</div>
-            <Typography variant="body1" className="desc">
-              미림미디어랩은 교육을 통하여 <br />
-              평등한 세상을 구현하고자 합니다.
-            </Typography>
-          </IntroductionSection>
-          <ContentItem className="m-l-auto">
-            <Typography variant="h6" className="desc">
-              러닝핏
-            </Typography>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                홈
-              </Button>
-            </Link>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                기업교육
-              </Button>
-            </Link>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                채용
-              </Button>
-            </Link>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                도움말
-              </Button>
-            </Link>
-          </ContentItem>
-          <ContentItem>
-            <Typography variant="h6" className="logo">
-              튜터
-            </Typography>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                튜터 센터
-              </Button>
-            </Link>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                정큐 과정 지원하기
-              </Button>
-            </Link>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                원포인트 과정 지원하기
-              </Button>
-            </Link>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">
-                도움말
-              </Button>
->>>>>>> feat/calendar
             </Link>
           </ContentItem> */}
         </ContentContainer>

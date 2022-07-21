@@ -40,8 +40,8 @@ export interface CategoryBoardInput {
   publicYn: string;
   subject: string;
 }
-
-// 공지사항 리스트
+//////////////////////////////////////////////////////////////////////////////////////////
+// 게시판 리스트(공지사항, 자주묻는질문)
 export function categoryBoardList({ page, elementCnt, boardType } : {
   page: number;
   elementCnt?: number;
@@ -59,7 +59,7 @@ export function categoryBoardList({ page, elementCnt, boardType } : {
   };
 }
 
-// 게시판 상세
+// 게시판 상세(공지사항, 자주묻는질문)
 export function useCategoryBoard(seq: number | null) {
   const { data, error, mutate } = useSWR<SWRResponse<CategoryBoard>>(seq? `/post/adm/${seq}` : null, GET);
   return {
@@ -69,35 +69,48 @@ export function useCategoryBoard(seq: number | null) {
   };
 }
 
-// 게시판 업로드
+// 게시판 업로드(공지사항, 자주묻는질문)
 export async function uploadCategoryBoard(CategoryBoardInput : CategoryBoardInput) {
   return await POST(`/post`, CategoryBoardInput);
 }
 
-// 게시판 수정
+// 게시판 수정(공지사항, 자주묻는질문)
 export async function modifyCategoryBoard({seq, categoryBoardInput} : {
   seq: number, categoryBoardInput : CategoryBoardInput
 }) {
   return await PUT(`/post/${seq}`, categoryBoardInput);
 }
 
-
-// 게시판 삭제
+// 게시판 삭제(공지사항, 자주묻는질문)
 export async function removeCategoryBoard(seq: number) {
   return await DELETE(`/post/${seq}`);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+// 교육문의 리스트
+
+// 교육문의 등록
+
+// 교육문의 전체조회(관리자)
+
+// 교육문의 단건조회(관리자)
+
+// 교육문의 답변(관리자)
 
 
 
 
-// // 자주묻는질문(QnA) 리스트
-// export function categoryBoardQnaList() {
 
-// }
 
-// // 문의내역조회 리스트
-// export function categoryBoardLookList() {
 
-// }
+
+
+
+
+
+
+
+
 

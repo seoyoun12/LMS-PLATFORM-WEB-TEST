@@ -7,12 +7,12 @@ import { useRouter } from "next/router";
 import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { CategoryBoardNotice } from "@layouts/Category/CategoryBoardNotice";
 import { CategoryBoardQna } from "@layouts/Category/CategoryBoardQna";
-import { CategoryBoardQuestion } from "@layouts/Category/CategoryBoardQuestion";
 import { CategoryBoardLook } from "@layouts/Category/CategoryBoardLook";
 import { Tabs2 } from '@components/ui/Tabs2';
 import { useSnackbar } from "@hooks/useSnackbar";
 import { useDialog } from "@hooks/useDialog";
 import { useCategoryBoard } from '@common/api/categoryBoard';
+import { CategoryBoardQuestion } from "@layouts/Category/CategoryBoardQuestion";
 
 
 const tabsConfig = [

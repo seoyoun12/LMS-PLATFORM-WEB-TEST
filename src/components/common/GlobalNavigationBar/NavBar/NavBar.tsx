@@ -26,13 +26,7 @@ export function NavBar() {
             <Typography variant="subtitle2" className="bold-600">학습지원</Typography>
           </Link>
 
-          <Link
-            href="/makeAll"
-            underline="none"
-            color={grey[800]}
-          >
-            <Typography variant="subtitle2" className="bold-600">TEST</Typography>
-          </Link>
+
 
           {/* <Link
             href="/"

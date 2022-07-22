@@ -5,14 +5,24 @@ import { useState } from 'react';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { locationList } from '@layouts/MeEdit/MeEdit';
+import { FieldValues, UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import { UserTransSaveInputDataType } from '@common/api/courseClass';
+import { YN } from '@common/constant';
 
-export function StudentInfo() {
+interface Props {
+  register: UseFormRegister<UserTransSaveInputDataType>;
+  setValue: UseFormSetValue<UserTransSaveInputDataType>;
+}
+
+export function StudentInfo({ register, setValue }: Props) {
   const [name, setName] = useState<string>(); //이름
-  const [firstResiNumber, setFirstResiNumber] = useState<string>(); //주민앞
-  const [secondResiNumber, setSecondResiNumber] = useState<string>(); //주민뒷
-  const [vehicleNumber, setVehicleNumber] = useState<string | null>(null); //차량번호
-  const [vehicleLocate, setVehicleLocate] = useState<string | null>(null); //차량등록지
+  const [firstIdentityNumber, setFirstIdentityNumber] = useState<string>(); //주민앞
+  const [secondIdentityNumber, setSecondidentityNumber] = useState<string>(); //주민뒷
+  const [carNumber, setCarNumber] = useState<string | null>(null); //차량번호
+  const [carRegisteredRegion, setCarRegisteredRegion] = useState<string | null>(null); //차량등록지
+  const [smsYn, setSmsYn] = useState(false);
   const [isIndividualCheck, setIsIndividualCheck] = useState(false);
+  console.log(secondIdentityNumber);
 
   return (
     <StudentInfoWrap>
@@ -23,36 +33,38 @@ export function StudentInfo() {
         </Typography>
       </Box>
       <Typography>이름</Typography>
-      <TextField value={name} onChange={e => setName(e.target.value)} fullWidth />
+      <TextField value={name} {...register('name')} fullWidth />
       <Box>
         <Typography>주민등록번호</Typography>
         <Box display="flex" alignItems="center">
           <TextField
-            value={firstResiNumber}
+            value={firstIdentityNumber}
             onChange={e => {
-              if (e.target.value.length > 7) return;
-              setFirstResiNumber(e.target.value.replace(/[^0-9]/g, ''));
+              if (e.target.value.length > 6) return;
+              setFirstIdentityNumber(e.target.value.replace(/[^0-9]/g, ''));
+              setValue('firstIdentityNumber', e.target.value.replace(/[^0-9]/g, ''));
             }}
             fullWidth
           />
           <span>-</span>
           <TextField
             type="password"
-            value={secondResiNumber}
+            value={secondIdentityNumber}
             onChange={e => {
               if (e.target.value.length > 7) return;
-              setSecondResiNumber(e.target.value.replace(/[^0-9]/g, ''));
+              setSecondidentityNumber(e.target.value.replace(/[^0-9]/g, ''));
+              setValue('secondIdentityNumber', e.target.value.replace(/[^0-9]/g, ''));
             }}
             fullWidth
           />
         </Box>
       </Box>
       <Typography>차량 번호</Typography>
-      <TextField fullWidth />
+      <TextField {...register('carNumber')} fullWidth />
       <Box>
         <Typography>차량 등록지</Typography>
         <FormControl fullWidth>
-          <Select>
+          <Select {...register('carRegisteredRegion')}>
             {locationList.map(item => (
               <MenuItem key={item.en} value={item.en}>
                 {item.ko}
@@ -62,8 +74,24 @@ export function StudentInfo() {
         </FormControl>
       </Box>
       <Typography>휴대전화</Typography>
-      <TextField placeholder="'-'를 제외한 숫자만 입력해주세요." fullWidth />
-      <Checkbox defaultChecked />
+      <TextField
+        placeholder="'-'를 제외한 숫자만 입력해주세요."
+        {...register('phone', { maxLength: { value: 12, message: 'phone must be longer than 12 characters' } })}
+        // onChange={e => {
+        //   console.log(e.target.value.length);
+        //   if (e.target.value.length > 11) return
+        //   setValue('phone', e.target.value);
+        // }}
+        fullWidth
+      />
+      <Checkbox
+        value={smsYn}
+        onChange={(e, checked) => {
+          setSmsYn(checked);
+          if (checked) setValue('smsYn', YN.YES);
+          if (!checked) setValue('smsYn', YN.NO);
+        }}
+      />
       <Typography component="span">SMS문자 수신 동의</Typography>
       <Typography>※ 교육접수 완료 시 예약완료 문자가 발송됩니다.</Typography>
       <Typography>※ 신청인 본인의 휴대폰 번호를 입력하셔야 합니다.</Typography>

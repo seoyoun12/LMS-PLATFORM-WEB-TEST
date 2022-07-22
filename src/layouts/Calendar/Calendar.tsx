@@ -132,7 +132,7 @@ export function CNCalendar() {
   const [filter, setFilter] = useState<businessType>(businessType.TYPE_ALL);
   const [openModal, setOpenModal] = useState(false);
   const [modalInfo, setModalInfo] = useState<ClickedPlanInfo>();
-  const { data, error, mutate } = useCourseClass({ businessType: filter, date: '2022-07' });
+  const { data, error, mutate } = useCourseClass({ businessType: filter, date: dateFormat(date, 'yyyy-mm') });
   const [schedule, setSchedule] = useState<CourseClassRes[]>();
 
   const [month, setMonth] = useState(new Date().getMonth() + 1);

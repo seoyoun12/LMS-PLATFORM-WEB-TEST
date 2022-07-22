@@ -1,0 +1,1 @@
+export { courseClassOrganization } from './atom';

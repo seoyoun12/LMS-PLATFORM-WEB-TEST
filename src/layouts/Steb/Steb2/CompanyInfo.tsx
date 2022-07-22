@@ -3,16 +3,20 @@ import { Box, FormControl, Select, Typography, MenuItem, TextField, Button } fro
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import React, { useState } from 'react';
 import { userBusinessTypeOne, userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
+import { FieldValues, UseFormRegister, UseFormWatch } from 'react-hook-form';
+import { UserTransSaveInputDataType } from '@common/api/courseClass';
 
 interface Props {
   isIndividual: boolean;
   setIsIndividual: React.Dispatch<React.SetStateAction<boolean>>;
+  register: UseFormRegister<UserTransSaveInputDataType>;
+  watch: UseFormWatch<UserTransSaveInputDataType>;
 }
 
-export function CompanyInfo({ isIndividual, setIsIndividual }: Props) {
-  const [businessTypeOne, setBusinessTypeOne] = useState<string | null>(null);
-  const [businessTypeTwo, setBusinessTypeTwo] = useState<string | null>(null);
-  const [companyName, setCompanyName] = useState<string | null>(null);
+export function CompanyInfo({ register, watch }: Props) {
+  const [businessType, setBusinessType] = useState<string | null>(null);
+  const [businessSubType, setBusinessSubType] = useState<string | null>(null);
+  const [businessName, setBusinessName] = useState<string | null>(null);
 
   return (
     <CompanyInfoWrap>
@@ -25,7 +29,7 @@ export function CompanyInfo({ isIndividual, setIsIndividual }: Props) {
       <Box>
         <Typography mb={1}>업종</Typography>
         <FormControl fullWidth>
-          <Select labelId="job" id="job" value={businessTypeOne} onChange={e => setBusinessTypeOne(e.target.value)}>
+          <Select labelId="businessType" id="businessType" {...register('businessType')}>
             {userBusinessTypeOne.map(item => (
               <MenuItem key={item.enType} value={item.enType}>
                 {item.type}
@@ -37,9 +41,9 @@ export function CompanyInfo({ isIndividual, setIsIndividual }: Props) {
       <Box mt={2}>
         <Typography mb={1}>업종구분</Typography>
         <FormControl fullWidth>
-          <Select labelId="jobType" id="jobType" onChange={e => setBusinessTypeTwo(e.target.value)} value={businessTypeTwo}>
+          <Select labelId="businessSubType" id="businessSubType" {...register('businessSubType')}>
             {userBusinessTypeTwo
-              .filter(filter => filter.category === businessTypeOne)
+              .filter(filter => filter.category === watch().businessType)
               .map(item => (
                 <MenuItem key={item.enType} value={item.enType}>
                   {item.type}
@@ -51,7 +55,7 @@ export function CompanyInfo({ isIndividual, setIsIndividual }: Props) {
       <Typography mt={2} mb={1}>
         회사명
       </Typography>
-      <TextField placeholder="회사명 또는 차량등록지역" onChange={e => setCompanyName(e.target.value)} value={companyName} fullWidth />
+      <TextField placeholder="회사명 또는 차량등록지역" {...register('businessName')} fullWidth />
       <Box display="flex" mt={2}>
         <Box>※</Box>
         <Box display="flex" flexDirection="column" ml={1}>
@@ -67,14 +71,6 @@ export function CompanyInfo({ isIndividual, setIsIndividual }: Props) {
         </Box>
       </Box>
       <Typography>예약구분</Typography>
-      <ReservationType>
-        <Button variant="outlined" color={isIndividual ? 'primary' : 'neutral'} onClick={() => setIsIndividual(true)} fullWidth>
-          개인
-        </Button>
-        <Button variant="outlined" color={!isIndividual ? 'primary' : 'neutral'} onClick={() => setIsIndividual(false)} fullWidth>
-          단체
-        </Button>
-      </ReservationType>
     </CompanyInfoWrap>
   );
 }
@@ -83,8 +79,4 @@ const CompanyInfoWrap = styled(Box)``;
 
 const ExampleMessege = styled(Typography)`
   color: red;
-`;
-const ReservationType = styled(Box)`
-  display: flex;
-  gap: 2rem;
 `;

@@ -1,5 +1,5 @@
 import { YN } from '@common/constant';
-import { GET } from '@common/httpClient';
+import { GET, POST } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { CourseRes, ProductStatus } from './course';
 
@@ -86,4 +86,35 @@ export function useSingleCourseClass(classSeq: number) {
 
 export function getCourseClassStep(courseCategoryType: courseCategoryType, courseSubCategoryType: courseSubCategoryType) {
   return GET<{ data: CourseClassStepsRes[] }>('/course-class/step', { params: { courseCategoryType, courseSubCategoryType } });
+}
+
+export enum RegisterType {
+  TYPE_INDIVIDUAL = 'TYPE_INDIVIDUAL',
+  TYPE_ORGANIZATION = 'TYPE_ORGANIZATION',
+}
+
+export interface UserTransSaveInputDataType {
+  businessName: string; //회사명
+  businessSubType: string; //업종구분
+  businessType: string; //업종
+  carNumber: string; //차량번호
+  carRegisteredRegion: string; //차량 등록지
+  courseClassSeq: number; //과정시퀀스
+  firstIdentityNumber: string; //민증번호 앞
+  secondIdentityNumber: string; //민증번호 뒤
+  name: string; //이름
+  phone: string;
+  registerType: RegisterType; //개인 단체 구분
+  smsYn: YN;
+}
+
+export function courseClassIndividualEnroll(
+  userTransSaveData: Omit<UserTransSaveInputDataType, 'firstIdentityNumber' | 'secondIdentityNumber'>
+) {
+  return POST(`/course-user/enroll/individual`, userTransSaveData);
+}
+export function courseClassOrganizationEnrll(
+  userTransSaveData: Omit<UserTransSaveInputDataType, 'firstIdentityNumber' | 'secondIdentityNumber'>
+) {
+  return POST(`/course-user/enroll/organization`, userTransSaveData);
 }

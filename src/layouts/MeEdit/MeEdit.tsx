@@ -18,7 +18,7 @@ const tabsConfig = [
 ];
 export const locationList = [
   { ko: '천안', en: 'CHEONAN' },
-  { ko: '공주', en: 'PRINCESS' },
+  { ko: '공주', en: 'GONGJU' },
   { ko: '보령', en: 'BORYEONG' },
   { ko: '아산', en: 'ASAN' },
   { ko: '서산', en: 'SEOSAN' },
@@ -80,10 +80,10 @@ export function MeEdit() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const dialogConfirmed = await dialog({
-      title: "회원 정보 수정",
-      description: "회원 정보를 수정하시겠습니까?",
-      confirmText: "수정하기",
-      cancelText: "취소하기",
+      title: '회원 정보 수정',
+      description: '회원 정보를 수정하시겠습니까?',
+      confirmText: '수정하기',
+      cancelText: '취소하기',
     });
     await handleOnCloseConfirm(dialogConfirmed);
   };
@@ -93,7 +93,7 @@ export function MeEdit() {
       const emailYn = emailChecked ? YN.YES : YN.NO;
       const smsYn = smsChecked ? YN.YES : YN.NO;
       await modifyMyUser({ name: nameInput, emailYn, smsYn });
-      return router.push("/me");
+      return router.push('/me');
     }
   };
 

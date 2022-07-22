@@ -3,11 +3,18 @@ import { Box, FormControl, InputLabel, Select, Table, TableCell, TableContainer,
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { courseCategoryType, courseSubCategoryType, getCourseClassStep, useSingleCourseClass } from '@common/api/courseClass';
+import {
+  courseCategoryType,
+  courseSubCategoryType,
+  getCourseClassStep,
+  UserTransSaveInputDataType,
+  useSingleCourseClass,
+} from '@common/api/courseClass';
 import { Spinner } from '@components/ui';
 import { courseCategory, courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
+import { FieldValues, UseFormSetValue } from 'react-hook-form';
 
-export function EduOverview() {
+export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransSaveInputDataType> }) {
   const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(null); //교육과정
   const [courseSubCategoryType, setCourseSubCategoryType] = useState<courseSubCategoryType | null>(null); //업종구분
   const [step, setStep] = useState<number | null>(null); //업종구분
@@ -103,6 +110,7 @@ export function EduOverview() {
                     value={step}
                     onChange={e => {
                       setStep(Number(e.target.value));
+                      setValue('courseClassSeq', Number(e.target.value));
                     }}
                     label="student"
                   >

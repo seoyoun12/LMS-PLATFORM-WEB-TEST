@@ -1,5 +1,5 @@
 import { YN } from '@common/constant';
-import { GET, POST } from '@common/httpClient';
+import { DELETE, GET, POST } from '@common/httpClient';
 import { FilterType } from '@layouts/Calendar/Calendar';
 import useSWR, { SWRResponse } from 'swr';
 import { CourseRes, ProductStatus } from './course';
@@ -97,6 +97,7 @@ export enum RegisterType {
 }
 
 export interface UserTransSaveInputDataType {
+  seq: number; //삭제용 구분 시퀀스
   businessName: string; //회사명
   businessSubType: string; //업종구분
   businessType: string; //업종
@@ -120,4 +121,9 @@ export function courseClassOrganizationEnrll(
   userTransSaveData: Omit<UserTransSaveInputDataType, 'firstIdentityNumber' | 'secondIdentityNumber'>
 ) {
   return POST(`/course-user/enroll/organization`, userTransSaveData);
+}
+
+//해당하는 교육과정을 수강 취소
+export function courseClassCancel(courseUserSeq: string) {
+  return DELETE(`//course-user/cancel/${courseUserSeq}`);
 }

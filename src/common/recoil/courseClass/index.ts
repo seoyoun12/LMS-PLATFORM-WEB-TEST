@@ -1,1 +1,1 @@
-export { courseClassOrganization } from './atom';
+export { courseClassOrganization, isIndividual, courseClassIndividual } from './atom';

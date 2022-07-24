@@ -1,4 +1,4 @@
-import { RegisterType } from '@common/api/courseClass';
+import { courseClassCancel, RegisterType } from '@common/api/courseClass';
 import { courseClassOrganization } from '@common/recoil';
 import styled from '@emotion/styled';
 import { Box, Button, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
@@ -8,6 +8,7 @@ import { useRecoilState } from 'recoil';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import { Table } from '@components/ui';
 import { locationList } from '@layouts/MeEdit/MeEdit';
+import { useSnackbar } from '@hooks/useSnackbar';
 
 interface Props {
   registerType: RegisterType;
@@ -15,6 +16,18 @@ interface Props {
 }
 export function StudentList({ registerType, setRegisterType }: Props) {
   const [organization, setOrganization] = useRecoilState(courseClassOrganization);
+  const snackbar = useSnackbar();
+
+  const onClickDelete = async (seq: number, test: any) => {
+    console.log('아', seq, test);
+    try {
+      // await courseClassCancel(courseUserSeq); 삭제 통신
+      setOrganization((prev) => prev.filter((item) => item.seq !== seq));
+    } catch (e: any) {
+      snackbar({ variant: 'error', message: e });
+    }
+  };
+
   return (
     <StudentListWrap>
       <ReservationType>
@@ -49,32 +62,32 @@ export function StudentList({ registerType, setRegisterType }: Props) {
               <StudentListItem key={item.courseClassSeq}>
                 <StuTableContainer>
                   <TableBody sx={{ display: 'table', width: '100%' }}>
-                    <TableRow>
+                    <UserTableRow>
                       <TableCell>이름</TableCell>
                       <TableCell>{item.name}</TableCell>
-                    </TableRow>
-                    <TableRow>
+                    </UserTableRow>
+                    <UserTableRow>
                       <TableCell>민증</TableCell>
                       <TableCell>
                         {item.firstIdentityNumber} - {item.secondIdentityNumber}
                       </TableCell>
-                    </TableRow>
-                    <TableRow>
+                    </UserTableRow>
+                    <UserTableRow>
                       <TableCell>차량번호</TableCell>
                       <TableCell>{item.carNumber}</TableCell>
-                    </TableRow>
-                    <TableRow>
+                    </UserTableRow>
+                    <UserTableRow>
                       <TableCell>등록지</TableCell>
                       <TableCell>{locationList.filter((regi) => regi.en === item.carRegisteredRegion)[0].ko}</TableCell>
-                    </TableRow>
-                    <TableRow>
+                    </UserTableRow>
+                    <UserTableRow>
                       <TableCell>휴대전화링</TableCell>
                       <TableCell>{item.phone}</TableCell>
-                    </TableRow>
+                    </UserTableRow>
                   </TableBody>
                 </StuTableContainer>
                 <Box width="20%" display="flex" alignItems="flex-end">
-                  <Button variant="outlined" fullWidth>
+                  <Button variant="outlined" onClick={() => onClickDelete(item.seq, item)} fullWidth>
                     삭제
                   </Button>
                 </Box>
@@ -119,5 +132,20 @@ const StuTableContainer = styled(TableContainer)`
         border-bottom: none;
       }
     }
+  }
+`;
+
+const UserTableRow = styled(TableRow)`
+  display: flex;
+
+  td:first-child {
+    width: 50%;
+  }
+  td:last-child {
+    display: block;
+    width: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;

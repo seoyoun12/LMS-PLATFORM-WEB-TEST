@@ -1,11 +1,13 @@
 import { RegisterType } from '@common/api/courseClass';
 import { courseClassOrganization } from '@common/recoil';
 import styled from '@emotion/styled';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
 import React from 'react';
 import { FieldValues, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
+import { Table } from '@components/ui';
+import { locationList } from '@layouts/MeEdit/MeEdit';
 
 interface Props {
   registerType: RegisterType;
@@ -40,33 +42,45 @@ export function StudentList({ registerType, setRegisterType }: Props) {
             <span>교육신청자 리스트</span>
           </Typography>
         )}
-        {registerType === RegisterType.TYPE_ORGANIZATION &&
-          organization.length > 0 &&
-          organization.map(item => (
-            <Box display="flex">
-              <Box width="30%">
-                <Box>이름</Box>
-                <Box>민증앞</Box>
-                <Box>민증 뒤</Box>
-                <Box>차량번호</Box>
-                <Box>등록지</Box>
-                <Box>휴대전화링</Box>
-              </Box>
-              <Box width="45%">
-                <Box>{item.name}</Box>
-                <Box>{item.firstIdentityNumber}</Box>
-                <Box>{item.firstIdentityNumber}</Box>
-                <Box>{item.carNumber}</Box>
-                <Box>{item.carRegisteredRegion}</Box>
-                <Box>{item.phone}</Box>
-              </Box>
-              <Box width="25%" display="flex" alignItems="flex-end">
-                <Button variant="outlined" fullWidth>
-                  삭제
-                </Button>
-              </Box>
-            </Box>
-          ))}
+        <StudentItemListWrap>
+          {registerType === RegisterType.TYPE_ORGANIZATION &&
+            organization.length > 0 &&
+            organization.map((item) => (
+              <StudentListItem key={item.courseClassSeq}>
+                <StuTableContainer>
+                  <TableBody sx={{ display: 'table', width: '100%' }}>
+                    <TableRow>
+                      <TableCell>이름</TableCell>
+                      <TableCell>{item.name}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>민증</TableCell>
+                      <TableCell>
+                        {item.firstIdentityNumber} - {item.secondIdentityNumber}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>차량번호</TableCell>
+                      <TableCell>{item.carNumber}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>등록지</TableCell>
+                      <TableCell>{locationList.filter((regi) => regi.en === item.carRegisteredRegion)[0].ko}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>휴대전화링</TableCell>
+                      <TableCell>{item.phone}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </StuTableContainer>
+                <Box width="20%" display="flex" alignItems="flex-end">
+                  <Button variant="outlined" fullWidth>
+                    삭제
+                  </Button>
+                </Box>
+              </StudentListItem>
+            ))}
+        </StudentItemListWrap>
       </Box>
     </StudentListWrap>
   );
@@ -76,4 +90,34 @@ const StudentListWrap = styled(Box)``;
 const ReservationType = styled(Box)`
   display: flex;
   gap: 2rem;
+`;
+const StudentItemListWrap = styled(Box)`
+  div:last-child {
+    border-bottom: none;
+  }
+`;
+const StudentListItem = styled(Box)`
+  display: flex;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e1e1e1;
+`;
+const StuTableContainer = styled(TableContainer)`
+  width: 80%;
+  .css-2lu2eg-MuiTableCell-root {
+    border-bottom: none;
+    padding: 0.5rem;
+    font-weight: bold;
+  }
+  .css-dfr580-MuiTableRow-root {
+    /* :first-child {
+      td {
+        border-top: none;
+      }
+    } */
+    :last-child {
+      td {
+        border-bottom: none;
+      }
+    }
+  }
 `;

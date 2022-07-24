@@ -1,5 +1,6 @@
 import { YN } from '@common/constant';
 import { GET, POST } from '@common/httpClient';
+import { FilterType } from '@layouts/Calendar/Calendar';
 import useSWR, { SWRResponse } from 'swr';
 import { CourseRes, ProductStatus } from './course';
 
@@ -84,8 +85,10 @@ export function useSingleCourseClass(classSeq: number) {
   };
 }
 
-export function getCourseClassStep(courseCategoryType: courseCategoryType, courseSubCategoryType: courseSubCategoryType) {
-  return GET<{ data: CourseClassStepsRes[] }>('/course-class/step', { params: { courseCategoryType, courseSubCategoryType } });
+export function getCourseClassStep(courseCategoryType: courseCategoryType, courseBusinessType: FilterType) {
+  return GET<{ data: CourseClassStepsRes[] }>('/course-class/step', {
+    params: { courseCategoryType, courseBusinessType },
+  });
 }
 
 export enum RegisterType {

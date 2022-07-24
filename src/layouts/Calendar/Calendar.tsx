@@ -119,7 +119,7 @@ export const eduLegendList = [
   { title: '접수마감', color: '#e0e0e0' },
 ];
 
-const filterList = [
+export const courseBusinessTypeList = [
   { type: '전체', enType: FilterType.TYPE_ALL },
   { type: '여객', enType: FilterType.TYPE_PASSENGER },
   { type: '화물', enType: FilterType.TYPE_CARGO },
@@ -148,8 +148,8 @@ export function CNCalendar() {
 
   //Month changer
   const onChangeMonth = (type: MonthClickType, value: number) => {
-    if (type === MonthClickType.BTN_CLICK) return setDate(prev => new Date(prev.setMonth(prev.getMonth() + value)));
-    if (type === MonthClickType.MONTH_CLICK) return setDate(prev => new Date(prev.setMonth(value - 1)));
+    if (type === MonthClickType.BTN_CLICK) return setDate((prev) => new Date(prev.setMonth(prev.getMonth() + value)));
+    if (type === MonthClickType.MONTH_CLICK) return setDate((prev) => new Date(prev.setMonth(value - 1)));
   };
 
   //fullcalendar changer
@@ -168,7 +168,13 @@ export function CNCalendar() {
   if (!data) return null;
   return (
     <CalendarWrap>
-      <CalendarHeader onChangeMonth={onChangeMonth} date={date} filterList={filterList} onChangeFilter={onChangeFilter} filter={filter} />
+      <CalendarHeader
+        onChangeMonth={onChangeMonth}
+        date={date}
+        filterList={courseBusinessTypeList}
+        onChangeFilter={onChangeFilter}
+        filter={filter}
+      />
       {schedule && (
         <CalendarBody
           setOpenModal={setOpenModal}

@@ -39,7 +39,7 @@ export function StudentInfo({ register, setValue }: Props) {
         <Box display="flex" alignItems="center">
           <TextField
             value={firstIdentityNumber}
-            onChange={e => {
+            onChange={(e) => {
               if (e.target.value.length > 6) return;
               setFirstIdentityNumber(e.target.value.replace(/[^0-9]/g, ''));
               setValue('firstIdentityNumber', e.target.value.replace(/[^0-9]/g, ''));
@@ -50,7 +50,7 @@ export function StudentInfo({ register, setValue }: Props) {
           <TextField
             type="password"
             value={secondIdentityNumber}
-            onChange={e => {
+            onChange={(e) => {
               if (e.target.value.length > 7) return;
               setSecondidentityNumber(e.target.value.replace(/[^0-9]/g, ''));
               setValue('secondIdentityNumber', e.target.value.replace(/[^0-9]/g, ''));
@@ -65,7 +65,7 @@ export function StudentInfo({ register, setValue }: Props) {
         <Typography>차량 등록지</Typography>
         <FormControl fullWidth>
           <Select {...register('carRegisteredRegion')}>
-            {locationList.map(item => (
+            {locationList.map((item) => (
               <MenuItem key={item.en} value={item.en}>
                 {item.ko}
               </MenuItem>
@@ -88,8 +88,14 @@ export function StudentInfo({ register, setValue }: Props) {
         value={smsYn}
         onChange={(e, checked) => {
           setSmsYn(checked);
-          if (checked) setValue('smsYn', YN.YES);
-          if (!checked) setValue('smsYn', YN.NO);
+          if (checked) {
+            setValue('smsYn', YN.YES);
+            setValue('smsYn', YN.YES);
+          }
+          if (!checked) {
+            setValue('smsYn', YN.NO);
+            setValue('smsYn', YN.NO);
+          }
         }}
       />
       <Typography component="span">SMS문자 수신 동의</Typography>

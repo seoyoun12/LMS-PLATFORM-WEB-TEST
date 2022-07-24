@@ -21,7 +21,9 @@ export function Steb2() {
   const [registerType, setRegisterType] = useState<RegisterType>(RegisterType.TYPE_INDIVIDUAL);
   const [organization, setOrganization] = useRecoilState(courseClassOrganization);
 
-  const { register, setValue, watch } = useForm<UserTransSaveInputDataType>();
+  const { register, setValue, watch } = useForm<UserTransSaveInputDataType>({
+    defaultValues: { firstIdentityNumber: '', secondIdentityNumber: '' },
+  });
 
   useEffect(() => {
     if (router.query.seq) setValue('courseClassSeq', Number(router.query.seq));
@@ -32,14 +34,16 @@ export function Steb2() {
 
   const onClickEnroll = async () => {
     //단체 신청시 스택쌓이는 구조. 개인상태에서는 혼자 신청
-    const orgaPostData = { ...watch(), identityNumber: watch().firstIdentityNumber + watch().secondIdentityNumber }; //민증번호때문에 구분
+    const { firstIdentityNumber, secondIdentityNumber, ...rest } = watch();
+    if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7) return window.alert('주민번호를 모두 입력해주세요!');
+    const orgaPostData = { ...rest, identityNumber: firstIdentityNumber + secondIdentityNumber }; //민증번호때문에 구분
 
     try {
       if (registerType === RegisterType.TYPE_INDIVIDUAL) return;
       if (registerType === RegisterType.TYPE_ORGANIZATION) {
-        const test = await courseClassOrganizationEnrll(orgaPostData);
-        console.log('테스트맨이야', test);
-        setOrganization(prev => [...prev, watch()]);
+        // const test = await courseClassOrganizationEnrll(orgaPostData);
+        // console.log('테스트맨이야', test);
+        setOrganization((prev) => [...prev, watch()]);
         console.log('뭐라는거야', organization);
       }
     } catch (e: any) {

@@ -4,8 +4,10 @@ const theme = createTheme({
   palette: {
     primary: {
       light: '#ff9a67',
-      main: '#ff5600',
-      dark: '#E92A00',
+      // main: '#ff5600',
+      main: '#3498db',
+      // dark: '#E92A00',
+      dark: '#2774a7',
     },
     secondary: {
       light: '#93CCFF',
@@ -35,20 +37,20 @@ const theme = createTheme({
   components: {
     MuiContainer: {
       defaultProps: {
-        disableGutters: true
+        disableGutters: true,
       },
     },
     MuiButton: {
       defaultProps: {
-        disableElevation: true
-      }
+        disableElevation: true,
+      },
     },
     MuiLink: {
       defaultProps: {
-        underline: 'none'
-      }
-    }
-  }
+        underline: 'none',
+      },
+    },
+  },
 });
 
 declare module '@mui/material/styles' {

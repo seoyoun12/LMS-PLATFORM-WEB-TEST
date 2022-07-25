@@ -3,12 +3,14 @@ import { CustomContentGenerator, EventContentArg } from '@fullcalendar/core';
 import { Box, Button, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import FullCalendar from '@fullcalendar/react';
-import { CalendarEvent, ClickedPlanInfo, FilterType } from '../Calendar';
+import { CalendarEvent, ClickedPlanInfo, eduLegendList, FilterType } from '../Calendar';
 import { Modal } from '@components/ui/Modal';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import dateFormat from 'dateformat';
 import { useRouter } from 'next/router';
 import { courseCategoryType, CourseClassRes, courseSubCategoryType } from '@common/api/courseClass';
+import { courseClassEnrollInfo } from '@common/recoil';
+import { useRecoilState } from 'recoil';
 
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,7 +29,7 @@ export const courseCategory = [
   { type: courseCategoryType.TYPE_NEW, ko: '신규' },
   { type: courseCategoryType.TYPE_ILLEGAL, ko: '법령위반자' },
   { type: courseCategoryType.TYPE_HANDICAPPED, ko: '교통약자 이동편의 증진' },
-  { type: courseCategoryType.TYPE_DANGEROUS, ko: '위험물진 운송차량 운전자' },
+  { type: courseCategoryType.TYPE_DANGEROUS, ko: '위험물질 운송차량 운전자' },
 ];
 export const courseSubCategory = [
   { type: courseSubCategoryType.BUS, ko: '버스' },
@@ -49,10 +51,28 @@ export const courseSubCategory = [
 
 export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo, calendarRef, filter, schedule }: Props) {
   const router = useRouter();
+  const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
   const scheduleList = schedule.map(item => {
+    //마감 여부 확인
+    // const isReceive =
+    //   new Date(item.requestStartDate).getTime() - new Date().getTime() > 0 //값이 음수면 신청날짜 이므로 true
+    //     ? new Date(item.requestEndDate).getTime() - new Date().getTime() > 0 //값이 양수면 날짜가끝나기 전이므로 true
+    //       ? true
+    //       : false
+    //     : false;
+    console.log('아니 도대체 왜?', item.course.courseName, item.step, new Date(item.requestStartDate).getTime() - new Date().getTime());
+    const prevSchedule = new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0 ? true : false;
+    const isReceive =
+      new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0
+        ? new Date(item.requestStartDate).getTime() - new Date().getTime() <= 0
+          ? true
+          : false
+        : false;
+
     return {
       ...item,
-      title: item.status === 1 ? '접수중' : '마감', //말
+      title: prevSchedule ? (isReceive ? '접수중' : '준비중') : '마감', //말
+      isReceive,
       step: item.step, //기수
       mediaType: '동영상(VOD)',
       courseCategoryType: courseCategory.filter(categoryItem => categoryItem.type === item.course.courseCategoryType)[0], //eduType
@@ -64,6 +84,9 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
       studyEndDate: item.studyEndDate, //studyStartDate
       start: item.requestStartDate, //start: requestStartDate
       end: item.requestEndDate, //start: requestStartDate
+      className: isReceive
+        ? eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType || 'TYPE_NONE'
+        : 'TYPE_NONE',
     };
   });
 
@@ -74,6 +97,7 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
         plugins={[dayGridPlugin]}
         headerToolbar={{ start: '', end: '' }} //헤더 제거
         locale="ko"
+        contentHeight="auto" //스크롤 제거
         eventContent={renderEventContent}
         events={scheduleList}
         eventClick={e => {
@@ -84,7 +108,7 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
               end,
             },
           }: { event: { _def: { extendedProps: Partial<ClickedPlanInfo> }; start: Date | null; end: Date | null } } = e;
-          if (e.event._def.extendedProps.statue === -1) return window.alert('이 교육은 마감된 교육입니다!');
+          if (!e.event._def.extendedProps.isReceive) return window.alert('이 교육은 마감된 교육입니다!');
           setModalInfo({
             seq: extendedProps.seq as number,
             step: extendedProps.step as number,
@@ -107,7 +131,16 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
         title={'교육안내'}
         action={
           <Box sx={{ display: 'flex', width: 'fit-content', margin: 'auto', gap: '1rem' }}>
-            <Button variant="contained" onClick={() => router.push({ pathname: '/stebMove/steb2', query: { seq: modalInfo?.seq } })}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setEnrollInfo(prev => {
+                  return { ...prev, seq: modalInfo?.seq ? modalInfo.seq : 0 };
+                });
+                router.push({ pathname: '/stebMove/steb2', query: { seq: modalInfo?.seq } });
+                // router.push('/stebMove/steb2');
+              }}
+            >
               교육신청
             </Button>
             <Button variant="contained" color="neutral" onClick={() => setOpenModal(false)}>
@@ -208,4 +241,32 @@ const CalendarWrap = styled(Box)<{ filter: string }>`
     //필터
     display: none;
   } */
+  .TYPE_SUP_COMMON {
+    background: #27ae60;
+    border: #27ae60;
+  }
+  .TYPE_CONSTANT {
+    background: #036c19;
+    border: #036c19;
+  }
+  .TYPE_NEW {
+    background: #2980b9;
+    border: #2980b9;
+  }
+  .TYPE_ILLEGAL {
+    background: #4c0c0c;
+    border: #4c0c0c;
+  }
+  .TYPE_HANDICAPPED {
+    background: #190b99;
+    border: #190b99;
+  }
+  .TYPE_DANGEROUS {
+    background: #b807a9;
+    border: #b807a9;
+  }
+  .TYPE_NONE {
+    background: #e0e0e0;
+    border: #e0e0e0;
+  }
 `;

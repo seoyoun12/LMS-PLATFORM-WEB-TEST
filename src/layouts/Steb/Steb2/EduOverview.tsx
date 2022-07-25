@@ -15,22 +15,30 @@ import { Spinner } from '@components/ui';
 import { courseCategory, courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
 import { courseBusinessTypeList, FilterType } from '@layouts/Calendar/Calendar';
+import { courseClassEnrollInfo } from '@common/recoil';
+import { useRecoilState } from 'recoil';
 
 export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransSaveInputDataType> }) {
   const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(null); //교육과정
   const [courseBusinessType, setCourseBusinessType] = useState<FilterType | null>(null); //업종구분
-  const [step, setStep] = useState<number | null>(null); //업종구분
+  const [stepSeq, setStepSeq] = useState<number | null>(null); //업종구분
   const [values, setValues] = useState<{ step: number; studyStartDate: string; studyEndDate: string }>();
-  const [stepsRes, setStepsRes] = useState<{ step: number; studyStartDate: string; studyEndDate: string }[]>([]); //기수 교육시작 교육끝
+  const [stepsRes, setStepsRes] = useState<{ seq: number; step: number; studyStartDate: string; studyEndDate: string }[]>([]); //기수 교육시작 교육끝
+  const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo); //전역에 교육정보 저장
   const router = useRouter();
   const { data, error, mutate } = useSingleCourseClass(Number(router.query.seq));
 
   useEffect(() => {
     console.log(data);
     if (data) {
+      console.log('안녕', data, stepsRes, enrollInfo, values);
+      setCourseCategoryType(data.course.courseCategoryType);
+      setCourseBusinessType(FilterType.TYPE_PASSENGER); //임시타입
+      setStepSeq(data.seq);
       setValues({ step: data.step, studyStartDate: data.studyStartDate, studyEndDate: data.studyEndDate });
+      console.log('나한테 왜그래', stepSeq, values, courseCategoryType, courseBusinessType);
     }
-  }, [data]);
+  }, [data, stepSeq, stepsRes]);
 
   const getSteps = async () => {
     if (!courseCategoryType || !courseBusinessType) return window.alert('기수 가져오기 실패');
@@ -45,7 +53,7 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
     }
   }, [courseCategoryType, courseBusinessType]);
 
-  if (router.query.seq && !data) return <Spinner />;
+  // if (enrollInfo.seq && !data) return <Spinner />;
   return (
     <EduOverviewWrap>
       <Box>
@@ -59,17 +67,20 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
               <TableLeftCell>교육과정</TableLeftCell>
               <TableCell>
                 <FormControl fullWidth>
-                  <InputLabel id="student">선택</InputLabel>
+                  {/* <InputLabel id="student">선택</InputLabel> */}
                   <Select
                     labelId="student"
                     id="student"
                     value={courseCategoryType}
-                    onChange={(e) => {
-                      setCourseCategoryType(courseCategory.filter((cate) => cate.type === e.target.value)[0].type);
+                    onChange={e => {
+                      setCourseCategoryType(courseCategory.filter(cate => cate.type === e.target.value)[0].type);
+                      // setEnrollInfo(prev => {
+                      // return { ...prev, courseCategoryType: courseCategory.filter(cate => cate.type === e.target.value)[0].type };
+                      // });
                     }}
                     label="student"
                   >
-                    {courseCategory.map((item) => (
+                    {courseCategory.map(item => (
                       <MenuItem key={item.type} value={item.type}>
                         {item.ko}
                       </MenuItem>
@@ -82,17 +93,23 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
               <TableLeftCell>업종</TableLeftCell>
               <TableCell>
                 <FormControl fullWidth>
-                  <InputLabel id="courseBusinessType">선택</InputLabel>
+                  {/* <InputLabel id="courseBusinessType">선택</InputLabel> */}
                   <Select
                     labelId="courseBusinessType"
                     id="courseBusinessType"
                     value={courseBusinessType}
-                    onChange={(e) => {
-                      setCourseBusinessType(courseBusinessTypeList.filter((filter) => filter.enType === e.target.value)[0].enType);
+                    onChange={e => {
+                      setCourseBusinessType(courseBusinessTypeList.filter(filter => filter.enType === e.target.value)[0].enType);
+                      // setEnrollInfo(prev => {
+                      // return {
+                      // ...prev,
+                      // courseCategorySubType: courseBusinessTypeList.filter(filter => filter.enType === e.target.value)[0].enType,
+                      // };
+                      // });
                     }}
                     label="student"
                   >
-                    {courseBusinessTypeList.map((item) => {
+                    {courseBusinessTypeList.map(item => {
                       if (item.enType === FilterType.TYPE_ALL) return;
                       return (
                         <MenuItem key={item.enType} value={item.enType}>
@@ -108,22 +125,35 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
               <TableLeftCell>기수 / 교육일자</TableLeftCell>
               <TableCell>
                 <FormControl fullWidth>
-                  <InputLabel id="student">선택</InputLabel>
+                  {/* {/* <InputLabel id="student">선택</InputLabel> */}
                   <Select
                     labelId="student"
                     id="student"
-                    value={step}
-                    onChange={(e) => {
-                      setStep(Number(e.target.value));
+                    value={stepSeq}
+                    onChange={e => {
+                      setStepSeq(Number(e.target.value));
                       setValue('courseClassSeq', Number(e.target.value));
+                      setEnrollInfo(prev => {
+                        return { ...prev, seq: Number(e.target.value) };
+                      });
+                      console.log('아이', enrollInfo);
+                      // setEnrollInfo(prev => {
+                      // return {
+                      // ...prev,
+                      // step: Number(e.target.value),
+                      // };
+                      // });
                     }}
                     label="student"
                   >
-                    {stepsRes.map((item) => (
-                      <MenuItem key={item.step} value={item.step}>
-                        {item.step}기 / {item.studyStartDate} ~ {item.studyEndDate}
-                      </MenuItem>
-                    ))}
+                    {stepsRes.map(item => {
+                      console.log('아니', item);
+                      return (
+                        <MenuItem key={item.step} value={item.seq}>
+                          {item.step}기 / {item.studyStartDate} ~ {item.studyEndDate}
+                        </MenuItem>
+                      );
+                    })}
                   </Select>
                 </FormControl>
               </TableCell>

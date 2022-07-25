@@ -7,17 +7,21 @@ import { Container, TableBody, TableCell, TableHead, TableRow, Typography } from
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import dateFormat from 'dateformat';
+import { businessType } from '@common/api/courseClass';
+import { useCourseClassAdm } from '@common/api/adm/courseClass';
 
 const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify' }[] = [
   { name: 'seq', align: 'left' },
   { name: '접수여부', align: 'right' },
   { name: '교육타입/시간', align: 'right' },
-  { name: '방법', align: 'right' },
-  { name: '기수', align: 'right' },
-  { name: '??', align: 'right' },
+  // { name: '방법', align: 'right' },
   { name: '화물/여객', align: 'right' },
-  { name: '교육타입', align: 'right' },
-  { name: '교육기간', align: 'right' },
+  // { name: '??', align: 'right' },
+  { name: '기수', align: 'right' },
+  { name: '교육구분', align: 'right' },
+  // { name: '교육대상', align: 'right' },
+
+  { name: '신청인원 / 제한', align: 'right' },
   { name: '교육기간', align: 'right' },
   { name: '신청기간', align: 'right' },
 ];
@@ -81,7 +85,7 @@ export function CalendarManagement() {
   const dialog = useDialog();
   const router = useRouter();
   // const [ page, setPage ] = useState(0);
-  // const { data, error } = useCourseList({ page });
+  const { data, error } = useCourseClassAdm(businessType.TYPE_ALL, '2022-07');
 
   useEffect(() => {
     console.log('useEffect Triggered');
@@ -111,7 +115,7 @@ export function CalendarManagement() {
           fontWeight: 700,
         }}
       >
-        과정 목록
+        일정 목록
       </Typography>
       <Table
         pagination={true}
@@ -131,60 +135,72 @@ export function CalendarManagement() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map(data => (
-            <TableRow key={data.seq} hover>
-              <TableCell>{data.seq}</TableCell>
-              <TableCell align="right">
-                {/* <Link href={`/course/${content.seq}`} underline="hover" color={grey[900]}> */}
-                {data.title}
-                {/* </Link> */}
-              </TableCell>
-              <TableCell align="right">
-                {data.eduTypeAndTime}
-                {/* {dateFormat(data.eduTypeAndTime, 'isoDate')} */}
-              </TableCell>
-              <TableCell align="right">
-                {data.description}
-                {/* <Chip
+          {data.map(data => {
+            const isReceive = new Date(data.requestEndDate).getTime() - new Date().getTime() > 0 ? true : false;
+            return (
+              <TableRow key={data.seq} hover>
+                <TableCell>{data.seq}</TableCell>
+                <TableCell align="right">
+                  {/* <Link href={`/course/${content.seq}`} underline="hover" color={grey[900]}> */}
+                  {/*                 
+                //마감 여부 확인
+                const isReceive =
+                  new Date(item.requestStartDate).getTime() - new Date().getTime() < 0 //값이 음수면 신청날짜 이므로 true
+                    ? new Date(item.requestEndDate).getTime() - new Date().getTime() > 0 //값이 양수면 날짜가끝나기 전이므로 true
+                      ? true
+                      : false
+                    : false; */}
+                  {isReceive ? '접수중' : '마감'}
+                  {/* </Link> */}
+                </TableCell>
+                <TableCell align="right">
+                  {data.course.courseCategoryType} /{data.course.lessonTime}
+                  {/* {dateFormat(data.eduTypeAndTime, 'isoDate')} */}
+                </TableCell>
+                <TableCell align="right">
+                  {/* {data.description} */}
+                  PESSENGER(임시)
+                  {/* <Chip
                   label={data.displayYn === YN.YES ? '보임' : '숨김'}
                   variant="outlined"
                   size="small"
                   color={data.displayYn === YN.YES ? 'secondary' : 'default'}
                 /> */}
-              </TableCell>
-              <TableCell align="right">
-                {data.year}
-                {/* <Chip
+                </TableCell>
+                <TableCell align="right">
+                  {data.step}
+                  {/* <Chip
                   label={data.status ? '정상' : '중지'}
                   variant="outlined"
                   size="small"
                   color={data.status ? 'secondary' : 'default'}
                 /> */}
-              </TableCell>
-              <TableCell align="right">{data.className}</TableCell>
-              <TableCell align="right">{data.jobType}</TableCell>
-              <TableCell align="right">{data.eduLegend}</TableCell>
-              <TableCell align="right">
-                {data.currentJoin} / {data.limit}
-              </TableCell>
-              <TableCell align="right">
-                {data.eduStart} ~ {data.eduEnd}
-              </TableCell>
-              <TableCell align="right">
-                {data.start} ~ {data.end}
-              </TableCell>
-              <TableCell align="right">
-                {/* <Link href={`/admin-center/course/modify/${data.seq}`}>
+                </TableCell>
+                {/* <TableCell align="right">{'data.className'}</TableCell>
+                <TableCell align="right">{'data.jobType'}</TableCell> */}
+                <TableCell align="right">{data.course.courseSubCategoryType}</TableCell>
+                <TableCell align="right">
+                  {data.enrolledPeopleCnt} / {data.limitPeople}
+                </TableCell>
+                <TableCell align="right">
+                  {dateFormat(data.studyStartDate, 'yyyy-mm-dd')} ~ {dateFormat(data.studyEndDate, 'yyyy-mm-dd')}
+                </TableCell>
+                <TableCell align="right">
+                  {dateFormat(data.requestStartDate, 'yyyy-mm-dd')} ~ {dateFormat(data.requestEndDate, 'yyyy-mm-dd')}
+                </TableCell>
+                {/* <TableCell align="right">
+                  <Link href={`/admin-center/course/modify/${data.seq}`}>
                   <Button variant="text" color="neutral" size="small">
                     상세
                   </Button>
                 </Link>
                 <Button variant="text" color="warning" onClick={() => onRemoveCourse(data.seq)} size="small">
                   삭제
-                </Button> */}
-              </TableCell>
-            </TableRow>
-          ))}
+                </Button>
+                </TableCell> */}
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </CalendarManagementWrap>

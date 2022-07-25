@@ -1,4 +1,5 @@
-import { UserTransSaveInputDataType } from '@common/api/courseClass';
+import { courseCategoryType, UserTransSaveInputDataType } from '@common/api/courseClass';
+import { FilterType } from '@layouts/Calendar/Calendar';
 import { atom } from 'recoil';
 
 export const isIndividual = atom({
@@ -6,12 +7,16 @@ export const isIndividual = atom({
   default: true,
 });
 
-export const courseClassOrganization = atom<UserTransSaveInputDataType[]>({
-  key: 'courseClassOrganization',
+export const courseClassEnrollList = atom<UserTransSaveInputDataType[]>({
+  key: 'courseClassEnrollList',
   default: [],
 });
 
-export const courseClassIndividual = atom<UserTransSaveInputDataType[]>({
-  key: 'courseClassIndividual',
-  default: [],
+export const courseClassEnrollInfo = atom<{
+  courseCategoryType: courseCategoryType;
+  corseCategorySubType: FilterType;
+  seq: number;
+}>({
+  key: 'courseClassEnrollInfo',
+  default: undefined,
 });

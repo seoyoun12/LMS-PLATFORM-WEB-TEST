@@ -11,6 +11,7 @@ export enum businessType {
 }
 
 export enum courseCategoryType {
+  TYPE_NONE = 'NONE',
   TYPE_SUP_COMMON = 'TYPE_SUP_COMMON', //보수일반
   TYPE_CONSTANT = 'TYPE_CONSTANT', //수시
   TYPE_NEW = 'TYPE_NEW', //신규
@@ -83,6 +84,9 @@ export function useSingleCourseClass(classSeq: number) {
     error,
     mutate,
   };
+}
+export function getSingleCourseClass(classSeq: number) {
+  return GET<{ data: CourseClassRes }>(`/course-class/${classSeq}`);
 }
 
 export function getCourseClassStep(courseCategoryType: courseCategoryType, courseBusinessType: FilterType) {

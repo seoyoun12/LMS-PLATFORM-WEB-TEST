@@ -54,69 +54,14 @@ export enum FilterType {
   TYPE_CARGO = 'TYPE_CARGO',
 }
 
-// const calendarDatas: CalendarEvent[] = [
-//   {
-//     className: 'PASSENGER',
-//     title: `마감`, //status
-//     courseCategoryType: courseCategoryType.TYPE_SUP_COMMON,
-//     lessonTime: 24, //eduTime
-//     eduTypeAndTime: '강화교육/종일', //eduType
-//     description: '동영상(VOD)', //몰라
-//     year: 9999, // steb
-//     jobType: '여객', //courseSubCategoryType
-//     eduLegend: '강화교육', //courseCategoryType
-//     currentJoin: 599,
-//     limit: 999,
-//     eduStart: '2022-07-10', //studyStartDate
-//     eduEnd: '2022-07-16', //studyStartDate
-//     start: '2022-07-02', //start: requestStartDate
-//     end: '2022-07-05', //start: requestStartDate
-//     color: '#4c0c0c',
-//   },
-//   {
-//     className: 'FREIGHT',
-//     title: `접수중`,
-//     courseCategoryType: courseCategoryType.TYPE_SUP_COMMON,
-//     lessonTime: 24,
-//     eduTypeAndTime: '신규교육/24시간',
-//     description: '동영상(VOD)',
-//     year: 999,
-//     jobType: '화물',
-//     eduLegend: '보수교육',
-//     currentJoin: 59,
-//     limit: 99,
-//     eduStart: '2022-07-20',
-//     eduEnd: '2022-07-26',
-//     start: '2022-07-12',
-//     end: '2022-07-15',
-//     color: '#2980b9',
-//   },
-//   {
-//     className: 'PASSENGER',
-//     title: `접수중`,
-//     courseCategoryType: courseCategoryType.TYPE_SUP_COMMON,
-//     lessonTime: 24,
-//     eduTypeAndTime: '신규교육/24시간',
-//     description: '동영상(VOD)',
-//     year: 9929,
-//     jobType: '화물',
-//     eduLegend: '보수교육',
-//     currentJoin: 592,
-//     limit: 992,
-//     eduStart: '2022-07-20',
-//     eduEnd: '2022-07-26',
-//     start: '2022-07-12',
-//     end: '2022-07-15',
-//     color: '#2980b9',
-//   },
-// ];
-
 export const eduLegendList = [
-  { title: '화물보수교육', color: '#27ae60' },
-  { title: '여객보수교육', color: '#036c19' },
-  { title: '신규교육', color: '#2980b9' },
-  { title: '강화교육', color: '#4c0c0c' },
-  { title: '접수마감', color: '#e0e0e0' },
+  { title: '보수일반 교육', enType: courseCategoryType.TYPE_SUP_COMMON, color: '#27ae60' },
+  { title: '수시 교육', enType: courseCategoryType.TYPE_CONSTANT, color: '#036c19' },
+  { title: '신규 교육', enType: courseCategoryType.TYPE_NEW, color: '#2980b9' },
+  { title: '법령위반자 교육', enType: courseCategoryType.TYPE_ILLEGAL, color: '#4c0c0c' },
+  { title: '교통약자 교육', enType: courseCategoryType.TYPE_HANDICAPPED, color: '#190b99' },
+  { title: '위험물질 운송차량교육', enType: courseCategoryType.TYPE_DANGEROUS, color: '#b807a9' },
+  { title: '마감', enType: courseCategoryType.TYPE_NONE, color: '#e0e0e0' },
 ];
 
 export const courseBusinessTypeList = [
@@ -148,8 +93,8 @@ export function CNCalendar() {
 
   //Month changer
   const onChangeMonth = (type: MonthClickType, value: number) => {
-    if (type === MonthClickType.BTN_CLICK) return setDate((prev) => new Date(prev.setMonth(prev.getMonth() + value)));
-    if (type === MonthClickType.MONTH_CLICK) return setDate((prev) => new Date(prev.setMonth(value - 1)));
+    if (type === MonthClickType.BTN_CLICK) return setDate(prev => new Date(prev.setMonth(prev.getMonth() + value)));
+    if (type === MonthClickType.MONTH_CLICK) return setDate(prev => new Date(prev.setMonth(value - 1)));
   };
 
   //fullcalendar changer

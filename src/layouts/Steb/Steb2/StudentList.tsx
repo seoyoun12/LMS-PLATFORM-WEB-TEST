@@ -1,5 +1,5 @@
 import { courseClassCancel, RegisterType } from '@common/api/courseClass';
-import { courseClassOrganization } from '@common/recoil';
+import { courseClassEnrollList } from '@common/recoil';
 import styled from '@emotion/styled';
 import { Box, Button, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
 import React from 'react';
@@ -15,14 +15,14 @@ interface Props {
   setRegisterType: React.Dispatch<React.SetStateAction<RegisterType>>;
 }
 export function StudentList({ registerType, setRegisterType }: Props) {
-  const [organization, setOrganization] = useRecoilState(courseClassOrganization);
+  const [organization, setOrganization] = useRecoilState(courseClassEnrollList);
   const snackbar = useSnackbar();
 
   const onClickDelete = async (seq: number, test: any) => {
     console.log('아', seq, test);
     try {
       // await courseClassCancel(courseUserSeq); 삭제 통신
-      setOrganization((prev) => prev.filter((item) => item.seq !== seq));
+      setOrganization(prev => prev.filter(item => item.seq !== seq));
     } catch (e: any) {
       snackbar({ variant: 'error', message: e });
     }
@@ -58,7 +58,7 @@ export function StudentList({ registerType, setRegisterType }: Props) {
         <StudentItemListWrap>
           {registerType === RegisterType.TYPE_ORGANIZATION &&
             organization.length > 0 &&
-            organization.map((item) => (
+            organization.map(item => (
               <StudentListItem key={item.courseClassSeq}>
                 <StuTableContainer>
                   <TableBody sx={{ display: 'table', width: '100%' }}>
@@ -68,9 +68,7 @@ export function StudentList({ registerType, setRegisterType }: Props) {
                     </UserTableRow>
                     <UserTableRow>
                       <TableCell>민증</TableCell>
-                      <TableCell>
-                        {item.firstIdentityNumber} - {item.secondIdentityNumber}
-                      </TableCell>
+                      <TableCell>{item.firstIdentityNumber} - ●●●●●●●</TableCell>
                     </UserTableRow>
                     <UserTableRow>
                       <TableCell>차량번호</TableCell>
@@ -78,7 +76,7 @@ export function StudentList({ registerType, setRegisterType }: Props) {
                     </UserTableRow>
                     <UserTableRow>
                       <TableCell>등록지</TableCell>
-                      <TableCell>{locationList.filter((regi) => regi.en === item.carRegisteredRegion)[0].ko}</TableCell>
+                      <TableCell>{locationList.filter(regi => regi.en === item.carRegisteredRegion)[0].ko}</TableCell>
                     </UserTableRow>
                     <UserTableRow>
                       <TableCell>휴대전화링</TableCell>

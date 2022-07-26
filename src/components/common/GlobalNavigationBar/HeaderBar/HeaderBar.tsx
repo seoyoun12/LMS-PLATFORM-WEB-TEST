@@ -25,11 +25,7 @@ export function HeaderBar() {
           width={80}
           alt="Your Name"
         /> */}
-        <Link
-          href="/"
-          underline="none"
-          color={grey[800]}
-        >
+        <Link href="/" underline="none" color={grey[800]}>
           <TitleTypography>충남교통연수원</TitleTypography>
         </Link>
         {/* <NavContainer>
@@ -50,34 +46,29 @@ export function HeaderBar() {
           {!isLogin ? (
             <div>
               <Link href="/admin-center/apply-tutor" underline="none">
-                <Button
-                  className="align-left"
-                  color="neutral"
-                >튜터 지원</Button>
+                <Button className="align-left" color="neutral">
+                  튜터 지원
+                </Button>
               </Link>
               <Link href="/sign-in" underline="none">
-                <Button
-                  className="align-left"
-                  color="neutral"
-                >로그인</Button>
+                <Button className="align-left" color="neutral">
+                  로그인
+                </Button>
               </Link>
             </div>
           ) : (
-            <Stack
-              direction="row"
-              alignItems="center"
-            >
-              {
-                !!user?.roles?.length && user.roles.some(role => role === UserRole.ROLE_ADMIN || role === UserRole.ROLE_MANAGER)
-                  ? <Link href="/admin-center/dashboard" underline="none">
-                    <Button
-                      className="align-left"
-                      color="neutral"
-                      size='large'
-                    >관리 센터</Button>
-                  </Link>
-                  : null
-              }
+            <Stack direction="row" alignItems="center">
+              {!!user?.roles?.length &&
+              user.roles.some(
+                role =>
+                  role === UserRole.ROLE_ADMIN || role === UserRole.ROLE_TRANS_MANAGER || role === UserRole.ROLE_TRAFFIC_SAFETY_MANAGER
+              ) ? (
+                <Link href="/admin-center/dashboard" underline="none">
+                  <Button className="align-left" color="neutral" size="large">
+                    관리 센터
+                  </Button>
+                </Link>
+              ) : null}
               <AccountMenu />
             </Stack>
           )}
@@ -101,7 +92,7 @@ const TitleTypography = styled(Typography)`
   font-size: 1.3rem;
   white-space: nowrap;
   margin-left: 50px;
-`
+`;
 
 const ContentContainer = styled.div`
   display: flex;

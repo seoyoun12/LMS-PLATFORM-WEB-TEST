@@ -18,6 +18,7 @@ export function CompanyInfo({ register, watch }: Props) {
   const [businessSubType, setBusinessSubType] = useState<string | null>(null);
   const [businessName, setBusinessName] = useState<string | null>(null);
 
+  console.log('좀 ㅈ발', userBusinessTypeTwo, watch());
   return (
     <CompanyInfoWrap>
       <Box>
@@ -27,7 +28,7 @@ export function CompanyInfo({ register, watch }: Props) {
         </Typography>
       </Box>
       <Box>
-        <Typography mb={1}>업종</Typography>
+        <Typography mb={1}>운수구분</Typography>
         <FormControl fullWidth>
           <Select labelId="businessType" id="businessType" {...register('businessType')}>
             {userBusinessTypeOne.map(item => (

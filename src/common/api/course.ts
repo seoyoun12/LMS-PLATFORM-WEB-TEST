@@ -5,7 +5,7 @@ import { FetchPaginationResponse, PaginationResult } from 'types/fetch';
 import { S3Files } from 'types/file';
 import { ContentRes } from '@common/api/content';
 import { Lesson } from '@common/api/lesson';
-import { courseCategoryType, courseSubCategoryType } from './courseClass';
+import { businessType, courseCategoryType, courseSubCategoryType } from './courseClass';
 
 export enum ProductStatus {
   APPROVE = 1,
@@ -62,6 +62,7 @@ export interface CourseRes {
   courseCategoryType: courseCategoryType;
   courseName: string;
   courseSubCategoryType: courseSubCategoryType;
+  courseBusinessType: businessType;
   courseType: courseType;
   createdDtime: string;
   displayYn: YN;

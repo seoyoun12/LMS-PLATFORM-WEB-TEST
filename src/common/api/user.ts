@@ -1,64 +1,67 @@
-import { GET, POST, PUT } from "@common/httpClient";
-import useSWR, { SWRResponse } from "swr";
-import { CourseRes } from "@common/api/course";
-import { YN } from "@common/constant";
+import { GET, POST, PUT } from '@common/httpClient';
+import useSWR, { SWRResponse } from 'swr';
+import { CourseRes } from '@common/api/course';
+import { YN } from '@common/constant';
 
 export enum UserRole {
-  ROLE_USER = "ROLE_USER",
-  ROLE_ADMIN = "ROLE_ADMIN",
-  ROLE_MANAGER = "ROLE_MANAGER",
-  ROLE_TUTOR = "ROLE_TUTOR",
+  ROLE_TRANS_USER = 'ROLE_TRANS_USER',
+  ROLE_TRANS_MANAGER = 'ROLE_TRANS_MANAGER',
+  ROLE_TRAFFIC_SAFETY_USER = 'ROLE_TRAFFIC_SAFETY_USER',
+  ROLE_TRAFFIC_SAFETY_MANAGER = 'ROLE_TRAFFIC_SAFETY_MANAGER',
+  ROLE_ADMIN = 'ROLE_ADMIN',
+  // ROLE_MANAGER = 'ROLE_MANAGER',
+  // ROLE_TUTOR = 'ROLE_TUTOR',
 }
 
 export enum userRegistrationType {
-  CHEONAN = "CHEONAN",
-  PRINCESS = "PRINCESS",
-  BORYEONG = "BORYEONG",
-  ASAN = "ASAN",
-  SEOSAN = "SEOSAN",
-  NONSAN = "NONSAN",
-  GYERYONG = "GYERYONG",
-  DANGJIN = "DANGJIN",
-  GEUMSAN = "GEUMSAN",
-  GRANT = "GRANT",
-  SEOCHEON = "SEOCHEON",
-  CHEONGYANG = "CHEONGYANG",
-  HONGSEONG = "HONGSEONG",
-  BUDGET = "BUDGET",
-  TAEAN = "TAEAN",
-  CHUNGNAM = "CHUNGNAM",
-  SEJONG = "SEJONG",
-  SEOUL = "SEOUL",
-  BUSAN = "BUSAN",
-  DAEGU = "DAEGU",
-  INCHEON = "INCHEON",
-  GWANGJU = "GWANGJU",
-  DAEJEON = "DAEJEON",
-  ULSAN = "ULSAN",
-  GAME = "GAME",
-  GANGWON = "GANGWON",
-  CHUNGBUK = "CHUNGBUK",
-  JEONBUK = "JEONBUK",
-  JEONNAM = "JEONNAM",
-  GYEONGBUK = "GYEONGBUK",
-  GYEONGNAM = "GYEONGNAM",
-  JEJU = "JEJU",
+  CHEONAN = 'CHEONAN',
+  PRINCESS = 'PRINCESS',
+  BORYEONG = 'BORYEONG',
+  ASAN = 'ASAN',
+  SEOSAN = 'SEOSAN',
+  NONSAN = 'NONSAN',
+  GYERYONG = 'GYERYONG',
+  DANGJIN = 'DANGJIN',
+  GEUMSAN = 'GEUMSAN',
+  GRANT = 'GRANT',
+  SEOCHEON = 'SEOCHEON',
+  CHEONGYANG = 'CHEONGYANG',
+  HONGSEONG = 'HONGSEONG',
+  BUDGET = 'BUDGET',
+  TAEAN = 'TAEAN',
+  CHUNGNAM = 'CHUNGNAM',
+  SEJONG = 'SEJONG',
+  SEOUL = 'SEOUL',
+  BUSAN = 'BUSAN',
+  DAEGU = 'DAEGU',
+  INCHEON = 'INCHEON',
+  GWANGJU = 'GWANGJU',
+  DAEJEON = 'DAEJEON',
+  ULSAN = 'ULSAN',
+  GAME = 'GAME',
+  GANGWON = 'GANGWON',
+  CHUNGBUK = 'CHUNGBUK',
+  JEONBUK = 'JEONBUK',
+  JEONNAM = 'JEONNAM',
+  GYEONGBUK = 'GYEONGBUK',
+  GYEONGNAM = 'GYEONGNAM',
+  JEJU = 'JEJU',
 }
 
 export enum userSubjectEducationType {
-  CHILDREN = "CHILDREN",
-  TEENAGER = "TEENAGER",
-  SELF_DRIVER = "SELF_DRIVER",
-  OLD_MAN = "OLD_MAN",
+  CHILDREN = 'CHILDREN',
+  TEENAGER = 'TEENAGER',
+  SELF_DRIVER = 'SELF_DRIVER',
+  OLD_MAN = 'OLD_MAN',
 }
 
 export enum userSubjectEducationDetailType {
-  KINDER = "KINDER",
-  ELEMENTARY_SCHOOL = "ELEMENTARY_SCHOOL",
-  MIDDLE_SCHOOL = "MIDDLE_SCHOOL",
-  HIGH_SCHOOL = "HIGH_SCHOOL",
-  SELF_DRIVER = "SELF_DRIVER",
-  OLD_MAN = "OLD_MAN",
+  KINDER = 'KINDER',
+  ELEMENTARY_SCHOOL = 'ELEMENTARY_SCHOOL',
+  MIDDLE_SCHOOL = 'MIDDLE_SCHOOL',
+  HIGH_SCHOOL = 'HIGH_SCHOOL',
+  SELF_DRIVER = 'SELF_DRIVER',
+  OLD_MAN = 'OLD_MAN',
 }
 
 export interface MyUser extends User {
@@ -79,6 +82,7 @@ export interface User {
   gender: string;
   lastPwUpdDtime: string;
   loginFailedCount: number;
+  identityNumber: string;
   modifiedDtime: string;
   name: string;
   phone: string;

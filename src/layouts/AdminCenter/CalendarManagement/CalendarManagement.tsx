@@ -3,12 +3,14 @@ import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { Table } from '@components/ui';
-import { Container, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, Button, Container, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import dateFormat from 'dateformat';
 import { businessType } from '@common/api/courseClass';
-import { useCourseClassAdm } from '@common/api/adm/courseClass';
+import { courseClassRemove, useCourseClassAdm } from '@common/api/adm/courseClass';
+import { Link } from '@components/common';
+import { courseBusinessTypeList } from '@layouts/Calendar/Calendar';
 
 const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify' }[] = [
   { name: 'seq', align: 'left' },
@@ -26,66 +28,12 @@ const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' |
   { name: '신청기간', align: 'right' },
 ];
 
-const data = [
-  {
-    seq: 1,
-    className: 'PASSENGER',
-    title: `접수중`,
-    eduTypeAndTime: '신규교육/24시간',
-    description: '동영상(VOD)',
-    year: 9929,
-    jobType: '화물',
-    eduLegend: '보수교육',
-    currentJoin: 592,
-    limit: 992,
-    eduStart: '2022-07-20',
-    eduEnd: '2022-07-26',
-    start: '2022-07-12',
-    end: '2022-07-15',
-    color: '#2980b9',
-  },
-  {
-    seq: 2,
-    className: 'PASSENGER',
-    title: `접수중`,
-    eduTypeAndTime: '신규교육/24시간',
-    description: '동영상(VOD)',
-    year: 9929,
-    jobType: '화물',
-    eduLegend: '보수교육',
-    currentJoin: 592,
-    limit: 992,
-    eduStart: '2022-07-20',
-    eduEnd: '2022-07-26',
-    start: '2022-07-12',
-    end: '2022-07-15',
-    color: '#2980b9',
-  },
-  {
-    seq: 3,
-    className: 'PASSENGER',
-    title: `접수중`,
-    eduTypeAndTime: '신규교육/24시간',
-    description: '동영상(VOD)',
-    year: 9929,
-    jobType: '화물',
-    eduLegend: '보수교육',
-    currentJoin: 592,
-    limit: 992,
-    eduStart: '2022-07-20',
-    eduEnd: '2022-07-26',
-    start: '2022-07-12',
-    end: '2022-07-15',
-    color: '#2980b9',
-  },
-];
-
 export function CalendarManagement() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const router = useRouter();
   // const [ page, setPage ] = useState(0);
-  const { data, error } = useCourseClassAdm(businessType.TYPE_ALL, '2022-07');
+  const { data, error, mutate } = useCourseClassAdm(businessType.TYPE_ALL, '2022-07');
 
   useEffect(() => {
     console.log('useEffect Triggered');
@@ -102,7 +50,25 @@ export function CalendarManagement() {
     });
   };
 
-  const onRemoveCourse = async (courseId: number) => {};
+  const onRemoveCourse = async (calendarId: number) => {
+    try {
+      const dialogConfirmed = await dialog({
+        title: '일정 삭제하기',
+        description: '정말로 삭제하시겠습니까?',
+        confirmText: '삭제하기',
+        cancelText: '취소',
+      });
+      if (dialogConfirmed) {
+        await courseClassRemove(calendarId);
+        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
+        // await mutate([`/course-class/adm`, { params: { businessType: businessType.TYPE_ALL, date: '2022-07' } }]);
+        await mutate();
+      }
+    } catch (e: any) {
+      snackbar({ variant: 'error', message: e.data.message });
+      console.log(e);
+    }
+  };
 
   // if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
@@ -141,15 +107,6 @@ export function CalendarManagement() {
               <TableRow key={data.seq} hover>
                 <TableCell>{data.seq}</TableCell>
                 <TableCell align="right">
-                  {/* <Link href={`/course/${content.seq}`} underline="hover" color={grey[900]}> */}
-                  {/*                 
-                //마감 여부 확인
-                const isReceive =
-                  new Date(item.requestStartDate).getTime() - new Date().getTime() < 0 //값이 음수면 신청날짜 이므로 true
-                    ? new Date(item.requestEndDate).getTime() - new Date().getTime() > 0 //값이 양수면 날짜가끝나기 전이므로 true
-                      ? true
-                      : false
-                    : false; */}
                   {isReceive ? '접수중' : '마감'}
                   {/* </Link> */}
                 </TableCell>
@@ -158,8 +115,7 @@ export function CalendarManagement() {
                   {/* {dateFormat(data.eduTypeAndTime, 'isoDate')} */}
                 </TableCell>
                 <TableCell align="right">
-                  {/* {data.description} */}
-                  PESSENGER(임시)
+                  {courseBusinessTypeList.filter(business => business.enType === data.course.courseBusinessType)[0].type}
                   {/* <Chip
                   label={data.displayYn === YN.YES ? '보임' : '숨김'}
                   variant="outlined"
@@ -188,6 +144,16 @@ export function CalendarManagement() {
                 <TableCell align="right">
                   {dateFormat(data.requestStartDate, 'yyyy-mm-dd')} ~ {dateFormat(data.requestEndDate, 'yyyy-mm-dd')}
                 </TableCell>
+                <TableCell>
+                  <Link href={`/admin-center/calendar/modify/`}>
+                    <Button variant="text" color="neutral" size="small">
+                      상세
+                    </Button>
+                  </Link>
+                  <Button variant="text" color="warning" onClick={() => onRemoveCourse(data.seq)} size="small">
+                    삭제
+                  </Button>
+                </TableCell>
                 {/* <TableCell align="right">
                   <Link href={`/admin-center/course/modify/${data.seq}`}>
                   <Button variant="text" color="neutral" size="small">
@@ -207,7 +173,7 @@ export function CalendarManagement() {
   );
 }
 
-const CalendarManagementWrap = styled(Container)`
+const CalendarManagementWrap = styled(Box)`
   tr {
     white-space: nowrap;
   }

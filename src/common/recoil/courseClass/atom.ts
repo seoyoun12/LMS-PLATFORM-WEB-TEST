@@ -13,10 +13,10 @@ export const courseClassEnrollList = atom<UserTransSaveInputDataType[]>({
 });
 
 export const courseClassEnrollInfo = atom<{
-  courseCategoryType: courseCategoryType;
-  corseCategorySubType: FilterType;
+  courseCategoryType?: courseCategoryType;
+  courseBusinessType?: FilterType;
   seq: number;
-}>({
+} | null>({
   key: 'courseClassEnrollInfo',
-  default: undefined,
+  default: null,
 });

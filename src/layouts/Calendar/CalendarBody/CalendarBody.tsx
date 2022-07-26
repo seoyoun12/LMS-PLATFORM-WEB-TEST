@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { courseCategoryType, CourseClassRes, courseSubCategoryType } from '@common/api/courseClass';
 import { courseClassEnrollInfo } from '@common/recoil';
 import { useRecoilState } from 'recoil';
+import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -51,6 +52,7 @@ export const courseSubCategory = [
 
 export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo, calendarRef, filter, schedule }: Props) {
   const router = useRouter();
+  const isLogin = useIsLoginStatus();
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
   const scheduleList = schedule.map(item => {
     //마감 여부 확인
@@ -60,7 +62,7 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
     //       ? true
     //       : false
     //     : false;
-    console.log('아니 도대체 왜?', item.course.courseName, item.step, new Date(item.requestStartDate).getTime() - new Date().getTime());
+    console.log('아니 도대체 왜?', item.course.courseName, item, new Date(item.requestStartDate).getTime() - new Date().getTime());
     const prevSchedule = new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0 ? true : false;
     const isReceive =
       new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0
@@ -73,7 +75,9 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
       ...item,
       title: prevSchedule ? (isReceive ? '접수중' : '준비중') : '마감', //말
       isReceive,
+      prevSchedule,
       step: item.step, //기수
+      lessonTime: item.course.lessonTime,
       mediaType: '동영상(VOD)',
       courseCategoryType: courseCategory.filter(categoryItem => categoryItem.type === item.course.courseCategoryType)[0], //eduType
       courseSubCategoryType: courseSubCategory.filter(sub => sub.type === item.course.courseSubCategoryType)[0], //업종
@@ -108,10 +112,12 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
               end,
             },
           }: { event: { _def: { extendedProps: Partial<ClickedPlanInfo> }; start: Date | null; end: Date | null } } = e;
-          if (!e.event._def.extendedProps.isReceive) return window.alert('이 교육은 마감된 교육입니다!');
+          if (!e.event._def.extendedProps.prevSchedule) return window.alert('마감된 교육입니다!');
+          if (!e.event._def.extendedProps.isReceive) return window.alert('신청기간이 아닙니다!');
           setModalInfo({
             seq: extendedProps.seq as number,
             step: extendedProps.step as number,
+            lessonTime: extendedProps.lessonTime as number,
             courseCategoryType: extendedProps.courseCategoryType as { type: courseCategoryType; ko: string },
             courseSubCategoryType: extendedProps.courseSubCategoryType as { type: courseSubCategoryType; ko: string },
 
@@ -134,11 +140,17 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
             <Button
               variant="contained"
               onClick={() => {
-                setEnrollInfo(prev => {
-                  return { ...prev, seq: modalInfo?.seq ? modalInfo.seq : 0 };
+                setEnrollInfo({
+                  // courseCategoryType: modalInfo ? modalInfo.courseCategoryType.type : courseCategoryType.TYPE_NONE,
+                  // courseBusinessType: FilterType.TYPE_PASSENGER, //서버에서 받아야함
+                  seq: modalInfo?.seq ? modalInfo.seq : 0,
                 });
-                router.push({ pathname: '/stebMove/steb2', query: { seq: modalInfo?.seq } });
-                // router.push('/stebMove/steb2');
+                if (!isLogin) {
+                  window.alert('로그인이 필요한 서비스입니다.');
+                  return router.push('/sign-in');
+                }
+                // router.push({ pathname: '/stebMove/steb2', query: { seq: modalInfo?.seq } });
+                router.push('/stebMove/steb2');
               }}
             >
               교육신청
@@ -203,7 +215,7 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
   const {
     event: {
       _def: {
-        extendedProps: { step, courseCategoryType },
+        extendedProps: { lessonTime, courseCategoryType },
       },
       title,
     },
@@ -212,7 +224,7 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
     <>
       <div>[{title}]</div>
       <div>
-        {courseCategoryType?.ko ? courseCategoryType.ko : 'null'}교육 / {step ? (step === 0 ? '종일' : step) : 'null'}시간
+        {courseCategoryType?.ko ? courseCategoryType.ko : 'null'}교육 / {lessonTime ? (lessonTime === 0 ? '종일' : lessonTime) : 'null'}시간
       </div>
       <div>{info && info.event._def.extendedProps.mediaType}</div>
     </>

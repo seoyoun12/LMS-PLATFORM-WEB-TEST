@@ -89,7 +89,7 @@ export function getSingleCourseClass(classSeq: number) {
   return GET<{ data: CourseClassRes }>(`/course-class/${classSeq}`);
 }
 
-export function getCourseClassStep(courseCategoryType: courseCategoryType, courseBusinessType: FilterType) {
+export function getCourseClassStep(courseCategoryType: courseCategoryType, courseBusinessType: businessType) {
   return GET<{ data: CourseClassStepsRes[] }>('/course-class/step', {
     params: { courseCategoryType, courseBusinessType },
   });
@@ -117,12 +117,12 @@ export interface UserTransSaveInputDataType {
 }
 
 export function courseClassIndividualEnroll(
-  userTransSaveData: Omit<UserTransSaveInputDataType, 'firstIdentityNumber' | 'secondIdentityNumber'>
+  userTransSaveData: Omit<UserTransSaveInputDataType, 'firstIdentityNumber' | 'secondIdentityNumber' | 'seq'>
 ) {
   return POST(`/course-user/enroll/individual`, userTransSaveData);
 }
 export function courseClassOrganizationEnrll(
-  userTransSaveData: Omit<UserTransSaveInputDataType, 'firstIdentityNumber' | 'secondIdentityNumber'>
+  userTransSaveData: Omit<UserTransSaveInputDataType, 'firstIdentityNumber' | 'secondIdentityNumber' | 'seq'>
 ) {
   return POST(`/course-user/enroll/organization`, userTransSaveData);
 }

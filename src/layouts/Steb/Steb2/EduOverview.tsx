@@ -20,23 +20,23 @@ import { useRecoilState } from 'recoil';
 
 export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransSaveInputDataType> }) {
   const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(null); //교육과정
-  const [courseBusinessType, setCourseBusinessType] = useState<FilterType | null>(null); //업종구분
+  const [courseBusinessType, setCourseBusinessType] = useState<businessType | null>(null); //업종구분
   const [stepSeq, setStepSeq] = useState<number | null>(null); //업종구분
   const [values, setValues] = useState<{ step: number; studyStartDate: string; studyEndDate: string }>();
   const [stepsRes, setStepsRes] = useState<{ seq: number; step: number; studyStartDate: string; studyEndDate: string }[]>([]); //기수 교육시작 교육끝
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo); //전역에 교육정보 저장
   const router = useRouter();
-  const { data, error, mutate } = useSingleCourseClass(Number(router.query.seq));
+  const { data, error, mutate } = useSingleCourseClass(Number(enrollInfo && enrollInfo.seq));
 
   useEffect(() => {
     console.log(data);
     if (data) {
       console.log('안녕', data, stepsRes, enrollInfo, values);
       setCourseCategoryType(data.course.courseCategoryType);
-      setCourseBusinessType(FilterType.TYPE_PASSENGER); //임시타입
+      setCourseBusinessType(data.course.courseBusinessType); //임시타입
       setStepSeq(data.seq);
       setValues({ step: data.step, studyStartDate: data.studyStartDate, studyEndDate: data.studyEndDate });
-      console.log('나한테 왜그래', stepSeq, values, courseCategoryType, courseBusinessType);
+      console.log('하세요', stepSeq, values, courseCategoryType, courseBusinessType);
     }
   }, [data, stepSeq, stepsRes]);
 
@@ -90,7 +90,7 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
               </TableCell>
             </TableCustomRow>
             <TableCustomRow>
-              <TableLeftCell>업종</TableLeftCell>
+              <TableLeftCell>운수구분</TableLeftCell>
               <TableCell>
                 <FormControl fullWidth>
                   {/* <InputLabel id="courseBusinessType">선택</InputLabel> */}
@@ -110,7 +110,7 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
                     label="student"
                   >
                     {courseBusinessTypeList.map(item => {
-                      if (item.enType === FilterType.TYPE_ALL) return;
+                      if (item.enType === businessType.TYPE_ALL) return;
                       return (
                         <MenuItem key={item.enType} value={item.enType}>
                           {item.type}
@@ -133,10 +133,8 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
                     onChange={e => {
                       setStepSeq(Number(e.target.value));
                       setValue('courseClassSeq', Number(e.target.value));
-                      setEnrollInfo(prev => {
-                        return { ...prev, seq: Number(e.target.value) };
-                      });
-                      console.log('아이', enrollInfo);
+                      setEnrollInfo({ seq: Number(e.target.value) });
+                      console.log('아이', enrollInfo, e.target.value);
                       // setEnrollInfo(prev => {
                       // return {
                       // ...prev,

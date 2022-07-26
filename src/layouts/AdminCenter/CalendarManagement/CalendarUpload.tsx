@@ -109,6 +109,7 @@ export function CalendarUpload() {
         과정 선택
       </CourseConnectButton>
       <Box>
+        <Typography color={'red'}>과정에 콘텐츠를 연결해 주셔야 오류가 나지않습니다! </Typography>
         <Typography component="span">선택됨: </Typography>
         {watch().courseSeq && (
           <Typography component="span">

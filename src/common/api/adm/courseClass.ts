@@ -1,5 +1,5 @@
 import { YN } from '@common/constant';
-import { GET, POST } from '@common/httpClient';
+import { DELETE, GET, POST } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { businessType, CourseClassRes } from '../courseClass';
 
@@ -27,4 +27,8 @@ export interface CourseClassCreate {
 
 export function courseClassCreate(CourseClassCreate: CourseClassCreate) {
   return POST(`/course-class/adm`, CourseClassCreate);
+}
+
+export function courseClassRemove(courseClassSeq: number) {
+  return DELETE(`/course-class/adm/${courseClassSeq}`);
 }

@@ -11,6 +11,7 @@ import { businessType, courseCategoryType, CourseClassRes, courseSubCategoryType
 export interface ClickedPlanInfo {
   seq: number;
   step: number;
+  lessonTime: number;
   courseSubCategoryType: { type: courseSubCategoryType; ko: string };
   courseCategoryType: { type: courseCategoryType; ko: string };
 
@@ -65,9 +66,9 @@ export const eduLegendList = [
 ];
 
 export const courseBusinessTypeList = [
-  { type: '전체', enType: FilterType.TYPE_ALL },
-  { type: '여객', enType: FilterType.TYPE_PASSENGER },
-  { type: '화물', enType: FilterType.TYPE_CARGO },
+  { type: '전체', enType: businessType.TYPE_ALL },
+  { type: '여객', enType: businessType.TYPE_PASSENGER },
+  { type: '화물', enType: businessType.TYPE_CARGO },
 ];
 
 const modalInfoTItle = ['기수', '보수교육', '업종구분', '교육일', '신청/정원', '예약가능시간'];

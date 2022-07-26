@@ -6,12 +6,13 @@ import CheckIcon from '@mui/icons-material/Check';
 import { locationList } from '@layouts/MeEdit/MeEdit';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import { useRouter } from 'next/router';
-import { getSingleCourseClass, useSingleCourseClass } from '@common/api/courseClass';
+import { businessType, getSingleCourseClass, useSingleCourseClass } from '@common/api/courseClass';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useSnackbar } from '@hooks/useSnackbar';
 import dateFormat from 'dateformat';
 import { courseCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { Spinner } from '@components/ui';
+import { courseBusinessTypeList } from '@layouts/Calendar/Calendar';
 
 export function Steb3() {
   const router = useRouter();
@@ -21,7 +22,7 @@ export function Steb3() {
   const [enrollList, setEnrollList] = useRecoilState(courseClassEnrollList);
   const [info, setInfo] = useState<{
     courseCategoryType: string;
-    courseSubCategoryType: string;
+    courseBusinessType: businessType;
     step: number;
     studyStartDate: string;
     studyEndDate: string;
@@ -35,12 +36,12 @@ export function Steb3() {
       const { data } = await getSingleCourseClass(seq);
       console.log('sadasd', data);
       const {
-        course: { courseCategoryType, courseSubCategoryType },
+        course: { courseCategoryType, courseBusinessType },
         step,
         studyStartDate,
         studyEndDate,
       } = data;
-      setInfo({ courseCategoryType, courseSubCategoryType, step, studyStartDate, studyEndDate });
+      setInfo({ courseCategoryType, courseBusinessType, step, studyStartDate, studyEndDate });
       setLoading(false);
       console.log('두번째', loading);
     } catch (e: any) {
@@ -52,7 +53,7 @@ export function Steb3() {
 
   useLayoutEffect(() => {
     if (!enrollInfo?.seq) {
-      window.alert('잘못됀 접근입니다.');
+      window.alert('잘못된 접근입니다.');
       router.push('/category');
     }
     if (enrollInfo?.seq) {
@@ -60,13 +61,12 @@ export function Steb3() {
     }
 
     return () => {
-      setEnrollInfo(prev => {
-        return { ...prev, seq: undefined };
-      });
+      setEnrollList([]);
+      setEnrollInfo(null);
     };
   }, []);
 
-  if (loading) return <Spinner />;
+  if (loading || !info) return <Spinner />;
   return (
     <Steb3Wrap>
       <StebHeader value={3} />
@@ -96,16 +96,16 @@ export function Steb3() {
             <Table sx={{ borderTop: '4px solid #3498db' }}>
               <TableCustomRow>
                 <TableLeftCell>교육과정</TableLeftCell>
-                <TableCell>{courseCategory.filter(cate => cate.type === info?.courseCategoryType)[0]?.ko}</TableCell>
+                <TableCell>{courseCategory.filter(cate => cate.type === info.courseCategoryType)[0]?.ko}</TableCell>
               </TableCustomRow>
               <TableCustomRow>
-                <TableLeftCell>업종</TableLeftCell>
-                <TableCell>{info?.courseSubCategoryType}</TableCell>
+                <TableLeftCell>운수구분</TableLeftCell>
+                <TableCell>{courseBusinessTypeList.filter(business => business.enType === info.courseBusinessType)[0].type}</TableCell>
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>기수 / 교육일자</TableLeftCell>
                 <TableCell>
-                  {info?.step}기 / {dateFormat(info?.studyStartDate, 'yyyy-mm-dd')} ~ {dateFormat(info?.studyEndDate, 'yyyy-mm-dd')}
+                  {info?.step}기 / {dateFormat(info.studyStartDate, 'yyyy-mm-dd')} ~ {dateFormat(info?.studyEndDate, 'yyyy-mm-dd')}
                 </TableCell>
               </TableCustomRow>
             </Table>

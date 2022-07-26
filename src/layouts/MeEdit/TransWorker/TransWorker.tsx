@@ -1,9 +1,10 @@
-import { modifTransWorker, useMyUser } from "@common/api/user";
-import { YN } from "@common/constant";
-import styled from "@emotion/styled";
-import { useDialog } from "@hooks/useDialog";
-import { useInput } from "@hooks/useInput";
-import { useSnackbar } from "@hooks/useSnackbar";
+import { businessType } from '@common/api/courseClass';
+import { modifTransWorker, useMyUser } from '@common/api/user';
+import { YN } from '@common/constant';
+import styled from '@emotion/styled';
+import { useDialog } from '@hooks/useDialog';
+import { useInput } from '@hooks/useInput';
+import { useSnackbar } from '@hooks/useSnackbar';
 import {
   Autocomplete,
   Avatar,
@@ -18,63 +19,63 @@ import {
   Switch,
   TextField,
   Typography,
-  Checkbox
-} from "@mui/material";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
+  Checkbox,
+} from '@mui/material';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
 interface Props {
-  type: "transport" | "lowfloorbus" | "educator";
+  type: 'transport' | 'lowfloorbus' | 'educator';
   locationList: { ko: string; en: string }[];
 }
-const phoneNumbers = ["010", "02", "032", "031"];
+const phoneNumbers = ['010', '02', '032', '031'];
 
 export const userBusinessTypeOne = [
-  { type: "여객", enType: "PASSENGER" },
-  { type: "화물", enType: "FREIGHT" },
+  { type: '여객', enType: businessType.TYPE_PASSENGER },
+  { type: '화물', enType: businessType.TYPE_CARGO },
 ];
 export const userBusinessTypeTwo = [
-  { category: "PASSENGER", type: "버스", enType: "BUS", isMoreInfo: true },
+  { category: businessType.TYPE_PASSENGER, type: '버스', enType: 'BUS', isMoreInfo: true },
   {
-    category: "PASSENGER",
-    type: "전세버스",
-    enType: "CHARTER_BUS",
+    category: businessType.TYPE_PASSENGER,
+    type: '전세버스',
+    enType: 'CHARTER_BUS',
     isMoreInfo: true,
   },
   {
-    category: "PASSENGER",
-    type: "특수여객",
-    enType: "SPECIAL_PASSENGER",
+    category: businessType.TYPE_PASSENGER,
+    type: '특수여객',
+    enType: 'SPECIAL_PASSENGER',
     isMoreInfo: true,
   },
   {
-    category: "PASSENGER",
-    type: "법인택시",
-    enType: "CORPORATE_TAXI",
+    category: businessType.TYPE_PASSENGER,
+    type: '법인택시',
+    enType: 'CORPORATE_TAXI',
     isMoreInfo: true,
   },
   {
-    category: "FREIGHT",
-    type: "법인화물",
-    enType: "GENERAL_CARGO",
+    category: businessType.TYPE_CARGO,
+    type: '법인화물',
+    enType: 'GENERAL_CARGO',
     isMoreInfo: true,
   },
   {
-    category: "PASSENGER",
-    type: "개인택시",
-    enType: "PRIVATE_TAXI",
+    category: businessType.TYPE_PASSENGER,
+    type: '개인택시',
+    enType: 'PRIVATE_TAXI',
     isMoreInfo: false,
   },
   {
-    category: "FREIGHT",
-    type: "용달화물",
-    enType: "INDIVIDUAL_CARGO",
+    category: businessType.TYPE_CARGO,
+    type: '용달화물',
+    enType: 'INDIVIDUAL_CARGO',
     isMoreInfo: false,
   },
   {
-    category: "FREIGHT",
-    type: "개별화물",
-    enType: "CONSIGNMENT",
+    category: businessType.TYPE_CARGO,
+    type: '개별화물',
+    enType: 'CONSIGNMENT',
     isMoreInfo: false,
   },
 ];
@@ -100,10 +101,10 @@ export function TransWorker({ type, locationList }: Props) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const dialogConfirmed = await dialog({
-      title: "회원 정보 수정",
-      description: "회원 정보를 수정하시겠습니까?",
-      confirmText: "수정하기",
-      cancelText: "취소하기",
+      title: '회원 정보 수정',
+      description: '회원 정보를 수정하시겠습니까?',
+      confirmText: '수정하기',
+      cancelText: '취소하기',
     });
     await handleOnCloseConfirm(dialogConfirmed);
   };
@@ -111,7 +112,7 @@ export function TransWorker({ type, locationList }: Props) {
   const handleOnCloseConfirm = async (isConfirm: boolean) => {
     if (isConfirm) {
       const smsYn = smsChecked ? YN.YES : YN.NO;
-      if (!user) return snackbar({ variant: "error", message: "수정 실패하였습니다." });
+      if (!user) return snackbar({ variant: 'error', message: '수정 실패하였습니다.' });
       const data = {
         carNumber: vehicleNumber, //차번호
         company: company, //회사
@@ -125,7 +126,7 @@ export function TransWorker({ type, locationList }: Props) {
       };
 
       await modifTransWorker(data);
-      return router.push("/me");
+      return router.push('/me');
     }
   };
 
@@ -133,14 +134,14 @@ export function TransWorker({ type, locationList }: Props) {
     <TransAndLowFloorContainer
       sx={{
         marginBottom: 8,
-        padding: "72px 30px 48px",
-        minWidth: "375px",
+        padding: '72px 30px 48px',
+        minWidth: '375px',
       }}
       maxWidth="sm"
     >
-      <Box display="flex" flexDirection={"column"} gap="1rem" component={"form"} onSubmit={handleSubmit}>
-        <Box sx={{ margin: "auto" }}>
-          {" "}
+      <Box display="flex" flexDirection={'column'} gap="1rem" component={'form'} onSubmit={handleSubmit}>
+        <Box sx={{ margin: 'auto' }}>
+          {' '}
           {/*어쨰서 이렇게 해야 되는것..? */}
           <UserProfile />
         </Box>
@@ -221,7 +222,7 @@ export function TransWorker({ type, locationList }: Props) {
             ))}
           </Select>
         </FormControl>
-        <Box display={"flex"} alignItems="center" gap="1rem">
+        <Box display={'flex'} alignItems="center" gap="1rem">
           {/* <FormControl fullWidth>
             <Select onChange={e => setPhone(String(e.target.value))}>
               {phoneNumbers.map(phone => (
@@ -232,16 +233,26 @@ export function TransWorker({ type, locationList }: Props) {
             </Select>
           </FormControl>{" "}
           - */}
-          <TextField required fullWidth id="name" label="휴대전화" placeholder="'-'를 제외한 숫자만 입력해주세요." name="name" value={phone} onChange={onChagePhone} />
+          <TextField
+            required
+            fullWidth
+            id="name"
+            label="휴대전화"
+            placeholder="'-'를 제외한 숫자만 입력해주세요."
+            name="name"
+            value={phone}
+            onChange={onChagePhone}
+          />
         </Box>
-        <Box display={"flex"} alignItems="center">
+        <Box display={'flex'} alignItems="center">
           <Checkbox
             name="smsYn"
             checked={smsChecked}
             onChange={(e, checked) => {
               setSmsChecked(checked);
-            }} />
-            <Typography variant="body2">SMS 수신 여부</Typography>
+            }}
+          />
+          <Typography variant="body2">SMS 수신 여부</Typography>
         </Box>
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
           수정하기
@@ -257,7 +268,7 @@ const TransAndLowFloorContainer = styled(Container)`
   }
 `;
 const CssTextField = styled(InputBase)({
-  padding: "15.5px 14px",
+  padding: '15.5px 14px',
 });
 
 const BoxForm = styled(Box)`

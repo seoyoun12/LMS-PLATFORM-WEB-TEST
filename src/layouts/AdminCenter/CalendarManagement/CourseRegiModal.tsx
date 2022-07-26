@@ -32,7 +32,7 @@ export function CourseRegiModal({ open, handleClose, handleGetCourseSeq }: Props
   const [page, setPage] = useState(0);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const { data, error } = useCourseList({ page: 0, courseTitle: keyword });
-  console.log('zz', data);
+  console.log('zz', data, error);
 
   const handleSearch = async (event: FormEvent, isReload = false) => {
     event.preventDefault();

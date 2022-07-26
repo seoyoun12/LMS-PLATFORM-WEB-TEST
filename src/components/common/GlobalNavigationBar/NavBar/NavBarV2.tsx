@@ -32,13 +32,13 @@ export function NavBarV2() {
             onMouseOut={handleOut}
           ></HeaderBackground>
           <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
-            {HeaderList.map(item => (
-              <HeaderItem onMouseOver={handleHover} onMouseOut={handleOut}>
+            {HeaderList.map((item) => (
+              <HeaderItem key={item.category} onMouseOver={handleHover} onMouseOut={handleOut}>
                 <Box className="header-title">{item.category}</Box>
                 <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
                   <Box className="link-wrap">
-                    {item.items.map(menuItem => (
-                      <MenuItem className="link-item">
+                    {item.items.map((menuItem) => (
+                      <MenuItem key={menuItem.title} className="link-item">
                         <Link href={menuItem.href}>{menuItem.title}</Link>
                       </MenuItem>
                     ))}
@@ -50,6 +50,25 @@ export function NavBarV2() {
         </NavContainer>
         {/* 여기에 리모컨 */}
       </ContentContainer>
+      <RemoteWrap>
+        <Box className="remote-box" color="primary.main">
+          <MenuItem>내 정보</MenuItem>
+          <MenuItem>일정보기</MenuItem>
+        </Box>
+        <Box className="remote-circle-box" color="primary.main">
+          <MenuItem
+            className="remote-circle"
+            onClick={() =>
+              window.scrollTo({
+                top: 0,
+                // behavior: 'smooth'
+              })
+            }
+          >
+            TOP
+          </MenuItem>
+        </Box>
+      </RemoteWrap>
     </nav>
   );
 }
@@ -115,6 +134,33 @@ const HeaderBackground = styled(Box)``;
 const HeaderItem = styled(Box)`
   width: 100px;
   flex-grow: 1;
+`;
+const RemoteWrap = styled(Box)`
+  position: absolute;
+  right: 120px;
+  width: 120px;
+  top: 470px;
+  /* box-shadow: 0 0 0.5rem 2px #999797; */
+
+  .remote-box {
+    border: 2px solid #999797;
+    border-radius: 0.25rem;
+  }
+  .remote-circle-box {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+  .remote-circle {
+    display: flex;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    padding: 0;
+    border: 2px solid #999797;
+    border-radius: 20px;
+  }
 `;
 
 const HeaderList = [

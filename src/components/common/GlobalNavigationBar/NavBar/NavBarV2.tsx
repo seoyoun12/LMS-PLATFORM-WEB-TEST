@@ -5,9 +5,18 @@ import { DropdownItemV2 } from '@components/common/GlobalNavigationBar/NavBar/Dr
 import { grey } from '@mui/material/colors';
 import { Box, Button, MenuItem, Typography } from '@mui/material';
 import { Link } from '@components/common';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+
+const showRemoteList = [
+  // { href: '/course/[courseId]' },
+  // { href: '/admin-center' },
+  { href: '/category' },
+];
 
 export function NavBarV2() {
+  const router = useRouter();
+  const [isShowRemote, setIsShowRemote] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const menuRef = useRef(anchorEl); // current에 안담겨
   // // let open = true;
@@ -15,12 +24,16 @@ export function NavBarV2() {
 
   const handleHover = (e: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(e.currentTarget);
-    console.log(e.currentTarget, anchorEl, '있냐?');
   };
   const handleOut = (e: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(null);
-    console.log(e.currentTarget, anchorEl, '있냐1?');
   };
+
+  useEffect(() => {
+    const show = showRemoteList.some((e) => router.route.includes(e.href));
+    console.log(show);
+    setIsShowRemote(show);
+  }, [router]);
 
   return (
     <nav className={styles.globalContainer}>
@@ -50,25 +63,27 @@ export function NavBarV2() {
         </NavContainer>
         {/* 여기에 리모컨 */}
       </ContentContainer>
-      <RemoteWrap>
-        <Box className="remote-box" color="primary.main">
-          <MenuItem>내 정보</MenuItem>
-          <MenuItem>일정보기</MenuItem>
-        </Box>
-        <Box className="remote-circle-box" color="primary.main">
-          <MenuItem
-            className="remote-circle"
-            onClick={() =>
-              window.scrollTo({
-                top: 0,
-                // behavior: 'smooth'
-              })
-            }
-          >
-            TOP
-          </MenuItem>
-        </Box>
-      </RemoteWrap>
+      {isShowRemote && (
+        <RemoteWrap>
+          <Box className="remote-box" color="primary.main">
+            <MenuItem>내 정보</MenuItem>
+            <MenuItem>일정보기</MenuItem>
+          </Box>
+          <Box className="remote-circle-box" color="primary.main">
+            <MenuItem
+              className="remote-circle"
+              onClick={() =>
+                window.scrollTo({
+                  top: 0,
+                  // behavior: 'smooth'
+                })
+              }
+            >
+              TOP
+            </MenuItem>
+          </Box>
+        </RemoteWrap>
+      )}
     </nav>
   );
 }

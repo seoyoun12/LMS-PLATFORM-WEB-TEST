@@ -60,7 +60,7 @@ export function Steb2() {
 
     const postData = {
       ...rest,
-      businessType: watch().businessType.split('_')[1],
+      businessType: watch().businessType.split('_')[1], //TYPE_PASSENGER 이런식인줄 알았으나 PASSENGER식으로 요청해야함
       identityNumber: firstIdentityNumber + secondIdentityNumber,
     }; //민증번호때문에 구분
     console.log('포스폿', postData, seq);

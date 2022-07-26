@@ -9,7 +9,7 @@ import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { useMyUser, UserRole } from '@common/api/user';
 import { AccountMenu } from '@components/ui';
 import Image from 'next/image';
-import { NavBar } from '../NavBar';
+import { NavBar, NavBarV2 } from '../NavBar';
 
 export function HeaderBar() {
   const router = useRouter();
@@ -40,7 +40,8 @@ export function HeaderBar() {
         {/* <SearchbarContainer>
           <Searchbar />
         </SearchbarContainer> */}
-        <NavBar></NavBar>
+        {/* <NavBar></NavBar> */}
+        <NavBarV2 />
 
         <RightSection>
           {!isLogin ? (

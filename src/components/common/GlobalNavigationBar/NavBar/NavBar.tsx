@@ -10,28 +10,22 @@ export function NavBar() {
     <nav className={styles.globalContainer}>
       <ContentContainer>
         <NavContainer>
-          <DropdownItem className="dropdown"/>
-          <Link
-            href="/me"
-            underline="none"
-            color={grey[800]}
-          >
-            <Typography variant="subtitle2" className="bold-600">마이페이지</Typography>
+          <DropdownItem className="dropdown" />
+          <Link href="/me" underline="none" color={grey[800]}>
+            <Typography variant="subtitle2" className="bold-600">
+              마이페이지
+            </Typography>
           </Link>
-          <Link
-            href="/"
-            underline="none"
-            color={grey[800]}
-          >
-            <Typography variant="subtitle2" className="bold-600">학습지원</Typography>
+          <Link href="/" underline="none" color={grey[800]}>
+            <Typography variant="subtitle2" className="bold-600">
+              학습지원
+            </Typography>
           </Link>
 
-          <Link
-            href="/makeAll"
-            underline="none"
-            color={grey[800]}
-          >
-            <Typography variant="subtitle2" className="bold-600">TEST</Typography>
+          <Link href="/makeAll" underline="none" color={grey[800]}>
+            <Typography variant="subtitle2" className="bold-600">
+              TEST
+            </Typography>
           </Link>
 
           {/* <Link
@@ -86,11 +80,10 @@ const ContentContainer = styled.div`
   }
 `;
 
-
 const NavContainer = styled.div`
   display: flex;
   align-items: center;
-  
+
   .dropdown {
     margin-right: 30px;
   }

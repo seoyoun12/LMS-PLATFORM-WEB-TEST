@@ -19,15 +19,12 @@ export function HeaderBar() {
   return (
     <Header className={styles.globalContainer}>
       <ContentContainer>
-        {/* <Image
-          src="/assets/images/logo.png"
-          height={24}
-          width={80}
-          alt="Your Name"
-        /> */}
-        <Link href="/" underline="none" color={grey[800]}>
-          <TitleTypography>충남교통연수원</TitleTypography>
+        <Link href="/" underline="none">
+          <Image src="/assets/images/cttsLogo.png" height={24} width={160} alt="Your Name" />
         </Link>
+        {/* <Link href="/" underline="none" color={grey[800]}>
+          <TitleTypography>충남교통연수원</TitleTypography>
+        </Link> */}
         {/* <NavContainer>
           <Link
             href="/"

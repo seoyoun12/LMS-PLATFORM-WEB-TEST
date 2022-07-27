@@ -109,7 +109,7 @@ export function Steb2() {
           });
       }
     } catch (e: any) {
-      snackbar({ variant: 'error', message: e.message });
+      snackbar({ variant: 'error', message: e.data.message });
     }
   };
 

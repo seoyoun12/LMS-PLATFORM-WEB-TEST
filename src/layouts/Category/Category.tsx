@@ -30,6 +30,12 @@ const bannerData = [
     title: 'test 3',
     description: 'description 3',
   },
+  {
+    id: 3,
+    img: '/assets/images/banner.jpg',
+    title: 'test 3',
+    description: 'description 3',
+  },
 ];
 
 // const SecondPage: NextPage = (res) => {
@@ -41,23 +47,16 @@ export function Category() {
   // if (error) return <div>error</div>;
   // if (!data) return <Spinner />;
 
-  
-
-
   return (
     <div>
-
       <CategoryCarousel datas={bannerData} />
 
       <CategoryCard></CategoryCard>
 
       <CategoryBoard></CategoryBoard>
-
     </div>
   );
-};
-
-
+}
 
 // const ContentContainer = styled.div`
 //   padding: 76px 20px 0 20px !important;

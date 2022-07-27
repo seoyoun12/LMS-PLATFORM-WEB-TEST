@@ -17,8 +17,13 @@ export function GlobalNavigationBar() {
 
   useEffect(
     () => {
-      const hide = hideNavList.some(e => router.route.includes(e.href));
-      setIsHideNavbar(hide);
+      if(router.route === '/'){
+        setIsHideNavbar(true)
+      }
+      else{
+        const hide = hideNavList.some(e => router.route.includes(e.href));
+        setIsHideNavbar(hide);
+      }
     },
     [ router ]
   );

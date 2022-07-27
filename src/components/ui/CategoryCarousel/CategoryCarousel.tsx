@@ -8,6 +8,8 @@ import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
 import { Typography } from '@mui/material';
 import Image from 'next/image';
+import { useBannerList } from '@common/api/banner';
+import { Spinner } from '../Spinner';
 
 interface Datas {
   id: number;
@@ -16,9 +18,11 @@ interface Datas {
   description: string;
 }
 
-export const CategoryCarousel = ({ datas }: { datas: Array<any> }) => {
-  const [ firstSwiper, setFirstSwiper ] = useState();
-  const [ secondSwiper, setSecondSwiper ] = useState();
+export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) => {
+  const [firstSwiper, setFirstSwiper] = useState();
+  const [secondSwiper, setSecondSwiper] = useState();
+  const { data, error } = useBannerList();
+  console.log(data);
 
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);
@@ -30,10 +34,13 @@ export const CategoryCarousel = ({ datas }: { datas: Array<any> }) => {
 
   const progress = () => {
     const progressbar = document.querySelector('.timeline-current');
-    progressbar?.animate({ 'width': '100%' }, 4000);
+    progressbar?.animate({ width: '100%' }, 4000);
+    // const test = progressbar?.animate({ width: '100%' }, 4000);
+    // test?.cancel();
+    // test?.play();
   };
 
-  const [ isMobile, setIsMobile ] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     window.addEventListener('resize', () => {
@@ -42,47 +49,48 @@ export const CategoryCarousel = ({ datas }: { datas: Array<any> }) => {
     });
   }, []);
 
-  if (!datas?.length) return <div>loading</div>;
+  if (!data) return <Spinner />;
+  if (!deprecated?.length) return <div>loading</div>;
   return (
     <Slider>
       <SliderLayout style={isMobile ? { flexDirection: 'column-reverse' } : { flexDirection: 'row' }}>
         <Swiper
-          modules={[ Navigation, Pagination, Controller, Autoplay ]}
+          modules={[Navigation, Pagination, Controller, Autoplay]}
           spaceBetween={300}
           slidesPerView={1}
           loop={true}
-          autoplay={{
-            delay: 4000,
-            disableOnInteraction: false,
-          }}
+          // autoplay={{
+          //   delay: 4000,
+          //   disableOnInteraction: false,
+          // }}
           onSwiper={(swiper: any) => setFirstSwiper(swiper)}
-          // controller={{ control: secondSwiper }}
+          controller={{ control: secondSwiper }}
           style={{ maxWidth: '676px', width: '100%', minHeight: '370px', marginLeft: '0', top: '32px' }}
         >
-          {datas.map((data: Datas) => {
+          {deprecated.map((data: Datas) => {
             return (
               <SwiperSlide key={data.id}>
                 {isMobile ? (
-                  <Image
-                    width="100%"
-                    height="192px"
-                    src={data.img} alt=""
-                    style={{ paddingRight: '16px', objectFit: 'cover' }} />
+                  <Image width="100%" height="192px" src={data.img} alt="" style={{ paddingRight: '16px', objectFit: 'cover' }} />
                 ) : (
-                  <Image
-                    src={data.img} alt=""
-                    layout="fill"
-                    objectFit="cover"
-                    style={{ paddingRight: '16px' }} />
+                  <Image src={data.img} alt="" layout="fill" objectFit="cover" style={{ paddingRight: '16px' }} />
                 )}
-
               </SwiperSlide>
             );
           })}
+          {data.map(item => (
+            <SwiperSlide>
+              {isMobile ? (
+                <Image width="100%" height="192px" src={item.s3Files[0].path} alt="" style={{ paddingRight: '16px', objectFit: 'cover' }} />
+              ) : (
+                <Image src={item.s3Files[0].path} alt="" layout="fill" objectFit="cover" style={{ paddingRight: '16px' }} />
+              )}
+            </SwiperSlide>
+          ))}
         </Swiper>
 
         <Swiper
-          modules={[ Navigation, Pagination, Controller, Autoplay ]}
+          modules={[Navigation, Pagination, Controller, Autoplay]}
           spaceBetween={300}
           slidesPerView={1}
           loop={true}
@@ -94,11 +102,11 @@ export const CategoryCarousel = ({ datas }: { datas: Array<any> }) => {
             type: 'custom',
             el: paginationRef.current,
             renderCustom: function (swiper, current, total) {
-              return (`
+              return `
                 <span>${chkPages(current)}</span>
                 <span style="font-size: 12px; margin: 0 4px">|</span>
                 <span>${chkPages(total)}</span>
-              `);
+              `;
             },
           }}
           resizeObserver={false}
@@ -106,38 +114,56 @@ export const CategoryCarousel = ({ datas }: { datas: Array<any> }) => {
             delay: 4000,
             disableOnInteraction: false,
           }}
+          // onSlideChange={e => {
+          //   console.log(e);
+          // }}
           onRealIndexChange={progress}
           onInit={progress}
-          onSwiper={(swiper: any) => setSecondSwiper(swiper)}
-          // controller={{ control: firstSwiper }}
-          style={isMobile ? {
-            margin: '20px 0',
-          } : {
-            maxWidth: '450px',
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            padding: '32px 0',
+          onSwiper={(swiper: any) => {
+            setSecondSwiper(swiper);
           }}
+          controller={{ control: firstSwiper }}
+          style={
+            isMobile
+              ? {
+                  margin: '20px 0',
+                }
+              : {
+                  maxWidth: '450px',
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  padding: '32px 0',
+                }
+          }
         >
-          {datas.map((data: Datas) => {
+          {deprecated.map((data: Datas) => {
             return (
               <SwiperSlide key={data.id}>
                 <SlideInfo>
-                  <Typography variant="h1" className="bold-700">{data.title}</Typography>
+                  <Typography variant="h1" className="bold-700">
+                    {data.title}
+                  </Typography>
                   <Typography variant="inherit">{data.description}</Typography>
                 </SlideInfo>
               </SwiperSlide>
             );
           })}
+          {data.map(item => (
+            <SwiperSlide>
+              <SlideInfo>
+                <Typography variant="h1" className="bold-700">
+                  {item.title}
+                </Typography>
+                <Typography variant="inherit">{item.title}</Typography>
+              </SlideInfo>
+            </SwiperSlide>
+          ))}
 
-          {!isMobile ?
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <div
-                ref={paginationRef}
-                style={{ display: 'inline-flex', alignItems: 'center', color: '#fff', width: 'initial', }}
-              />
+          {!isMobile ? (
+            <div className="ㅅㅂ?" style={{ display: 'flex', alignItems: 'center' }}>
+              <div ref={paginationRef} style={{ display: 'inline-flex', alignItems: 'center', color: '#fff', width: 'initial' }} />
               <Timeline>
                 <div className="timeline-bg">
                   <div className="timeline-current"></div>
@@ -152,8 +178,9 @@ export const CategoryCarousel = ({ datas }: { datas: Array<any> }) => {
                 </SliderButton>
               </>
             </div>
-            : ``}
-
+          ) : (
+            ``
+          )}
         </Swiper>
       </SliderLayout>
     </Slider>
@@ -161,9 +188,7 @@ export const CategoryCarousel = ({ datas }: { datas: Array<any> }) => {
 };
 
 const Slider = styled.div`
-  background: linear-gradient(270.44deg,
-  rgb(255, 122, 0) 0.21%,
-  rgba(255, 122, 0, 0.4) 99.18%) 0% 0% / 100%;
+  background: linear-gradient(270.44deg, rgb(255, 122, 0) 0.21%, rgba(255, 122, 0, 0.4) 99.18%) 0% 0% / 100%;
   margin-bottom: 32px;
 `;
 

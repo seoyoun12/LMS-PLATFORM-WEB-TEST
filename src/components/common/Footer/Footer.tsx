@@ -22,8 +22,13 @@ export const Footer: FC<Props> = () => {
   const [isHideFooter, setIsHideFooter] = useState(false);
 
   useEffect(() => {
+    if(router.route === '/'){
+      setIsHideFooter(true)
+    }
+    else{
     const hide = hideNavList.some(e => router.route.includes(e.href));
     setIsHideFooter(hide);
+    }
   }, [router]);
 
   if (isHideFooter) return null;

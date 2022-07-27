@@ -66,6 +66,7 @@ export function MeEdit() {
       let confirm = window.confirm('다른 타입의 정보를 수정하시려면 재로그인이 필요합니다. 로그아웃 하시겠습니까?');
       if (confirm) {
         await logout();
+        router.push('/category');
       } else {
         return;
       }

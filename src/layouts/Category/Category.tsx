@@ -24,18 +24,6 @@ const bannerData = [
     title: 'test 2',
     description: 'description 2',
   },
-  {
-    id: 3,
-    img: '/assets/images/banner.jpg',
-    title: 'test 3',
-    description: 'description 3',
-  },
-  {
-    id: 3,
-    img: '/assets/images/banner.jpg',
-    title: 'test 3',
-    description: 'description 3',
-  },
 ];
 
 // const SecondPage: NextPage = (res) => {

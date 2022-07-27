@@ -1,23 +1,24 @@
-import * as React from "react";
-import { Avatar, Box, Container, Grid, Typography } from "@mui/material";
-import { Link } from "@components/common";
-import s from "./Me.module.scss";
-import { grey } from "@mui/material/colors";
-import { ContentCard, Spinner, Tabs } from "@components/ui";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { css } from "@emotion/css";
-import styled from "@emotion/styled";
-import { useMyUser } from "@common/api/user";
-import { useEffect } from "react";
-import dateFormat from "dateformat";
+import * as React from 'react';
+import { Avatar, Box, Container, Grid, tabsClasses, Typography } from '@mui/material';
+import { Link } from '@components/common';
+import s from './Me.module.scss';
+import { grey } from '@mui/material/colors';
+import { ContentCard, Spinner, Tabs } from '@components/ui';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { css } from '@emotion/css';
+import styled from '@emotion/styled';
+import { useMyUser } from '@common/api/user';
+import { useEffect } from 'react';
+import dateFormat from 'dateformat';
 
 const myInfoList = [
   // { label: "내 강의", value: "myCourse" },
   // { label: "정보 수정", value: "editInfo" },
   // { label: "증명서 발급", value: "certificate" },
-  { label: "학습중인 과정", value: "studyCourse" },
-  { label: "학습종료 과정", value: "endStudyCourse" },
-  { label: "증명서 발급", value: "certificate" },
+  { label: '학습중인 과정', value: 'studyCourse' },
+  { label: '학습종료 과정', value: 'endStudyCourse' },
+  { label: '증명서 발급', value: 'certificate' },
+  { label: '온라인 교육 신청내욕', value: 'onlineEdu' },
 ];
 
 export function Me() {
@@ -74,45 +75,51 @@ export function Me() {
           </SideBarContent>
         </SideBar>
         <LessonListContainer>
-          <Typography variant="h6" sx={{ marginBottom: "16px" }}>
-            {value}
+          <Typography variant="h6" sx={{ marginBottom: '16px' }}>
+            {myInfoList.filter(filter => filter.value === value)[0].label}
           </Typography>
           <Grid container rowSpacing={4} columnSpacing={2} columns={{ xs: 1, sm: 1, md: 2, lg: 2 }}>
-            {user.learningCourses.map((res) => {
-              const period = new Date(res.createdDtime).setDate(res.lessonTerm);
-              const Days = Math.floor((period - new Date(res.createdDtime).getTime()) / (1000 * 60 * 60 * 24));
-              return (
-                <Grid item xs={1} sm={1} md={1} lg={1} key={res.seq} sx={{ display: value === myInfoList[0].value ? "display" : "none" }}>
-                  <Link href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}>
-                    <ContentCard
-                      title={res.courseName}
-                      content1={res.courseSubName}
-                      content2={`${Days < 10 ? `0${Days}` : Days}일 남았습니다.`}
-                    />
-                  </Link>
-                </Grid>
-              );
-            })}
-            {user.learningCourses.map((res) => (
-              <Grid
-                item
-                xs={1}
-                sm={1}
-                md={1}
-                lg={1}
-                key={res.seq}
-                sx={{
-                  display:
-                    value === myInfoList[2].value && res.lessonTime <= res.lessons.reduce((prev, curr) => prev + curr.completeTime, 0)
-                      ? "display"
-                      : "none",
-                }}
-              >
-                <Link href={`/course/${res.seq}/lesson/${res.seq}`}>
-                  <ContentCard title={res.courseName} />
-                </Link>
-              </Grid>
-            ))}
+            {user.learningCourses ? (
+              user.learningCourses.map(res => {
+                const period = new Date(res.createdDtime).setDate(res.lessonTime);
+                const Days = Math.floor((period - new Date(res.createdDtime).getTime()) / (1000 * 60 * 60 * 24));
+                return (
+                  <Grid item xs={1} sm={1} md={1} lg={1} key={res.seq} sx={{ display: value === myInfoList[0].value ? 'display' : 'none' }}>
+                    <Link href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}>
+                      <ContentCard
+                        title={res.courseName}
+                        content1={'버그수정정'}
+                        content2={`${Days < 10 ? `0${Days}` : Days}일 남았습니다.`}
+                      />
+                    </Link>
+                  </Grid>
+                );
+              })
+            ) : (
+              <div>dd</div>
+            )}
+            {user.learningCourses
+              ? user.learningCourses.map(res => (
+                  <Grid
+                    item
+                    xs={1}
+                    sm={1}
+                    md={1}
+                    lg={1}
+                    key={res.seq}
+                    sx={{
+                      display:
+                        value === myInfoList[2].value && res.lessonTime <= res.lessons.reduce((prev, curr) => prev + curr.completeTime, 0)
+                          ? 'display'
+                          : 'none',
+                    }}
+                  >
+                    <Link href={`/course/${res.seq}/lesson/${res.seq}`}>
+                      <ContentCard title={res.courseName} />
+                    </Link>
+                  </Grid>
+                ))
+              : '없어'}
           </Grid>
         </LessonListContainer>
       </ContentBody>

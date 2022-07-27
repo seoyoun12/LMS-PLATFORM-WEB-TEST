@@ -1,0 +1,1 @@
+export { pageType } from './atom';

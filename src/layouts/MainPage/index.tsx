@@ -13,10 +13,14 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
 import { MainDisplayType, useMainDisplay } from '@common/api/mainDisplay';
+import { useRecoilState } from 'recoil';
+import { pageType } from '@common/recoil';
+import { pageRegType } from '@common/recoil/pageType/atom';
 
 const LinkList = [
   {
     mainDisplayType: MainDisplayType.EDUCATION_TRANSPORT_WORKER,
+    pageType: pageRegType.TYPE_TRANS_EDU,
     displayWord: '운수종사자',
     color: '#0A9A4E',
     href: '/category',
@@ -24,6 +28,7 @@ const LinkList = [
   },
   {
     mainDisplayType: MainDisplayType.EDUCATION_GROUND_BUS_DRIVER,
+    pageType: pageRegType.TYPE_TRANS_EDU,
     displayWord: '저상버스',
     color: '#256AEF',
     href: '/category',
@@ -31,6 +36,7 @@ const LinkList = [
   },
   {
     mainDisplayType: MainDisplayType.EDUCATION_PROVINCIAL_TRAFFIC_SAFETY,
+    pageType: pageRegType.TYPE_TRAFFIC_SAFETY_EDU,
     displayWord: '도민교통',
     color: '#FEC901',
     href: '/category',
@@ -40,6 +46,7 @@ const LinkList = [
 
 const MainPage: NextPage = () => {
   const [screenHeight, setScreenHeight] = useState<number>();
+  const [userPageType, setUserPageType] = useRecoilState(pageType);
   const { data, error } = useMainDisplay();
   console.log(data, error);
 
@@ -86,12 +93,12 @@ const MainPage: NextPage = () => {
             >
               {data.map(item => {
                 if (item.status === 1) {
-                  const { href, color, displayWord, imgPath } = LinkList.filter(
+                  const { href, color, displayWord, imgPath, pageType } = LinkList.filter(
                     filter => filter.mainDisplayType === item.mainDisplayType
                   )[0];
                   return (
                     <MainCategoryCard sx={{ borderTop: `4px solid ${color}` }}>
-                      <Link href={href}>
+                      <Link href={href} onClick={() => setUserPageType(pageType)}>
                         <Box width="270px" borderRadius="8px 8px 0 0" overflow="hidden">
                           <Image src={imgPath} width="270" height="184" objectFit="fill" />
                         </Box>

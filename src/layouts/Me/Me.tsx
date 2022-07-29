@@ -10,6 +10,7 @@ import styled from '@emotion/styled';
 import { useMyUser } from '@common/api/user';
 import { useEffect } from 'react';
 import dateFormat from 'dateformat';
+import { useRouter } from 'next/router';
 
 const myInfoList = [
   // { label: "내 강의", value: "myCourse" },
@@ -22,6 +23,7 @@ const myInfoList = [
 ];
 
 export function Me() {
+  const router = useRouter();
   const { user, error } = useMyUser();
   console.log(user);
   const [value, setValue] = React.useState(myInfoList[0].value);
@@ -85,13 +87,21 @@ export function Me() {
                 const Days = Math.floor((period - new Date(res.createdDtime).getTime()) / (1000 * 60 * 60 * 24));
                 return (
                   <Grid item xs={1} sm={1} md={1} lg={1} key={res.seq} sx={{ display: value === myInfoList[0].value ? 'display' : 'none' }}>
-                    <Link href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}>
+                    <Box
+                      // href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}
+                      onClick={() => {
+                        if (!res.lessons[0]?.seq) {
+                          return window.alert('수업이 존재하지 않습니다. 관리자에게 문의해주세요.');
+                        }
+                        router.push(`/course/${res.seq}/lesson/${res.lessons[0].seq}`);
+                      }}
+                    >
                       <ContentCard
                         title={res.courseName}
                         content1={'버그수정정'}
                         content2={`${Days < 10 ? `0${Days}` : Days}일 남았습니다.`}
                       />
-                    </Link>
+                    </Box>
                   </Grid>
                 );
               })

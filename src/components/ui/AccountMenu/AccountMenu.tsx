@@ -15,8 +15,10 @@ import { useSetRecoilState } from "recoil";
 import { isLoginState } from "@common/recoil";
 import { Link } from "@components/common";
 import { grey } from "@mui/material/colors";
+import { useRouter } from "next/router";
 
 export function AccountMenu() {
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const setIsLoginState = useSetRecoilState(isLoginState);
   const open = Boolean(anchorEl);
@@ -32,6 +34,7 @@ export function AccountMenu() {
   const logOut = async () => {
     await logout();
     setIsLoginState(false);
+    router.push(`/`);
   };
 
   return (
@@ -62,13 +65,13 @@ export function AccountMenu() {
             overflow: "visible",
             filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
             mt: 1.5,
-            "& .MuiAvatar-root": {
+            '& .MuiAvatar-root': {
               width: 32,
               height: 32,
               ml: -0.5,
               mr: 1,
             },
-            "&:before": {
+            '&:before': {
               content: '""',
               display: "block",
               position: "absolute",

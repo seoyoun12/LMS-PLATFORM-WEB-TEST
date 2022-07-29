@@ -74,6 +74,11 @@ export interface MyUser extends User {
   pushToken: string;
 }
 
+export enum regCategoryType {
+  TYPE_TRANS_EDU = 'TYPE_TRANS_EDU',
+  TYPE_TRAFFIC_SAFETY_EDU = 'TYPE_TRAFFIC_SAFETY_EDU',
+}
+
 export interface User {
   birth: string;
   createdDtime: string;
@@ -86,7 +91,7 @@ export interface User {
   modifiedDtime: string;
   name: string;
   phone: string;
-  regCategory: string;
+  regCategory: regCategoryType;
   seq: number;
   smsYn: string;
   status: number;

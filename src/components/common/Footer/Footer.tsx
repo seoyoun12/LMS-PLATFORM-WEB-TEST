@@ -10,11 +10,12 @@ import { Grid3x3 } from '@mui/icons-material';
 
 interface Props {
   className?: string;
-} 
+}
 
 const hideNavList = [
   { href: '/admin-center' },
   // { href: '' } // 메인에서 제거
+  { href: '/sign-up' },
 ];
 
 export const Footer: FC<Props> = () => {
@@ -22,12 +23,11 @@ export const Footer: FC<Props> = () => {
   const [isHideFooter, setIsHideFooter] = useState(false);
 
   useEffect(() => {
-    if(router.route === '/'){
-      setIsHideFooter(true)
-    }
-    else{
-    const hide = hideNavList.some(e => router.route.includes(e.href));
-    setIsHideFooter(hide);
+    if (router.route === '/') {
+      setIsHideFooter(true);
+    } else {
+      const hide = hideNavList.some(e => router.route.includes(e.href));
+      setIsHideFooter(hide);
     }
   }, [router]);
 
@@ -37,34 +37,45 @@ export const Footer: FC<Props> = () => {
       <div className={styles.globalContainer}>
         <ContentContainer>
           {/* <IntroductionSection> */}
-            {/* <div className="logo">충남교통연수원</div> */}
-            {/* <Typography variant="body1" className="desc">개인정보처리방침</Typography>
+          {/* <div className="logo">충남교통연수원</div> */}
+          {/* <Typography variant="body1" className="desc">개인정보처리방침</Typography>
             <Typography variant="body1" className="desc">1</Typography>
             <Typography variant="body1" className="desc">1</Typography>
             <Typography variant="body1" className="desc">1</Typography> */}
           {/* </IntroductionSection> */}
 
-          <Hrhrhrhrhr/>
-          
+          <Hrhrhrhrhr />
+
           <UplineFootConatainer>
-            <Link className='uplineFoot' color="" href="https://www.ctti.or.kr/kor/page.do?menuIdx=185&bbscd=0&tcd=0">개인정보처리방침</Link>
-            <Link className='uplineFoot' color="inherit" href="https://www.ctti.or.kr/kor/page.do?menuIdx=186&bbscd=0&tcd=0">이메일무단수집거부</Link>
-            <Link className='uplineFoot' color="inherit"  href="https://www.ctti.or.kr/kor/memberClause.do?menuIdx=182">이용약관</Link>
-            <Link className='uplineFoot' color="inherit"  href="https://www.ctti.or.kr/kor/page.do?menuIdx=130&bbscd=0&tcd=0">찾아오시는길</Link>
+            <Link className="uplineFoot" color="" href="https://www.ctti.or.kr/kor/page.do?menuIdx=185&bbscd=0&tcd=0">
+              개인정보처리방침
+            </Link>
+            <Link className="uplineFoot" color="inherit" href="https://www.ctti.or.kr/kor/page.do?menuIdx=186&bbscd=0&tcd=0">
+              이메일무단수집거부
+            </Link>
+            <Link className="uplineFoot" color="inherit" href="https://www.ctti.or.kr/kor/memberClause.do?menuIdx=182">
+              이용약관
+            </Link>
+            <Link className="uplineFoot" color="inherit" href="https://www.ctti.or.kr/kor/page.do?menuIdx=130&bbscd=0&tcd=0">
+              찾아오시는길
+            </Link>
           </UplineFootConatainer>
 
           <DownLineFootConatainer>
-            <Typography className='boldTypo'>[32589] 충청남도 공주시 연수원길 83 (금흥동 110-2)</Typography>
+            <Typography className="boldTypo">[32589] 충청남도 공주시 연수원길 83 (금흥동 110-2)</Typography>
             <FirstBox>
-              <Typography className='boldTypo'>교육문의(연수과) : 041.854.2101~2 | 임대문의(총무과) : 041.854.2106 | 연수원 운영문의 : 041.854.2107</Typography>
+              <Typography className="boldTypo">
+                교육문의(연수과) : 041.854.2101~2 | 임대문의(총무과) : 041.854.2106 | 연수원 운영문의 : 041.854.2107
+              </Typography>
             </FirstBox>
             <SecondBox>
-              <Typography className='boldTypo'>Copyright ⓒ 2022 Chungcheongnamdo Traffic Training Institute All Rights Reserved.</Typography>
+              <Typography className="boldTypo">
+                Copyright ⓒ 2022 Chungcheongnamdo Traffic Training Institute All Rights Reserved.
+              </Typography>
             </SecondBox>
           </DownLineFootConatainer>
 
           {/* <RightFootContainer></RightFootContainer> */}
-
 
           {/* <ContentItem className="m-l-auto">
             <Typography variant="h6" className="desc">충남교통연수원</Typography>
@@ -138,9 +149,9 @@ const UplineFootConatainer = styled(Grid)`
   .uplineFoot {
     margin-right: 20px;
     font-weight: bold;
-    font-size: 1.05rem
+    font-size: 1.05rem;
   }
-`
+`;
 
 const DownLineFootConatainer = styled.div`
   /* box-sizing: border-box;
@@ -149,20 +160,19 @@ const DownLineFootConatainer = styled.div`
   height: 50%;
   float: left;
   position: relative;
-`
+`;
 
 const FirstBox = styled(Box)`
   margin-bottom: 20px;
-`
+`;
 
 const SecondBox = styled(Box)`
   float: left;
-`
+`;
 
 const Hrhrhrhrhr = styled.hr`
   opacity: 30%;
-`
-
+`;
 
 // const ContentItem = styled.div`
 //   display: flex;
@@ -203,5 +213,3 @@ const Hrhrhrhrhr = styled.hr`
 //     margin-top: 20px;
 //   }
 // `;
-
-

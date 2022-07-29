@@ -114,11 +114,12 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
             delay: 4000,
             disableOnInteraction: false,
           }}
-          // onSlideChange={e => {
-          //   console.log(e);
-          // }}
-          onRealIndexChange={progress}
-          onInit={progress}
+          onSlideChange={e => {
+            console.log(e);
+            progress();
+          }}
+          // onRealIndexChange={progress}
+          // onInit={progress}
           onSwiper={(swiper: any) => {
             setSecondSwiper(swiper);
           }}

@@ -17,7 +17,12 @@ export interface SignInResponse {
   };
 };
 
-export async function signIn(username: string, password: string , loginType: string): Promise<SignInResponse> {
+export enum loginType{
+  TYPE_TRANS_EDU='TYPE_TRANS_EDU', //운수저상
+  TYPE_TRAFFIC_SAFETY_EDU='TYPE_TRAFFIC_SAFETY_EDU'
+}
+
+export async function signIn(username: string, password: string , loginType: loginType): Promise<SignInResponse> {
   return await POST('/auth/signin', { username, password, loginType })
     .then(onSignInSuccess)
     .then(getUserLoginHistory);

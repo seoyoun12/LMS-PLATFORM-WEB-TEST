@@ -2,20 +2,21 @@ import type { NextPage } from 'next';
 import styles from '@styles/common.module.scss';
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { ContentCard, CategoryCarousel, Spinner } from '@components/ui';
+import { Spinner } from '@components/ui';
 import cn from 'clsx';
 import { Link } from '@components/common';
 import { Box, Button, Card, CardActions, CardContent, Grid, Typography } from '@mui/material';
-import { useCourseList } from '@common/api/course';
 import { useState } from 'react';
 import { Container } from '@mui/system';
-import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
 import { MainDisplayType, useMainDisplay } from '@common/api/mainDisplay';
 import { useRecoilState } from 'recoil';
 import { pageType } from '@common/recoil';
 import { pageRegType } from '@common/recoil/pageType/atom';
+import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
+import { regCategoryType, useMyUser } from '@common/api/user';
+import { useRouter } from 'next/router';
 
 const LinkList = [
   {
@@ -39,21 +40,33 @@ const LinkList = [
     pageType: pageRegType.TYPE_TRAFFIC_SAFETY_EDU,
     displayWord: '도민교통',
     color: '#FEC901',
-    href: '/category',
+    href: 'traffic/category',
     imgPath: '/assets/images/domin.png',
   },
 ];
 
 const MainPage: NextPage = () => {
+  const router = useRouter();
   const [screenHeight, setScreenHeight] = useState<number>();
   const [userPageType, setUserPageType] = useRecoilState(pageType);
+  const isLogin = useIsLoginStatus();
+  const { user, error: userError } = useMyUser();
   const { data, error } = useMainDisplay();
-  console.log(data, error);
+  console.log(data, error, user);
 
   React.useEffect(() => {
+    if (isLogin && user) {
+      if (user.regCategory === regCategoryType.TYPE_TRANS_EDU) {
+        router.push('/category');
+        console.log('뭐징??1');
+      } else if (user.regCategory === regCategoryType.TYPE_TRAFFIC_SAFETY_EDU) {
+        router.push('/traffic/category');
+        console.log('뭐징??12');
+      }
+    }
     console.log(screen.availHeight);
     setScreenHeight(screen.availHeight);
-  }, []);
+  }, [isLogin, user]);
 
   if (!data) return <Spinner />;
   return (

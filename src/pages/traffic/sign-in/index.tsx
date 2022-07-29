@@ -1,5 +1,5 @@
 import { Layout } from '@layouts/Layout';
-import { SignInV2 } from '@layouts/SignIn';
+import { SignInV2 } from '@layouts/Traffic/SignIn';
 import Head from 'next/head';
 
 export default function SignInPage() {

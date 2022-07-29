@@ -95,8 +95,8 @@ export function UserManagement() {
   if (!data) return <Spinner />;
 
   return (
-    <div>
-    {/* <Container className={styles.globalContainer}> */}
+    // <div>
+    <Container className={styles.globalContainer}>
       <UserTypo variant="h5">회원 목록</UserTypo>
       <Table
         pagination={true}
@@ -172,8 +172,8 @@ export function UserManagement() {
         userData={data.content.find((item) => item.seq === userSeq)!}
         error={error}
       />
-    {/* </Container> */}
-    </div>
+    </Container>
+    // {/* </div> */}
   );
 }
 

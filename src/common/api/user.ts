@@ -3,6 +3,11 @@ import useSWR, { SWRResponse } from 'swr';
 import { CourseRes } from '@common/api/course';
 import { YN } from '@common/constant';
 
+export enum MemberType {
+  TYPE_MEMBER = "TYPE_MEMBER",
+  TYPE_NON_MEMBER = "TYPE_NON_MEMBER"
+}
+
 export enum UserRole {
   ROLE_TRANS_USER = 'ROLE_TRANS_USER',
   ROLE_TRANS_MANAGER = 'ROLE_TRANS_MANAGER',

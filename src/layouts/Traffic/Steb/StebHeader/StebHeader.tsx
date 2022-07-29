@@ -6,8 +6,7 @@ import Filter3Icon from '@mui/icons-material/Filter3';
 
 const headers = [
   { title: '나눈도민이라구행><', value: 1 },
-  { title: '교육신청', value: 2 },
-  { title: '신청완료', value: 3 },
+  { title: '신청완료', value: 2 },
 ];
 
 export function StebHeader({ value }: { value: number }) {
@@ -34,16 +33,16 @@ export function StebHeader({ value }: { value: number }) {
             <Box display="flex" gap="8rem" width="fit-content" margin={'auto'} mt={4}>
               <Box display="flex" flexDirection="column" alignItems={'center'} sx={{ opacity: 1 === value ? 1 : 0.5 }}>
                 <Filter1Icon fontSize="large" />
-                <span>교육일정</span>
+                <span>교육신청</span>
               </Box>
               <Box display="flex" flexDirection="column" alignItems={'center'} sx={{ opacity: 2 === value ? 1 : 0.5 }}>
                 <Filter2Icon fontSize="large" />
-                <span>교육신청</span>
-              </Box>
-              <Box display="flex" flexDirection="column" alignItems={'center'} sx={{ opacity: 3 === value ? 1 : 0.5 }}>
-                <Filter3Icon fontSize="large" />
                 <span>신청완료</span>
               </Box>
+              {/* <Box display="flex" flexDirection="column" alignItems={'center'} sx={{ opacity: 3 === value ? 1 : 0.5 }}>
+                <Filter3Icon fontSize="large" />
+                <span>신청완료</span>
+              </Box> */}
             </Box>
           </Box>
         ))}

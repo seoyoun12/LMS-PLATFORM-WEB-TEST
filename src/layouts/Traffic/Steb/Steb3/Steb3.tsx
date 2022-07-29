@@ -17,56 +17,56 @@ import { courseBusinessTypeList } from '@layouts/Calendar/Calendar';
 export function Steb3() {
   const router = useRouter();
   const snackbar = useSnackbar();
-  const [loading, setLoading] = useState(false);
-  const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
-  const [enrollList, setEnrollList] = useRecoilState(courseClassEnrollList);
-  const [info, setInfo] = useState<{
-    courseCategoryType: string;
-    courseBusinessType: businessType;
-    step: number;
-    studyStartDate: string;
-    studyEndDate: string;
-  }>();
-  console.log(enrollList);
+  // const [loading, setLoading] = useState(false);
+  // const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
+  // const [enrollList, setEnrollList] = useRecoilState(courseClassEnrollList);
+  // const [info, setInfo] = useState<{
+  //   courseCategoryType: string;
+  //   courseBusinessType: businessType;
+  //   step: number;
+  //   studyStartDate: string;
+  //   studyEndDate: string;
+  // }>();
+  // console.log(enrollList);
 
-  const getData = async (seq: number) => {
-    setLoading(true);
-    console.log('첫번째', loading);
-    try {
-      const { data } = await getSingleCourseClass(seq);
-      console.log('sadasd', data);
-      const {
-        course: { courseCategoryType, courseBusinessType },
-        step,
-        studyStartDate,
-        studyEndDate,
-      } = data;
-      setInfo({ courseCategoryType, courseBusinessType, step, studyStartDate, studyEndDate });
-      setLoading(false);
-      console.log('두번째', loading);
-    } catch (e: any) {
-      // snackbar({ variant: 'error', message: e });
-      console.log(e);
-      setLoading(false);
-    }
-  };
+  // const getData = async (seq: number) => {
+  //   setLoading(true);
+  //   console.log('첫번째', loading);
+  //   try {
+  //     const { data } = await getSingleCourseClass(seq);
+  //     console.log('sadasd', data);
+  //     const {
+  //       course: { courseCategoryType, courseBusinessType },
+  //       step,
+  //       studyStartDate,
+  //       studyEndDate,
+  //     } = data;
+  //     setInfo({ courseCategoryType, courseBusinessType, step, studyStartDate, studyEndDate });
+  //     setLoading(false);
+  //     console.log('두번째', loading);
+  //   } catch (e: any) {
+  //     // snackbar({ variant: 'error', message: e });
+  //     console.log(e);
+  //     setLoading(false);
+  //   }
+  // };
 
-  useLayoutEffect(() => {
-    if (!enrollInfo?.seq) {
-      window.alert('잘못된 접근입니다.');
-      router.push('/category');
-    }
-    if (enrollInfo?.seq) {
-      getData(enrollInfo.seq);
-    }
+  // useLayoutEffect(() => {
+  //   if (!enrollInfo?.seq) {
+  //     window.alert('잘못된 접근입니다.');
+  //     router.push('/category');
+  //   }
+  //   if (enrollInfo?.seq) {
+  //     getData(enrollInfo.seq);
+  //   }
 
-    return () => {
-      setEnrollList([]);
-      setEnrollInfo(null);
-    };
-  }, []);
+  //   return () => {
+  //     setEnrollList([]);
+  //     setEnrollInfo(null);
+  //   };
+  // }, []);
 
-  if (loading || !info) return <Spinner />;
+  // if (loading || !info) return <Spinner />;
   return (
     <Steb3Wrap>
       <StebHeader value={3} />
@@ -95,59 +95,35 @@ export function Steb3() {
           <TableContainer>
             <Table sx={{ borderTop: '4px solid #3498db' }}>
               <TableCustomRow>
-                <TableLeftCell>교육과정</TableLeftCell>
-                <TableCell>{courseCategory.filter(cate => cate.type === info.courseCategoryType)[0]?.ko}</TableCell>
+                <TableLeftCell>지역</TableLeftCell>
+                <TableCell>asdasd</TableCell>
               </TableCustomRow>
               <TableCustomRow>
-                <TableLeftCell>운수구분</TableLeftCell>
-                <TableCell>{courseBusinessTypeList.filter(business => business.enType === info.courseBusinessType)[0].type}</TableCell>
+                <TableLeftCell>소속</TableLeftCell>
+                <TableCell>asdsad</TableCell>
               </TableCustomRow>
               <TableCustomRow>
-                <TableLeftCell>기수 / 교육일자</TableLeftCell>
-                <TableCell>
-                  {info?.step}기 / {dateFormat(info.studyStartDate, 'yyyy-mm-dd')} ~ {dateFormat(info?.studyEndDate, 'yyyy-mm-dd')}
-                </TableCell>
+                <TableLeftCell>신청기간</TableLeftCell>
+                <TableCell>asdasfsdf</TableCell>
+              </TableCustomRow>
+              <TableCustomRow>
+                <TableLeftCell>교육대상자</TableLeftCell>
+                <TableCell>fsdaewr</TableCell>
+              </TableCustomRow>
+              <TableCustomRow>
+                <TableLeftCell>교육 세부구분</TableLeftCell>
+                <TableCell>어르신</TableCell>
               </TableCustomRow>
             </Table>
           </TableContainer>
         </RegiType>
 
         <RegiStudentList>
-          <Typography variant="h5" fontWeight="bold" display="flex" alignItems="center" mt={4} mb={2}>
+          {/* <Typography variant="h5" fontWeight="bold" display="flex" alignItems="center" mt={4} mb={2}>
             <HorizontalRuleRoundedIcon sx={{ transform: 'scale(1,2)', color: '#3498db' }} />
             <span>교육신청자 리스트</span>
-          </Typography>
-          <StudentItemListWrap>
-            {enrollList.length > 0 &&
-              enrollList.map(item => (
-                <StudentListItem>
-                  <StuTableContainer key={item.courseClassSeq}>
-                    <TableBody sx={{ display: 'table', width: '100%' }}>
-                      <UserTableRow>
-                        <TableCell>이름</TableCell>
-                        <TableCell>{item.name}</TableCell>
-                      </UserTableRow>
-                      <UserTableRow>
-                        <TableCell>민증</TableCell>
-                        <TableCell>{item.firstIdentityNumber} - ●●●●●●●</TableCell>
-                      </UserTableRow>
-                      <UserTableRow>
-                        <TableCell>차량번호</TableCell>
-                        <TableCell>{item.carNumber}</TableCell>
-                      </UserTableRow>
-                      <UserTableRow>
-                        <TableCell>등록지</TableCell>
-                        <TableCell>{locationList.filter(regi => regi.en === item.carRegisteredRegion)[0].ko}</TableCell>
-                      </UserTableRow>
-                      <UserTableRow>
-                        <TableCell>휴대전화링</TableCell>
-                        <TableCell>{item.phone}</TableCell>
-                      </UserTableRow>
-                    </TableBody>
-                  </StuTableContainer>
-                </StudentListItem>
-              ))}
-          </StudentItemListWrap>
+          </Typography> */}
+          <StudentItemListWrap>테이블</StudentItemListWrap>
         </RegiStudentList>
         <BottomBox>
           <Box padding="2rem" borderBottom="2px solid #888888" mb={2} textAlign="center">

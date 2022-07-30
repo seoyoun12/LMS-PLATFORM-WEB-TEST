@@ -1,5 +1,4 @@
 import { ContentType } from "@common/api/content";
-import { QnaInput } from "@common/api/qna";
 import { MemberType } from "@common/api/user";
 // import { MemberType } from "@common/api/user";
 import { YN } from "@common/constant";
@@ -22,21 +21,11 @@ import {
   Checkbox,
   Typography,
   Button,
-  Chip,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
-
-
-
-
-
-
-
-
+import { ChangeEvent, useState } from "react";
+import { useForm } from "react-hook-form";
 
 const questionTypeList = [
   { type: "회원가입/로그인", enType: "TYPE_SIGNUP_OR_SIGNIN" },
@@ -54,72 +43,17 @@ const emailList = [
 
 const phoneList = ["010", "032", "02", "031"];
 
+// interface FormType extends CourseRes {
+//   files: File[];
+// }
+// const defaultValues = {
+//     contentType: ContentType.CONTENT_MP4,
+//     status: ProductStatus.APPROVE,
+//     displayYn: YN.YES,
+//     files: []
+//   };
 
-interface Props {
-  memberType: MemberType | undefined;
-  mode? : 'upload';
-  qna? : QnaInput;
-  onHandleSubmit: ({ qnaInput, files, qnaSeq, isFileDelete } :{
-    qnaInput: QnaInput;
-    files: File[];
-    isFileDelete: boolean;
-    qnaSeq?: number;
-  }) => void
-}
-
-interface FormType extends QnaInput {
-  files: File[];
-}
-
-const defaultValues = {
-  files: [],
-};
-
-
-export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, onHandleSubmit }: Props) {
-
-  //
-  // const editorRef = useRef<EditorType>(null); // tui
-  const [ isFileDelete, setIsFileDelete ] = useState(false);
-  const [ fileName, setFileName ] = useState<string | null>(null);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-    reset,
-    resetField
-  } = useForm<FormType>({ defaultValues });
-
-  const handleFileChange = (e: ChangeEvent) => {
-    e.preventDefault();
-    const files = (e.target as HTMLInputElement).files;
-    if (!files?.length) return null;
-    setFileName(files[0].name);
-    setIsFileDelete(false);
-  };
-
-  const handleDeleteFile = () => {
-    resetField('files');
-    setFileName(null);
-    setIsFileDelete(true);
-  };
-
-
-  const onSubmit: SubmitHandler<FormType> = async ({files, ...qna }, event) => {
-    event?.preventDefault();
-
-    const qnaInput = {
-      ...qna
-    };
-    onHandleSubmit({ qnaInput, files, isFileDelete });
-  };
-
-
-
-
-  //
-
+export function CategoryBoardQuestionForm({ memberType }: { memberType: MemberType | undefined }) {
   const [phone1, setPhone1, onChangePhone1] = useInput();
   const [phone2, setPhone2, onChangePhone2] = useInput();
   const [phone3, setPhone3, onChangePhone3] = useInput();
@@ -128,11 +62,28 @@ export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, on
   const [questionText, setQuestionText, onChangeQuestionText] = useInput();
   const [smsChecked, setSmsChecked] = useState(true);
   const [privacyChecked, setPrivacyChecked] = useState(false);
-  // const [isFileDelete, setIsFileDelete] = useState(false);
-  // const [fileName, setFileName] = useState<string | null>(null);
+  const [isFileDelete, setIsFileDelete] = useState(false);
+  const [fileName, setFileName] = useState<string | null>(null);
   const dialog = useDialog();
   const router = useRouter();
 
+  //   const {
+  //     register,
+  //     handleSubmit,
+  //     formState: { errors },
+  //     control,
+  //     reset,
+  //     resetField,
+  //   } = useForm<FormType>({ defaultValues });
+
+  //   const handleFileChange = (e: ChangeEvent) => {
+  //     e.preventDefault();
+
+  //     const files = (e.target as HTMLInputElement).files;
+  //     if (!files?.length) return null;
+  //     setFileName(files[0].name);
+  //     setIsFileDelete(false);
+  //   };
 
   const handleSubmitQues = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -160,88 +111,8 @@ export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, on
   };
 
   return (
-
-    <Box
-        component="form"
-        encType="multipart/form-data"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-        // className={boxStyles}
-      >
-
-        <FormControl className="form-control">
-          <TextField
-            {...register('phone')}
-            type="text"
-            size="small"
-            variant="outlined"
-            label="전화번호"
-          />
-        </FormControl>
-
-        <FormControl className="form-control">
-          <TextField
-            {...register('type')}
-            type="text"
-            size="small"
-            variant="outlined"
-            label="문의유형"
-          />
-        </FormControl>
-
-        <FormControl className="form-control">
-          <TextField
-            {...register('title')}
-            type="text"
-            size="small"
-            variant="outlined"
-            label="문의제목"
-          />
-        </FormControl>
-
-        <FormControl className="form-control">
-          <TextField
-            {...register('content')}
-            type="text"
-            size="small"
-            variant="outlined"
-            label="문의내용"
-          />
-        </FormControl>
-
-
-        <div className="board-uploader">
-          <FileUploader
-            register={register}
-            regName="files"
-            onFileChange={handleFileChange}
-          >
-          </FileUploader>
-          {fileName
-            ? <Chip
-              sx={{ mt: '8px' }}
-              icon={<OndemandVideoOutlinedIcon />}
-              label={fileName}
-              onDelete={handleDeleteFile} />
-            : null
-          }
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <QuestionFormWrap>
+      <Box component={"form"} onSubmit={handleSubmitQues}>
         <TableContainer sx={{ width: "100%" }}>
           <TableBody sx={{ display: "table", width: "100%" }}>
             <TableRow>
@@ -283,8 +154,6 @@ export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, on
                 </Box>
               </TableCellRight>
             </TableRow>
-
-            
             <TableRow>
               <TableCellLeft align="center">문의유형</TableCellLeft>
               <TableCellRight>
@@ -298,63 +167,37 @@ export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, on
                 </FormControl>
               </TableCellRight>
             </TableRow>
-
-
             <TableRow>
               <TableCellLeft align="center">문의제목</TableCellLeft>
               <TableCellRight>
-                <FormControl className="form-control">
-                  <TextField
-                    {...register('title')}
-                    type="text"
-                    size="small"
-                    variant="outlined"
-                    label="문의제목"
-                    style={{ width: "330%" }}
-                  />
-                </FormControl>
+                <TextField
+                  onChange={onChangeQuestionName}
+                  value={questionName}
+                  placeholder="제목을 입력하세요(100자)"
+                  fullWidth
+                />
               </TableCellRight>
             </TableRow>
-
-
             <TableRow>
               <TableCellLeft align="center">문의내용</TableCellLeft>
               <TableCellRight>
-                <FormControl className="form-control">
-                  <TextareaAutosize
-                    {...register('content')}
-                    style={{ width: "455%" }}
-                    minRows={10}
-                    placeholder="문의 내용을 입력해주세요(5000자).&#13;&#10;욕설, 비속어, 비방성 등 부적절한 단어가 포함되어있는 경우, 답변 진행이 어려울 수 있습니다. 문의가 집중되거나 주말의 경우 답변이 지연될 수 있습니다. 최대한 빠르게 답변드리도록 하겠습니다."
-                  />
-                </FormControl>
+                <TextareaAutosize
+                  style={{ width: "100%" }}
+                  minRows={10}
+                  onChange={onChangeQuestionText}
+                  value={questionText}
+                  placeholder="문의 내용을 입력해주세요(5000자).&#13;&#10;욕설, 비속어, 비방성 등 부적절한 단어가 포함되어있는 경우, 답변 진행이 어려울 수 있습니다. 문의가 집중되거나 주말의 경우 답변이 지연될 수 있습니다. 최대한 빠르게 답변드리도록 하겠습니다."
+                />
               </TableCellRight>
             </TableRow>
-
-
             <TableRow>
               <TableCellLeft align="center">파일첨부</TableCellLeft>
               <TableCellRight>
-                <div className="board-uploader">
-                  <FileUploader
-                    register={register}
-                    regName="files"
-                    onFileChange={handleFileChange}
-                  >
-                  </FileUploader>
-                  {fileName
-                    ? <Chip
-                      sx={{ mt: '8px' }}
-                      icon={<OndemandVideoOutlinedIcon />}
-                      label={fileName}
-                      onDelete={handleDeleteFile} />
-                    : null
-                  }
-                </div>
+                {/* <FileUploader register={register} regName="files" onFileChange={handleFileChange}>
+                  <FileUploader.Label>썸네일 이미지</FileUploader.Label>
+                </FileUploader> */}
               </TableCellRight>
             </TableRow>
-
-
           </TableBody>
         </TableContainer>
         <Typography sx={{ padding: "1rem", color: grey[500] }}>
@@ -379,6 +222,7 @@ export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, on
           등록하기
         </Button>
       </Box>
+    </QuestionFormWrap>
   );
 }
 

@@ -16,8 +16,10 @@ import { BoardAccordion } from '@components/ui/BoardAccordion';
 
 export function CategoryBoardNotice() {
 
-  const [page, setPage] = useState(0);
+  const [ page, setPage ] = useState(0);
   const { data, error, mutate } = categoryBoardList({ page, boardType: "TYPE_NOTICE" });
+
+  console.log("notice data : ", data)
 
   return (
     <Container>

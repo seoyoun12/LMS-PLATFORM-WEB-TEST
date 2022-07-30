@@ -6,44 +6,12 @@ import { useEffect, useState } from "react";
 import { MemberType } from "@common/api/user";
 import { CategoryBoardQuestionLogin } from "./CategoryBoardQuestionLogin";
 import { CategoryBoardQuestionForm } from "./CategoryBoardQuestionForm";
-import { useSnackbar } from "@hooks/useSnackbar";
-import { Qna, QnaInput, uploadQna } from "@common/api/qna";
-import { BbsType, uploadFile } from "@common/api/adm/file";
-import router from "next/router";
 
 export function CategoryBoardQuestion() {
   const isLoginStatus = useIsLoginStatus();
   const [isNonMenberQuestion, setIsNonMenberQuestion] = useState(false);
   const [isOpenQues, setIsOpneQues] = useState(false);
   const [memberType, setMemberType] = useState<undefined | MemberType>();
-
-  
-  //
-
-  const snackbar = useSnackbar();
-  const fileHandler = async (files: File[], qna: Qna) => {
-    const isFileUpload = files.length > 0;
-    if (isFileUpload) {
-      await uploadFile({
-        fileTypeId: qna.seq, // undefined
-        fileType: BbsType.TYPE_POST_QUESTION, // Type Setting 필요
-        files,
-      });
-    }
-  };
-
-  const handleSubmit = async ({ files, qnaInput }: { files: File[]; qnaInput: QnaInput }) => {
-    try {
-      const category = await uploadQna(qnaInput); // 게시판 내용 업로드. 파일보다 먼저
-      await fileHandler(files, category.data); // 파일업로드. 게시판 뒤
-      snackbar({ variant: 'success', message: '업로드 되었습니다.' });
-      router.push(`/admin-center/category`);
-    } catch (e: any) {
-      console.error(e);
-    }
-  };
-
-  //
 
   useEffect(() => {
     if (isLoginStatus) {
@@ -55,7 +23,7 @@ export function CategoryBoardQuestion() {
   return (
     <NtContainer>
       {isOpenQues ? (
-        <CategoryBoardQuestionForm memberType={memberType} onHandleSubmit={handleSubmit} />
+        <CategoryBoardQuestionForm memberType={memberType} />
       ) : (
         <CategoryBoardQuestionLogin setIsOpneQues={setIsOpneQues} setMemberType={setMemberType} />
       )}{" "}

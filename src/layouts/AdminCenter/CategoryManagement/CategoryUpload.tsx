@@ -23,14 +23,14 @@ export function CategoryUpload() {
   };
 
   const handleSubmit = async ({ files, categoryBoardInput }: { files: File[]; categoryBoardInput: CategoryBoardInput }) => {
-    console.log('1 : ', files);
-    console.log('2 : ', categoryBoardInput);
+    // console.log('1 : ', files);
+    // console.log('2 : ', categoryBoardInput);
     try {
       const category = await uploadCategoryBoard(categoryBoardInput); // 게시판 내용 업로드. 파일보다 먼저
-      console.log('3 : ', category);
-      console.log('4 : ', category.data);
-      console.log('5 : ', router);
-      console.log('6 : ', files);
+      // console.log('3 : ', category);
+      // console.log('4 : ', category.data);
+      // console.log('5 : ', router);
+      // console.log('6 : ', files);
       await fileHandler(files, category.data); // 파일업로드. 게시판 뒤
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
       router.push(`/admin-center/category`);

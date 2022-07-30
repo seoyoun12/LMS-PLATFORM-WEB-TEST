@@ -1,3 +1,7 @@
+import { YN } from "@common/constant";
+import { GET, POST } from "@common/httpClient";
+import useSWR, { SWRResponse } from "swr";
+import { PaginationResult } from "types/fetch";
 import { S3Files } from "types/file";
 
 export enum QnaType {
@@ -36,7 +40,58 @@ export interface QnaAnswer {
 
 }
 
-// Qna 리스트
-export function qnaList () {
+export interface QnaInput {
+
+  content: string;
+  phone: number;
+  smsYn: YN;
+  title: string;
+  type: QnaType;
+
+}
+
+export interface QnaAnserList {
   
+  content: string;
+
+}
+
+
+
+// 1:1문의 리스트 조회
+// export async function qn1aList() {
+//   return await GET(`/qna`, {
+//     headers: {
+//       ACCESS_TOKEN: 'login-token'
+//     }
+//   });
+// }
+
+
+// qna list
+export function qnaList({ page, elementCnt } : {
+  page: number;
+  elementCnt?: number;
+}) {
+  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Qna[]>>>([
+    `/qna`, {
+      params: { page, elementCnt }
+    }
+  ], GET);
+  return {
+    data: data?.data,
+    error,
+    mutate
+  }
+}
+
+// qna answer
+export async function qnaAnswerList(qnaSeq : number) {
+  return await GET(`/qna/adm/${qnaSeq}`)
+}
+
+
+// qna upload
+export async function uploadQna(qnaInput : QnaInput) {
+  return await POST(`/qna`, qnaInput)
 }

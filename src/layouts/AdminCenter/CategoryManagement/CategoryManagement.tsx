@@ -51,7 +51,7 @@ export function CategoryManagement() {
   // const { categorySeq } = router.query;
   
   const { data, error, mutate } = categoryBoardList({ 
-    boardType: "TYPE_NOTICE",
+    boardType: "TYPE_FAQ",
     // boardType: String(BoardType),
     page 
   }); 

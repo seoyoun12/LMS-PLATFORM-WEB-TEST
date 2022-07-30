@@ -13,6 +13,7 @@ export interface FetchPaginationResponse<T> {
 }
 
 export interface PaginationResult<T> {
+  map(arg0: (data: any) => import("@emotion/react/jsx-runtime").JSX.Element): import("react").ReactNode;
   content: T;
   empty: boolean;
   first: boolean;

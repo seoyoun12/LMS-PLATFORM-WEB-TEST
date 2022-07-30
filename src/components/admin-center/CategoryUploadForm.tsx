@@ -75,7 +75,6 @@ export function CategoryUploadForm({ mode = 'upload', category, courseSeq, onHan
 
   const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();
-
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setFileName(files[0].name);

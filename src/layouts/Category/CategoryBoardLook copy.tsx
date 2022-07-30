@@ -4,13 +4,11 @@ import styled from '@emotion/styled';
 import { qnaList } from "@common/api/qna";
 import { BoardAccordion } from "@components/ui";
 import { useState } from "react";
-import { QnaAccordion } from "@components/ui/QnaAccordion.tsx";
 
 export function CategoryBoardLook() {
 
   const [ page, setPage ] = useState(0);
   const { data, error, mutate } = qnaList({ page });
-  
 
   console.log("1대1문의 data : ", data)
   
@@ -20,10 +18,10 @@ export function CategoryBoardLook() {
       {data && data?.map((data) => {
         const accordionInfo = [{ 
           date: data.createdDtime, 
-          title: data.title, 
-          children: [{ firstContent: data.content, secondContent: data.content}] 
+          name: data.title, 
+          children: [{ name: data.content}] 
         }]
-        return <QnaAccordion qnaAccordionList={accordionInfo}/>
+        return <BoardAccordion boardAccordionList={accordionInfo}/>
       })}
     </Container>
 

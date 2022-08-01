@@ -30,6 +30,7 @@ export function Steb2() {
   const [enroll, setEnroll] = useRecoilState(courseClassEnrollList); //전역에 신청자 정보 저장
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo); //전역에 교육정보 저장
   const [confirm, setConfirm] = useState(false);
+  const [isIndividualCheck, setIsIndividualCheck] = useState(false);
   const confirmRef = useRef<boolean>();
 
   const { register, setValue, watch } = useForm<UserTransSaveInputDataType>({
@@ -57,6 +58,7 @@ export function Steb2() {
     const { seq, firstIdentityNumber, secondIdentityNumber, ...rest } = watch();
     if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7) return window.alert('주민번호를 모두 입력해주세요!');
     if (!enrollInfo || !enrollInfo.seq) return window.alert('기수를 선택해주세요!');
+    if (!isIndividualCheck) return window.alert('개인정보 수집 및 이용동의에 체크해주세요!');
 
     const postData = {
       ...rest,
@@ -88,24 +90,24 @@ export function Steb2() {
           emailYn: YN.NO,
           smsYn: YN.NO,
         })
-          .then(async res => {
+          .then(async (res) => {
             //계정생성완료 후 작업
-            const test = await courseClassOrganizationEnrll(postData);
-            console.log('test', test);
+            const { data } = await courseClassOrganizationEnrll(postData);
+            console.log('test', data);
             const randomSeq = Math.floor(Math.random() * 10000); //로컬에서 삭제를 구분하기 위한 번호
-            setValue('seq', randomSeq);
-            setEnroll(prev => [...prev, watch()]);
+            setValue('seq', data.seq);
+            setEnroll((prev) => [...prev, watch()]);
             console.log('gg', enroll);
           })
-          .catch(async e => {
+          .catch(async (e) => {
             console.dir(e.data.status);
             if (e.data.status === 400) {
               //이미 존재하는 계정
-              const test = await courseClassOrganizationEnrll(postData);
-              console.log('test', test);
+              const { data } = await courseClassOrganizationEnrll(postData);
+              console.log('test', data);
               const randomSeq = Math.floor(Math.random() * 10000); //로컬에서 삭제를 구분하기 위한 번호
-              setValue('seq', randomSeq);
-              setEnroll(prev => [...prev, watch()]);
+              setValue('seq', data.seq);
+              setEnroll((prev) => [...prev, watch()]);
               console.log('gg', enroll);
             }
           });
@@ -169,7 +171,14 @@ export function Steb2() {
         <EduOverview setValue={setValue} />
         <CompanyInfo isIndividual={isIndividual} setIsIndividual={setIsIndividual} register={register} watch={watch} />
         <StudentList registerType={registerType} setRegisterType={setRegisterType} />
-        <StudentInfo register={register} setValue={setValue} registerType={registerType} setRegisterType={setRegisterType} />
+        <StudentInfo
+          register={register}
+          setValue={setValue}
+          registerType={registerType}
+          setRegisterType={setRegisterType}
+          isIndividualCheck={isIndividualCheck}
+          setIsIndividualCheck={setIsIndividualCheck}
+        />
         <Button variant="contained" onClick={onClickEnroll} fullWidth sx={{ mb: 2 }}>
           신청하기
         </Button>

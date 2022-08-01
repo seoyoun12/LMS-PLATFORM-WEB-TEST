@@ -21,8 +21,8 @@ export function StudentList({ registerType, setRegisterType }: Props) {
   const onClickDelete = async (seq: number, test: any) => {
     console.log('아', seq, test);
     try {
-      // await courseUserOrganCancel(seq);
-      setOrganization(prev => prev.filter(item => item.seq !== seq));
+      await courseUserOrganCancel(seq);
+      setOrganization((prev) => prev.filter((item) => item.seq !== seq));
     } catch (e: any) {
       snackbar({ variant: 'error', message: e });
     }
@@ -58,7 +58,7 @@ export function StudentList({ registerType, setRegisterType }: Props) {
         <StudentItemListWrap>
           {registerType === RegisterType.TYPE_ORGANIZATION &&
             organization.length > 0 &&
-            organization.map(item => (
+            organization.map((item) => (
               <StudentListItem key={item.courseClassSeq}>
                 <StuTableContainer>
                   <TableBody sx={{ display: 'table', width: '100%' }}>
@@ -76,7 +76,7 @@ export function StudentList({ registerType, setRegisterType }: Props) {
                     </UserTableRow>
                     <UserTableRow>
                       <TableCell>등록지</TableCell>
-                      <TableCell>{locationList.filter(regi => regi.en === item.carRegisteredRegion)[0].ko}</TableCell>
+                      <TableCell>{locationList.filter((regi) => regi.en === item.carRegisteredRegion)[0].ko}</TableCell>
                     </UserTableRow>
                     <UserTableRow>
                       <TableCell>휴대전화링</TableCell>

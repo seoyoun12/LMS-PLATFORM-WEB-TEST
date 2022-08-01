@@ -15,16 +15,17 @@ interface Props {
   setValue: UseFormSetValue<UserTransSaveInputDataType>;
   registerType: RegisterType;
   setRegisterType: React.Dispatch<React.SetStateAction<RegisterType>>;
+  setIsIndividualCheck: React.Dispatch<React.SetStateAction<boolean>>;
+  isIndividualCheck: boolean;
 }
 
-export function StudentInfo({ register, setValue, registerType, setRegisterType }: Props) {
+export function StudentInfo({ register, setValue, registerType, setRegisterType, setIsIndividualCheck, isIndividualCheck }: Props) {
   const [name, setName] = useState<string>(); //이름
   const [firstIdentityNumber, setFirstIdentityNumber] = useState<string>(); //주민앞
   const [secondIdentityNumber, setSecondidentityNumber] = useState<string>(); //주민뒷
   const [carNumber, setCarNumber] = useState<string | null>(null); //차량번호
   const [carRegisteredRegion, setCarRegisteredRegion] = useState<string | null>(null); //차량등록지
   const [smsYn, setSmsYn] = useState(false);
-  const [isIndividualCheck, setIsIndividualCheck] = useState(false);
   const { user, error } = useMyUser();
 
   useEffect(() => {
@@ -39,18 +40,18 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
       setSecondidentityNumber(second);
     }
     if (user && registerType === RegisterType.TYPE_ORGANIZATION) {
-      const first = user.identityNumber.slice(0, 6);
-      const second = user.identityNumber.slice(6, 14);
-      setValue('name', user.name);
-      setValue('firstIdentityNumber', first);
-      setFirstIdentityNumber(first);
-      setValue('secondIdentityNumber', second);
-      setSecondidentityNumber(second);
-      if (!user.roles.filter(role => role === UserRole.ROLE_TRANS_MANAGER)[0]) {
+      // const first = user.identityNumber.slice(0, 6);
+      // const second = user.identityNumber.slice(6, 14);
+      // setValue('name', user.name);
+      // setValue('firstIdentityNumber', first);
+      // setFirstIdentityNumber(first);
+      // setValue('secondIdentityNumber', second);
+      // setSecondidentityNumber(second);
+      if (!user.roles.filter((role) => role === UserRole.ROLE_TRANS_MANAGER)[0]) {
         window.alert('권한이 없는 유저입니다.');
         setRegisterType(RegisterType.TYPE_INDIVIDUAL);
       } else {
-        console.log('휴먼엄ㄴㅇ', user.roles.filter(role => role === UserRole.ROLE_TRANS_MANAGER)[0]);
+        console.log('휴먼엄ㄴㅇ', user.roles.filter((role) => role === UserRole.ROLE_TRANS_MANAGER)[0]);
       }
     }
   }, [user, registerType]);
@@ -71,7 +72,7 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
           <TextField
             disabled={registerType === RegisterType.TYPE_INDIVIDUAL && true}
             value={firstIdentityNumber}
-            onChange={e => {
+            onChange={(e) => {
               if (e.target.value.length > 6) return;
               setFirstIdentityNumber(e.target.value.replace(/[^0-9]/g, ''));
               setValue('firstIdentityNumber', e.target.value.replace(/[^0-9]/g, ''));
@@ -83,7 +84,7 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
             disabled={registerType === RegisterType.TYPE_INDIVIDUAL && true}
             type="password"
             value={secondIdentityNumber}
-            onChange={e => {
+            onChange={(e) => {
               if (e.target.value.length > 7) return;
               setSecondidentityNumber(e.target.value.replace(/[^0-9]/g, ''));
               setValue('secondIdentityNumber', e.target.value.replace(/[^0-9]/g, ''));
@@ -98,7 +99,7 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
         <Typography>차량 등록지</Typography>
         <FormControl fullWidth>
           <Select {...register('carRegisteredRegion')}>
-            {locationList.map(item => (
+            {locationList.map((item) => (
               <MenuItem key={item.en} value={item.en}>
                 {item.ko}
               </MenuItem>

@@ -12,14 +12,13 @@ export function CategoryBoardLook() {
   const [ page, setPage ] = useState(0);
   const { data, error, mutate } = qnaList({ page });
   
-
-  console.log("1대1문의 data : ", data)
-  
   return (
 
     <Container>
       {data && data?.map((data) => {
         console.log("카테고리 1대1문의 data", data);
+        console.log("답변을 보자 : ", data?.qnaAnswer?.content);
+
         const accordionInfo = [{ 
           // date: data.createdDtime, 
           title: data.title, 
@@ -28,6 +27,8 @@ export function CategoryBoardLook() {
             firstContent: data.content, 
             secondContent: dateFormat(data.date, 'isoDate'),
             thirdContent: data.s3Files[0] ? data.s3Files[0].name : "파일없음",
+            fourthContent: data.qnaAnswer?.createdDtime,
+            fifthContent : data.qnaAnswer?.content
           }]
         }]
         return <QnaAccordion qnaAccordionList={accordionInfo}/>

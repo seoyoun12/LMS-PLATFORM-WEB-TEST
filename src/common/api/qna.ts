@@ -20,7 +20,7 @@ export enum AnsweredYn {
 
 export interface Qna {
 
-  answeredYn: string;
+  answeredYn: YN;
   content: string;
   createdDtime: string;
   modifiedDtime: string;

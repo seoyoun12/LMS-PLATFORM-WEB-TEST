@@ -76,7 +76,7 @@ export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, on
   const [ isFileDelete, setIsFileDelete ] = useState(false);
   const [ fileName, setFileName ] = useState<string | null>(null);
 
-  const [ phone01, setPhone01 ] = useState("");
+  const [ phone01, setPhone01 ] = useState("010");
   const [ phone02, setPhone02 ] = useState("");
   const [ phone03, setPhone03 ] = useState("");
 
@@ -97,6 +97,8 @@ export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, on
   const onChangePhoneNum01 = (e: any) => {
     setPhone01(e.target.value)
   }
+  console.log("폰앞자리 : ", phone01);
+  
   const onChangePhoneNum02 = (e: any) => {
     setPhone02(e.target.value)
   }
@@ -110,7 +112,7 @@ export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, on
   const handleSelectChange = (e: any) => {
     setQuestionType(e.target.value);
   }
-  console.log("타입 : ", questionType);
+  // console.log("타입 : ", questionType);
 
   const [smsChecked, setSmsChecked] = useState(true);
 
@@ -149,12 +151,6 @@ export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, on
 
 
 
-
-
-
-
-
-
   return (
 
     <Box
@@ -171,32 +167,28 @@ export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, on
             <TableCellLeft align="center">전화번호</TableCellLeft>
 
             <TableCellRight>
-            <FormControl sx={{ minWidth: "130px" }}>
-              {/* <TextField
-                {...register('phone')}
-                type="text"
-                size="small"
-                variant="outlined"
-                label="번호"
-              /> */}
-              <TextField
-                onChange={(e) => {
-                  if (e.target.value.length > 4) return;
-                  onChangePhoneNum01(e);
-                }}
-              />
-              <TextField
-                onChange={(e) => {
-                  if (e.target.value.length > 4) return;
-                  onChangePhoneNum02(e);
-                }}
-              />
-              <TextField
-                onChange={(e) => {
-                  if (e.target.value.length > 4) return;
-                  onChangePhoneNum03(e);
-                }}
-              />
+            <FormControl sx={{ minWidth: "130px" , width: "60%"}}>
+              <Box display={"flex"} alignItems="center" gap="1rem">
+                <Select labelId="phone-type-label" id="phone-type" defaultValue={"010"} onChange={onChangePhoneNum01}>
+                  {phoneList.map((item) => (
+                    <MenuItem value={item}>{item}</MenuItem>
+                  ))}
+                </Select>
+                -
+                <TextField
+                  onChange={(e) => {
+                    if (e.target.value.length > 4) return;
+                    onChangePhoneNum02(e);
+                  }}
+                />
+                <TextField
+                  onChange={(e) => {
+                    if (e.target.value.length > 4) return;
+                    onChangePhoneNum03(e);
+                  }}
+                />
+              </Box>
+
               <Box display={"flex"} alignItems="center">
                 <Checkbox
                   checked={smsChecked}

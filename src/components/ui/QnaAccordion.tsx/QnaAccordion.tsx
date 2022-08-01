@@ -22,6 +22,8 @@ interface QnaBoardAccordionList {
     firstContent?: string;
     secondContent?: string;
     thirdContent?: string;
+    fourthContent?: string;
+    fifthContent?: string;
     isActive?: boolean;
   }[];
 }
@@ -74,7 +76,7 @@ export function QnaAccordion({ qnaAccordionList } : { qnaAccordionList : QnaBoar
           <BoardAccordionDetails>
             <nav aria-label="secondary mailbox folders">
               <List disablePadding={true}>
-                {children.map(({ firstContent,secondContent, thirdContent , isActive }, idx) => (
+                {children.map(({ firstContent, secondContent, thirdContent, fourthContent, fifthContent, isActive }, idx) => (
                   <ListItem
                     disablePadding
                     sx={{
@@ -85,13 +87,23 @@ export function QnaAccordion({ qnaAccordionList } : { qnaAccordionList : QnaBoar
                       <TableRow>
                         <TableCellLeft align="center" sx={{fontSize: "1.2rem", fontWeight: "bold"}}>질문</TableCellLeft>
                         <TableCellRight>
-                          <BoardBox display="flex" flexDirection={"column"} width="100%" >
+                          <QuestionBoardBox display="flex" flexDirection={"column"} width="100%" >
                             <ListItemText primary={secondContent} className="SecondContent"/>
                             <ListItemText primary={firstContent} className="FirstContent"/>
                             <ListItemText primary={thirdContent} className="ThirdContent"/>
-                          </BoardBox>
+                          </QuestionBoardBox>
                         </TableCellRight>
                       </TableRow>
+
+                      <TableRow sx={{backgroundColor: "white"}}>
+                        <TableCellLeft align="center" sx={{fontSize: "1.2rem", fontWeight: "bold", backgroundColor: "white"}}>답변</TableCellLeft>
+                        <TableCellRight>
+                          <AnswerBoardBox display="flex" flexDirection={"column"} width="100%" >
+                            <ListItemText primary={fourthContent} className="FourthContent"/>
+                            <ListItemText primary={fifthContent} className="FifthContent"/>
+                          </AnswerBoardBox>
+                        </TableCellRight>
+                        </TableRow>
                     </TableBody>
 
                   </ListItem>
@@ -111,11 +123,32 @@ export function QnaAccordion({ qnaAccordionList } : { qnaAccordionList : QnaBoar
 
 }
 
-
 const BoardBox = styled(Box)`
+.QnaBoardOne {
+  color: #a59d9d;
+}
+
+.QnaBoardTwo {
+  font-weight: bold;
+  font-size: 1.3rem;
+  width: 100%;
+}
+`
+
+
+const QuestionBoardBox = styled(Box)`
   .QnaBoardOne {
     color: #a59d9d;
   }
+
+  .QnaBoardTwo {
+    font-weight: bold;
+    font-size: 1.3rem;
+    width: 100%;
+  }
+`
+
+const AnswerBoardBox = styled(Box)`
 
   .QnaBoardTwo {
     font-weight: bold;
@@ -131,7 +164,7 @@ const BoardAccordionDetails = styled(AccordionDetails)`
 `
 
 const TableCellLeft = styled(TableCell)`
-  background: #e0e0e0;
+  /* background: #e0e0e0; */
   /* border-top: 1px solid #b4b4b4;
   border-bottom: 1px solid #b4b4b4; */
   width: 20%;

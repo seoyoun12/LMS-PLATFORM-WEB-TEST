@@ -29,7 +29,7 @@ export function SignInV2() {
 
   useEffect(() => {
     if (isLogin) {
-      router.push('/');
+      router.push('/traffic/category');
     }
   }, [isLogin]);
 

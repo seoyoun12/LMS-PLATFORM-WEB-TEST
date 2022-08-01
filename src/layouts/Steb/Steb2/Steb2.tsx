@@ -91,6 +91,7 @@ export function Steb2() {
           .then(async res => {
             //계정생성완료 후 작업
             const test = await courseClassOrganizationEnrll(postData);
+            console.log('test', test);
             const randomSeq = Math.floor(Math.random() * 10000); //로컬에서 삭제를 구분하기 위한 번호
             setValue('seq', randomSeq);
             setEnroll(prev => [...prev, watch()]);
@@ -101,6 +102,7 @@ export function Steb2() {
             if (e.data.status === 400) {
               //이미 존재하는 계정
               const test = await courseClassOrganizationEnrll(postData);
+              console.log('test', test);
               const randomSeq = Math.floor(Math.random() * 10000); //로컬에서 삭제를 구분하기 위한 번호
               setValue('seq', randomSeq);
               setEnroll(prev => [...prev, watch()]);

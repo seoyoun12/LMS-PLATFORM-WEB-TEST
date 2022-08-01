@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Avatar, Box, Container, Grid, tabsClasses, Typography } from '@mui/material';
+import { Avatar, Box, Container, Grid, MenuItem, tabsClasses, Typography } from '@mui/material';
 import { Link } from '@components/common';
 import s from './Me.module.scss';
 import { grey } from '@mui/material/colors';
@@ -16,10 +16,11 @@ const myInfoList = [
   // { label: "내 강의", value: "myCourse" },
   // { label: "정보 수정", value: "editInfo" },
   // { label: "증명서 발급", value: "certificate" },
-  { label: '학습중인 과정', value: 'studyCourse' },
-  { label: '학습종료 과정', value: 'endStudyCourse' },
-  { label: '증명서 발급', value: 'certificate' },
-  { label: '온라인 교육 신청내욕', value: 'onlineEdu' },
+
+  { label: '정보수정', value: '/edit' },
+  { label: '학습현황', value: '/my-course' },
+  { label: '증명서발급', value: '/certificate' },
+  { label: '온라인 교육 신청내역', value: '/enroll-history' },
 ];
 
 export function Me() {
@@ -44,24 +45,19 @@ export function Me() {
             <Typography>{user.username}</Typography>
           </div>
         </Link>
-        <Link className={s.link} underline="hover" color={grey[900]} href={`/me/edit`}>
-          <Typography variant="body2">정보수정</Typography>
-          <ArrowForwardIcon />
-        </Link>
       </UserInfoSection>
       <ContentBody>
         <SideBar>
           <SideBarContent>
             <SideBarTitle variant="h6">내 정보</SideBarTitle>
-
-            <Tabs
-              tabsConfig={myInfoList}
-              orientation="vertical"
-              variant="fullWidth"
-              rendering={false}
-              onChange={(newValue: string) => setValue(newValue)}
-              value={value}
-            />
+            {myInfoList.map(item => (
+              <Link color={grey[900]} href={`/me/${item.value}`}>
+                <MenuItem sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  {item.label}
+                  <ArrowForwardIcon />
+                </MenuItem>
+              </Link>
+            ))}
             {/* {myInfoList.map(({ href, name }) => (
               <Link
                 key={name}
@@ -78,7 +74,7 @@ export function Me() {
         </SideBar>
         <LessonListContainer>
           <Typography variant="h6" sx={{ marginBottom: '16px' }}>
-            {myInfoList.filter(filter => filter.value === value)[0].label}
+            내 강의
           </Typography>
           <Grid container rowSpacing={4} columnSpacing={2} columns={{ xs: 1, sm: 1, md: 2, lg: 2 }}>
             {user.learningCourses ? (
@@ -86,7 +82,7 @@ export function Me() {
                 const period = new Date(res.createdDtime).setDate(res.lessonTime);
                 const Days = Math.floor((period - new Date(res.createdDtime).getTime()) / (1000 * 60 * 60 * 24));
                 return (
-                  <Grid item xs={1} sm={1} md={1} lg={1} key={res.seq} sx={{ display: value === myInfoList[0].value ? 'display' : 'none' }}>
+                  <Grid item xs={1} sm={1} md={1} lg={1} key={res.seq}>
                     <Box
                       // href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}
                       onClick={() => {

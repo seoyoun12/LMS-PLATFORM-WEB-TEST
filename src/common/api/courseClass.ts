@@ -128,6 +128,6 @@ export function courseClassOrganizationEnrll(
 }
 
 //해당하는 교육과정을 수강 취소
-export function courseClassCancel(courseUserSeq: string) {
-  return DELETE(`//course-user/cancel/${courseUserSeq}`);
+export function courseUserOrganCancel(courseUserSeq: number) {
+  return DELETE(`/course-user/cancel/organization/${courseUserSeq}`);
 }

@@ -13,6 +13,11 @@ export enum QnaType {
 
 }
 
+export enum AnsweredYn {
+  ANSWEREDY = "Y",
+  ANSWEREDN = "N"
+}
+
 export interface Qna {
 
   answeredYn: string;
@@ -43,10 +48,11 @@ export interface QnaAnswer {
 export interface QnaInput {
 
   content: string;
-  phone: number;
+  phone: string;
   smsYn: YN;
   title: string;
   type: QnaType;
+  s3Files: S3Files;
 
 }
 

@@ -202,7 +202,7 @@ export function CategoryUploadForm({ mode = 'upload', category, courseSeq, onHan
           {mode === 'upload' ? '업로드하기' : '수정하기'}
         </SubmitBtn>
       </Box>
-
+      
     </Container>
     
   )

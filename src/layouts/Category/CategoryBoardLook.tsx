@@ -1,10 +1,11 @@
 import { Container } from "@mui/material";
 import styles from '@styles/common.module.scss';
 import styled from '@emotion/styled';
-import { qnaList } from "@common/api/qna";
+import { AnsweredYn, qnaList } from "@common/api/qna";
 import { BoardAccordion } from "@components/ui";
 import { useState } from "react";
 import { QnaAccordion } from "@components/ui/QnaAccordion.tsx";
+import dateFormat from "dateformat";
 
 export function CategoryBoardLook() {
 
@@ -18,10 +19,16 @@ export function CategoryBoardLook() {
 
     <Container>
       {data && data?.map((data) => {
+        console.log("카테고리 1대1문의 data", data);
         const accordionInfo = [{ 
-          date: data.createdDtime, 
+          // date: data.createdDtime, 
           title: data.title, 
-          children: [{ firstContent: data.content, secondContent: data.content}] 
+          answeredYN: data.answeredYn,
+          children: [{ 
+            firstContent: data.content, 
+            secondContent: dateFormat(data.date, 'isoDate'),
+            thirdContent: data.s3Files[0] ? data.s3Files[0].name : "파일없음",
+          }]
         }]
         return <QnaAccordion qnaAccordionList={accordionInfo}/>
       })}

@@ -22,7 +22,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
   const [firstSwiper, setFirstSwiper] = useState();
   const [secondSwiper, setSecondSwiper] = useState();
   const { data, error } = useBannerList();
-  console.log(data);
+  // console.log(data);
 
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);
@@ -115,7 +115,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
             disableOnInteraction: false,
           }}
           onSlideChange={e => {
-            console.log(e);
+            // console.log(e);
             progress();
           }}
           // onRealIndexChange={progress}

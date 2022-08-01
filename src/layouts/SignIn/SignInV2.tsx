@@ -60,7 +60,7 @@ export function SignInV2() {
         setIsLoginState(true);
         setUsetInfo({ username: res.data.username, regCategory: [...res.data.roles] }); // api가 있었음 필요없을듯
         snackbar({ variant: 'success', message: '로그인이 되었습니다.' });
-        return router.push('/');
+        return router.push('/category');
       }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });

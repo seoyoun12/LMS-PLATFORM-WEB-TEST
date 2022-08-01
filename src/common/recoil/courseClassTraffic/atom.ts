@@ -7,6 +7,10 @@ export const courseClassTrafficInfo = atom<CourseClassTraffic | null>({
   default: null,
 });
 
+export interface PeopleCounts {
+  [prop: string]: { [prop: string]: number };
+}
+
 export interface CourseClassTraffic {
   locate: string; //지엮
   division: string; // 소속
@@ -14,15 +18,16 @@ export interface CourseClassTraffic {
   student: string;
   category: string;
 
-  firstGrade: number;
-  secondGrade: number;
-  thirdGrade: number;
-  fourthGrade: number;
-  fifthGrade: number;
-  sixthGrade: number;
-  fifthYearOldChild: number;
-  fourthYearOldChild: number;
-  thirdYearOldChild: number;
-  oldMan: number;
-  selfDriver: number;
+  peopleCounts: PeopleCounts;
+  // firstGrade: number;
+  // secondGrade: number;
+  // thirdGrade: number;
+  // fourthGrade: number;
+  // fifthGrade: number;
+  // sixthGrade: number;
+  // fifthYearOldChild: number;
+  // fourthYearOldChild: number;
+  // thirdYearOldChild: number;
+  // oldMan: number;
+  // selfDriver: number;
 }

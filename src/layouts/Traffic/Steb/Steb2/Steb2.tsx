@@ -44,7 +44,7 @@ import { ko } from 'date-fns/locale';
 import { CourseClassTraffic } from '@common/recoil/courseClassTraffic/atom';
 
 interface detailCounts {
-  [prop: string]: any;
+  [prop: string]: { [prop: string]: number };
 }
 
 interface FormDatas {
@@ -59,17 +59,7 @@ export function Steb2() {
   const [trafficInfo, setTrafficInfo] = useRecoilState(courseClassTrafficInfo);
 
   const [detailCounts, setDetailCounts] = useState<detailCounts>({
-    firstGrade: null,
-    secondGrade: null,
-    thirdGrade: null,
-    fourthGrade: null,
-    fifthGrade: null,
-    sixthGrade: null,
-    fifthYearOldChild: null, //만 5세
-    fourthYearOldChild: null, //만 4세
-    thirdYearOldChild: null, //만 3세
-    oldMan: null, //어르신
-    selfDriver: null, //자가운전자
+    HIGH_SCHOOL: { firstGrade: 0, secondGrade: 0, thirdGrade: 0 },
   });
 
   const { register, setValue, watch, reset } = useForm<CourseClassTraffic>({
@@ -79,66 +69,31 @@ export function Steb2() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { locate, division, date, student, category } = watch();
-    const {
-      firstGrade,
-      secondGrade,
-      thirdGrade,
-      fourthGrade,
-      fifthGrade,
-      sixthGrade,
-      fifthYearOldChild,
-      fourthYearOldChild,
-      thirdYearOldChild,
-      oldMan,
-      selfDriver,
-    } = detailCounts;
-    if (!locate || !division || !date || !student || !category) return window.alert('모두 입력해 주세요!');
-    console.log(watch());
 
-    for (let keys in detailCounts) {
-      const value = detailCounts[keys];
-      console.log('ss', value);
+    let isPeople = null;
+    for (let [key, obj] of Object.entries(detailCounts)) {
+      for (let [kkey, value] of Object.entries(obj)) {
+        isPeople = isPeople || value;
+      }
     }
 
-    // if (
-    //   !firstGrade &&
-    //   !secondGrade &&
-    //   !thirdGrade &&
-    //   !fourthGrade &&
-    //   !fifthGrade &&
-    //   !sixthGrade &&
-    //   !fifthYearOldChild &&
-    //   !thirdYearOldChild &&
-    //   !fourthYearOldChild &&
-    //   !thirdGrade &&
-    //   !oldMan &&
-    //   !selfDriver
-    // )
-    //   return window.alert('교육생 수를 기입해주세요!');
+    if (!locate || !division || !date || !student || !category) return window.alert('모두 입력해 주세요!');
+    if (!isPeople || isPeople <= 0) return window.alert('교육생 명수를 기입해주세요!');
 
     try {
+      setTrafficInfo({ ...watch(), peopleCounts: { ...detailCounts } });
       router.push('steb3');
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
     }
   };
 
-  // useEffect(() => {
-  //   //해당 페이지 접근시 개인, 단체 초기화.
-  //   console.log('초기화');
-  //   setEnroll([]);
-  //   setEnrollInfo([]);
-  // }, []);
-
-  // useEffect(() => {
-  //   onClickConfirm();
-  //   if (!confirm) {
-  //     return () => {
-  //       console.log('형이 왜 실행되는거야');
-  //       setOrganization([]);
-  //     };
-  //   }
-  // }, [confirm]);
+  useEffect(() => {
+    if (!isLogin) {
+      router.push('/traffic/category');
+      window.alert('신청하시려면 로그인하셔야 합니다!');
+    }
+  }, []);
 
   return (
     <Steb2Wrap>
@@ -151,14 +106,7 @@ export function Steb2() {
       >
         <FormControl fullWidth>
           <InputLabel id="location">지역</InputLabel>
-          <Select
-            labelId="location"
-            id="location"
-            // value={location}
-            // onChange={(e) => setLocation(e.target.value as userRegistrationType)}
-            {...register('locate', { required: true })}
-            label="location"
-          >
+          <Select labelId="location" id="location" {...register('locate', { required: true })} label="location">
             {locationList.map(item => (
               <MenuItem key={item.en} value={item.en}>
                 {item.ko}
@@ -178,7 +126,6 @@ export function Steb2() {
           customInput={<TextField fullWidth />}
           selected={new Date(watch().date)}
           onSelect={() => {}}
-          // popperPlacement="left"
           onChange={date => setValue('date', date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd'))}
         />
         <FormControl fullWidth>
@@ -204,21 +151,7 @@ export function Steb2() {
             value={watch().category}
             onChange={e => {
               setValue('category', e.target.value);
-              setDetailCounts({
-                firstGrade: 0,
-                secondGrade: 0,
-                thirdGrade: 0,
-                fourthGrade: 0,
-                fifthGrade: 0,
-                sixthGrade: 0,
-                fifthYearOldChild: 0,
-                fourthYearOldChild: 0,
-                thirdYearOldChild: 0,
-                oldMan: 0,
-                selfDriver: 0,
-              });
             }}
-            // label="student-category"
           >
             {studentList
               .filter(studentList => watch().student === studentList.enType)[0]
@@ -233,9 +166,9 @@ export function Steb2() {
           <TableBody sx={{ width: '80%' }}>
             {studentList
               .filter(item => watch().student === item.enType)[0]
-              ?.category.filter(item => watch().category === item.enType)[0] //뭐지??왜 옵셔널체이닝을 해야하지?
+              ?.category.filter(item => watch().category === item.enType)[0]
               ?.ageList.map(item => (
-                <CustomInput ageInfo={item} setDetailCounts={setDetailCounts} detailCounts={detailCounts} />
+                <CustomInput ageInfo={item} category={watch().category} setDetailCounts={setDetailCounts} detailCounts={detailCounts} />
               ))}
           </TableBody>
         </TableContainer>
@@ -253,17 +186,17 @@ const Steb2Wrap = styled(Container)`
 `;
 
 function CustomInput({
-  //부모에서 map해서 사용하도록 리팩토링
   ageInfo,
   setDetailCounts,
   detailCounts,
+  category,
 }: {
   ageInfo: { age: string; enAge: string };
   detailCounts: detailCounts;
   setDetailCounts: React.Dispatch<React.SetStateAction<detailCounts>>;
+  category: string;
 }) {
   const keyName: string = ageInfo.enAge;
-  // console.log(detailCounts);
 
   return (
     <TableRow>
@@ -272,11 +205,13 @@ function CustomInput({
         <TextField
           name={ageInfo.enAge}
           placeholder="0~000명"
-          value={detailCounts[keyName]}
+          value={detailCounts[category]?.[keyName]}
           onChange={e => {
-            // setValue(e.target.value);
             if (e.target.value.length > 10) return;
-            if (/^[0-9]+$/.test(e.target.value)) setDetailCounts({ ...detailCounts, [e.target.name]: Number(e.target.value) });
+            if (/^[0-9]+$/.test(e.target.value))
+              setDetailCounts(prev => {
+                return { [category]: { ...prev[category], [e.target.name]: Number(e.target.value) } };
+              });
           }}
           fullWidth
         />
@@ -285,7 +220,7 @@ function CustomInput({
   );
 }
 
-const studentList = [
+export const studentList = [
   {
     type: '어린이',
     enType: 'CHILDREN',
@@ -294,9 +229,9 @@ const studentList = [
         type: '유치원',
         enType: 'KINDER',
         ageList: [
-          { age: '만3세', enAge: 'fifthYearOldChild' },
+          { age: '만3세', enAge: 'thirdYearOldChild' },
           { age: '만4세', enAge: 'fourthYearOldChild' },
-          { age: '만5세', enAge: 'thirdYearOldChild' },
+          { age: '만5세', enAge: 'fifthYearOldChild' },
         ],
       },
     ],

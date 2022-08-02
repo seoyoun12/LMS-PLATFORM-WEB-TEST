@@ -3,7 +3,7 @@ import styles from '@styles/common.module.scss';
 import styled from '@emotion/styled';
 import router, { useRouter } from "next/router";
 import { useSnackbar } from "@hooks/useSnackbar";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { CategoryBoard, BoardType, categoryBoardList } from "@common/api/categoryBoard";
 import { Accordion, Table } from '@components/ui';
 import dateFormat from 'dateformat';
@@ -12,7 +12,7 @@ import KeyboardArrowUpSharpIcon from '@mui/icons-material/KeyboardArrowUpSharp';
 import { grey } from '@mui/material/colors';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import { BoardAccordion } from '@components/ui/BoardAccordion';
-import React from 'react';
+
 
 
 export function CategoryBoardNotice() {
@@ -20,11 +20,6 @@ export function CategoryBoardNotice() {
   const [ page, setPage ] = useState(0);
   const { data, error, mutate } = categoryBoardList({ page, boardType: "TYPE_NOTICE" });
   const router = useRouter();
-
-
-  //
-  
-
 
   // Pagination
   useEffect(() => {

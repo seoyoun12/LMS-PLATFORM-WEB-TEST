@@ -211,4 +211,17 @@ const TableCellRight = styled(TableCell)`
     text-align: center;
     /* margin-top: 5%; */
   }
+
+  .FourthContent {
+    color: #a59d9d;
+    /* border: 1px solid black;
+    box-sizing: border-box; */
+    position: relative;
+    width: 20%;
+    float: right;
+    text-align: center;
+    margin-left: 82%;
+    margin-top: -2%;
+    margin-bottom: -0.5%;
+  }
 `;

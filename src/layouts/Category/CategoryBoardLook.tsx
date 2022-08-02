@@ -27,7 +27,7 @@ export function CategoryBoardLook() {
             firstContent: data.content, 
             secondContent: dateFormat(data.date, 'isoDate'),
             thirdContent: data.s3Files[0] ? data.s3Files[0].name : "파일없음",
-            fourthContent: data.qnaAnswer?.createdDtime,
+            fourthContent: dateFormat(data.qnaAnswer?.createdDtime, 'isoDate'),
             fifthContent : data.qnaAnswer?.content
           }]
         }]

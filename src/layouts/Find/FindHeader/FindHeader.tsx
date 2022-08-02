@@ -4,10 +4,18 @@ import Filter1Icon from '@mui/icons-material/Filter1';
 import Filter2Icon from '@mui/icons-material/Filter2';
 import Filter3Icon from '@mui/icons-material/Filter3';
 
-export function StepHeader({ value, title, headers }: { value: number; title: string; headers: { title: string; value: number }[] }) {
+export function FindHeader({
+  value,
+  title,
+  headers,
+}: {
+  value: number;
+  title: string;
+  headers: { title: string; value: number; icon: any }[];
+}) {
   console.log(headers, value);
   return (
-    <StebHeaderWrap>
+    <FindHeaderWrap>
       <Box
         sx={{
           background: '#3498db',
@@ -25,16 +33,14 @@ export function StepHeader({ value, title, headers }: { value: number; title: st
         <Box display="flex" gap="8rem" width="fit-content" margin={'auto'} mt={4}>
           {headers.map(item => (
             <Box display="flex" flexDirection="column" alignItems={'center'} sx={{ opacity: item.value === value ? 1 : 0.5 }}>
-              {item.value === 1 && <Filter1Icon fontSize="large" />}
-              {item.value === 2 && <Filter2Icon fontSize="large" />}
-              {item.value === 3 && <Filter3Icon fontSize="large" />}
+              {item.icon}
               <span>{item.title}</span>
             </Box>
           ))}
         </Box>
       </Box>
-    </StebHeaderWrap>
+    </FindHeaderWrap>
   );
 }
 
-const StebHeaderWrap = styled(Box)``;
+const FindHeaderWrap = styled(Box)``;

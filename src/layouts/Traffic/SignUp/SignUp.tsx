@@ -18,6 +18,12 @@ import styled from '@emotion/styled';
 import { StepHeader } from './StepHeader';
 import { Step1, Step2, Step3 } from './Step';
 
+const headers = [
+  { title: '본인인증', value: 1 },
+  { title: 'ID생성', value: 2 },
+  { title: '가입완료', value: 3 },
+];
+
 export function SignUp() {
   const snackbar = useSnackbar();
   const [stepNumber, setStepNumber] = React.useState(1);
@@ -50,7 +56,7 @@ export function SignUp() {
 
   return (
     <SignUpWrap>
-      <StepHeader value={stepNumber} />
+      <StepHeader value={stepNumber} title={'충남교통연수원'} headers={headers} />
       {stepNumber === 1 && <Step1 handleStep={handleStep} />}
       {stepNumber === 2 && <Step2 handleStep={handleStep} />}
       {stepNumber === 3 && <Step3 handleStep={handleStep} />}

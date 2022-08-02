@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import { Box, BoxProps, Container, Typography } from '@mui/material';
-import { Spinner, Tabs } from '@components/ui';
+import { Tabs } from '@components/ui';
 import React from 'react';
-import { useMyUser } from '@common/api/user';
 import { useRouter } from 'next/router';
 import { LearningCourse } from './LearningCourse';
+import { EndCourse } from './EndCourse';
 
 const studingCourseList = [
   { label: '학습중인 과정', value: 'ing' },
@@ -13,22 +13,21 @@ const studingCourseList = [
 
 export function MyCourse() {
   const router = useRouter();
-  const { user, error } = useMyUser();
-  console.log(user);
-  if (!user) return <Spinner />;
   return (
     <Container>
       <MyCoursewrap>
-        <Typography variant="h5" fontWeight="bold">
+        <Typography variant="h5" fontWeight="bold" mt={4}>
           학습현황
         </Typography>
-        <Typography variant="h6">학습중인 과정의 수료확인 및 수료증 발급을 받을 수 있습니다!</Typography>
-        <Tabs tabsConfig={studingCourseList} />
+        <Typography variant="h6">학습중인 과정을 확인할수 있습니다!!</Typography>
+        <Box sx={{ width: 'fit-content', margin: 'auto' }}>
+          <Tabs tabsConfig={studingCourseList} />
+        </Box>
         <TabPanel index={String(router.query?.tab)} value={studingCourseList[0].value}>
           <LearningCourse />
         </TabPanel>
         <TabPanel index={String(router.query?.tab)} value={studingCourseList[1].value}>
-          asdasd아ddd
+          <EndCourse />
         </TabPanel>
       </MyCoursewrap>
     </Container>

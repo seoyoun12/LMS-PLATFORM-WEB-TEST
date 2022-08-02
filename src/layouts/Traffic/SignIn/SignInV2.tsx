@@ -104,7 +104,7 @@ export function SignInV2() {
           </Button>
           <Grid container>
             <Grid item>
-              <Link href="#" variant="body2" color="black">
+              <Link href="/find/id" variant="body2" color="black">
                 아이디를 잊으셨나요?
               </Link>
             </Grid>
@@ -112,7 +112,7 @@ export function SignInV2() {
               |
             </Box>
             <Grid item xs>
-              <Link href="#" variant="body2" color="black">
+              <Link href="/find/pw" variant="body2" color="black">
                 비밀번호를 잊으셨나요?
               </Link>
             </Grid>

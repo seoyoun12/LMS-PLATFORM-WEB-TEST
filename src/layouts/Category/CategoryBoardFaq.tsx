@@ -14,7 +14,7 @@ import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import { BoardAccordion } from '@components/ui/BoardAccordion';
 
 
-export function CategoryBoardQna() {
+export function CategoryBoardFaq() {
 
   const [page, setPage] = useState(0);
   const { data, error, mutate } = categoryBoardList({ page, boardType: "TYPE_FAQ" });

@@ -11,7 +11,6 @@ import { useRouter } from 'next/router';
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const [userPageType, setUserPageType] = useRecoilState(pageType);
-  // console.log("니 인마 어 내가 너거 서장이랑 밥도먹고 어?")
   useEffect(() => {
     if (router.route.includes('/traffic')) setUserPageType(pageRegType.TYPE_TRAFFIC_SAFETY_EDU);
   }, []);

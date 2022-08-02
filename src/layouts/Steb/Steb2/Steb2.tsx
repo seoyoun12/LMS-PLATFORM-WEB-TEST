@@ -63,7 +63,6 @@ export function Steb2() {
       businessType: watch().businessType.split('_')[1], //TYPE_PASSENGER 이런식인줄 알았으나 PASSENGER식으로 요청해야함
       identityNumber: firstIdentityNumber + secondIdentityNumber,
     }; //민증번호때문에 구분
-    console.log('포스폿', postData, seq);
 
     try {
       //개인으로 신청
@@ -75,7 +74,6 @@ export function Steb2() {
         //   return { ...prev, seq: enrollInfo.seq };
         // });
         router.push('/stebMove/steb3');
-        return console.log('컨펌입니다', confirm);
       }
       //단체로 신청
       if (registerType === RegisterType.TYPE_ORGANIZATION) {
@@ -94,7 +92,6 @@ export function Steb2() {
             const randomSeq = Math.floor(Math.random() * 10000); //로컬에서 삭제를 구분하기 위한 번호
             setValue('seq', randomSeq);
             setEnroll(prev => [...prev, watch()]);
-            console.log('gg', enroll);
           })
           .catch(async e => {
             console.dir(e.data.status);
@@ -104,7 +101,6 @@ export function Steb2() {
               const randomSeq = Math.floor(Math.random() * 10000); //로컬에서 삭제를 구분하기 위한 번호
               setValue('seq', randomSeq);
               setEnroll(prev => [...prev, watch()]);
-              console.log('gg', enroll);
             }
           });
       }
@@ -117,11 +113,9 @@ export function Steb2() {
     //단체에서 신청완료로 넘어가는 버튼
     // setConfirm(true);
     confirmRef.current = true;
-    console.log('십', confirmRef.current);
     // if (confirm) {
     setEnrollInfo({ seq: Number(enrollInfo && enrollInfo.seq) });
     router.push('/stebMove/steb3');
-    console.log('컨펌입니다', confirm);
     // }
   };
   useEffect(() => {
@@ -129,17 +123,13 @@ export function Steb2() {
   }, [confirm]);
 
   useEffect(() => {
-    console.log('뭐래', confirmRef.current);
     return () => {
-      console.log('뭐래2', confirmRef.current);
       if (confirmRef.current === false) {
         //해당 페이지 접근시 개인, 단체 초기화.
-        console.log('초기화', confirmRef.current);
         setEnroll([]);
         setEnrollInfo(null);
       }
       confirmRef.current = false;
-      console.log('십', confirmRef.current);
     };
   }, []);
 
@@ -154,7 +144,6 @@ export function Steb2() {
   //   onClickConfirm();
   //   if (!confirm) {
   //     return () => {
-  //       console.log('형이 왜 실행되는거야');
   //       setOrganization([]);
   //     };
   //   }

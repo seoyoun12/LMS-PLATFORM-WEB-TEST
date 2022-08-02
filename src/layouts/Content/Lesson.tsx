@@ -59,12 +59,9 @@ export function Lesson() {
   const { query, pathname } = router;
   const { courseId, lessonId } = query;
   const { course, courseError } = useCourse(Number(courseId));
-  console.log(course);
-  console.log(router);
 
   if (courseError) return <div>error</div>;
   if (!course) return <Spinner />;
-  console.log(course);
   return (
     <ContentContainer maxWidth={false}>
       {/* <MainSection>

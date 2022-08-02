@@ -62,7 +62,7 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
     //       ? true
     //       : false
     //     : false;
-    console.log('아니 도대체 왜?', item.course.courseName, item, new Date(item.requestStartDate).getTime() - new Date().getTime());
+    // console.log('아니 도대체 왜?', item.course.courseName, item, new Date(item.requestStartDate).getTime() - new Date().getTime());
     const prevSchedule = new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0 ? true : false;
     const isReceive =
       new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0

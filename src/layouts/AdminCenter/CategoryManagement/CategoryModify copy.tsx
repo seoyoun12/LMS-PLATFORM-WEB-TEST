@@ -56,10 +56,8 @@ export function CategoryModify() {
     categoryBoardInput: CategoryBoardInput,
     categorySeq?: number;
   }) => {
-    console.log("1. categorySeq : ", categorySeq);
 
     try {
-      console.log("2. categorySeq : ", categorySeq);
       if (categorySeq) {
         const category = await modifyCategoryBoard({seq: categorySeq, categoryBoardInput });
         await fileHandler(files, category.data, isFileDelete ); // 파일업로드 

@@ -26,7 +26,6 @@ export function CategoryModify() {
       });
     } else {
       if (isFileDelete) {
-        console.log('소리질러!!');
         await deleteFile({
           fileTypeId: category.seq,
           fileType: BbsType.TYPE_POST_NOTICE,

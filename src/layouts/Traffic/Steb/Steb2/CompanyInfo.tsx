@@ -18,7 +18,6 @@ export function CompanyInfo({ register, watch }: Props) {
   const [businessSubType, setBusinessSubType] = useState<string | null>(null);
   const [businessName, setBusinessName] = useState<string | null>(null);
 
-  console.log('좀 ㅈ발', userBusinessTypeTwo, watch());
   return (
     <CompanyInfoWrap>
       <Box>

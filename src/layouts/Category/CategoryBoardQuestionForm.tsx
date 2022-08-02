@@ -97,8 +97,6 @@ export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, on
   const onChangePhoneNum01 = (e: any) => {
     setPhone01(e.target.value)
   }
-  console.log("폰앞자리 : ", phone01);
-  
   const onChangePhoneNum02 = (e: any) => {
     setPhone02(e.target.value)
   }
@@ -144,8 +142,6 @@ export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, on
     const qnaInput = {
       ...qna, phone : phone01 + phone02 + phone03, type : questionType
     };
-    console.log("서브밋 안의 questionType : ", questionType)
-    console.log("파일 : ", files);
     onHandleSubmit({ qnaInput, files, isFileDelete });
   };
 

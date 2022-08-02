@@ -29,8 +29,6 @@ export function CategoryBoardQuestion() {
         fileType: BbsType.TYPE_QNA,
         files,
       });
-      console.log("qna.files", files);
-
     }
   };
 
@@ -39,7 +37,6 @@ export function CategoryBoardQuestion() {
       const qna = await uploadQna(qnaInput); // 게시판 내용 업로드. 파일보다 먼저
       await fileHandler(files, qna.data); // 파일업로드. 게시판 뒤
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
-      console.log("12. qna.data", qna.data);
       router.push(`/category`);
     } catch (e: any) {
       console.error(e);

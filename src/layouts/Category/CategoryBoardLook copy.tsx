@@ -10,8 +10,6 @@ export function CategoryBoardLook() {
   const [ page, setPage ] = useState(0);
   const { data, error, mutate } = qnaList({ page });
 
-  console.log("1대1문의 data : ", data)
-  
   return (
 
     <Container>

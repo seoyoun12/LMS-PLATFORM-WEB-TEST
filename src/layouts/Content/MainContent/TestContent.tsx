@@ -45,12 +45,10 @@ export function TestContent({noticeConfig}:Props){
     const router = useRouter()
     const {query , pathname} = router;
     const [loading , setLoading] = useState(false)
-    console.log(query)
 
     useEffect(()=>{
         if(query.content){
             try{
-                console.log("머ㅏㄴ데에에",router,query,pathname)
                 setLoading(true)
                 //api 요청하는부분.
                 // throw new Error("ㅋㅋ")

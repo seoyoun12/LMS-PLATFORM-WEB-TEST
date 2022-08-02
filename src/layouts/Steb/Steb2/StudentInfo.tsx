@@ -50,7 +50,6 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
         window.alert('권한이 없는 유저입니다.');
         setRegisterType(RegisterType.TYPE_INDIVIDUAL);
       } else {
-        console.log('휴먼엄ㄴㅇ', user.roles.filter(role => role === UserRole.ROLE_TRANS_MANAGER)[0]);
       }
     }
   }, [user, registerType]);

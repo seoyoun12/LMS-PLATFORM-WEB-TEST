@@ -31,12 +31,9 @@ export function NoticeContent({course}:Props){
     const asyncFunc = async() =>{
         if(query.content){
             try{
-                console.log("머ㅏㄴ데에에",router,query,pathname)
                 setLoading(true)
                 //api 요청하는부분.
-                // throw new Error("ㅋㅋ")
                 const data : any = await PromiseTest(Number(query.seq));
-                console.log(data)
                 setNotice(data[0])
                 setLoading(false)
             }catch(err){

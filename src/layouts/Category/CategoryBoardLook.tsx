@@ -16,8 +16,6 @@ export function CategoryBoardLook() {
 
     <Container>
       {data && data?.map((data) => {
-        console.log("카테고리 1대1문의 data", data);
-        console.log("답변을 보자 : ", data?.qnaAnswer?.content);
 
         const accordionInfo = [{ 
           // date: data.createdDtime, 

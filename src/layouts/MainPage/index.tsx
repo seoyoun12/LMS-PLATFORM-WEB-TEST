@@ -52,16 +52,13 @@ const MainPage: NextPage = () => {
   const isLogin = useIsLoginStatus();
   const { user, error: userError } = useMyUser();
   const { data, error } = useMainDisplay();
-  console.log(data, error, user);
 
   React.useEffect(() => {
     if (isLogin && user) {
       if (user.regCategory === regCategoryType.TYPE_TRANS_EDU) {
         router.push('/category');
-        console.log('뭐징??1');
       } else if (user.regCategory === regCategoryType.TYPE_TRAFFIC_SAFETY_EDU) {
         router.push('/traffic/category');
-        console.log('뭐징??12');
       }
     }
     console.log(screen.availHeight);

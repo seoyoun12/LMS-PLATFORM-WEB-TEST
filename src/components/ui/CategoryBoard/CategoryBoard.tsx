@@ -6,7 +6,7 @@ import MuiTab from '@mui/material/Tab';
 import { useRouter } from "next/router";
 import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { CategoryBoardNotice } from "@layouts/Category/CategoryBoardNotice";
-import { CategoryBoardQna } from "@layouts/Category/CategoryBoardQna";
+import { CategoryBoardFaq } from "@layouts/Category/CategoryBoardFaq";
 import { CategoryBoardQuestion } from "@layouts/Category/CategoryBoardQuestion";
 import { CategoryBoardLook } from "@layouts/Category/CategoryBoardLook";
 import { Tabs2 } from '@components/ui/Tabs2';
@@ -17,7 +17,7 @@ import { useCategoryBoard } from '@common/api/categoryBoard';
 
 const tabsConfig = [
   { label: '공지사항', value: "cbNotice", href: <CategoryBoardNotice />},
-  { label: '자주묻는질문', value: "cbQna", href: <CategoryBoardQna />},
+  { label: '자주묻는질문', value: "cbQna", href: <CategoryBoardFaq />},
   { label: '교육문의', value: "cbQuestion", href: <CategoryBoardQuestion />},
   { label: '문의내역조회', value: "cbLook", href: <CategoryBoardLook />},
 ]

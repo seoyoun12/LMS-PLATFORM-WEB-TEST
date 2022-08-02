@@ -47,7 +47,9 @@ export function NavBarV2() {
           <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
             {HeaderList.map(item => (
               <HeaderItem key={item.category} onMouseOver={handleHover} onMouseOut={handleOut}>
-                <Box className="header-title">{item.category}</Box>
+                <Link href={item.href} color={grey[900]}>
+                  <Box className="header-title">{item.category}</Box>
+                </Link>
                 <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
                   <Box className="link-wrap">
                     {item.items.map(menuItem => (
@@ -182,6 +184,7 @@ const RemoteWrap = styled(Box)`
 const HeaderList = [
   {
     category: '교육이용안내',
+    href: '/',
     items: [
       { title: '회원가입 및 로그인', href: '/sign-in' },
       { title: '교육신청방법', href: '/sign-in' },
@@ -190,6 +193,7 @@ const HeaderList = [
   },
   {
     category: '학습자료',
+    href: '/',
     items: [
       { title: '연령별 교수학습지도안', href: '/sign-in' },
       { title: '교육자료 및 영상', href: '/sign-in' },
@@ -198,21 +202,24 @@ const HeaderList = [
   },
   {
     category: '온라인교육',
+    href: '/traffic/stebMove/steb2',
     items: [
-      { title: '온라인교육 신청', href: '/sign-in' },
-      { title: '온라인교육 수정/취소', href: '/sign-in' },
+      { title: '온라인교육 신청', href: '/traffic/stebMove/steb2' },
+      { title: '온라인교육 수정/취소', href: '/traffic/stebMove/steb2' },
     ],
   },
   {
     category: '나의강의실',
+    href: '/me',
     items: [
-      { title: '학습현황', href: '/me' },
+      { title: '학습현황', href: '/me/my-course' },
       { title: '정보수정', href: '/me/edit' },
       { title: '문의하기', href: '/sign-in' },
     ],
   },
   {
     category: '고객센터',
+    href: '/',
     items: [
       { title: '공지사항', href: '/sign-in' },
       { title: '자주묻는질문', href: '/sign-in' },

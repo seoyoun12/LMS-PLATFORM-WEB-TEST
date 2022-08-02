@@ -30,7 +30,7 @@ export function NavBarV2() {
   };
 
   useEffect(() => {
-    const show = showRemoteList.some((e) => router.route.includes(e.href));
+    const show = showRemoteList.some(e => router.route.includes(e.href));
     console.log(show);
     setIsShowRemote(show);
   }, [router]);
@@ -45,12 +45,14 @@ export function NavBarV2() {
             onMouseOut={handleOut}
           ></HeaderBackground>
           <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
-            {HeaderList.map((item) => (
+            {HeaderList.map(item => (
               <HeaderItem key={item.category} onMouseOver={handleHover} onMouseOut={handleOut}>
-                <Box className="header-title">{item.category}</Box>
+                <Link href={item.href} color={grey[900]}>
+                  <Box className="header-title">{item.category}</Box>
+                </Link>
                 <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
                   <Box className="link-wrap">
-                    {item.items.map((menuItem) => (
+                    {item.items.map(menuItem => (
                       <MenuItem key={menuItem.title} className="link-item">
                         <Link href={menuItem.href}>{menuItem.title}</Link>
                       </MenuItem>
@@ -180,38 +182,25 @@ const RemoteWrap = styled(Box)`
 
 const HeaderList = [
   {
-    category: '교육이용안내',
-    items: [
-      { title: '회원가입 및 로그인', href: '/sign-in' },
-      { title: '교육신청방법', href: '/sign-in' },
-      { title: '학습방법', href: '/sign-in' },
-    ],
-  },
-  {
-    category: '학습자료',
-    items: [
-      { title: '연령별 교수학습지도안', href: '/sign-in' },
-      { title: '교육자료 및 영상', href: '/sign-in' },
-      { title: '타기관자료 모음', href: '/sign-in' },
-    ],
-  },
-  {
     category: '온라인교육',
+    href: '/stebMove/steb1',
     items: [
-      { title: '온라인교육 신청', href: '/sign-in' },
-      { title: '온라인교육 수정/취소', href: '/sign-in' },
+      { title: '교육일정', href: '/stebMove/steb1' },
+      { title: '교육예약', href: '/stebMove/steb1' },
     ],
   },
   {
-    category: '나의강의실',
+    category: '마이페이지',
+    href: '/me',
     items: [
-      { title: '학습현황', href: '/me' },
+      { title: '학습현황', href: '/me/my-course' },
       { title: '정보수정', href: '/me/edit' },
-      { title: '문의하기', href: '/sign-in' },
+      { title: '문의하기', href: '/' },
     ],
   },
   {
     category: '고객센터',
+    href: '/',
     items: [
       { title: '공지사항', href: '/sign-in' },
       { title: '자주묻는질문', href: '/sign-in' },

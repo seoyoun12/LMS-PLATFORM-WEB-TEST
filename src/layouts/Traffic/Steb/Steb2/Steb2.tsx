@@ -1,6 +1,22 @@
-import { Button, Container, styled } from '@mui/material';
+import {
+  Button,
+  Container,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  styled,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { StebHeader } from '../StebHeader';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { EduOverview } from './EduOverview';
 import { CompanyInfo } from './CompanyInfo';
 import { StudentInfo } from './StudentInfo';
@@ -16,171 +32,254 @@ import {
   UserTransSaveInputDataType,
 } from '@common/api/courseClass';
 import { useRecoilState } from 'recoil';
-import { courseClassEnrollInfo, courseClassEnrollList } from '@common/recoil';
+import { courseClassEnrollInfo, courseClassEnrollList, courseClassTrafficInfo } from '@common/recoil';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { signUp } from '@common/api';
+import { locationList } from '@layouts/MeEdit/MeEdit';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import dateFormat from 'dateformat';
+import { ko } from 'date-fns/locale';
+import { CourseClassTraffic } from '@common/recoil/courseClassTraffic/atom';
+
+interface detailCounts {
+  [prop: string]: { [prop: string]: number };
+}
+
+interface FormDatas {
+  locate: string;
+}
 
 export function Steb2() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const isLogin = useIsLoginStatus();
-  const [isIndividual, setIsIndividual] = useState(true); //individual or team button
-  const [registerType, setRegisterType] = useState<RegisterType>(RegisterType.TYPE_INDIVIDUAL); //개인신청 단체신청 토글
-  const [enroll, setEnroll] = useRecoilState(courseClassEnrollList); //전역에 신청자 정보 저장
-  const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo); //전역에 교육정보 저장
-  const [confirm, setConfirm] = useState(false);
-  const confirmRef = useRef<boolean>();
+  const ref = useRef<boolean>(false);
+  const [trafficInfo, setTrafficInfo] = useRecoilState(courseClassTrafficInfo);
 
-  const { register, setValue, watch } = useForm<UserTransSaveInputDataType>({
-    defaultValues: { firstIdentityNumber: '', secondIdentityNumber: '' },
+  const [detailCounts, setDetailCounts] = useState<detailCounts>({
+    HIGH_SCHOOL: { firstGrade: 0, secondGrade: 0, thirdGrade: 0 },
   });
 
-  useEffect(() => {
-    (function () {
-      if (!isLogin) {
-        window.alert('로그인이 필요한 서비스입니다.');
-        return router.push('/sign-in');
+  const { register, setValue, watch, reset } = useForm<CourseClassTraffic>({
+    defaultValues: { date: dateFormat(new Date(), 'yyyy-mm-dd') },
+  });
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { locate, division, date, student, category } = watch();
+
+    let isPeople = null;
+    for (let [key, obj] of Object.entries(detailCounts)) {
+      for (let [kkey, value] of Object.entries(obj)) {
+        isPeople = isPeople || value;
       }
-    })();
-  }, []);
+    }
 
-  useEffect(() => {
-    if (enrollInfo) setValue('courseClassSeq', Number(enrollInfo.seq));
-  }, [enrollInfo]);
-  useEffect(() => {
-    setValue('registerType', RegisterType.TYPE_INDIVIDUAL);
-  }, []);
-
-  const onClickEnroll = async () => {
-    //단체 신청시 스택쌓이는 구조. 개인상태에서는 혼자 신청
-    const { seq, firstIdentityNumber, secondIdentityNumber, ...rest } = watch();
-    if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7) return window.alert('주민번호를 모두 입력해주세요!');
-    if (!enrollInfo || !enrollInfo.seq) return window.alert('기수를 선택해주세요!');
-
-    const postData = {
-      ...rest,
-      businessType: watch().businessType.split('_')[1], //TYPE_PASSENGER 이런식인줄 알았으나 PASSENGER식으로 요청해야함
-      identityNumber: firstIdentityNumber + secondIdentityNumber,
-    }; //민증번호때문에 구분
-    console.log('포스폿', postData, seq);
+    if (!locate || !division || !date || !student || !category) return window.alert('모두 입력해 주세요!');
+    if (!isPeople || isPeople <= 0) return window.alert('교육생 명수를 기입해주세요!');
 
     try {
-      //개인으로 신청
-      if (registerType === RegisterType.TYPE_INDIVIDUAL) {
-        confirmRef.current = true;
-        const test = await courseClassIndividualEnroll(postData);
-        setEnroll([watch()]);
-        // setEnrollInfo(prev => {
-        //   return { ...prev, seq: enrollInfo.seq };
-        // });
-        router.push('/stebMove/steb3');
-        return console.log('컨펌입니다', confirm);
-      }
-      //단체로 신청
-      if (registerType === RegisterType.TYPE_ORGANIZATION) {
-        signUp({
-          username: watch().firstIdentityNumber + secondIdentityNumber,
-          password: watch().firstIdentityNumber + secondIdentityNumber,
-          name: watch().name,
-          regCategory: 'TYPE_TRANS_EDU',
-          phone: watch().phone,
-          emailYn: YN.NO,
-          smsYn: YN.NO,
-        })
-          .then(async res => {
-            //계정생성완료 후 작업
-            const test = await courseClassOrganizationEnrll(postData);
-            const randomSeq = Math.floor(Math.random() * 10000); //로컬에서 삭제를 구분하기 위한 번호
-            setValue('seq', randomSeq);
-            setEnroll(prev => [...prev, watch()]);
-            console.log('gg', enroll);
-          })
-          .catch(async e => {
-            console.dir(e.data.status);
-            if (e.data.status === 400) {
-              //이미 존재하는 계정
-              const test = await courseClassOrganizationEnrll(postData);
-              const randomSeq = Math.floor(Math.random() * 10000); //로컬에서 삭제를 구분하기 위한 번호
-              setValue('seq', randomSeq);
-              setEnroll(prev => [...prev, watch()]);
-              console.log('gg', enroll);
-            }
-          });
-      }
+      setTrafficInfo({ ...watch(), peopleCounts: { ...detailCounts } });
+      router.push('steb3');
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
     }
   };
 
-  const onClickConfirm = async () => {
-    //단체에서 신청완료로 넘어가는 버튼
-    // setConfirm(true);
-    confirmRef.current = true;
-    console.log('십', confirmRef.current);
-    // if (confirm) {
-    setEnrollInfo({ seq: Number(enrollInfo && enrollInfo.seq) });
-    router.push('/stebMove/steb3');
-    console.log('컨펌입니다', confirm);
-    // }
-  };
   useEffect(() => {
-    confirmRef.current = confirm;
-  }, [confirm]);
-
-  useEffect(() => {
-    console.log('뭐래', confirmRef.current);
-    return () => {
-      console.log('뭐래2', confirmRef.current);
-      if (confirmRef.current === false) {
-        //해당 페이지 접근시 개인, 단체 초기화.
-        console.log('초기화', confirmRef.current);
-        setEnroll([]);
-        setEnrollInfo(null);
-      }
-      confirmRef.current = false;
-      console.log('십', confirmRef.current);
-    };
+    if (!isLogin) {
+      router.push('/traffic/category');
+      window.alert('신청하시려면 로그인하셔야 합니다!');
+    }
   }, []);
-
-  // useEffect(() => {
-  //   //해당 페이지 접근시 개인, 단체 초기화.
-  //   console.log('초기화');
-  //   setEnroll([]);
-  //   setEnrollInfo([]);
-  // }, []);
-
-  // useEffect(() => {
-  //   onClickConfirm();
-  //   if (!confirm) {
-  //     return () => {
-  //       console.log('형이 왜 실행되는거야');
-  //       setOrganization([]);
-  //     };
-  //   }
-  // }, [confirm]);
 
   return (
     <Steb2Wrap>
-      <StebHeader value={2} />
-      <Steb2BodyContainer maxWidth="sm">
-        <EduOverview setValue={setValue} />
-        <CompanyInfo isIndividual={isIndividual} setIsIndividual={setIsIndividual} register={register} watch={watch} />
-        <StudentList registerType={registerType} setRegisterType={setRegisterType} />
-        <StudentInfo register={register} setValue={setValue} registerType={registerType} setRegisterType={setRegisterType} />
-        <Button variant="contained" onClick={onClickEnroll} fullWidth sx={{ mb: 2 }}>
-          신청하기
+      <StebHeader value={1} />
+      <Container
+        component="form"
+        onSubmit={handleSubmit}
+        maxWidth="sm"
+        sx={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '2rem' }}
+      >
+        <FormControl fullWidth>
+          <InputLabel id="location">지역</InputLabel>
+          <Select labelId="location" id="location" {...register('locate', { required: true })} label="location">
+            {locationList.map(item => (
+              <MenuItem key={item.en} value={item.en}>
+                {item.ko}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <TextField label="소속(학교 , 기관 , 단체)" {...register('division')} />
+          <FormHelperText sx={{ color: 'red' }}></FormHelperText>
+        </FormControl>
+        <DatePicker
+          locale={ko}
+          dateFormat="yyyy-MM-dd"
+          showPopperArrow={false}
+          minDate={new Date()}
+          customInput={<TextField fullWidth />}
+          selected={new Date(watch().date)}
+          onSelect={() => {}}
+          onChange={date => setValue('date', date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd'))}
+        />
+        <FormControl fullWidth>
+          <Typography id="student">교육 대상자</Typography>
+          <Select
+            labelId="student"
+            id="student"
+            {...register('student')}
+            // label="student"
+          >
+            {studentList.map((item, index) => (
+              <MenuItem key={item.enType} value={item.enType}>
+                {item.type}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <Typography id="student-category">교육생 세부구분</Typography>
+          <Select
+            labelId="student-category"
+            id="student-category"
+            value={watch().category}
+            onChange={e => {
+              setValue('category', e.target.value);
+            }}
+          >
+            {studentList
+              .filter(studentList => watch().student === studentList.enType)[0]
+              ?.category.map(({ type, enType, ageList }) => (
+                <MenuItem key={enType} value={enType}>
+                  {type}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+        <TableContainer component={Paper} sx={{ display: 'flex', justifyContent: 'center' }}>
+          <TableBody sx={{ width: '80%' }}>
+            {studentList
+              .filter(item => watch().student === item.enType)[0]
+              ?.category.filter(item => watch().category === item.enType)[0]
+              ?.ageList.map(item => (
+                <CustomInput ageInfo={item} category={watch().category} setDetailCounts={setDetailCounts} detailCounts={detailCounts} />
+              ))}
+          </TableBody>
+        </TableContainer>
+        <Button variant="contained" type="submit" fullWidth>
+          교육 신청하기
         </Button>
-        {registerType === RegisterType.TYPE_ORGANIZATION && (
-          <Button variant="contained" onClick={onClickConfirm} fullWidth>
-            확인
-          </Button>
-        )}
-      </Steb2BodyContainer>
+      </Container>
     </Steb2Wrap>
   );
 }
 
-const Steb2Wrap = styled(Container)``;
+const Steb2Wrap = styled(Container)`
+  .react-datepicker__month-container {
+  }
+`;
 
-const Steb2BodyContainer = styled(Container)``;
+function CustomInput({
+  ageInfo,
+  setDetailCounts,
+  detailCounts,
+  category,
+}: {
+  ageInfo: { age: string; enAge: string };
+  detailCounts: detailCounts;
+  setDetailCounts: React.Dispatch<React.SetStateAction<detailCounts>>;
+  category: string;
+}) {
+  const keyName: string = ageInfo.enAge;
+
+  return (
+    <TableRow>
+      <TableCell sx={{ width: '50%' }}>{ageInfo.age}</TableCell>
+      <TableCell>
+        <TextField
+          name={ageInfo.enAge}
+          placeholder="0~000명"
+          value={detailCounts[category]?.[keyName]}
+          onChange={e => {
+            if (e.target.value.length > 10) return;
+            if (/^[0-9]+$/.test(e.target.value))
+              setDetailCounts(prev => {
+                return { [category]: { ...prev[category], [e.target.name]: Number(e.target.value) } };
+              });
+          }}
+          fullWidth
+        />
+      </TableCell>
+    </TableRow>
+  );
+}
+
+export const studentList = [
+  {
+    type: '어린이',
+    enType: 'CHILDREN',
+    category: [
+      {
+        type: '유치원',
+        enType: 'KINDER',
+        ageList: [
+          { age: '만3세', enAge: 'thirdYearOldChild' },
+          { age: '만4세', enAge: 'fourthYearOldChild' },
+          { age: '만5세', enAge: 'fifthYearOldChild' },
+        ],
+      },
+    ],
+  },
+  {
+    type: '청소년',
+    enType: 'TEENAGER',
+    category: [
+      {
+        type: '초등학교',
+        enType: 'ELEMENTARY_SCHOOL',
+        ageList: [
+          { age: '1학년', enAge: 'firstGrade' },
+          { age: '2학년', enAge: 'secondGrade' },
+          { age: '3학년', enAge: 'thirdGrade' },
+          { age: '4학년', enAge: 'fourthGrade' },
+          { age: '5학년', enAge: 'fifthGrade' },
+          { age: '6학년', enAge: 'sixthGrade' },
+        ],
+      },
+      {
+        type: '중학교',
+        enType: 'MIDDLE_SCHOOL',
+        ageList: [
+          { age: '1학년', enAge: 'firstGrade' },
+          { age: '2학년', enAge: 'secondGrade' },
+          { age: '3학년', enAge: 'thirdGrade' },
+        ],
+      },
+      {
+        type: '고등학교',
+        enType: 'HIGH_SCHOOL',
+        ageList: [
+          { age: '1학년', enAge: 'firstGrade' },
+          { age: '2학년', enAge: 'secondGrade' },
+          { age: '3학년', enAge: 'thirdGrade' },
+        ],
+      },
+    ],
+  },
+  {
+    type: '자가운전자',
+    enType: 'SELF_DRIVER',
+    category: [{ type: '자가운전자', enType: 'SELF_DRIVER', ageList: [{ age: '자가운전자', enAge: 'selfDriver' }] }],
+  },
+  {
+    type: '어르신',
+    enType: 'OLD_MAN',
+    category: [{ type: '어르신', enType: 'OLD_MAN', ageList: [{ age: '어르신', enAge: 'oldMan' }] }],
+  },
+];

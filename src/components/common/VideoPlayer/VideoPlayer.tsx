@@ -3,7 +3,7 @@ import Script from 'next/script';
 import * as React from 'react';
 import { Config, Ncplayer } from 'types/ncplayer';
 
-const CDN_URL = 'https://dnkwhodfjmev10929056.cdn.ntruss.com/resource/js/ncplayer-1.2.5.umd.min-c808bb53.js';
+const CDN_URL = 'https://cn-lms-storage.cdn.gov-ntruss.com/common/js/ncplayer-1.2.5.umd.min-c808bb53.js';
 
 type Props = {
   config: Config

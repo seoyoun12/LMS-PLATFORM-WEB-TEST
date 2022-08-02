@@ -29,7 +29,7 @@ export function SignInV2() {
 
   useEffect(() => {
     if (isLogin) {
-      router.push('/');
+      router.push('/traffic/category');
     }
   }, [isLogin]);
 
@@ -45,7 +45,7 @@ export function SignInV2() {
         setIsLoginState(true);
         setUsetInfo({ username: res.data.username, regCategory: [...res.data.roles] }); // api가 있었음 필요없을듯
         snackbar({ variant: 'success', message: '로그인이 되었습니다.' });
-        return router.push('/');
+        return router.push('/traffic/category');
       }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -104,7 +104,7 @@ export function SignInV2() {
           </Button>
           <Grid container>
             <Grid item>
-              <Link href="#" variant="body2" color="black">
+              <Link href="/find/id" variant="body2" color="black">
                 아이디를 잊으셨나요?
               </Link>
             </Grid>
@@ -112,7 +112,7 @@ export function SignInV2() {
               |
             </Box>
             <Grid item xs>
-              <Link href="#" variant="body2" color="black">
+              <Link href="/find/pw" variant="body2" color="black">
                 비밀번호를 잊으셨나요?
               </Link>
             </Grid>

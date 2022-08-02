@@ -13,6 +13,7 @@ const aa = '123@';
 
 const passwordRegex = /^[a-zA-z]+[0-9]+[\[\]\{\}\/,.<>;:\'\"`~!@#$%^&*\(\)-_=+\\]/;
 const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+const phoneRegex = /[0-9]$/;
 
 interface Props {
   handleStep: (moveNumber: number) => void;
@@ -23,6 +24,8 @@ export function Step2({ handleStep }: Props) {
   const [usernameErr, setUserNameErr] = useState(false);
   const [passwordErr, setPasswordErr] = useState(false);
   const [emailErr, setEmailErr] = useState(false);
+  const [phoneErr, setPhoneErr] = useState(false);
+  const [phone, setPhone] = useState<string>();
   const snackbar = useSnackbar();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,8 +34,10 @@ export function Step2({ handleStep }: Props) {
     const username = data.get('username') as string;
     const password = data.get('password') as string;
     const email = data.get('email') as string;
+    const phone = data.get('phone') as string;
+    console.log(phone);
 
-    if (nameErr || usernameErr || passwordErr || emailErr) return;
+    if (nameErr || usernameErr || passwordErr || emailErr || phoneErr) return;
 
     if (!!name && !!username && !!password) {
       try {
@@ -44,7 +49,7 @@ export function Step2({ handleStep }: Props) {
           regCategory: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU,
           emailYn: YN.NO,
           smsYn: YN.NO,
-          phone: '0100101010123123',
+          phone,
         });
         handleStep(3);
       } catch (e: any) {
@@ -76,6 +81,14 @@ export function Step2({ handleStep }: Props) {
     if (!emailRegex.test(e.target.value)) {
       setEmailErr(true);
     }
+  };
+  const onChangePhone = (e: ChangeEvent<HTMLInputElement>) => {
+    setPhoneErr(false);
+    if (e.target.value.length > 11) return;
+    if (!phoneRegex.test(e.target.value)) {
+      setPhoneErr(true);
+    }
+    setPhone(e.target.value);
   };
 
   return (
@@ -140,6 +153,17 @@ export function Step2({ handleStep }: Props) {
           <FormControl>
             <TextField name="email" placeholder="이메일을 입력해주세요" onChange={onChangeEmail} error={emailErr} required />
             <FormHelperText sx={{ color: 'red' }}>{emailErr && '올바른 형식이 아닙니다.'}</FormHelperText>
+          </FormControl>
+          <FormControl>
+            <TextField
+              name="phone"
+              placeholder="전화번호를 입력해주세요"
+              onChange={onChangePhone}
+              error={phoneErr}
+              value={phone}
+              required
+            />
+            <FormHelperText sx={{ color: 'red' }}>{phoneErr && '올바른 형식이 아닙니다.'}</FormHelperText>
           </FormControl>
           <Button variant="contained" type="submit">
             동의하고 회원가입

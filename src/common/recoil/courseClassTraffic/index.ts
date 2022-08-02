@@ -1,0 +1,1 @@
+export { courseClassTrafficInfo } from './atom';

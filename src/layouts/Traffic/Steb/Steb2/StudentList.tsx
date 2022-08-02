@@ -1,4 +1,4 @@
-import { courseClassCancel, RegisterType } from '@common/api/courseClass';
+import { courseUserOrganCancel, RegisterType } from '@common/api/courseClass';
 import { courseClassEnrollList } from '@common/recoil';
 import styled from '@emotion/styled';
 import { Box, Button, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';

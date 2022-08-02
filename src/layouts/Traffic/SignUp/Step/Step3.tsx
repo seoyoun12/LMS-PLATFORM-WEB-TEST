@@ -31,7 +31,7 @@ export function Step3({ handleStep }: Props) {
           </Box>
         </ContentBoxes>
         <Box mt={4} />
-        <ContentBoxes>어쩌라구님의 회원가입을 축하합니다.</ContentBoxes>
+        <ContentBoxes>홍길동님의 회원가입을 축하합니다.</ContentBoxes>
         <ContentBoxes>알차고 실속있는 서비스로 찾아뵙겠습니다.</ContentBoxes>
         <Box margin="auto" maxWidth="450px" mt={4} borderBottom="2px solid #888888" />
         <ContentBoxes borderBottom="2px solid #888888"></ContentBoxes>

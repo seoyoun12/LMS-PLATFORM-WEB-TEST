@@ -2,6 +2,7 @@ import { GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { CourseRes } from '@common/api/course';
 import { YN } from '@common/constant';
+import { businessType, courseSubCategoryType } from './courseClass';
 
 export enum MemberType {
   TYPE_MEMBER = "TYPE_MEMBER",
@@ -69,13 +70,31 @@ export enum userSubjectEducationDetailType {
   OLD_MAN = 'OLD_MAN',
 }
 
+export enum progressStatus {
+  TYPE_PROGRESSING = 'TYPE_PROGRESSING',
+  TYPE_ENDED = 'TYPE_ENDED',
+}
+
+export interface MyInfoCourseRes {
+  courseClassSeq: number; //과정클래스 시퀀스
+  courseSeq: number; //과정 시퀀스
+  courseTitle: string; //과정 제목
+  courseUserSeq: number; //과정신청 시퀀스
+  leftDays: number; //교육만료까지 남은기간
+  progress: number; //진도율
+  progressStatus: progressStatus; //학습중인 과정 ,종료과정 구분
+  step: number; //기수
+  studyEndDate: string; //교육만료일
+  thumbnailImage: string; //썸네일 이미지 S3경로
+}
+
 export interface MyUser extends User {
   accountNonExpired: boolean;
   accountNonLocked: boolean;
   roles: UserRole[];
   credentialsNonExpired: boolean;
   enabled: boolean;
-  learningCourses: CourseRes[];
+  learningCourses: MyInfoCourseRes[];
   pushToken: string;
 }
 
@@ -131,6 +150,16 @@ export async function userLoginHistory() {
   return await POST(`/user/login-history`);
 }
 
+export async function findUserId(phone: string) {
+  return await POST(`/user/find-id`, { phone });
+}
+export async function existsUserId(username: string) {
+  return await POST(`/user/exists-id`, { username });
+}
+export async function changeUserPW({ username, password }: { username: string; password: string }) {
+  return await POST(`/user/change-password`, { username, password });
+}
+
 export async function modifyMyUser({ name, emailYn, smsYn }: { name: string; emailYn: YN; smsYn: YN }) {
   return await PUT(`/user/myinfo/modify`, {
     emailYn,
@@ -153,31 +182,39 @@ export async function transWorker({ currentPassword, newPassword }: { currentPas
 }
 
 export interface provincailTrafficSafety {
+  // company: string;
+  // email: string;
+  // firstGrade?: number; // 1학년
+  // secondGrade?: number; // 2학년
+  // thirdGrade?: number; // 3학년
+  // fourthGrade?: number; // 4학년
+  // fifthGrade?: number; // 5학년
+  // sixthGrade?: number; // 6학년
+  // thirdYearOldChild?: number; //만 3세
+  // fourthYearOldChild?: number; //만 4세
+  // fifthYearOldChild?: number; //만 5세
+  // oldMan?: number; //어르신
+  // selfDriver?: number; //자가운전자
+  // name: string;
+  // phone: string;
+  // smsYn: string;
+  // userRegistrationType: string;
+  // userSeq: number;
+  // userSubjectEducationDetailType: string;
+  // userSubjectEducationType: string;
+  // username: string;
+  carNumber: string;
   company: string;
-  email: string;
-  firstGrade?: number; // 1학년
-  secondGrade?: number; // 2학년
-  thirdGrade?: number; // 3학년
-  fourthGrade?: number; // 4학년
-  fifthGrade?: number; // 5학년
-  sixthGrade?: number; // 6학년
-  thirdYearOldChild?: number; //만 3세
-  fourthYearOldChild?: number; //만 4세
-  fifthYearOldChild?: number; //만 5세
-  oldMan?: number; //어르신
-  selfDriver?: number; //자가운전자
   name: string;
   phone: string;
-  smsYn: string;
+  smsYn: YN;
+  userBusinessTypeOne: businessType;
+  userBusinessTypeTwo: courseSubCategoryType;
   userRegistrationType: string;
-  userSeq: number;
-  userSubjectEducationDetailType: string;
-  userSubjectEducationType: string;
-  username: string;
 }
 
 export async function modifyProvincialTrafficSafety(info: provincailTrafficSafety) {
-  return await PUT(`/user/provincial-traffic/${info.userSeq}`, info);
+  return await PUT(`/user/provincial`, info);
 }
 
 interface modifTransWorker {
@@ -193,5 +230,5 @@ interface modifTransWorker {
 }
 
 export async function modifTransWorker(info: modifTransWorker) {
-  return await PUT(`/user/trans-worker/${info.userSeq}`, info);
+  return await PUT(`/user/transport`, info);
 }

@@ -1,4 +1,4 @@
-import { courseClassCancel, RegisterType } from '@common/api/courseClass';
+import { courseUserOrganCancel, RegisterType } from '@common/api/courseClass';
 import { courseClassEnrollList } from '@common/recoil';
 import styled from '@emotion/styled';
 import { Box, Button, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
@@ -21,7 +21,7 @@ export function StudentList({ registerType, setRegisterType }: Props) {
   const onClickDelete = async (seq: number, test: any) => {
     console.log('아', seq, test);
     try {
-      // await courseClassCancel(courseUserSeq); 삭제 통신
+      await courseUserOrganCancel(seq);
       setOrganization(prev => prev.filter(item => item.seq !== seq));
     } catch (e: any) {
       snackbar({ variant: 'error', message: e });

@@ -13,8 +13,8 @@ import { grey } from '@mui/material/colors';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import { BoardAccordion } from '@components/ui/BoardAccordion';
 import React from 'react';
-import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
 
+import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
 
 export function CategoryBoardNotice() {
 

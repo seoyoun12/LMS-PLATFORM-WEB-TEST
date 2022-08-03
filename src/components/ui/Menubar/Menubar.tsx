@@ -10,13 +10,14 @@ import { headerHeight } from "@styles/variables";
 const pages = ["강의소개", "커리큘럼"];
 
 export const Menubar = ({ className }: { className?: string }) => {
+  // const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
+  // const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+  //   setAnchorElNav(event.currentTarget);
+  // };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);

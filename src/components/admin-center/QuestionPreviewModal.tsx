@@ -8,7 +8,7 @@ interface Props {
 }
 
 export function QuestionPreviewModal({ open, handleClose, questionId }: Props) {
-  const { question, questionError } = useQuestion(questionId);
+  const { question } = useQuestion(questionId); // questionError
 
   return (
     <Modal

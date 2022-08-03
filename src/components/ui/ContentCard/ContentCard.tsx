@@ -1,4 +1,3 @@
-import * as React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -38,11 +37,11 @@ const Title = styled(Typography)`
   ${setLineClamp(1)}
 `;
 
-const TakeCourse = styled(Typography)`
-  font-weight: bold;
-  color: #3498db;
-`;
+// const TakeCourse = styled(Typography)`
+//   font-weight: bold;
+//   color: #3498db;
+// `;
 
-const OverDay = styled(Typography)`
-  font-weight: bold;
-`;
+// const OverDay = styled(Typography)`
+//   font-weight: bold;
+// `;

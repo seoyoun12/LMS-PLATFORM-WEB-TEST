@@ -4,7 +4,6 @@ import { courseEnroll, useCourse } from '@common/api/course';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { headerHeight } from '@styles/variables';
-import { TuiViewer } from '@components/common/TuiEditor';
 import { useRouter } from 'next/router';
 import { Spinner } from '@components/ui';
 import { css, cx } from '@emotion/css';
@@ -39,16 +38,16 @@ export function Course() {
     <Container className={cx(styles.globalContainer, containerStyle)}>
       <MainSection>
         <ThumbnailImg>
-          {course.courseFile ? <Image
+          {course.s3Files ? <Image
             className="thumbnailImg"
-            src={course.courseFile}
+            src={course.s3Files[0].path} // course.courseFile
             layout="responsive"
             width="100%"
             height="56.25"
           /> : null}
         </ThumbnailImg>
 
-        <TuiViewer initialValue={course.content1} />
+        {/* <TuiViewer initialValue={course.courseName} /> content1 */} 
 
         <CurriculumContainer>
           <Typography
@@ -57,7 +56,6 @@ export function Course() {
           >
             커리큘럼
           </Typography>
-          {/*<CurriculumAccordion curriculum={course.curriculum}/>*/}
         </CurriculumContainer>
       </MainSection>
 
@@ -70,7 +68,7 @@ export function Course() {
             variant="h6"
             className={fontWeightBold}
           >
-            {course.courseSubName}
+            {course.courseName} {/* subname */}
           </Typography>
           <Divider
             light

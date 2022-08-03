@@ -1,6 +1,6 @@
 import useSWR, {SWRResponse} from "swr";
 import {GET} from "@common/httpClient";
-import {UserMyinfoCertificatesResponseDto} from "@common/api/types/data-contracts";
+import {UserMyinfoCertificatesResponseDto} from "@common/api/types/Api";
 
 export function useGetUserMyinfoCertificates () {
   const { data, mutate, error } = useSWR<SWRResponse<UserMyinfoCertificatesResponseDto>>(

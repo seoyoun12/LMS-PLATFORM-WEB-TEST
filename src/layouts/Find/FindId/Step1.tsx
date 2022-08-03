@@ -37,7 +37,6 @@ export function Step1({ handleStepChange, handleIdsChange }: Props) {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPhoneErr(false);
-    console.log(phoneRegex.test(e.target.value), e.target.value);
     if (e.target.value.length > 11) return;
     if (!phoneRegex.test(e.target.value) || e.target.value.length < 11) {
       // return setPhoneErr(true);

@@ -1,49 +1,36 @@
-import { findUserId } from '@common/api/user';
+import { existsUserId } from '@common/api/user';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { Box, Button, Container, FormControl, FormHelperText, TextField, Typography } from '@mui/material';
-import { grey } from '@mui/material/colors';
 import { ChangeEvent, FormEvent, useState } from 'react';
 
-const phoneRegex = /[0-9]$/;
-
 interface Props {
-  handleStepChange: () => void;
-  handleIdsChange: (
-    idArr: {
-      username: string;
-      createdDTime: string;
-    }[]
-  ) => void;
+  handleStepChange: (stepNumber: number) => void;
+  handleUsernameChange: (username: string) => void;
 }
 
-export function Step1({ handleStepChange, handleIdsChange }: Props) {
+export function Step1({ handleStepChange, handleUsernameChange }: Props) {
   const snackbar = useSnackbar();
-  const [phone, setPhone] = useState<string>('');
-  const [phoneErr, setPhoneErr] = useState(false);
+  const [username, setUsername] = useState<string>('');
+  const [usernameErr, setUsernameErr] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (phoneErr) return window.alert('올바르지 않은 휴대폰 번호 형식입니다.');
+    if (usernameErr) return window.alert('올바른 아이디를 입력해 주세요!');
     try {
-      const { data } = await findUserId(phone);
+      const { data }: { data: { name: string; phone: string; username: string } } = await existsUserId(username);
       console.log(data);
-      handleIdsChange(data);
-      handleStepChange();
+      handleUsernameChange(data.username);
+      handleStepChange(2);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
     }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPhoneErr(false);
-    console.log(phoneRegex.test(e.target.value), e.target.value);
-    if (e.target.value.length > 11) return;
-    if (!phoneRegex.test(e.target.value) || e.target.value.length < 11) {
-      // return setPhoneErr(true);
-      setPhoneErr(true);
-    }
-    setPhone(e.target.value);
+    setUsernameErr(false);
+    setUsername(e.target.value);
+    if (e.target.value === '') return setUsernameErr(true);
   };
 
   return (
@@ -52,8 +39,8 @@ export function Step1({ handleStepChange, handleIdsChange }: Props) {
       <Typography fontWeight="bold">아이디의 존재여부를 확인합니다</Typography>
       <Box className="find-form" component="form" onSubmit={handleSubmit}>
         <FormControl>
-          <TextField placeholder="아이디를 입력해 주세요" onChange={handleChange} error={phoneErr} value={phone} />
-          <FormHelperText sx={{ color: 'red' }}>{phoneErr && `올바른 형식으로 입력해주세요`}</FormHelperText>
+          <TextField placeholder="아이디를 입력해 주세요" onChange={handleChange} error={usernameErr} value={username} />
+          <FormHelperText sx={{ color: 'red' }}>{usernameErr && `올바른 형식으로 입력해주세요`}</FormHelperText>
         </FormControl>
         <Button variant="contained" type="submit">
           찾기

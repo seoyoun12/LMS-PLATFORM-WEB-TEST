@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Alert } from '@components/common';
 import Button from '@mui/material/Button';
@@ -6,7 +5,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Box, FormControl, FormHelperText, MenuItem, Select } from '@mui/material';
 import { ErrorMessage } from '@hookform/error-message';
 import { ContentType } from '@common/api/content';
-import { ChangeEvent, useRef } from 'react';
+import { useRef } from 'react';
 import styled from '@emotion/styled';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import { grey } from '@mui/material/colors';
@@ -42,7 +41,6 @@ export function LessonBulkUploadModal({ open, handleClose }: {
     handleSubmit,
     formState: { errors },
     control,
-    reset
   } = useForm<{ contentType: ContentType }>({ defaultValues });
   const snackbar = useSnackbar();
   const router = useRouter();
@@ -81,12 +79,8 @@ export function LessonBulkUploadModal({ open, handleClose }: {
     handleClose(true);
   };
 
-  const uploadFile = (e: ChangeEvent) => {
-    e.preventDefault();
 
-    const files = (e.target as HTMLInputElement).files;
-    if (!files?.length) return null;
-  };
+  // 파일 업로드 관련 코드 작성 필요. modal쪽 전부 코드수정해야함.
 
   return (
     <Modal

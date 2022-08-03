@@ -3,7 +3,7 @@ import styles from '@styles/common.module.scss';
 import styled from '@emotion/styled';
 import router, { useRouter } from "next/router";
 import { useSnackbar } from "@hooks/useSnackbar";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { CategoryBoard, BoardType, categoryBoardList } from "@common/api/categoryBoard";
 import { Accordion, Spinner, Table } from '@components/ui';
 import dateFormat from 'dateformat';
@@ -22,11 +22,6 @@ export function CategoryBoardNotice() {
   // const { data, error, mutate } = categoryBoardList({ page, boardType: "TYPE_NOTICE" });
   const router = useRouter();
   const [target , loadedItem , loading] = useInfiniteScroll(`/post`,"TYPE_NOTICE")
-
-
-  //
-  
-
 
   // Pagination
   useEffect(() => {

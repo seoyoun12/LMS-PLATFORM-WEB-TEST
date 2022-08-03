@@ -1,12 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import styles from '@styles/common.module.scss';
-import s from './Footer.module.scss';
 import styled from '@emotion/styled';
-import { Button, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { Link } from '@components/common';
 import { useRouter } from 'next/router';
-import { Box, Container } from '@mui/system';
-import { Grid3x3 } from '@mui/icons-material';
+import { Box } from '@mui/system';
 
 interface Props {
   className?: string;

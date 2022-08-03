@@ -30,8 +30,8 @@ export function MainContent({ course, noticeConfig }: Props) {
   const [revealVideo, setRevealVideo] = useRecoilState(revealVideoState);
   const [progressValue, setProgressValue] = useState(50);
 
-  const period = new Date(course.createdDtime).setDate(course.lessonTerm);
-  const Days = Math.floor((period - new Date(course.createdDtime).getTime()) / (1000 * 60 * 60 * 24));
+  // const period = new Date(course.createdDtime).setDate(course.lessonTerm);
+  // const Days = Math.floor((period - new Date(course.createdDtime).getTime()) / (1000 * 60 * 60 * 24));
 
   useEffect(() => {
     setProgressValue(Math.floor((2 / course.lessons.length) * 100));
@@ -66,7 +66,7 @@ export function MainContent({ course, noticeConfig }: Props) {
         <Box>
           <Box sx={{ minWidth: 35 }} display="flex" justifyContent={"space-between"}>
             <Typography variant="h6" fontWeight={"bold"} color="#ff5600">{`${Math.round(progressValue)}% 수강완료`}</Typography>
-            <Typography variant="h6" color={grey[500]}>{`${Days}일 남음`}</Typography>
+            {/* <Typography variant="h6" color={grey[500]}>{`${Days}일 남음`}</Typography> */}
           </Box>
           <Box sx={{ width: "100%", mr: 1 }}>
             <LinearProgress variant="determinate" value={progressValue} />

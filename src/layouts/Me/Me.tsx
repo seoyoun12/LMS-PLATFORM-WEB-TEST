@@ -80,7 +80,7 @@ export function Me() {
             {user.learningCourses ? (
               user.learningCourses.map(res => {
                 return (
-                  <Grid item xs={1} sm={1} md={1} lg={1} key={res.courseSeq}>
+                  <Grid item xs={1} sm={1} md={1} lg={1} key={res.courseClassSeq}>
                     <Box
                       onClick={() => {
                           return window.alert('수업이 존재하지 않습니다. 관리자에게 문의해주세요.');

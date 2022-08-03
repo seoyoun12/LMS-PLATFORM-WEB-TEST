@@ -16,7 +16,6 @@ import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
 import { useRouter } from 'next/router';
 import { Accordion } from '@components/ui';
-import EventNoteIcon from '@mui/icons-material/EventNote';
 
 const drawerWidth = 240;
 

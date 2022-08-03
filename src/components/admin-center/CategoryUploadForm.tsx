@@ -1,6 +1,4 @@
-import { CategoryBoard, CategoryBoardInput } from "@common/api/categoryBoard"
-import { CourseRes } from "@common/api/course";
-import { ProductStatus } from "@common/api/course";
+import { CategoryBoardInput } from "@common/api/categoryBoard"
 import { YN } from "@common/constant";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Editor as EditorType } from '@toast-ui/react-editor';
@@ -10,22 +8,17 @@ import {
   Box,
   Button, Chip, FormControl,
   FormControlLabel, FormHelperText,
-  FormLabel, InputAdornment,
+  FormLabel,
   Radio,
   RadioGroup,
   TextField,
-  Typography
 } from '@mui/material';
 import { TuiEditor } from '@components/common/TuiEditor';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { ContentType } from '@common/api/content';
-import * as React from 'react';
-import { css, cx } from '@emotion/css';
+import { css } from '@emotion/css';
 import { ErrorMessage } from '@hookform/error-message';
 import { FileUploader } from '@components/ui/FileUploader';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
-import { useSnackbar } from '@hooks/useSnackbar';
-import { Link } from '@components/common';
 
 
 interface Props {
@@ -53,7 +46,7 @@ const defaultValues = {
 };
 
 
-export function CategoryUploadForm({ mode = 'upload', category, courseSeq, onHandleSubmit }: Props) {
+export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }: Props) {
   const editorRef = useRef<EditorType>(null);
   const [ isFileDelete, setIsFileDelete ] = useState(false);
   const [ fileName, setFileName ] = useState<string | null>(null);
@@ -248,15 +241,7 @@ const boxStyles = css`
   margin-top: 8px;
 `;
 
-const chipStyles = css`
-  margin-top: 8px;
-`;
-
 const pt20 = css`
   padding-top: 20px;
 `;
 
-const lessonTime = css`
-  width: 30%;
-  margin-top: 20px;
-`;

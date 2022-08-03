@@ -1,9 +1,7 @@
 import styled from '@emotion/styled';
 import styles from '@styles/common.module.scss';
-import { DropdownItem } from '@components/common/GlobalNavigationBar/NavBar/DropdownItem/DropdownItem';
-import { DropdownItemV2 } from '@components/common/GlobalNavigationBar/NavBar/DropdownItem/DropdownItemV2';
 import { grey } from '@mui/material/colors';
-import { Box, Button, MenuItem, Typography } from '@mui/material';
+import { Box, MenuItem } from '@mui/material';
 import { Link } from '@components/common';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -18,14 +16,16 @@ export function NavBarV2() {
   const router = useRouter();
   const [isShowRemote, setIsShowRemote] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const menuRef = useRef(anchorEl); // current에 안담겨
+  // const menuRef = useRef(anchorEl); // current에 안담겨
   // // let open = true;
-  let open = Boolean(anchorEl);
+  // let open = Boolean(anchorEl); 
+  const open = Boolean(anchorEl); 
 
   const handleHover = (e: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(e.currentTarget);
   };
-  const handleOut = (e: React.MouseEvent<HTMLDivElement>) => {
+  // const handleOut = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleOut = () => {
     setAnchorEl(null);
   };
 

@@ -4,6 +4,10 @@
     "plugin:@typescript-eslint/recommended",
     "next"
   ],
+  "rules": {
+    "react/no-unescaped-entities": "off",
+    "@next/next/no-page-custom-font": "off"
+  },
   "settings": {
     "react": {
       // eslint-plugin-react가 자동 리액트버전탐지,

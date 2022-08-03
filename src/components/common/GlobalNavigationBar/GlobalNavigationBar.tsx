@@ -1,5 +1,4 @@
 import { HeaderBar } from "@components/common/GlobalNavigationBar/HeaderBar";
-import { NavBar } from "@components/common/GlobalNavigationBar/NavBar";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AppBar } from "@mui/material";

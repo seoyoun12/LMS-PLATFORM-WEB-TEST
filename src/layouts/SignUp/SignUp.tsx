@@ -14,6 +14,7 @@ import { Link } from '@components/common';
 import { signUp } from '@common/api/auth';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { YN } from '@common/constant';
+import {SignupParams} from "@common/api/auth/signUp";
 
 export function SignUp() {
   const snackbar = useSnackbar();
@@ -32,9 +33,19 @@ export function SignUp() {
       password: data.get('password'),
     });
 
+    const param: SignupParams = {
+      name,
+      password,
+      username,
+      emailYn: YN.NO,
+      smsYn: YN.NO,
+      phone: "",
+      regCategory: "",
+    };
+
     if (!!name && !!username && !!password) {
       try {
-        return signUp({ name, password, username, emailYn: YN.NO, smsYn: YN.NO });
+        return signUp(param);
       } catch (e: any) {
         snackbar({ variant: 'error', message: e.data.message });
       }

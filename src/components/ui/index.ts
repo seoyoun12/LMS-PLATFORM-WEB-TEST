@@ -2,7 +2,6 @@ export { ManagedUIContext } from './context';
 export { ContentCard } from './ContentCard';
 export { AccountMenu } from './AccountMenu';
 export { Menubar } from './Menubar';
-export { CurriculumAccordion } from './CurriculumAccordion';
 export { Accordion } from './Accordion';
 export { CategoryCarousel } from './CategoryCarousel';
 export { Table } from './Table';

@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { useSnackbar } from "@hooks/useSnackbar";
 import { regCategory } from "@common/api/auth/signUp";
 import { userInfo } from "@common/recoil/user";
+import {loginType as LOGIN_TYPE} from "@common/api/auth/signIn";
 
 
 export function SignIn() {
@@ -25,7 +26,7 @@ export function SignIn() {
   const isLogin = useIsLoginStatus();
   const setIsLoginState = useSetRecoilState(isLoginState);
   const setUsetInfo = useSetRecoilState(userInfo)
-  const [loginType , setLoginType] = React.useState<regCategory>("TYPE_TRANS_EDU")
+  const [loginType , setLoginType] = React.useState<LOGIN_TYPE>(LOGIN_TYPE.TYPE_TRANS_EDU);
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -77,8 +78,8 @@ export function SignIn() {
           로그인
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <Typography component="div" variant="button" onClick={()=>setLoginType("TYPE_TRANS_EDU")} >저상/운수</Typography>
-          <Typography component="div" variant="button" onClick={()=>setLoginType("TYPE_TRAFFIC_SAFETY_EDU")} >도민</Typography>
+          <Typography component="div" variant="button" onClick={()=>setLoginType(LOGIN_TYPE.TYPE_TRANS_EDU)} >저상/운수</Typography>
+          <Typography component="div" variant="button" onClick={()=>setLoginType(LOGIN_TYPE.TYPE_TRAFFIC_SAFETY_EDU)} >도민</Typography>
           <TextField
             margin="normal"
             required

@@ -15,15 +15,16 @@ export function CategoryBoardLook() {
   return (
 
     <Container>
-      {data && data?.map((data) => {
-
+      {data && data?.content.map((data) => {
+        console.log("data.content : ", data.content)
+        console.log("data: ", data)
         const accordionInfo = [{ 
           // date: data.createdDtime, 
           title: data.title, 
           answeredYN: data.answeredYn,
           children: [{ 
             firstContent: data.content, 
-            secondContent: dateFormat(data.date, 'isoDate'),
+            secondContent: dateFormat(data.createdDtime, 'isoDate'),
             thirdContent: data.s3Files[0] ? data.s3Files[0].name : "파일없음",
             fourthContent: dateFormat(data.qnaAnswer?.createdDtime, 'isoDate'),
             fifthContent : data.qnaAnswer?.content

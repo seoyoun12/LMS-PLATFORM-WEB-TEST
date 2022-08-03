@@ -172,7 +172,7 @@ export function QuestionUploadModal({ open, handleClose, questionId, contentId, 
                       name="answer"
                       render={({ field }) => (
                         <RadioGroup row {...field} className="item-container radio">
-                          {objQuestionTypeItems.map(({ value, name }) =>
+                          {objQuestionTypeItems.map(({ value }) => // value, name
                             <Radio key={value} value={value} />
                           )}
                         </RadioGroup>

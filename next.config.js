@@ -1,11 +1,11 @@
 const path = require('path');
-const withTM = require("next-transpile-modules")([
-  "@fullcalendar/common",
-  "@fullcalendar/common",
-  "@fullcalendar/daygrid",
-  "@fullcalendar/interaction",
-  "@fullcalendar/react",
-  "@fullcalendar/timegrid",
+const withTM = require('next-transpile-modules')([
+  '@fullcalendar/common',
+  '@fullcalendar/common',
+  '@fullcalendar/daygrid',
+  '@fullcalendar/interaction',
+  '@fullcalendar/react',
+  '@fullcalendar/timegrid',
 ]);
 
 /** @type {import('next').NextConfig} */
@@ -15,14 +15,14 @@ const nextConfig = {
     includePaths: [path.join(__dirname, 'styles')],
   },
   images: {
-    domains: [
-      'picsum.photos',
-      'dnkwhodfjmev10929056.cdn.ntruss.com'
-    ]
+    domains: ['picsum.photos', 'dnkwhodfjmev10929056.cdn.ntruss.com'],
   },
   experimental: {
     forceSwcTransforms: true,
-  }
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
-module.exports = withTM(nextConfig)
+module.exports = withTM(nextConfig);

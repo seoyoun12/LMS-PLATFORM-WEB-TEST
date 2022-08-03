@@ -5,7 +5,6 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
-import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import dateFormat from 'dateformat';
@@ -24,7 +23,8 @@ interface BoardAccordionAccordionList {
 export function BoardAccordion({ boardAccordionList }: { boardAccordionList: BoardAccordionAccordionList[] }) {
   return (
     <>
-      {boardAccordionList.map(({ date, name, icon, children }, idx) => (
+      {/* {boardAccordionList.map(({ date, name, icon, children }, idx) => ( */}
+      {boardAccordionList.map(({ date, name, icon, children }) => (
         <MuiAccordion
           key={name}
           disableGutters elevation={0}
@@ -52,9 +52,11 @@ export function BoardAccordion({ boardAccordionList }: { boardAccordionList: Boa
           <BoardAccordionDetails>
             <nav aria-label="secondary mailbox folders">
               <List disablePadding={true}>
-                {children.map(({ name, isActive }, idx) => (
+                {/* {children.map(({ name, isActive }, idx) => ( */}
+                {children.map(({ name, isActive }) => (
                   <ListItem
                     disablePadding
+                    key={name} // key props error
                     sx={{
                       backgroundColor: `${isActive ? grey[50] : 'inherit'}`,
                     }}

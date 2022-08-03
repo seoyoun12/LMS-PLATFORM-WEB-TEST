@@ -1,18 +1,16 @@
 import styled from '@emotion/styled';
 import styles from '@styles/common.module.scss';
-import { Button, Stack, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
-import { Link, Searchbar } from '@components/common';
-import { grey } from '@mui/material/colors';
-import * as React from 'react';
+import { Button, Stack } from '@mui/material';
+// import { useRouter } from 'next/router';
+import { Link } from '@components/common';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { useMyUser, UserRole } from '@common/api/user';
 import { AccountMenu } from '@components/ui';
 import Image from 'next/image';
-import { NavBar, NavBarV2 } from '../NavBar';
+import { NavBarV2 } from '../NavBar';
 
 export function HeaderBar() {
-  const router = useRouter();
+  // const router = useRouter();
   const isLogin = useIsLoginStatus();
   const { user } = useMyUser();
 
@@ -81,16 +79,16 @@ const Header = styled.header`
   height: 100%;
 `;
 
-const TitleTypography = styled(Typography)`
-  /* box-sizing: border-box;
-  border: 1px solid black; */
-  color: black;
-  width: 150px;
-  font-weight: bold;
-  font-size: 1.3rem;
-  white-space: nowrap;
-  margin-left: 50px;
-`;
+// const TitleTypography = styled(Typography)`
+//   /* box-sizing: border-box;
+//   border: 1px solid black; */
+//   color: black;
+//   width: 150px;
+//   font-weight: bold;
+//   font-size: 1.3rem;
+//   white-space: nowrap;
+//   margin-left: 50px;
+// `;
 
 const ContentContainer = styled.div`
   display: flex;
@@ -106,23 +104,23 @@ const ContentContainer = styled.div`
   }
 `;
 
-const NavContainer = styled.div`
-  display: flex;
-  align-content: center;
-  margin-left: 20px;
+// const NavContainer = styled.div`
+//   display: flex;
+//   align-content: center;
+//   margin-left: 20px;
 
-  a:not(:first-of-type) {
-    margin-left: 16px;
-  }
+//   a:not(:first-of-type) {
+//     margin-left: 16px;
+//   }
 
-  .bold-600 {
-    font-weight: 600;
-  }
-`;
+//   .bold-600 {
+//     font-weight: 600;
+//   }
+// `;
 
-const SearchbarContainer = styled.div`
-  padding: 0 0 0 36px;
-`;
+// const SearchbarContainer = styled.div`
+//   padding: 0 0 0 36px;
+// `;
 
 const RightSection = styled.div`
   margin-left: auto;

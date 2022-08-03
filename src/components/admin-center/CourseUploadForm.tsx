@@ -11,13 +11,11 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import { TuiEditor } from '@components/common/TuiEditor';
 import styled from '@emotion/styled';
 import { ProductStatus, CourseRes } from '@common/api/course';
 import { YN } from '@common/constant';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { ContentType } from '@common/api/content';
-import * as React from 'react';
 import { css, cx } from '@emotion/css';
 import { ErrorMessage } from '@hookform/error-message';
 import { FileUploader } from '@components/ui/FileUploader';
@@ -114,15 +112,6 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             <ErrorMessage errors={errors} name="courseName" as={<FormHelperText error />} />
           </FormControl>
 
-          <FormControl className={textField}>
-            <TextField
-              {...register('courseSubName', { required: '과정 부제목을 입력해주세요.' })}
-              size="small"
-              label="부제목"
-              variant="outlined"
-            />
-            <ErrorMessage errors={errors} name="courseSubName" as={<FormHelperText error />} />
-          </FormControl>
           <div className="thumbnail-uploader">
             <FileUploader
               register={register}
@@ -144,14 +133,14 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
           </div>
         </InputContainer>
 
-        <TuiEditor
+        {/* <TuiEditor
           initialValue={(course && course.content1) || ' '}
           previewStyle="vertical"
           height="600px"
           initialEditType="wysiwyg"
           useCommandShortcut={true}
           ref={editorRef}
-        />
+        /> */}
 
         <FormControl className={cx(textField, lessonTime)}>
           <TextField
@@ -241,9 +230,6 @@ const boxStyles = css`
   margin-top: 8px;
 `;
 
-const chipStyles = css`
-  margin-top: 8px;
-`;
 
 const pt20 = css`
   padding-top: 20px;

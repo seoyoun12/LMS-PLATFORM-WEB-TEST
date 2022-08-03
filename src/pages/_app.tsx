@@ -6,7 +6,6 @@ import { AppProps } from 'next/app';
 import { ManagedUIContext } from '@components/ui';
 import { RecoilRoot } from 'recoil';
 import { ReactNode } from 'react';
-import * as React from 'react';
 
 const Noop = ({ children }: { children: ReactNode }) => <>{children}</>;
 

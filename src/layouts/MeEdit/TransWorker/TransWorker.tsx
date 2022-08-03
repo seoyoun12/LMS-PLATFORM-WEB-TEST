@@ -1,4 +1,4 @@
-import { businessType } from '@common/api/courseClass';
+import { businessType, courseSubCategoryType } from '@common/api/courseClass';
 import { modifTransWorker, useMyUser } from '@common/api/user';
 import { YN } from '@common/constant';
 import styled from '@emotion/styled';
@@ -28,55 +28,89 @@ interface Props {
   type: 'transport' | 'lowfloorbus' | 'educator';
   locationList: { ko: string; en: string }[];
 }
-const phoneNumbers = ['010', '02', '032', '031'];
+const phoneRegex = /[0-9]$/;
+const phoneList = ['010', '032', '02', '031'];
 
 export const userBusinessTypeOne = [
-  { type: '여객', enType: businessType.TYPE_PASSENGER },
-  { type: '화물', enType: businessType.TYPE_CARGO },
+  { type: '여객', enType: 'PASSENGER' },
+  { type: '화물', enType: 'FREIGHT' },
 ];
 export const userBusinessTypeTwo = [
-  { category: businessType.TYPE_PASSENGER, type: '버스', enType: 'BUS', isMoreInfo: true },
   {
-    category: businessType.TYPE_PASSENGER,
+    category: 'PASSENGER',
+    type: '버스',
+    enType: courseSubCategoryType.BUS,
+    // isMoreInfo: true
+  },
+  {
+    category: 'PASSENGER',
     type: '전세버스',
-    enType: 'CHARTER_BUS',
-    isMoreInfo: true,
+    enType: courseSubCategoryType.CHARTER_BUS,
   },
   {
-    category: businessType.TYPE_PASSENGER,
+    category: 'PASSENGER',
     type: '특수여객',
-    enType: 'SPECIAL_PASSENGER',
-    isMoreInfo: true,
+    enType: courseSubCategoryType.SPECIAL_PASSENGER,
   },
   {
-    category: businessType.TYPE_PASSENGER,
+    category: 'PASSENGER',
     type: '법인택시',
-    enType: 'CORPORATE_TAXI',
-    isMoreInfo: true,
+    enType: courseSubCategoryType.CORPORATE_TAXI,
   },
   {
-    category: businessType.TYPE_CARGO,
-    type: '법인화물',
-    enType: 'GENERAL_CARGO',
-    isMoreInfo: true,
+    category: 'FREIGHT',
+    type: '일반화물',
+    enType: courseSubCategoryType.GENERAL_CARGO,
   },
   {
-    category: businessType.TYPE_PASSENGER,
+    category: 'PASSENGER',
     type: '개인택시',
-    enType: 'PRIVATE_TAXI',
-    isMoreInfo: false,
+    enType: courseSubCategoryType.PRIVATE_TAXI,
   },
   {
-    category: businessType.TYPE_CARGO,
-    type: '용달화물',
-    enType: 'INDIVIDUAL_CARGO',
-    isMoreInfo: false,
-  },
-  {
-    category: businessType.TYPE_CARGO,
+    category: 'FREIGHT',
     type: '개별화물',
-    enType: 'CONSIGNMENT',
-    isMoreInfo: false,
+    enType: courseSubCategoryType.INDIVIDUAL_CARGO,
+  },
+  {
+    category: 'FREIGHT',
+    type: '용달화물',
+    enType: courseSubCategoryType.CONSIGNMENT,
+  },
+  {
+    category: 'PASSENGER',
+    type: '특별교통수단',
+    enType: courseSubCategoryType.SPECIAL_TRANSPORTATION,
+  },
+  {
+    category: 'PASSENGER',
+    type: '저상버스',
+    enType: courseSubCategoryType.KNEELING_BUS,
+  },
+  {
+    category: 'FREIGHT',
+    type: '위험물',
+    enType: courseSubCategoryType.DANGEROUS_GOODS,
+  },
+  {
+    category: 'FREIGHT',
+    type: '지정폐기물',
+    enType: courseSubCategoryType.DESIGNATED_WASTE,
+  },
+  {
+    category: 'FREIGHT',
+    type: '유해화학물질',
+    enType: courseSubCategoryType.HAZARDOUS_CHEMICALS,
+  },
+  {
+    category: 'FREIGHT',
+    type: '고압가스(가연성)',
+    enType: courseSubCategoryType.HIGH_PRESSURE_GAS_FLAMMABLE,
+  },
+  {
+    category: 'FREIGHT',
+    type: '고압가스(독성)',
+    enType: courseSubCategoryType.HIGH_PRESSURE_GAS_TOXIC,
   },
 ];
 
@@ -90,9 +124,9 @@ export function TransWorker({ type, locationList }: Props) {
   const [company, setCompany, onChangeComp] = useInput();
   const [vehicleNumber, setVehicleNumber, onChangeVehicleNum] = useInput();
   const [vehicleRegi, setVehicleRegi, onChangeVehicleRegi] = useInput();
-  const [phone, setPhone, onChagePhone] = useInput();
-  const [phone2, setPhone2, onChagePhone2] = useInput();
-  const [phone3, setPhone3, onChagePhone3] = useInput();
+  const [phone, setPhone, onChangePhone1] = useInput();
+  const [phone2, setPhone2, onChangePhone2] = useInput();
+  const [phone3, setPhone3, onChangePhone3] = useInput();
   const [smsChecked, setSmsChecked] = useState(false);
   const dialog = useDialog();
   const snackbar = useSnackbar();
@@ -100,6 +134,13 @@ export function TransWorker({ type, locationList }: Props) {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!phone || !phone2 || !phone3) return window.alert('올바른 휴대전화 번호를 입력하세요!');
+    if (!company) return window.alert('올바른 회사명을 입력하세요!');
+    if (!vehicleNumber) return window.alert('올바른 차량번호를 입력하세요!');
+    if (!vehicleRegi) return window.alert('올바른 등록지를 입력하세요!');
+    if (!occupation1) return window.alert('업종을 선택해주세요.');
+    if (!occupation2) return window.alert('업종구분을 선택해주세요.');
+    console.log('last confirm', phone + phone2 + phone3, company, vehicleNumber, vehicleRegi, occupation1, occupation2, user?.name);
     const dialogConfirmed = await dialog({
       title: '회원 정보 수정',
       description: '회원 정보를 수정하시겠습니까?',
@@ -119,10 +160,9 @@ export function TransWorker({ type, locationList }: Props) {
         name: user.name, //이름
         phone: phone + phone2 + phone3, //폰번
         smsYn: smsYn, // 동의여부
-        userBusinessTypeOne: occupation1, //업종
+        userBusinessTypeOne: occupation1.split('_')[1], //업종
         userBusinessTypeTwo: occupation2, // 구분
         userRegistrationType: vehicleRegi, //지역
-        userSeq: user.seq,
       };
 
       await modifTransWorker(data);
@@ -141,8 +181,6 @@ export function TransWorker({ type, locationList }: Props) {
     >
       <Box display="flex" flexDirection={'column'} gap="1rem" component={'form'} onSubmit={handleSubmit}>
         <Box sx={{ margin: 'auto' }}>
-          {' '}
-          {/*어쨰서 이렇게 해야 되는것..? */}
           <UserProfile />
         </Box>
         <TextField required fullWidth id="name" label="이름" name="name" value={user?.name ? user.name : 'Error'} disabled />
@@ -172,11 +210,11 @@ export function TransWorker({ type, locationList }: Props) {
               // ?
               userBusinessTypeTwo
                 .filter(item => item.category === occupation1)
-                .map(item => (
+                .map((item, index) => (
                   <MenuItem
                     key={item.enType}
                     value={item.enType}
-                    onClick={() => (item.isMoreInfo ? setShowCompany(true) : setShowCompany(false))}
+                    // onClick={() => (item.isMoreInfo ? setShowCompany(true) : setShowCompany(false))}
                   >
                     {item.type}
                   </MenuItem>
@@ -201,7 +239,8 @@ export function TransWorker({ type, locationList }: Props) {
           </Select>
         </FormControl>
 
-        {showCompany && <TextField required fullWidth id="company" label="회사명" name="company" value={company} onChange={onChangeComp} />}
+        {/* {showCompany && <TextField required fullWidth id="company" label="회사명" name="company" value={company} onChange={onChangeComp} />} */}
+        <TextField required fullWidth id="company" label="회사명" name="company" value={company} onChange={onChangeComp} />
         <TextField
           required
           fullWidth
@@ -222,8 +261,8 @@ export function TransWorker({ type, locationList }: Props) {
             ))}
           </Select>
         </FormControl>
-        <Box display={'flex'} alignItems="center" gap="1rem">
-          {/* <FormControl fullWidth>
+        {/* <Box display={'flex'} alignItems="center" gap="1rem">
+           <FormControl fullWidth>
             <Select onChange={e => setPhone(String(e.target.value))}>
               {phoneNumbers.map(phone => (
                 <MenuItem key={phone} value={phone}>
@@ -232,7 +271,7 @@ export function TransWorker({ type, locationList }: Props) {
               ))}
             </Select>
           </FormControl>{" "}
-          - */}
+          - *
           <TextField
             required
             fullWidth
@@ -242,6 +281,33 @@ export function TransWorker({ type, locationList }: Props) {
             name="name"
             value={phone}
             onChange={onChagePhone}
+          />
+        </Box> */}
+        <Box display={'flex'} alignItems="center" gap="1rem">
+          <FormControl sx={{ minWidth: '130px' }}>
+            <Select labelId="phone-type-label" id="phone-type" onChange={onChangePhone1}>
+              {phoneList.map(item => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          -
+          <TextField
+            onChange={e => {
+              if (e.target.value.length > 4) return;
+              if (!phoneRegex.test(e.target.value)) return;
+              onChangePhone2(e);
+            }}
+            value={phone2}
+          />
+          -
+          <TextField
+            onChange={e => {
+              if (e.target.value.length > 4) return;
+              if (!phoneRegex.test(e.target.value)) return;
+              onChangePhone3(e);
+            }}
+            value={phone3}
           />
         </Box>
         <Box display={'flex'} alignItems="center">

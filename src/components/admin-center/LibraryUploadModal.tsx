@@ -10,7 +10,7 @@ import {
   Box, Button, Chip,
   FormControl, FormControlLabel,
   FormHelperText, FormLabel,
-  Radio, RadioGroup, TableCell, Typography
+  Radio, RadioGroup, Typography
 } from '@mui/material';
 import { ErrorMessage } from '@hookform/error-message';
 import styled from '@emotion/styled';

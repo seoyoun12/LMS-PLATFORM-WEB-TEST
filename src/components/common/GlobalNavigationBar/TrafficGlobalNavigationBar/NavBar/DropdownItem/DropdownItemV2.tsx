@@ -16,10 +16,10 @@ export function DropdownItemV2({ className }: { className?: string }) {
       setAnchorEl(event.currentTarget);
     }
   };
-  const handleLeave = (event: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(event.currentTarget);
-    setAnchorEl(null);
-  };
+  // const handleLeave = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   console.log(event.currentTarget);
+  //   setAnchorEl(null);
+  // };
   const handleClose = () => {
     setAnchorEl(null);
   };

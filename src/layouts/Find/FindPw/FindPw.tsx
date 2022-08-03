@@ -8,6 +8,7 @@ import Filter1Icon from '@mui/icons-material/Filter1';
 import Filter2Icon from '@mui/icons-material/Filter2';
 import Filter3Icon from '@mui/icons-material/Filter3';
 import { FindHeader } from '../FindHeader/FindHeader';
+import { Step3 } from './Step3';
 
 const headers = [
   { title: 'ID 입력', value: 1, icon: <Filter1Icon fontSize="large" /> },
@@ -17,21 +18,22 @@ const headers = [
 
 export function FindPw() {
   const [stepNumber, setStepNumber] = useState(1);
-  const [idArr, setIdArr] = useState<{ username: string; createdDTime: string }[]>();
+  const [username, setUsername] = useState<string>();
 
-  const handleStepChange = () => {
-    setStepNumber(2);
+  const handleStepChange = (stepNumber: number) => {
+    setStepNumber(stepNumber);
   };
 
-  const handleIdsChange = (idArr: { username: string; createdDTime: string }[]) => {
-    setIdArr(idArr);
+  const handleUsernameChange = (username: string) => {
+    setUsername(username);
   };
 
   return (
     <FindPwWrap>
       <FindHeader value={stepNumber} title={'비밀번호 찾기'} headers={headers} />
-      {stepNumber === 1 && <Step1 handleStepChange={handleStepChange} handleIdsChange={handleIdsChange} />}
-      {stepNumber === 2 && <Step2 idArr={idArr} />}
+      {stepNumber === 1 && <Step1 handleStepChange={handleStepChange} handleUsernameChange={handleUsernameChange} />}
+      {stepNumber === 2 && <Step2 handleStepChange={handleStepChange} username={username} />}
+      {stepNumber === 3 && <Step3 />}
     </FindPwWrap>
   );
 }

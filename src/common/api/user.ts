@@ -5,8 +5,8 @@ import { YN } from '@common/constant';
 import { businessType, courseSubCategoryType } from './courseClass';
 
 export enum MemberType {
-  TYPE_MEMBER = "TYPE_MEMBER",
-  TYPE_NON_MEMBER = "TYPE_NON_MEMBER"
+  TYPE_MEMBER = 'TYPE_MEMBER',
+  TYPE_NON_MEMBER = 'TYPE_NON_MEMBER',
 }
 
 export enum UserRole {
@@ -157,7 +157,7 @@ export async function existsUserId(username: string) {
   return await POST(`/user/exists-id`, { username });
 }
 export async function changeUserPW({ username, password }: { username: string; password: string }) {
-  return await POST(`/user/change-password`, { username, password });
+  return await PUT(`/user/change-password`, { username, password });
 }
 
 export async function modifyMyUser({ name, emailYn, smsYn }: { name: string; emailYn: YN; smsYn: YN }) {
@@ -203,14 +203,17 @@ export interface provincailTrafficSafety {
   // userSubjectEducationDetailType: string;
   // userSubjectEducationType: string;
   // username: string;
-  carNumber: string;
+
+  // carNumber: string;
   company: string;
+  email: string;
   name: string;
   phone: string;
   smsYn: YN;
-  userBusinessTypeOne: businessType;
-  userBusinessTypeTwo: courseSubCategoryType;
+  // userBusinessTypeOne: businessType;
+  // userBusinessTypeTwo: courseSubCategoryType;
   userRegistrationType: string;
+  username: string;
 }
 
 export async function modifyProvincialTrafficSafety(info: provincailTrafficSafety) {
@@ -223,10 +226,10 @@ interface modifTransWorker {
   name: string;
   phone: string;
   smsYn: string;
-  userBusinessTypeOne: string; //업종
-  userBusinessTypeTwo: string; // 구분
+  userBusinessTypeOne: Omit<businessType, 'TYPE_ALL'>; //업종
+  userBusinessTypeTwo: courseSubCategoryType; // 구분
   userRegistrationType: string; //지역
-  userSeq: number;
+  // userSeq: number;
 }
 
 export async function modifTransWorker(info: modifTransWorker) {

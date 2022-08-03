@@ -76,9 +76,10 @@ export function QnaAccordion({ qnaAccordionList } : { qnaAccordionList : QnaBoar
           <BoardAccordionDetails>
             <nav aria-label="secondary mailbox folders">
               <List disablePadding={true}>
-                {children.map(({ firstContent, secondContent, thirdContent, fourthContent, fifthContent, isActive }, idx) => (
+                {children.map(({ firstContent, secondContent, thirdContent, fourthContent, fifthContent, isActive }, ) => (
                   <ListItem
                     disablePadding
+                    key={idx} // key props error
                     sx={{
                       backgroundColor: `${isActive ? grey[50] : 'inherit'}`,
                     }}

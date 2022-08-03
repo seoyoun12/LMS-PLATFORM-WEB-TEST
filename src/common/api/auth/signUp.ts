@@ -9,7 +9,7 @@ export type regCategory =
   | 'ROLE_TRAFFIC_SAFETY_MANAGER'
   | 'ROLE_ADMIN';
 
-interface Params {
+export interface SignupParams {
   username: string;
   password: string;
   name: string;
@@ -22,6 +22,6 @@ interface Params {
   smsYn?: YN;
 }
 
-export async function signUp(params: Params) {
+export async function signUp(params: SignupParams) {
   return await POST('/auth/signup/common', { ...params });
 }

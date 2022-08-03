@@ -1,18 +1,12 @@
 import { Container } from "@mui/system";
 import styled from '@emotion/styled';
-import styles from '@styles/common.module.scss';
 import { Box } from "@mui/material";
-import MuiTab from '@mui/material/Tab';
-import { useRouter } from "next/router";
-import { SyntheticEvent, useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { CategoryBoardNotice } from "@layouts/Category/CategoryBoardNotice";
 import { CategoryBoardFaq } from "@layouts/Category/CategoryBoardFaq";
 import { CategoryBoardQuestion } from "@layouts/Category/CategoryBoardQuestion";
 import { CategoryBoardLook } from "@layouts/Category/CategoryBoardLook";
 import { Tabs2 } from '@components/ui/Tabs2';
-import { useSnackbar } from "@hooks/useSnackbar";
-import { useDialog } from "@hooks/useDialog";
-import { useCategoryBoard } from '@common/api/categoryBoard';
 
 
 const tabsConfig = [
@@ -60,7 +54,8 @@ export function CategoryBoard() {
 
         {tabsConfig.map((item)=>{
           return (
-            <Box hidden={item.value !== value} >
+            <Box hidden={item.value !== value} key={item.value}>
+              {/* key props error */}
               {item.href}
             </Box>
           )

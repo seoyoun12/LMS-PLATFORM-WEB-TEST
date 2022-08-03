@@ -21,7 +21,8 @@ interface Datas {
 export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) => {
   const [firstSwiper, setFirstSwiper] = useState();
   const [secondSwiper, setSecondSwiper] = useState();
-  const { data, error } = useBannerList();
+  // const { data, error } = useBannerList();
+  const { data } = useBannerList();
   // console.log(data);
 
   const navigationPrevRef = useRef(null);
@@ -79,7 +80,9 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
             );
           })}
           {data.map(item => (
-            <SwiperSlide>
+            <SwiperSlide // key props error
+              key={item.seq}
+            > 
               {isMobile ? (
                 <Image width="100%" height="192px" src={item.s3Files[0].path} alt="" style={{ paddingRight: '16px', objectFit: 'cover' }} />
               ) : (
@@ -115,7 +118,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
             disableOnInteraction: false,
           }}
           onSlideChange={e => {
-            // console.log(e);
+            console.log(e);
             progress();
           }}
           // onRealIndexChange={progress}
@@ -152,7 +155,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
             );
           })}
           {data.map(item => (
-            <SwiperSlide>
+            <SwiperSlide key={item.seq}>
               <SlideInfo>
                 <Typography variant="h1" className="bold-700">
                   {item.title}
@@ -163,7 +166,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
           ))}
 
           {!isMobile ? (
-            <div className="ㅅㅂ?" style={{ display: 'flex', alignItems: 'center' }}>
+            <div className="" style={{ display: 'flex', alignItems: 'center' }}>
               <div ref={paginationRef} style={{ display: 'inline-flex', alignItems: 'center', color: '#fff', width: 'initial' }} />
               <Timeline>
                 <div className="timeline-bg">

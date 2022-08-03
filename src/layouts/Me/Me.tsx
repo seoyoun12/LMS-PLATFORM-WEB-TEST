@@ -79,23 +79,17 @@ export function Me() {
           <Grid container rowSpacing={4} columnSpacing={2} columns={{ xs: 1, sm: 1, md: 2, lg: 2 }}>
             {user.learningCourses ? (
               user.learningCourses.map(res => {
-                const period = new Date(res.createdDtime).setDate(res.lessonTime);
-                const Days = Math.floor((period - new Date(res.createdDtime).getTime()) / (1000 * 60 * 60 * 24));
                 return (
-                  <Grid item xs={1} sm={1} md={1} lg={1} key={res.seq}>
+                  <Grid item xs={1} sm={1} md={1} lg={1} key={res.courseClassSeq}>
                     <Box
                       // href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}
                       onClick={() => {
-                        if (!res.lessons[0]?.seq) {
                           return window.alert('수업이 존재하지 않습니다. 관리자에게 문의해주세요.');
-                        }
-                        router.push(`/course/${res.seq}/lesson/${res.lessons[0].seq}`);
                       }}
                     >
                       <ContentCard
-                        title={res.courseName}
+                        title={res.courseTitle}
                         content1={'버그수정정'}
-                        content2={`${Days < 10 ? `0${Days}` : Days}일 남았습니다.`}
                       />
                     </Box>
                   </Grid>
@@ -104,28 +98,7 @@ export function Me() {
             ) : (
               <div>dd</div>
             )}
-            {user.learningCourses
-              ? user.learningCourses.map(res => (
-                  <Grid
-                    item
-                    xs={1}
-                    sm={1}
-                    md={1}
-                    lg={1}
-                    key={res.seq}
-                    sx={{
-                      display:
-                        value === myInfoList[2].value && res.lessonTime <= res.lessons.reduce((prev, curr) => prev + curr.completeTime, 0)
-                          ? 'display'
-                          : 'none',
-                    }}
-                  >
-                    <Link href={`/course/${res.seq}/lesson/${res.seq}`}>
-                      <ContentCard title={res.courseName} />
-                    </Link>
-                  </Grid>
-                ))
-              : '없어'}
+            
           </Grid>
         </LessonListContainer>
       </ContentBody>

@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import styles from '@styles/common.module.scss';
 import styled from '@emotion/styled';
 import { AnsweredYn, qnaList } from "@common/api/qna";
@@ -6,18 +6,18 @@ import { BoardAccordion } from "@components/ui";
 import { useState } from "react";
 import { QnaAccordion } from "@components/ui/QnaAccordion.tsx";
 import dateFormat from "dateformat";
+import { useInfiniteScrollQna } from "@hooks/useInfiniteScrollQna";
 
 export function CategoryBoardLook() {
 
-  const [ page, setPage ] = useState(0);
-  const { data, error, mutate } = qnaList({ page });
-  
+  const [target , loadedItem , loading] = useInfiniteScrollQna(`/qna`)
+
   return (
 
     <Container>
-      {data && data?.content.map((data) => {
-        console.log("data.content : ", data.content)
-        console.log("data: ", data)
+      {loadedItem && loadedItem.map((data) => {
+        console.log("2. data.content : ", data.content)
+        console.log("2. data: ", data)
         const accordionInfo = [{ 
           // date: data.createdDtime, 
           title: data.title, 
@@ -32,6 +32,7 @@ export function CategoryBoardLook() {
         }]
         return <QnaAccordion qnaAccordionList={accordionInfo}/>
       })}
+      <Box ref={target} height='100px' >{loading ? <div /> : ""}</Box>
     </Container>
 
   )

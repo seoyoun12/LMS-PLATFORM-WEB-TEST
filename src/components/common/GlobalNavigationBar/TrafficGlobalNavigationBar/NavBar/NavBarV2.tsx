@@ -184,7 +184,7 @@ const RemoteWrap = styled(Box)`
 const HeaderList = [
   {
     category: '교육이용안내',
-    href: '/',
+    href: '/traffic/guide',
     items: [
       { title: '회원가입 및 로그인', href: '/sign-in' },
       { title: '교육신청방법', href: '/sign-in' },
@@ -193,11 +193,11 @@ const HeaderList = [
   },
   {
     category: '학습자료',
-    href: '/',
+    href: '/traffic/learning-material',
     items: [
-      { title: '연령별 교수학습지도안', href: '/sign-in' },
-      { title: '교육자료 및 영상', href: '/sign-in' },
-      { title: '타기관자료 모음', href: '/sign-in' },
+      { title: '연령별 교수학습지도안', href: '/traffic/learning-material?tab=A' },
+      { title: '교육자료 및 영상', href: '/traffic/learning-material?tab=B' },
+      { title: '타기관자료 모음', href: '/traffic/learning-material?tab=D' },
     ],
   },
   {
@@ -219,12 +219,12 @@ const HeaderList = [
   },
   {
     category: '고객센터',
-    href: '/',
+    href: '/traffic/service',
     items: [
-      { title: '공지사항', href: '/sign-in' },
-      { title: '자주묻는질문', href: '/sign-in' },
-      { title: '교육문의', href: '/sign-in' },
-      { title: '문의내역조회', href: '/sign-in' },
+      { title: '공지사항', href: '/traffic/service?tab=Notice' },
+      { title: '자주묻는질문', href: '/traffic/service?tab=Faq' },
+      { title: '교육문의', href: '/traffic/service?tab=Question' },
+      { title: '문의내역조회', href: '/traffic/service?tab=Look' },
     ],
   },
 ];

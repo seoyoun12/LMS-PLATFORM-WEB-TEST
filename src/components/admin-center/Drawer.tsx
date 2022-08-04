@@ -99,6 +99,22 @@ export function Drawer({ children }: { children: ReactNode }) {
       icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
     },
     {
+      name: '배너관리',
+      children: [
+        {
+          name: '배너 목록',
+          href: '/admin-center/banner',
+          isActive: router.pathname === '/admin-center/banner'
+        },
+        {
+          name: '배너 등록',
+          href: '/admin-center/banner/upload',
+          isActive: router.pathname === '/admin-center/banner/upload'
+        },
+      ],
+      icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
+    },
+    {
       name: '통계',
       children: [
         { name: 'child1', href: '/admin-center/statics', isActive: router.pathname === '' },

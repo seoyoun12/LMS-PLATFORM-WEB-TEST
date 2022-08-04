@@ -1,0 +1,1 @@
+export { LearningMaterialBoard } from './LearningMaterialBoard'

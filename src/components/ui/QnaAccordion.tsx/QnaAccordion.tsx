@@ -165,63 +165,43 @@ const BoardAccordionDetails = styled(AccordionDetails)`
 `
 
 const TableCellLeft = styled(TableCell)`
-  /* background: #e0e0e0; */
-  /* border-top: 1px solid #b4b4b4;
-  border-bottom: 1px solid #b4b4b4; */
   width: 20%;
-  /* border-right: 1px solid #a59d9d; */
 `
 const TableCellRight = styled(TableCell)`
-  /* border-top: 1px solid #b4b4b4;
-  border-bottom: 1px solid #b4b4b4; */
-  width: 80%;
-  /* border: 1px solid black;
-  box-sizing: border-box; */
+  width: 780%;
   position: relative;
-  /* margin: 0px;
-  padding: 0px; */
   
   .FirstContent {
-    /* border: 1px solid black;
-    box-sizing: border-box; */
     width: 100%;
     height: 100%;
-    float: left;
     position: flex;
   }
 
   .SecondContent {
     color: #a59d9d;
-    /* border: 1px solid black;
-    box-sizing: border-box; */
     position: relative;
     width: 20%;
     float: right;
     text-align: center;
-    margin-left: 82%;
+    margin-left: 80%;
     margin-top: -2%;
     margin-bottom: -0.5%;
   }
 
   .ThirdContent {
     color: #a59d9d;
-    /* border: 1px solid black;
-    box-sizing: border-box; */
     position: relative;
     float: right;
     text-align: center;
-    /* margin-top: 5%; */
   }
 
   .FourthContent {
     color: #a59d9d;
-    /* border: 1px solid black;
-    box-sizing: border-box; */
     position: relative;
     width: 20%;
     float: right;
     text-align: center;
-    margin-left: 82%;
+    margin-left: 80%;
     margin-top: -2%;
     margin-bottom: -0.5%;
   }

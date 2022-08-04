@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, BoxProps, Container, Typography } from '@mui/material';
-import { Tabs } from '@components/ui';
+import { Tabs2 } from '@components/ui/Tabs2';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { LearningCourse } from './LearningCourse';
@@ -19,8 +19,10 @@ export function MyCourse() {
         <MyCourseTitle>학습현황</MyCourseTitle>
         <MyCourseSubTitle>학습중인 과정을 확인할수 있습니다</MyCourseSubTitle>
       </MyCourseContainer>
-      <Box sx={{ width: 'fit-content', margin: 'auto' }}>
-        <Tabs tabsConfig={studingCourseList} />
+      <Box boxSizing={'border-box'} borderBottom={'2px solid #e0e0e0'} >
+        <Box sx={{ width: 'fit-content', margin: 'auto' }}>
+          <Tabs2 tabsConfig={studingCourseList} variant={'fullWidth'} gap={10} showBorderBottom={false} />
+        </Box>
       </Box>
       <CourseContainer>
         <TabPanel index={String(router.query?.tab)} value={studingCourseList[0].value}>

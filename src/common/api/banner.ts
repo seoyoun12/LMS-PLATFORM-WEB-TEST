@@ -21,3 +21,11 @@ export function useBannerList() {
     error,
   };
 }
+
+export function useBannerListAdm() {
+  const { data, error } = useSWR<SWRResponse<BannerRes[]>>('/banner/adm', GET);
+  return {
+    data: data?.data,
+    error,
+  };
+}

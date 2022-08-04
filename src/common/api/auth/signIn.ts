@@ -22,8 +22,8 @@ export enum loginType{
   TYPE_TRAFFIC_SAFETY_EDU='TYPE_TRAFFIC_SAFETY_EDU'
 }
 
-export async function signIn(username: string, password: string , loginType: loginType): Promise<SignInResponse> {
-  return await POST('/auth/signin', { username, password, loginType })
+export async function signIn(username: string, password: string , loginType: loginType, name?: string  ): Promise<SignInResponse> {
+  return await POST('/auth/signin', {username, password, loginType ,name })
     .then(onSignInSuccess)
     .then(getUserLoginHistory);
 }

@@ -1,5 +1,6 @@
 import { progressStatus, useMyUser } from '@common/api/user';
-import { ContentCard, Spinner } from '@components/ui';
+import { Spinner } from '@components/ui';
+import { ContentCardV2 } from '@components/ui/ContentCard';
 import styled from '@emotion/styled';
 import { Box, Grid } from '@mui/material';
 
@@ -22,10 +23,10 @@ export function LearningCourse() {
                   // router.push(`/course/${res.seq}/lesson/${res.lessons[0].seq}`);
                 }}
               >
-                <ContentCard
+                <ContentCardV2
                   title={item.courseTitle}
                   content1={`${item.leftDays === 0 ? '오늘마감 입니다!' : item.leftDays}`}
-                  content2={`진도율 ${item.progress}%`}
+                  content2={`현재 진도율 ${item.progress}%`}
                 />
               </Box>
             </Grid>

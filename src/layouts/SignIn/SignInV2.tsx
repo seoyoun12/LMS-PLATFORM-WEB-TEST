@@ -35,9 +35,9 @@ export function SignInV2() {
   // const [identify2Err, setIdentify2Err] = React.useState(false);
 
   const { watch, setValue } = useForm({
-    defaultValues: { username: '', identify1: '', identify2: '', usernameErr: false, identify1Err: false, identify2Err: false },
+    defaultValues: { name: '', identify1: '', identify2: '', usernameErr: false, identify1Err: false, identify2Err: false },
   });
-  const { username, identify1, identify2, usernameErr, identify1Err, identify2Err } = watch();
+  const { name, identify1, identify2, usernameErr, identify1Err, identify2Err } = watch();
 
   useEffect(() => {
     if (isLogin) {
@@ -48,14 +48,16 @@ export function SignInV2() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const username = data.get('username') as string;
+    const name = data.get('name') as string;
     const identify1 = data.get('identify1') as string;
     const identify2 = data.get('identify2') as string;
+    const username = identify1 + identify2;
     const password = identify1 + identify2;
+    console.log(name , username , password , watch() ,loginType.TYPE_TRANS_EDU)
     if (usernameErr || identify1Err || identify2Err) return;
 
     try {
-      const res = await signIn(username, password, loginType.TYPE_TRANS_EDU);
+      const res = await signIn(username, password, loginType.TYPE_TRANS_EDU ,name);
       if (res.success) {
         setIsLoginState(true);
         setUsetInfo({ username: res.data.username, regCategory: [...res.data.roles] }); // api가 있었음 필요없을듯
@@ -68,7 +70,7 @@ export function SignInV2() {
   };
 
   const onChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue('username', e.target.value);
+    setValue('name', e.target.value);
     setValue('usernameErr', false);
     if (e.target.value === '') {
       setValue('usernameErr', true);
@@ -127,13 +129,13 @@ export function SignInV2() {
             margin="normal"
             required
             fullWidth
-            id="username"
+            id="name"
             label="이름"
             placeholder="본인의 실명을 입력해주세요."
-            name="username"
-            autoComplete="username"
+            name="name"
+            autoComplete="name"
             onChange={onChangeUsername}
-            value={username}
+            value={name}
             error={usernameErr}
             autoFocus
           />

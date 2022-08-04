@@ -10,6 +10,11 @@ export enum businessType {
   TYPE_CARGO = 'TYPE_CARGO',
 }
 
+export enum userBusinessType {
+  PASSENGER = 'PASSENGER',
+  FREIGHT = 'FREIGHT',
+}
+
 export enum courseCategoryType {
   TYPE_NONE = 'NONE',
   TYPE_SUP_COMMON = 'TYPE_SUP_COMMON', //보수일반
@@ -103,8 +108,8 @@ export enum RegisterType {
 export interface UserTransSaveInputDataType {
   seq: number; //삭제용 구분 시퀀스
   businessName: string; //회사명
-  businessSubType: string; //업종구분
-  businessType: string; //업종
+  businessSubType: courseSubCategoryType; //업종구분
+  businessType: userBusinessType; //업종
   carNumber: string; //차량번호
   carRegisteredRegion: string; //차량 등록지
   courseClassSeq: number; //과정시퀀스

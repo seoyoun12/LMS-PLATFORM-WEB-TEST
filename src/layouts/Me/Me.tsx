@@ -3,14 +3,14 @@ import { Avatar, Box, Container, Grid, MenuItem, tabsClasses, Typography } from 
 import { Link } from '@components/common';
 import s from './Me.module.scss';
 import { grey } from '@mui/material/colors';
-import { ContentCard, Spinner, Tabs } from '@components/ui';
+import { Spinner, Tabs } from '@components/ui';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { css } from '@emotion/css';
 import styled from '@emotion/styled';
 import { useMyUser } from '@common/api/user';
 import { useEffect } from 'react';
-import dateFormat from 'dateformat';
 import { useRouter } from 'next/router';
+import { ContentCardV2 } from '@components/ui/ContentCard';
 
 const myInfoList = [
   // { label: "내 강의", value: "myCourse" },
@@ -83,13 +83,10 @@ export function Me() {
                   <Grid item xs={1} sm={1} md={1} lg={1} key={res.courseClassSeq}>
                     <Box
                       onClick={() => {
-                          return window.alert('수업이 존재하지 않습니다. 관리자에게 문의해주세요.');
+                        return window.alert('수업이 존재하지 않습니다. 관리자에게 문의해주세요.');
                       }}
                     >
-                      <ContentCard
-                        title={res.courseTitle}
-                        content1={'버그수정정'}
-                      />
+                      <ContentCardV2 title={res.courseTitle} content1={'버그수정정'} content2={`현재 진도율 ${res.progress}%`} />
                     </Box>
                   </Grid>
                 );
@@ -97,7 +94,6 @@ export function Me() {
             ) : (
               <div>dd</div>
             )}
-            
           </Grid>
         </LessonListContainer>
       </ContentBody>

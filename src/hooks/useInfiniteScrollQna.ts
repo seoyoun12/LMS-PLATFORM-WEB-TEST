@@ -1,14 +1,14 @@
 import { GET } from '@common/httpClient';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSnackbar } from './useSnackbar';
-import { CategoryBoard } from '@common/api/categoryBoard';
+import { Qna } from '@common/api/qna';
 import { PaginationResult } from 'types/fetch';
 
 const holdValue = 0.8;
 // url: string, config:{ params:any , header:any  }
-export function useInfiniteScroll(url:string,boardType:string) {
+export function useInfiniteScrollQna(url:string) {
   const [target, setTarget] = useState<HTMLElement | null | undefined>(null);
-  const [loadedItem, setLoadItem] = useState<CategoryBoard[]>([]);
+  const [loadedItem, setLoadItem] = useState<Qna[]>([]);
   const page = useRef(0)
   const loading = useRef(false);
   const snackbar = useSnackbar()
@@ -21,10 +21,10 @@ export function useInfiniteScroll(url:string,boardType:string) {
     if(loading.current === true) return
     try{
       loading.current = true;
-      const {data} = await GET<{data:PaginationResult<CategoryBoard[]>}>(url,{params:{page:page.current ,boardType: boardType}})
+      const {data} = await GET<{data:PaginationResult<Qna[]>}>(url,{params:{page:page.current}})
       page.current += 1;
       // if(loadedItem.length === 0)  setLoadItem(data.content);
-      if(loadedItem)  setLoadItem((prev)  =>[...prev , ...data.content])
+      if(loadedItem) setLoadItem((prev)  =>[...prev , ...data.content])
       loading.current = false;
     }catch(e:any){
       snackbar({variant:'error' , message:e.data.message})
@@ -42,5 +42,5 @@ export function useInfiniteScroll(url:string,boardType:string) {
     }
   }, [target]);
 
-  return [setTarget, loadedItem  , loading.current] as [React.Dispatch<React.SetStateAction<HTMLElement | null | undefined>> ,CategoryBoard[] , boolean]
+  return [setTarget, loadedItem  , loading.current] as [React.Dispatch<React.SetStateAction<HTMLElement | null | undefined>> ,Qna[] , boolean]
 }

@@ -1,42 +1,35 @@
 import { Container } from "@mui/system";
 import styled from '@emotion/styled';
 import { Box } from "@mui/material";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { CategoryBoardNotice } from "@layouts/Category/CategoryBoardNotice";
 import { CategoryBoardFaq } from "@layouts/Category/CategoryBoardFaq";
 import { CategoryBoardQuestion } from "@layouts/Category/CategoryBoardQuestion";
 import { CategoryBoardLook } from "@layouts/Category/CategoryBoardLook";
 import { Tabs2 } from '@components/ui/Tabs2';
+import { useRouter } from "next/router";
 
 
 const tabsConfig = [
   { label: '공지사항', value: "cbNotice", href: <CategoryBoardNotice />},
-  { label: '자주묻는질문', value: "cbQna", href: <CategoryBoardFaq />},
+  { label: '자주묻는질문', value: "cbFaq", href: <CategoryBoardFaq />},
   { label: '교육문의', value: "cbQuestion", href: <CategoryBoardQuestion />},
   { label: '문의내역조회', value: "cbLook", href: <CategoryBoardLook />},
 ]
-// const tabsConfig = [
-//   { label: '공지사항', value: NoticeTab.CbNotice },
-//   { label: '자주묻는질문', value: NoticeTab.CbQna },
-//   { label: '교육문의', value: NoticeTab.CbQuestion },
-//   { label: '문의내역조회', value: NoticeTab.CbLook },
-// ]
 
 export function CategoryBoard() {
 
-  // const router = useRouter();
   const [value , setValue] = useState(tabsConfig[0].value)
+  const router = useRouter()
 
   const onChange = (newValue:string) =>{
     setValue(newValue)
   }
-  // console.log(value)
 
-
-  // const { categorySeq } = router.query;
-  //const { data, error } = useCategoryBoard(Number(categorySeq)); ////
-  // const dialog = useDialog();
-  // const snackbar = useSnackbar();
+  // useLayoutEffect(()=>{
+  //   console.log(router.route.split('/traffic/')[1])
+  //   setValue(router.route.split('/traffic/')[1])
+  // },[])
 
   return (
     <NoticeContainer>

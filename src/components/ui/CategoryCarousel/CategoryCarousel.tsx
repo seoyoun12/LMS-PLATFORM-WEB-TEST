@@ -82,11 +82,11 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
           {data.map(item => (
             <SwiperSlide // key props error
               key={item.seq}
-            > 
+            >
               {isMobile ? (
                 <Image width="100%" height="192px" src={item.s3Files[0].path} alt="" style={{ paddingRight: '16px', objectFit: 'cover' }} />
               ) : (
-                <Image src={item.s3Files[0].path} alt="" layout="fill" objectFit="cover" style={{ paddingRight: '16px' }} />
+                <Image src={item.s3Files[0]?.path} alt="" layout="fill" objectFit="cover" style={{ paddingRight: '16px' }} />
               )}
             </SwiperSlide>
           ))}

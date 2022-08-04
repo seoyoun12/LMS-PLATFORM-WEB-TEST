@@ -1,17 +1,35 @@
 import { BbsType, uploadFile } from '@common/api/adm/file';
-import { BannerRes, createBannerAdm } from '@common/api/banner';
+import { BannerRes, createBannerAdm, useBannerListAdm, useSingleBannerAdm } from '@common/api/banner';
+import { ContentType } from '@common/api/content';
 import { ProductStatus } from '@common/api/course';
+import { YN } from '@common/constant';
+import { Table } from '@components/ui';
 import { FileUploader } from '@components/ui/FileUploader';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import dateFormat from 'dateformat';
 import { ko } from 'date-fns/locale';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { useRouter } from 'next/router';
 
 interface FormType {
   title: string;
@@ -31,8 +49,10 @@ const defaultValues = {
   endDate: dateFormat(new Date(), 'yyyy-mm-dd'),
 };
 
-export function BannerUpload() {
+export function BannerModify() {
   const snackbar = useSnackbar();
+  const router = useRouter();
+  const { bannerId } = router.query;
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const {
@@ -45,7 +65,7 @@ export function BannerUpload() {
     setValue,
     watch,
   } = useForm<FormType>({ defaultValues });
-  console.log(watch());
+  const { data, error, mutate } = useSingleBannerAdm(Number(bannerId));
 
   const fileHandler = async (files: File[], bannerSeq: number) => {
     const isFileUpload = files.length > 0;
@@ -58,16 +78,25 @@ export function BannerUpload() {
     }
   };
 
+  useEffect(() => {
+    setValue('title', data.title);
+    setValue('content', data.content);
+    setValue('startDate', data.startDate);
+    setValue('endDate', data.endDate);
+    setValue('toUrl', data.toUrl);
+  }, []);
+
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...rest }, e) => {
     console.log('onSubmit triggered', files, rest, e);
-    try {
-      const { data }: { data: BannerRes } = await createBannerAdm(rest);
-      await fileHandler(files, data.seq);
-      snackbar({ variant: 'success', message: '성공적으로 완료되었습니다.' });
-      console.log(data);
-    } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
-    }
+    return;
+    // try {
+    //   const { data }: { data: BannerRes } = await createBannerAdm(rest);
+    //   await fileHandler(files, data.seq);
+    //   snackbar({ variant: 'success', message: '성공적으로 완료되었습니다.' });
+    //   console.log(data);
+    // } catch (e: any) {
+    //   snackbar({ variant: 'error', message: e.data.message });
+    // }
   };
 
   const handleFileChange = (e: ChangeEvent) => {
@@ -86,8 +115,7 @@ export function BannerUpload() {
           배너 등록
         </Typography>
         <TextField placeholder="배너 제목" {...register('title', { required: '배너이름을 입력해주세요.' })} />
-        <TextField placeholder="콘텐츠 내용" {...register('content', { required: '콘텐츠를 입력해주세요.' })} />{' '}
-        {/*mui의 textarea나 tui의 폼을 사용 */}
+
         <Typography fontWeight="bold">게시 시작날짜</Typography>
         <DatePicker
           locale={ko}
@@ -111,6 +139,7 @@ export function BannerUpload() {
           // popperPlacement="right"
           onChange={date => setValue('endDate', date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd'))}
         />
+
         <TextField placeholder="페이지 이동 url" {...register('toUrl', { required: '입력해주세요.' })} />
         <FormControl className="form-control">
           <FormLabel focused={false}>상태</FormLabel>
@@ -126,9 +155,11 @@ export function BannerUpload() {
             )}
           />
         </FormControl>
+
         <FileUploader register={register} regName="files" onFileChange={handleFileChange}>
           <FileUploader.Label>파일업로드</FileUploader.Label>
         </FileUploader>
+
         <Button variant="contained" type="submit">
           업로드
         </Button>

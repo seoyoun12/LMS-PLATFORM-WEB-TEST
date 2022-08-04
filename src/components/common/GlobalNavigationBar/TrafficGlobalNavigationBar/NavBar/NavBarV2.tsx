@@ -184,11 +184,11 @@ const RemoteWrap = styled(Box)`
 const HeaderList = [
   {
     category: '교육이용안내',
-    href: '/traffic/guide',
+    href: '',
     items: [
-      { title: '회원가입 및 로그인', href: '/sign-in' },
-      { title: '교육신청방법', href: '/sign-in' },
-      { title: '학습방법', href: '/sign-in' },
+      { title: '회원가입 및 로그인', href: '/traffic/guide?tab=TYPE_GUIDE_AUTH' },
+      { title: '교육신청방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_REGI' },
+      { title: '학습방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_LEARNING' },
     ],
   },
   {
@@ -202,10 +202,10 @@ const HeaderList = [
   },
   {
     category: '온라인교육',
-    href: '/traffic/stebMove/steb2',
+    href: '',
     items: [
       { title: '온라인교육 신청', href: '/traffic/stebMove/steb2' },
-      { title: '온라인교육 수정/취소', href: '/traffic/stebMove/steb2' },
+      { title: '온라인교육 수정/취소', href: '/traffic/stebMove/steb2' }, // 미완
     ],
   },
   {
@@ -214,12 +214,12 @@ const HeaderList = [
     items: [
       { title: '학습현황', href: '/me/my-course' },
       { title: '정보수정', href: '/me/edit' },
-      { title: '문의하기', href: '/sign-in' },
+      { title: '문의하기', href: '/traffic/service?tab=Question' },
     ],
   },
   {
     category: '고객센터',
-    href: '/traffic/service',
+    href: '',
     items: [
       { title: '공지사항', href: '/traffic/service?tab=Notice' },
       { title: '자주묻는질문', href: '/traffic/service?tab=Faq' },

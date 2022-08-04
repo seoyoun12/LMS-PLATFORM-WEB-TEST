@@ -1,16 +1,17 @@
-import { Box, Container } from "@mui/material";
-import styled from '@emotion/styled';
-import { QnaAccordion } from "@components/ui/QnaAccordion.tsx";
-import dateFormat from "dateformat";
-import { useInfiniteScrollQna } from "@hooks/useInfiniteScrollQna";
+import { QnaAccordion } from "@components/ui/QnaAccordion.tsx"
+import { useInfiniteScrollQna } from "@hooks/useInfiniteScrollQna"
+import { Box, Container } from "@mui/material"
+import dateFormat from "dateformat"
+import styled from "styled-components"
 
-export function CategoryBoardLook() {
 
-  const [target , loadedItem , loading] = useInfiniteScrollQna(`/qna`)
+export function CategoryBoardLookList() {
+
+  const [target ,loadedItem ,loading] = useInfiniteScrollQna(`/qna`)
 
   return (
 
-    <Container>
+    <LkContainer>
       {loadedItem && loadedItem.map((data) => {
         const accordionInfo = [{ 
           title: data.title, 
@@ -26,13 +27,12 @@ export function CategoryBoardLook() {
         return <QnaAccordion qnaAccordionList={accordionInfo}/>
       })}
       <Box ref={target} height='100px' >{loading ? <div /> : ""}</Box>
-    </Container>
+    </LkContainer>
 
   )
-
 }
 
-const NtContainer = styled(Container)`
+const LkContainer = styled(Container)`
   width: 100%;
   height: 100%;
 `

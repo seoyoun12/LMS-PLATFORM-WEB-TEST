@@ -44,7 +44,7 @@ export function SignInV2() {
       if (res.success) {
         setIsLoginState(true);
         setUsetInfo({ username: res.data.username, regCategory: [...res.data.roles] }); // api가 있었음 필요없을듯
-        snackbar({ variant: 'success', message: '로그인이 되었습니다.' });
+        snackbar({ variant: 'success', message: '로그인이 완료되었습니다.' });
         return router.push('/traffic/category');
       }
     } catch (e: any) {

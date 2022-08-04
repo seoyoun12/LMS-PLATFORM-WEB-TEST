@@ -1,5 +1,4 @@
 import { Container } from "@mui/material";
-import styles from '@styles/common.module.scss';
 import styled from '@emotion/styled';
 import { useIsLoginStatus } from "@hooks/useIsLoginStatus";
 import { useEffect, useState } from "react";
@@ -13,12 +12,8 @@ import router from "next/router";
 
 export function CategoryBoardQuestion() {
   const isLoginStatus = useIsLoginStatus();
-  // const [isNonMenberQuestion, setIsNonMenberQuestion] = useState(false);
   const [isOpenQues, setIsOpneQues] = useState(false);
   const [memberType, setMemberType] = useState<undefined | MemberType>();
-
-  
-  //
 
   const snackbar = useSnackbar();
   const fileHandler = async (files: File[], qna: Qna) => {
@@ -43,8 +38,6 @@ export function CategoryBoardQuestion() {
     }
   };
 
-  //
-
   useEffect(() => {
     if (isLoginStatus) {
       setIsOpneQues(true);
@@ -54,18 +47,16 @@ export function CategoryBoardQuestion() {
 
   return (
     <NtContainer>
-      {isOpenQues ? (
+      {isLoginStatus ? (
         <CategoryBoardQuestionForm memberType={memberType} onHandleSubmit={handleSubmit} />
       ) : (
         <CategoryBoardQuestionLogin setIsOpneQues={setIsOpneQues} setMemberType={setMemberType} />
-      )}{" "}
+      )}
     </NtContainer>
   );
 }
 
 const NtContainer = styled(Container)`
-  /* box-sizing: border-box;
-  border: 1px solid black; */
   width: 100%;
   height: 100%;
 `;

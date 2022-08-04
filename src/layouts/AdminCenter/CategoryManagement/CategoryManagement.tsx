@@ -32,7 +32,9 @@ const headRows = [
 const tabsConfig = [
   {name: "공지사항", value: "TYPE_NOTICE"},
   {name: "자주묻는질문", value: "TYPE_FAQ"},
-  {name: "문의내역조회", value: "TYPE_REVIEW"}
+  {name: "회원가입 및 로그인", value: "TYPE_GUIDE_AUTH "},
+  {name: "교육신청방법", value: "TYPE_GUIDE_EDU_REGI "},
+  {name: "학습방법", value: "TYPE_GUIDE_EDU_LEARNING "},
 ]
 
 
@@ -48,10 +50,17 @@ export function CategoryManagement() {
   const [ seq, setSeq ] = useState<number | null>(null);
   const [ modifyPage, setModifyPage ] = useState();
 
-  // const { categorySeq } = router.query;
-  
+  const [ typeValue, setTypeValue ] = useState("TYPE_NOTICE");
+
+
   const { data, error, mutate } = categoryBoardList({ 
-    boardType: "TYPE_FAQ",
+    boardType: typeValue, 
+    // TYPE_NOTICE -> 공지사항
+    // TYPE_FAQ -> 자주묻는질문
+    // TYPE_GUIDE_AUTH -> 회원가입 및 로그인
+    // TYPE_GUIDE_EDU_REGI -> 교육신청방법
+    // TYPE_GUIDE_EDU_LEARNING -> 학습방법
+
     // boardType: String(BoardType),
     page 
   }); 
@@ -63,10 +72,6 @@ export function CategoryManagement() {
     const modifyData = (data?.content.find((item) => item.seq === seq))
     router.push(`/admin-center/category/modify/${seq}`);
     mutate();
-    // console.log("seq : ", seq)
-    // console.log("modifyData : ", modifyData);
-    // const categoryBoardData = modifyData;
-    // const categorySeq = seq;
   }
 
   // 삭제
@@ -104,41 +109,16 @@ export function CategoryManagement() {
   };
 
   
-  // Radio Button check value
-  // const [ TypeOfBoard, setTypeOfBoard ] = useState<string>("TYPE_NOTICE");
-
-  // const handleClickedRadioButton = async (boardTypeString: string) => {
-  //   setTypeOfBoard(boardTypeString)
-  //   console.log("boardType : ", boardTypeString);
-  //   await mutate({  boardType : boardTypeString });
-  // }
-
-  // const { data, error, mutate } = categoryBoardList({ 
-  //   boardType: "TYPE_FAQ",
-  //   page 
-  // }); 
-  
-  // const handleClickedRadioButton = async (boardTypeString: string) => {
-  //   setTypeOfBoard(boardTypeString)
-  //   console.log("1. boardType : ", boardTypeString);
-  //   await mutate({boardTypeString : boardTypeString});
-  // }
-
-
-
-  // const [ modifyPage, setModifyPage ] = useState();
-
   return (
     <div>
-      {/* <RadioGroup row onChange={handleClickedRadioButton}> */}
       <RadioGroup row>
         {tabsConfig.map(({ name, value }: { name: string, value: string }) => (
           <FormControlLabel
             key={name}
             label={name}
             value={value}
-            control={<Radio />}
-            // onClick={() => handleClickedRadioButton(boardTypeString)} 
+            control={<Radio checked={typeValue == value} />}
+            onClick={() => setTypeValue(value)} 
           />
         ))}
       </RadioGroup>
@@ -177,7 +157,6 @@ export function CategoryManagement() {
               <TableCell align="center">{category.hit}</TableCell>
               <TableCell align="center">{category.s3Files[0] ? category.s3Files[0].name : "파일없음"}</TableCell>
               <TableCell align="center">
-                {/* <Link href={`/admin-center/category/modify/${category.seq}`}> */}
                 <Button
                   variant="text"
                   color="neutral"
@@ -186,7 +165,6 @@ export function CategoryManagement() {
                 >
                   수정
                 </Button>
-                {/* </Link> */}
               </TableCell>
               <TableCell align="center">
                 <Button

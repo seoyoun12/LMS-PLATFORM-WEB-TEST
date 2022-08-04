@@ -1,10 +1,6 @@
-import { ContentType } from "@common/api/content";
 import { QnaInput, QnaType } from "@common/api/qna";
 import { MemberType } from "@common/api/user";
-import { YN } from "@common/constant";
 import { FileUploader } from "@components/ui/FileUploader";
-import { useDialog } from "@hooks/useDialog";
-import { useInput } from "@hooks/useInput";
 import {
   Box,
   FormControl,
@@ -22,32 +18,11 @@ import {
   Typography,
   Button,
   Chip,
-  FormLabel,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
-  SelectChangeEvent,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { ChangeEvent, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
-
-
-const questionTypeList = [
-  { type: "회원가입/로그인", enType: "TYPE_SIGNUP_OR_SIGNIN" },
-  { type: "교육/수료", enType: "TYPE_EDU_OR_COMPLETE" },
-  { type: "홈페이지/앱", enType: "TYPE_WEB_OR_APP" },
-  { type: "기타", enType: "TYPE_ETC" },
-];
-
-const emailList = [
-  { email: "직접입력", isHandmade: true },
-  { email: "naver.com", isHandmade: false },
-  { email: "gamil.com", isHandmade: false },
-  { email: "daum.net", isHandmade: false },
-];
 
 const phoneList = ["010", "032", "02", "031"];
 
@@ -103,23 +78,16 @@ export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, on
   const onChangePhoneNum03 = (e: any) => {
     setPhone03(e.target.value)
   }
-
-  // select
   const [ questionType, setQuestionType ] = useState<QnaType>(QnaType.TYPE_SIGNUP_OR_SIGNIN);
-
   const handleSelectChange = (e: any) => {
     setQuestionType(e.target.value);
   }
-  // console.log("타입 : ", questionType);
-
   const [smsChecked, setSmsChecked] = useState(true);
-
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    reset,
     resetField
   } = useForm<FormType>({ defaultValues });
 
@@ -154,7 +122,6 @@ export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, on
       encType="multipart/form-data"
       onSubmit={handleSubmit(onSubmit)}
       noValidate
-      // className={boxStyles}
     >
 
       <TableContainer sx={{ width: "100%" }}>

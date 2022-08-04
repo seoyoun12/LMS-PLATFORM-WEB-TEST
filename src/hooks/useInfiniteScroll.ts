@@ -10,7 +10,9 @@ export function useInfiniteScroll(url:string,boardType:string) {
   const [target, setTarget] = useState<HTMLElement | null | undefined>(null);
   const [loadedItem, setLoadItem] = useState<CategoryBoard[]>([]);
   const page = useRef(0)
+  const [loadingStatus , setLoadingStatus] = useState(false)
   const loading = useRef(false);
+  const pageEnd = useRef(false)
   const snackbar = useSnackbar()
 
   const onIntersection = async (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
@@ -18,11 +20,18 @@ export function useInfiniteScroll(url:string,boardType:string) {
     console.log("entries[0].intersectionRatio : ",entries[0].intersectionRatio)
     if (entries[0].intersectionRatio <= holdValue) return;
     // if (entries[0].intersectionRatio <= 0) return;
-    if(loading.current === true) return
+    if(loading.current === true || pageEnd.current) return
     try{
       loading.current = true;
+      setLoadingStatus(true);
       const {data} = await GET<{data:PaginationResult<CategoryBoard[]>}>(url,{params:{page:page.current ,boardType: boardType}})
-      page.current += 1;
+      setLoadingStatus(false);
+      if(data.content.length === 0) {
+        pageEnd.current = true;
+        loading.current = false;
+        return;
+      }
+      if(data.content.length !== 0) page.current += 1;
       // if(loadedItem.length === 0)  setLoadItem(data.content);
       if(loadedItem)  setLoadItem((prev)  =>[...prev , ...data.content])
       loading.current = false;
@@ -42,5 +51,5 @@ export function useInfiniteScroll(url:string,boardType:string) {
     }
   }, [target]);
 
-  return [setTarget, loadedItem  , loading.current] as [React.Dispatch<React.SetStateAction<HTMLElement | null | undefined>> ,CategoryBoard[] , boolean]
+  return [setTarget, loadedItem , loadingStatus] as [React.Dispatch<React.SetStateAction<HTMLElement | null | undefined>> ,CategoryBoard[] , boolean]
 }

@@ -4,7 +4,7 @@ import { ProductStatus } from '@common/api/course';
 import { FileUploader } from '@components/ui/FileUploader';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import { Box, Button, Chip, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
@@ -12,6 +12,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import dateFormat from 'dateformat';
 import { ko } from 'date-fns/locale';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 
 interface FormType {
   title: string;
@@ -79,6 +80,14 @@ export function BannerUpload() {
     setIsFileDelete(false);
   };
 
+  const handleDeleteFile = async () => {
+    if (watch().files.length < 0 || !fileName) return;
+    resetField('files');
+    setFileName(null);
+    setIsFileDelete(true);
+    snackbar({ variant: 'success', message: 'img delete successful' });
+  };
+
   return (
     <BannnerUploadContainer>
       <Box className="form-box" component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -129,6 +138,7 @@ export function BannerUpload() {
         <FileUploader register={register} regName="files" onFileChange={handleFileChange}>
           <FileUploader.Label>파일업로드</FileUploader.Label>
         </FileUploader>
+        {fileName ? <Chip sx={{ mt: '8px' }} icon={<OndemandVideoOutlinedIcon />} label={fileName} onDelete={handleDeleteFile} /> : null}
         <Button variant="contained" type="submit">
           업로드
         </Button>

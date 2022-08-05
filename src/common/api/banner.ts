@@ -45,6 +45,10 @@ export function useSingleBannerAdm(bannerSeq: number) {
   };
 }
 
+export function getSingleBannerAdm(bannerSeq: number) {
+  return GET<{ data: BannerRes }>(`/banner/adm/${bannerSeq}`);
+}
+
 export async function createBannerAdm(data: banner) {
   return await POST(`/banner/adm`, data);
 }

@@ -1,28 +1,11 @@
-import { BbsType, uploadFile } from '@common/api/adm/file';
-import { BannerRes, createBannerAdm, useBannerListAdm, useSingleBannerAdm } from '@common/api/banner';
-import { ContentType } from '@common/api/content';
+import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
+import { BannerRes, getSingleBannerAdm, modifyBannerAdm, useSingleBannerAdm } from '@common/api/banner';
 import { ProductStatus } from '@common/api/course';
-import { YN } from '@common/constant';
-import { Table } from '@components/ui';
 import { FileUploader } from '@components/ui/FileUploader';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';
-import {
-  Box,
-  Button,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { Box, Button, Chip, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -30,6 +13,7 @@ import dateFormat from 'dateformat';
 import { ko } from 'date-fns/locale';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useRouter } from 'next/router';
+import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 
 interface FormType {
   title: string;
@@ -55,6 +39,7 @@ export function BannerModify() {
   const { bannerId } = router.query;
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [fileSeq, setFileSeq] = useState<number | null>(null);
   const {
     register,
     handleSubmit,
@@ -65,7 +50,7 @@ export function BannerModify() {
     setValue,
     watch,
   } = useForm<FormType>({ defaultValues });
-  const { data, error, mutate } = useSingleBannerAdm(Number(bannerId));
+  // const { data, error, mutate } = useSingleBannerAdm(Number(bannerId));
 
   const fileHandler = async (files: File[], bannerSeq: number) => {
     const isFileUpload = files.length > 0;
@@ -79,33 +64,72 @@ export function BannerModify() {
   };
 
   useEffect(() => {
-    setValue('title', data.title);
-    setValue('content', data.content);
-    setValue('startDate', data.startDate);
-    setValue('endDate', data.endDate);
-    setValue('toUrl', data.toUrl);
+    (async function () {
+      try {
+        const { data } = await getSingleBannerAdm(Number(bannerId));
+        console.log(data);
+        setValue('title', data.title);
+        setValue('content', data.content);
+        setValue('startDate', dateFormat(data.startDate, 'yyyy-mm-dd'));
+        setValue('endDate', dateFormat(data.endDate, 'yyyy-mm-dd'));
+        setValue('toUrl', data.toUrl);
+        setFileName(data.s3Files[0]?.name || null);
+        setFileSeq(data.s3Files[0].seq);
+        console.log(watch());
+      } catch (e: any) {
+        snackbar({ variant: 'error', message: e.data.message });
+      }
+    })();
   }, []);
 
+  //나중에 submit 할때 이미지 바뀌도록 수정
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...rest }, e) => {
     console.log('onSubmit triggered', files, rest, e);
-    return;
-    // try {
-    //   const { data }: { data: BannerRes } = await createBannerAdm(rest);
-    //   await fileHandler(files, data.seq);
-    //   snackbar({ variant: 'success', message: '성공적으로 완료되었습니다.' });
-    //   console.log(data);
-    // } catch (e: any) {
-    //   snackbar({ variant: 'error', message: e.data.message });
-    // }
+    try {
+      const { data }: { data: BannerRes } = await modifyBannerAdm(Number(bannerId), rest);
+      if (watch().files.length !== 0) {
+        if (fileSeq) await deleteFile({ fileType: BbsType.TYPE_BANNER, fileTypeId: Number(bannerId), fileSeqList: [fileSeq] });
+        await fileHandler(files, data.seq);
+      }
+      snackbar({ variant: 'success', message: '성공적으로 완료되었습니다.' });
+      router.push(`/admin-center/banner`);
+      console.log(data);
+    } catch (e: any) {
+      snackbar({ variant: 'error', message: e.data.message });
+    }
   };
 
-  const handleFileChange = (e: ChangeEvent) => {
+  const handleFileChange = async (e: ChangeEvent) => {
     e.preventDefault();
 
+    // if (fileName) {
+    //   try {
+    //     await deleteFile({ fileType: BbsType.TYPE_BANNER, fileTypeId: Number(bannerId), fileSeqList: [fileSeq] });
+    //     snackbar({ variant: 'success', message: 'img changeed successful' });
+    //   } catch (e: any) {
+    //     snackbar({ variant: 'error', message: e.data.message });
+    //   }
+    // }
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setFileName(files[0].name);
     setIsFileDelete(false);
+  };
+
+  const handleDeleteFile = async () => {
+    resetField('files');
+    setFileName(null);
+    setIsFileDelete(true);
+    // if (watch().files.length < 0 || !fileName) return;
+    // try {
+    //   await deleteFile({ fileType: BbsType.TYPE_BANNER, fileTypeId: Number(bannerId), fileSeqList: [fileSeq] });
+    //   resetField('files');
+    //   setFileName(null);
+    //   setIsFileDelete(true);
+    //   snackbar({ variant: 'success', message: 'img delete successful' });
+    // } catch (e: any) {
+    //   snackbar({ variant: 'error', message: e.data.message });
+    // }
   };
 
   return (
@@ -160,6 +184,7 @@ export function BannerModify() {
           <FileUploader.Label>파일업로드</FileUploader.Label>
         </FileUploader>
 
+        {fileName ? <Chip sx={{ mt: '8px' }} icon={<OndemandVideoOutlinedIcon />} label={fileName} onDelete={handleDeleteFile} /> : null}
         <Button variant="contained" type="submit">
           업로드
         </Button>

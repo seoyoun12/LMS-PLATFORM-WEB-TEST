@@ -22,13 +22,12 @@ export const AdminCenterLayout = ({ children }: { children: React.ReactNode }) =
         const { data }: { data: MyUser } = await getMyUser();
         if(!data || !data.roles.includes(UserRole.ROLE_ADMIN)){
           window.alert('권한이 없습니다.');
-          router.back();
-          setLoading(false);
+          return router.back();
         }
         setLoading(false);
       } catch (e: any) {
         snackbar({ variant: 'error', message: e.data.message });
-        setLoading(false);
+        router.back();
       }
     })();
   }, [router]);

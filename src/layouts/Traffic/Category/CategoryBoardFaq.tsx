@@ -17,7 +17,7 @@ export function CategoryBoardFaq() {
         }]
         return <BoardAccordion boardAccordionList={accordionInfo} key={content.seq}/>
       })}
-      <Box ref={target} height='100px' >{loading ? <div /> : ""}</Box>
+      <Box ref={target} height='100px' >{loading ? <Container /> : ""}</Box>
     </Container>
   )
 }

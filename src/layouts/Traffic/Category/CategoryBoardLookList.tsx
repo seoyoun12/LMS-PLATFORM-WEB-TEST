@@ -28,7 +28,7 @@ export function CategoryBoardLookList() {
         }]
         return <QnaAccordion qnaAccordionList={accordionInfo} key={data.seq}/>
       })}
-      <Box ref={target} height='100px' >{loading ? <div /> : ""}</Box>
+      <Box ref={target} height='100px' >{loading ? <Container /> : ""}</Box>
     </LkContainer>
 
   )

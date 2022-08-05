@@ -160,7 +160,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
                 <Typography variant="h1" className="bold-700">
                   {item.title}
                 </Typography>
-                <Typography variant="inherit">{item.title}</Typography>
+                <Typography variant="inherit">{item.content}</Typography>
               </SlideInfo>
             </SwiperSlide>
           ))}

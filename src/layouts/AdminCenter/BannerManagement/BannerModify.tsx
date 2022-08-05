@@ -73,6 +73,7 @@ export function BannerModify() {
         setValue('startDate', dateFormat(data.startDate, 'yyyy-mm-dd'));
         setValue('endDate', dateFormat(data.endDate, 'yyyy-mm-dd'));
         setValue('toUrl', data.toUrl);
+
         setFileName(data.s3Files[0]?.name || null);
         setFileSeq(data.s3Files[0].seq);
         console.log(watch());
@@ -82,7 +83,6 @@ export function BannerModify() {
     })();
   }, []);
 
-  //나중에 submit 할때 이미지 바뀌도록 수정
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...rest }, e) => {
     console.log('onSubmit triggered', files, rest, e);
     try {
@@ -102,14 +102,6 @@ export function BannerModify() {
   const handleFileChange = async (e: ChangeEvent) => {
     e.preventDefault();
 
-    // if (fileName) {
-    //   try {
-    //     await deleteFile({ fileType: BbsType.TYPE_BANNER, fileTypeId: Number(bannerId), fileSeqList: [fileSeq] });
-    //     snackbar({ variant: 'success', message: 'img changeed successful' });
-    //   } catch (e: any) {
-    //     snackbar({ variant: 'error', message: e.data.message });
-    //   }
-    // }
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setFileName(files[0].name);
@@ -120,16 +112,6 @@ export function BannerModify() {
     resetField('files');
     setFileName(null);
     setIsFileDelete(true);
-    // if (watch().files.length < 0 || !fileName) return;
-    // try {
-    //   await deleteFile({ fileType: BbsType.TYPE_BANNER, fileTypeId: Number(bannerId), fileSeqList: [fileSeq] });
-    //   resetField('files');
-    //   setFileName(null);
-    //   setIsFileDelete(true);
-    //   snackbar({ variant: 'success', message: 'img delete successful' });
-    // } catch (e: any) {
-    //   snackbar({ variant: 'error', message: e.data.message });
-    // }
   };
 
   return (
@@ -139,7 +121,7 @@ export function BannerModify() {
           배너 등록
         </Typography>
         <TextField placeholder="배너 제목" {...register('title', { required: '배너이름을 입력해주세요.' })} />
-
+        <TextField placeholder="콘텐츠 내용" {...register('content', { required: '콘텐츠를 입력해주세요.' })} />{' '}
         <Typography fontWeight="bold">게시 시작날짜</Typography>
         <DatePicker
           locale={ko}
@@ -163,7 +145,6 @@ export function BannerModify() {
           // popperPlacement="right"
           onChange={date => setValue('endDate', date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd'))}
         />
-
         <TextField placeholder="페이지 이동 url" {...register('toUrl', { required: '입력해주세요.' })} />
         <FormControl className="form-control">
           <FormLabel focused={false}>상태</FormLabel>
@@ -179,11 +160,9 @@ export function BannerModify() {
             )}
           />
         </FormControl>
-
         <FileUploader register={register} regName="files" onFileChange={handleFileChange}>
           <FileUploader.Label>파일업로드</FileUploader.Label>
         </FileUploader>
-
         {fileName ? <Chip sx={{ mt: '8px' }} icon={<OndemandVideoOutlinedIcon />} label={fileName} onDelete={handleDeleteFile} /> : null}
         <Button variant="contained" type="submit">
           업로드

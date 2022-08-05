@@ -13,7 +13,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   const [userPageType, setUserPageType] = useRecoilState(pageType);
   useEffect(() => {
     if (router.route.includes('/traffic')) setUserPageType(pageRegType.TYPE_TRAFFIC_SAFETY_EDU);
-  }, []);
+  }, [router]);
   return (
     <div className={cn(s.root)}>
       {/* <GlobalNavigationBar /> */}

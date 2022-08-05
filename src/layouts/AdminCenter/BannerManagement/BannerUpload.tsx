@@ -95,7 +95,7 @@ export function BannerUpload() {
           배너 등록
         </Typography>
         <TextField placeholder="배너 제목" {...register('title', { required: '배너이름을 입력해주세요.' })} />
-        <TextField placeholder="콘텐츠 내용" {...register('content', { required: '콘텐츠를 입력해주세요.' })} />{' '}
+        <TextField placeholder="콘텐츠 내용" {...register('content', { required: '콘텐츠를 입력해주세요.' })} />
         {/*mui의 textarea나 tui의 폼을 사용 */}
         <Typography fontWeight="bold">게시 시작날짜</Typography>
         <DatePicker

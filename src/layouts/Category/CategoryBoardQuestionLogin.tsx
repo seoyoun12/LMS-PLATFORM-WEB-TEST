@@ -26,7 +26,7 @@ export function CategoryBoardQuestionLogin(){
 					<Typography component={"span"} sx={{color:"#2980bf"}} >[비회원 문의]</Typography>
 					<Typography component={"span"} >를 선택하세요</Typography>
 				</Box> */}
-				<Button type="button" variant="contained"sx={{ mt: 3, mb: 2 }} onClick={()=>router.push(`/traffic/sign-in`)} >로그인 </Button>
+				<Button type="button" variant="contained"sx={{ mt: 3, mb: 2 }} onClick={()=>router.push(`/sign-in`)} >로그인 </Button>
 				{/* <Button type="button" onClick={()=>{setIsOpneQues(true);setMemberType(MemberType.TYPE_NON_MEMBER)}} >비회원 문의</Button> */}
 			</Box>
 		</SignInLayoutWrap>

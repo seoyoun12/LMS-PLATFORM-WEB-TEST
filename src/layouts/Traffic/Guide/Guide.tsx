@@ -1,4 +1,4 @@
-import { GuideBoard } from "@components/ui/GuideBoard";
+import { GuideBoard } from "@components/ui/Traffic/GuideBoard";
 import { Container, Typography } from "@mui/material";
 
 export function Guide() {

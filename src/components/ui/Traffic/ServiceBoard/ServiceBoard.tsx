@@ -1,8 +1,8 @@
 import { Tabs } from '@components/ui/Tabs';
-import { CategoryBoardFaq } from '@layouts/Category/CategoryBoardFaq';
-import { CategoryBoardLook } from '@layouts/Category/CategoryBoardLook';
-import { CategoryBoardNotice } from '@layouts/Category/CategoryBoardNotice';
-import { CategoryBoardQuestion } from '@layouts/Category/CategoryBoardQuestion';
+import { CategoryBoardFaq } from '@layouts/Traffic/Category/CategoryBoardFaq';
+import { CategoryBoardLook } from '@layouts/Traffic/Category/CategoryBoardLook';
+import { CategoryBoardNotice } from '@layouts/Traffic/Category/CategoryBoardNotice';
+import { CategoryBoardQuestion } from '@layouts/Traffic/Category/CategoryBoardQuestion';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { Box, Container } from '@mui/material';

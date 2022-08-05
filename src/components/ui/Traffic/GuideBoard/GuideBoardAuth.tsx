@@ -1,11 +1,10 @@
-import { Box, Container } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import { BoardAccordion } from '@components/ui/BoardAccordion';
 import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
 
+export function GuideBoardAuth() {
 
-export function CategoryBoardFaq() {
-
-  const [target , loadedItem , loading] = useInfiniteScroll(`/post`,"TYPE_FAQ")
+  const [target , loadedItem , loading] = useInfiniteScroll(`/post`,"TYPE_GUIDE_AUTH")
 
   return (
     <Container>
@@ -15,7 +14,7 @@ export function CategoryBoardFaq() {
           name: content.subject, 
           children: [{ name: content.content}] 
         }]
-        return <BoardAccordion boardAccordionList={accordionInfo} key={content.seq}/>
+        return <BoardAccordion boardAccordionList={accordionInfo}/>
       })}
       <Box ref={target} height='100px' >{loading ? <div /> : ""}</Box>
     </Container>

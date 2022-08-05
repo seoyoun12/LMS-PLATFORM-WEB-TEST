@@ -1,6 +1,6 @@
-import { CategoryCarousel } from '@components/ui';
-import { CategoryCard } from '@components/ui/CategoryCard/CategoryCard';
-import { CategoryBoard } from '@components/ui/CategoryBoard/CategoryBoard';
+import { CategoryBoard } from "@components/ui/Traffic/CategoryBoard";
+import { CategoryCard } from "@components/ui/Traffic/CategoryCard";
+import { CategoryCarousel } from "@components/ui/Traffic/CategoryCarousel";
 
 const bannerData = [
   {
@@ -23,9 +23,9 @@ export function Category() {
     <div>
       <CategoryCarousel datas={bannerData} />
 
-      <CategoryCard></CategoryCard>
+      <CategoryCard />
 
-      <CategoryBoard></CategoryBoard>
+      <CategoryBoard />
     </div>
   );
 }

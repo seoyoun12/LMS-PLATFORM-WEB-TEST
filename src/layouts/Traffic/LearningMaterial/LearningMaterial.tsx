@@ -1,4 +1,4 @@
-import { LearningMaterialBoard } from "@components/ui/LearningMaterialBoard";
+import { LearningMaterialBoard } from "@components/ui/Traffic/LearningMaterialBoard";
 import { Container, Typography } from "@mui/material";
 
 

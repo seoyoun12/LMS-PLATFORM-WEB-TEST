@@ -4,7 +4,7 @@ import { useSnackbar } from './useSnackbar';
 import { Qna } from '@common/api/qna';
 import { PaginationResult } from 'types/fetch';
 
-const holdValue = 0.8;
+const holdValue = 0.1;
 // url: string, config:{ params:any , header:any  }
 export function useInfiniteScrollQna(url:string) {
   const [target, setTarget] = useState<HTMLElement | null | undefined>(null);

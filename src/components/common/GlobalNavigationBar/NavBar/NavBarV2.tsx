@@ -199,12 +199,12 @@ const HeaderList = [
   },
   {
     category: '고객센터',
-    href: '/',
+    href: '/service',
     items: [
-      { title: '공지사항', href: '/sign-in' },
-      { title: '자주묻는질문', href: '/sign-in' },
-      { title: '교육문의', href: '/sign-in' },
-      { title: '문의내역조회', href: '/sign-in' },
+      { title: '공지사항', href: '/service?tab=Notice' },
+      { title: '자주묻는질문', href: '/service?tab=Faq' },
+      { title: '교육문의', href: '/service?tab=Question' },
+      { title: '문의내역조회', href: '/service?tab=Look' },
     ],
   },
 ];

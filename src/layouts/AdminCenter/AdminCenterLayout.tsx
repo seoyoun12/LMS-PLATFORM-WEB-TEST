@@ -14,6 +14,10 @@ export const AdminCenterLayout = ({ children }: { children: React.ReactNode }) =
   useLayoutEffect(() => {
     (async function () {
       try {
+        if(!localStorage.getItem('ACCESS_TOKEN')){
+          window.alert('권한이 없습니다.');
+          return router.back();
+        }
         setLoading(true);
         const { data }: { data: MyUser } = await getMyUser();
         if(!data || !data.roles.includes(UserRole.ROLE_ADMIN)){
@@ -21,7 +25,6 @@ export const AdminCenterLayout = ({ children }: { children: React.ReactNode }) =
           router.back();
           setLoading(false);
         }
-        console.log('뭐ㅜ야')
         setLoading(false);
       } catch (e: any) {
         snackbar({ variant: 'error', message: e.data.message });

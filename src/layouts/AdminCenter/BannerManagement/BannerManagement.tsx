@@ -81,8 +81,8 @@ export function BannerManagement() {
                   color={item.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
                 />
               </TableCell>
-              <TableCell>{item.startDate}</TableCell>
-              <TableCell>{item.endDate}</TableCell>
+              <TableCell>{dateFormat(item.startDate,'yyyy-mm-dd')}</TableCell>
+              <TableCell>{dateFormat(item.endDate,'yyyy-mm-dd')}</TableCell>
               <TableCell>{item.s3Files[0]?.name || 'No File'}</TableCell>
               <TableCell>{dateFormat(item.createdDtime, 'yyyy-mm-dd')}</TableCell>
               <TableCell style={{ width: 120 }} align="right">

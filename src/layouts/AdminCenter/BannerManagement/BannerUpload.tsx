@@ -13,6 +13,7 @@ import dateFormat from 'dateformat';
 import { ko } from 'date-fns/locale';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
+import { useRouter } from 'next/router';
 
 interface FormType {
   title: string;
@@ -34,6 +35,7 @@ const defaultValues = {
 
 export function BannerUpload() {
   const snackbar = useSnackbar();
+  const router = useRouter();
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const {
@@ -65,6 +67,7 @@ export function BannerUpload() {
       const { data }: { data: BannerRes } = await createBannerAdm(rest);
       await fileHandler(files, data.seq);
       snackbar({ variant: 'success', message: '성공적으로 완료되었습니다.' });
+      router.push(`/admin-center/banner`);
       console.log(data);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });

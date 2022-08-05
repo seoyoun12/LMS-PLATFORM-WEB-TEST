@@ -118,7 +118,6 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
             disableOnInteraction: false,
           }}
           onSlideChange={e => {
-            console.log(e);
             progress();
           }}
           // onRealIndexChange={progress}

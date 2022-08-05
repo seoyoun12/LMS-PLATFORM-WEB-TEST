@@ -73,6 +73,7 @@ export function BannerModify() {
         setValue('startDate', dateFormat(data.startDate, 'yyyy-mm-dd'));
         setValue('endDate', dateFormat(data.endDate, 'yyyy-mm-dd'));
         setValue('toUrl', data.toUrl);
+        setValue('status' , data.status);
 
         setFileName(data.s3Files[0]?.name || null);
         setFileSeq(data.s3Files[0].seq);

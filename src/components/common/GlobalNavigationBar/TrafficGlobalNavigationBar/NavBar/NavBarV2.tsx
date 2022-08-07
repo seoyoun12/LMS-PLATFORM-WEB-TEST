@@ -12,6 +12,55 @@ const showRemoteList = [
   { href: '/traffic/category' },
 ];
 
+const HeaderList = [
+  {
+    category: '교육이용안내',
+    href: '',
+    items: [
+      { title: '회원가입 및 로그인', href: '/traffic/guide?tab=TYPE_GUIDE_AUTH' },
+      { title: '교육신청방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_REGI' },
+      { title: '학습방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_LEARNING' },
+    ],
+  },
+  {
+    category: '학습자료',
+    href: '/traffic/learning-material',
+    items: [
+      { title: '연령별 교수학습지도안', href: '/traffic/learning-material?tab=A' },
+      { title: '교육자료 및 영상', href: '/traffic/learning-material?tab=B' },
+      { title: '타기관자료 모음', href: '/traffic/learning-material?tab=D' },
+    ],
+  },
+  {
+    category: '온라인교육',
+    href: '',
+    items: [
+      { title: '온라인교육 신청', href: '/traffic/stebMove/steb2' },
+      { title: '온라인교육 수정/취소', href: '/traffic/stebMove/steb2' }, // 미완
+    ],
+  },
+  {
+    category: '나의강의실',
+    href: '/me',
+    items: [
+      { title: '학습현황', href: '/me/my-course' },
+      { title: '정보수정', href: '/me/edit' },
+      { title: '문의하기', href: '/traffic/service?tab=Question' },
+    ],
+  },
+  {
+    category: '고객센터',
+    href: '',
+    items: [
+      { title: '공지사항', href: '/traffic/service?tab=Notice' },
+      { title: '자주묻는질문', href: '/traffic/service?tab=Faq' },
+      { title: '교육문의', href: '/traffic/service?tab=Question' },
+      { title: '문의내역조회', href: '/traffic/service?tab=Look' },
+    ],
+  },
+];
+
+
 export function NavBarV2() {
   const router = useRouter();
   const [isShowRemote, setIsShowRemote] = useState(false);
@@ -19,7 +68,7 @@ export function NavBarV2() {
   // const menuRef = useRef(anchorEl); // current에 안담겨
   // // let open = true;
   // let open = Boolean(anchorEl); 
-  const open = Boolean(anchorEl); 
+  const open = Boolean(anchorEl);
 
   const handleHover = (e: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(e.currentTarget);
@@ -53,9 +102,11 @@ export function NavBarV2() {
                 <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
                   <Box className="link-wrap">
                     {item.items.map(menuItem => (
-                      <MenuItem key={menuItem.title} className="link-item">
-                        <Link href={menuItem.href}>{menuItem.title}</Link>
-                      </MenuItem>
+                      <Link href={menuItem.href}>
+                        <MenuItem key={menuItem.title} className="link-item">
+                          {menuItem.title}
+                        </MenuItem>
+                      </Link>
                     ))}
                   </Box>
                 </Box>
@@ -181,50 +232,3 @@ const RemoteWrap = styled(Box)`
   }
 `;
 
-const HeaderList = [
-  {
-    category: '교육이용안내',
-    href: '',
-    items: [
-      { title: '회원가입 및 로그인', href: '/traffic/guide?tab=TYPE_GUIDE_AUTH' },
-      { title: '교육신청방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_REGI' },
-      { title: '학습방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_LEARNING' },
-    ],
-  },
-  {
-    category: '학습자료',
-    href: '/traffic/learning-material',
-    items: [
-      { title: '연령별 교수학습지도안', href: '/traffic/learning-material?tab=A' },
-      { title: '교육자료 및 영상', href: '/traffic/learning-material?tab=B' },
-      { title: '타기관자료 모음', href: '/traffic/learning-material?tab=D' },
-    ],
-  },
-  {
-    category: '온라인교육',
-    href: '',
-    items: [
-      { title: '온라인교육 신청', href: '/traffic/stebMove/steb2' },
-      { title: '온라인교육 수정/취소', href: '/traffic/stebMove/steb2' }, // 미완
-    ],
-  },
-  {
-    category: '나의강의실',
-    href: '/me',
-    items: [
-      { title: '학습현황', href: '/me/my-course' },
-      { title: '정보수정', href: '/me/edit' },
-      { title: '문의하기', href: '/traffic/service?tab=Question' },
-    ],
-  },
-  {
-    category: '고객센터',
-    href: '',
-    items: [
-      { title: '공지사항', href: '/traffic/service?tab=Notice' },
-      { title: '자주묻는질문', href: '/traffic/service?tab=Faq' },
-      { title: '교육문의', href: '/traffic/service?tab=Question' },
-      { title: '문의내역조회', href: '/traffic/service?tab=Look' },
-    ],
-  },
-];

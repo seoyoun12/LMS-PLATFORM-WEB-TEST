@@ -37,14 +37,14 @@ export function Steb2() {
     defaultValues: { firstIdentityNumber: '', secondIdentityNumber: '' },
   });
 
-  useEffect(() => {
-    (function () {
-      if (!isLogin) {
-        window.alert('로그인이 필요한 서비스입니다.');
-        return router.push('/sign-in');
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (function () {
+  //     if (!isLogin) {
+  //       window.alert('로그인이 필요한 서비스입니다.');
+  //       return router.push('/sign-in');
+  //     }
+  //   })();
+  // }, []);
 
   useEffect(() => {
     if (enrollInfo) setValue('courseClassSeq', Number(enrollInfo.seq));

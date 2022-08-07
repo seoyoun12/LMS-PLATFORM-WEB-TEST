@@ -1,4 +1,6 @@
-export const loginPathList: { href: string }[] = [
+import { UserRole } from '@common/api/user';
+
+export const notNeededLoginPathList: { href: string }[] = [
   { href: 'category' },
   { href: 'service' },
   { href: 'learning-material' },
@@ -6,3 +8,10 @@ export const loginPathList: { href: string }[] = [
   { href: 'sign-up' },
   { href: 'find' },
 ];
+
+export const allowUserPahtList: { href: string; roles: UserRole[] }[] = [
+  { href: '/traffic/stebMove', roles: [UserRole.ROLE_TRAFFIC_SAFETY_MANAGER, UserRole.ROLE_TRAFFIC_SAFETY_USER] },
+  { href: '/stebMove', roles: [UserRole.ROLE_TRANS_MANAGER, UserRole.ROLE_TRANS_USER] },
+];
+
+export const onlyAdminPahtList: { href: string }[] = [{ href: 'admin-center' }];

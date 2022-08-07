@@ -41,7 +41,6 @@ interface FormDatas {
 export function Steb2() {
   const router = useRouter();
   const snackbar = useSnackbar();
-  const isLogin = useIsLoginStatus();
   const ref = useRef<boolean>(false);
   const [trafficInfo, setTrafficInfo] = useRecoilState(courseClassTrafficInfo);
 
@@ -74,13 +73,6 @@ export function Steb2() {
       snackbar({ variant: 'error', message: e.data.message });
     }
   };
-
-  useEffect(() => {
-    if (!isLogin) {
-      router.push('/traffic/category');
-      window.alert('신청하시려면 로그인하셔야 합니다!');
-    }
-  }, []);
 
   return (
     <Steb2Wrap>

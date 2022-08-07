@@ -24,7 +24,13 @@ export function StepHeader({ value, title, headers }: { value: number; title: st
 
         <Box display="flex" gap="8rem" width="fit-content" margin={'auto'} mt={4}>
           {headers.map(item => (
-            <Box display="flex" flexDirection="column" alignItems={'center'} sx={{ opacity: item.value === value ? 1 : 0.5 }}>
+            <Box
+              key={item.value}
+              display="flex"
+              flexDirection="column"
+              alignItems={'center'}
+              sx={{ opacity: item.value === value ? 1 : 0.5 }}
+            >
               {item.value === 1 && <Filter1Icon fontSize="large" />}
               {item.value === 2 && <Filter2Icon fontSize="large" />}
               {item.value === 3 && <Filter3Icon fontSize="large" />}

@@ -1,17 +1,18 @@
 import styled from '@emotion/styled';
 import { Box, Typography } from '@mui/material';
-import { StepHeader } from '../StepHeader';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { width } from '@mui/system';
-import { useRouter } from 'next/router';
+import { v4 as uuid } from 'uuid';
+import { useRef } from 'react';
 
 interface Props {
   handleStep: (moveNumber: number) => void;
 }
 
 export function Step1({ handleStep }: Props) {
+  const uuidRef = useRef(uuid());
+  console.log(uuidRef);
   return (
     <Step1Wrap>
       <StepMain>
@@ -28,6 +29,9 @@ export function Step1({ handleStep }: Props) {
         <SpaceBox mt={2} />
         <ContentBoxes>
           <SelfCertificateBox
+            // onClick={() => {
+            //   document.open(`https://api.bonobono.dev/api/v1/nice?uuid=` + uuidRef.current, '_parant', 'popup=yes');
+            // }}
             onClick={() => {
               handleStep(2);
             }}

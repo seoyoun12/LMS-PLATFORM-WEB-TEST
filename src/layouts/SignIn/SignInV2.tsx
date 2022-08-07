@@ -41,7 +41,7 @@ export function SignInV2() {
 
   useEffect(() => {
     if (isLogin) {
-      router.push('/');
+      router.push('/category');
     }
   }, [isLogin]);
 
@@ -53,15 +53,15 @@ export function SignInV2() {
     const identify2 = data.get('identify2') as string;
     const username = identify1 + identify2;
     const password = identify1 + identify2;
-    console.log(name , username , password , watch() ,loginType.TYPE_TRANS_EDU)
+    console.log(name, username, password, watch(), loginType.TYPE_TRANS_EDU);
     if (usernameErr || identify1Err || identify2Err) return;
 
     try {
-      const res = await signIn(username, password, loginType.TYPE_TRANS_EDU ,name);
+      const res = await signIn(username, password, loginType.TYPE_TRANS_EDU, name);
       if (res.success) {
         setIsLoginState(true);
         setUsetInfo({ username: res.data.username, regCategory: [...res.data.roles] }); // api가 있었음 필요없을듯
-        snackbar({ variant: 'success', message: '로그인이 되었습니다.' });
+        snackbar({ variant: 'success', message: '로그인이 완료되었습니다.' });
         return router.push('/category');
       }
     } catch (e: any) {

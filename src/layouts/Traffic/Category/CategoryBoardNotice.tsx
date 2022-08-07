@@ -1,7 +1,7 @@
 import { Container, Box } from '@mui/material';
 import { BoardAccordion } from '@components/ui/BoardAccordion';
+import React from 'react';
 import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
-
 
 export function CategoryBoardNotice() {
 
@@ -15,9 +15,9 @@ export function CategoryBoardNotice() {
           name: content.subject, 
           children: [{ name: content.content}] 
         }]
-        return <BoardAccordion boardAccordionList={accordionInfo}/>
+        return <BoardAccordion boardAccordionList={accordionInfo} key={content.seq}/>
       })}
-      <Box ref={target} height='100px' >{loading ? <div /> : ""}</Box>
+      <Box ref={target} height='100px' >{loading ? <Container /> : ""}</Box>
     </Container>
   )
 }

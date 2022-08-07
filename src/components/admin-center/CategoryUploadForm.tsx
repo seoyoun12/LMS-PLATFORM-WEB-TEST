@@ -40,6 +40,11 @@ interface FormType extends CategoryBoardInput {
 
 const defaultValues = {
   boardType: "TYPE_NOTICE",
+    // TYPE_NOTICE -> 공지사항
+    // TYPE_FAQ -> 자주묻는질문
+    // TYPE_GUIDE_AUTH -> 회원가입 및 로그인
+    // TYPE_GUIDE_EDU_REGI -> 교육신청방법
+    // TYPE_GUIDE_EDU_LEARNING -> 학습방법
   noticeYn : YN.YES,
   publicYn : YN.YES,
   files: [],
@@ -115,6 +120,9 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
               <RadioGroup row {...field}>
                 <FormControlLabel value={"TYPE_NOTICE"} control={<Radio />} label="공지사항" />
                 <FormControlLabel value={"TYPE_FAQ"} control={<Radio />} label="자주묻는질문" />
+                <FormControlLabel value={"TYPE_GUIDE_AUTH"} control={<Radio />} label="회원가입 및 로그인" />
+                <FormControlLabel value={"TYPE_GUIDE_EDU_REGI"} control={<Radio />} label="교육신청방법" />
+                <FormControlLabel value={"TYPE_GUIDE_EDU_LEARNING"} control={<Radio />} label="학습방법" />
                 {/* <FormControlLabel value={"TYPE_REVIEW"} control={<Radio />} label="문의 내역" /> */}
                 {/* <FormControlLabel value={YN.NO} control={<Radio />} label="공개N" /> */}
               </RadioGroup>

@@ -82,11 +82,11 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
           {data.map(item => (
             <SwiperSlide // key props error
               key={item.seq}
-            > 
+            >
               {isMobile ? (
                 <Image width="100%" height="192px" src={item.s3Files[0].path} alt="" style={{ paddingRight: '16px', objectFit: 'cover' }} />
               ) : (
-                <Image src={item.s3Files[0].path} alt="" layout="fill" objectFit="cover" style={{ paddingRight: '16px' }} />
+                <Image src={item.s3Files[0]?.path} alt="" layout="fill" objectFit="cover" style={{ paddingRight: '16px' }} />
               )}
             </SwiperSlide>
           ))}
@@ -118,7 +118,6 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
             disableOnInteraction: false,
           }}
           onSlideChange={e => {
-            console.log(e);
             progress();
           }}
           // onRealIndexChange={progress}
@@ -160,7 +159,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
                 <Typography variant="h1" className="bold-700">
                   {item.title}
                 </Typography>
-                <Typography variant="inherit">{item.title}</Typography>
+                <Typography variant="inherit">{item.content}</Typography>
               </SlideInfo>
             </SwiperSlide>
           ))}

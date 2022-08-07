@@ -22,4 +22,5 @@ export { CategoryUploadForm } from '@components/admin-center/CategoryUploadForm'
 export { CalendarManagement } from './CalendarManagement/CalendarManagement';
 export { CalendarUpload } from './CalendarManagement/CalendarUpload';
 
-export { BannerManagement } from './BannerManagement/BannerManagement'
+export { BannerManagement } from './BannerManagement/BannerManagement';
+export { BannerUpload } from './BannerManagement/BannerUpload';

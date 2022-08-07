@@ -52,7 +52,7 @@ const emailList = [
 const phoneList = ["010", "032", "02", "031"];
 
 interface Props {
-  memberType: MemberType | undefined;
+  // memberType: MemberType | undefined;
   mode? : 'upload';
   qna? : QnaInput;
   onHandleSubmit: ({ qnaInput, files, qnaSeq, isFileDelete } :{
@@ -72,7 +72,7 @@ const defaultValues = {
 };
 
 
-export function CategoryBoardQuestionForm({ memberType, mode = "upload", qna, onHandleSubmit }: Props) {
+export function CategoryBoardQuestionForm({  mode = "upload", qna, onHandleSubmit }: Props) {
   const [ isFileDelete, setIsFileDelete ] = useState(false);
   const [ fileName, setFileName ] = useState<string | null>(null);
 

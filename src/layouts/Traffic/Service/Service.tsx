@@ -1,4 +1,4 @@
-import { ServiceBoard } from "@components/ui/ServiceBoard";
+import { ServiceBoard } from "@components/ui/Traffic/ServiceBoard";
 import { Container, Typography } from "@mui/material";
 
 export function Service() {

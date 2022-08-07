@@ -9,11 +9,11 @@ const holdValue = 0.8;
 export function useInfiniteScroll(url:string,boardType:string) {
   const [target, setTarget] = useState<HTMLElement | null | undefined>(null);
   const [loadedItem, setLoadItem] = useState<CategoryBoard[]>([]);
-  const page = useRef(0)
-  const [loadingStatus , setLoadingStatus] = useState(false)
+  const page = useRef(0);
+  const [loadingStatus , setLoadingStatus] = useState(false);
   const loading = useRef(false);
-  const pageEnd = useRef(false)
-  const snackbar = useSnackbar()
+  const pageEnd = useRef(false);
+  const snackbar = useSnackbar();
 
   const onIntersection = async (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
     // console.log('intersection', entries ,observer);
@@ -35,6 +35,23 @@ export function useInfiniteScroll(url:string,boardType:string) {
       // if(loadedItem.length === 0)  setLoadItem(data.content);
       if(loadedItem)  setLoadItem((prev)  =>[...prev , ...data.content])
       loading.current = false;
+
+      //임시조치
+      if(page.current < 2){
+        loading.current = true;
+        setLoadingStatus(true);
+        const {data} = await GET<{data:PaginationResult<CategoryBoard[]>}>(url,{params:{page:page.current ,boardType: boardType}})
+        setLoadingStatus(false);
+        if(data.content.length === 0) {
+          pageEnd.current = true;
+          loading.current = false;
+          return;
+        }
+        if(data.content.length !== 0) page.current += 1;
+        // if(loadedItem.length === 0)  setLoadItem(data.content);
+        if(loadedItem)  setLoadItem((prev)  =>[...prev , ...data.content])
+        loading.current = false;
+      }
     }catch(e:any){
       snackbar({variant:'error' , message:e.data.message})
       loading.current = false;

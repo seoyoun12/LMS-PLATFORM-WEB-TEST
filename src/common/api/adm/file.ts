@@ -2,7 +2,6 @@ import { DELETE, POST, PUT } from '@common/httpClient';
 import { CompleteFileInput, FileType } from '@common/api/file';
 import { setFileConfig } from '@utils/setFileConfig';
 
-
 // TODO: FileType 값이랑 호환하게 할 수는 없나?
 export enum BbsType {
   TYPE_FORUM = 'TYPE_FORUM',
@@ -20,25 +19,27 @@ export enum BbsType {
   TYPE_USER_PROFILE = 'TYPE_USER_PROFILE',
   TYPE_POST_GUIDE_AUTH = 'TYPE_GUIDE_AUTH',
   TYPE_POST_GUIDE_EDU_REGI = 'TYPE_GUIDE_EDU_REGI',
-  TYPE_POST_GUIDE_EDU_LEARNING = 'TYPE_GUIDE_EDU_LEARNING'
+  TYPE_POST_GUIDE_EDU_LEARNING = 'TYPE_GUIDE_EDU_LEARNING',
 }
 
-export const initFileConfig = async ({ fileUploadType, fileName }: {
-  fileUploadType: FileType,
-  fileName: string
+export const initFileConfig = async ({
+  fileUploadType,
+  fileName,
+}: {
+  fileUploadType: FileType;
+  fileName: string;
 }): Promise<{
-  encFileName: string,
-  uploadRequestKey: string
+  encFileName: string;
+  uploadRequestKey: string;
 }> => {
   const fileContentType = 'video/mp4';
 
   // const { data } = await POST(`/file/adm/multipart/init`, {
   const { data } = await POST(`/file/multipart/init`, {
-      fileContentType,
-      fileName,
-      uploadType: fileUploadType
-    }
-  );
+    fileContentType,
+    fileName,
+    uploadType: fileUploadType,
+  });
 
   return data;
 };
@@ -48,22 +49,18 @@ export const completeFileUpload = (completeFileInput: CompleteFileInput) => {
   return POST(`/file/multipart/complete`, completeFileInput);
 };
 
-export const uploadFile = ({ fileType, fileTypeId, files }: {
-  fileType: BbsType;
-  fileTypeId: number;
-  files: File[]
-}) => {
+export const uploadFile = ({ fileType, fileTypeId, files }: { fileType: BbsType; fileTypeId: number; files: File[] }) => {
   const formData = new FormData();
   const { file, fileName } = setFileConfig(files);
   formData.append('files', file, fileName);
 
-  console.log("fileTypeId: ", fileTypeId);
+  console.log('fileTypeId: ', fileTypeId);
 
   // return POST(`/file/adm/${fileType}/${fileTypeId}`, formData, {
   return POST(`/file/${fileType}/${fileTypeId}`, formData, {
     headers: {
-      contentType: 'multipart/form-data'
-    }
+      contentType: 'multipart/form-data',
+    },
   });
 };
 
@@ -71,11 +68,7 @@ export const updateFile = () => {
   return PUT(``);
 };
 
-export const deleteFile = ({ fileType, fileTypeId, fileSeqList }: {
-  fileType: BbsType;
-  fileTypeId: number;
-  fileSeqList: number[];
-}) => {
+export const deleteFile = ({ fileType, fileTypeId, fileSeqList }: { fileType: BbsType; fileTypeId: number; fileSeqList: number[] }) => {
   // return DELETE(`/file/adm/${fileType}/${fileTypeId}`, { fileSeqList });
   return DELETE(`/file/${fileType}/${fileTypeId}`, { fileSeqList });
 };

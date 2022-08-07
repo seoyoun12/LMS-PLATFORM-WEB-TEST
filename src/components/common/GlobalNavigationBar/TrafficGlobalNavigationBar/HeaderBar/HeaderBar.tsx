@@ -4,16 +4,22 @@ import { Button, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { Link } from '@components/common';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
-import { useMyUser, UserRole } from '@common/api/user';
+import { getMyUser, MyUser, useMyUser, UserRole } from '@common/api/user';
 import { AccountMenu } from '@components/ui';
 import Image from 'next/image';
 import { NavBarV2 } from '../NavBar';
+import { useEffect, useState } from 'react';
 
 export function HeaderBar() {
-  // const router = useRouter();
   const isLogin = useIsLoginStatus();
-  const { user } = useMyUser();
+  const [user , setUser] = useState<MyUser>()
 
+  useEffect(()=>{
+    (async function(){
+      const {data}:{data:MyUser} = await getMyUser();
+      setUser(data);
+    })()
+  },[])
   return (
     <Header className={styles.globalContainer}>
       <ContentContainer>

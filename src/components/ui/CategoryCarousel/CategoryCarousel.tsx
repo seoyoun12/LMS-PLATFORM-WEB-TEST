@@ -118,6 +118,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
             disableOnInteraction: false,
           }}
           onSlideChange={e => {
+            console.log()
             progress();
           }}
           // onRealIndexChange={progress}
@@ -141,14 +142,14 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
                 }
           }
         >
-          {deprecated.map((data: Datas) => {
+          {data.map((data) => {
             return (
-              <SwiperSlide key={data.id}>
+              <SwiperSlide key={data.seq}>
                 <SlideInfo>
                   <Typography variant="h1" className="bold-700">
                     {data.title}
                   </Typography>
-                  <Typography variant="inherit">{data.description}</Typography>
+                  <Typography variant="inherit">{data.content}</Typography>
                 </SlideInfo>
               </SwiperSlide>
             );

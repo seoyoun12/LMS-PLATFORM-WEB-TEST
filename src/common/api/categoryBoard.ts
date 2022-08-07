@@ -48,7 +48,8 @@ export function categoryBoardList({ page, elementCnt, boardType } : {
   boardType: string | null;
 }) {
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<CategoryBoard[]>>>([
-    `/post`, {
+    // `/post/adm`, {
+    `/post/adm`, {
       params: { page, elementCnt, boardType }
     }
   ], GET);
@@ -58,6 +59,25 @@ export function categoryBoardList({ page, elementCnt, boardType } : {
     mutate
   };
 }
+
+// 공지사항 관리자 리스트
+// export function categoryBoarAdmList({ page, elementCnt, boardType } : {
+//   page: number;
+//   elementCnt?: number;
+//   boardType: string | null;
+// }) {
+//   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<CategoryBoard[]>>>([
+//     `/post/adm`, {
+//       params: { page, elementCnt, boardType }
+//     }
+//   ], GET);
+//   return {
+//     data: data?.data,
+//     error,
+//     mutate
+//   };
+// }
+
 
 // 게시판 상세
 export function useCategoryBoard(seq: number | null) {

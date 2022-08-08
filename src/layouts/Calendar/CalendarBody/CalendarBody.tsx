@@ -138,8 +138,8 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
         onCloseModal={() => setOpenModal(false)}
         // title={<Box >교육안내</Box>}
         action={
-          <Box sx={{ display: 'flex', width: 'fit-content', margin: 'auto', gap: '1rem' }}>
-            <Button
+          <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', gap: '1rem', paddingBottom: '2rem' }}>
+            <JoinButton
               variant="contained"
               onClick={() => {
                 setEnrollInfo({
@@ -155,60 +155,56 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
               }}
             >
               교육신청
-            </Button>
-            <Button variant="contained" color="neutral" onClick={() => setOpenModal(false)}>
+            </JoinButton>
+            <CloseButton variant="contained" onClick={() => setOpenModal(false)}>
               닫기
-            </Button>
+            </CloseButton>
           </Box>
         }
       >
-        <TableContainer sx={{ width: '500px' }}>
+        <TableContainer sx={{ width: '500px', padding: '0 2rem' }}>
           {/* <Box display="flex" alignItems="center" fontWeight="bold" mb={2}>
             <HorizontalRuleRoundedIcon sx={{ color: '#2980b9' }} />
             <span>교육개요</span>
           </Box> */}
-          <Typography width="fit-content" fontWeight={700} fontSize="36px" margin='auto' >
+          <EduGuide>
             <span>교육안내</span>
-          </Typography>
-          <Typography width="fit-content" fontWeight={700} fontSize="24px" borderTop="3px solid #000">
+          </EduGuide>
+          <EduSummury>
             <span>교육개요</span>
-          </Typography>
-          <TableBody sx={{ display: 'table', width: '100%', borderTop: '6px solid #2980b9' }}>
+          </EduSummury>
+          <TableBody sx={{ display: 'table', width: '100%', borderTop: '1px solid #c4c4c4' }}>
             {modalInfo && (
               <>
                 <TableRow>
-                  <TableLeftCell sx={{ width: '30%', background: '#TableLeftCell', borderBottom: '2px solid #b4b4b4' }}>기수</TableLeftCell>
-                  <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>{modalInfo.step}</TableCell>
+                  <TableLeftCell>기수</TableLeftCell>
+                  <TableRightCell>{modalInfo.step}</TableRightCell>
                 </TableRow>
                 <TableRow>
-                  <TableLeftCell sx={{ width: '30%', background: '#TableLeftCell', borderBottom: '2px solid #b4b4b4' }}>교육과정</TableLeftCell>
-                  <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>
-                    {modalInfo.courseCategoryType ? modalInfo.courseCategoryType.ko : '오류'}
-                  </TableCell>
+                  <TableLeftCell>교육과정</TableLeftCell>
+                  <TableRightCell>{modalInfo.courseCategoryType ? modalInfo.courseCategoryType.ko : '오류'}</TableRightCell>
                 </TableRow>
                 <TableRow>
-                  <TableLeftCell sx={{ width: '30%', background:'#TableLeftCell', borderBottom: '2px solid #b4b4b4' }}>업종구분</TableLeftCell>
-                  <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>
-                    {modalInfo.courseSubCategoryType ? modalInfo.courseSubCategoryType.ko : '오류'}
-                  </TableCell>
+                  <TableLeftCell>업종구분</TableLeftCell>
+                  <TableRightCell>{modalInfo.courseSubCategoryType ? modalInfo.courseSubCategoryType.ko : '오류'}</TableRightCell>
                 </TableRow>
                 <TableRow>
-                  <TableLeftCell sx={{ width: '30%', background:'#TableLeftCell', borderBottom: '2px solid #b4b4b4' }}>교육일</TableLeftCell>
-                  <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>
+                  <TableLeftCell>교육일</TableLeftCell>
+                  <TableRightCell>
                     {dateFormat(modalInfo.studyStartDate, 'yyyy-mm-dd')} ~ {dateFormat(modalInfo.studyEndDate, 'yyyy-mm-dd')}
-                  </TableCell>
+                  </TableRightCell>
                 </TableRow>
                 <TableRow>
-                  <TableLeftCell sx={{ width: '30%', background:'#TableLeftCell', borderBottom: '2px solid #b4b4b4' }}>신청/정원</TableLeftCell>
-                  <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>
-                    {modalInfo.enrolledPeopleCnt} / {modalInfo.limitPeople}명
-                  </TableCell>
+                  <TableLeftCell>신청/정원</TableLeftCell>
+                  <TableRightCell>
+                    {modalInfo.limitPeople === 0 ? '제한없음' : `${modalInfo.enrolledPeopleCnt} / ${modalInfo.limitPeople}명`}
+                  </TableRightCell>
                 </TableRow>
                 <TableRow>
-                  <TableLeftCell sx={{ width: '30%', background:'#TableLeftCell', borderBottom: '2px solid #b4b4b4' }}>예약가능시간</TableLeftCell>
-                  <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>
+                  <TableLeftCell>예약가능시간</TableLeftCell>
+                  <TableRightCell>
                     {modalInfo.start} ~ {modalInfo.end}
-                  </TableCell>
+                  </TableRightCell>
                 </TableRow>
               </>
             )}
@@ -293,7 +289,42 @@ const CalendarWrap = styled(Box)<{ filter: string }>`
     border: #e0e0e0;
   }
 `;
+const EduGuide = styled(Typography)`
+  width: fit-content;
+  font-weight: 700;
+  font-size: 36px;
+  margin: auto;
+`;
+
+const EduSummury = styled(Typography)`
+  width: fit-content;
+  font-weight: 700;
+  font-size: 24px;
+  border-top: 3px solid #000;
+`;
 
 const TableLeftCell = styled(TableCell)`
-  background:#f5f5f5;
-`
+  width: 30%;
+  background: #f5f5f5;
+  border-right: 1px solid #c4c4c4;
+  border-left: 1px solid #c4c4c4;
+  border-bottom: 1px solid #c4c4c4;
+  font-weight: 400;
+`;
+const TableRightCell = styled(TableCell)`
+  border-bottom: 1px solid #c4c4c4;
+  border-right: 1px solid #c4c4c4;
+  font-weight: 400;
+`;
+
+const JoinButton = styled(Button)`
+  width: 25%;
+  padding: 0.5rem;
+  font-weight: 500;
+`;
+const CloseButton = styled(Button)`
+  width: 25%;
+  padding: 0.5rem;
+  font-weight: 500;
+  background-color: #383838;
+`;

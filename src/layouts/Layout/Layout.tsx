@@ -15,7 +15,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const snackbar = useSnackbar();
   const [userPageType, setUserPageType] = useRecoilState(pageType);
-  const [user, setUser] = useState<MyUser>();
+  const [user, setUser] = useState<MyUser>(null);
   useEffect(() => {
     if (router.route.includes('/traffic')) {
       setUserPageType(pageRegType.TYPE_TRAFFIC_SAFETY_EDU);
@@ -65,19 +65,26 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const isTraffic = router.route.includes('/traffic');
-    console.log('뭐ㅗ야', isTraffic, user);
+
+    //have a local useState(user) when logout
+    if (!localStorage.getItem('ACCESS_TOKEN') && user) {
+      return setUser(null);
+    }
+    //if you admin, ignore alert.
     if (user && user.roles.some(item => item === UserRole.ROLE_ADMIN)) return;
+
+    //if you trans user , block access traffic page
     if (isTraffic && user) {
       const imTrans = user.roles.some(item => item === UserRole.ROLE_TRANS_USER || item === UserRole.ROLE_TRANS_MANAGER);
-      console.log('너냐?');
       if (!imTrans) return;
-      window.alert('잘못된 접근입니다! 로그아웃 후 해당 페이지로 다시 로그인하세요!');
+      window.alert('잘못된 접근입니다! 로그아웃 후 해당 페이지로 다시 로그인하세요! Trans');
       router.push('/category');
-    } else if (!isTraffic && user) {
+    }
+    //if you traffic user , block access trans page
+    else if (!isTraffic && user) {
       const imSafe = user.roles.some(item => item === UserRole.ROLE_TRAFFIC_SAFETY_USER || item === UserRole.ROLE_TRAFFIC_SAFETY_MANAGER);
-      console.log('너냐?2');
       if (!imSafe) return;
-      window.alert('잘못된 접근입니다! 로그아웃 후 해당 페이지로 다시 로그인하세요!');
+      window.alert('잘못된 접근입니다! 로그아웃 후 해당 페이지로 다시 로그인하세요! Domin');
       router.push('/traffic/category');
     }
   }, [router, user]);

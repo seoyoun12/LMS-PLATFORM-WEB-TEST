@@ -14,9 +14,9 @@ import styles from '@styles/common.module.scss';
 import { Container } from '@mui/material';
 import dateFormat from 'dateformat';
 import { YN } from '@common/constant';
-import { mutate } from 'swr';
 import { Spinner } from '@components/ui';
 import { css } from '@emotion/css';
+import { courseAdmList, courseList, courseRemove } from '@common/api/course';
 
 const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
   { name: 'seq', align: 'left' },
@@ -33,13 +33,18 @@ export function CourseManagement() {
   const dialog = useDialog();
   const router = useRouter();
   const [ page, setPage ] = useState(0);
-  const { data, error } = useCourseList({ page });
+  const [ seq, setSeq ] = useState<number | null>(null);
 
+  const { data, error, mutate } = courseAdmList({ page });
+  // const { data, error, mutate } = courseList({ page });
+
+
+  // pagination
   useEffect(() => {
     console.log('useEffect Triggered');
     const { page } = router.query;
     setPage(!isNaN(Number(page)) ? Number(page) : 0);
-  }, [ router ]);
+  }, [ router.query ]);
 
   const onChangePage = async (page: number) => {
     await router.push({
@@ -50,7 +55,8 @@ export function CourseManagement() {
     });
   };
 
-  const onRemoveCourse = async (courseId: number) => {
+  // 삭제
+  const onRemoveCourse = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
         title: '과정 삭제하기',
@@ -59,9 +65,9 @@ export function CourseManagement() {
         cancelText: '취소'
       });
       if (dialogConfirmed) {
-        await removeCourse({ courseId });
+        await courseRemove(seq);
         snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-        await mutate([ `/course/adm`, { params: { page } } ]);
+        await mutate();
       }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -70,6 +76,7 @@ export function CourseManagement() {
 
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
+
   return (
     <Container className={styles.globalContainer}>
       <Typography

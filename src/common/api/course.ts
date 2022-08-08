@@ -1,4 +1,4 @@
-import { GET, POST } from '@common/httpClient';
+import { DELETE, GET, POST } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { YN } from '@common/constant';
 import { FetchPaginationResponse, PaginationResult } from 'types/fetch';
@@ -61,8 +61,8 @@ export interface Course {
 
 // 20220808 courseList
 export function courseList({ contentTitle, elementCnt, page } : {
-  contentTitle: string;
-  elementCnt: number;
+  contentTitle?: string;
+  elementCnt?: number;
   page: number;
 }) {
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Course[]>>> ([
@@ -80,8 +80,8 @@ export function courseList({ contentTitle, elementCnt, page } : {
 
 // 20220808 courseAdmList
 export function courseAdmList({ contentTitle, elementCnt, page } : {
-  contentTitle: string;
-  elementCnt: number;
+  contentTitle?: string;
+  elementCnt?: number;
   page: number;
 }) {
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Course[]>>> ([
@@ -101,6 +101,12 @@ export function courseAdmList({ contentTitle, elementCnt, page } : {
 export async function courseUpload(courseInput : CourseInput) {
   return await POST(`/course/adm`, courseInput)
 }
+
+// 20220808 courseDelete
+export async function courseRemove(seq: number) {
+  return await DELETE(`/course/adm/${seq}`);
+}
+
 
 
 export function useCourse(courseId?: number) {

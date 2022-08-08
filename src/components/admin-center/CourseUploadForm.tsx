@@ -29,7 +29,7 @@ interface Props {
   mode?: 'upload' | 'modify',
   course?: CourseInput,
   // onHandleSubmit: ({ courseInput, files, courseId }: {
-  onHandleSubmit: ({ courseInput, files }: {
+  onHandleSubmit: ({ courseInput, files, isFileDelete }: {
     courseInput: CourseInput;
     files: File[];
     isFileDelete: boolean;
@@ -76,7 +76,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
   const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();
 
-    const files = (e.target as HTMLInputElement).files;
+    const files = (e.target as HTMLInputElement).files; 
     if (!files?.length) return null;
     setFileName(files[0].name);
     setIsFileDelete(false);
@@ -98,8 +98,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
       // content1: markdownContent,
     };
 
-    console.log("courseInput : ", courseInput);
-
+    console.log("courseUpload check : ", courseInput)
     onHandleSubmit({ courseInput, files, isFileDelete });
   };
 

@@ -81,12 +81,12 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
 
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...course }, event) => {
     event?.preventDefault();
-    if (!editorRef.current) return;
+    // if (!editorRef.current) return;
 
-    const markdownContent = editorRef.current.getInstance().getMarkdown();
+    // const markdownContent = editorRef.current.getInstance().getMarkdown();
     const courseInput = {
       ...course,
-      content1: markdownContent,
+      // content1: markdownContent,
     };
 
     onHandleSubmit({ courseInput, courseId: course.seq, files, isFileDelete });

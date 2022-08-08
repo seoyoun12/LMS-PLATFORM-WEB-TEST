@@ -6,6 +6,7 @@ import { S3Files } from 'types/file';
 import { ContentRes } from '@common/api/content';
 import { Lesson } from '@common/api/lesson';
 import { businessType, courseCategoryType, courseSubCategoryType } from './courseClass';
+import { LargeNumberLike } from 'crypto';
 
 export enum ProductStatus {
   APPROVE = 1,
@@ -19,42 +20,6 @@ export enum courseType {
 }
 
 export type CourseInput = Partial<CourseRes>;
-
-// old Interface
-// export interface CourseRes {
-//   content: ContentRes;
-//   content1: string;
-//   courseFile: string;
-//   courseName: string;
-//   courseSubName: string;
-//   courseThumbLink: string;
-//   createdDtime: string;
-//   displayYn: YN;
-//   fullScore: number;
-//   lessonTerm: number;
-//   lessonTime: number;
-//   lessons: Lesson[];
-//   limitPeople: number;
-//   limitPeopleYn: string;
-//   limitTotalScore: number;
-//   modifiedDtime: string;
-//   price: number;
-//   restudyDay: number;
-//   restudyYn: string;
-//   saleYn: string;
-//   seq: number;
-//   status: ProductStatus;
-//   s3Files: S3Files;
-
-//   // 임시용 타입
-//   curriculum: {
-//     title: string;
-//     panel: number;
-//     contents: {
-//       title: string;
-//     }[];
-//   }[];
-// }
 
 export interface CourseRes {
   seq: number;
@@ -72,6 +37,51 @@ export interface CourseRes {
   s3Files: S3Files;
   status: ProductStatus;
 }
+
+
+
+
+export interface Course {
+
+  contentName: string;
+  contentSeq: LargeNumberLike;
+  courseBusinessType: businessType;
+  courseCategoryType: courseCategoryType;
+  courseName: string;
+  courseSubCategoryType: courseSubCategoryType;
+  courseType: courseType;
+  createdDtime: string;
+  displayYn: YN,
+  fileName: string;
+  lessonTime: number;
+  modifiedDtime: string;
+  s3Files: S3Files
+  seq: 0,
+  status: 0
+
+}
+
+// 20220808 
+export function courseList({ contentTitle, elementCnt, page } : {
+  contentTitle: string;
+  elementCnt: number;
+  page: number;
+}) {
+  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Course[]>>> ([
+    `/course`, {
+      params: { contentTitle, elementCnt, page }
+    }
+  ], GET)
+  
+  return {
+    data: data?.data,
+    error,
+    mutate
+  }
+}
+
+
+
 
 export function useCourse(courseId?: number) {
   const { data, error, mutate } = useSWR<SWRResponse<CourseRes>>(courseId ? `/course/${courseId}` : null, GET);

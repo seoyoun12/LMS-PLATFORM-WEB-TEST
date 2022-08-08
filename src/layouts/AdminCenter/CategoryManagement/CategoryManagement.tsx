@@ -1,15 +1,12 @@
-import { BoardType, categoryBoardList, removeCategoryBoard } from "@common/api/categoryBoard";
+import { categoryBoardList, removeCategoryBoard } from "@common/api/categoryBoard";
 import { useDialog } from "@hooks/useDialog";
 import { useSnackbar } from "@hooks/useSnackbar";
 import { Button, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import styles from "@styles/common.module.scss";
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Table } from "@components/ui";
 import dateFormat from "dateformat";
 import styled from "@emotion/styled";
-import { Controller, useForm } from "react-hook-form";
-import { Link } from '@components/common';
 
 const headRows = [
   { name: "seq" }, // seq

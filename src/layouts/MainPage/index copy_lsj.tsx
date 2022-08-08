@@ -44,6 +44,7 @@ const LinkList = [
     imgPath: '/assets/images/domin.png',
   },
 ];
+
 const MainPage: NextPage = () => {
   const router = useRouter();
   const [screenHeight, setScreenHeight] = useState<number>();
@@ -51,6 +52,7 @@ const MainPage: NextPage = () => {
   const isLogin = useIsLoginStatus();
   const { user, error: userError } = useMyUser();
   const { data, error } = useMainDisplay();
+
   React.useEffect(() => {
     if (isLogin && user) {
       if (user.regCategory === regCategoryType.TYPE_TRANS_EDU) {
@@ -62,6 +64,7 @@ const MainPage: NextPage = () => {
     console.log(screen.availHeight);
     setScreenHeight(screen.availHeight);
   }, [isLogin, user]);
+
   if (!data) return <Spinner />;
   return (
     <WrapMainContainer
@@ -70,21 +73,25 @@ const MainPage: NextPage = () => {
       <Head>
         <title>Main Page</title>
       </Head>
+
       <MainContainer>
         <ContentBox>
           <LogoBox>
             <Image src="/assets/images/cttsLogo.png" height={48} width={320} alt="Your Name" style={{ margin: 'auto' }} />
           </LogoBox>
+
           <NoticeContainer>
             <NoticeTitle>
               <NoticeTitleTypography>{`충남교통연수원 알림판`}</NoticeTitleTypography>
             </NoticeTitle>
             <NoticeContent>
-              <NoticeContentTypography fontWeight="bold">
-                {`운수종사자의 경우 첫번째 "운수종사자교육"\n저상버스운전자의 경우 두번째 "저상버스운전자교육"\n도민교통안전교육자의 경우 세번째 "도민교통안전교육"을\n이용해주시기 바랍니다.`}
+              {/* <NoticeContentTypography fontWeight="bold"> */}
+              <NoticeContentTypography fontWeight="">
+                {`운수종사자의 경우 첫번째 "운수종사자교육" 저상버스운전자의 경우 두번째 "저상버스운전자교육"\n도민교통안전교육자의 경우 세번째 "도민교통안전교육"을 이용해주시기 바랍니다.`}
               </NoticeContentTypography>
             </NoticeContent>
           </NoticeContainer>
+
           <Box position="relative">
             <CategoryGrid
               container={true}
@@ -101,11 +108,14 @@ const MainPage: NextPage = () => {
                     filter => filter.mainDisplayType === item.mainDisplayType
                   )[0];
                   return (
-                    <MainCategoryCard sx={{ borderTop: `px solid ${color}` }}>
+                    <MainCategoryCard key={item.seq} sx={{ borderTop: `7px solid ${color}` }}>
+                      <Box className="cardTop" />
                       <Link href={href} onClick={() => setUserPageType(pageType)}>
-                        <Box width="270px" borderRadius="8px 8px 0 0" overflow="hidden">
+                        <Box>
                           <Image src={imgPath} width="270" height="184" objectFit="fill" />
                         </Box>
+
+
                         <CardInContainer>
                           <Box>
                             <Typography component="span" fontSize={25} fontWeight="bold" color={color}>
@@ -115,18 +125,22 @@ const MainPage: NextPage = () => {
                               교육
                             </Typography>
                           </Box>
+
                           <Button color="neutral" sx={{ position: 'relative' }}>
-                            <Typography>바로가기</Typography>
+                            <Typography fontWeight="bold">바로가기</Typography>
                             <Box className="button-bot-line" />
                             <Box className="button-right-line" />
                           </Button>
                         </CardInContainer>
+
+
                       </Link>
                     </MainCategoryCard>
                   );
                 }
               })}
-              {/* <MainCategoryCard>
+
+            {/* <MainCategoryCard>
             <Link href="/category" underline="none">
               <Box width='270px' borderRadius='8px 8px 0 0' overflow='hidden' >
               <Image src='/assets/images/banner.jpg' width='270' height='184' objectFit='fill' /></Box>
@@ -135,6 +149,7 @@ const MainPage: NextPage = () => {
               </CardInContainer>
             </Link>
           </MainCategoryCard>
+
           <MainCategoryCard>
             <Link href="/category" underline="none">
               <Box width='270px' borderRadius='8px 8px 0 0' overflow='hidden' >
@@ -146,6 +161,7 @@ const MainPage: NextPage = () => {
               </CardInContainer>
             </Link>
           </MainCategoryCard>
+
           <MainCategoryCard>
             <Link href="/category" underline="none">
               <Box width='270px' borderRadius='8px 8px 0 0' overflow='hidden' >
@@ -162,17 +178,14 @@ const MainPage: NextPage = () => {
         </ContentBox>
       </MainContainer>
       <FooterContainer sx={{ color: 'black' }}>
-        <FooterWord>CTTS</FooterWord>
+        <FooterWord>CTTI</FooterWord>
       </FooterContainer>
     </WrapMainContainer>
   );
 };
 // Wrap
 const WrapMainContainer = styled.div`
-  /* display: flex; */
-  width: 100%;
-  height: 100%;
-  /* align-content: flex-start; */
+
   .MuiButton-root.MuiButton-textNeutral:hover {
     background-color: #fff;
   }
@@ -182,11 +195,10 @@ const WrapMainContainer = styled.div`
 `;
 // MainContainer
 const MainContainer = styled(Box)`
-  /* background: #DCF3FF; */
-  height: 70%;
   min-height: 728px;
   padding-top: 4rem;
 `;
+
 const ContentBox = styled(Box)`
   width: 80%;
   margin: auto;
@@ -194,6 +206,7 @@ const ContentBox = styled(Box)`
     width: 95%;
   }
 `;
+
 const LogoBox = styled(Box)`
   width: fit-content;
   margin: auto;
@@ -207,7 +220,7 @@ const NoticeContainer = styled(Box)`
   border: 2px solid #d7d7d7;
   width: 936px;
   height: 110px;
-  // 알림판 중앙 정렬
+  margin-left: 350px;
 `;
 
 const NoticeTitle = styled(Box)`
@@ -226,87 +239,79 @@ const NoticeTitle = styled(Box)`
   /* border-radius: 30px 0 0 30px; */
   /* background-color: rgb(63, 63, 198); */
 `;
+
 const NoticeTitleTypography = styled(Typography)`
   /* white-space: pre-wrap; */
   width: 100%;
   font-size: 1.15rem;
   font-weight: bold;
   text-align: center;
+  box-sizing: border-box;
 `;
+
 const NoticeContent = styled(Box)`
-  /* width: 60%; */
-  height: 100%;
   margin: 2rem;
   text-align: center;
   border-radius: 0 30px 30px 0;
   background-color: white;
 `;
+
 // line-break
 const NoticeContentTypography = styled(Typography)`
   white-space: pre-wrap;
 `;
+
 // Category Grid
 const CategoryGrid = styled(Grid)`
-  gap: 4px;
-  position: relative;
-  top: 60px;
-  height: 100%;
-  display: flex;
+  gap: 15px;
   justify-content: center;
-  gap: 14px;
 `;
+
 // Three section
 const MainCategoryCard = styled(Container)`
   display: flex;
-  width: 328px;
-  height: 386px;
-  /* border-radius: 70px 70px 30px 30px; */
+  width: 302px;
+  height: 360px;
   background: #fff;
   justify-content: center;
   align-items: center;
-  margin: 0;
-  margin-top: 80px;
   box-shadow: 2px 2px 12px 3px rgba(0, 0, 0, 0.2);
   z-index: 11;
+  margin: 0px;
+  
 `;
 
 const CardInContainer = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   width: 185px;
   height: 130px;
-  /* margin-top: 170px; */
-  border-radius: 0 0 30px 30px;
   background-color: white;
   margin: auto;
   padding-top: 2rem;
 
-  
   .button-bot-line {
     position: absolute;
-    left: 0;
     top: 2rem;
-    width: 100%;
-    border-bottom: 2px solid #DADADA;
+    width: 149px;
+    border-bottom: 2px solid #dadada;
   }
   .button-right-line {
     position: absolute;
-    right: 9px;
-    top: 0.5rem;
+    right: 24px;
+    top: 9.5px;
     height: 75%;
-    border-right: 2px solid #DADADA;
+    border-right: 2px solid #dadada;
     transform: rotate(-40deg);
   }
 `;
+
 const FooterContainer = styled(Box)`
   position: relative;
   width: 100%;
   height: 250px;
-  background: #144AAA;
+  background: #144aaa;
   overflow: hidden;
 `;
+
 const FooterWord = styled(Box)`
   position: absolute;
   width: 435px;
@@ -315,7 +320,8 @@ const FooterWord = styled(Box)`
   bottom: 1rem;
   font-size: 13rem;
   font-weight: bold;
-  color: #1A53BA;
+  color: #1a53ba;
   transform: rotate(-15deg);
 `;
+
 export default MainPage;

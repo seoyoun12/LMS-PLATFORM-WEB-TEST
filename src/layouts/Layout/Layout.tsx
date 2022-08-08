@@ -1,7 +1,7 @@
 import cn from 'clsx';
 import s from './Layout.module.css';
 import { Footer, GlobalNavigationBar } from '@components/common';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { TrafficGlobalNavigationBar } from '@components/common/GlobalNavigationBar/TrafficGlobalNavigationBar';
 import { useRecoilState } from 'recoil';
 import { pageType } from '@common/recoil';
@@ -9,17 +9,23 @@ import { pageRegType } from '@common/recoil/pageType/atom';
 import { useRouter } from 'next/router';
 import { allowUserPahtList, notNeededLoginPathList } from '@utils/loginPathList';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { getMyUser, MyUser } from '@common/api/user';
+import { getMyUser, MyUser, UserRole } from '@common/api/user';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const snackbar = useSnackbar();
   const [userPageType, setUserPageType] = useRecoilState(pageType);
+  const [user, setUser] = useState<MyUser>();
   useEffect(() => {
-    if (router.route.includes('/traffic')) setUserPageType(pageRegType.TYPE_TRAFFIC_SAFETY_EDU);
+    if (router.route.includes('/traffic')) {
+      setUserPageType(pageRegType.TYPE_TRAFFIC_SAFETY_EDU);
+    } else {
+      setUserPageType(pageRegType.TYPE_TRANS_EDU);
+    }
   }, [router]);
 
-  useEffect(() => {
+  //추후 훅스로 이동
+  useLayoutEffect(() => {
     (async function () {
       try {
         if (router.route === '/') return;
@@ -34,7 +40,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         }
 
         const { data }: { data: MyUser } = await getMyUser();
-
+        setUser(data);
         const allowUserPage = allowUserPahtList.filter(item => router.route.includes(item.href))[0];
         if (allowUserPage) {
           console.log(allowUserPage, allowUserPahtList);
@@ -56,6 +62,26 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       }
     })();
   }, [router]);
+
+  useEffect(() => {
+    const isTraffic = router.route.includes('/traffic');
+    console.log('뭐ㅗ야', isTraffic, user);
+    if (user && user.roles.some(item => item === UserRole.ROLE_ADMIN)) return;
+    if (isTraffic && user) {
+      const imTrans = user.roles.some(item => item === UserRole.ROLE_TRANS_USER || item === UserRole.ROLE_TRANS_MANAGER);
+      console.log('너냐?');
+      if (!imTrans) return;
+      window.alert('잘못된 접근입니다! 로그아웃 후 해당 페이지로 다시 로그인하세요!');
+      router.push('/category');
+    } else if (!isTraffic && user) {
+      const imSafe = user.roles.some(item => item === UserRole.ROLE_TRAFFIC_SAFETY_USER || item === UserRole.ROLE_TRAFFIC_SAFETY_MANAGER);
+      console.log('너냐?2');
+      if (!imSafe) return;
+      window.alert('잘못된 접근입니다! 로그아웃 후 해당 페이지로 다시 로그인하세요!');
+      router.push('/traffic/category');
+    }
+  }, [router, user]);
+
   return (
     <div className={cn(s.root)}>
       {/* <GlobalNavigationBar /> */}

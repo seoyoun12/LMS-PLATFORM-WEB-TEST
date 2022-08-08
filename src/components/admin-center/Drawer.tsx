@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { Drawer as MuiDrawer } from '@mui/material';
+import { Button, Drawer as MuiDrawer, MenuItem } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -16,11 +16,20 @@ import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
 import { useRouter } from 'next/router';
 import { Accordion } from '@components/ui';
+import { logout } from '@common/api';
 
 const drawerWidth = 240;
 
 export function Drawer({ children }: { children: ReactNode }) {
   const router = useRouter();
+
+  const onClickToMain = () => {
+    router.push('/');
+  };
+  const onClickLogout = async () => {
+    await logout();
+    router.push('/admin-center/signin');
+  };
 
   const accordionList = [
     {
@@ -29,12 +38,12 @@ export function Drawer({ children }: { children: ReactNode }) {
         {
           name: '게시판 목록',
           href: '/admin-center/category',
-          isActive: router.pathname === '/admin-center/category'
+          isActive: router.pathname === '/admin-center/category',
         },
         {
           name: '게시판 등록',
           href: '/admin-center/category/upload',
-          isActive: router.pathname === '/admin-center/category/upload'
+          isActive: router.pathname === '/admin-center/category/upload',
         },
       ],
       icon: <SchoolOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
@@ -45,12 +54,12 @@ export function Drawer({ children }: { children: ReactNode }) {
         {
           name: '과정 목록',
           href: '/admin-center/course',
-          isActive: router.pathname === '/admin-center/course'
+          isActive: router.pathname === '/admin-center/course',
         },
         {
           name: '과정 등록',
           href: '/admin-center/course/upload',
-          isActive: router.pathname === '/admin-center/course/upload'
+          isActive: router.pathname === '/admin-center/course/upload',
         },
       ],
       icon: <SchoolOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
@@ -61,12 +70,12 @@ export function Drawer({ children }: { children: ReactNode }) {
         {
           name: '콘텐츠 목록',
           href: '/admin-center/content',
-          isActive: router.pathname === '/admin-center/content'
+          isActive: router.pathname === '/admin-center/content',
         },
         {
           name: '콘텐츠 등록',
           href: '/admin-center/content/upload',
-          isActive: router.pathname === '/admin-center/content/upload'
+          isActive: router.pathname === '/admin-center/content/upload',
         },
       ],
       icon: <SourceOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
@@ -77,7 +86,7 @@ export function Drawer({ children }: { children: ReactNode }) {
         {
           name: '회원 목록',
           href: '/admin-center/user',
-          isActive: router.pathname === '/admin-center/user'
+          isActive: router.pathname === '/admin-center/user',
         },
       ],
       icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
@@ -88,12 +97,12 @@ export function Drawer({ children }: { children: ReactNode }) {
         {
           name: '일정 목록',
           href: '/admin-center/calendar',
-          isActive: router.pathname === '/admin-center/calendar'
+          isActive: router.pathname === '/admin-center/calendar',
         },
         {
           name: '일정 등록',
           href: '/admin-center/calendar/upload',
-          isActive: router.pathname === '/admin-center/calendar/upload'
+          isActive: router.pathname === '/admin-center/calendar/upload',
         },
       ],
       icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
@@ -104,12 +113,12 @@ export function Drawer({ children }: { children: ReactNode }) {
         {
           name: '배너 목록',
           href: '/admin-center/banner',
-          isActive: router.pathname === '/admin-center/banner'
+          isActive: router.pathname === '/admin-center/banner',
         },
         {
           name: '배너 등록',
           href: '/admin-center/banner/upload',
-          isActive: router.pathname === '/admin-center/banner/upload'
+          isActive: router.pathname === '/admin-center/banner/upload',
         },
       ],
       icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
@@ -142,29 +151,32 @@ export function Drawer({ children }: { children: ReactNode }) {
           [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
             boxSizing: 'border-box',
-            borderRight: '1px solid rgb(0 0 0 / 12%)'
+            borderRight: '1px solid rgb(0 0 0 / 12%)',
           },
           position: 'relative',
         }}
       >
-        <Box sx={{
-          overflow: 'auto',
-          position: 'relative',
-          paddingTop: '78px'
-        }}>
+        <Box
+          sx={{
+            overflow: 'auto',
+            position: 'relative',
+            // paddingTop: '28px',
+          }}
+        >
           <List>
-            <Link
-              href="/admin-center/dashboard"
-              color={router.pathname === '/admin-center/dashboard' ? grey[900] : grey[800]}
-            >
+            <Box display="flex" gap="1rem" flexDirection="column" padding="1rem">
+              <Button variant="contained" onClick={onClickToMain}>
+                메인사이트로
+              </Button>
+              <Button variant="contained" onClick={onClickLogout}>
+                로그아웃
+              </Button>
+            </Box>
+            <Link href="/admin-center/dashboard" color={router.pathname === '/admin-center/dashboard' ? grey[900] : grey[800]}>
               <ListItem
                 button
                 sx={{
-                  backgroundColor: `${
-                    router.pathname === '/admin-center/dashboard'
-                      ? grey[50]
-                      : 'inherit'
-                  }`
+                  backgroundColor: `${router.pathname === '/admin-center/dashboard' ? grey[50] : 'inherit'}`,
                 }}
               >
                 <ListItemIcon>
@@ -183,4 +195,3 @@ export function Drawer({ children }: { children: ReactNode }) {
     </Box>
   );
 }
-

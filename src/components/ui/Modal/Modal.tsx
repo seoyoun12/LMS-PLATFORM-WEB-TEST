@@ -11,12 +11,13 @@ import { Spinner } from '@components/ui';
 type ModalProps = {
   open: boolean,
   onCloseModal: () => void;
+  title?:React.ReactNode;
   onSubmit?: () => void;
   actionLoading?: boolean;
   actionDisabled?: boolean;
   loading?: boolean;
   action?: string | React.ReactNode;
-} & DialogProps
+} & Omit<DialogProps , 'title'>
 
 interface DialogTitleProps {
   id: string;
@@ -75,7 +76,7 @@ export function Modal(
             <BootstrapDialogTitle id="modal-title" onClose={onCloseModal}>
               {title}
             </BootstrapDialogTitle>
-            <DialogContent dividers>
+            <DialogContent>
               {children}
             </DialogContent>
             {action ? <DialogActions>

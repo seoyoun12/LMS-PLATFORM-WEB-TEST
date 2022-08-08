@@ -73,7 +73,7 @@ export function BannerModify() {
         setValue('startDate', dateFormat(data.startDate, 'yyyy-mm-dd'));
         setValue('endDate', dateFormat(data.endDate, 'yyyy-mm-dd'));
         setValue('toUrl', data.toUrl);
-        setValue('status' , data.status);
+        setValue('status', data.status);
 
         setFileName(data.s3Files[0]?.name || null);
         setFileSeq(data.s3Files[0].seq);
@@ -168,6 +168,9 @@ export function BannerModify() {
         <Button variant="contained" type="submit">
           업로드
         </Button>
+        <Typography fontWeight="bold" sx={{ color: 'red' }}>
+          배너 수정시 상태 , 게시종료일자를 모두 업데이트 해야합니다!
+        </Typography>
       </Box>
     </BannnerUploadContainer>
   );

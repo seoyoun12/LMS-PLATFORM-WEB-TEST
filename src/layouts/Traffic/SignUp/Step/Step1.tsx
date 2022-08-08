@@ -20,7 +20,7 @@ export function Step1({ handleStep }: Props) {
   console.log(uuidRef);
 
   const onClickPop = () => {
-    const popUp = document.open(`https://api.bonobono.dev/api/v1/nice?uuid=` + uuidRef.current, '블랴ㅐㅇ크', 'popup=yes');
+    const popUp = document.open(`https://api.bonobono.dev/api/v1/nice?uuid=` + uuidRef.current, '_parant', 'popup=yes');
     setPopUpState(popUp);
   };
 
@@ -28,11 +28,13 @@ export function Step1({ handleStep }: Props) {
     if (popUpState) {
       const interval = setInterval(async () => {
         console.log('UUID', uuidRef.current);
+        console.log('ㅇㅇㅇ', popUpState);
         if (popUpState.closed) {
           console.log('죽었쪙', popUpState.closed);
           try {
             const { data } = await niceConfirm(uuidRef.current);
             console.log(data);
+            handleStep(2);
           } catch (e: any) {
             snackbar({ variant: 'error', message: e.data.message });
           }

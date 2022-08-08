@@ -15,7 +15,7 @@ import { useRecoilState } from 'recoil';
 import { pageType } from '@common/recoil';
 import { pageRegType } from '@common/recoil/pageType/atom';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
-import { regCategoryType, useMyUser } from '@common/api/user';
+import { regCategoryType, useMyUser, UserRole } from '@common/api/user';
 import { useRouter } from 'next/router';
 
 const LinkList = [
@@ -55,6 +55,7 @@ const MainPage: NextPage = () => {
 
   React.useEffect(() => {
     if (isLogin && user) {
+      if (user.roles.some(item => item === UserRole.ROLE_ADMIN)) return;
       if (user.regCategory === regCategoryType.TYPE_TRANS_EDU) {
         router.push('/category');
       } else if (user.regCategory === regCategoryType.TYPE_TRAFFIC_SAFETY_EDU) {
@@ -264,6 +265,9 @@ const CategoryGrid = styled(Grid)`
   position: relative;
   top: 60px;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
 `;
 
 // Three section
@@ -275,6 +279,7 @@ const MainCategoryCard = styled(Container)`
   background: #fff;
   justify-content: center;
   align-items: center;
+  margin: 0;
   margin-top: 80px;
   box-shadow: 2px 2px 12px 3px rgba(0, 0, 0, 0.2);
   z-index: 11;

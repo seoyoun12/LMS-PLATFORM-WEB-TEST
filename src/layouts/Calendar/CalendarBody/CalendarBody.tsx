@@ -2,7 +2,7 @@
 
 import styled from '@emotion/styled';
 import { CustomContentGenerator, EventContentArg } from '@fullcalendar/core';
-import { Box, Button, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import { Box, Button, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import FullCalendar from '@fullcalendar/react';
 import { CalendarEvent, ClickedPlanInfo, eduLegendList, FilterType } from '../Calendar';
@@ -136,7 +136,7 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
       <Modal
         open={openModal}
         onCloseModal={() => setOpenModal(false)}
-        title={'교육안내'}
+        // title={<Box >교육안내</Box>}
         action={
           <Box sx={{ display: 'flex', width: 'fit-content', margin: 'auto', gap: '1rem' }}>
             <Button
@@ -151,7 +151,6 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
                   window.alert('로그인이 필요한 서비스입니다.');
                   return router.push('/sign-in');
                 }
-                // router.push({ pathname: '/stebMove/steb2', query: { seq: modalInfo?.seq } });
                 router.push('/stebMove/steb2');
               }}
             >
@@ -164,43 +163,49 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
         }
       >
         <TableContainer sx={{ width: '500px' }}>
-          <Box display="flex" alignItems="center" fontWeight="bold" mb={2}>
+          {/* <Box display="flex" alignItems="center" fontWeight="bold" mb={2}>
             <HorizontalRuleRoundedIcon sx={{ color: '#2980b9' }} />
             <span>교육개요</span>
-          </Box>
+          </Box> */}
+          <Typography width="fit-content" fontWeight={700} fontSize="36px" margin='auto' >
+            <span>교육안내</span>
+          </Typography>
+          <Typography width="fit-content" fontWeight={700} fontSize="24px" borderTop="3px solid #000">
+            <span>교육개요</span>
+          </Typography>
           <TableBody sx={{ display: 'table', width: '100%', borderTop: '6px solid #2980b9' }}>
             {modalInfo && (
               <>
                 <TableRow>
-                  <TableCell sx={{ width: '30%', background: '#e0e0e0', borderBottom: '2px solid #b4b4b4' }}>기수</TableCell>
+                  <TableLeftCell sx={{ width: '30%', background: '#TableLeftCell', borderBottom: '2px solid #b4b4b4' }}>기수</TableLeftCell>
                   <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>{modalInfo.step}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell sx={{ width: '30%', background: '#e0e0e0', borderBottom: '2px solid #b4b4b4' }}>교육과정</TableCell>
+                  <TableLeftCell sx={{ width: '30%', background: '#TableLeftCell', borderBottom: '2px solid #b4b4b4' }}>교육과정</TableLeftCell>
                   <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>
                     {modalInfo.courseCategoryType ? modalInfo.courseCategoryType.ko : '오류'}
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell sx={{ width: '30%', background: '#e0e0e0', borderBottom: '2px solid #b4b4b4' }}>업종구분</TableCell>
+                  <TableLeftCell sx={{ width: '30%', background:'#TableLeftCell', borderBottom: '2px solid #b4b4b4' }}>업종구분</TableLeftCell>
                   <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>
                     {modalInfo.courseSubCategoryType ? modalInfo.courseSubCategoryType.ko : '오류'}
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell sx={{ width: '30%', background: '#e0e0e0', borderBottom: '2px solid #b4b4b4' }}>교육일</TableCell>
+                  <TableLeftCell sx={{ width: '30%', background:'#TableLeftCell', borderBottom: '2px solid #b4b4b4' }}>교육일</TableLeftCell>
                   <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>
                     {dateFormat(modalInfo.studyStartDate, 'yyyy-mm-dd')} ~ {dateFormat(modalInfo.studyEndDate, 'yyyy-mm-dd')}
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell sx={{ width: '30%', background: '#e0e0e0', borderBottom: '2px solid #b4b4b4' }}>신청/정원</TableCell>
+                  <TableLeftCell sx={{ width: '30%', background:'#TableLeftCell', borderBottom: '2px solid #b4b4b4' }}>신청/정원</TableLeftCell>
                   <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>
                     {modalInfo.enrolledPeopleCnt} / {modalInfo.limitPeople}명
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell sx={{ width: '30%', background: '#e0e0e0', borderBottom: '2px solid #b4b4b4' }}>예약가능시간</TableCell>
+                  <TableLeftCell sx={{ width: '30%', background:'#TableLeftCell', borderBottom: '2px solid #b4b4b4' }}>예약가능시간</TableLeftCell>
                   <TableCell sx={{ borderBottom: '2px solid #b4b4b4' }}>
                     {modalInfo.start} ~ {modalInfo.end}
                   </TableCell>
@@ -214,7 +219,6 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
   );
 }
 function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
-  
   const {
     //@ts-ignore
     event: {
@@ -231,9 +235,12 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
       <div>
         {courseCategoryType?.ko ? courseCategoryType.ko : 'null'}교육 / {lessonTime ? (lessonTime === 0 ? '종일' : lessonTime) : 'null'}시간
       </div>
-      <div>{
-      //@ts-ignore
-      info && info.event._def.extendedProps.mediaType}</div>
+      <div>
+        {
+          //@ts-ignore
+          info && info.event._def.extendedProps.mediaType
+        }
+      </div>
     </>
   );
 }
@@ -256,10 +263,7 @@ const CalendarWrap = styled(Box)<{ filter: string }>`
       border-radius: 220px; */
     }
   }
-  /* ${({ filter }) => (filter !== 'ALL' ? '.' + filter : '')} {
-    //필터
-    display: none;
-  } */
+
   .TYPE_SUP_COMMON {
     background: #27ae60;
     border: #27ae60;
@@ -289,3 +293,7 @@ const CalendarWrap = styled(Box)<{ filter: string }>`
     border: #e0e0e0;
   }
 `;
+
+const TableLeftCell = styled(TableCell)`
+  background:#f5f5f5;
+`

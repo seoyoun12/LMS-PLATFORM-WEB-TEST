@@ -4,15 +4,44 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { v4 as uuid } from 'uuid';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { niceConfirm } from '@common/api/nice';
 
 interface Props {
   handleStep: (moveNumber: number) => void;
 }
 
 export function Step1({ handleStep }: Props) {
+  const snackbar = useSnackbar();
   const uuidRef = useRef(uuid());
+  const popUpRef = useRef<Window>(null);
+  const [popUpState, setPopUpState] = useState<Window>(null);
   console.log(uuidRef);
+
+  const onClickPop = () => {
+    const popUp = document.open(`https://api.bonobono.dev/api/v1/nice?uuid=` + uuidRef.current, '블랴ㅐㅇ크', 'popup=yes');
+    setPopUpState(popUp);
+  };
+
+  useEffect(() => {
+    if (popUpState) {
+      const interval = setInterval(async () => {
+        console.log('UUID', uuidRef.current);
+        if (popUpState.closed) {
+          console.log('죽었쪙', popUpState.closed);
+          try {
+            const { data } = await niceConfirm(uuidRef.current);
+            console.log(data);
+          } catch (e: any) {
+            snackbar({ variant: 'error', message: e.data.message });
+          }
+          clearInterval(interval);
+        }
+      }, 1000);
+    }
+  }, [popUpState]);
+
   return (
     <Step1Wrap>
       <StepMain>
@@ -29,12 +58,10 @@ export function Step1({ handleStep }: Props) {
         <SpaceBox mt={2} />
         <ContentBoxes>
           <SelfCertificateBox
+            onClick={onClickPop}
             // onClick={() => {
-            //   document.open(`https://api.bonobono.dev/api/v1/nice?uuid=` + uuidRef.current, '_parant', 'popup=yes');
+            //   handleStep(2);
             // }}
-            onClick={() => {
-              handleStep(2);
-            }}
           >
             <PhoneAndroidIcon sx={{ fontSize: '6rem', width: '20%' }} />
             <Box display="flex" flexDirection="column" width="70%" paddingRight="1rem">
@@ -53,7 +80,7 @@ export function Step1({ handleStep }: Props) {
         <SpaceBox mt={2} />
 
         <ContentBoxes component="li">본인인증은 휴대폰으로 가능합니다.</ContentBoxes>
-        <ContentBoxes component="li">본인인증 절차가 정상적으로 이루어지지 않을 경우 휴대폰 본인인증은 한국모바알인증(주)</ContentBoxes>
+        <ContentBoxes component="li">본인인증 절차가 정상적으로 이루어지지 않을 경우 휴대폰 본인인증은 한국모바일인증(주)</ContentBoxes>
         <ContentBoxes>☎ 02-2033-8500으로 문의하시기 바랍니다.</ContentBoxes>
         <ContentBoxes component="li">회원가입에 대한 다른 궁금한 사항은 고객센터로 문의하여 주시기 바랍니다.</ContentBoxes>
       </StepMain>

@@ -1,7 +1,7 @@
 import cn from 'clsx';
 import s from './Layout.module.css';
 import { Footer, GlobalNavigationBar } from '@components/common';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { TrafficGlobalNavigationBar } from '@components/common/GlobalNavigationBar/TrafficGlobalNavigationBar';
 import { useRecoilState } from 'recoil';
 import { pageType } from '@common/recoil';
@@ -24,14 +24,16 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       try {
         if (router.route === '/') return;
 
-        if (!localStorage.getItem('ACCESS_TOKEN')) return;
-        const { data }: { data: MyUser } = await getMyUser();
         const currentPageNotNeedLogin = notNeededLoginPathList.some(item => router.route.includes(item.href));
-        if (!currentPageNotNeedLogin && !data) {
+
+        if (currentPageNotNeedLogin && !localStorage.getItem('ACCESS_TOKEN')) return;
+
+        if (!currentPageNotNeedLogin && !localStorage.getItem('ACCESS_TOKEN')) {
           window.alert('로그인이 필요한 서비스입니다.');
-          router.back();
-          return;
+          return router.push(userPageType === pageRegType.TYPE_TRANS_EDU ? '/category' : '/traffic/category');
         }
+
+        const { data }: { data: MyUser } = await getMyUser();
 
         const allowUserPage = allowUserPahtList.filter(item => router.route.includes(item.href))[0];
         if (allowUserPage) {

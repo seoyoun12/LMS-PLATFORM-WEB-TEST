@@ -7,6 +7,7 @@ export const notNeededLoginPathList: { href: string }[] = [
   { href: 'sign-in' },
   { href: 'sign-up' },
   { href: 'find' },
+  { href: 'guide' },
 ];
 
 export const allowUserPahtList: { href: string; roles: UserRole[] }[] = [

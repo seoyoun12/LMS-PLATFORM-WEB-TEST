@@ -3,6 +3,7 @@ import { GET, POST, PUT, DELETE } from "@common/httpClient";
 import useSWR, { SWRResponse } from "swr";
 import { PaginationResult } from "types/fetch";
 import { S3File, S3Files } from "types/file";
+import { ProductStatus } from "./course";
 
 
 export enum BoardType {
@@ -18,10 +19,10 @@ export interface CategoryBoard {
   createdDtime: string;
   hit: number;
   modifiedDtime: string;
-  noticeYn: string;
-  publicYn: string;
+  noticeYn: YN;
+  publicYn: YN;
   seq: number;
-  status: number;
+  status: ProductStatus;
   subject: string;
   userSeq: number;
   username: string;
@@ -30,16 +31,16 @@ export interface CategoryBoard {
 
 // 카테고리게시판 공지사항 input
 
-// export type CategoryBoardInput = Partial<CategoryBoard>;
-export interface CategoryBoardInput {
-  s3Files: S3Files;
-  boardType: string;
-  content: string;
-  courseSeq: number;
-  noticeYn: string;
-  publicYn: string;
-  subject: string;
-}
+export type CategoryBoardInput = Partial<CategoryBoard>;
+// export interface CategoryBoardInput {
+//   s3Files: S3Files;
+//   boardType: string;
+//   content: string;
+//   courseSeq: number;
+//   noticeYn: string;
+//   publicYn: string;
+//   subject: string;
+// }
 
 // 공지사항 리스트
 export function categoryBoardList({ page, elementCnt, boardType } : {
@@ -90,8 +91,8 @@ export function useCategoryBoard(seq: number | null) {
 }
 
 // 게시판 업로드
-export async function uploadCategoryBoard(CategoryBoardInput : CategoryBoardInput) {
-  return await POST(`/post`, CategoryBoardInput);
+export async function uploadCategoryBoard(categoryBoardInput : CategoryBoardInput) {
+  return await POST(`/post`, categoryBoardInput);
 }
 
 // 게시판 수정

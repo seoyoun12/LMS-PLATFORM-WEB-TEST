@@ -91,6 +91,33 @@ export function qnaList({ page, elementCnt } : {
   }
 }
 
+// qna adm list
+export function qnaAdmList({ page, elementCnt } : {
+  page: number;
+  elementCnt?: number;
+}) {
+  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Qna[]>>>([
+    `/qna/adm`, {
+      params: { page, elementCnt }
+    }
+  ], GET);
+  return {
+    data: data?.data,
+    error,
+    mutate
+  }
+}
+
+// qna detail
+export function qnaDetail(seq: number | null) {
+  const { data, error } = useSWR<SWRResponse<Qna>>(seq ? `/qna/adm/${seq}`: null , GET);
+  return {
+    detailData : data?.data,
+    detailError : error
+  }
+}
+
+
 // qna answer
 export async function qnaAnswerList(qnaSeq : number) {
   return await GET(`/qna/adm/${qnaSeq}`)

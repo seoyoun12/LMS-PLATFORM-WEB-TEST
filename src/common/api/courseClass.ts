@@ -15,9 +15,16 @@ export enum userBusinessType {
   FREIGHT = 'FREIGHT',
 }
 
+export enum courseRegType {
+  TYPE_TRANS_WORKER = 'TYPE_TRANS_WORKER', //운수종사자
+  TYPE_LOW_FLOOR_BUS = 'TYPE_LOW_FLOOR_BUS', //저상버스
+  TYPE_PROVINCIAL = 'TYPE_PROVINCIAL', //도민
+}
+
 export enum courseCategoryType {
   TYPE_NONE = 'NONE',
   TYPE_SUP_COMMON = 'TYPE_SUP_COMMON', //보수일반
+  TYPE_SUP_CONSTANT = 'TYPE_SUP_CONSTANT', //보수수시
   TYPE_CONSTANT = 'TYPE_CONSTANT', //수시
   TYPE_NEW = 'TYPE_NEW', //신규
   TYPE_ILLEGAL = 'TYPE_ILLEGAL', //법령위반자

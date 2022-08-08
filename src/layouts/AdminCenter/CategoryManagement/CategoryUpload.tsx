@@ -9,10 +9,9 @@ import { useState } from 'react';
 import router from 'next/router';
 
 export function CategoryUpload() {
-  // const [ seq, setSeq ] = useState<number | null>(null);
+
   const snackbar = useSnackbar();
 
-  
   const fileHandler = async (files: File[], category: CategoryBoard) => {
     const isFileUpload = files.length > 0;
     if (isFileUpload) {
@@ -24,7 +23,10 @@ export function CategoryUpload() {
     }
   };
 
-  const handleSubmit = async ({ files, categoryBoardInput }: { files: File[]; categoryBoardInput: CategoryBoardInput }) => {
+  const handleSubmit = async ({ files, categoryBoardInput }: { 
+    files: File[]; 
+    categoryBoardInput: CategoryBoardInput
+   }) => {
     try {
       const category = await uploadCategoryBoard(categoryBoardInput); // 게시판 내용 업로드. 파일보다 먼저
       await fileHandler(files, category.data); // 파일업로드. 게시판 뒤

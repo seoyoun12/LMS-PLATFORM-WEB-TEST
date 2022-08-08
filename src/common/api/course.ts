@@ -5,7 +5,7 @@ import { FetchPaginationResponse, PaginationResult } from 'types/fetch';
 import { S3Files } from 'types/file';
 import { ContentRes } from '@common/api/content';
 import { Lesson } from '@common/api/lesson';
-import { businessType, courseCategoryType, courseSubCategoryType } from './courseClass';
+import { businessType, courseCategoryType, courseRegType, courseSubCategoryType } from './courseClass';
 import { LargeNumberLike } from 'crypto';
 
 export enum ProductStatus {
@@ -14,12 +14,14 @@ export enum ProductStatus {
 }
 
 export enum courseType {
-  TYPE_TRANS_WOKER = 'TYPE_TRANS_WOKER', //운수종사자
+  TYPE_TRANS_WORKER = 'TYPE_TRANS_WORKER', //운수종사자
   TYPE_LOW_FLOOR_BUS = 'TYPE_LOW_FLOOR_BUS', //저상버스
   TYPE_PROVINCIAL = 'TYPE_PROVINCIAL', //도민
 }
 
-export type CourseInput = Partial<CourseRes>;
+// 20220808 CourseInput
+// export type CourseInput = Partial<CourseRes>;
+export type CourseInput = Partial<Course>;
 
 export interface CourseRes {
   seq: number;
@@ -28,7 +30,7 @@ export interface CourseRes {
   courseName: string;
   courseSubCategoryType: courseSubCategoryType;
   courseBusinessType: businessType;
-  courseType: courseType;
+  courseType: courseRegType;
   createdDtime: string;
   displayYn: YN;
   lessonTime: number;
@@ -38,11 +40,8 @@ export interface CourseRes {
   status: ProductStatus;
 }
 
-
-
-
+// 20220808 Course interface
 export interface Course {
-
   contentName: string;
   contentSeq: LargeNumberLike;
   courseBusinessType: businessType;
@@ -56,12 +55,11 @@ export interface Course {
   lessonTime: number;
   modifiedDtime: string;
   s3Files: S3Files
-  seq: 0,
-  status: 0
-
+  seq: number,
+  status: ProductStatus
 }
 
-// 20220808 
+// 20220808 courseList
 export function courseList({ contentTitle, elementCnt, page } : {
   contentTitle: string;
   elementCnt: number;
@@ -80,7 +78,29 @@ export function courseList({ contentTitle, elementCnt, page } : {
   }
 }
 
+// 20220808 courseAdmList
+export function courseAdmList({ contentTitle, elementCnt, page } : {
+  contentTitle: string;
+  elementCnt: number;
+  page: number;
+}) {
+  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Course[]>>> ([
+    `/course/adm`, {
+      params: { contentTitle, elementCnt, page }
+    }
+  ], GET)
+  
+  return {
+    data: data?.data,
+    error,
+    mutate
+  }
+}
 
+// 20220808 courseUpload
+export async function courseUpload(courseInput : CourseInput) {
+  return await POST(`/course/adm`, courseInput)
+}
 
 
 export function useCourse(courseId?: number) {

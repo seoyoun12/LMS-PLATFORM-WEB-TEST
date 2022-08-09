@@ -205,8 +205,8 @@ const NoticeContainer = styled(Box)`
   margin-top: 5rem;
   border-radius: 1rem;
   border: 2px solid #d7d7d7;
-  width: 936px;
-  height: 110px;
+  /* width: 936px;
+  height: 110px; */
   // 알림판 중앙 정렬
 `;
 

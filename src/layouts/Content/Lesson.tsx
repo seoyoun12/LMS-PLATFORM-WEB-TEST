@@ -57,8 +57,8 @@ const fileList = [
 export function Lesson() {
   const router = useRouter();
   const { query, pathname } = router;
-  const { courseId, lessonId } = query;
-  const { course, courseError } = useCourse(Number(courseId));
+  const { courseSeq, lessonId } = query;
+  const { course, courseError } = useCourse(Number(courseSeq));
 
   if (courseError) return <div>error</div>;
   if (!course) return <Spinner />;

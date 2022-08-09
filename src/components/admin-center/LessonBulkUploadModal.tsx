@@ -69,8 +69,8 @@ export function LessonBulkUploadModal({ open, handleClose }: {
       );
 
     try {
-      const contentId = Number(query.contentId);
-      await uploadLessons({ contentId, lessonInput });
+      const contentSeq = Number(query.contentSeq);
+      await uploadLessons({ contentSeq, lessonInput });
       snackbar({ variant: 'success', message: '성공적으로 업로드 되었습니다.' });
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });

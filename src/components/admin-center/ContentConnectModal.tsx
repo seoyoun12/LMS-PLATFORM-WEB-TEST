@@ -18,7 +18,7 @@ import ReplayIcon from '@mui/icons-material/Replay';
 
 interface Props {
   open: boolean;
-  courseId: number;
+  courseSeq: number;
   handleClose: () => void;
 }
 
@@ -29,7 +29,7 @@ const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' |
   { name: '연결된 과정명', align: 'right' },
 ];
 
-export function ContentConnectModal({ open, handleClose, courseId }: Props) {
+export function ContentConnectModal({ open, handleClose, courseSeq }: Props) {
   const dialog = useDialog();
   const snackbar = useSnackbar();
   const [ page, setPage ] = useState(0);
@@ -39,7 +39,7 @@ export function ContentConnectModal({ open, handleClose, courseId }: Props) {
 
   const handleConnect = async (contentSeq: number) => {
     try {
-      await connectCourseToContent({ courseSeq: courseId, contentSeq });
+      await connectCourseToContent({ courseSeq: courseSeq, contentSeq });
       await mutate();
       snackbar({ variant: 'success', message: '연결이 완료되었습니다.' });
     } catch (e) {
@@ -47,7 +47,7 @@ export function ContentConnectModal({ open, handleClose, courseId }: Props) {
     }
   };
 
-  const handleDisconnect = async (courseId: number) => {
+  const handleDisconnect = async (courseSeq: number) => {
     try {
       const dialogConfirmed = await dialog({
         title: '콘텐츠 연결 해제하기',
@@ -57,7 +57,7 @@ export function ContentConnectModal({ open, handleClose, courseId }: Props) {
       });
 
       if (dialogConfirmed) {
-        await disConnectContent(courseId);
+        await disConnectContent(courseSeq);
         await mutate();
         snackbar({ variant: 'success', message: '해제가 완료되었습니다.' });
       }

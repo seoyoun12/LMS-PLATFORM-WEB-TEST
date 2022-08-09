@@ -5,7 +5,7 @@ import { AppBar } from "@mui/material";
 import * as React from "react";
 
 const hideNavList = [
-  // { href: '/course/[courseId]' },
+  // { href: '/course/[courseSeq]' },
   { href: '/admin-center' },
   // { href: '/'}
 ];

@@ -43,7 +43,7 @@ export function ContentManagement() {
     });
   };
 
-  const onRemoveCourse = async (contentId: number) => {
+  const onRemoveCourse = async (contentSeq: number) => {
     try {
       const dialogConfirmed = await dialog({
         title: '콘텐츠 삭제하기',
@@ -52,7 +52,7 @@ export function ContentManagement() {
         cancelText: '취소'
       });
       if (dialogConfirmed) {
-        // await removeCourse({ contentId });
+        // await removeCourse({ contentSeq });
         snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
         // await mutate([ `/content/adm`, { params: { page } } ]);
       }

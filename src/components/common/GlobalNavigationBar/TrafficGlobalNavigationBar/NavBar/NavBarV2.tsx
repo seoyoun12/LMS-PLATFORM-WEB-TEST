@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
 const showRemoteList = [
-  // { href: '/traffic/course/[courseId]' },
+  // { href: '/traffic/course/[courseSeq]' },
   // { href: '/traffic/admin-center' },
   { href: '/traffic/category' },
 ];

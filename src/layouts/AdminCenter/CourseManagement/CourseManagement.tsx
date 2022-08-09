@@ -38,13 +38,8 @@ export function CourseManagement() {
   const { data, error, mutate } = courseAdmList({ page });
   // const { data, error, mutate } = courseList({ page });
 
-
-  console.log("CourseManagement data : ", data);
-
-
   // pagination
   useEffect(() => {
-    console.log('useEffect Triggered');
     const { page } = router.query;
     setPage(!isNaN(Number(page)) ? Number(page) : 0);
   }, [ router.query ]);
@@ -58,19 +53,12 @@ export function CourseManagement() {
     });
   };
 
-
-
-
   // 수정
   const onClickModifyCourse = async (seq : number) => {
     setSeq(seq);
-    console.log("modifyseq(CourseManageMent) : ", seq)
-    console.log("modify(CourseManageMent) : ", data)
     router.push(`/admin-center/course/modify/${seq}`);
     mutate();
   }
-
-
 
   // 삭제
   const onClickRemoveCourse = async (seq: number) => {

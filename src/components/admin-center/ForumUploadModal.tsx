@@ -23,7 +23,7 @@ interface Props {
   open: boolean;
   onClose: (isMutate: boolean) => void;
   forumId?: number | null;
-  courseId?: number;
+  courseSeq?: number;
   mode?: 'modify' | 'upload';
 }
 
@@ -36,7 +36,7 @@ const defaultValues = {
   files: [],
 };
 
-export function ForumUploadModal({ open, onClose, forumId, courseId, mode = 'upload' }: Props) {
+export function ForumUploadModal({ open, onClose, forumId, courseSeq, mode = 'upload' }: Props) {
   const snackbar = useSnackbar();
   const { forum, forumError, mutate } = useForum(Number(forumId));
   const [ submitLoading, setSubmitLoading ] = useState(false);
@@ -97,7 +97,7 @@ export function ForumUploadModal({ open, onClose, forumId, courseId, mode = 'upl
   };
 
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...forum }) => {
-    const inputParams = { ...forum, courseSeq: courseId };
+    const inputParams = { ...forum, courseSeq: courseSeq };
     setSubmitLoading(true);
 
     try {

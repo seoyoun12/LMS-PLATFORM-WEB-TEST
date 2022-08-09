@@ -42,8 +42,8 @@ export function LessonList() {
   const [ openBulkUploadModal, setOpenBulkUploadModal ] = useState(false);
   const [ openUploadModal, setOpenUploadModal ] = useState(false);
   const [ lessonId, setLessonId ] = useState<number | null>(null);
-  const { contentId } = router.query;
-  const { lessonList, lessonListError, mutate } = useLessonList(Number(contentId));
+  const { contentSeq } = router.query;
+  const { lessonList, lessonListError, mutate } = useLessonList(Number(contentSeq));
   const { lesson, lessonError } = useLesson(lessonId);
 
   const onRemoveLesson = async (lessonId: number) => {

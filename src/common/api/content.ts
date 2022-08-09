@@ -12,20 +12,23 @@ export enum ContentTypeHuman {
   CONTENT_EXTERNAL = '외부링크'
 }
 
-export interface ContentInput {
-  contentType: ContentType | string;
-  contentName: string;
-  contentWidth: number;
-  contentHeight: number;
-  status: ProductStatus;
-}
+// export interface ContentInput {
+//   contentType: ContentType | string;
+//   contentName: string;
+//   contentWidth: number;
+//   contentHeight: number;
+//   status: ProductStatus;
+// }
 
-export interface ContentRes {
+// export interface ContentRes {
+export interface Content {
   code: string;
   contentHeight: number;
   contentName: string;
   contentType: ContentType;
   contentWidth: number;
+  courseName: string;
+  courseSeq: number;
   createdDtime: string;
   examCnt: number;
   homeworkCnt: number;
@@ -34,6 +37,11 @@ export interface ContentRes {
   questionCnt: number;
   seq: number;
   status: ProductStatus;
-  courseName: string;
-  courseSeq: number;
 }
+
+export type ContentInput = Partial<Content>;
+
+
+
+
+

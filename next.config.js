@@ -23,6 +23,21 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  webpack: {
+    rules: [
+      {
+        test: /\.(js|jsx|ts|tsx)$/,
+        use: [
+            {
+              loader: 'babel-loader',
+            },
+        ],
+        // Exclude the untransformed packages from the exclude rule here
+        exclude: /node_modules\/(\@[a-ln-z0-9][a-z0-9\-._]+|[a-z0-9\-._]+)/,
+        // exclude: /node_modules/,
+      },
+    ],
+  }
 };
 
 module.exports = withTM(nextConfig);

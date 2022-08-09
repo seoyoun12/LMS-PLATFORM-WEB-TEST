@@ -15,7 +15,7 @@ import { useRecoilState } from 'recoil';
 import { pageType } from '@common/recoil';
 import { pageRegType } from '@common/recoil/pageType/atom';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
-import { regCategoryType, useMyUser } from '@common/api/user';
+import { regCategoryType, useMyUser, UserRole } from '@common/api/user';
 import { useRouter } from 'next/router';
 
 const LinkList = [
@@ -55,6 +55,7 @@ const MainPage: NextPage = () => {
 
   React.useEffect(() => {
     if (isLogin && user) {
+      if (user.roles.some(item => item === UserRole.ROLE_ADMIN)) return;
       if (user.regCategory === regCategoryType.TYPE_TRANS_EDU) {
         router.push('/category');
       } else if (user.regCategory === regCategoryType.TYPE_TRAFFIC_SAFETY_EDU) {
@@ -96,7 +97,6 @@ const MainPage: NextPage = () => {
               container={true}
               spacing={0}
               columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
-              gap={1}
               position="relative"
               height={'100%'}
               top={60}
@@ -171,7 +171,7 @@ const MainPage: NextPage = () => {
         </ContentBox>
       </MainContainer>
       <FooterContainer sx={{ color: 'black' }}>
-        <FooterWord>CTTS</FooterWord>
+        <FooterWord>CTTI</FooterWord>
       </FooterContainer>
     </WrapMainContainer>
   );
@@ -195,7 +195,7 @@ const MainContainer = styled(Box)`
   /* background: #dcf3ff; */
   height: 70%;
   min-height: 728px;
-  padding-top: 4rem;
+  padding-top: 130px;
 `;
 
 const ContentBox = styled(Box)`
@@ -213,9 +213,11 @@ const LogoBox = styled(Box)`
 
 // Notice
 const NoticeContainer = styled(Box)`
+  max-width: 930px;
   position: relative;
   height: 25%;
-  margin-top: 5rem;
+  margin: auto;
+  margin-top: 80px;
   border-radius: 1rem;
   border: 2px solid #d7d7d7;
 `;
@@ -264,6 +266,9 @@ const CategoryGrid = styled(Grid)`
   position: relative;
   top: 60px;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 13px;
 `;
 
 // Three section
@@ -275,6 +280,7 @@ const MainCategoryCard = styled(Container)`
   background: #fff;
   justify-content: center;
   align-items: center;
+  margin: 0;
   margin-top: 80px;
   box-shadow: 2px 2px 12px 3px rgba(0, 0, 0, 0.2);
   z-index: 11;
@@ -321,12 +327,24 @@ const FooterWord = styled(Box)`
   position: absolute;
   width: 435px;
   height: 214px;
-  right: 25rem;
+  /* right: 25rem; */
+  right: 10%;
   bottom: 1rem;
   font-size: 13rem;
   font-weight: bold;
   color: #1a53ba;
   transform: rotate(-15deg);
+
+  /* @media (max-width: 1230px) {
+    right: 10rem;
+  } */
+  @media (max-width: 768px) {
+    width: fit-content;
+    height: fit-content;
+    right: 2%;
+    bottom: -10%;
+    font-size: 8rem;
+  }
 `;
 
 export default MainPage;

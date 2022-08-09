@@ -141,14 +141,14 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
                 }
           }
         >
-          {deprecated.map((data: Datas) => {
+          {deprecated.map((data) => {
             return (
               <SwiperSlide key={data.id}>
                 <SlideInfo>
                   <Typography variant="h1" className="bold-700">
                     {data.title}
                   </Typography>
-                  <Typography variant="inherit">{data.description}</Typography>
+                  <Typography variant="inherit">{data.title}</Typography>
                 </SlideInfo>
               </SwiperSlide>
             );

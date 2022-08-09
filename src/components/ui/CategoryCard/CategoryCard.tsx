@@ -19,7 +19,7 @@ const categoryData = [
   {
     id: 2,
     title: "운수종사자 교육예약",
-    href: "stebMove/steb2",
+    href: "stebMove/steb1",
     icon: "DirectionsCarIcon",
     color: "#fff6e7",
     btnText: "예약하기"

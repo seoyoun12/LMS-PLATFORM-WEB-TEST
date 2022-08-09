@@ -9,14 +9,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Spinner } from '@components/ui';
 
 type ModalProps = {
-  open: boolean,
+  open: boolean;
   onCloseModal: () => void;
+  title?: React.ReactNode;
   onSubmit?: () => void;
   actionLoading?: boolean;
   actionDisabled?: boolean;
   loading?: boolean;
   action?: string | React.ReactNode;
-} & DialogProps
+} & Omit<DialogProps, 'title'>;
 
 interface DialogTitleProps {
   id: string;
@@ -38,7 +39,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
             position: 'absolute',
             right: 8,
             top: 8,
-            color: (theme) => theme.palette.grey[500],
+            color: theme => theme.palette.grey[500],
           }}
         >
           <CloseIcon />
@@ -48,51 +49,41 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-export function Modal(
-  {
-    open,
-    children,
-    title,
-    action,
-    onCloseModal,
-    onSubmit,
-    actionLoading,
-    actionDisabled,
-    loading = false,
-    ...dialogProps
-  }: ModalProps
-) {
+export function Modal({
+  open,
+  children,
+  title,
+  action,
+  onCloseModal,
+  onSubmit,
+  actionLoading,
+  actionDisabled,
+  loading = false,
+  ...dialogProps
+}: ModalProps) {
   return (
-    <Dialog
-      onClose={onCloseModal}
-      aria-labelledby="modal-title"
-      open={open}
-      {...dialogProps}
-    >
-      {
-        loading ? <Spinner /> :
-          <>
-            <BootstrapDialogTitle id="modal-title" onClose={onCloseModal}>
-              {title}
-            </BootstrapDialogTitle>
-            <DialogContent dividers>
-              {children}
-            </DialogContent>
-            {action ? <DialogActions>
-              {typeof action !== 'string' ? action :
-                <LoadingButton
-                  autoFocus
-                  onClick={onSubmit}
-                  disabled={actionDisabled}
-                  loading={actionLoading || false}
-                >
+    <Dialog onClose={onCloseModal} aria-labelledby="modal-title" open={open} {...dialogProps} >
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          <BootstrapDialogTitle id="modal-title" onClose={onCloseModal}>
+            {title}
+          </BootstrapDialogTitle>
+          <DialogContent>{children}</DialogContent>
+          {action ? (
+            <DialogActions>
+              {typeof action !== 'string' ? (
+                action
+              ) : (
+                <LoadingButton autoFocus onClick={onSubmit} disabled={actionDisabled} loading={actionLoading || false}>
                   {action}
                 </LoadingButton>
-              }
-            </DialogActions> : null}
-          </>
-      }
+              )}
+            </DialogActions>
+          ) : null}
+        </>
+      )}
     </Dialog>
   );
 }
-

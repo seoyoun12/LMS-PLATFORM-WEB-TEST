@@ -66,7 +66,7 @@ export function CategoryManagement() {
   // 수정
   const onClickmodifyCategoryBoard = async (seq: number) => {
     setSeq(seq);
-    const modifyData = (data?.content.find((item) => item.seq === seq))
+    // const modifyData = (data?.content.find((item) => item.seq === seq))
     router.push(`/admin-center/category/modify/${seq}`);
     mutate();
   }

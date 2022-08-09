@@ -1,22 +1,16 @@
-import { DELETE, GET, POST } from '@common/httpClient';
+import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { YN } from '@common/constant';
 import { FetchPaginationResponse, PaginationResult } from 'types/fetch';
 import { S3Files } from 'types/file';
 import { ContentRes } from '@common/api/content';
 import { Lesson } from '@common/api/lesson';
-import { businessType, courseCategoryType, courseRegType, courseSubCategoryType } from './courseClass';
+import { businessType, courseCategoryType, courseType ,courseSubCategoryType } from './courseClass';
 import { LargeNumberLike } from 'crypto';
 
 export enum ProductStatus {
   APPROVE = 1,
   REJECT = -1,
-}
-
-export enum courseType {
-  TYPE_TRANS_WORKER = 'TYPE_TRANS_WORKER', //운수종사자
-  TYPE_LOW_FLOOR_BUS = 'TYPE_LOW_FLOOR_BUS', //저상버스
-  TYPE_PROVINCIAL = 'TYPE_PROVINCIAL', //도민
 }
 
 // 20220808 CourseInput
@@ -30,7 +24,7 @@ export interface CourseRes {
   courseName: string;
   courseSubCategoryType: courseSubCategoryType;
   courseBusinessType: businessType;
-  courseType: courseRegType;
+  courseType: courseType;
   createdDtime: string;
   displayYn: YN;
   lessonTime: number;
@@ -43,7 +37,7 @@ export interface CourseRes {
 // 20220808 Course interface
 export interface Course {
   contentName: string;
-  contentSeq: LargeNumberLike;
+  contentSeq: number;
   courseBusinessType: businessType;
   courseCategoryType: courseCategoryType;
   courseName: string;
@@ -105,6 +99,24 @@ export async function courseUpload(courseInput : CourseInput) {
 // 20220808 courseDelete
 export async function courseRemove(seq: number) {
   return await DELETE(`/course/adm/${seq}`);
+}
+
+// 20220809 courseDetail
+export function courseDetail(seq: number | null) {
+  const { data, error, mutate } = useSWR<SWRResponse<Course>>(seq? `/course/adm/${seq}` : null, GET);
+  return {
+    data: data?.data,
+    error,
+    mutate
+  };
+}
+
+// 20220809 courseModify
+export async function courseModify({seq, courseInput} : {
+  seq: number,
+  courseInput: CourseInput
+}) {
+  return await PUT(`/course/adm/${seq}`, courseInput);
 }
 
 

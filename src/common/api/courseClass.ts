@@ -15,7 +15,7 @@ export enum userBusinessType {
   FREIGHT = 'FREIGHT',
 }
 
-export enum courseRegType {
+export enum courseType {
   TYPE_TRANS_WORKER = 'TYPE_TRANS_WORKER', //운수종사자
   TYPE_LOW_FLOOR_BUS = 'TYPE_LOW_FLOOR_BUS', //저상버스
   TYPE_PROVINCIAL = 'TYPE_PROVINCIAL', //도민

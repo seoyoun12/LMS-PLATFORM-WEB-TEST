@@ -3,9 +3,7 @@ import { Container } from '@mui/material';
 import { CategoryUploadForm } from '@layouts/AdminCenter';
 import { CategoryBoard, CategoryBoardInput, uploadCategoryBoard } from '@common/api/categoryBoard';
 import { BbsType, uploadFile } from '@common/api/adm/file';
-import { CourseInput, CourseRes } from '@common/api/course';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { useState } from 'react';
 import router from 'next/router';
 
 export function CategoryUpload() {

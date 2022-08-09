@@ -23,7 +23,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import { FileUploader } from '@components/ui/FileUploader';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { courseReg, courseCategory, courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
-import { courseCategoryType, courseRegType, courseSubCategoryType } from '@common/api/courseClass';
+import { courseCategoryType, courseType, courseSubCategoryType } from '@common/api/courseClass';
 
 interface Props {
   mode?: 'upload' | 'modify',
@@ -42,7 +42,7 @@ interface FormType extends CourseInput {
 }
 
 const defaultValues = {
-  contentType: ContentType.CONTENT_MP4,
+  // contentType: ContentType.CONTENT_MP4,
   status: ProductStatus.APPROVE,
   displayYn: YN.YES,
   files: []
@@ -55,7 +55,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
 
   const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(null); //교육과정
   const [courseSubCategoryType, setCourseSubCategoryType] = useState<courseSubCategoryType | null>(null); //교육과정
-  const [courseRegType, setCourseRegType] = useState<courseRegType | null>(null); //교육과정
+  const [courseType, setCourseType] = useState<courseType | null>(null); //교육과정
 
   const {
     register,
@@ -94,7 +94,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
 
     // const markdownContent = editorRef.current.getInstance().getMarkdown();
     const courseInput = {
-      ...course, courseCategoryType, courseSubCategoryType, courseRegType
+      ...course, courseCategoryType, courseSubCategoryType, courseType
       // content1: markdownContent,
     };
 
@@ -154,11 +154,11 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
 
           <FormControl fullWidth>
             <Select
-              labelId="courseRegType"
-              id="courseRegType"
-              value={courseRegType}
+              labelId="courseType"
+              id="courseType"
+              value={courseType}
               onChange={e => {
-                setCourseRegType(courseReg.filter(cate => cate.type === e.target.value)[0].type);
+                setCourseType(courseReg.filter(cate => cate.type === e.target.value)[0].type);
               }}
               // label="student"
             >

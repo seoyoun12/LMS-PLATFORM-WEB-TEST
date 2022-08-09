@@ -24,8 +24,8 @@ const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' |
 export function ContentList() {
   const router = useRouter();
   const [ openModal, setOpenModal ] = useState(false);
-  const { courseId } = router.query;
-  const { course, courseError, mutate } = useCourse(Number(courseId));
+  const { courseSeq } = router.query;
+  const { course, courseError, mutate } = useCourse(Number(courseSeq));
 
   const handleCloseModal = async () => {
     setOpenModal(false);
@@ -84,7 +84,7 @@ export function ContentList() {
       <ContentConnectModal
         open={openModal}
         handleClose={handleCloseModal}
-        courseId={Number(courseId)}
+        courseSeq={Number(courseSeq)}
       />
     </Container>
   );

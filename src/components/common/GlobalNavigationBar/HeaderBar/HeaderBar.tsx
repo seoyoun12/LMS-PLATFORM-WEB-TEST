@@ -18,7 +18,7 @@ export function HeaderBar() {
     <Header className={styles.globalContainer}>
       <ContentContainer>
         <Link href="/" underline="none">
-          <Image src="/assets/images/cttsLogo.png" height={24} width={160} alt="Your Name" />
+          <Image src="/assets/images/cttsLogo.png" height={40} width={224} alt="Your Name" />
         </Link>
         {/* <Link href="/" underline="none" color={grey[800]}>
           <TitleTypography>충남교통연수원</TitleTypography>

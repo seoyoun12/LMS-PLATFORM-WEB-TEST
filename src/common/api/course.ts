@@ -3,10 +3,9 @@ import useSWR, { SWRResponse } from 'swr';
 import { YN } from '@common/constant';
 import { FetchPaginationResponse, PaginationResult } from 'types/fetch';
 import { S3Files } from 'types/file';
-import { ContentRes } from '@common/api/content';
+import { Content } from '@common/api/content';
 import { Lesson } from '@common/api/lesson';
 import { businessType, courseCategoryType, courseType ,courseSubCategoryType } from './courseClass';
-import { LargeNumberLike } from 'crypto';
 
 export enum ProductStatus {
   APPROVE = 1,
@@ -19,7 +18,7 @@ export type CourseInput = Partial<Course>;
 
 export interface CourseRes {
   seq: number;
-  content: ContentRes;
+  content: Content;
   courseCategoryType: courseCategoryType;
   courseName: string;
   courseSubCategoryType: courseSubCategoryType;
@@ -96,7 +95,7 @@ export async function courseUpload(courseInput : CourseInput) {
   return await POST(`/course/adm`, courseInput)
 }
 
-// 20220808 courseDelete
+// 20220808 courseRemove
 export async function courseRemove(seq: number) {
   return await DELETE(`/course/adm/${seq}`);
 }
@@ -121,8 +120,8 @@ export async function courseModify({seq, courseInput} : {
 
 
 
-export function useCourse(courseId?: number) {
-  const { data, error, mutate } = useSWR<SWRResponse<CourseRes>>(courseId ? `/course/${courseId}` : null, GET);
+export function useCourse(courseSeq?: number) {
+  const { data, error, mutate } = useSWR<SWRResponse<CourseRes>>(courseSeq ? `/course/${courseSeq}` : null, GET);
   return {
     course: data?.data,
     courseError: error,
@@ -157,6 +156,6 @@ export function useCourseList({
   };
 }
 
-export function courseEnroll(courseId: number) {
-  return POST(`/course/enroll/${courseId}`);
+export function courseEnroll(courseSeq: number) {
+  return POST(`/course/enroll/${courseSeq}`);
 }

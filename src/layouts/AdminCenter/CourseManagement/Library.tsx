@@ -30,12 +30,12 @@ export function Library() {
 	const [ openLibraryModal, setOpenLibraryModal ] = useState(false);
 	const [ seq, setSeq ] = useState<number | null>(null);
 	const [ page, setPage ] = useState(0);
-	const { courseId } = router.query;
+	const { courseSeq } = router.query;
 	const {
 		libraryPaginationResult,
 		libraryPaginationResultError,
 		mutate
-	} = libraryList({ courseId: Number(courseId), page });
+	} = libraryList({ courseSeq: Number(courseSeq), page });
 
 	const onRemoveLibrary = async (seq: number) => {
 		try {
@@ -163,7 +163,7 @@ export function Library() {
 			<LibraryUploadModal
 				mode={seq ? 'modify' : 'upload'}
 				seq={Number(seq)}
-				courseId={Number(courseId)}
+				courseSeq={Number(courseSeq)}
 				open={openLibraryModal}
 				handleClose={(isSubmit) => handleCloseModal(isSubmit)}
 			/>

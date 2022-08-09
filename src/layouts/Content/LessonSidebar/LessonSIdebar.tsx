@@ -50,7 +50,7 @@ interface Props {
 export function LessonSidebar({ course, tabsConfig, testList, noticeConfig, fileList }: Props) {
   const router = useRouter();
   const { query, pathname } = router;
-  const { courseId, lessonId } = query;
+  const { courseSeq, lessonId } = query;
 
   const [changeMenu, setChangeMenu] = useState(tabsConfig[0].value);
   const [check, setCheck] = useState(false);

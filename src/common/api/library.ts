@@ -9,7 +9,7 @@ export enum LibraryStatus {
 }
 
 export interface Library {
-  courseId: number,
+  courseSeq: number,
   createdDtime: string,
   hit: number,
   modifiedDtime: string,
@@ -23,7 +23,7 @@ export interface Library {
 }
 
 export interface LibraryInput {
-  courseId: number,
+  courseSeq: number,
   createdDtime?: string,
   hit: number,
   modifiedDtime: string,
@@ -37,13 +37,13 @@ export interface LibraryInput {
 }
 
 
-export function libraryList({ courseId, page, elementCnt }: {
-  courseId: number,
+export function libraryList({ courseSeq, page, elementCnt }: {
+  courseSeq: number,
   page: number,
   elementCnt?: number
 }) {
-  const key = courseId
-    ? [`/library/tutor`, { params: { courseSeq: courseId, page, elementCnt } }]
+  const key = courseSeq
+    ? [`/library/tutor`, { params: { courseSeq: courseSeq, page, elementCnt } }]
     : null;
 
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Library[]>>>(key, GET);

@@ -47,12 +47,12 @@ export function Question() {
   const [ openPreviewModal, setOpenPreviewModal ] = useState(false);
   const [ questionId, setQuestionId ] = useState<number | null>(null);
   const [ page, setPage ] = useState(0);
-  const { contentId } = router.query;
+  const { contentSeq } = router.query;
   const {
     questionPaginationResult,
     questionPaginationResultError,
     mutate
-  } = useQuestionList({ contentId: Number(contentId), page });
+  } = useQuestionList({ contentSeq: Number(contentSeq), page });
 
   const handleRemoveQuestion = async (questionId: number) => {
     try {
@@ -165,7 +165,7 @@ export function Question() {
 
       <QuestionUploadModal
         mode={questionId ? 'modify' : 'upload'}
-        contentId={Number(contentId)}
+        contentSeq={Number(contentSeq)}
         questionId={Number(questionId)}
         open={openUploadModal}
         handleClose={() => setOpenUploadModal(false)}

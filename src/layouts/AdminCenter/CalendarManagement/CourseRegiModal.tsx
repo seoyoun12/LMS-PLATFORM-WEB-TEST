@@ -22,7 +22,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 interface Props {
   open: boolean;
-  //   courseId: number;
+  //   courseSeq: number;
   handleClose: () => void;
   handleGetCourseSeq: (courseSeq: number, courseName: string) => void;
 }

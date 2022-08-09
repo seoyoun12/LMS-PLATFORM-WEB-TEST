@@ -30,12 +30,12 @@ export function Forum() {
   const [ openUploadModal, setOpenUploadModal ] = useState(false);
   const [ forumId, setForumId ] = useState<number | null>(null);
   const [ page, setPage ] = useState(0);
-  const { courseId } = router.query;
+  const { courseSeq } = router.query;
   const {
     forumPaginationResult,
     forumPaginationResultError,
     mutate
-  } = useForumList({ courseId: Number(courseId), page });
+  } = useForumList({ courseSeq: Number(courseSeq), page });
 
   const handleRemoveForum = async (forumId: number) => {
     try {
@@ -149,7 +149,7 @@ export function Forum() {
       <ForumUploadModal
         mode={forumId ? 'modify' : 'upload'}
         forumId={Number(forumId)}
-        courseId={Number(courseId)}
+        courseSeq={Number(courseSeq)}
         open={openUploadModal}
         onClose={(isMutate) => handleModalClose(isMutate)}
       />

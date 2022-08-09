@@ -3,8 +3,8 @@ import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import { Lesson, LessonInput } from '@common/api/lesson';
 import { BbsType, deleteFile } from '@common/api/adm/file';
 
-export function useLessonList(contentId: number) {
-  const { data, error, mutate } = useSWR<SWRResponse<Lesson[]>>(contentId ? `/lesson/adm/${contentId}` : null, GET);
+export function useLessonList(contentSeq: number) {
+  const { data, error, mutate } = useSWR<SWRResponse<Lesson[]>>(contentSeq ? `/lesson/adm/${contentSeq}` : null, GET);
 
   return {
     lessonList: data?.data,
@@ -22,11 +22,11 @@ export function useLesson(lessonId: number | null) {
   };
 }
 
-export function uploadLessons({ contentId, lessonInput }: {
-  contentId: number,
+export function uploadLessons({ contentSeq, lessonInput }: {
+  contentSeq: number,
   lessonInput: LessonInput[]
 }) {
-  return POST(`/lesson/adm/${contentId}`, lessonInput);
+  return POST(`/lesson/adm/${contentSeq}`, lessonInput);
 }
 
 export async function modifyLesson({ lessonId, lesson }: {

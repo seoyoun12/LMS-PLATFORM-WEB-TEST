@@ -31,16 +31,16 @@ const tabsConfig = [
 export function ContentModify() {
   const router = useRouter();
   const snackbar = useSnackbar();
-  const { contentId, tab } = router.query;
-  const { data, error } = useContent(Number(contentId));
+  const { contentSeq, tab } = router.query;
+  const { data, error } = useContent(Number(contentSeq));
 
-  const handleSubmit = async ({ contentInput, contentId }: {
+  const handleSubmit = async ({ contentInput, contentSeq }: {
     contentInput: ContentInput,
-    contentId?: number
+    contentSeq?: number
   }) => {
     try {
-      if (contentId) {
-        await modifyContent({ contentInput, contentId });
+      if (contentSeq) {
+        await modifyContent({ contentInput, contentSeq });
         snackbar({ variant: 'success', message: '성공적으로 수정되었습니다.' });
         router.push('/admin-center/content');
       }

@@ -7,12 +7,12 @@ export async function uploadCourse(courseInput: CourseInput) {
   return await POST(`/course/adm`, courseInput);
 }
 
-export async function modifyCourse({ courseId, courseInput }: { courseId: number; courseInput: CourseInput }) {
-  return await PUT(`/course/adm/${courseId}`, courseInput);
+export async function modifyCourse({ courseSeq, courseInput }: { courseSeq: number; courseInput: CourseInput }) {
+  return await PUT(`/course/adm/${courseSeq}`, courseInput);
 }
 
-export function useCourse(courseId?: number) {
-  const { data, error, mutate } = useSWR<SWRResponse<CourseRes>>(courseId ? `/course/${courseId}` : null, GET);
+export function useCourse(courseSeq?: number) {
+  const { data, error, mutate } = useSWR<SWRResponse<CourseRes>>(courseSeq ? `/course/${courseSeq}` : null, GET);
   return {
     course: data?.data,
     courseError: error,
@@ -20,8 +20,8 @@ export function useCourse(courseId?: number) {
   };
 }
 
-export function removeCourse({ courseId }: { courseId: number }) {
-  return DELETE(`/course/adm/${courseId}`);
+export function removeCourse({ courseSeq }: { courseSeq: number }) {
+  return DELETE(`/course/adm/${courseSeq}`);
 }
 
 export function useCourseList({

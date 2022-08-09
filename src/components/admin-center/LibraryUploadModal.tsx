@@ -25,11 +25,11 @@ const defaultValues = {
   status: LibraryStatus.APPROVE
 };
 
-export function LibraryUploadModal({ open, handleClose, seq, courseId, mode = 'upload' }: {
+export function LibraryUploadModal({ open, handleClose, seq, courseSeq, mode = 'upload' }: {
   open: boolean;
   handleClose: (isSubmit: boolean) => void;
   seq?: number | null;
-  courseId?: number;
+  courseSeq?: number;
   mode?: 'modify' | 'upload';
 }) {
   const input: HTMLInputElement | null = document.querySelector('#input-file');
@@ -66,7 +66,7 @@ export function LibraryUploadModal({ open, handleClose, seq, courseId, mode = 'u
 
   const onSubmit: SubmitHandler<LibraryInput> = async (library) => {
     const s3Files = library?.s3Files?.length ? library.s3Files : [];
-    const inputParams = { ...library, courseSeq: courseId, s3Files };
+    const inputParams = { ...library, courseSeq: courseSeq, s3Files };
     setSubmitLoading(true);
     const files = fileInputRef.current?.files;
     const file = !!files?.length ? files[0] : new Blob([]);

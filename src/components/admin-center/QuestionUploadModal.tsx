@@ -55,11 +55,11 @@ const defaultValues = {
   level: ExamLevel.LEVEL_EASY,
 };
 
-export function QuestionUploadModal({ open, handleClose, questionId, contentId, mode = 'upload' }: {
+export function QuestionUploadModal({ open, handleClose, questionId, contentSeq, mode = 'upload' }: {
   open: boolean;
   handleClose: () => void;
   questionId?: number | null;
-  contentId?: number;
+  contentSeq?: number;
   mode?: 'modify' | 'upload';
 }) {
   const { question, questionError } = useQuestion(Number(questionId));
@@ -86,7 +86,7 @@ export function QuestionUploadModal({ open, handleClose, questionId, contentId, 
   }, [ mode, question, open, reset ]);
 
   const onSubmit: SubmitHandler<FormType> = async (question) => {
-    const inputParams = { ...question, contentSeq: contentId };
+    const inputParams = { ...question, contentSeq: contentSeq };
     setSubmitLoading(true);
     try {
       if (mode === 'upload') {

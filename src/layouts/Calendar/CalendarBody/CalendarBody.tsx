@@ -23,14 +23,14 @@ interface Props {
   calendarRef: React.RefObject<FullCalendar>;
   // CalendarEvent: CalendarEvent[];
   filter: string;
-  schedule: CourseClassRes[];
+  schedule?: CourseClassRes[];
 }
 
 export const courseReg = [
   { type: courseType.TYPE_TRANS_WORKER, ko: '운수종사자' },
   { type: courseType.TYPE_LOW_FLOOR_BUS, ko: '저상버스' },
   { type: courseType.TYPE_PROVINCIAL, ko: '도민' },
-]
+];
 
 export const courseCategory = [
   { type: courseCategoryType.TYPE_SUP_COMMON, ko: '보수일반' },
@@ -63,15 +63,9 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
   const router = useRouter();
   const isLogin = useIsLoginStatus();
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
-  const scheduleList = schedule.map(item => {
-    //마감 여부 확인
-    // const isReceive =
-    //   new Date(item.requestStartDate).getTime() - new Date().getTime() > 0 //값이 음수면 신청날짜 이므로 true
-    //     ? new Date(item.requestEndDate).getTime() - new Date().getTime() > 0 //값이 양수면 날짜가끝나기 전이므로 true
-    //       ? true
-    //       : false
-    //     : false;
-    // console.log('아니 도대체 왜?', item.course.courseName, item, new Date(item.requestStartDate).getTime() - new Date().getTime());
+  const scheduleList = schedule?.map(item => {
+    //마감여부
+    console.log(item);
     const prevSchedule = new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0 ? true : false;
     const isReceive =
       new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0
@@ -109,7 +103,13 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
         ref={calendarRef}
         plugins={[dayGridPlugin]}
         headerToolbar={{ start: '', end: '' }} //헤더 제거
-        locale="ko"
+        // locale="ko"
+        // dayCellContent={['😁', '😂', '😁', '😂', '😁', '😂']}
+        // dayCellClassNames={date => ['fc-day-header-sun', '월', '화', '수', '목', '금', 'fc-day-header-sat'][date.dow]}
+        dayHeaderClassNames={date => ['fc-day-header-sun', '월', '화', '수', '목', '금', 'fc-day-header-sat'][date.dow]}
+        dayHeaderContent={date => ['일', '월', '화', '수', '목', '금', '토'][date.dow]}
+        // showNonCurrentDates={false}
+
         contentHeight="auto" //스크롤 제거
         eventContent={renderEventContent}
         events={scheduleList}
@@ -226,33 +226,38 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
     //@ts-ignore
     event: {
       _def: {
-        extendedProps: { lessonTime, courseCategoryType },
+        extendedProps: { lessonTime, courseCategoryType, isReceive },
       },
       title,
     },
   } = info;
+  console.log(info, 'tq');
   // @ts-ignore
   return (
-    <>
-      <div>[{title}]</div>
-      <div>
+    <Box display="flex">
+      <Typography sx={{ color: isReceive ? '#df280a' : '#7a7a7a' }} fontWeight="bold">
+        [{title}]
+      </Typography>
+      <Typography>
         {courseCategoryType?.ko ? courseCategoryType.ko : 'null'}교육 / {lessonTime ? (lessonTime === 0 ? '종일' : lessonTime) : 'null'}시간
-      </div>
-      <div>
+      </Typography>
+      <Typography>
         {
           //@ts-ignore
           info && info.event._def.extendedProps.mediaType
         }
-      </div>
-    </>
+      </Typography>
+    </Box>
   );
 }
 const CalendarWrap = styled(Box)<{ filter: string }>`
+  .fc-dayGridMonth-view {
+    border-top: 3px solid #000;
+  }
   .fc-col-header {
     // 헤더css
     .fc-scrollgrid-sync-inner {
-      background: #374151;
-      color: white;
+      background: #fafafa;
       font-weight: bold;
       padding: 1rem 0;
     }
@@ -266,6 +271,49 @@ const CalendarWrap = styled(Box)<{ filter: string }>`
       border-radius: 220px; */
     }
   }
+
+  .fc-day-today {
+    background-color: white !important; // as possible as Avoid using '!important' !!!!
+  }
+  //date
+  .fc-day-sun {
+    color: #ea0b0b;
+  }
+  .fc-daygrid-day-top {
+    padding: 10px 0 0 10px;
+  }
+
+  .fc-day-header-sun {
+    color: #ea0b0b;
+  }
+  .fc-day-header-sat {
+    color: #256aef;
+  }
+
+  .fc-daygrid-block-event {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #dae2f3 !important;
+  }
+
+  //calendar event start in date
+  .fc-event-start {
+    border-radius: 30px 0 0 30px;
+    padding-left: 1rem;
+    margin-left: 1rem !important;
+    /* text-align: left; */
+  }
+  //calendar event end in date
+  .fc-event-end {
+    border-radius: 0 30px 30px 0;
+    padding-right: 1rem;
+    margin-right: 1rem !important;
+    /* text-align: right; */
+  }
+  /* .fc-day-sat {
+    color: red;
+  } */
 
   .TYPE_SUP_COMMON {
     background: #27ae60;

@@ -28,12 +28,12 @@ import { courseCategoryType, courseType, courseSubCategoryType } from '@common/a
 interface Props {
   mode?: 'upload' | 'modify',
   course?: CourseInput,
-  // onHandleSubmit: ({ courseInput, files, courseId }: {
+  // onHandleSubmit: ({ courseInput, files, courseSeq }: {
   onHandleSubmit: ({ courseInput, files, isFileDelete }: {
     courseInput: CourseInput;
     files: File[];
     isFileDelete: boolean;
-    // courseId?: number
+    // courseSeq?: number
   }) => void
 }
 
@@ -98,7 +98,6 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
       // content1: markdownContent,
     };
 
-    console.log("courseUpload check : ", courseInput)
     onHandleSubmit({ courseInput, files, isFileDelete });
   };
 
@@ -115,7 +114,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
       >
         <InputContainer>
 
-          <FormControl fullWidth>
+          <FormControl fullWidth className='courseUploadInputBox'>
             {/* <FormControlLabel></FormControlLabel> */}
             <Select
               labelId="courseCategory"
@@ -134,7 +133,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             </Select>
           </FormControl>
 
-          <FormControl fullWidth>
+          <FormControl fullWidth className='courseUploadInputBox'>
             <Select
               labelId="courseSubCategoryType"
               id="courseSubCategoryType"
@@ -152,7 +151,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             </Select>
           </FormControl>
 
-          <FormControl fullWidth>
+          <FormControl fullWidth className='courseUploadInputBox'>
             <Select
               labelId="courseType"
               id="courseType"
@@ -266,6 +265,10 @@ const Container = styled.div`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
+
+  .courseUploadInputBox {
+    margin-bottom: 20px;
+  }
 
   .thumbnail-uploader {
     display: flex;

@@ -12,8 +12,8 @@ import { useSnackbar } from '@hooks/useSnackbar';
 
 export function Course() {
   const router = useRouter();
-  const { courseId } = router.query;
-  const { course, courseError } = useCourse(Number(courseId));
+  const { courseSeq } = router.query;
+  const { course, courseError } = useCourse(Number(courseSeq));
   const dialog = useDialog();
   const snackbar = useSnackbar();
 
@@ -26,7 +26,7 @@ export function Course() {
     });
 
     if (dialogConfirmed) {
-      await courseEnroll(Number(courseId));
+      await courseEnroll(Number(courseSeq));
       snackbar({ variant: 'success', message: '수강 신청이 완료되었습니다.' });
     }
   };

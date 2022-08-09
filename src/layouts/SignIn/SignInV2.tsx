@@ -22,17 +22,16 @@ import { pageRegType } from '@common/recoil/pageType/atom';
 import { loginType } from '@common/api/auth/signIn';
 import { FormHelperText } from '@mui/material';
 import { useForm } from 'react-hook-form';
+import { Spinner } from '@components/ui';
 
 export function SignInV2() {
   const router = useRouter();
   const isLogin = useIsLoginStatus();
   const setIsLoginState = useSetRecoilState(isLoginState);
   const setUsetInfo = useSetRecoilState(userInfo);
-  // const [loginType, setLoginType] = React.useState<regCategory>('TYPE_TRANS_EDU');
   const snackbar = useSnackbar();
-  // const [usernameErr, setUsernameErr] = React.useState(false);
-  // const [identify1Err, setIdentify1Err] = React.useState(false);
-  // const [identify2Err, setIdentify2Err] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const loadingRef = React.useRef(false);
 
   const { watch, setValue } = useForm({
     defaultValues: { name: '', identify1: '', identify2: '', usernameErr: false, identify1Err: false, identify2Err: false },
@@ -53,19 +52,26 @@ export function SignInV2() {
     const identify2 = data.get('identify2') as string;
     const username = identify1 + identify2;
     const password = identify1 + identify2;
-    console.log(name, username, password, watch(), loginType.TYPE_TRANS_EDU);
-    if (usernameErr || identify1Err || identify2Err) return;
 
+    if (usernameErr || identify1Err || identify2Err) return;
+    if (loadingRef.current) return console.log('Block multiple click');
+
+    loadingRef.current = true;
+    setLoading(true);
     try {
       const res = await signIn(username, password, loginType.TYPE_TRANS_EDU, name);
       if (res.success) {
         setIsLoginState(true);
         setUsetInfo({ username: res.data.username, regCategory: [...res.data.roles] }); // api가 있었음 필요없을듯
         snackbar({ variant: 'success', message: '로그인이 완료되었습니다.' });
-        return router.push('/category');
+        router.push('/category');
       }
+      loadingRef.current = false;
+      setLoading(false);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
+      loadingRef.current = false;
+      setLoading(false);
     }
   };
 
@@ -80,7 +86,6 @@ export function SignInV2() {
     if (e.target.value.length > 6) return;
     setValue('identify1', e.target.value.replace(/[^0-9]/g, ''));
     setValue('identify1Err', false);
-    console.log(String(e.target.value).length);
     if (e.target.value.length < 6) {
       setValue('identify1Err', true);
     }
@@ -182,21 +187,9 @@ export function SignInV2() {
           <FormHelperText sx={{ color: 'red' }}>
             {(identify1Err || identify2Err) && '올바르지 않은 주민등록번호 입니다. 다시 한번 확인해주세요.'}
           </FormHelperText>
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            확인
+          <Button type="submit" fullWidth variant="contained" disabled={loading} sx={{ mt: 3, mb: 2 }}>
+            {loading ? <Spinner fit={true} /> : '확인'}
           </Button>
-          {/* <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                비밀번호를 잊으셨나요?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/sign-up" variant="body2">
-                {'회원 가입하기'}
-              </Link>
-            </Grid>
-          </Grid> */}
         </Box>
       </Box>
     </Container>

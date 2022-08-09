@@ -7,7 +7,6 @@ import { ContentList, Library } from '@layouts/AdminCenter';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { EvaluationInfo } from '@layouts/AdminCenter/CourseManagement/EvaluationInfo';
 import { Forum } from '@layouts/AdminCenter/CourseManagement/Forum';
-import { useCourse } from '@common/api/adm/course';
 import { Course, courseDetail, CourseInput, courseModify } from '@common/api/course';
 import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
 
@@ -33,13 +32,6 @@ export function CourseModify() {
   const snackbar = useSnackbar();
   const { courseSeq, tab } = router.query;
   const { data, error } = courseDetail(Number(courseSeq));
-
-
-  console.log("Course -> courseSeq : ", courseSeq);
-  console.log("Course -> tab :", tab);
-  console.log("Course -> data : ", data);
-
-
 
   const fileHandler = async (files: File[], course: Course, isFileDelete: boolean) => {
     const isFileUpload = files.length > 0;
@@ -67,8 +59,10 @@ export function CourseModify() {
     seq?: number;
   }) => {
     try {
-      if (courseSeq) {
-        const course = await courseModify({ seq, courseInput });
+      console.log("courseSeq : ", courseSeq);
+      console.log("courseInput : ", courseInput);
+      if (data?.seq) {
+        const course = await courseModify({ seq : data.seq, courseInput });
         await fileHandler(files, course.data, isFileDelete);
         snackbar({ variant: 'success', message: '성공적으로 수정되었습니다.' });
         router.push('/admin-center/course');
@@ -80,6 +74,8 @@ export function CourseModify() {
 
   if (error) return <div>...ERROR</div>;
   if (!data) return <Spinner />;
+
+  console.log("CourseModifydata : ", data);
 
   return (
     <Container className={styles.globalContainer}>

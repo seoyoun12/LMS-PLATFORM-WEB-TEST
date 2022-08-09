@@ -16,7 +16,7 @@ import TextField from '@mui/material/TextField';
 import styles from '@styles/common.module.scss';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
-import { ContentRes, ContentInput, ContentType } from '@common/api/content';
+import { Content, ContentInput, ContentType } from '@common/api/content';
 import * as React from 'react';
 import { CustomInputLabel } from '@components/ui/InputLabel';
 
@@ -28,7 +28,7 @@ const contentTypeOptions = [
 
 const defaultValues = {
   status: ProductStatus.APPROVE,
-  contentType: '',
+  contentType: ContentType.CONTENT_HTML,
   contentName: ''
 };
 
@@ -39,10 +39,10 @@ export function ContentUploadForm(
     onHandleSubmit,
   }: {
     mode?: 'upload' | 'modify',
-    content?: ContentRes,
-    onHandleSubmit: ({ contentInput, contentId }: {
+    content?: Content,
+    onHandleSubmit: ({ contentInput, contentSeq }: {
       contentInput: ContentInput,
-      contentId?: number
+      contentSeq?: number
     }) => void,
   }
 ) {
@@ -61,7 +61,7 @@ export function ContentUploadForm(
   }, [ mode, content, reset ]);
 
   const onSubmit: SubmitHandler<ContentInput> = (contentInput: ContentInput) => {
-    onHandleSubmit({ contentInput: contentInput, contentId: content?.seq });
+    onHandleSubmit({ contentInput: contentInput, contentSeq: content?.seq });
   };
 
   return (

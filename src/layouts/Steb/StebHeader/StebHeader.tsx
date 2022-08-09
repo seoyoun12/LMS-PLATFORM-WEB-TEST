@@ -38,19 +38,27 @@ export function StebHeader({ value }: { value: number }) {
                 {/* <Filter1Icon fontSize="large" /> */}
                 {/* <span>교육일정</span> */}
 
-                {1 === value ? <Image src={'/assets/images/lightOnEduScheduleIcon.png'} width={150} height={150} /> : 'test1'}
+                {1 === value ? <Image src={'/assets/images/lightOnEduScheduleIcon.png'} width={150} height={150} /> : '교육일정'}
               </StepHeaderProgessIcon>
               {/* <StepHeaderProgessIcon display="flex" flexDirection="column" alignItems={'center'} sx={{ opacity: 2 === value ? 1 : 0.5 }}> */}
               <StepHeaderProgessIcon>
                 {/* <Filter2Icon fontSize="large" /> */}
                 {/* <span>교육신청</span> */}
-                {2 === value ? 'test1' : <Image src={'/assets/images/lightOffJoinIcon.png'} width={150} height={150} />}
+                {2 === value ? (
+                  <Image src={'/assets/images/lightOnJoinIcon.png'} width={150} height={150} />
+                ) : (
+                  <Image src={'/assets/images/lightOffJoinIcon.png'} width={150} height={150} />
+                )}
               </StepHeaderProgessIcon>
               {/* <StepHeaderProgessIcon display="flex" flexDirection="column" alignItems={'center'} sx={{ opacity: 3 === value ? 1 : 0.5 }}> */}
               <StepHeaderProgessIcon>
                 {/* <Filter3Icon fontSize="large" /> */}
                 {/* <span>신청완료</span> */}
-                {3 === value ? 'test' : <Image src={'/assets/images/lightOffJoinCompleteIcon.png'} width={150} height={150} />}
+                {3 === value ? (
+                  <Image src={'/assets/images/lightOnJoinCompleteIcon.png'} width={150} height={150} />
+                ) : (
+                  <Image src={'/assets/images/lightOffJoinCompleteIcon.png'} width={150} height={150} />
+                )}
               </StepHeaderProgessIcon>
             </Box>
           </Box>

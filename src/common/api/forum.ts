@@ -25,11 +25,11 @@ export interface Forum {
   s3Files: S3Files;
 }
 
-export function useForumList({ courseId, page, elementCnt }: {
-  courseId: number, page: number, elementCnt?: number
+export function useForumList({ courseSeq, page, elementCnt }: {
+  courseSeq: number, page: number, elementCnt?: number
 }) {
-  const key = courseId
-    ? [ `/forum/tutor`, { params: { courseSeq: courseId, page, elementCnt } } ]
+  const key = courseSeq
+    ? [ `/forum/tutor`, { params: { courseSeq: courseSeq, page, elementCnt } } ]
     : null;
 
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Forum[]>>>(key, GET);

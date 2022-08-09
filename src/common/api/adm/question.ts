@@ -3,11 +3,11 @@ import { PaginationResult } from 'types/fetch';
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import { Question, QuestionInput } from '@common/api/question';
 
-export function useQuestionList({ contentId, page, elementCnt }: {
-  contentId: number, page: number, elementCnt?: number
+export function useQuestionList({ contentSeq, page, elementCnt }: {
+  contentSeq: number, page: number, elementCnt?: number
 }) {
-  const key = contentId
-    ? [ `/question/adm`, { params: { contentSeq: contentId, page, elementCnt } } ]
+  const key = contentSeq
+    ? [ `/question/adm`, { params: { contentSeq: contentSeq, page, elementCnt } } ]
     : null;
 
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Question[]>>>(key, GET);

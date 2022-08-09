@@ -1,0 +1,10 @@
+@font-face {
+  font-family: 'Black-Han-Sans';
+  src: url(../public/assets/fonts/NotoSans-Regular.ttf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Black-Han-Sans';
+}

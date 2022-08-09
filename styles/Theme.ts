@@ -32,7 +32,8 @@ const theme = createTheme({
       // '"Segoe UI Emoji"',
       // '"Segoe UI Symbol"',
       'Black-Han-Sans',
-      'sans-serif',
+      'Noto-Sans-Kr',
+      'sans-serif'
     ].join(','),
   },
   components: {

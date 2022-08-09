@@ -11,4 +11,4 @@ export function Steb1() {
   );
 }
 
-const Steb1Wrap = styled(Container)``;
+const Steb1Wrap = styled(Box)``;

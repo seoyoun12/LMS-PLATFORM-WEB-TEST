@@ -16,13 +16,13 @@ export const AdminCenterLayout = ({ children }: { children: React.ReactNode }) =
       try {
         if(!localStorage.getItem('ACCESS_TOKEN')){
           window.alert('권한이 없습니다.');
-          return router.push('/');
+          return router.push('/admin-center/signin');
         }
         setLoading(true);
         const { data }: { data: MyUser } = await getMyUser();
         if(!data || !data.roles.includes(UserRole.ROLE_ADMIN)){
           window.alert('권한이 없습니다.');
-          return router.push('/');
+          return router.push('/admin-center/signin');
         }
         setLoading(false);
       } catch (e: any) {

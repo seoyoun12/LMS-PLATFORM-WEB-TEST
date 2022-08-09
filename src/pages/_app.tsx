@@ -1,6 +1,7 @@
 import '@styles/reset.scss';
 import '@styles/muiButton.scss';
 import '@styles/palette.scss';
+import '../../styles/font.css';
 
 import { AppProps } from 'next/app';
 import { ManagedUIContext } from '@components/ui';

@@ -7,8 +7,8 @@ class MyDocument extends Document {
       <Html>
         <Head />
         <body className="loading">
-        <Main />
-        <NextScript />
+          <Main />
+          <NextScript />
         </body>
       </Html>
     );

@@ -19,6 +19,7 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { regCategory } from '@common/api/auth/signUp';
 import { userInfo } from '@common/recoil/user';
 import { loginType } from '@common/api/auth/signIn';
+import { Spinner } from '@components/ui';
 
 export function SignInV2() {
   const router = useRouter();
@@ -26,6 +27,8 @@ export function SignInV2() {
   const setIsLoginState = useSetRecoilState(isLoginState);
   const setUsetInfo = useSetRecoilState(userInfo);
   const snackbar = useSnackbar();
+  const [loading, setLoading] = React.useState(false);
+  const loadingRef = React.useRef(false);
 
   useEffect(() => {
     if (isLogin) {
@@ -39,16 +42,24 @@ export function SignInV2() {
     const username = data.get('username') as string;
     const password = data.get('password') as string;
 
+    if (loadingRef.current) return console.log('Block multiple click');
+
+    loadingRef.current = true;
+    setLoading(true);
     try {
       const res = await signIn(username, password, loginType.TYPE_TRAFFIC_SAFETY_EDU);
       if (res.success) {
         setIsLoginState(true);
         setUsetInfo({ username: res.data.username, regCategory: [...res.data.roles] }); // api가 있었음 필요없을듯
         snackbar({ variant: 'success', message: '로그인이 완료되었습니다.' });
-        return router.push('/traffic/category');
+        router.push('/traffic/category');
       }
+      loadingRef.current = false;
+      setLoading(false);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
+      loadingRef.current = false;
+      setLoading(false);
     }
   };
 
@@ -99,8 +110,8 @@ export function SignInV2() {
             id="password"
             autoComplete="current-password"
           />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            로그인
+          <Button type="submit" fullWidth variant="contained" disabled={loading} sx={{ mt: 3, mb: 2 }}>
+            {loading ? <Spinner fit={true} /> : '로그인'}
           </Button>
           <Grid container>
             <Grid item>

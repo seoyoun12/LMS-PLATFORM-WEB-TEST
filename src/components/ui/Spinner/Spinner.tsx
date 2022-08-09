@@ -1,23 +1,27 @@
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import styled from '@emotion/styled';
 
-
-export function Spinner() {
-	return (
-		<Container>
-			<SpinCircle />
-		</Container>
-	);
+interface Props {
+  fit?: boolean;
 }
 
-const Container = styled(Box)`
+export function Spinner({ fit }: Props) {
+  console.log(fit);
+  return (
+    <Container fit={fit}>
+      <SpinCircle size={fit ? '1.5rem' : '40px'} />
+    </Container>
+  );
+}
+
+const Container = styled(Box)<{ fit: boolean }>`
   display: flex;
-  min-height: 50vh;
-  align-items : center;
+  ${({ fit }) => (fit ? '' : 'min-height: 50vh;')}
+  align-items: center;
   justify-content: center;
 `;
 
 const SpinCircle = styled(CircularProgress)`
-	color: rgb(33, 56, 109);
+  color: rgb(33, 56, 109);
 `;

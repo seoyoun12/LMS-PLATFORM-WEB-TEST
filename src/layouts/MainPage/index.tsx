@@ -23,6 +23,7 @@ const LinkList = [
     mainDisplayType: MainDisplayType.EDUCATION_TRANSPORT_WORKER,
     pageType: pageRegType.TYPE_TRANS_EDU,
     displayWord: '운수종사자',
+    textColor:'#0A9A4E',
     color: '#0A9A4E',
     href: '/category',
     imgPath: '/assets/images/unsu.png',
@@ -31,6 +32,7 @@ const LinkList = [
     mainDisplayType: MainDisplayType.EDUCATION_GROUND_BUS_DRIVER,
     pageType: pageRegType.TYPE_TRANS_EDU,
     displayWord: '저상버스',
+    textColor:'#256AEF',
     color: '#256AEF',
     href: '/category',
     imgPath: '/assets/images/lowFloor.png',
@@ -39,6 +41,7 @@ const LinkList = [
     mainDisplayType: MainDisplayType.EDUCATION_PROVINCIAL_TRAFFIC_SAFETY,
     pageType: pageRegType.TYPE_TRAFFIC_SAFETY_EDU,
     displayWord: '도민교통',
+    textColor:'#711D14',
     color: '#FEC901',
     href: 'traffic/category',
     imgPath: '/assets/images/domin.png',
@@ -97,18 +100,18 @@ const MainPage: NextPage = () => {
             >
               {data.map(item => {
                 if (item.status === 1) {
-                  const { href, color, displayWord, imgPath, pageType } = LinkList.filter(
+                  const { href, color,textColor, displayWord, imgPath, pageType } = LinkList.filter(
                     filter => filter.mainDisplayType === item.mainDisplayType
                   )[0];
                   return (
-                    <MainCategoryCard sx={{ borderTop: `px solid ${color}` }}>
+                    <MainCategoryCard sx={{ borderTop: `7px solid ${color}` }}>
                       <Link href={href} onClick={() => setUserPageType(pageType)}>
                         <Box width="270px" borderRadius="8px 8px 0 0" overflow="hidden">
                           <Image src={imgPath} width="270" height="184" objectFit="fill" />
                         </Box>
                         <CardInContainer>
                           <Box>
-                            <Typography component="span" fontSize={25} fontWeight="bold" color={color}>
+                            <Typography component="span" fontSize={25} fontWeight="bold" color={textColor}>
                               {displayWord}
                             </Typography>
                             <Typography component="span" fontSize={25} fontWeight="bold" color="#000">

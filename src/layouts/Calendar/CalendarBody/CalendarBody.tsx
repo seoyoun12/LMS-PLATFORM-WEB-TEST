@@ -10,7 +10,7 @@ import { Modal } from '@components/ui/Modal';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import dateFormat from 'dateformat';
 import { useRouter } from 'next/router';
-import { courseCategoryType, CourseClassRes, courseSubCategoryType } from '@common/api/courseClass';
+import { courseType, courseCategoryType, CourseClassRes, courseSubCategoryType } from '@common/api/courseClass';
 import { courseClassEnrollInfo } from '@common/recoil';
 import { useRecoilState } from 'recoil';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
@@ -26,8 +26,15 @@ interface Props {
   schedule: CourseClassRes[];
 }
 
+export const courseReg = [
+  { type: courseType.TYPE_TRANS_WORKER, ko: '운수종사자' },
+  { type: courseType.TYPE_LOW_FLOOR_BUS, ko: '저상버스' },
+  { type: courseType.TYPE_PROVINCIAL, ko: '도민' },
+]
+
 export const courseCategory = [
   { type: courseCategoryType.TYPE_SUP_COMMON, ko: '보수일반' },
+  { type: courseCategoryType.TYPE_SUP_CONSTANT, ko: '보수수시' },
   { type: courseCategoryType.TYPE_CONSTANT, ko: '수시' },
   { type: courseCategoryType.TYPE_NEW, ko: '신규' },
   { type: courseCategoryType.TYPE_ILLEGAL, ko: '법령위반자' },

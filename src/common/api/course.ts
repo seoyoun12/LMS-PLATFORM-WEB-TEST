@@ -1,60 +1,21 @@
-import { GET, POST } from '@common/httpClient';
+import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { YN } from '@common/constant';
 import { FetchPaginationResponse, PaginationResult } from 'types/fetch';
 import { S3Files } from 'types/file';
 import { ContentRes } from '@common/api/content';
 import { Lesson } from '@common/api/lesson';
-import { businessType, courseCategoryType, courseSubCategoryType } from './courseClass';
+import { businessType, courseCategoryType, courseType ,courseSubCategoryType } from './courseClass';
+import { LargeNumberLike } from 'crypto';
 
 export enum ProductStatus {
   APPROVE = 1,
   REJECT = -1,
 }
 
-export enum courseType {
-  TYPE_TRANS_WOKER = 'TYPE_TRANS_WOKER', //운수종사자
-  TYPE_LOW_FLOOR_BUS = 'TYPE_LOW_FLOOR_BUS', //저상버스
-  TYPE_PROVINCIAL = 'TYPE_PROVINCIAL', //도민
-}
-
-export type CourseInput = Partial<CourseRes>;
-
-// old Interface
-// export interface CourseRes {
-//   content: ContentRes;
-//   content1: string;
-//   courseFile: string;
-//   courseName: string;
-//   courseSubName: string;
-//   courseThumbLink: string;
-//   createdDtime: string;
-//   displayYn: YN;
-//   fullScore: number;
-//   lessonTerm: number;
-//   lessonTime: number;
-//   lessons: Lesson[];
-//   limitPeople: number;
-//   limitPeopleYn: string;
-//   limitTotalScore: number;
-//   modifiedDtime: string;
-//   price: number;
-//   restudyDay: number;
-//   restudyYn: string;
-//   saleYn: string;
-//   seq: number;
-//   status: ProductStatus;
-//   s3Files: S3Files;
-
-//   // 임시용 타입
-//   curriculum: {
-//     title: string;
-//     panel: number;
-//     contents: {
-//       title: string;
-//     }[];
-//   }[];
-// }
+// 20220808 CourseInput
+// export type CourseInput = Partial<CourseRes>;
+export type CourseInput = Partial<Course>;
 
 export interface CourseRes {
   seq: number;
@@ -72,6 +33,93 @@ export interface CourseRes {
   s3Files: S3Files;
   status: ProductStatus;
 }
+
+// 20220808 Course interface
+export interface Course {
+  contentName: string;
+  contentSeq: number;
+  courseBusinessType: businessType;
+  courseCategoryType: courseCategoryType;
+  courseName: string;
+  courseSubCategoryType: courseSubCategoryType;
+  courseType: courseType;
+  createdDtime: string;
+  displayYn: YN,
+  fileName: string;
+  lessonTime: number;
+  modifiedDtime: string;
+  s3Files: S3Files
+  seq: number,
+  status: ProductStatus
+}
+
+// 20220808 courseList
+export function courseList({ contentTitle, elementCnt, page } : {
+  contentTitle?: string;
+  elementCnt?: number;
+  page: number;
+}) {
+  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Course[]>>> ([
+    `/course`, {
+      params: { contentTitle, elementCnt, page }
+    }
+  ], GET)
+  
+  return {
+    data: data?.data,
+    error,
+    mutate
+  }
+}
+
+// 20220808 courseAdmList
+export function courseAdmList({ contentTitle, elementCnt, page } : {
+  contentTitle?: string;
+  elementCnt?: number;
+  page: number;
+}) {
+  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Course[]>>> ([
+    `/course/adm`, {
+      params: { contentTitle, elementCnt, page }
+    }
+  ], GET)
+  
+  return {
+    data: data?.data,
+    error,
+    mutate
+  }
+}
+
+// 20220808 courseUpload
+export async function courseUpload(courseInput : CourseInput) {
+  return await POST(`/course/adm`, courseInput)
+}
+
+// 20220808 courseDelete
+export async function courseRemove(seq: number) {
+  return await DELETE(`/course/adm/${seq}`);
+}
+
+// 20220809 courseDetail
+export function courseDetail(seq: number | null) {
+  const { data, error, mutate } = useSWR<SWRResponse<Course>>(seq? `/course/adm/${seq}` : null, GET);
+  return {
+    data: data?.data,
+    error,
+    mutate
+  };
+}
+
+// 20220809 courseModify
+export async function courseModify({seq, courseInput} : {
+  seq: number,
+  courseInput: CourseInput
+}) {
+  return await PUT(`/course/adm/${seq}`, courseInput);
+}
+
+
 
 export function useCourse(courseId?: number) {
   const { data, error, mutate } = useSWR<SWRResponse<CourseRes>>(courseId ? `/course/${courseId}` : null, GET);

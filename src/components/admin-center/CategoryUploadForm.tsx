@@ -50,11 +50,11 @@ const defaultValues = {
   files: [],
 };
 
-
 export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }: Props) {
   const editorRef = useRef<EditorType>(null);
   const [ isFileDelete, setIsFileDelete ] = useState(false);
   const [ fileName, setFileName ] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -73,6 +73,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
 
   const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();
+
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setFileName(files[0].name);
@@ -101,7 +102,6 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
   return (
 
     <Container>
-
       <Box
         component="form"
         encType="multipart/form-data"

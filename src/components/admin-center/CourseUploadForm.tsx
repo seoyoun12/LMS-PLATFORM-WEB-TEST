@@ -6,13 +6,15 @@ import {
   Button, Chip, FormControl,
   FormControlLabel, FormHelperText,
   FormLabel, InputAdornment,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
   TextField,
   Typography
 } from '@mui/material';
 import styled from '@emotion/styled';
-import { ProductStatus, CourseRes } from '@common/api/course';
+import { ProductStatus, CourseRes, CourseInput } from '@common/api/course';
 import { YN } from '@common/constant';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { ContentType } from '@common/api/content';
@@ -20,33 +22,40 @@ import { css, cx } from '@emotion/css';
 import { ErrorMessage } from '@hookform/error-message';
 import { FileUploader } from '@components/ui/FileUploader';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
+import { courseReg, courseCategory, courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
+import { courseCategoryType, courseType, courseSubCategoryType } from '@common/api/courseClass';
 
 interface Props {
   mode?: 'upload' | 'modify',
-  course?: CourseRes,
-  onHandleSubmit: ({ courseInput, files, courseId }: {
-    courseInput: CourseRes;
+  course?: CourseInput,
+  // onHandleSubmit: ({ courseInput, files, courseId }: {
+  onHandleSubmit: ({ courseInput, files, isFileDelete }: {
+    courseInput: CourseInput;
     files: File[];
     isFileDelete: boolean;
-    courseId?: number
+    // courseId?: number
   }) => void
 }
 
-interface FormType extends CourseRes {
+interface FormType extends CourseInput {
   files: File[];
 }
 
 const defaultValues = {
-  contentType: ContentType.CONTENT_MP4,
+  // contentType: ContentType.CONTENT_MP4,
   status: ProductStatus.APPROVE,
   displayYn: YN.YES,
   files: []
 };
 
 export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Props) {
-  const editorRef = useRef<EditorType>(null);
+  // const editorRef = useRef<EditorType>(null);
   const [ isFileDelete, setIsFileDelete ] = useState(false);
   const [ fileName, setFileName ] = useState<string | null>(null);
+
+  const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(null); //교육과정
+  const [courseSubCategoryType, setCourseSubCategoryType] = useState<courseSubCategoryType | null>(null); //교육과정
+  const [courseType, setCourseType] = useState<courseType | null>(null); //교육과정
 
   const {
     register,
@@ -67,7 +76,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
   const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();
 
-    const files = (e.target as HTMLInputElement).files;
+    const files = (e.target as HTMLInputElement).files; 
     if (!files?.length) return null;
     setFileName(files[0].name);
     setIsFileDelete(false);
@@ -81,16 +90,19 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
 
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...course }, event) => {
     event?.preventDefault();
-    if (!editorRef.current) return;
+    // if (!editorRef.current) return;
 
-    const markdownContent = editorRef.current.getInstance().getMarkdown();
+    // const markdownContent = editorRef.current.getInstance().getMarkdown();
     const courseInput = {
-      ...course,
-      content1: markdownContent,
+      ...course, courseCategoryType, courseSubCategoryType, courseType
+      // content1: markdownContent,
     };
 
-    onHandleSubmit({ courseInput, courseId: course.seq, files, isFileDelete });
+    console.log("courseUpload check : ", courseInput)
+    onHandleSubmit({ courseInput, files, isFileDelete });
   };
+
+
 
   return (
     <Container>
@@ -102,6 +114,65 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
         className={boxStyles}
       >
         <InputContainer>
+
+          <FormControl fullWidth>
+            {/* <FormControlLabel></FormControlLabel> */}
+            <Select
+              labelId="courseCategory"
+              id="courseCategory"
+              value={courseCategoryType}
+              onChange={e => {
+                setCourseCategoryType(courseCategory.filter(cate => cate.type === e.target.value)[0].type);
+              }}
+              // label="student"
+            >
+              {courseCategory.map(item => (
+                <MenuItem key={item.type} value={item.type}>
+                  {item.ko}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth>
+            <Select
+              labelId="courseSubCategoryType"
+              id="courseSubCategoryType"
+              value={courseSubCategoryType}
+              onChange={e => {
+                setCourseSubCategoryType(courseSubCategory.filter(cate => cate.type === e.target.value)[0].type);
+              }}
+              // label="student"
+            >
+              {courseSubCategory.map(item => (
+                <MenuItem key={item.type} value={item.type}>
+                  {item.ko}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth>
+            <Select
+              labelId="courseType"
+              id="courseType"
+              value={courseType}
+              onChange={e => {
+                setCourseType(courseReg.filter(cate => cate.type === e.target.value)[0].type);
+              }}
+              // label="student"
+            >
+              {courseReg.map(item => (
+                <MenuItem key={item.type} value={item.type}>
+                  {item.ko}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+
+
+
           <FormControl className={textField}>
             <TextField
               {...register('courseName', { required: '과정 명을 입력해주세요.' })}
@@ -118,10 +189,9 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               regName="files"
               onFileChange={handleFileChange}
             >
-              <FileUploader.Label>썸네일 이미지</FileUploader.Label>
+              {/* <FileUploader.Label>썸네일 이미지</FileUploader.Label> */}
             </FileUploader>
 
-            <Typography variant="subtitle2" className="subtitle">썸네일 이미지</Typography>
             {fileName
               ? <Chip
                 sx={{ mt: '8px' }}
@@ -132,15 +202,8 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             }
           </div>
         </InputContainer>
-
-        {/* <TuiEditor
-          initialValue={(course && course.content1) || ' '}
-          previewStyle="vertical"
-          height="600px"
-          initialEditType="wysiwyg"
-          useCommandShortcut={true}
-          ref={editorRef}
-        /> */}
+          
+        
 
         <FormControl className={cx(textField, lessonTime)}>
           <TextField

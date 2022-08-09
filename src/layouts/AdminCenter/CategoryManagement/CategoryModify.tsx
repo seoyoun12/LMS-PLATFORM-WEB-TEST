@@ -5,9 +5,6 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import styles from '@styles/common.module.scss';
-import { useCallback, useState } from 'react';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { Spinner } from '@components/ui';
 
 export function CategoryModify() {
@@ -21,14 +18,15 @@ export function CategoryModify() {
     if (isFileUpload) {
       await uploadFile({
         fileTypeId: category.seq, // undefined
-        fileType: BbsType.TYPE_POST_NOTICE, // Type Setting 필요
+        fileType: BbsType.TYPE_POST_NOTICE || BbsType.TYPE_POST_FAQ || BbsType.TYPE_POST_GUIDE_AUTH || BbsType.TYPE_POST_GUIDE_EDU_REGI || BbsType.TYPE_POST_GUIDE_EDU_LEARNING , // Type Setting 필요
         files,
       });
     } else {
       if (isFileDelete) {
         await deleteFile({
           fileTypeId: category.seq,
-          fileType: BbsType.TYPE_POST_NOTICE,
+          fileType: BbsType.TYPE_POST_NOTICE || BbsType.TYPE_POST_FAQ || BbsType.TYPE_POST_GUIDE_AUTH || BbsType.TYPE_POST_GUIDE_EDU_REGI || BbsType.TYPE_POST_GUIDE_EDU_LEARNING , // Type Setting 필요
+          // fileSeqList: category.s3Files.map(v => v.seq),
           fileSeqList: category.s3Files.map(v => v.seq),
         });
       }

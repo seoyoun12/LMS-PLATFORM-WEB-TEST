@@ -5,6 +5,14 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Noto-Sans-Kr';
+  src: url(../public/assets/fonts/NotoSansKR-Regular.otf) format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 body {
-  font-family: 'Black-Han-Sans';
+  font-family: 'Black-Han-Sans', 'Noto-Sans-Kr';
 }

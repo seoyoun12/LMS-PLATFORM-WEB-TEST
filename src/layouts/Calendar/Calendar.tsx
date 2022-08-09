@@ -7,6 +7,7 @@ import { CalendarHeader } from './CalendarHeader';
 import dateFormat from 'dateformat';
 import { CalendarBody } from './CalendarBody';
 import { businessType, courseCategoryType, CourseClassRes, courseSubCategoryType, useCourseClass } from '@common/api/courseClass';
+import { Spinner } from '@components/ui';
 
 export interface ClickedPlanInfo {
   seq: number;
@@ -111,7 +112,8 @@ export function CNCalendar() {
     setSchedule(data);
   }, [data]);
 
-  if (!data) return null;
+  console.log('ㅎㅇ', schedule);
+  // if (!data) return <Spinner />;
   return (
     <CalendarWrap>
       <CalendarHeader
@@ -121,18 +123,16 @@ export function CNCalendar() {
         onChangeFilter={onChangeFilter}
         filter={filter}
       />
-      {schedule && (
-        <CalendarBody
-          setOpenModal={setOpenModal}
-          setModalInfo={setModalInfo}
-          openModal={openModal}
-          modalInfo={modalInfo}
-          calendarRef={calendarRef}
-          // CalendarEvent={calendarDatas}
-          schedule={schedule}
-          filter={filter}
-        />
-      )}
+      <CalendarBody
+        setOpenModal={setOpenModal}
+        setModalInfo={setModalInfo}
+        openModal={openModal}
+        modalInfo={modalInfo}
+        calendarRef={calendarRef}
+        // CalendarEvent={calendarDatas}
+        schedule={schedule}
+        filter={filter}
+      />
     </CalendarWrap>
   );
 }

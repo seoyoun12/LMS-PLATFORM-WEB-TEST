@@ -1,6 +1,6 @@
-import { Button, Container, styled } from '@mui/material';
+import { Box, Button, Container, styled } from '@mui/material';
 import { StebHeader } from '../StebHeader';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { EduOverview } from './EduOverview';
 import { CompanyInfo } from './CompanyInfo';
 import { StudentInfo } from './StudentInfo';
@@ -36,15 +36,6 @@ export function Steb2() {
   const { register, setValue, watch } = useForm<UserTransSaveInputDataType>({
     defaultValues: { firstIdentityNumber: '', secondIdentityNumber: '' },
   });
-
-  // useEffect(() => {
-  //   (function () {
-  //     if (!isLogin) {
-  //       window.alert('로그인이 필요한 서비스입니다.');
-  //       return router.push('/sign-in');
-  //     }
-  //   })();
-  // }, []);
 
   useEffect(() => {
     if (enrollInfo) setValue('courseClassSeq', Number(enrollInfo.seq));
@@ -182,6 +173,6 @@ export function Steb2() {
   );
 }
 
-const Steb2Wrap = styled(Container)``;
+const Steb2Wrap = styled(Box)``;
 
 const Steb2BodyContainer = styled(Container)``;

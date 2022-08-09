@@ -68,13 +68,13 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
           controller={{ control: secondSwiper }}
           style={{ maxWidth: '676px', width: '100%', minHeight: '370px', marginLeft: '0', top: '32px' }}
         >
-          {data.map((data) => {
+          {deprecated.map((data) => {
             return (
               <SwiperSlide key={data.seq}>
                 {isMobile ? (
-                  <Image width="100%" height="192px" src={data.s3Files[0].path} alt="" style={{ paddingRight: '16px', objectFit: 'cover' }} />
+                  <Image width="100%" height="192px" src={data.img} alt="" style={{ paddingRight: '16px', objectFit: 'cover' }} />
                 ) : (
-                  <Image src={data.s3Files[0].path} alt="" layout="fill" objectFit="cover" style={{ paddingRight: '16px' }} />
+                  <Image src={data.img} alt="" layout="fill" objectFit="cover" style={{ paddingRight: '16px' }} />
                 )}
               </SwiperSlide>
             );

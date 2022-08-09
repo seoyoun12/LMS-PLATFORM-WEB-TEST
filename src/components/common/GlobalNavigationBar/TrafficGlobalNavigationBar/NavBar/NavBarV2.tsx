@@ -60,14 +60,13 @@ const HeaderList = [
   },
 ];
 
-
 export function NavBarV2() {
   const router = useRouter();
   const [isShowRemote, setIsShowRemote] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   // const menuRef = useRef(anchorEl); // current에 안담겨
   // // let open = true;
-  // let open = Boolean(anchorEl); 
+  // let open = Boolean(anchorEl);
   const open = Boolean(anchorEl);
 
   const handleHover = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -87,12 +86,12 @@ export function NavBarV2() {
   return (
     <nav className={styles.globalContainer}>
       <ContentContainer>
+        <HeaderBackground
+          className={`dropdown-back  ${open ? '' : 'hidden'}`}
+          onMouseOver={handleHover}
+          onMouseOut={handleOut}
+        ></HeaderBackground>
         <NavContainer>
-          <HeaderBackground
-            className={`dropdown-back  ${open ? '' : 'hidden'}`}
-            onMouseOver={handleHover}
-            onMouseOut={handleOut}
-          ></HeaderBackground>
           <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
             {HeaderList.map(item => (
               <HeaderItem key={item.category} onMouseOver={handleHover} onMouseOut={handleOut}>
@@ -152,6 +151,20 @@ const ContentContainer = styled.div`
   .bold-600 {
     font-weight: 600;
   }
+
+  .dropdown-back {
+    position: absolute;
+    background: white;
+    width: 100%;
+    top: 78px;
+    box-shadow: 2px 10px 12px 1px rgba(0, 0, 0, 0.1);
+    left: 0;
+    min-height: 300px;
+    border-radius: 0 0 4px 4px;
+  }
+  .hidden {
+    display: none;
+  }
 `;
 
 const NavContainer = styled.div`
@@ -170,14 +183,6 @@ const NavContainer = styled.div`
     display: none;
   }
 
-  .dropdown-back {
-    position: absolute;
-    background: white;
-    width: 100%;
-    top: 78px;
-    min-height: 300px;
-    border-radius: 0 0 4px 4px;
-  }
   .dropdown-box {
     position: relative;
   }
@@ -231,4 +236,3 @@ const RemoteWrap = styled(Box)`
     border-radius: 20px;
   }
 `;
-

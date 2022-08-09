@@ -56,7 +56,7 @@ export function LessonSidebar({
 }: Props) {
   const router = useRouter();
   const { query, pathname } = router;
-  const { courseSeq, lessonSeq } = query;
+  const { courseUserSeq, lessonId } = query;
 
   const [changeMenu, setChangeMenu] = useState(tabsConfig[0].value);
   const [check, setCheck] = useState(false);

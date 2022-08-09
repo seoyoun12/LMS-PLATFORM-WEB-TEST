@@ -25,8 +25,8 @@ interface Props {
 export function MainContent({ course, noticeConfig }: Props) {
   const router = useRouter();
   const { query } = router;
-  const { courseSeq, lessonSeq } = query;
-  // const { course, courseError } = useCourse(Number(courseSeq));
+  const { courseUserSeq, lessonId } = query;
+  // const { course, courseError } = useCourse(Number(courseUserSeq));
   const [revealVideo, setRevealVideo] = useRecoilState(revealVideoState);
   const [progressValue, setProgressValue] = useState(50);
 

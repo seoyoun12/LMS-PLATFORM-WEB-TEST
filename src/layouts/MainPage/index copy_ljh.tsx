@@ -15,7 +15,7 @@ import { useRecoilState } from 'recoil';
 import { pageType } from '@common/recoil';
 import { pageRegType } from '@common/recoil/pageType/atom';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
-import { regCategoryType, useMyUser, UserRole } from '@common/api/user';
+import { regCategoryType, useMyUser } from '@common/api/user';
 import { useRouter } from 'next/router';
 
 const LinkList = [
@@ -53,7 +53,6 @@ const MainPage: NextPage = () => {
   const { data, error } = useMainDisplay();
   React.useEffect(() => {
     if (isLogin && user) {
-      if (user.roles.some(item => item === UserRole.ROLE_ADMIN)) return;
       if (user.regCategory === regCategoryType.TYPE_TRANS_EDU) {
         router.push('/category');
       } else if (user.regCategory === regCategoryType.TYPE_TRAFFIC_SAFETY_EDU) {
@@ -91,6 +90,7 @@ const MainPage: NextPage = () => {
               container={true}
               spacing={0}
               columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
+              gap={1}
               position="relative"
               height={'100%'}
               top={60}
@@ -162,7 +162,7 @@ const MainPage: NextPage = () => {
         </ContentBox>
       </MainContainer>
       <FooterContainer sx={{ color: 'black' }}>
-        <FooterWord>CTTI</FooterWord>
+        <FooterWord>CTTS</FooterWord>
       </FooterContainer>
     </WrapMainContainer>
   );
@@ -185,7 +185,7 @@ const MainContainer = styled(Box)`
   /* background: #DCF3FF; */
   height: 70%;
   min-height: 728px;
-  padding-top: 130px;
+  padding-top: 4rem;
 `;
 const ContentBox = styled(Box)`
   width: 80%;
@@ -201,15 +201,12 @@ const LogoBox = styled(Box)`
 
 // Notice
 const NoticeContainer = styled(Box)`
-  max-width: 930px;
   position: relative;
-  height: 25%;
-  margin: auto;
-  margin-top: 80px;
+  margin-top: 5rem;
   border-radius: 1rem;
   border: 2px solid #d7d7d7;
-  /* width: 936px;
-  height: 110px; */
+  width: 936px;
+  height: 110px;
   // 알림판 중앙 정렬
 `;
 
@@ -256,7 +253,7 @@ const CategoryGrid = styled(Grid)`
   height: 100%;
   display: flex;
   justify-content: center;
-  gap: 13px;
+  gap: 14px;
 `;
 // Three section
 const MainCategoryCard = styled(Container)`
@@ -314,23 +311,11 @@ const FooterWord = styled(Box)`
   position: absolute;
   width: 435px;
   height: 214px;
-  /* right: 25rem; */
-  right: 10%;
+  right: 25rem;
   bottom: 1rem;
   font-size: 13rem;
   font-weight: bold;
   color: #1A53BA;
   transform: rotate(-15deg);
-
-  /* @media (max-width: 1230px) {
-    right: 10rem;
-  } */
-  @media (max-width: 768px) {
-    width: fit-content;
-    height: fit-content;
-    right: 2%;
-    bottom: -10%;
-    font-size: 8rem;
-  }
 `;
 export default MainPage;

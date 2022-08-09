@@ -6,7 +6,7 @@ const categoryData = [
   {
     id: 1,
     title: "운수종사자 교육일정",
-    href: "stebMove/steb1",
+    href: "stebMove/steb2",
     icon: "CalendarMonthIcon",
     color: "#ffede9",
     btnText: "확인하기",

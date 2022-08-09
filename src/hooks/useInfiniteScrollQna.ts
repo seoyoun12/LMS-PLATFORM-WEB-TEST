@@ -9,9 +9,11 @@ const holdValue = 0.1;
 export function useInfiniteScrollQna(url: string) {
   const [target, setTarget] = useState<HTMLElement | null | undefined>(null);
   const [loadedItem, setLoadItem] = useState<Qna[]>([]);
-  const page = useRef(0)
+  const page = useRef(0);
+  const [loadingStatus , setLoadingStatus] = useState(false)
   const loading = useRef(false);
-  const snackbar = useSnackbar()
+  const pageEnd = useRef(false);
+  const snackbar = useSnackbar();
 
   const onIntersection = async (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
     // console.log('intersection', entries ,observer);
@@ -24,8 +26,25 @@ export function useInfiniteScrollQna(url: string) {
       const { data } = await GET<{ data: PaginationResult<Qna[]> }>(url, { params: { page: page.current } })
       page.current += 1;
       // if(loadedItem.length === 0)  setLoadItem(data.content);
-      if (loadedItem) setLoadItem((prev) => [...prev, ...data.content])
+      if (loadedItem) setLoadItem((prev) => [...prev, ...data.content]);
       loading.current = false;
+      
+      //임시조치
+      if(page.current < 2){
+        loading.current = true;
+        setLoadingStatus(true);
+        const {data} = await GET<{data:PaginationResult<Qna[]>}>(url,{params:{page:page.current }})
+        setLoadingStatus(false);
+        if(data.content.length === 0) {
+          pageEnd.current = true;
+          loading.current = false;
+          return;
+        }
+        if(data.content.length !== 0) page.current += 1;
+        // if(loadedItem.length === 0)  setLoadItem(data.content);
+        if(loadedItem)  setLoadItem((prev)  =>[...prev , ...data.content])
+        loading.current = false;
+      }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message })
       loading.current = false;

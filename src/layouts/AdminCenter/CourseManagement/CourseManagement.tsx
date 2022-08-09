@@ -14,9 +14,9 @@ import styles from '@styles/common.module.scss';
 import { Container } from '@mui/material';
 import dateFormat from 'dateformat';
 import { YN } from '@common/constant';
-import { mutate } from 'swr';
 import { Spinner } from '@components/ui';
 import { css } from '@emotion/css';
+import { courseAdmList, courseList, courseRemove } from '@common/api/course';
 
 const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
   { name: 'seq', align: 'left' },
@@ -33,13 +33,21 @@ export function CourseManagement() {
   const dialog = useDialog();
   const router = useRouter();
   const [ page, setPage ] = useState(0);
-  const { data, error } = useCourseList({ page });
+  const [ seq, setSeq ] = useState<number | null>(null);
 
+  const { data, error, mutate } = courseAdmList({ page });
+  // const { data, error, mutate } = courseList({ page });
+
+
+  console.log("CourseManagement data : ", data);
+
+
+  // pagination
   useEffect(() => {
     console.log('useEffect Triggered');
     const { page } = router.query;
     setPage(!isNaN(Number(page)) ? Number(page) : 0);
-  }, [ router ]);
+  }, [ router.query ]);
 
   const onChangePage = async (page: number) => {
     await router.push({
@@ -50,7 +58,22 @@ export function CourseManagement() {
     });
   };
 
-  const onRemoveCourse = async (courseId: number) => {
+
+
+
+  // 수정
+  const onClickModifyCourse = async (seq : number) => {
+    setSeq(seq);
+    console.log("modifyseq(CourseManageMent) : ", seq)
+    console.log("modify(CourseManageMent) : ", data)
+    router.push(`/admin-center/course/modify/${seq}`);
+    mutate();
+  }
+
+
+
+  // 삭제
+  const onClickRemoveCourse = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
         title: '과정 삭제하기',
@@ -59,9 +82,9 @@ export function CourseManagement() {
         cancelText: '취소'
       });
       if (dialogConfirmed) {
-        await removeCourse({ courseId });
+        await courseRemove(seq);
         snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-        await mutate([ `/course/adm`, { params: { page } } ]);
+        await mutate();
       }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -70,6 +93,7 @@ export function CourseManagement() {
 
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
+
   return (
     <Container className={styles.globalContainer}>
       <Typography
@@ -95,52 +119,57 @@ export function CourseManagement() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.content.map((content) => (
-            <TableRow key={content.seq} hover>
+          {data.content.map((course) => (
+            <TableRow key={course.seq} hover>
               <TableCell>
-                {content.seq}
+                {course.seq}
               </TableCell>
               <TableCell align="right">
                 <Link
-                  href={`/course/${content.seq}`}
+                  href={`/course/${course.seq}`}
                   underline="hover"
                   color={grey[900]}
                 >
-                  {content.courseName}
+                  {course.courseName}
                 </Link>
               </TableCell>
               <TableCell align="right" className={spaceNoWrap}>
-                {dateFormat(content.createdDtime, 'isoDate')}
+                {dateFormat(course.createdDtime, 'isoDate')}
               </TableCell>
               <TableCell align="right">
                 <Chip
-                  label={content.displayYn === YN.YES ? '보임' : '숨김'}
+                  label={course.displayYn === YN.YES ? '보임' : '숨김'}
                   variant="outlined"
                   size="small"
-                  color={content.displayYn === YN.YES ? 'secondary' : 'default'}
+                  color={course.displayYn === YN.YES ? 'secondary' : 'default'}
                 />
               </TableCell>
               <TableCell align="right">
                 <Chip
-                  label={content.status ? '정상' : '중지'}
+                  label={course.status ? '정상' : '중지'}
                   variant="outlined"
                   size="small"
-                  color={content.status ? 'secondary' : 'default'}
+                  color={course.status ? 'secondary' : 'default'}
                 />
               </TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
 
               <TableCell align="right" className={spaceNoWrap}>
-                <Link href={`/admin-center/course/modify/${content.seq}`}>
-                  <Button variant="text" color="neutral" size="small">
-                    상세
-                  </Button>
-                </Link>
+                {/* <Link href={`/admin-center/course/modify/${course.seq}`}> */}
+                <Button
+                  variant="text" 
+                  color="neutral" 
+                  size="small"
+                  onClick={() => onClickModifyCourse(course.seq)}
+                >
+                  상세
+                </Button>
+                {/* </Link> */}
                 <Button
                   variant="text"
                   color="warning"
-                  onClick={() => onRemoveCourse(content.seq)}
+                  onClick={() => onClickRemoveCourse(course.seq)}
                   size="small"
                 >
                   삭제

@@ -7,8 +7,8 @@ import { ContentList, Library } from '@layouts/AdminCenter';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { EvaluationInfo } from '@layouts/AdminCenter/CourseManagement/EvaluationInfo';
 import { Forum } from '@layouts/AdminCenter/CourseManagement/Forum';
-import { modifyCourse, useCourse } from '@common/api/adm/course';
-import { CourseRes } from '@common/api/course';
+import { useCourse } from '@common/api/adm/course';
+import { Course, courseDetail, CourseInput, courseModify } from '@common/api/course';
 import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
 
 
@@ -31,10 +31,17 @@ const tabsConfig = [
 export function CourseModify() {
   const router = useRouter();
   const snackbar = useSnackbar();
-  const { courseId, tab } = router.query;
-  const { course, courseError } = useCourse(Number(courseId));
+  const { courseSeq, tab } = router.query;
+  const { data, error } = courseDetail(Number(courseSeq));
 
-  const fileHandler = async (files: File[], course: CourseRes, isFileDelete: boolean) => {
+
+  console.log("Course -> courseSeq : ", courseSeq);
+  console.log("Course -> tab :", tab);
+  console.log("Course -> data : ", data);
+
+
+
+  const fileHandler = async (files: File[], course: Course, isFileDelete: boolean) => {
     const isFileUpload = files.length > 0;
     if (isFileUpload) {
       await uploadFile({
@@ -53,16 +60,16 @@ export function CourseModify() {
     }
   };
 
-  const handleSubmit = async ({ files, isFileDelete, courseInput, courseId }: {
+  const handleSubmit = async ({ files, isFileDelete, courseInput, seq }: {
     files: File[];
     isFileDelete: boolean;
-    courseInput: CourseRes;
-    courseId?: number;
+    courseInput: CourseInput;
+    seq?: number;
   }) => {
     try {
-      if (courseId) {
-        await modifyCourse({ courseInput, courseId });
-        await fileHandler(files, courseInput, isFileDelete);
+      if (courseSeq) {
+        const course = await courseModify({ seq, courseInput });
+        await fileHandler(files, course.data, isFileDelete);
         snackbar({ variant: 'success', message: '성공적으로 수정되었습니다.' });
         router.push('/admin-center/course');
       }
@@ -71,8 +78,9 @@ export function CourseModify() {
     }
   };
 
-  if (courseError) return <div>...ERROR</div>;
-  if (!course) return <Spinner />;
+  if (error) return <div>...ERROR</div>;
+  if (!data) return <Spinner />;
+
   return (
     <Container className={styles.globalContainer}>
       <Box sx={{ mb: '30px' }}>
@@ -83,7 +91,7 @@ export function CourseModify() {
           [TabValue.CourseInfo]:
             <CourseUploadForm
               mode="modify"
-              course={course}
+              course={data}
               onHandleSubmit={handleSubmit}
             />,
           [TabValue.ContentList]:

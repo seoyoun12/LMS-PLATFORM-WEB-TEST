@@ -11,6 +11,7 @@ import { NavBarV2 } from '../NavBar';
 import { useEffect, useState } from 'react';
 
 export function HeaderBar() {
+  const router = useRouter()
   const isLogin = useIsLoginStatus();
   const [user , setUser] = useState<MyUser>()
 
@@ -19,7 +20,7 @@ export function HeaderBar() {
       const {data}:{data:MyUser} = await getMyUser();
       setUser(data);
     })()
-  },[])
+  },[router])
   return (
     <Header className={styles.globalContainer}>
       <ContentContainer>

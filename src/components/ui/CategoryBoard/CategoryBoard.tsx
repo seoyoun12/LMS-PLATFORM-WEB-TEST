@@ -1,7 +1,7 @@
 import { Container } from "@mui/system";
 import styled from '@emotion/styled';
 import { Box } from "@mui/material";
-import { useLayoutEffect, useState } from "react";
+import { useState } from "react";
 import { CategoryBoardNotice } from "@layouts/Category/CategoryBoardNotice";
 import { CategoryBoardFaq } from "@layouts/Category/CategoryBoardFaq";
 import { CategoryBoardQuestion } from "@layouts/Category/CategoryBoardQuestion";

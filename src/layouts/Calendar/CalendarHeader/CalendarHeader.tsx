@@ -2,10 +2,11 @@ import styled from '@emotion/styled';
 import { Box, Radio, Typography } from '@mui/material';
 import React from 'react';
 import { eduLegendList, FilterType, MonthClickType } from '../Calendar';
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { grey } from '@mui/material/colors';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
+import ArrowLeftRoundedIcon from '@mui/icons-material/ArrowLeftRounded';
+import ArrowRightRoundedIcon from '@mui/icons-material/ArrowRightRounded';
+import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
 
 interface Props {
   onChangeMonth: (type: MonthClickType, value: number) => void;
@@ -31,41 +32,43 @@ const Months = [
 ];
 
 export function CalendarHeader({ onChangeMonth, date, filterList, onChangeFilter, filter }: Props) {
+  const handleLeftBtnClick = () => {
+    const clickType = MonthClickType.BTN_CLICK;
+    onChangeMonth(clickType, -1);
+  };
+  const handleRightBtnClick = () => {
+    const clickType = MonthClickType.BTN_CLICK;
+    onChangeMonth(clickType, 1);
+  };
+  const handleLeftMonthClick = (value: number) => {
+    const clickType = MonthClickType.MONTH_CLICK;
+    onChangeMonth(clickType, value);
+  };
+
   return (
     <CalendarHeaderWrap>
-      <DateWrap>
-        <ArrowLeftIcon
-          sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }}
-          onClick={() => {
-            const clickType = MonthClickType.BTN_CLICK;
-            onChangeMonth(clickType, -1);
-          }}
-        />
+      <TopYearWrap>
+        <ArrowLeftRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleLeftBtnClick} />
         <YearWrap>{date.getFullYear()}년</YearWrap>
+        <ArrowRightRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleRightBtnClick} />
+      </TopYearWrap>
+      <DateWrap>
+        <ArrowLeftRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleLeftBtnClick} />
         <MonthWrap>
           {Months.map(month => (
             <Box
               sx={{ height: '50px', flexGrow: 1, cursor: 'pointer' }}
               className={`header-month-box `}
-              onClick={() => {
-                const clickType = MonthClickType.MONTH_CLICK;
-                onChangeMonth(clickType, month.value);
-              }}
+              onClick={() => handleLeftMonthClick(month.value)}
             >
               <Typography className={`header-month ${month.value === date.getMonth() + 1 ? 'active' : ''}`}>{month.title}</Typography>
             </Box>
           ))}
         </MonthWrap>
-        <ArrowRightIcon
-          sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }}
-          onClick={() => {
-            const clickType = MonthClickType.BTN_CLICK;
-            onChangeMonth(clickType, 1);
-          }}
-        />
+        <ArrowRightRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleRightBtnClick} />
       </DateWrap>
       <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
-        <Typography>- 해당 일정을 클릭 하시면 자세한 교육내용을 확인하실 수 있습니다.</Typography>
+        <Typography fontSize="18px">- 해당 일정을 클릭 하시면 자세한 교육내용을 확인하실 수 있습니다.</Typography>
         <Box>
           {filterList.map(item => (
             <>
@@ -75,11 +78,11 @@ export function CalendarHeader({ onChangeMonth, date, filterList, onChangeFilter
           ))}
         </Box>
       </Box>
-      <Box display="flex" alignItems="center" width="fit-content" margin="auto">
+      <Box display="flex" justifyContent="flex-end" gap="1rem" mt={6}>
         {eduLegendList.map(legend => (
-          <>
-            <HorizontalRuleRoundedIcon sx={{ fontSize: '2.5rem', color: legend.color }} /> <span>{legend.title}</span>
-          </>
+          <Box display="flex" alignItems="center">
+            <CircleRoundedIcon sx={{ fontSize: '1rem', color: legend.color }} /> <span>{legend.title}</span>
+          </Box>
         ))}
       </Box>
     </CalendarHeaderWrap>
@@ -100,23 +103,37 @@ const CalendarHeaderWrap = styled(Box)`
     right: 10%;
     left: 10%;
     bottom: -10px;
+    font-size: 20px;
   }
   .active {
     z-index: 4;
     color: white;
     font-weight: bold;
-    background: #254a98;
+    background: #3c3c3c;
+    border-radius: 4px;
   }
+`;
+
+const TopYearWrap = styled(Box)`
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  margin: auto;
+  margin-bottom: 1.5rem;
 `;
 
 const DateWrap = styled(Box)`
   display: flex;
+  height: 60px;
   align-items: center;
   font-size: 1.25rem;
-  border: 1px solid #9e9e9e;
+  border: 1px solid #d6d6d6;
+  border-radius: 30px;
 `;
 const YearWrap = styled(Box)`
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0;
+  font-size: 28px;
 `;
 const MonthWrap = styled(Box)`
   display: flex;

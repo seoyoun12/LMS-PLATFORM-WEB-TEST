@@ -25,17 +25,14 @@ interface XlsxData extends LessonInput {
 const contentTypeOptions = [
   { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
   { value: ContentType.CONTENT_MP4, name: 'mp4' },
-  { value: ContentType.CONTENT_EXTERNAL, name: '외부링크' }
+  { value: ContentType.CONTENT_EXTERNAL, name: '외부링크' },
 ];
 
 const defaultValues = {
-  contentType: ContentType.CONTENT_MP4
+  contentType: ContentType.CONTENT_MP4,
 };
 
-export function LessonBulkUploadModal({ open, handleClose }: {
-  open: boolean;
-  handleClose: (isSubmit: boolean) => void;
-}) {
+export function LessonBulkUploadModal({ open, handleClose }: { open: boolean; handleClose: (isSubmit: boolean) => void }) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const {
     handleSubmit,
@@ -57,20 +54,20 @@ export function LessonBulkUploadModal({ open, handleClose }: {
     const lessonInput = xlsxData
       .filter(data => !!data)
       .map(data => {
-          const totalTime = (data.min * 60 + data.sec);
-          const completeTime = Math.round(totalTime * 0.9);
-          return {
-            contentType,
-            totalTime,
-            completeTime,
-            ...data
-          };
-        }
-      );
+        const totalTime = data.min * 60 + data.sec;
+        const completeTime = Math.round(totalTime * 0.9);
+        return {
+          contentType,
+          totalTime,
+          completeTime,
+          ...data,
+        };
+      });
 
     try {
       const contentSeq = Number(query.contentSeq);
-      await uploadLessons({ contentSeq, lessonInput });
+      console.log('im lesson.', lessonInput);
+      // await uploadLessons({ contentSeq, lessonInput });
       snackbar({ variant: 'success', message: '성공적으로 업로드 되었습니다.' });
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -78,7 +75,6 @@ export function LessonBulkUploadModal({ open, handleClose }: {
 
     handleClose(true);
   };
-
 
   // 파일 업로드 관련 코드 작성 필요. modal쪽 전부 코드수정해야함.
 
@@ -99,13 +95,15 @@ export function LessonBulkUploadModal({ open, handleClose }: {
               1. 샘플양식을 다운로드 받아 작성한 후 업로드 하셔야 합니다. <br />
             </Typography>
             <Typography variant="body2">
-              2. 업로드파일은 .xls 파일만 가능합니다. 복수 시트는 지원하지 않습니다.<br />
+              2. 업로드파일은 .xls 파일만 가능합니다. 복수 시트는 지원하지 않습니다.
+              <br />
             </Typography>
             <Typography variant="body2" color="primary">
               3. 일괄등록의 경우 이전 데이타는 모두 삭제되고 새로 등록됩니다.(주의요망) <br />
             </Typography>
             <Typography variant="body2">
-              4. 엑셀의 첫번째, 두번째 행은 칼럼의 제목이며 실제 데이타는 3번째 행부터 등록됩니다.(예제확인)<br />
+              4. 엑셀의 첫번째, 두번째 행은 칼럼의 제목이며 실제 데이타는 3번째 행부터 등록됩니다.(예제확인)
+              <br />
             </Typography>
           </Typography>
         </Alert>
@@ -117,14 +115,12 @@ export function LessonBulkUploadModal({ open, handleClose }: {
               control={control}
               name="contentType"
               render={({ field }) => (
-                <Select
-                  {...field}
-                  size="small"
-                  label="콘텐츠 타입"
-                >
-                  {contentTypeOptions.map(({ value, name }) =>
-                    <MenuItem value={value} key={value}>{name}</MenuItem>
-                  )}
+                <Select {...field} size="small" label="콘텐츠 타입">
+                  {contentTypeOptions.map(({ value, name }) => (
+                    <MenuItem value={value} key={value}>
+                      {name}
+                    </MenuItem>
+                  ))}
                 </Select>
               )}
             />
@@ -136,13 +132,7 @@ export function LessonBulkUploadModal({ open, handleClose }: {
               엑셀 파일 업로드
             </Typography>
             <label htmlFor="input-file">
-              <input
-                style={{ display: 'none' }}
-                id="input-file"
-                type="file"
-                multiple={true}
-                ref={fileInputRef}
-              />
+              <input style={{ display: 'none' }} id="input-file" type="file" multiple={true} ref={fileInputRef} />
             </label>
             <Button
               color="neutral"

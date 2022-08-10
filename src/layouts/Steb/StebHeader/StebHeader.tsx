@@ -38,7 +38,11 @@ export function StebHeader({ value }: { value: number }) {
                 {/* <Filter1Icon fontSize="large" /> */}
                 {/* <span>교육일정</span> */}
 
-                {1 === value ? <Image src={'/assets/images/lightOnEduScheduleIcon.png'} width={150} height={150} /> : '교육일정'}
+                {1 === value ? (
+                  <Image src={'/assets/images/lightOnEduScheduleIcon.png'} width={150} height={150} />
+                ) : (
+                  <Image src={'/assets/images/lightOffEduScheduleIcon.png'} width={150} height={150} />
+                )}
               </StepHeaderProgessIcon>
               {/* <StepHeaderProgessIcon display="flex" flexDirection="column" alignItems={'center'} sx={{ opacity: 2 === value ? 1 : 0.5 }}> */}
               <StepHeaderProgessIcon>

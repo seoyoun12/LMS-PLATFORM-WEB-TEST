@@ -124,17 +124,26 @@ export interface UserTransSaveInputDataType {
   secondIdentityNumber: string; //민증번호 뒤
   name: string; //이름
   phone: string;
+  firstPhone: string;
+  secondPhone: string;
+  thirdPhone: string;
   registerType: RegisterType; //개인 단체 구분
   smsYn: YN;
 }
 
 export function courseClassIndividualEnroll(
-  userTransSaveData: Omit<UserTransSaveInputDataType, 'firstIdentityNumber' | 'secondIdentityNumber' | 'seq'>
+  userTransSaveData: Omit<
+    UserTransSaveInputDataType,
+    'firstIdentityNumber' | 'secondIdentityNumber' | 'seq' | 'firstPhone' | 'secondPhone' | 'thirdPhone'
+  >
 ) {
   return POST(`/course-user/enroll/individual`, userTransSaveData);
 }
 export function courseClassOrganizationEnrll(
-  userTransSaveData: Omit<UserTransSaveInputDataType, 'firstIdentityNumber' | 'secondIdentityNumber' | 'seq'>
+  userTransSaveData: Omit<
+    UserTransSaveInputDataType,
+    'firstIdentityNumber' | 'secondIdentityNumber' | 'seq' | 'firstPhone' | 'secondPhone' | 'thirdPhone'
+  >
 ) {
   return POST(`/course-user/enroll/organization`, userTransSaveData);
 }

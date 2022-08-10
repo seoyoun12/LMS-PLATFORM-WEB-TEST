@@ -10,11 +10,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Switch,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
   TextField,
   Typography,
 } from '@mui/material';
@@ -139,6 +134,7 @@ export function Educator({ locationList }: Props) {
       const smsYn = smsChecked ? YN.YES : YN.NO;
       if (!user || !location || !email || !company) return window.alert('수정 실패하였습니다.');
       const data = {
+        userSeq: user.seq,
         company: company,
         email: email,
         name: user.name,
@@ -147,6 +143,7 @@ export function Educator({ locationList }: Props) {
         userRegistrationType: location,
         username: user.username,
       };
+      console.log('죽인다 진짜로', data);
 
       await modifyProvincialTrafficSafety(data);
       return router.push('/me');

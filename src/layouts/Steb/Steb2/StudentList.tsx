@@ -1,7 +1,7 @@
 import { courseUserOrganCancel, RegisterType } from '@common/api/courseClass';
 import { courseClassEnrollList } from '@common/recoil';
 import styled from '@emotion/styled';
-import { Box, Button, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
 import React from 'react';
 import { FieldValues, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
@@ -9,6 +9,54 @@ import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded
 import { Table } from '@components/ui';
 import { locationList } from '@layouts/MeEdit/MeEdit';
 import { useSnackbar } from '@hooks/useSnackbar';
+
+const test = [
+  {
+    seq: 1,
+    businessName: '좋은회사입니다',
+    businessSubType: 'BUS',
+    businessType: 'PASSENGER',
+    carNumber: '12가1234',
+    carRegisteredRegion: 'GONGJU',
+    courseClassSeq: 123123,
+    firstIdentityNumber: 312312,
+    secondIdentityNumber: 1313132,
+    name: 'Hi There',
+    phone: '123123123',
+    registerType: 'TYPE_ORGANIZATION',
+    smsYn: 'Y',
+  },
+  {
+    seq: 1,
+    businessName: '좋은회22사입니다',
+    businessSubType: 'BUS',
+    businessType: 'PASSENGER',
+    carNumber: '12가1234',
+    carRegisteredRegion: 'GONGJU',
+    courseClassSeq: 123123,
+    firstIdentityNumber: 312312,
+    secondIdentityNumber: 1313132,
+    name: 'Hi There',
+    phone: '123123123',
+    registerType: 'TYPE_ORGANIZATION',
+    smsYn: 'Y',
+  },
+  {
+    seq: 1,
+    businessName: '좋은회2233사입니다',
+    businessSubType: 'BUS',
+    businessType: 'PASSENGER',
+    carNumber: '12가1234',
+    carRegisteredRegion: 'GONGJU',
+    courseClassSeq: 123123,
+    firstIdentityNumber: 312312,
+    secondIdentityNumber: 1313132,
+    name: 'Hi There',
+    phone: '123123123',
+    registerType: 'TYPE_ORGANIZATION',
+    smsYn: 'Y',
+  },
+];
 
 interface Props {
   registerType: RegisterType;
@@ -19,7 +67,7 @@ export function StudentList({ registerType, setRegisterType }: Props) {
   const snackbar = useSnackbar();
 
   const onClickDelete = async (seq: number, test: any) => {
-    console.log('아', seq, test);
+    console.log('user is deleted', seq, test);
     try {
       await courseUserOrganCancel(seq);
       setOrganization(prev => prev.filter(item => item.seq !== seq));
@@ -34,6 +82,7 @@ export function StudentList({ registerType, setRegisterType }: Props) {
         <Button
           variant="outlined"
           color={registerType === RegisterType.TYPE_INDIVIDUAL ? 'primary' : 'neutral'}
+          sx={{ color: 'black' }}
           onClick={() => setRegisterType(RegisterType.TYPE_INDIVIDUAL)}
           fullWidth
         >
@@ -42,6 +91,7 @@ export function StudentList({ registerType, setRegisterType }: Props) {
         <Button
           variant="outlined"
           color={registerType === RegisterType.TYPE_ORGANIZATION ? 'primary' : 'neutral'}
+          sx={{ color: 'black' }}
           onClick={() => setRegisterType(RegisterType.TYPE_ORGANIZATION)}
           fullWidth
         >
@@ -56,41 +106,45 @@ export function StudentList({ registerType, setRegisterType }: Props) {
           </Typography>
         )}
         <StudentItemListWrap>
-          {registerType === RegisterType.TYPE_ORGANIZATION &&
-            organization.length > 0 &&
-            organization.map(item => (
-              <StudentListItem key={item.courseClassSeq}>
-                <StuTableContainer>
-                  <TableBody sx={{ display: 'table', width: '100%' }}>
-                    <UserTableRow>
-                      <TableCell>이름</TableCell>
-                      <TableCell>{item.name}</TableCell>
-                    </UserTableRow>
-                    <UserTableRow>
-                      <TableCell>민증</TableCell>
-                      <TableCell>{item.firstIdentityNumber} - ●●●●●●●</TableCell>
-                    </UserTableRow>
-                    <UserTableRow>
-                      <TableCell>차량번호</TableCell>
-                      <TableCell>{item.carNumber}</TableCell>
-                    </UserTableRow>
-                    <UserTableRow>
-                      <TableCell>등록지</TableCell>
-                      <TableCell>{locationList.filter(regi => regi.en === item.carRegisteredRegion)[0].ko}</TableCell>
-                    </UserTableRow>
-                    <UserTableRow>
-                      <TableCell>휴대전화링</TableCell>
-                      <TableCell>{item.phone}</TableCell>
-                    </UserTableRow>
-                  </TableBody>
-                </StuTableContainer>
-                <Box width="20%" display="flex" alignItems="flex-end">
-                  <Button variant="outlined" onClick={() => onClickDelete(item.seq, item)} fullWidth>
-                    삭제
-                  </Button>
-                </Box>
-              </StudentListItem>
-            ))}
+          <StuGrid container columns={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2 }} rowSpacing={4} columnSpacing={4}>
+            {registerType === RegisterType.TYPE_ORGANIZATION &&
+              organization.length > 0 &&
+              organization.map(item => (
+                // test.length > 0 &&
+                // test.map(item => (
+                <StudentListItem item xs={1} sm={1} md={1} lg={1} key={item.courseClassSeq}>
+                  <StuTableContainer>
+                    <StuTableBody>
+                      <UserTableRow>
+                        <TableLeftCell>이름</TableLeftCell>
+                        <TableRightCell>{item.name}</TableRightCell>
+                      </UserTableRow>
+                      <UserTableRow>
+                        <TableLeftCell>민증</TableLeftCell>
+                        <TableRightCell>{item.firstIdentityNumber} - ●●●●●●●</TableRightCell>
+                      </UserTableRow>
+                      <UserTableRow>
+                        <TableLeftCell>차량번호</TableLeftCell>
+                        <TableRightCell>{item.carNumber}</TableRightCell>
+                      </UserTableRow>
+                      <UserTableRow>
+                        <TableLeftCell>등록지</TableLeftCell>
+                        <TableRightCell>{locationList.filter(regi => regi.en === item.carRegisteredRegion)[0].ko}</TableRightCell>
+                      </UserTableRow>
+                      <UserTableRow>
+                        <TableLeftCell>휴대전화링</TableLeftCell>
+                        <TableRightCell>{item.phone}</TableRightCell>
+                      </UserTableRow>
+                    </StuTableBody>
+                  </StuTableContainer>
+                  <Box width="200px" display="flex" alignItems="flex-end" margin="auto" mt={4}>
+                    <Button variant="outlined" color="neutral" onClick={() => onClickDelete(item.seq, item)} fullWidth>
+                      삭제
+                    </Button>
+                  </Box>
+                </StudentListItem>
+              ))}
+          </StuGrid>
         </StudentItemListWrap>
       </Box>
     </StudentListWrap>
@@ -100,50 +154,63 @@ export function StudentList({ registerType, setRegisterType }: Props) {
 const StudentListWrap = styled(Box)``;
 const ReservationType = styled(Box)`
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
+  max-width: 460px;
+  margin: auto;
 `;
 const StudentItemListWrap = styled(Box)`
-  div:last-child {
+  /* div:last-child { Remove last Element borderBottom
     border-bottom: none;
-  }
+  } */
 `;
-const StudentListItem = styled(Box)`
+const StudentListItem = styled(Grid)`
   display: flex;
+  flex-direction: column;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #e1e1e1;
+  /* border-bottom: 2px solid #e1e1e1; Add border Bottom */
 `;
 const StuTableContainer = styled(TableContainer)`
-  width: 80%;
   .css-2lu2eg-MuiTableCell-root {
     border-bottom: none;
     padding: 0.5rem;
     font-weight: bold;
   }
-  .css-dfr580-MuiTableRow-root {
-    /* :first-child {
-      td {
-        border-top: none;
-      }
-    } */
-    :last-child {
-      td {
-        border-bottom: none;
-      }
-    }
-  }
 `;
+
+const StuGrid = styled(Grid)``;
 
 const UserTableRow = styled(TableRow)`
   display: flex;
 
-  td:first-child {
+  /* td:first-child {
     width: 50%;
-  }
+  } */
   td:last-child {
     display: block;
-    width: 50%;
+    /* width: 50%; */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+`;
+
+const StuTableBody = styled(TableBody)`
+  display: table;
+  width: 100%;
+  border-top: 1px solid #c4c4c4;
+  border-left: 1px solid #c4c4c4;
+  border-right: 1px solid #c4c4c4;
+  /* border: 1px solid #c4c4c4; */
+`;
+const TableLeftCell = styled(TableCell)`
+  width: 30%;
+  border-right: 1px solid #c4c4c4;
+  background: #f4f4f4;
+  font-weight: 400;
+  font-size: 18px;
+`;
+const TableRightCell = styled(TableCell)`
+  width: 70%;
+  font-weight: 400;
+  font-size: 18px;
 `;

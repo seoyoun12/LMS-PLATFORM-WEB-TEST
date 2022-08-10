@@ -80,11 +80,11 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
     <EduOverviewWrap>
       <Box>
         <Typography variant="h5" fontWeight="bold" display="flex" alignItems="center">
-          <HorizontalRuleRoundedIcon sx={{ transform: 'scale(1,2)', color: '#3498db' }} />
+          {/* <HorizontalRuleRoundedIcon sx={{ transform: 'scale(1,2)', color: '#3498db' }} /> */}
           <span>교육개요</span>
         </Typography>
         <TableContainer>
-          <Table sx={{ borderTop: '4px solid #3498db' }}>
+          <Table sx={{ borderTop: '3px solid #000' }}>
             <TableCustomRow>
               <TableLeftCell>교육과정</TableLeftCell>
               <TableCell>
@@ -185,9 +185,12 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
 
 const EduOverviewWrap = styled(Box)``;
 const TableCustomRow = styled(TableRow)`
-  border-bottom: 2px solid #c3c3c3;
+  border-bottom: 1px solid #d2d2d2;
 `;
 const TableLeftCell = styled(TableCell)`
-  background: #e1e1e1;
-  width: 30%;
+  /* background: #e1e1e1; */
+  font-size: 20px;
+  text-align: center;
+  font-weight: 700;
+  width: 20%;
 `;

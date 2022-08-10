@@ -3,26 +3,24 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import { Link } from '@components/common';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { signIn } from '@common/api/auth';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { isLoginState, pageType } from '@common/recoil';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { regCategory } from '@common/api/auth/signUp';
 import { userInfo } from '@common/recoil/user';
-import { pageRegType } from '@common/recoil/pageType/atom';
 import { loginType } from '@common/api/auth/signIn';
-import { FormHelperText } from '@mui/material';
+import { Checkbox, FormHelperText } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { Spinner } from '@components/ui';
+import { Modal, Spinner } from '@components/ui';
+import Image from 'next/image';
+import styled from '@emotion/styled';
+import { transIndividualSummary } from '@utils/individualSummaries';
 
 export function SignInV2() {
   const router = useRouter();
@@ -31,6 +29,8 @@ export function SignInV2() {
   const setUsetInfo = useSetRecoilState(userInfo);
   const snackbar = useSnackbar();
   const [loading, setLoading] = React.useState(false);
+  const [smsYn, setSmsYn] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
   const loadingRef = React.useRef(false);
 
   const { watch, setValue } = useForm({
@@ -54,6 +54,7 @@ export function SignInV2() {
     const password = identify1 + identify2;
 
     if (usernameErr || identify1Err || identify2Err) return;
+    if (!smsYn) return window.alert('문자수신동의하셔야 합니다!');
     if (loadingRef.current) return console.log('Block multiple click');
 
     loadingRef.current = true;
@@ -102,7 +103,6 @@ export function SignInV2() {
   return (
     <Container
       component="div"
-      maxWidth="xs"
       sx={{
         marginBottom: 8,
       }}
@@ -116,20 +116,12 @@ export function SignInV2() {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
+        <Avatar sx={{ m: 1 }}>
+          {/* <LockOutlinedIcon /> */}
+          <Image src={'/assets/images/loginLogo.png'} width={60} height={60} />
         </Avatar>
-        {/* <Typography component="h1" variant="h5">
-          로그인
-        </Typography> */}
-        <Typography fontSize="1rem">실명인증 후 예약절차를 진행하고 있습니다.</Typography>
+        <Typography fontSize="22px">실명인증 후 예약절차를 진행하고 있습니다.</Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          {/* <Typography component="div" variant="button" onClick={() => setLoginType('TYPE_TRANS_EDU')}>
-            저상/운수
-          </Typography>
-          <Typography component="div" variant="button" onClick={() => setLoginType('TYPE_TRAFFIC_SAFETY_EDU')}>
-            도민
-          </Typography> */}
           <TextField
             margin="normal"
             required
@@ -187,11 +179,61 @@ export function SignInV2() {
           <FormHelperText sx={{ color: 'red' }}>
             {(identify1Err || identify2Err) && '올바르지 않은 주민등록번호 입니다. 다시 한번 확인해주세요.'}
           </FormHelperText>
-          <Button type="submit" fullWidth variant="contained" disabled={loading} sx={{ mt: 3, mb: 2 }}>
+          <IndividualCheckBox>
+            <Box>
+              <Checkbox
+                value={smsYn}
+                onChange={(e, checked) => {
+                  setSmsYn(checked);
+                }}
+              />
+              <Typography component="span">개인정보 수집 및 이용에 동의합니다.</Typography>
+            </Box>
+            <ViewContentBox onClick={() => setOpen(true)}>내용보기</ViewContentBox>
+          </IndividualCheckBox>
+          <Button type="submit" fullWidth variant="contained" disabled={loading} sx={{ mt: 1, mb: 2 }}>
             {loading ? <Spinner fit={true} /> : '확인'}
           </Button>
+          <Modal
+            title={'개인정보 수집 및 이용 전문'}
+            open={open}
+            onCloseModal={() => setOpen(false)}
+            // sx={{ maxWidth: '800px', margin: 'auto' }}
+            maxWidth="md"
+            action={
+              <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', gap: '1rem', paddingBottom: '1rem' }}>
+                <ConfirmButton variant="contained" onClick={() => setOpen(false)} fullWidth>
+                  확인
+                </ConfirmButton>
+              </Box>
+            }
+          >
+            {transIndividualSummary.split('\n').map(item => (
+              <Box>{item}</Box>
+            ))}
+          </Modal>
         </Box>
       </Box>
     </Container>
   );
 }
+
+const IndividualCheckBox = styled(Box)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+const ViewContentBox = styled(Box)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  width: 72px;
+  height: 30px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #171717;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+const ConfirmButton = styled(Button)``;

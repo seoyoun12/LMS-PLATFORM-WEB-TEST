@@ -95,7 +95,7 @@ export function ContentManagement() {
               </TableCell>
               <TableCell style={{ width: 200 }} align="right">
                 <Link
-                  href={`/content/${content.seq}`}
+                  href={`/admin-center/content/modify/${content.seq}`}
                   underline="hover"
                   color={grey[900]}
                 >

@@ -46,6 +46,7 @@ export function ContentModify() {
       }
     } catch (e: any) {
       console.error(e);
+      snackbar({ variant: "error", message: '업로드에 실패했습니다.' });
     }
   };
 

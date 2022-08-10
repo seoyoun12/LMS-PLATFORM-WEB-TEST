@@ -20,6 +20,7 @@ import { courseClassEnrollInfo, courseClassEnrollList } from '@common/recoil';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { signUp } from '@common/api';
+import { IndividualSummary } from './IndividualSummary';
 
 export function Steb2() {
   const router = useRouter();
@@ -46,7 +47,7 @@ export function Steb2() {
 
   const onClickEnroll = async () => {
     //단체 신청시 스택쌓이는 구조. 개인상태에서는 혼자 신청
-    const { seq, firstIdentityNumber, secondIdentityNumber, ...rest } = watch();
+    const { seq, firstIdentityNumber, secondIdentityNumber, firstPhone, secondPhone, thirdPhone, ...rest } = watch();
     console.log('user datas2', watch(), enrollInfo);
     if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7) return window.alert('주민번호를 모두 입력해주세요!');
     if (!enrollInfo || !enrollInfo.seq) return window.alert('기수를 선택해주세요!');
@@ -58,6 +59,7 @@ export function Steb2() {
       ...rest,
       businessType: watch().businessType, //TYPE_PASSENGER 이런식인줄 알았으나 PASSENGER식으로 요청해야함
       identityNumber: firstIdentityNumber + secondIdentityNumber,
+      phone: firstPhone + secondPhone + thirdPhone,
     }; //민증번호때문에 구분
     console.log('user datas', postData);
 
@@ -79,7 +81,7 @@ export function Steb2() {
           password: watch().firstIdentityNumber + secondIdentityNumber,
           name: watch().name,
           regCategory: 'TYPE_TRANS_EDU',
-          phone: watch().phone,
+          phone: firstPhone + secondPhone + thirdPhone,
           emailYn: YN.NO,
           smsYn: YN.NO,
         })
@@ -148,26 +150,22 @@ export function Steb2() {
   return (
     <Steb2Wrap>
       <StebHeader value={2} />
-      <Steb2BodyContainer maxWidth="sm">
+      <Steb2BodyContainer>
         <EduOverview setValue={setValue} />
         <CompanyInfo isIndividual={isIndividual} setIsIndividual={setIsIndividual} register={register} watch={watch} />
         <StudentList registerType={registerType} setRegisterType={setRegisterType} />
-        <StudentInfo
-          register={register}
-          setValue={setValue}
-          registerType={registerType}
-          setRegisterType={setRegisterType}
-          isIndividualCheck={isIndividualCheck}
-          setIsIndividualCheck={setIsIndividualCheck}
-        />
-        <Button variant="contained" onClick={onClickEnroll} fullWidth sx={{ mb: 2 }}>
-          신청하기
-        </Button>
-        {registerType === RegisterType.TYPE_ORGANIZATION && (
-          <Button variant="contained" onClick={onClickConfirm} fullWidth>
-            확인
+        <StudentInfo register={register} setValue={setValue} registerType={registerType} setRegisterType={setRegisterType} />
+        <IndividualSummary isIndividualCheck={isIndividualCheck} setIsIndividualCheck={setIsIndividualCheck} />
+        <ConfirmButtonsWrap>
+          <Button variant="contained" onClick={onClickEnroll} fullWidth sx={{ mb: 2 }}>
+            신청하기
           </Button>
-        )}
+          {registerType === RegisterType.TYPE_ORGANIZATION && (
+            <Button variant="contained" onClick={onClickConfirm} fullWidth>
+              확인
+            </Button>
+          )}
+        </ConfirmButtonsWrap>
       </Steb2BodyContainer>
     </Steb2Wrap>
   );
@@ -175,4 +173,11 @@ export function Steb2() {
 
 const Steb2Wrap = styled(Box)``;
 
-const Steb2BodyContainer = styled(Container)``;
+const Steb2BodyContainer = styled(Container)`
+  padding: 0 1rem;
+`;
+
+const ConfirmButtonsWrap = styled(Box)`
+  max-width: 650px;
+  margin: auto;
+`;

@@ -6,6 +6,7 @@ import {
   Button, Chip, FormControl,
   FormControlLabel, FormHelperText,
   FormLabel, InputAdornment,
+  InputLabel,
   MenuItem,
   Radio,
   RadioGroup,
@@ -24,6 +25,7 @@ import { FileUploader } from '@components/ui/FileUploader';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { courseReg, courseCategory, courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { courseCategoryType, courseType, courseSubCategoryType } from '@common/api/courseClass';
+
 
 interface Props {
   mode?: 'upload' | 'modify',
@@ -116,6 +118,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
 
           <FormControl fullWidth className='courseUploadInputBox'>
             {/* <FormControlLabel></FormControlLabel> */}
+            <InputLabel>교육분류</InputLabel>
             <Select
               labelId="courseCategory"
               id="courseCategory"
@@ -123,7 +126,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               onChange={e => {
                 setCourseCategoryType(courseCategory.filter(cate => cate.type === e.target.value)[0].type);
               }}
-              // label="student"
+              label="교육분류"
             >
               {courseCategory.map(item => (
                 <MenuItem key={item.type} value={item.type}>
@@ -134,6 +137,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
           </FormControl>
 
           <FormControl fullWidth className='courseUploadInputBox'>
+            <InputLabel>업종</InputLabel>
             <Select
               labelId="courseSubCategoryType"
               id="courseSubCategoryType"
@@ -141,7 +145,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               onChange={e => {
                 setCourseSubCategoryType(courseSubCategory.filter(cate => cate.type === e.target.value)[0].type);
               }}
-              // label="student"
+              label="업종"
             >
               {courseSubCategory.map(item => (
                 <MenuItem key={item.type} value={item.type}>
@@ -152,6 +156,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
           </FormControl>
 
           <FormControl fullWidth className='courseUploadInputBox'>
+            <InputLabel>과정분류</InputLabel>
             <Select
               labelId="courseType"
               id="courseType"
@@ -159,7 +164,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               onChange={e => {
                 setCourseType(courseReg.filter(cate => cate.type === e.target.value)[0].type);
               }}
-              // label="student"
+              label="과정분류"
             >
               {courseReg.map(item => (
                 <MenuItem key={item.type} value={item.type}>
@@ -188,7 +193,6 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               regName="files"
               onFileChange={handleFileChange}
             >
-              {/* <FileUploader.Label>썸네일 이미지</FileUploader.Label> */}
             </FileUploader>
 
             {fileName

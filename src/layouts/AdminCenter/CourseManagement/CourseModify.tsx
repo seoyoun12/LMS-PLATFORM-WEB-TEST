@@ -33,6 +33,9 @@ export function CourseModify() {
   const { courseSeq, tab } = router.query;
   const { data, error } = courseDetail(Number(courseSeq));
 
+  console.log("CourseModify Data : ", data);
+  console.log("CourseModify courseSeq : ", courseSeq);
+
   const fileHandler = async (files: File[], course: Course, isFileDelete: boolean) => {
     const isFileUpload = files.length > 0;
     if (isFileUpload) {
@@ -58,9 +61,8 @@ export function CourseModify() {
     courseInput: CourseInput;
     seq?: number;
   }) => {
+    console.log("courseInput : ", courseInput);
     try {
-      console.log("courseSeq : ", courseSeq);
-      console.log("courseInput : ", courseInput);
       if (data?.seq) {
         const course = await courseModify({ seq : data.seq, courseInput });
         await fileHandler(files, course.data, isFileDelete);
@@ -68,14 +70,14 @@ export function CourseModify() {
         router.push('/admin-center/course');
       }
     } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
+      console.error(e);
+      snackbar({ variant: "error", message: '업로드에 실패했습니다.' });
+      // snackbar({ variant: 'error', message: e.data.message });
     }
   };
 
   if (error) return <div>...ERROR</div>;
   if (!data) return <Spinner />;
-
-  console.log("CourseModifydata : ", data);
 
   return (
     <Container className={styles.globalContainer}>

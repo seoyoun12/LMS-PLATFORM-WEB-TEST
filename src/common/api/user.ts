@@ -214,7 +214,7 @@ export interface provincailTrafficSafety {
   smsYn: YN;
   // userBusinessTypeOne: businessType;
   // userBusinessTypeTwo: courseSubCategoryType;
-  userRegistrationType: string;
+  userRegistrationType: userRegistrationType;
   username: string;
 }
 

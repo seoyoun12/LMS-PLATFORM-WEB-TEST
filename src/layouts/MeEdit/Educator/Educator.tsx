@@ -13,15 +13,16 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { PasswordChangeModal } from '../PasswordChangeModal/PasswordChangeModal';
 import Paper from '@mui/material/Paper';
-import { modifyProvincialTrafficSafety, useMyUser, userRegistrationType } from '@common/api/user';
+import { getProvincial, modifyProvincialTrafficSafety, useMyUser, userRegistrationType } from '@common/api/user';
 import { useDialog } from '@hooks/useDialog';
 import { YN } from '@common/constant';
 import { useRouter } from 'next/router';
 import { useInput } from '@hooks/useInput';
 import Link from 'next/link';
+import { useSnackbar } from '@hooks/useSnackbar';
 
 // const studentList = [
 //   {
@@ -100,6 +101,7 @@ interface detailCounts {
 }
 
 export function Educator({ locationList }: Props) {
+  const snackbar = useSnackbar();
   const [openPromptDialog, setOpenPromptDialog] = useState(false);
   const { user, error } = useMyUser();
   const [phone, setPhone, onChangePhone] = useInput('');
@@ -114,6 +116,24 @@ export function Educator({ locationList }: Props) {
 
   const dialog = useDialog();
   const router = useRouter();
+
+  useEffect(() => {
+    (async function () {
+      try {
+        const { data } = await getProvincial();
+        console.log(data.phone.slice(0, 3), 'holymmoly');
+        setCompany(data.company);
+        setPhone(data.phone.slice(0, 3));
+        // setPhone2(data.phone.slice(3, 7));
+        // setPhone3(data.phone.slice(7, 11));
+        setEmail(data.email);
+        setLocation(data.userRegistrationType);
+        setSmsChecked(data.smsYn === YN.YES ? true : false);
+      } catch (e: any) {
+        snackbar({ variant: 'error', message: e.data.message });
+      }
+    })();
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -143,7 +163,6 @@ export function Educator({ locationList }: Props) {
         userRegistrationType: location,
         username: user.username,
       };
-      console.log('죽인다 진짜로', data);
 
       await modifyProvincialTrafficSafety(data);
       return router.push('/me');

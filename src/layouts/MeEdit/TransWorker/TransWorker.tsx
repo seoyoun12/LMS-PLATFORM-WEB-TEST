@@ -138,7 +138,7 @@ export function TransWorker({ type, locationList }: Props) {
         console.log(data.phone.slice(0, 3), 'holymmoly');
         setVehicleNumber(data.carNumber);
         setCompany(data.company);
-        setPhone(data.phone.slice(1, 3));
+        setPhone(data.phone.slice(0, 3));
         setPhone2(data.phone.slice(3, 7));
         setPhone3(data.phone.slice(7, 11));
         setSmsChecked(data.smsYn === YN.YES ? true : false);
@@ -148,7 +148,6 @@ export function TransWorker({ type, locationList }: Props) {
       } catch (e: any) {
         snackbar({ variant: 'error', message: e.data.message });
       }
-      setCompany();
     })();
   }, []);
 

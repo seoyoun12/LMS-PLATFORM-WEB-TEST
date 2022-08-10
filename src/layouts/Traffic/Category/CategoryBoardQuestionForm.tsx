@@ -209,7 +209,7 @@ export function CategoryBoardQuestionForm({  mode = "upload", qna, onHandleSubmi
                 <InputLabel>문의유형</InputLabel>
                 <Select
                   value={questionType}
-                  label="문의유형"
+                  label="type"
                   onChange={handleSelectChange}
                 >
                   <MenuItem value={QnaType.TYPE_SIGNUP_OR_SIGNIN}>회원가입/로그인</MenuItem>

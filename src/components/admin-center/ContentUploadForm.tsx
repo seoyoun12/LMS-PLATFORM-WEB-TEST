@@ -21,15 +21,15 @@ import * as React from 'react';
 import { CustomInputLabel } from '@components/ui/InputLabel';
 
 const contentTypeOptions = [
-  { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
+  // { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
   { value: ContentType.CONTENT_MP4, name: 'mp4' },
-  { value: ContentType.CONTENT_EXTERNAL, name: '외부링크' }
+  // { value: ContentType.CONTENT_EXTERNAL, name: '외부링크' }
 ];
 
 const defaultValues = {
   status: ProductStatus.APPROVE,
-  contentType: ContentType.CONTENT_HTML,
-  contentName: ''
+  // contentType: ContentType.CONTENT_HTML,
+  // contentName: ''
 };
 
 export function ContentUploadForm(
@@ -71,6 +71,9 @@ export function ContentUploadForm(
         component="form"
         onSubmit={handleSubmit(onSubmit)}
       >
+
+
+        {/* <FormControl className="form-control" disabled> */}
         <FormControl className="form-control">
           <CustomInputLabel size="small">콘텐츠 타입</CustomInputLabel>
           <Controller
@@ -91,6 +94,9 @@ export function ContentUploadForm(
           />
           <ErrorMessage errors={errors} name="contentType" as={<FormHelperText error />} />
         </FormControl>
+
+
+
 
         <FormControl className="form-control">
           <TextField

@@ -32,32 +32,36 @@ export function CategoryBoard() {
   // },[])
 
   return (
-    <NoticeContainer>
-      <Box sx={{ mb: '30px' }}>
-        <Tabs2
-          tabsConfig={tabsConfig}
-          variant={"fullWidth"}
-          rendering={false}
-          onChange={onChange}
-          value={value}
-          showBorderBottom={true}
-        />
-      </Box>
-      <Box>
-
-        {tabsConfig.map((item)=>{
-          return (
-            <Box hidden={item.value !== value} key={item.value}>
-              {/* key props error */}
-              {item.href}
-            </Box>
-          )
-        })}
-      </Box>
-  
-    </NoticeContainer>
+    <NoticeWrap>
+        <Box sx={{ mb: '30px', maxWidth:'1200px' ,margin:'auto' }}>
+          <Tabs2
+              tabsConfig={tabsConfig}
+              variant={"fullWidth"}
+              rendering={false}
+              onChange={onChange}
+              value={value}
+              showBorderBottom={true}
+              />
+        </Box>
+        <Box sx={{borderBottom: '1px solid #2A2A2A', position:'relative' , top:'-1px'}} ></Box>
+      <NoticeContainer>
+        <Box mt={6}>
+          {tabsConfig.map((item)=>{
+            return (
+              <Box hidden={item.value !== value} key={item.value}>
+                {/* key props error */}
+                {item.href}
+              </Box>
+            )
+          })}
+        </Box>
+      </NoticeContainer>
+    </NoticeWrap>
   )
 }
-
+const NoticeWrap = styled(Box)`
+  padding-top:4rem;
+  background:#E6EDF3;
+`
 const NoticeContainer = styled(Container)`
 `

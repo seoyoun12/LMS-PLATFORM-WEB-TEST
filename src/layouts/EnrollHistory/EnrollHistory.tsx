@@ -1,3 +1,4 @@
+import { useCourseUser } from '@common/api/courseUser';
 import { useMyUser } from '@common/api/user';
 import { ContentCard, Spinner } from '@components/ui';
 import styled from '@emotion/styled';
@@ -6,38 +7,33 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 export function EnrollHistory() {
-  const router = useRouter();
-  const { user, error } = useMyUser();
-  console.log(user);
-  if (!user) return <Spinner />;
+  // const router = useRouter();
+  // const { data, error, mutate } = useCourseUser();
+  // console.log(data, data[0].seq);
+  // if (!data) return <Spinner />;
   return (
     <Container>
       <EnrollHistoryWrap>
-        <Typography variant="h5" fontWeight="bold">
+        폐강
+        {/* <Typography variant="h5" fontWeight="bold">
           온라인 교육 신청내역
         </Typography>
         <Typography>온라인 교육 신청내역을 확인하실 수 있습니다.</Typography>
         <Grid container rowSpacing={4} columnSpacing={4} columns={{ xs: 1, sm: 2, md: 4, lg: 4 }} mt={1}>
-          {user.learningCourses.map(item => (
-            <Grid item xs={1} sm={1} md={1} lg={1} key={item.courseClassSeq}>
+          {data.map(item => (
+            <Grid item xs={1} sm={1} md={1} lg={1} key={item.seq}>
               <Box
-                // href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}
                 onClick={() => {
-                  // if (!item.lessons[0]?.seq) {
                   return window.alert('수업이 존재하지 않습니다. 관리자에게 문의해주세요.');
-                  // }
-                  // router.push(`/course/${res.seq}/lesson/${res.lessons[0].seq}`);
                 }}
               >
                 <ContentCard
-                  title={item.courseTitle}
-                  content1={item.leftDays === 0 ? '오늘마감 입니다!' : `${item.leftDays}일 남음`}
-                  content2={`진도율 ${item.progress}%`}
+                  title={'개발중'}
                 />
               </Box>
             </Grid>
           ))}
-        </Grid>
+        </Grid> */}
       </EnrollHistoryWrap>
     </Container>
   );

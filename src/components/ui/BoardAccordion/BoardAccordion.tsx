@@ -62,7 +62,7 @@ export function BoardAccordion({ boardAccordionList }: { boardAccordionList: Boa
                     }}
                   >
                     <ListItemButton>
-                      <ListItemText primary={name} />
+                      <BoardListItemText primary={name} />
                     </ListItemButton>
                   </ListItem>
                 ))}
@@ -92,4 +92,8 @@ const BoardAccordionDetails = styled(AccordionDetails)`
   background-color: #e0e0e0;
   padding: 0px;
   margin-bottom: 30px;
+`
+
+const BoardListItemText = styled(ListItemText)`
+  white-space: pre-wrap;
 `

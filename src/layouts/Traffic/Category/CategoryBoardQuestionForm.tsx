@@ -142,6 +142,10 @@ export function CategoryBoardQuestionForm({  mode = "upload", qna, onHandleSubmi
     const qnaInput = {
       ...qna, phone : phone01 + phone02 + phone03, type : questionType
     };
+
+    console.log("1대1문의 qnaInput : ", qnaInput);
+
+    
     onHandleSubmit({ qnaInput, files, isFileDelete });
   };
 

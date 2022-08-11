@@ -89,9 +89,9 @@ export function QnaAccordion({ qnaAccordionList } : { qnaAccordionList : QnaBoar
                         <TableCellLeft align="center" sx={{fontSize: "1.2rem", fontWeight: "bold"}}>질문</TableCellLeft>
                         <TableCellRight>
                           <QuestionBoardBox display="flex" flexDirection={"column"} width="100%" >
-                            <ListItemText primary={secondContent} className="SecondContent"/>
-                            <ListItemText primary={firstContent} className="FirstContent"/>
-                            <ListItemText primary={thirdContent} className="ThirdContent"/>
+                            <QuestionBoardListItemText primary={secondContent} className="SecondContent"/>
+                            <QuestionBoardListItemText primary={firstContent} className="FirstContent"/>
+                            <QuestionBoardListItemText primary={thirdContent} className="ThirdContent"/>
                           </QuestionBoardBox>
                         </TableCellRight>
                       </TableRow>
@@ -100,8 +100,8 @@ export function QnaAccordion({ qnaAccordionList } : { qnaAccordionList : QnaBoar
                         <TableCellLeft align="center" sx={{fontSize: "1.2rem", fontWeight: "bold", backgroundColor: "white"}}>답변</TableCellLeft>
                         <TableCellRight>
                           <AnswerBoardBox display="flex" flexDirection={"column"} width="100%" >
-                            <ListItemText primary={fourthContent} className="FourthContent"/>
-                            <ListItemText primary={fifthContent} className="FifthContent"/>
+                            <QuestionBoardListItemText primary={fourthContent} className="FourthContent"/>
+                            <QuestionBoardListItemText primary={fifthContent} className="FifthContent"/>
                           </AnswerBoardBox>
                         </TableCellRight>
                         </TableRow>
@@ -134,6 +134,10 @@ const BoardBox = styled(Box)`
   font-size: 1.3rem;
   width: 100%;
 }
+`
+
+const QuestionBoardListItemText = styled(ListItemText)`
+  white-space: pre-wrap;
 `
 
 

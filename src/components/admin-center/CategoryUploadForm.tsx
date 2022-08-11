@@ -25,10 +25,11 @@ interface Props {
   mode? : 'upload' | 'modify',
   category?: CategoryBoardInput,
   courseSeq?: number;
-  onHandleSubmit: ({ categoryBoardInput, files, categorySeq, isFileDelete , courseSeq } :{
+  // onHandleSubmit: ({ categoryBoardInput, files, categorySeq, isFileDelete , courseSeq } :{
+  onHandleSubmit: ({ categoryBoardInput, files, categorySeq, courseSeq } :{
     categoryBoardInput: CategoryBoardInput;
     files: File[];
-    isFileDelete: boolean;
+    // isFileDelete: boolean;
     categorySeq?: number;
     courseSeq?: number;
   }) => void
@@ -36,7 +37,6 @@ interface Props {
 
 interface FormType extends CategoryBoardInput {
   files: File[];
-  isFileDelete:boolean;
 }
 
 const defaultValues = {
@@ -53,7 +53,7 @@ const defaultValues = {
 
 export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }: Props) {
   const editorRef = useRef<EditorType>(null);
-  const [ isFileDelete, setIsFileDelete ] = useState(false);
+  // const [ isFileDelete, setIsFileDelete ] = useState(false);
   const [ fileName, setFileName ] = useState<string | null>(null);
 
   const {
@@ -62,9 +62,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
     formState: { errors },
     control,
     reset,
-    resetField, 
-    setValue,
-    watch
+    resetField
   } = useForm<FormType>({ defaultValues });
 
   useEffect(() => {
@@ -79,19 +77,16 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setFileName(files[0].name);
-    setIsFileDelete(false);
+    // setIsFileDelete(false);
   };
 
-  const handleDeleteFile = () => {
-    console.log("12 : ",  watch().files)
-    // resetField('files');
-    setValue('files' , [])
-    console.log("123 : ",  watch().files)
+  const handleDeleteFile = async () => {
+    resetField('files');
     setFileName(null);
-    setIsFileDelete(true);
+    // setIsFileDelete(true);
   };
 
-  const onSubmit: SubmitHandler<FormType> = async ({files, isFileDelete , ...category }, event) => {
+  const onSubmit: SubmitHandler<FormType> = async ({files, ...category }, event) => {
     event?.preventDefault();
 
     if (!editorRef.current) return;
@@ -100,7 +95,8 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
       ...category,
       content: markdownContent,
     };
-    onHandleSubmit({ categoryBoardInput, files, isFileDelete });
+    // onHandleSubmit({ categoryBoardInput, files, isFileDelete });
+    onHandleSubmit({ categoryBoardInput, files });
   };
 
   
@@ -110,7 +106,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
       <Box
         component="form"
         encType="multipart/form-data"
-        onSubmit={handleSubmit(({...rest})=>onSubmit({...rest , isFileDelete}))}
+        onSubmit={handleSubmit(onSubmit)}
         noValidate
         className={boxStyles}
       >

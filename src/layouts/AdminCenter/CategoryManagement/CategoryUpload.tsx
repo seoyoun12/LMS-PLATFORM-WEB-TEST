@@ -37,6 +37,9 @@ export function CategoryUpload() {
     }
   };
 
+  // if (error) return <div>...ERROR</div>;
+  // if (!data) return <Spinner />;
+
   return (
     <Container className={styles.globalContainer}>
       <CategoryUploadForm

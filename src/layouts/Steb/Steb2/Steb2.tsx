@@ -80,6 +80,7 @@ export function Steb2() {
           username: watch().firstIdentityNumber + secondIdentityNumber,
           password: watch().firstIdentityNumber + secondIdentityNumber,
           name: watch().name,
+          email: '',
           regCategory: 'TYPE_TRANS_EDU',
           phone: firstPhone + secondPhone + thirdPhone,
           emailYn: YN.NO,

@@ -88,6 +88,11 @@ export function Drawer({ children }: { children: ReactNode }) {
           href: '/admin-center/user',
           isActive: router.pathname === '/admin-center/user',
         },
+        {
+          name: '회원 생성',
+          href: '/admin-center/user/create-user',
+          isActive: router.pathname === '/admin-center/user/create-user',
+        },
       ],
       icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
     },
@@ -119,6 +124,17 @@ export function Drawer({ children }: { children: ReactNode }) {
           name: '배너 등록',
           href: '/admin-center/banner/upload',
           isActive: router.pathname === '/admin-center/banner/upload',
+        },
+      ],
+      icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
+    },
+    {
+      name: '메인화면관리',
+      children: [
+        {
+          name: '메인화면 목록',
+          href: '/admin-center/main-display',
+          isActive: router.pathname === '/admin-center/main-display',
         },
       ],
       icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,

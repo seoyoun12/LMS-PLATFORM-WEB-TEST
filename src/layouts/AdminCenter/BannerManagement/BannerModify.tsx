@@ -119,7 +119,7 @@ export function BannerModify() {
     <BannnerUploadContainer>
       <Box className="form-box" component="form" onSubmit={handleSubmit(onSubmit)}>
         <Typography variant="h5" fontWeight="bold">
-          배너 등록
+          배너 변경
         </Typography>
         <TextField placeholder="배너 제목" {...register('title', { required: '배너이름을 입력해주세요.' })} />
         <TextField placeholder="콘텐츠 내용" {...register('content', { required: '콘텐츠를 입력해주세요.' })} />{' '}

@@ -133,21 +133,17 @@ export function TransWorker({ type, locationList }: Props) {
 
   useEffect(() => {
     (async function () {
-      try {
-        const { data } = await getTransport();
-        console.log(data.phone.slice(0, 3), 'holymmoly');
-        setVehicleNumber(data.carNumber);
-        setCompany(data.company);
-        setPhone(data.phone.slice(0, 3));
-        setPhone2(data.phone.slice(3, 7));
-        setPhone3(data.phone.slice(7, 11));
-        setSmsChecked(data.smsYn === YN.YES ? true : false);
-        setOccupation1(data.userBusinessTypeOne);
-        setOccupation2(data.userBusinessTypeTwo);
-        setVehicleRegi(data.userRegistrationType);
-      } catch (e: any) {
-        snackbar({ variant: 'error', message: e.data.message });
-      }
+      const { data } = await getTransport();
+      console.log(data.phone.slice(0, 3), 'holymmoly');
+      setVehicleNumber(data.carNumber);
+      setCompany(data.company);
+      setPhone(data.phone.slice(0, 3));
+      setPhone2(data.phone.slice(3, 7));
+      setPhone3(data.phone.slice(7, 11));
+      setSmsChecked(data.smsYn === YN.YES ? true : false);
+      setOccupation1(data.userBusinessTypeOne);
+      setOccupation2(data.userBusinessTypeTwo);
+      setVehicleRegi(data.userRegistrationType);
     })();
   }, []);
 

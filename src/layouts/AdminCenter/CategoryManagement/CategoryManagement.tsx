@@ -4,7 +4,7 @@ import { useSnackbar } from "@hooks/useSnackbar";
 import { Button, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Table } from "@components/ui";
+import { Spinner, Table } from "@components/ui";
 import dateFormat from "dateformat";
 import styled from "@emotion/styled";
 
@@ -34,39 +34,22 @@ const tabsConfig = [
   {name: "학습방법", value: "TYPE_GUIDE_EDU_LEARNING "},
 ]
 
-
-
-
 export function CategoryManagement() {
 
   const router = useRouter();
   const snackbar = useSnackbar();
   const dialog = useDialog();
-
   const [ page, setPage ] = useState(0);
   const [ seq, setSeq ] = useState<number | null>(null);
-  const [ modifyPage, setModifyPage ] = useState();
-
   const [ typeValue, setTypeValue ] = useState("TYPE_NOTICE");
-
-
   const { data, error, mutate } = categoryBoardList({ 
     boardType: typeValue, 
-    // TYPE_NOTICE -> 공지사항
-    // TYPE_FAQ -> 자주묻는질문
-    // TYPE_GUIDE_AUTH -> 회원가입 및 로그인
-    // TYPE_GUIDE_EDU_REGI -> 교육신청방법
-    // TYPE_GUIDE_EDU_LEARNING -> 학습방법
-
-    // boardType: String(BoardType),
     page 
   }); 
-
 
   // 수정
   const onClickmodifyCategoryBoard = async (seq: number) => {
     setSeq(seq);
-    // const modifyData = (data?.content.find((item) => item.seq === seq))
     router.push(`/admin-center/category/modify/${seq}`);
     mutate();
   }
@@ -105,6 +88,8 @@ export function CategoryManagement() {
     });
   };
 
+  if (error) return <div>...ERROR</div>;
+  if (!data) return <Spinner />;
   
   return (
     <div>

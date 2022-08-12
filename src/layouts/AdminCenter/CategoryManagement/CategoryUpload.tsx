@@ -4,7 +4,7 @@ import { CategoryUploadForm } from '@layouts/AdminCenter';
 import { CategoryBoard, CategoryBoardInput, uploadCategoryBoard, useCategoryBoard } from '@common/api/categoryBoard';
 import { BbsType, uploadFile } from '@common/api/adm/file';
 import { useSnackbar } from '@hooks/useSnackbar';
-import router, { useRouter } from 'next/router';
+import router from 'next/router';
 
 export function CategoryUpload() {
 
@@ -13,9 +13,8 @@ export function CategoryUpload() {
   const fileHandler = async (files: File[], category: CategoryBoard) => {
     const isFileUpload = files.length > 0;
     if (isFileUpload) {
-
       await uploadFile({
-        fileTypeId: category.seq, // undefined
+        fileTypeId: category.seq,
         fileType: BbsType.TYPE_POST_NOTICE || BbsType.TYPE_POST_FAQ || BbsType.TYPE_POST_GUIDE_AUTH || BbsType.TYPE_POST_GUIDE_EDU_REGI || BbsType.TYPE_POST_GUIDE_EDU_LEARNING , // Type Setting 필요
         files,
       });
@@ -36,9 +35,6 @@ export function CategoryUpload() {
       snackbar({ variant: "error", message: '업로드에 실패했습니다.' });
     }
   };
-
-  // if (error) return <div>...ERROR</div>;
-  // if (!data) return <Spinner />;
 
   return (
     <Container className={styles.globalContainer}>

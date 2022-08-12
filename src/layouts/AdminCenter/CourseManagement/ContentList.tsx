@@ -9,11 +9,14 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { ContentConnectModal } from '@components/admin-center/ContentConnectModal';
-import { useCourse } from '@common/api/course';
+import { courseDetail, useCourse } from '@common/api/course';
 import { ContentTypeHuman } from '@common/api/content';
 import { Link } from '@components/common';
 
-const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
+const headRows: {
+  name: string;
+  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+}[] = [
   { name: 'ID', align: 'left' },
   { name: '콘텐츠명', align: 'right' },
   { name: '콘텐츠 유형', align: 'right' },
@@ -23,17 +26,23 @@ const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' |
 
 export function ContentList() {
   const router = useRouter();
-  const [ openModal, setOpenModal ] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const { courseSeq } = router.query;
-  const { course, courseError, mutate } = useCourse(Number(courseSeq));
+  // const { course, courseError, mutate } = useCourse(Number(courseSeq));
+  const { data, error, mutate } = courseDetail(Number(courseSeq));
+
+  // console.log(' course : ', course);
+  console.log(' data : ', data);
+  console.log(' data.content : ', data.content);
 
   const handleCloseModal = async () => {
     setOpenModal(false);
     await mutate();
   };
 
-  if (courseError) return <div>error</div>;
-  if (!course) return <Spinner />;
+  if (error) return <div>error</div>;
+  if (!data) return <Spinner />;
+
   return (
     <Container className={styles.globalContainer}>
       <ContentConnectButton
@@ -49,35 +58,29 @@ export function ContentList() {
       <Table size="small">
         <TableHead>
           <TableRow>
-            {headRows.map(({ name, align }) =>
-              <TableCell key={name} align={align}>{name}</TableCell>
-            )}
+            {headRows.map(({ name, align }) => (
+              <TableCell key={name} align={align}>
+                {name}
+              </TableCell>
+            ))}
             <TableCell>{}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {course.content
-            ? <TableRow hover>
-              <TableCell align="left">
-                {course.content.seq}
-              </TableCell>
+          {data ? (
+            <TableRow hover>
+              <TableCell align="left">{data.content.seq}</TableCell>
               <TableCell align="right">
-                <Link href={`/admin-center/content/modify/${course.content.seq}`}>
-                  {course.content.contentName}
+                <Link href={`/admin-center/content/modify/${data.content.seq}`}>
+                  {data.content.contentName}
                 </Link>
               </TableCell>
-              <TableCell align="right">
-                {ContentTypeHuman[course.content.contentType]}
-              </TableCell>
-              <TableCell align="right">
-                {course.content.createdDtime}
-              </TableCell>
-              <TableCell align="right">
-                {course.content.status}
-              </TableCell>
+              {/* <TableCell align="right">{ContentTypeHuman[data.courseName]}</TableCell> */}
+              <TableCell align="right">{data.content.contentType}</TableCell>
+              <TableCell align="right">{data.content.createdDtime}</TableCell>
+              <TableCell align="right">{data.content.status}</TableCell>
             </TableRow>
-            : null
-          }
+          ) : null}
         </TableBody>
       </Table>
 

@@ -8,21 +8,14 @@ import styles from '@styles/common.module.scss';
 import { Spinner } from '@components/ui';
 
 export function CategoryModify() {
-  
   const router = useRouter();
   const snackbar = useSnackbar();
   const categorySeq = router.query;
   const { data, error } = useCategoryBoard(Number(categorySeq.categorySeq));
 
-  console.log("categorySeq : ", categorySeq)
+  console.log('categorySeq : ', categorySeq);
 
-  const handleSubmit = async ({
-    files,
-    categoryBoardInput,
-  } : {
-    files: File[];
-    categoryBoardInput: CategoryBoardInput;
-  }) => {
+  const handleSubmit = async ({ files, categoryBoardInput }: { files: File[]; categoryBoardInput: CategoryBoardInput }) => {
     try {
       if (data?.seq) {
         await modifyCategoryBoard({ seq: data?.seq, categoryBoardInput });
@@ -32,32 +25,44 @@ export function CategoryModify() {
       }
     } catch (e: any) {
       console.error(e);
-      snackbar({ variant: 'error', message: "수정에 실패했습니다." });
+      snackbar({ variant: 'error', message: '수정에 실패했습니다.' });
     }
   };
 
-
-
   const fileHandler = async (files: File[]) => {
-
     if (files == undefined) {
       await deleteFile({
         fileTypeId: data?.seq,
-        fileType: BbsType.TYPE_POST_NOTICE || BbsType.TYPE_POST_FAQ || BbsType.TYPE_POST_GUIDE_AUTH || BbsType.TYPE_POST_GUIDE_EDU_REGI || BbsType.TYPE_POST_GUIDE_EDU_LEARNING , // Type Setting 필요
+        fileType:
+          BbsType.TYPE_POST_NOTICE ||
+          BbsType.TYPE_POST_FAQ ||
+          BbsType.TYPE_POST_GUIDE_AUTH ||
+          BbsType.TYPE_POST_GUIDE_EDU_REGI ||
+          BbsType.TYPE_POST_GUIDE_EDU_LEARNING, // Type Setting 필요
         fileSeqList: data.s3Files.map(v => v.seq),
       });
     } else if (files.length > 0) {
       await deleteFile({
         fileTypeId: data?.seq,
-        fileType: BbsType.TYPE_POST_NOTICE || BbsType.TYPE_POST_FAQ || BbsType.TYPE_POST_GUIDE_AUTH || BbsType.TYPE_POST_GUIDE_EDU_REGI || BbsType.TYPE_POST_GUIDE_EDU_LEARNING , // Type Setting 필요
-        fileSeqList: data.s3Files.map(v => v.seq)
+        fileType:
+          BbsType.TYPE_POST_NOTICE ||
+          BbsType.TYPE_POST_FAQ ||
+          BbsType.TYPE_POST_GUIDE_AUTH ||
+          BbsType.TYPE_POST_GUIDE_EDU_REGI ||
+          BbsType.TYPE_POST_GUIDE_EDU_LEARNING, // Type Setting 필요
+        fileSeqList: data.s3Files.map(v => v.seq),
       });
       await uploadFile({
         fileTypeId: data?.seq,
-        fileType: BbsType.TYPE_POST_NOTICE || BbsType.TYPE_POST_FAQ || BbsType.TYPE_POST_GUIDE_AUTH || BbsType.TYPE_POST_GUIDE_EDU_REGI || BbsType.TYPE_POST_GUIDE_EDU_LEARNING , // Type Setting 필요
-        files
+        fileType:
+          BbsType.TYPE_POST_NOTICE ||
+          BbsType.TYPE_POST_FAQ ||
+          BbsType.TYPE_POST_GUIDE_AUTH ||
+          BbsType.TYPE_POST_GUIDE_EDU_REGI ||
+          BbsType.TYPE_POST_GUIDE_EDU_LEARNING, // Type Setting 필요
+        files,
       });
-    } 
+    }
   };
 
   if (error) return <div>...ERROR</div>;

@@ -14,7 +14,7 @@ import { Link } from '@components/common';
 import { signUp } from '@common/api/auth';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { YN } from '@common/constant';
-import {SignupParams} from "@common/api/auth/signUp";
+import { SignupParams } from '@common/api/auth/signUp';
 
 export function SignUp() {
   const snackbar = useSnackbar();
@@ -26,7 +26,6 @@ export function SignUp() {
     const username = data.get('username') as string;
     const password = data.get('password') as string;
 
-
     console.log({
       name: data.get('name'),
       username: data.get('username'),
@@ -37,10 +36,11 @@ export function SignUp() {
       name,
       password,
       username,
+      email: '',
       emailYn: YN.NO,
       smsYn: YN.NO,
-      phone: "",
-      regCategory: "",
+      phone: '',
+      regCategory: '',
     };
 
     if (!!name && !!username && !!password) {
@@ -57,7 +57,7 @@ export function SignUp() {
       component="main"
       maxWidth="xs"
       sx={{
-        marginBottom: 8
+        marginBottom: 8,
       }}
     >
       <CssBaseline />
@@ -78,49 +78,19 @@ export function SignUp() {
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="name"
-                label="이름"
-                name="name"
-                autoComplete="name"
-              />
+              <TextField required fullWidth id="name" label="이름" name="name" autoComplete="name" />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="username"
-                label="이메일"
-                name="username"
-                autoComplete="username"
-              />
+              <TextField required fullWidth id="username" label="이메일" name="username" autoComplete="username" />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="비밀번호"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-              />
+              <TextField required fullWidth name="password" label="비밀번호" type="password" id="password" autoComplete="new-password" />
             </Grid>
             <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="이용약관 동의"
-              />
+              <FormControlLabel control={<Checkbox value="allowExtraEmails" color="primary" />} label="이용약관 동의" />
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             회원가입
           </Button>
           <Grid container justifyContent="flex-end">

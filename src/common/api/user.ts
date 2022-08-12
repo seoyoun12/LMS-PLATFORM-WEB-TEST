@@ -174,6 +174,7 @@ export async function modifyMyUserPassword({ currentPassword, newPassword }: { c
   });
 }
 
+// deparcated
 export async function transWorker({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) {
   return await PUT(`/user/myinfo/modify/password`, {
     currentPw: currentPassword,
@@ -205,6 +206,7 @@ export interface provincailTrafficSafety {
   // username: string;
 
   // carNumber: string;
+  userSeq: number;
   company: string;
   email: string;
   name: string;
@@ -212,8 +214,12 @@ export interface provincailTrafficSafety {
   smsYn: YN;
   // userBusinessTypeOne: businessType;
   // userBusinessTypeTwo: courseSubCategoryType;
-  userRegistrationType: string;
+  userRegistrationType: userRegistrationType;
   username: string;
+}
+
+export function getProvincial() {
+  return GET<{ data: provincailTrafficSafety }>(`/user/provincial`);
 }
 
 export async function modifyProvincialTrafficSafety(info: provincailTrafficSafety) {
@@ -230,6 +236,10 @@ interface modifTransWorker {
   userBusinessTypeTwo: courseSubCategoryType; // 구분
   userRegistrationType: string; //지역
   // userSeq: number;
+}
+
+export function getTransport() {
+  return GET<{ data: modifTransWorker }>(`/user/transport`);
 }
 
 export async function modifTransWorker(info: modifTransWorker) {

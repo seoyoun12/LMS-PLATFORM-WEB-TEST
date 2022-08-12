@@ -6,20 +6,14 @@ import { signUp } from '@common/api';
 import { regCategoryType } from '@common/api/user';
 import { YN } from '@common/constant';
 import { ChangeEvent, useState } from 'react';
-
-// const passwordRegex =
-//   /^(?:[a-zA-Z]+[0-9]+$)|(?:[a-zA-Z]+[^a-zA-Z0-9\n]+$)|(?:[0-9]+[a-zA-Z]+$)|(?:[0-9]+[^a-zA-Z0-9\n]+$)|(?:[^a-zA-Z0-9\n]+[a-zA-Z0-9]+$)/;
-
-// const passwordRegex = /[a-zA-z]+[0-9]+[\[\]\{\}\/,.<>;:\'\"`~!@#$%^&*\(\)-_=+\\]/;
-const passwordRegex = /[a-zA-z0-9\[\]\{\}\/,.<>;:\'\"`~!@#$%^&*\(\)-_=+\\]/;
-const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-const phoneRegex = /[0-9]$/;
+import { emailRegex, passwordRegex, phoneRegex } from '@utils/inputRegexes';
 
 interface Props {
   handleStep: (moveNumber: number) => void;
+  resName: string;
 }
 
-export function Step2({ handleStep }: Props) {
+export function Step2({ handleStep, resName }: Props) {
   const [nameErr, setNameErr] = useState(false);
   const [usernameErr, setUserNameErr] = useState(false);
   const [passwordErr, setPasswordErr] = useState(false);
@@ -30,19 +24,20 @@ export function Step2({ handleStep }: Props) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-    const name = data.get('name') as string;
+    // const name = data.get('name') as string;
     const username = data.get('username') as string;
     const password = data.get('password') as string;
     const email = data.get('email') as string;
     const phone = data.get('phone') as string;
     console.log(phone);
+    console.log(resName);
 
     if (nameErr || usernameErr || passwordErr || emailErr || phoneErr) return;
 
-    if (!!name && !!username && !!password) {
+    if (!!resName && !!username && !!password) {
       try {
         await signUp({
-          name,
+          name: resName,
           username,
           password,
           email,
@@ -104,7 +99,9 @@ export function Step2({ handleStep }: Props) {
               id="name"
               // label="이름"
               name="name"
-              onChange={onChangeName}
+              value={resName}
+              disabled
+              // onChange={onChangeName}
               error={nameErr}
               autoComplete="name"
               autoFocus

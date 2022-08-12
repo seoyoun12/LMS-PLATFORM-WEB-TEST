@@ -15,7 +15,7 @@ const nextConfig = {
     includePaths: [path.join(__dirname, 'styles')],
   },
   images: {
-    domains: ['picsum.photos', 'dnkwhodfjmev10929056.cdn.ntruss.com'],
+    domains: ['picsum.photos', 'dnkwhodfjmev10929056.cdn.ntruss.com','cn-lms-storage.cdn.gov-ntruss.com'],
   },
   experimental: {
     forceSwcTransforms: true,
@@ -23,21 +23,14 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  webpack: {
-    rules: [
-      {
-        test: /\.(js|jsx|ts|tsx)$/,
-        use: [
-            {
-              loader: 'babel-loader',
-            },
-        ],
-        // Exclude the untransformed packages from the exclude rule here
-        exclude: /node_modules\/(\@[a-ln-z0-9][a-z0-9\-._]+|[a-z0-9\-._]+)/,
-        // exclude: /node_modules/,
-      },
-    ],
-  }
+  webpack: config => {
+    config.module.rules.push({
+      test: /\.svg$/,
+      issuer: /\.[jt]sx?$/,
+      use: ['@svgr/webpack'],
+    });
+    return config;
+  },
 };
 
 module.exports = withTM(nextConfig);

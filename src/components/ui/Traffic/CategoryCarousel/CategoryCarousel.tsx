@@ -6,7 +6,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import { useBannerList } from '@common/api/banner';
 import { Spinner } from '@components/ui/Spinner';
@@ -21,6 +21,7 @@ interface Datas {
 export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) => {
   const [firstSwiper, setFirstSwiper] = useState();
   const [secondSwiper, setSecondSwiper] = useState();
+  const [swiperPageNumber, setSwiperPageNumber] = useState(0);
   // const { data, error } = useBannerList();
   const { data } = useBannerList();
   // console.log(data);
@@ -54,8 +55,17 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
   if (!deprecated?.length) return <div>loading</div>;
   return (
     <Slider>
-      <SliderLayout style={isMobile ? { flexDirection: 'column-reverse' } : { flexDirection: 'row' }}>
+      <ImgBox width="100%" height="100%">
+        <ImgOpacity></ImgOpacity>
+        <ImgBack>
+          <Image src={data[swiperPageNumber].s3Files[0].path} layout="fill" />
+        </ImgBack>
+      </ImgBox>
+      <SliderLayout
+        style={isMobile ? { flexDirection: 'column-reverse' } : { flexDirection: 'row' }}
+      >
         <Swiper
+          className="swiper-z-index"
           modules={[Navigation, Pagination, Controller, Autoplay]}
           spaceBetween={300}
           slidesPerView={1}
@@ -66,33 +76,41 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
           // }}
           onSwiper={(swiper: any) => setFirstSwiper(swiper)}
           controller={{ control: secondSwiper }}
-          style={{ maxWidth: '676px', width: '100%', minHeight: '370px', marginLeft: '0', top: '32px' }}
+          style={{
+            maxWidth: '640px',
+            width: '100%',
+            minHeight: '360px',
+            marginLeft: '0',
+            top: '32px',
+          }}
         >
-          {deprecated.map((data) => {
-            return (
-              <SwiperSlide key={data.seq}>
-                {isMobile ? (
-                  <Image width="100%" height="192px" src={data.img} alt="" style={{ paddingRight: '16px', objectFit: 'cover' }} />
-                ) : (
-                  <Image src={data.img} alt="" layout="fill" objectFit="cover" style={{ paddingRight: '16px' }} />
-                )}
-              </SwiperSlide>
-            );
-          })}
           {data.map(item => (
             <SwiperSlide // key props error
               key={item.seq}
-            > 
+            >
               {isMobile ? (
-                <Image width="100%" height="192px" src={item.s3Files[0].path} alt="" style={{ paddingRight: '16px', objectFit: 'cover' }} />
+                <Image
+                  width="100%"
+                  height="192px"
+                  src={item.s3Files[0].path}
+                  alt=""
+                  style={{ paddingRight: '16px', objectFit: 'cover' }}
+                />
               ) : (
-                <Image src={item.s3Files[0]?.path} alt="" layout="fill" objectFit="cover" style={{ paddingRight: '16px' }} />
+                <Image
+                  src={item.s3Files[0]?.path}
+                  alt=""
+                  layout="fill"
+                  objectFit="cover"
+                  style={{ paddingRight: '16px' }}
+                />
               )}
             </SwiperSlide>
           ))}
         </Swiper>
 
         <Swiper
+          className="swiper-z-index"
           modules={[Navigation, Pagination, Controller, Autoplay]}
           spaceBetween={300}
           slidesPerView={1}
@@ -105,6 +123,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
             type: 'custom',
             el: paginationRef.current,
             renderCustom: function (swiper, current, total) {
+              setSwiperPageNumber(current - 1);
               return `
                 <span>${chkPages(current)}</span>
                 <span style="font-size: 12px; margin: 0 4px">|</span>
@@ -141,18 +160,6 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
                 }
           }
         >
-          {deprecated.map((data) => {
-            return (
-              <SwiperSlide key={data.seq}>
-                <SlideInfo>
-                  <Typography variant="h1" className="bold-700">
-                    {data.title}
-                  </Typography>
-                  <Typography variant="inherit">{data.title}</Typography>
-                </SlideInfo>
-              </SwiperSlide>
-            );
-          })}
           {data.map(item => (
             <SwiperSlide key={item.seq}>
               <SlideInfo>
@@ -166,7 +173,15 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
 
           {!isMobile ? (
             <div className="" style={{ display: 'flex', alignItems: 'center' }}>
-              <div ref={paginationRef} style={{ display: 'inline-flex', alignItems: 'center', color: '#fff', width: 'initial' }} />
+              <div
+                ref={paginationRef}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  color: '#fff',
+                  width: 'initial',
+                }}
+              />
               <Timeline>
                 <div className="timeline-bg">
                   <div className="timeline-current"></div>
@@ -191,8 +206,31 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
 };
 
 const Slider = styled.div`
-  background: linear-gradient(270.44deg, rgb(255, 122, 0) 0.21%, rgba(255, 122, 0, 0.4) 99.18%) 0% 0% / 100%;
+  position: relative;
+  /* background: linear-gradient(270.44deg, rgb(255, 122, 0) 0.21%, rgba(255, 122, 0, 0.4) 99.18%) 0% 0% / 100%; */
   margin-bottom: 32px;
+  .swiper-z-index {
+    z-index: 111;
+  }
+`;
+const ImgBox = styled(Box)`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+`;
+const ImgOpacity = styled(Box)`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 11;
+`;
+const ImgBack = styled(Box)`
+  width: 100%;
+  height: 100%;
+  transform: scale(1.1);
+  filter: blur(8px);
 `;
 
 const SliderLayout = styled.div`
@@ -201,6 +239,7 @@ const SliderLayout = styled.div`
   display: flex;
   margin: 0 auto;
   padding: 0 20px;
+  z-index: 111;
 `;
 
 const SlideInfo = styled.div`

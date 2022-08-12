@@ -1,5 +1,5 @@
 import { businessType, courseSubCategoryType } from '@common/api/courseClass';
-import { modifTransWorker, useMyUser } from '@common/api/user';
+import { getTransport, modifTransWorker, useMyUser } from '@common/api/user';
 import { YN } from '@common/constant';
 import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
@@ -22,7 +22,7 @@ import {
   Checkbox,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Props {
   type: 'transport' | 'lowfloorbus' | 'educator';
@@ -116,7 +116,6 @@ export const userBusinessTypeTwo = [
 
 export function TransWorker({ type, locationList }: Props) {
   const { user, error } = useMyUser();
-  const [name, setName, onChangeName] = useInput();
   const [occupation1, setOccupation1, onChangeOcc1] = useInput();
   const [occupation2, setOccupation2, onChangeOcc2] = useInput();
   const [showCompany, setShowCompany] = useState(false);
@@ -131,6 +130,22 @@ export function TransWorker({ type, locationList }: Props) {
   const dialog = useDialog();
   const snackbar = useSnackbar();
   const router = useRouter();
+
+  useEffect(() => {
+    (async function () {
+      const { data } = await getTransport();
+      console.log(data.phone.slice(0, 3), 'holymmoly');
+      setVehicleNumber(data.carNumber);
+      setCompany(data.company);
+      setPhone(data.phone.slice(0, 3));
+      setPhone2(data.phone.slice(3, 7));
+      setPhone3(data.phone.slice(7, 11));
+      setSmsChecked(data.smsYn === YN.YES ? true : false);
+      setOccupation1(data.userBusinessTypeOne);
+      setOccupation2(data.userBusinessTypeTwo);
+      setVehicleRegi(data.userRegistrationType);
+    })();
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -160,7 +175,7 @@ export function TransWorker({ type, locationList }: Props) {
         name: user.name, //이름
         phone: phone + phone2 + phone3, //폰번
         smsYn: smsYn, // 동의여부
-        userBusinessTypeOne: occupation1.split('_')[1], //업종
+        userBusinessTypeOne: occupation1, //업종
         userBusinessTypeTwo: occupation2, // 구분
         userRegistrationType: vehicleRegi, //지역
       };
@@ -285,7 +300,7 @@ export function TransWorker({ type, locationList }: Props) {
         </Box> */}
         <Box display={'flex'} alignItems="center" gap="1rem">
           <FormControl sx={{ minWidth: '130px' }}>
-            <Select labelId="phone-type-label" id="phone-type" onChange={onChangePhone1}>
+            <Select labelId="phone-type-label" id="phone-type" onChange={onChangePhone1} value={phone}>
               {phoneList.map(item => (
                 <MenuItem value={item}>{item}</MenuItem>
               ))}

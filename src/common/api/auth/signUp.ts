@@ -10,16 +10,24 @@ export type regCategory =
   | 'ROLE_ADMIN';
 
 export interface SignupParams {
+  // username: string;
+  // password: string;
+  // name: string;
+  // regCategory: regCategory;
+  // birth?: string;
+  // gender?: string;
+  // phone: string | null;
+  // email?: string;
+  // emailYn?: YN;
+  // smsYn?: YN;
+  name: string;
   username: string;
   password: string;
-  name: string;
+  phone: string;
+  smsYn: YN;
   regCategory: regCategory;
-  birth?: string;
-  gender?: string;
-  phone: string | null;
-  email?: string;
-  emailYn?: YN;
-  smsYn?: YN;
+  email: string;
+  emailYn: YN;
 }
 
 export async function signUp(params: SignupParams) {

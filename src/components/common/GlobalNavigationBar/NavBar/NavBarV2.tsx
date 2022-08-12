@@ -109,9 +109,11 @@ const ContentContainer = styled.div`
     left: 0;
     min-height: 300px;
     border-radius: 0 0 4px 4px;
+    transition: min-height 0.2s ease-in-out;
   }
   .hidden {
-    display: none;
+    /* display: none; */
+    min-height: 0;
   }
 `;
 
@@ -126,12 +128,6 @@ const NavContainer = styled.div`
     justify-content: center;
     align-items: center;
     height: 100%;
-  }
-  .hidden {
-    display: none;
-  }
-  .dropdown-box {
-    position: relative;
   }
   .link-wrap {
   }
@@ -148,6 +144,16 @@ const NavContainer = styled.div`
     &:first-of-type {
       margin-left: 0;
     }
+  }
+
+  .dropdown-box {
+    position: relative;
+    height: 300px;
+    transition: height 0.2s ease-in-out;
+    overflow: hidden;
+  }
+  .hidden {
+    height: 0;
   }
 `;
 

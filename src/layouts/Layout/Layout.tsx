@@ -73,6 +73,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     //if you admin, ignore alert.
     if (user && user.roles.some(item => item === UserRole.ROLE_ADMIN)) return;
 
+    //if not needed signin , ignore.
+    if (notNeededLoginPathList.some(path => router.route.includes(path.href))) return;
+
     //if you trans user , block access traffic page
     if (isTraffic && user) {
       const imTrans = user.roles.some(item => item === UserRole.ROLE_TRANS_USER || item === UserRole.ROLE_TRANS_MANAGER);

@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { Link } from '@components/common';
 import CalendarIcon from '/public/assets/svgs/calendarIcon.svg';
-import PromiseIcon from '/public/assets/svgs/calendarIcon.svg';
+import PromiseIcon from '/public/assets/svgs/promiseIcon.svg';
 import StudyIcon from '/public/assets/svgs/studyIcon.svg';
 import CertificateIcon from '/public/assets/svgs/certificateIcon.svg';
 
@@ -52,9 +52,23 @@ export function CategoryCard() {
   return (
     // <ContentContainer className={styles.globalContainer}>
     <Container>
-      <GridWrap container spacing={0} columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }} mt={16} mb={10}>
+      <GridWrap
+        container
+        spacing={0}
+        columns={{ xs: 1, sm: 2, md: 2, lg: 4, xl: 4 }}
+        mt={16}
+        mb={10}
+      >
         {categoryData.map(categoryData => (
-          <GridItem item xs={1} sm={1} md={1} lg={1} key={categoryData.id} cardcolor={categoryData.color}>
+          <GridItem
+            item
+            xs={1}
+            sm={1}
+            md={1}
+            lg={1}
+            key={categoryData.id}
+            cardcolor={categoryData.color}
+          >
             <GridLink href={categoryData.href} underline="none">
               {/* <div className='categoryIcon'/> */}
               <Box display="flex" alignItems="center" justifyContent="center">

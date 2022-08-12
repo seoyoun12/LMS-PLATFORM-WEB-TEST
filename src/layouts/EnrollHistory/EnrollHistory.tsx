@@ -14,7 +14,7 @@ export function EnrollHistory() {
   return (
     <Container>
       <EnrollHistoryWrap>
-        폐강
+        폐강(빌드오류)
         {/* <Typography variant="h5" fontWeight="bold">
           온라인 교육 신청내역
         </Typography>

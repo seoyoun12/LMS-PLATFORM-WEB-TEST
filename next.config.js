@@ -15,7 +15,7 @@ const nextConfig = {
     includePaths: [path.join(__dirname, 'styles')],
   },
   images: {
-    domains: ['picsum.photos', 'dnkwhodfjmev10929056.cdn.ntruss.com'],
+    domains: ['picsum.photos', 'dnkwhodfjmev10929056.cdn.ntruss.com','cn-lms-storage.cdn.gov-ntruss.com'],
   },
   experimental: {
     forceSwcTransforms: true,

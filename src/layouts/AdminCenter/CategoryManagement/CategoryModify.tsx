@@ -11,49 +11,57 @@ export function CategoryModify() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const categorySeq = router.query;
-  const { data, error } = useCategoryBoard(Number(categorySeq.categorySeq)); // 중괄호 비구조화할당
+  const { data, error } = useCategoryBoard(Number(categorySeq.categorySeq));
 
-  const fileHandler = async (files: File[], category: CategoryBoard, isFileDelete: boolean) => {
-    const isFileUpload = files.length < 0;
-    if (isFileUpload) {
-      await uploadFile({
-        fileTypeId: category.seq, // undefined
-        fileType: BbsType.TYPE_POST_NOTICE || BbsType.TYPE_POST_FAQ || BbsType.TYPE_POST_GUIDE_AUTH || BbsType.TYPE_POST_GUIDE_EDU_REGI || BbsType.TYPE_POST_GUIDE_EDU_LEARNING , // Type Setting 필요
-        files,
-      });
-    } else {
-      if (isFileDelete) {
-        await deleteFile({
-          fileTypeId: category.seq,
-          fileType: BbsType.TYPE_POST_NOTICE || BbsType.TYPE_POST_FAQ || BbsType.TYPE_POST_GUIDE_AUTH || BbsType.TYPE_POST_GUIDE_EDU_REGI || BbsType.TYPE_POST_GUIDE_EDU_LEARNING , // Type Setting 필요
-          // fileSeqList: category.s3Files.map(v => v.seq),
-          fileSeqList: category.s3Files.map(v => v.seq),
-        });
-      }
-    }
-  };
+  console.log('categorySeq : ', categorySeq);
 
-  // const handleSubmit = useCallback(async ({ files, isFileDelete, categoryBoardInput, categorySeq } : {
-  const handleSubmit = async ({
-    files,
-    isFileDelete,
-    categoryBoardInput,
-    categorySeq,
-  }: {
-    files: File[];
-    isFileDelete: boolean;
-    categoryBoardInput: CategoryBoardInput;
-    categorySeq?: number;
-  }) => {
+  const handleSubmit = async ({ files, categoryBoardInput }: { files: File[]; categoryBoardInput: CategoryBoardInput }) => {
     try {
       if (data?.seq) {
-        const category = await modifyCategoryBoard({ seq: data?.seq, categoryBoardInput });
-        await fileHandler(files, category.data, isFileDelete); // 파일업로드
+        await modifyCategoryBoard({ seq: data?.seq, categoryBoardInput });
+        await fileHandler(files);
         snackbar({ variant: 'success', message: '수정 되었습니다.' });
         router.push(`/admin-center/category`);
       }
     } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
+      console.error(e);
+      snackbar({ variant: 'error', message: '수정에 실패했습니다.' });
+    }
+  };
+
+  const fileHandler = async (files: File[]) => {
+    if (files == undefined) {
+      await deleteFile({
+        fileTypeId: data?.seq,
+        fileType:
+          BbsType.TYPE_POST_NOTICE ||
+          BbsType.TYPE_POST_FAQ ||
+          BbsType.TYPE_POST_GUIDE_AUTH ||
+          BbsType.TYPE_POST_GUIDE_EDU_REGI ||
+          BbsType.TYPE_POST_GUIDE_EDU_LEARNING, // Type Setting 필요
+        fileSeqList: data.s3Files.map(v => v.seq),
+      });
+    } else if (files.length > 0) {
+      await deleteFile({
+        fileTypeId: data?.seq,
+        fileType:
+          BbsType.TYPE_POST_NOTICE ||
+          BbsType.TYPE_POST_FAQ ||
+          BbsType.TYPE_POST_GUIDE_AUTH ||
+          BbsType.TYPE_POST_GUIDE_EDU_REGI ||
+          BbsType.TYPE_POST_GUIDE_EDU_LEARNING, // Type Setting 필요
+        fileSeqList: data.s3Files.map(v => v.seq),
+      });
+      await uploadFile({
+        fileTypeId: data?.seq,
+        fileType:
+          BbsType.TYPE_POST_NOTICE ||
+          BbsType.TYPE_POST_FAQ ||
+          BbsType.TYPE_POST_GUIDE_AUTH ||
+          BbsType.TYPE_POST_GUIDE_EDU_REGI ||
+          BbsType.TYPE_POST_GUIDE_EDU_LEARNING, // Type Setting 필요
+        files,
+      });
     }
   };
 

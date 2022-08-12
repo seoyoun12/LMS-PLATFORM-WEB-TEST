@@ -25,14 +25,18 @@ export function Step2({ username, handleStepChange }: Props) {
   const isLogin = useIsLoginStatus();
   const [userPageType, setUserPageType] = useRecoilState(pageType);
   const [passwordErr, setPasswordErr] = useState(false);
+  const [confirmPassErr, setConfirmPassErr] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const password = data.get('password') as string;
-    console.log(username, password);
+    const confirmPass = data.get('confirmPass') as string;
+    console.log(username, password, confirmPass);
     if (passwordErr || !username) return;
     if (!password) return window.alert('비밀번호를 입력하세요!');
+    if (!confirmPass) return setConfirmPassErr(true);
+
     try {
       const confirm = await dialog({ title: '변경확인', description: '정말로 패스워드를 변경하시겠습니까?' });
       if (confirm) {
@@ -57,31 +61,43 @@ export function Step2({ username, handleStepChange }: Props) {
       <Typo>PW 변경</Typo>
       <Typography fontWeight="bold">해당 계정의 비밀번호를 변경합니다.</Typography>
       <Box className="find-form" component="form" onSubmit={handleSubmit}>
-        {username && (
-          <FormControl>
-            <TextField
-              placeholder="비밀번호를 입력해주세요"
-              required
-              fullWidth
-              name="password"
-              onChange={onChangePassword}
-              error={passwordErr}
-              // label="비밀번호"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormHelperText sx={{ color: 'red' }}>{passwordErr && '올바른 형식이 아닙니다.'}</FormHelperText>
-            <FormHelperText>
-              <HelperBox>
-                <WarningAmberIcon sx={{ fontSize: '0.75rem' }} />
-                <Typography fontSize={'0.75rem'} fontWeight="bold">
-                  영문 대소문자/숫자/특수문자 3가지 이상 조합, 8자~32자 입니다.
-                </Typography>
-              </HelperBox>
-            </FormHelperText>
-          </FormControl>
-        )}
+        <FormControl>
+          <TextField
+            placeholder="비밀번호를 입력해주세요"
+            required
+            fullWidth
+            name="password"
+            onChange={onChangePassword}
+            error={passwordErr}
+            // label="비밀번호"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+          <FormHelperText sx={{ color: 'red' }}>{passwordErr && '올바른 형식이 아닙니다.'}</FormHelperText>
+          <FormHelperText>
+            <HelperBox>
+              <WarningAmberIcon sx={{ fontSize: '0.75rem' }} />
+              <Typography fontSize={'0.75rem'} fontWeight="bold">
+                영문 대소문자/숫자/특수문자 3가지 이상 조합, 8자~32자 입니다.
+              </Typography>
+            </HelperBox>
+          </FormHelperText>
+        </FormControl>
+        <FormControl>
+          <TextField
+            placeholder="비밀번호확인을 입력해주세요"
+            required
+            fullWidth
+            name="confirmPass"
+            onChange={() => setConfirmPassErr(false)}
+            error={confirmPassErr}
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+          <FormHelperText sx={{ color: 'red' }}>{confirmPassErr && '비밀번호가 일치하지 않습니다.'}</FormHelperText>
+        </FormControl>
 
         <Box display="flex" justifyContent="center" mt={4}>
           <Button variant="contained" type="submit" sx={{ width: '400px' }}>

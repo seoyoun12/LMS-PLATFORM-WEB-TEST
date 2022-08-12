@@ -35,8 +35,9 @@ export interface CourseRes {
 
 // 20220808 Course interface
 export interface Course {
-  contentName: string;
-  contentSeq: number;
+  content: Content;
+  // contentName: string;
+  // contentSeq: number;
   courseBusinessType: businessType;
   courseCategoryType: courseCategoryType;
   courseName: string;

@@ -10,22 +10,20 @@ export interface SignInResponse {
   status: number;
   message: string;
   data: {
-    username:string;
+    username: string;
     accessToken: string;
     refreshToken: string;
-    roles:regCategory[]
+    roles: regCategory[];
   };
-};
-
-export enum loginType{
-  TYPE_TRANS_EDU='TYPE_TRANS_EDU', //운수저상
-  TYPE_TRAFFIC_SAFETY_EDU='TYPE_TRAFFIC_SAFETY_EDU'
 }
 
-export async function signIn(username: string, password: string , loginType: loginType, name?: string  ): Promise<SignInResponse> {
-  return await POST('/auth/signin', {username, password, loginType ,name })
-    .then(onSignInSuccess)
-    .then(getUserLoginHistory);
+export enum loginType {
+  TYPE_TRANS_EDU = 'TYPE_TRANS_EDU', //운수저상
+  TYPE_TRAFFIC_SAFETY_EDU = 'TYPE_TRAFFIC_SAFETY_EDU',
+}
+
+export async function signIn(username: string, password: string, loginType: loginType, name?: string): Promise<SignInResponse> {
+  return await POST('/auth/signin', { username, password, loginType, name }).then(onSignInSuccess).then(getUserLoginHistory);
 }
 
 const onSignInSuccess = (response: SignInResponse) => {
@@ -42,3 +40,6 @@ const getUserLoginHistory = async (response: SignInResponse) => {
   return response;
 };
 
+export function checkingSignin(username: string, password: string, loginType: loginType, name?: string) {
+  return POST('/auth/signin', { username, password, loginType, name });
+}

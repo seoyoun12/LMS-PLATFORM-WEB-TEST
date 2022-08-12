@@ -114,7 +114,7 @@ export function CourseManagement() {
               </TableCell>
               <TableCell align="right">
                 <Link
-                  href={`/course/${course.seq}`}
+                  href={`/admin-center/course/modify/${course.seq}`}
                   underline="hover"
                   color={grey[900]}
                 >

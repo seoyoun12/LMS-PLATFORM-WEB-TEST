@@ -10,6 +10,7 @@ export function GuideBoardAuth() {
     <Container>
       {loadedItem && loadedItem.map((content) => {
         const accordionInfo = [{ 
+          seq: content.seq,
           date: content.createdDtime, 
           name: content.subject, 
           children: [{ name: content.content}] 

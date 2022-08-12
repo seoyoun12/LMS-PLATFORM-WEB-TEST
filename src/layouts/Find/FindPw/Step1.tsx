@@ -1,3 +1,4 @@
+import { checkingSignin, loginType, SignInResponse } from '@common/api/auth/signIn';
 import { existsUserId } from '@common/api/user';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -13,13 +14,16 @@ export function Step1({ handleStepChange, handleUsernameChange }: Props) {
   const snackbar = useSnackbar();
   const [username, setUsername] = useState<string>('');
   const [usernameErr, setUsernameErr] = useState(false);
+  const [password, setPassword] = useState<string>('');
+  const [passwordErr, setPasswordErr] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (usernameErr) return window.alert('올바른 아이디를 입력해 주세요!');
     try {
+      const userData = await checkingSignin(username, password, loginType.TYPE_TRAFFIC_SAFETY_EDU);
+      if (!userData || !userData.data) return window.alert('오류가 발생했습니다.');
       const { data }: { data: { name: string; phone: string; username: string } } = await existsUserId(username);
-      console.log(data);
       handleUsernameChange(data.username);
       handleStepChange(2);
     } catch (e: any) {
@@ -27,10 +31,16 @@ export function Step1({ handleStepChange, handleUsernameChange }: Props) {
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleUsername = (e: ChangeEvent<HTMLInputElement>) => {
     setUsernameErr(false);
     setUsername(e.target.value);
     if (e.target.value === '') return setUsernameErr(true);
+  };
+
+  const handlePassword = (e: ChangeEvent<HTMLInputElement>) => {
+    setPasswordErr(false);
+    setPassword(e.target.value);
+    if (e.target.value === '') return setPasswordErr(true);
   };
 
   return (
@@ -39,7 +49,17 @@ export function Step1({ handleStepChange, handleUsernameChange }: Props) {
       <Typography fontWeight="bold">아이디의 존재여부를 확인합니다</Typography>
       <Box className="find-form" component="form" onSubmit={handleSubmit}>
         <FormControl>
-          <TextField placeholder="아이디를 입력해 주세요" onChange={handleChange} error={usernameErr} value={username} />
+          <TextField placeholder="아이디를 입력해 주세요" onChange={handleUsername} error={usernameErr} value={username} />
+          <FormHelperText sx={{ color: 'red' }}>{usernameErr && `올바른 형식으로 입력해주세요`}</FormHelperText>
+        </FormControl>
+        <FormControl>
+          <TextField
+            placeholder="현재 비밀번호를 입력해 주세요"
+            type="password"
+            onChange={handlePassword}
+            error={passwordErr}
+            value={password}
+          />
           <FormHelperText sx={{ color: 'red' }}>{usernameErr && `올바른 형식으로 입력해주세요`}</FormHelperText>
         </FormControl>
         <Button variant="contained" type="submit">

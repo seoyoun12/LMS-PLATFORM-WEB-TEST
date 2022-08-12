@@ -10,23 +10,19 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Switch,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
   TextField,
   Typography,
 } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { PasswordChangeModal } from '../PasswordChangeModal/PasswordChangeModal';
 import Paper from '@mui/material/Paper';
-import { modifyProvincialTrafficSafety, useMyUser, userRegistrationType } from '@common/api/user';
+import { getProvincial, modifyProvincialTrafficSafety, useMyUser, userRegistrationType } from '@common/api/user';
 import { useDialog } from '@hooks/useDialog';
 import { YN } from '@common/constant';
 import { useRouter } from 'next/router';
 import { useInput } from '@hooks/useInput';
 import Link from 'next/link';
+import { useSnackbar } from '@hooks/useSnackbar';
 
 // const studentList = [
 //   {
@@ -105,6 +101,7 @@ interface detailCounts {
 }
 
 export function Educator({ locationList }: Props) {
+  const snackbar = useSnackbar();
   const [openPromptDialog, setOpenPromptDialog] = useState(false);
   const { user, error } = useMyUser();
   const [phone, setPhone, onChangePhone] = useInput('');
@@ -119,6 +116,20 @@ export function Educator({ locationList }: Props) {
 
   const dialog = useDialog();
   const router = useRouter();
+
+  useEffect(() => {
+    (async function () {
+      const { data } = await getProvincial();
+      console.log(data, 'holymmoly');
+      setCompany(data.company);
+      // setPhone(data.phone.slice(0, 3));
+      // setPhone2(data.phone.slice(3, 7));
+      // setPhone3(data.phone.slice(7, 11));
+      setEmail(data.email);
+      setLocation(data.userRegistrationType);
+      setSmsChecked(data.smsYn === YN.YES ? true : false);
+    })();
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -137,8 +148,10 @@ export function Educator({ locationList }: Props) {
   const handleOnCloseConfirm = async (isConfirm: boolean) => {
     if (isConfirm) {
       const smsYn = smsChecked ? YN.YES : YN.NO;
+      console.log(company, email);
       if (!user || !location || !email || !company) return window.alert('수정 실패하였습니다.');
       const data = {
+        userSeq: user.seq,
         company: company,
         email: email,
         name: user.name,
@@ -147,6 +160,7 @@ export function Educator({ locationList }: Props) {
         userRegistrationType: location,
         username: user.username,
       };
+      console.log(data, user, 'q보냊잖아');
 
       await modifyProvincialTrafficSafety(data);
       return router.push('/me');
@@ -195,8 +209,8 @@ export function Educator({ locationList }: Props) {
         <Box sx={{ padding: '2rem 0', margin: 'auto' }}>
           <UserProfile />
         </Box>
-        <TextField required fullWidth id="name" label="이름" name="name" value={user?.name} disabled />
-        <TextField required fullWidth id="id" label="아이디" name="id" value={user?.username} disabled />
+        <TextField required fullWidth id="name" label="이름" name="name" value={user?.name || ''} disabled />
+        <TextField required fullWidth id="id" label="아이디" name="id" value={user?.username || ''} disabled />
         {/* <Button
           type="button"
           fullWidth
@@ -212,28 +226,6 @@ export function Educator({ locationList }: Props) {
             비밀번호 변경
           </Button>
         </Link>
-        <PhoneBox>
-          <TextField
-            label="휴대전화"
-            value={phone}
-            onChange={handlePhoneChange}
-            placeholder="'-'를 제외한 숫자만 입력해주세요."
-            error={phoneErr}
-            fullWidth
-          />
-          <FormHelperText sx={{ color: 'red' }}>{phoneErr && '유효한 휴대폰 형식이 아닙니다.'}</FormHelperText>
-        </PhoneBox>
-        <EmailBox>
-          <TextField
-            label="이메일"
-            value={email}
-            onChange={handleEmailChange}
-            placeholder="이메일을 입력해주세요."
-            error={emailErr}
-            fullWidth
-          />
-          <FormHelperText sx={{ color: 'red' }}>{emailErr && '유효한 이메일 형식이 아닙니다.'}</FormHelperText>
-        </EmailBox>
 
         <LocationBox>
           <FormControl fullWidth>
@@ -241,7 +233,7 @@ export function Educator({ locationList }: Props) {
             <Select
               labelId="location"
               id="location"
-              value={location}
+              value={location || ''}
               onChange={e => setLocation(e.target.value as userRegistrationType)}
               label="location"
             >
@@ -258,18 +250,28 @@ export function Educator({ locationList }: Props) {
             label="소속(학교,기관,단체)"
             placeholder="예) oo유치원 / oo고등학교 / 대한노인회 공주지회"
             onChange={handleCompanyChange}
-            value={company}
+            value={company || ''}
             error={companyErr}
             fullWidth
           />
           <FormHelperText sx={{ color: 'red' }}>{companyErr && '올바른 입력형식이 아닙니다'}</FormHelperText>
         </DivisionBox>
 
+        <PhoneBox>
+          <TextField
+            label="휴대전화"
+            value={phone || ''}
+            onChange={handlePhoneChange}
+            placeholder="'-'를 제외한 숫자만 입력해주세요."
+            error={phoneErr}
+            fullWidth
+          />
+          <FormHelperText sx={{ color: 'red' }}>{phoneErr && '유효한 휴대폰 형식이 아닙니다.'}</FormHelperText>
+        </PhoneBox>
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
-            mt: '8px',
           }}
         >
           <Checkbox
@@ -281,6 +283,17 @@ export function Educator({ locationList }: Props) {
           />
           <Typography variant="body2">SMS 수신 여부</Typography>
         </Box>
+        <EmailBox>
+          <TextField
+            label="이메일"
+            value={email || ''}
+            onChange={handleEmailChange}
+            placeholder="이메일을 입력해주세요."
+            error={emailErr}
+            fullWidth
+          />
+          <FormHelperText sx={{ color: 'red' }}>{emailErr && '유효한 이메일 형식이 아닙니다.'}</FormHelperText>
+        </EmailBox>
 
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
           수정하기

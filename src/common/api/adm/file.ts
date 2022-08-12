@@ -54,7 +54,7 @@ export const uploadFile = ({ fileType, fileTypeId, files }: { fileType: BbsType;
   const { file, fileName } = setFileConfig(files);
   formData.append('files', file, fileName);
 
-  console.log('fileTypeId: ', fileTypeId);
+  // console.log('fileTypeId: ', fileTypeId);
 
   // return POST(`/file/adm/${fileType}/${fileTypeId}`, formData, {
   return POST(`/file/${fileType}/${fileTypeId}`, formData, {

@@ -1,94 +1,111 @@
 import styles from '@styles/common.module.scss';
 import styled from '@emotion/styled';
-import { Box, Button, Container, Grid, Icon, ListItem, ListItemIcon, Typography } from '@mui/material';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
-import FeaturedPlayListOutlinedIcon from '@mui/icons-material/FeaturedPlayListOutlined';
+import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { Link } from '@components/common';
+import CalendarIcon from '/public/assets/svgs/calendarIcon.svg';
+import PromiseIcon from '/public/assets/svgs/promiseIcon.svg';
+import StudyIcon from '/public/assets/svgs/studyIcon.svg';
+import CertificateIcon from '/public/assets/svgs/certificateIcon.svg';
 
 const categoryData = [
   {
     id: 1,
-    title: "운수종사자 교육일정",
-    href: "stebMove/steb1",
-    icon: "CalendarMonthIcon",
-    color: "#ffede9",
-    btnText: "확인하기",
+    title: '운수종사자',
+    href: 'stebMove/steb1',
+    icon: <CalendarIcon />,
+    color: '#fff',
+    btnText: '확인하기',
   },
   {
     id: 2,
-    title: "운수종사자 교육예약",
-    href: "stebMove/steb1",
-    icon: "DirectionsCarIcon",
-    color: "#fff6e7",
-    btnText: "예약하기"
+    title: '운수종사자',
+    href: 'stebMove/steb1',
+    icon: <PromiseIcon />,
+    color: '#fff',
+    btnText: '예약하기',
   },
   {
     id: 3,
-    title1: "운수종사자",
-    title2: "학습하기",
-    href: "/traffic/3",
-    icon: "MenuBookOutlinedIcon",
-    color: "#fffde2",
-    btnText: "학습하기"
+    title: '운수종사자',
+    href: '/traffic/3',
+    icon: <StudyIcon />,
+    color: '#fff',
+    btnText: '학습하기',
   },
   {
     id: 4,
-    title1: "운수종사자",
-    title2: "수료확인",
-    href: "/traffic/4",
-    icon: "FeaturedPlayListOutlinedIcon",
-    color: "#f8ffe2",
-    btnText: "수료확인"
-  }
-]
+    title: '운수종사자',
+    href: '/traffic/4',
+    icon: <CertificateIcon />,
+    color: '#fff',
+    btnText: '수료확인',
+  },
+];
 
 export function CategoryCard() {
   // console.log("categoryData : ", categoryData);
   return (
     // <ContentContainer className={styles.globalContainer}>
     <Container>
-      <GridWrap container={true} spacing={0} columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}>
+      <GridWrap
+        container={true}
+        spacing={0}
+        columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
+      >
         {categoryData.map(categoryData => (
-          <GridContainer key={categoryData.id} cardcolor={categoryData.color}>
-            {/* <div className='categoryIcon'/> */}
-            <GridTitleTypography className="cardTitleOne">{categoryData.title1}</GridTitleTypography>
-            <GridTitleTypography className="CardTitleTwo">{categoryData.title2}</GridTitleTypography>
+          <GridItem
+            item
+            xs={1}
+            sm={1}
+            md={1}
+            lg={1}
+            key={categoryData.id}
+            cardcolor={categoryData.color}
+          >
             <GridLink href={categoryData.href} underline="none">
-              <Button>{categoryData.btnText}</Button>
+              <Box display="flex" alignItems="center" justifyContent="center">
+                {categoryData.icon}
+              </Box>
+              <Box mt={2}>
+                {/* <div className='categoryIcon'/> */}
+                <GridTitleTypography fontWeight={500} fontSize="18px">
+                  {categoryData.title}
+                </GridTitleTypography>
+                <GridTitleTypography fontWeight={700} fontSize="24px">
+                  {categoryData.btnText}
+                </GridTitleTypography>
+              </Box>
             </GridLink>
-          </GridContainer>
+          </GridItem>
         ))}
       </GridWrap>
     </Container>
-  )
+  );
 }
 
 const GridWrap = styled(Grid)`
   width: 90%;
   padding: 5%;
   margin-left: 5%;
-`
+`;
 
-
-const GridContainer = styled(Container)<{cardcolor:string}>`
+const GridContainer = styled(Container)<{ cardcolor: string }>`
   /* display: flex; */
   width: 200px;
   height: 200px;
   border-radius: 20px;
   /* background-color: rgb(255, 0, 0, 0.1); */
-  background-color: ${({cardcolor})=>cardcolor};
+  background-color: ${({ cardcolor }) => cardcolor};
 
   .categoryIcon {
     width: 100px;
     height: 100px;
   }
-`
+`;
 
 const ContentContainer = styled.div`
   padding: 35px 0px 0 20px !important;
-`
+`;
 
 const GridTitleTypography = styled(Typography)`
   position: relative;
@@ -105,11 +122,15 @@ const GridTitleTypography = styled(Typography)`
     font-size: 3rem;
     color: red;
   }
-`
+`;
 
+const GridItem = styled(Grid)<{ cardcolor: string }>`
+  /* display: flex; */
+  border-radius: 20px;
+  /* background-color: rgb(255, 0, 0, 0.1); */
+  background-color: ${({ cardcolor }) => cardcolor};
+`;
 const GridLink = styled(Link)`
-  position: relative;
-  top: 40%;
-  left: 30%;
   text-align: center;
-`
+  color: black;
+`;

@@ -10,7 +10,6 @@ import { Forum } from '@layouts/AdminCenter/CourseManagement/Forum';
 import { Course, courseDetail, CourseInput, courseModify } from '@common/api/course';
 import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
 
-
 enum TabValue {
   CourseInfo = 'course-info',
   ContentList = 'content-list',
@@ -28,44 +27,29 @@ const tabsConfig = [
 ];
 
 export function CourseModify() {
+
   const router = useRouter();
   const snackbar = useSnackbar();
   const { courseSeq, tab } = router.query;
   const { data, error } = courseDetail(Number(courseSeq));
 
-  console.log("CourseModify Data : ", data);
   console.log("CourseModify courseSeq : ", courseSeq);
 
-  const fileHandler = async (files: File[], course: Course, isFileDelete: boolean) => {
-    const isFileUpload = files.length > 0;
-    if (isFileUpload) {
-      await uploadFile({
-        fileTypeId: course.seq,
-        fileType: BbsType.TYPE_COURSE,
-        files
-      });
-    } else {
-      if (isFileDelete) {
-        await deleteFile({
-          fileTypeId: course.seq,
-          fileType: BbsType.TYPE_COURSE,
-          fileSeqList: course.s3Files.map(v => v.seq),
-        });
-      }
-    }
-  };
-
-  const handleSubmit = async ({ files, isFileDelete, courseInput, seq }: {
+  const handleSubmit = async ({ 
+    files, 
+    // isFileDelete, 
+    courseInput, 
+    // seq
+    } : {
     files: File[];
-    isFileDelete: boolean;
+    // isFileDelete: boolean;
     courseInput: CourseInput;
-    seq?: number;
+    // seq?: number;
   }) => {
-    console.log("courseInput : ", courseInput);
     try {
       if (data?.seq) {
-        const course = await courseModify({ seq : data.seq, courseInput });
-        await fileHandler(files, course.data, isFileDelete);
+        await courseModify({ seq : data.seq, courseInput });
+        await fileHandler(files);
         snackbar({ variant: 'success', message: '성공적으로 수정되었습니다.' });
         router.push('/admin-center/course');
       }
@@ -74,6 +58,28 @@ export function CourseModify() {
       snackbar({ variant: "error", message: '업로드에 실패했습니다.' });
       // snackbar({ variant: 'error', message: e.data.message });
     }
+  };
+
+  const fileHandler = async (files: File[]) => {
+
+    if (files == undefined) {
+      await deleteFile({
+        fileTypeId: data?.seq,
+        fileType: BbsType.TYPE_COURSE,
+        fileSeqList: data.s3Files.map(v => v.seq),
+      });
+    } else if (files.length > 0) {
+      await deleteFile({
+        fileTypeId: data?.seq,
+        fileType: BbsType.TYPE_COURSE,
+        fileSeqList: data.s3Files.map(v => v.seq)
+      });
+      await uploadFile({
+        fileTypeId: data?.seq,
+        fileType: BbsType.TYPE_COURSE,
+        files
+      });
+    } 
   };
 
   if (error) return <div>...ERROR</div>;

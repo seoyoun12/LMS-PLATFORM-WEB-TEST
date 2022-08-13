@@ -66,23 +66,18 @@ export function Lesson() {
   const { query, pathname } = router;
   const { courseUserSeq, lessonId } = query;
   const { course, courseError } = useCourse(Number(courseUserSeq));
+
+  // 이벤트.
   
+  console.log("???");
+  
+  // 렌더.
+
   if (courseError) return <div>error</div>;
   if (!course) return <Spinner />;
   return (
     <ContentContainer maxWidth={false}>
-      {/* <MainSection>
-        {revealVideo ? <VideoPlayerContainer>
-          <VideoPlayer
-            config={{
-              playlist: course.lessons.filter(lesson => lesson.seq === Number(lessonSeq))[0].s3Files[0].path,
-              autostart: false
-            }}
-          />
-        </VideoPlayerContainer> : <TuiViewer initialValue={noticeConfig[0].content} />}
-      </MainSection> */}
       <MainContent course={course} noticeConfig={noticeConfig} />
-
       <LessonSidebar
         course={course}
         tabsConfig={tabsConfig}

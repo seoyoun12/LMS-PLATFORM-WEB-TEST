@@ -11,10 +11,10 @@ import { useEffect, useState } from "react";
 import { NoticeContent } from "./NoticeContent";
 import { Box, LinearProgress, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import type { CourseDetailResponseDto } from "@common/api/types/Api";
+import type { CourseDetailClientResponseDto } from "@common/api/types/Api";
 
 interface Props {
-  course: CourseDetailResponseDto;
+  course: CourseDetailClientResponseDto;
   noticeConfig: {
     title: string;
     content: string;

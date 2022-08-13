@@ -19,10 +19,10 @@ import { LessonTabs } from "@components/ui/Tabs";
 import DownloadIcon from "@mui/icons-material/Download";
 import { useRecoilState } from "recoil";
 import { contentSeqState, revealVideoState } from "@common/recoil";
-import type { CourseDetailResponseDto } from "@common/api/types/Api";
+import type { CourseDetailClientResponseDto } from "@common/api/types/Api";
 
 interface Props {
-  course: CourseDetailResponseDto;
+  course: CourseDetailClientResponseDto;
   tabsConfig: {
     label: string;
     value: string;
@@ -101,7 +101,7 @@ export function LessonSidebar({
               <MenuCellLink
                 className={Number(lessonSeq) === lesson.seq ? 'active' : ''}
                 key={lesson.seq}
-                href={`/course/${course.seq}/lesson/${lesson.seq}`}
+                href={`/course/${course.courseUserSeq}/lesson/${lesson.seq}`}
                 onClick={() => {
                   setRevealVideo(true);
                 }}

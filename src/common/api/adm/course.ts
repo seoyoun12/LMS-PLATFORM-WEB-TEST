@@ -45,7 +45,7 @@ export function useCourseList({
   elementCnt?: number;
   chapter?: string;
 }) {
-  const { data, error } = useSWR<FetchPaginationResponse<CourseDetailResponseDto[]>>(
+  const { data, error } = useSWR<FetchPaginationResponse<CourseDetailClientResponseDto[]>>(
     [
       `/course/adm`,
       {

@@ -57,7 +57,7 @@ export function LessonSidebar({
 }: Props) {
   const router = useRouter();
   const { query, pathname } = router;
-  const { courseUserSeq, lessonId } = query;
+  const { courseUserSeq, lessonSeq } = query;
 
   const [changeMenu, setChangeMenu] = useState(tabsConfig[0].value);
   const [check, setCheck] = useState(false);
@@ -99,7 +99,7 @@ export function LessonSidebar({
 
             return (
               <MenuCellLink
-                className={Number(lessonSeq) === lesson.seq ? 'active' : ''}
+                className={Number(lessonSeq) === lesson.seq ? "active" : ""}
                 key={lesson.seq}
                 href={`/course/${course.courseUserSeq}/lesson/${lesson.seq}`}
                 onClick={() => {

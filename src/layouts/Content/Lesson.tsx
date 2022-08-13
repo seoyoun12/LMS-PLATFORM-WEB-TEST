@@ -1,14 +1,15 @@
-import { Box, Container, Divider, Typography } from '@mui/material';
-import styled from '@emotion/styled';
-import { Spinner, Tabs } from '@components/ui';
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { Link, VideoPlayer } from '@components/common';
-import { useCourse } from '@common/api/course';
-import { TuiViewer } from '@components/common/TuiEditor';
-import { LessonSidebar } from './LessonSidebar';
-import { useRecoilState } from 'recoil';
-import { MainContent } from './MainContent';
+import { Box, Container, Divider, Typography } from "@mui/material";
+import styled from "@emotion/styled";
+import { Spinner, Tabs } from "@components/ui";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
+import { Link, VideoPlayer } from "@components/common";
+import { useCourse } from "@common/api/course";
+import { TuiViewer } from "@components/common/TuiEditor";
+import { LessonSidebar } from "./LessonSidebar";
+import { useRecoilState } from "recoil";
+import { MainContent } from "./MainContent";
+import type { LessonDetailClientResponseDto } from "@common/api/types/Api";
 
 const tabsConfig = [
   { label: '커리큘럼', value: 'curriculum' },
@@ -62,19 +63,48 @@ const fileList = [
 ];
 
 export function Lesson() {
-  const router = useRouter();
-  const { query, pathname } = router;
-  const { courseUserSeq, lessonId } = query;
-  const { course, courseError } = useCourse(Number(courseUserSeq));
 
-  // 이벤트.
+  const router = useRouter();
+
+  // 스테이트.
+
+  const [lessonSeq, setLessonSeq] = React.useState<number>(Number(router.query.lessonSeq));
+  const [courseUserSeq, setCourseUserSeq] = React.useState<number>(Number(router.query.courseUserSeq));
+
+  // 이펙트.
+
+  React.useEffect(() => {
+
+    setLessonSeq(Number(router.query.lessonSeq));
+    setCourseUserSeq(Number(router.query.courseUserSeq));
+
+  }, [router.query]);
+
+  // API.
+
+  const { course, courseError } = useCourse(courseUserSeq);
+
+  // 렌더 - 에러.
+
+  if (courseError) return (
+    <CourseErrorContainer>
+      <Typography>강의를 불러올 수 없습니다.</Typography>
+    </CourseErrorContainer>
+  );
+
+  if (!course) return <Spinner />;
+
+  // 변수.
+
+  const lessonIndex = course.lessons.findIndex((lesson) => lesson.seq === lessonSeq);
+  const lesson = lessonIndex >= 0 ? course.lessons[lessonIndex] : null;
+
+  // 함수.
   
   console.log("???");
   
   // 렌더.
 
-  if (courseError) return <div>error</div>;
-  if (!course) return <Spinner />;
   return (
     <ContentContainer maxWidth={false}>
       <MainContent course={course} noticeConfig={noticeConfig} />
@@ -88,6 +118,14 @@ export function Lesson() {
     </ContentContainer>
   );
 }
+
+const CourseErrorContainer = styled(Box)`
+  display: flex;
+  min-height: 50vh;
+  align-items : center;
+  justify-content: center;
+`;
+
 
 const ContentContainer = styled(Container)`
   padding: 0 50px;

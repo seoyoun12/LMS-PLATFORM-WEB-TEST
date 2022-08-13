@@ -1,15 +1,11 @@
-import { Box, Container, Divider, Typography } from "@mui/material";
+import React from "react";
 import styled from "@emotion/styled";
-import { Spinner, Tabs } from "@components/ui";
-import React, { useEffect } from "react";
+import { Box, Container, Typography } from "@mui/material";
+import { Spinner } from "@components/ui";
 import { useRouter } from "next/router";
-import { Link, VideoPlayer } from "@components/common";
 import { useCourse } from "@common/api/course";
-import { TuiViewer } from "@components/common/TuiEditor";
 import { LessonSidebar } from "./LessonSidebar";
-import { useRecoilState } from "recoil";
 import { MainContent } from "./MainContent";
-import type { LessonDetailClientResponseDto } from "@common/api/types/Api";
 
 const tabsConfig = [
   { label: '커리큘럼', value: 'curriculum' },
@@ -106,7 +102,7 @@ export function Lesson() {
   // 렌더.
 
   return (
-    <ContentContainer maxWidth={false}>
+    <LessonContainer maxWidth={false}>
       <MainContent course={course} noticeConfig={noticeConfig} />
       <LessonSidebar
         course={course}
@@ -115,7 +111,7 @@ export function Lesson() {
         noticeConfig={noticeConfig}
         fileList={fileList}
       />
-    </ContentContainer>
+    </LessonContainer>
   );
 }
 
@@ -126,8 +122,7 @@ const CourseErrorContainer = styled(Box)`
   justify-content: center;
 `;
 
-
-const ContentContainer = styled(Container)`
+const LessonContainer = styled(Container)`
   padding: 0 50px;
   display: flex;
   flex: 1 1 auto;
@@ -135,61 +130,3 @@ const ContentContainer = styled(Container)`
   width: 100%;
   max-width: calc(100% - 68px);
 `;
-
-const MainSection = styled.div`
-  flex: 1;
-`;
-
-// const StickySideBar = styled.aside`
-//   position: sticky;
-//   top: ${headerHeight};
-//   margin-left: 40px;
-//   padding-top: 32px;
-//   width: 480px;
-//   height: 100%;
-//   display: flex;
-//   flex-direction: column;
-//   background-color: #fff;
-//   z-index: 1;
-//   flex-shrink: 0;
-//   overflow: hidden;
-// `;
-
-const VideoPlayerContainer = styled.div`
-  height: calc(100vh - 160px);
-`;
-
-// const TabMenu = styled(Tabs)`
-//   padding-bottom: 30px;
-// `;
-
-// const LessonTitle = styled(Typography)`
-// &.active {
-//     font-weight:500;
-//   }
-// `;
-
-// const MenuCellLink = styled(Link)`
-//   display: block;
-//   padding: 12px;
-//   min-height: 36px;
-//   cursor: pointer;
-//   display:flex;
-//   justify-content:space-between;
-
-// `;
-
-// const LessonInfo = styled.div`
-//   display: flex;
-//   align-items: center;
-//   padding-top: 4px;
-
-//   .typo {
-//     margin-left: 4px;
-//   }
-// `;
-
-// const LessonCheck = styled(Box)`
-//   display:flex;
-//   align-items:center;
-// `

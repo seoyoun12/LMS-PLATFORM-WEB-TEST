@@ -1,27 +1,28 @@
-import { Box, BoxProps, Container, Divider, Typography } from '@mui/material';
-import styled from '@emotion/styled';
-import { headerHeight } from '@styles/variables';
-import { Spinner, Tabs } from '@components/ui';
-import React, { useState, useLayoutEffect, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { Link, VideoPlayer } from '@components/common';
-import { CourseRes, useCourse } from '@common/api/course';
-import { grey } from '@mui/material/colors';
-import PlayCircleOutlinedIcon from '@mui/icons-material/PlayCircleOutlined';
-import { totalSecToMinSec } from '@utils/totalSecToMinSec';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import PlayCircleIcon from '@mui/icons-material/PlayCircle';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import FeedIcon from '@mui/icons-material/Feed';
-import dateFormat, { masks } from 'dateformat';
-import { TuiViewer } from '@components/common/TuiEditor';
-import { LessonTabs } from '@components/ui/Tabs';
-import DownloadIcon from '@mui/icons-material/Download';
-import { useRecoilState } from 'recoil';
-import { contentSeqState, revealVideoState } from '@common/recoil';
+import { Box, BoxProps, Container, Divider, Typography } from "@mui/material";
+import styled from "@emotion/styled";
+import { headerHeight } from "@styles/variables";
+import { Spinner, Tabs } from "@components/ui";
+import React, { useState, useLayoutEffect, useEffect } from "react";
+import { useRouter } from "next/router";
+import { Link, VideoPlayer } from "@components/common";
+import { useCourse } from "@common/api/course";
+import { grey } from "@mui/material/colors";
+import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
+import { totalSecToMinSec } from "@utils/totalSecToMinSec";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import FeedIcon from "@mui/icons-material/Feed";
+import dateFormat, { masks } from "dateformat";
+import { TuiViewer } from "@components/common/TuiEditor";
+import { LessonTabs } from "@components/ui/Tabs";
+import DownloadIcon from "@mui/icons-material/Download";
+import { useRecoilState } from "recoil";
+import { contentSeqState, revealVideoState } from "@common/recoil";
+import type { CourseDetailResponseDto } from "@common/api/types/Api";
 
 interface Props {
-  course: CourseRes;
+  course: CourseDetailResponseDto;
   tabsConfig: {
     label: string;
     value: string;
@@ -64,7 +65,7 @@ export function LessonSidebar({
   const [contentSeq, setContentSeq] = useRecoilState(contentSeqState);
 
   const onChangeMenu = (menu?: string | string[]) => {
-    let menuString = String(menu);
+    const menuString = String(menu);
     setChangeMenu(menuString);
   };
 

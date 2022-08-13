@@ -3,6 +3,7 @@ import styles from '@styles/common.module.scss';
 import { Container } from '@mui/material';
 import { CourseInput, CourseRes, courseUpload } from '@common/api/course';
 import { BbsType, uploadFile } from '@common/api/adm/file';
+import type { CourseDetailResponseDto } from "@common/api/types/Api";
 import { useSnackbar } from '@hooks/useSnackbar';
 import router from 'next/router';
 

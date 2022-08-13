@@ -1,6 +1,5 @@
 import { GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
-import { CourseRes } from '@common/api/course';
 import { YN } from '@common/constant';
 import { businessType, courseSubCategoryType } from './courseClass';
 

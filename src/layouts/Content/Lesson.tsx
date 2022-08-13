@@ -66,7 +66,7 @@ export function Lesson() {
   const { query, pathname } = router;
   const { courseUserSeq, lessonId } = query;
   const { course, courseError } = useCourse(Number(courseUserSeq));
-
+  
   if (courseError) return <div>error</div>;
   if (!course) return <Spinner />;
   return (

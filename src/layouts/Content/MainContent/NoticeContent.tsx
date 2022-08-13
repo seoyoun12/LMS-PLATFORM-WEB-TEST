@@ -1,13 +1,13 @@
-import { CourseRes } from "@common/api/course";
 import { TuiViewer } from "@components/common/TuiEditor";
 import { Spinner } from "@components/ui";
 import styled from "@emotion/styled"
 import { Typography } from "@mui/material"
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import type { CourseDetailResponseDto } from "@common/api/types/Api";
 
 interface Props{
-    course:CourseRes;
+    course:CourseDetailResponseDto;
 }
 
 const noticeConfig = [

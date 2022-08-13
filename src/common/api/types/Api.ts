@@ -15,6 +15,9 @@ export interface AccessTokenRefreshRequestDto {
 }
 
 export interface BannerResponseDto {
+  /** 배너 설명 */
+  content?: string;
+
   /**
    * 생성일
    * @format date-time
@@ -62,6 +65,9 @@ export interface BannerResponseDto {
 }
 
 export interface BannerSaveRequestDto {
+  /** 배너 내용 */
+  content?: string;
+
   /**
    * 게시기간 종료일 (yyyy-MM-dd)
    * @format date
@@ -88,6 +94,9 @@ export interface BannerSaveRequestDto {
 }
 
 export interface BannerUpdateRequestDto {
+  /** 배너 내용 */
+  content?: string;
+
   /**
    * 게시기간 종료일 (yyyy-MM-dd)
    * @format date
@@ -732,6 +741,15 @@ export interface CourseDetailClientResponseDto {
   /** 과정 이름 */
   courseName?: string;
 
+  /** 연결된 최근에 들었던 학습 진행사항 */
+  courseProgressRecentResponseDto?: CourseProgressRecentResponseDto;
+
+  /**
+   * 연결된 학습 진행사항
+   * 해당 유저-과정이 듣고있는 과정 차씨의 학습 진행사항들(차씨들의 진도율)
+   */
+  courseProgressResponseDtoList?: CourseProgressResponseDto[];
+
   /**
    * 업종*   버스 - BUS
    *     전세버스 - CHARTER_BUS
@@ -943,12 +961,6 @@ export interface CourseDetailResponseDto {
 
 export interface CourseModuleFindResponseDto {
   /**
-   * 최소점수
-   * @format double
-   */
-  assignScore?: number;
-
-  /**
    * 과정 모듈 시퀀스
    * @format int64
    */
@@ -991,10 +1003,11 @@ export interface CourseModuleFindResponseDto {
 
 export interface CourseModuleSaveRequestDto {
   /**
-   * 반영 비율
-   * @format double
+   * 모듈 타입이 시험일 경우 설문지 시퀀스
+   * 이외 모듈분류에서는 NULL
+   * @format int64
    */
-  assignScore?: number;
+  examSeq?: number;
 
   /**
    * 최소 진도율 0=>상관없음
@@ -1037,12 +1050,6 @@ export interface CourseModuleSaveRequestDto {
 }
 
 export interface CourseModuleSaveResponseDto {
-  /**
-   * 반영 비율
-   * @format double
-   */
-  assignScore?: number;
-
   /**
    * 과정 모듈 시퀀스
    * @format int64
@@ -1095,10 +1102,10 @@ export interface CourseModuleSaveResponseDto {
 
 export interface CourseModuleUpdateRequestDto {
   /**
-   * 반영 비율
-   * @format double
+   * 시험 시퀀스
+   * @format int64
    */
-  assignScore?: number;
+  examSeq?: number;
 
   /**
    * 최소 진도율 0=>상관없음
@@ -1139,12 +1146,6 @@ export interface CourseModuleUpdateRequestDto {
 }
 
 export interface CourseModuleUpdateResponseDto {
-  /**
-   * 반영 비율
-   * @format double
-   */
-  assignScore?: number;
-
   /**
    * 과정 모듈 시퀀스
    * @format int64
@@ -1187,12 +1188,11 @@ export interface CourseModuleUpdateResponseDto {
 }
 
 export interface CourseModules {
-  /** @format double */
-  assignScore?: number;
   course?: Course;
 
   /** @format date-time */
   createdDtime?: string;
+  exam?: Exam;
 
   /** @format int32 */
   limitProgress?: number;
@@ -1247,6 +1247,59 @@ export interface CourseProgress {
 
   /** @format int32 */
   viewCnt?: number;
+}
+
+export interface CourseProgressRecentResponseDto {
+  /**
+   * 챕터 수료 일자
+   * @format date-time
+   */
+  completeDtime?: string;
+
+  /** 챕터수료여부 */
+  completeYn?: string;
+
+  /**
+   * 유저 진도율 시퀀스
+   * @format int64
+   */
+  courseProgressSeq?: number;
+
+  /**
+   * 유저-과정 시퀀스
+   * @format int64
+   */
+  courseUserSeq?: number;
+
+  /**
+   * 마지막 수강 날짜
+   * @format date-time
+   */
+  lastViewDtime?: string;
+
+  /**
+   * 레슨 시퀀스
+   * @format int64
+   */
+  lessonSeq?: number;
+
+  /**
+   * 진도율
+   * @format double
+   */
+  ratio?: number;
+
+  /**
+   * 마지막 학습 시간
+   * @format double
+   */
+  studyLastTime?: number;
+
+  /**
+   * 총 학습 시간
+   * @format double
+   */
+  studyTime?: number;
 }
 
 export interface CourseProgressRequestDto {
@@ -3652,11 +3705,15 @@ export interface FileMultipartCompleteRequestDto {
     | "RESOURCE_POST_QUESTION_FILE"
     | "RESOURCE_POST_FAQ_FILE"
     | "RESOURCE_POST_REVIEW_FILE"
+    | "RESOURCE_POST_GUIDE_AUTH"
+    | "RESOURCE_POST_GUIDE_EDU_REG"
+    | "RESOURCE_POST_GUIDE_EDU_LEARNING"
     | "RESOURCE_BANNER_FILE"
     | "RESOURCE_QNA_FILE"
     | "RESOURCE_QNA_ANSWER_FILE"
     | "RESOURCE_LEARNING_MATERIAL_FILE"
-    | "RESOURCE_USER_PROFILE_FILE";
+    | "RESOURCE_USER_PROFILE_FILE"
+    | "RESOURCE_USER_CERTIFICATES";
 }
 
 export interface FileMultipartCreateRequestDto {
@@ -3680,11 +3737,15 @@ export interface FileMultipartCreateRequestDto {
     | "RESOURCE_POST_QUESTION_FILE"
     | "RESOURCE_POST_FAQ_FILE"
     | "RESOURCE_POST_REVIEW_FILE"
+    | "RESOURCE_POST_GUIDE_AUTH"
+    | "RESOURCE_POST_GUIDE_EDU_REG"
+    | "RESOURCE_POST_GUIDE_EDU_LEARNING"
     | "RESOURCE_BANNER_FILE"
     | "RESOURCE_QNA_FILE"
     | "RESOURCE_QNA_ANSWER_FILE"
     | "RESOURCE_LEARNING_MATERIAL_FILE"
-    | "RESOURCE_USER_PROFILE_FILE";
+    | "RESOURCE_USER_PROFILE_FILE"
+    | "RESOURCE_USER_CERTIFICATES";
 }
 
 export interface FileMultipartCreateResponseDto {
@@ -4887,6 +4948,50 @@ export interface MultipartUploadListing {
   uploadIdMarker?: string;
 }
 
+export interface NicePhoneResultResponseDto {
+  /** 이름 */
+  name?: string;
+
+  /** UUID 시퀀스값 */
+  requestNo?: string;
+
+  /**
+   * 결과 코드 :: 0000 성공
+   * 0003	기타인증오류
+   * 0010	인증번호 불일치(소켓)
+   * 0012	요청정보오류(입력값오류)
+   * 0013	암호화 시스템 오류
+   * 0014	암호화 처리 오류
+   * 0015	암호화 데이터 오류
+   * 0016	복호화 처리 오류
+   * 0017	복호화 데이터 오류
+   * 0018	통신오류
+   * 0019	데이터베이스 오류
+   * 0020	유효하지않은 CP코드
+   * 0021	중단된 CP코드
+   * 0022	휴대전화본인확인 사용불가 CP코드
+   * 0023	미등록 CP코드
+   * 0031	유효한 인증이력 없음
+   * 0035	기인증완료건(소켓)
+   * 0040	본인확인차단고객(통신사)
+   * 0041	인증문자발송차단고객(통신사)
+   * 0050	NICE 명의보호서비스 이용고객차단
+   * 0052	부정사용차단
+   * 0070	간편인증앱 미설치
+   * 0071	앱인증 미완료
+   * 0072	간편인증 처리중 오류
+   * 0073	간편인증앱 미설치(LG U+ Only)
+   * 0074	간편인증앱 재설치필요
+   * 0075	간편인증사용불가-스마트폰아님
+   * 0076	간편인증앱 미설치
+   * 0078	14세 미만 인증 오류
+   * 0079	간편인증 시스템 오류
+   * 9097	인증번호 3회 불일치
+   *
+   */
+  resultCode?: string;
+}
+
 export interface Owner {
   displayName?: string;
   id?: string;
@@ -6023,6 +6128,7 @@ export interface User {
 
   /** @format int32 */
   status?: number;
+  userProvincial?: UserProvincial;
   userTransport?: UserTransport;
   username?: string;
 }
@@ -6348,6 +6454,56 @@ export interface UserPasswordModifyRequestDto {
   modifiedPw?: string;
 }
 
+export interface UserProvincial {
+  company?: string;
+
+  /** @format date-time */
+  createdDtime?: string;
+
+  /** @format date-time */
+  modifiedDtime?: string;
+
+  /** @format int64 */
+  seq?: number;
+
+  /** @format int32 */
+  status?: number;
+  user?: User;
+  userRegistrationType?:
+    | "CHEONAN"
+    | "GONGJU"
+    | "BORYEONG"
+    | "ASAN"
+    | "SEOSAN"
+    | "NONSAN"
+    | "GYERYONG"
+    | "DANGJIN"
+    | "GEUMSAN"
+    | "BUYEO"
+    | "SEOCHEON"
+    | "CHEONGYANG"
+    | "HONGSEONG"
+    | "YESAN"
+    | "TAEAN"
+    | "CHUNGNAM"
+    | "SEJONG"
+    | "SEOUL"
+    | "BUSAN"
+    | "DAEGU"
+    | "INCHEON"
+    | "GWANGJU"
+    | "DAEJEON"
+    | "ULSAN"
+    | "GYEONGGI"
+    | "GANGWON"
+    | "CHUNGBUK"
+    | "JEONBUK"
+    | "JEONNAM"
+    | "GYEONGBUK"
+    | "GYEONGNAM"
+    | "JEJU";
+}
+
 export interface UserProvincialFindResponseDto {
   /** 회사 */
   company?: string;
@@ -6453,6 +6609,12 @@ export interface UserProvincialUpdateRequestDto {
     | "GYEONGBUK"
     | "GYEONGNAM"
     | "JEJU";
+
+  /**
+   * 유저 시퀀스
+   * @format int64
+   */
+  userSeq?: number;
 
   /** 아이디 */
   username?: string;
@@ -7016,7 +7178,7 @@ export class HttpClient<SecurityDataType = unknown> {
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   auth = {
     /**
-     * @description Request DTO 를 전달받아 로그인을 수행한다. 이때, aT 와 rT, 간략한 사용자의 정보와 ROLE 등을 전달한다. <b>로그인 타입이 운수/저상</b>의 경우, loginType, name, username, password 를 필요로 하며, name 은 사용자의 실명을, 주민등록번호는 username 과 password 에 동일하게 입력한다. <b>로그인 타입이 도민교통</b>인 경우, loginType, username, password 만 필요로 하며, 이때 username 은 도민교통 타입의 유저가 회원가입 시 입력한 아이디, password 는 회원가입시 기입한 Plain text 로 이루어진 password 를 입력한다.
+     * @description Request DTO 를 전달받아 로그인을 수행한다. 이때, aT 와 rT, 간략한 사용자의 정보와 ROLE 등을 전달한다. <b>로그인 타입이 운수/저상</b>의 경우, loginType, name, username, password 를 필요로 하며, name 은 사용자의 실명을, 주민등록번호는 username 과 password 에 동일하게 입력한다. 이때, 전달받은 성명과 주민등록번호는 나이스 API 국내 실명 인증 확인을 통해 검증된다. <b>로그인 타입이 도민교통</b>인 경우, loginType, username, password 만 필요로 하며, 이때 username 은 도민교통 타입의 유저가 회원가입 시 입력한 아이디, password 는 회원가입시 기입한 Plain text 로 이루어진 password 를 입력한다.
      *
      * @tags [App & 관리자] 인증 API
      * @name SignInUsingPost
@@ -7714,7 +7876,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 과정 진도율 생성
      *
-     * @tags [App & 관리자] 과정 진도율 API - * 관리자는 추후 논의
+     * @tags [App & 관리자] 과정 진도율 API - * 관리자 통계 로직 등은 추후 논의
      * @name CreateCourseProgressUsingPost
      * @summary [App & 관리자] 과정 진도율 API - JWT 사용
      * @request POST:/course-progress
@@ -7731,7 +7893,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 과정 진도율 수정 수강생이 강의를 듣고 페이지를 나갈때 실행되는 API
      *
-     * @tags [App & 관리자] 과정 진도율 API - * 관리자는 추후 논의
+     * @tags [App & 관리자] 과정 진도율 API - * 관리자 통계 로직 등은 추후 논의
      * @name UpdateCourseProgressUsingPut
      * @summary [App & 관리자] 과정 진도율 수정  API - JWT 사용
      * @request PUT:/course-progress
@@ -8364,11 +8526,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description 유저가 시험을 시작하면 해당 시험리스트를 뿌려주고 임시 저장이 시작되는 API
      *
      * @tags [관리자] 시험 API
-     * @name FindTestListUsingGet
-     * @summary 시험 테스트 API
+     * @name ExamTestListUsingGet
+     * @summary 시험 (유저) 테스트 API
      * @request GET:/exam/test
      */
-    findTestListUsingGet: (query: { courseUserSeq: number; examSeq: number }, params: RequestParams = {}) =>
+    examTestListUsingGet: (query: { courseUserSeq: number; examSeq: number }, params: RequestParams = {}) =>
       this.request<ExamTestResponseDto, void>({
         path: `/exam/test`,
         method: "GET",
@@ -8479,6 +8641,52 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags 실험장 API
+     * @name EncTokenTestUsingGet
+     * @summary encTokenTest
+     * @request GET:/example/none/encToken
+     */
+    encTokenTestUsingGet: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/example/none/encToken`,
+        method: "GET",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 실험장 API
+     * @name ConvertHtmlToPdfUsingGet
+     * @summary HTML to PDF 변환 실험
+     * @request GET:/example/pdf
+     */
+    convertHtmlToPdfUsingGet: (query: { courseUserSeq: number }, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/example/pdf`,
+        method: "GET",
+        query: query,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 실험장 API
+     * @name IndexUsingGet
+     * @summary index
+     * @request GET:/example/pdf/index
+     */
+    indexUsingGet: (params: RequestParams = {}) =>
+      this.request<string, any>({
+        path: `/example/pdf/index`,
+        method: "GET",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags 실험장 API
      * @name FindAllMultipartRequestsUsingGet
      * @summary [실험] 멀티파트 전체 요청 조회 API
      * @request GET:/example/s3/multipart/all
@@ -8545,11 +8753,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           | "RESOURCE_POST_QUESTION_FILE"
           | "RESOURCE_POST_FAQ_FILE"
           | "RESOURCE_POST_REVIEW_FILE"
+          | "RESOURCE_POST_GUIDE_AUTH"
+          | "RESOURCE_POST_GUIDE_EDU_REG"
+          | "RESOURCE_POST_GUIDE_EDU_LEARNING"
           | "RESOURCE_BANNER_FILE"
           | "RESOURCE_QNA_FILE"
           | "RESOURCE_QNA_ANSWER_FILE"
           | "RESOURCE_LEARNING_MATERIAL_FILE"
-          | "RESOURCE_USER_PROFILE_FILE";
+          | "RESOURCE_USER_PROFILE_FILE"
+          | "RESOURCE_USER_CERTIFICATES";
         fileContentType: string;
         fileOriginalName: string;
       },
@@ -8707,6 +8919,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         | "TYPE_POST_FAQ"
         | "TYPE_POST_REVIEW"
         | "TYPE_POST_NOTICE"
+        | "TYPE_POST_GUIDE_AUTH"
+        | "TYPE_POST_GUIDE_EDU_REG"
+        | "TYPE_POST_GUIDE_EDU_LEARNING"
         | "TYPE_COURSE"
         | "TYPE_HOMEWORK"
         | "TYPE_LIBRARY"
@@ -8742,6 +8957,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         | "TYPE_POST_FAQ"
         | "TYPE_POST_REVIEW"
         | "TYPE_POST_NOTICE"
+        | "TYPE_POST_GUIDE_AUTH"
+        | "TYPE_POST_GUIDE_EDU_REG"
+        | "TYPE_POST_GUIDE_EDU_LEARNING"
         | "TYPE_COURSE"
         | "TYPE_HOMEWORK"
         | "TYPE_LIBRARY"
@@ -9346,6 +9564,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
   };
+  nice = {
+    /**
+     * @description uuid 값으로 휴대폰 본인인증을 성공한 유저를 조회한다.
+     *
+     * @tags NICE 휴대폰 본인인증 API
+     * @name PhoneConfirmUsingGet
+     * @summary 휴대폰 본인인증 (성공) 조회 API
+     * @request GET:/nice/phone/confirm
+     */
+    phoneConfirmUsingGet: (query: { uuid: string }, params: RequestParams = {}) =>
+      this.request<NicePhoneResultResponseDto, void>({
+        path: `/nice/phone/confirm`,
+        method: "GET",
+        query: query,
+        ...params,
+      }),
+  };
   post = {
     /**
      * @description 앱에서 게시글의 타입을 전달받아 해당하는 타입의 전체 게시글을 조회한다.
@@ -9391,6 +9626,35 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 관리자 페이지에서 게시글의 타입을 전달받아 해당하는 타입의 전체 게시글을 조회한다.
+     *
+     * @tags [App & 관리자] 게시글 API
+     * @name AdmFindPostsUsingGet
+     * @summary [관리자] 게시글 전체 조회 - Pagination
+     * @request GET:/post/adm
+     */
+    admFindPostsUsingGet: (
+      query: {
+        boardType:
+          | "TYPE_NOTICE"
+          | "TYPE_REVIEW"
+          | "TYPE_FAQ"
+          | "TYPE_GUIDE_AUTH"
+          | "TYPE_GUIDE_EDU_REGI"
+          | "TYPE_GUIDE_EDU_LEARNING";
+        elementCnt?: number;
+        page: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PostResponseDto, any>({
+        path: `/post/adm`,
+        method: "GET",
+        query: query,
         ...params,
       }),
 
@@ -9537,10 +9801,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary [App] 1:1 문의 내역 전체 조회 API - JWT
      * @request GET:/qna
      */
-    findAllQnaUsingGet: (params: RequestParams = {}) =>
+    findAllQnaUsingGet: (query?: { elementCnt?: number; page?: number }, params: RequestParams = {}) =>
       this.request<QnaResponseDto[], any>({
         path: `/qna`,
         method: "GET",
+        query: query,
         ...params,
       }),
 
@@ -10082,7 +10347,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description 해당하는 유저가 증명서 발급을 위해 수강중인 모든 과정에 대한 확인.
+     * @description 해당하는 유저가 증명서 발급을 위해 수강중인 특정 과정에 대한 확인.
      *
      * @tags [관리자 & App] 유저 API
      * @name FindCertificatesConfirmUsingGet
@@ -10093,6 +10358,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<UserMyinfoCertificatesResponseDto, void>({
         path: `/user/myinfo/certificates/confirm/${courseUserSeq}`,
         method: "GET",
+        ...params,
+      }),
+
+    /**
+     * @description courseUserSeq 를 PathVariable 로 전달받아 수료가 완료된 건에 대하여 수료증을 PDF 로 발급한다.
+     *
+     * @tags [관리자 & App] 유저 API
+     * @name DownloadCertPdfUsingPost
+     * @summary [App] 유저 마이페이지 내 증명서 PDF 다운로드
+     * @request POST:/user/myinfo/certificates/download/{courseUserSeq}
+     */
+    downloadCertPdfUsingPost: (courseUserSeq: number, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/user/myinfo/certificates/download/${courseUserSeq}`,
+        method: "POST",
+        type: ContentType.Json,
         ...params,
       }),
 

@@ -1,25 +1,27 @@
-import { revealVideoState } from '@common/recoil';
-import styled from '@emotion/styled';
-import { useRecoilState } from 'recoil';
-import { CourseRes, useCourse } from '@common/api/course';
-import { TuiViewer } from '@components/common/TuiEditor';
-import { Link, VideoPlayer } from '@components/common';
-import { useRouter } from 'next/router';
-import { Spinner } from '@components/ui';
-import { TestContent } from './TestContent';
-import { useEffect, useState } from 'react';
-import { NoticeContent } from './NoticeContent';
-import { Box, LinearProgress, Typography } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { revealVideoState } from "@common/recoil";
+import styled from "@emotion/styled";
+import { useRecoilState } from "recoil";
+import { useCourse } from "@common/api/course";
+import { TuiViewer } from "@components/common/TuiEditor";
+import { Link, VideoPlayer } from "@components/common";
+import { useRouter } from "next/router";
+import { Spinner } from "@components/ui";
+import { TestContent } from "./TestContent";
+import { useEffect, useState } from "react";
+import { NoticeContent } from "./NoticeContent";
+import { Box, LinearProgress, Typography } from "@mui/material";
+import { grey } from "@mui/material/colors";
+import type { CourseDetailResponseDto } from "@common/api/types/Api";
 
 interface Props {
-  course: CourseRes;
+  course: CourseDetailResponseDto;
   noticeConfig: {
     title: string;
     content: string;
     date: string;
     complete: boolean;
   }[];
+
 }
 
 export function MainContent({ course, noticeConfig }: Props) {
@@ -57,6 +59,7 @@ export function MainContent({ course, noticeConfig }: Props) {
               .s3Files[0].path,
             autostart: false,
           }}
+          
         />
       </VideoPlayerContainer>
 

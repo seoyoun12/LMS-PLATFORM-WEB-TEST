@@ -82,9 +82,7 @@ export function Me() {
                 return (
                   <Grid item xs={1} sm={1} md={1} lg={1} key={res.courseClassSeq}>
                     <Box
-                      onClick={() => {
-                        return window.alert('수업이 존재하지 않습니다. 관리자에게 문의해주세요.');
-                      }}
+                      onClick={() => router.push(`/course/${res.courseUserSeq}`)}
                     >
                       <ContentCardV2
                         title={res.courseTitle}

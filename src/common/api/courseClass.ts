@@ -2,7 +2,8 @@ import { YN } from '@common/constant';
 import { DELETE, GET, POST } from '@common/httpClient';
 import { FilterType } from '@layouts/Calendar/Calendar';
 import useSWR, { SWRResponse } from 'swr';
-import { CourseRes, ProductStatus } from './course';
+import { ProductStatus } from './course';
+import type { CourseDetailResponseDto } from "@common/api/types/Api";
 
 export enum businessType {
   TYPE_ALL = 'TYPE_ALL',
@@ -52,7 +53,7 @@ export enum courseSubCategoryType {
 
 export interface CourseClassRes {
   seq: number; //시퀀스
-  course: CourseRes;
+  course: CourseDetailResponseDto;
   year: number; //연도
   step: number; //기수
   requestStartDate: string; //신청일

@@ -98,18 +98,21 @@ export function Lesson() {
 
   // 함수.
   
-  console.log("???");
+  console.log("lesson");
   
   // 렌더.
 
   return (
     <LessonContainer maxWidth={false}>
-      {lesson &&
-        <LessonContent
-          lesson={lesson}
-          notice={noticeConfig}
-        />
-      }
+      <LessonVideoContainer>
+        {lesson ?
+          <LessonContent
+            lesson={lesson}
+            notice={noticeConfig}
+          /> :
+          <LessonVideoNotFount>강의가 존재하지 않습니다.</LessonVideoNotFount>
+        }
+      </LessonVideoContainer>
       <LessonSidebar
         course={course}
         tabsConfig={tabsConfig}
@@ -139,3 +142,15 @@ const LessonContainer = styled(Container)`
   width: 100%;
   max-width: calc(100% - 68px);
 `;
+
+const LessonVideoContainer = styled.div`
+  flex: 1;
+  padding-top: 32px;
+`;
+
+const LessonVideoNotFount = styled.div`
+  display: flex;
+  aspect-ratio: 16 / 9;
+  align-items : center;
+  justify-content: center;
+`

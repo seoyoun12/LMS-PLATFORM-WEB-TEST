@@ -51,17 +51,17 @@ export function LessonContent(props: Props) {
     setTimeStart(null);
 
   }, [props.lesson]);
-
+  console.log("lessoncontent");
   // 렌더.
 
   return (
-    <Container>
+    <React.Fragment>
       <VideoWrapper>
         <VideoPlayer
-          config={{
-            playlist: props.lesson.s3Files[0]?.path,
-            autostart: false,
-          }}
+          playlist={props.lesson.s3Files[0]?.path}
+          initialPlayerId="lesson-player"
+          initialConfig={{ autostart: false }}
+          seconds={props.lesson.studyLastTime}
           onPlaying={() => {
 
             if (!timePaused || (timePaused && timeStart !== null)) endTimeSession(Date.now());
@@ -87,17 +87,18 @@ export function LessonContent(props: Props) {
           </Box>
         </ContentInfoProgressContainer>
       </ContentInfoContainer>
-    </Container>
+    </React.Fragment>
   );
 
 }
 
-const Container = styled.div`
-  flex: 1;
-  padding-top: 32px;
+const VideoWrapper = styled.div`
+  display: flex;
+  aspect-ratio: 16 / 9;
+  background-color: #000;
+  align-items: center;
+  justify-content: center;
 `;
-
-const VideoWrapper = styled.div``;
 
 const ContentInfoContainer = styled(Box)``;
 

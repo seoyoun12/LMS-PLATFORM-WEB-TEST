@@ -140,7 +140,10 @@ interface Ncplayer {
    * type: 수신할 이벤트 명. 이벤트 목록은 여기를 참고하세요.
    * callback: 이벤트가 발생하면 호출 시킬 function을 전달
    **/
-  on(type: EventType, callback: (type: Event) => void): void;
+  on(type: EventType, callback: (event: Event) => void): void;
 
   _corePlayer: any;
+
+  _detachEvent(event: { type: EventType, listner: (event: Event) => void }): void;
+  
 }

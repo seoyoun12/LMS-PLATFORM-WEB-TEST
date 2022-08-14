@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Box, Typography } from "@mui/material";
+import { Box, LinearProgress, Typography } from "@mui/material";
 import { VideoPlayer } from "@components/common";
 import type { LessonDetailClientResponseDto } from "@common/api/types/Api";
 import type { Notice } from "./Lesson.types";
@@ -24,9 +24,20 @@ export function LessonContent(props: Props) {
   const [timeSessions, setTimeSessions] = React.useState<TimeSession[]>([]);
   const [timeStart, setTimeStart] = React.useState<number | null>(null);
 
-  // 함수.
+  // 콜백.
 
-  function endTimeSession(end: number) {
+  const getProgress = React.useCallback(() => {
+
+    const watchedTime = (props.lesson.totalTime * 1000) + timeSessions.map((session) => (session.end - session.start)).reduce((p, c) => p + c, 0);
+    const totalTime = props.lesson.min * 60000 + props.lesson.sec * 1000;
+
+    return totalTime === 0 ? 0 : watchedTime / totalTime;
+
+  }, [props.lesson.totalTime, props.lesson.min, props.lesson.sec, timeSessions]);
+
+  // 콜백.
+
+  const endTimeSession = React.useCallback((end: number) => {
 
     if (timeStart === null) return;
 
@@ -37,11 +48,51 @@ export function LessonContent(props: Props) {
         end: end,
       }
     ]);
-    setTimeSessions(null);
+    setTimeStart(null);
 
-    console.log(timeSessions);
+  }, [timeSessions, timeStart]);
 
-  }
+  const onPause = React.useCallback(() => {
+
+    setTimePaused(true);
+    endTimeSession(Date.now());
+
+  }, [endTimeSession]);
+
+  const onPlay = React.useCallback(() => {
+
+    setTimePaused(false);
+    setTimeStart(Date.now());
+
+  }, []);
+
+  const onPlaying = React.useCallback(() => {
+
+    if (!timePaused || (timePaused && timeStart !== null)) endTimeSession(Date.now());
+
+    onPlay();
+
+  }, [endTimeSession, onPlay, timePaused, timeStart]);
+
+  const onSeeking = React.useCallback(() => {
+
+    if (!timePaused) endTimeSession(Date.now());
+
+  }, [endTimeSession, timePaused]);
+
+  const onSeeked = React.useCallback(() => {
+
+    if (!timePaused) setTimeStart(Date.now());
+
+  }, [timePaused]);
+
+  const onEnded = React.useCallback(() => {
+
+    setTimePaused(true);
+    endTimeSession(Date.now());
+
+  }, [endTimeSession]);
+
 
   // 이펙트.
 
@@ -51,7 +102,7 @@ export function LessonContent(props: Props) {
     setTimeStart(null);
 
   }, [props.lesson]);
-  console.log("lessoncontent");
+
   // 렌더.
 
   return (
@@ -62,14 +113,12 @@ export function LessonContent(props: Props) {
           initialPlayerId="lesson-player"
           initialConfig={{ autostart: false }}
           seconds={props.lesson.studyLastTime}
-          onPlaying={() => {
-
-            if (!timePaused || (timePaused && timeStart !== null)) endTimeSession(Date.now());
-
-            setTimePaused(false);
-            setTimeStart(Date.now());
-
-          }}
+          onPause={onPause}
+          onPlay={onPlay}
+          onPlaying={onPlaying}
+          onSeeking={onSeeking}
+          onSeeked={onSeeked}
+          onEnded={onEnded}
         />
       </VideoWrapper>
       <ContentInfoContainer>
@@ -79,11 +128,11 @@ export function LessonContent(props: Props) {
         <ContentInfoProgressContainer>
           <Box>
             <Typography variant="h6" fontWeight="bold" color="#ff5600">
-              
+              {Math.floor(getProgress() * 100)}% 수강 완료
             </Typography>
           </Box>
-          <Box>
-
+          <Box sx={{ width: "100%", mr: 1 }}>
+            <LinearProgress variant="determinate" value={Math.floor(getProgress() * 100)} />
           </Box>
         </ContentInfoProgressContainer>
       </ContentInfoContainer>
@@ -100,6 +149,8 @@ const VideoWrapper = styled.div`
   justify-content: center;
 `;
 
-const ContentInfoContainer = styled(Box)``;
+const ContentInfoContainer = styled(Box)`
+  margin-top: 10px;
+`;
 
 const ContentInfoProgressContainer = styled(Box)``;

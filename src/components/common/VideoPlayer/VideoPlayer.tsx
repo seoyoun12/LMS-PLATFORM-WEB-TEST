@@ -26,10 +26,11 @@ export function VideoPlayer(props: Props) {
 
   const player = React.useRef<Ncplayer | null>(null);
   const playerElement = React.useRef(null);
-
+  
   const needUpdate = React.useRef<boolean>(false);
   const initialConfig = React.useRef<Omit<Config, "playlist">>(props.initialConfig);
   const initialPlayerId = React.useRef<string>(props.initialPlayerId);
+  const eventsPrev = React.useRef<Parameters<Ncplayer["_detachEvent"]>[0][]>([]);
 
   // 이펙트.
 
@@ -49,18 +50,27 @@ export function VideoPlayer(props: Props) {
 
       needUpdate.current = false;
       playerElement.current.replaceChildren();
+
       player.current = new window.ncplayer(initialPlayerId.current, { ...initialConfig.current, playlist: props.playlist });
-  
-      for (const key in Object.keys(props)) {
-  
-        if (!key.startsWith("on")) continue;
-        player.current.on(key.slice(2).toLocaleLowerCase() as EventType, props[key]);
-  
-      }
-  
       player.current.currentTime(props.seconds);
+      eventsPrev.current = [];
 
       if (props.onReady) props.onReady(player.current);
+
+    }
+    
+    if (player.current !== null) {
+
+      for (const item of eventsPrev.current) player.current._detachEvent(item);
+      for (const key of Object.keys(props)) {
+  
+        if (!key.startsWith("on")) continue;
+
+        const event = key.slice(2).toLocaleLowerCase() as EventType;
+        eventsPrev.current.push({ type: event, listner: props[key] });
+        player.current.on(event, props[key]);
+
+      }
 
     }
 

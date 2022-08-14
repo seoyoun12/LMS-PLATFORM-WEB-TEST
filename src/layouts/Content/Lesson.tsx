@@ -5,7 +5,6 @@ import { Spinner } from "@components/ui";
 import { useRouter } from "next/router";
 import { useCourse } from "@common/api/course";
 import { LessonSidebar } from "./LessonSidebar";
-import { MainContent } from "./MainContent";
 import { LessonContent } from "./LessonContent";
 
 const tabsConfig = [
@@ -98,7 +97,7 @@ export function Lesson() {
 
   // 함수.
   
-  console.log("lesson");
+
   
   // 렌더.
 
@@ -123,9 +122,6 @@ export function Lesson() {
     </LessonContainer>
   );
 }
-
-// TODO: LessonContent 없으면 사이더가 치우쳐짐
-// TODO: LessonContent 비디오가 계속 리셋됨(아마 컴포넌트 다시 렌더링 되어서 그런거)
 
 const CourseErrorContainer = styled(Box)`
   display: flex;

@@ -50,7 +50,9 @@ export function CategoryCard() {
       <GridWrap
         container={true}
         spacing={0}
-        columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
+        columns={{ xs: 1, sm: 2, md: 2, lg: 4, xl: 4 }}
+        mt={16}
+        mb={10}
       >
         {categoryData.map(categoryData => (
           <GridItem
@@ -83,11 +85,7 @@ export function CategoryCard() {
   );
 }
 
-const GridWrap = styled(Grid)`
-  width: 90%;
-  padding: 5%;
-  margin-left: 5%;
-`;
+const GridWrap = styled(Grid)``;
 
 const GridContainer = styled(Container)<{ cardcolor: string }>`
   /* display: flex; */

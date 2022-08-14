@@ -9,7 +9,7 @@ import CertificateIcon from '/public/assets/svgs/certificateIcon.svg';
 const categoryData = [
   {
     id: 1,
-    title: '운수종사자',
+    title: '도민교통',
     href: 'stebMove/steb2',
     icon: <CalendarIcon />,
     color: '#fff',
@@ -18,7 +18,7 @@ const categoryData = [
   },
   {
     id: 2,
-    title: '운수종사자',
+    title: '도민교통',
     href: 'stebMove/steb2',
     icon: <PromiseIcon />,
     color: '#fff',
@@ -27,7 +27,7 @@ const categoryData = [
   },
   {
     id: 3,
-    title: '운수종사자',
+    title: '도민교통',
     title2: '학습하기',
     href: '/traffic/3',
     icon: <StudyIcon />,
@@ -37,7 +37,7 @@ const categoryData = [
   },
   {
     id: 4,
-    title: '운수종사자',
+    title: '도민교통',
     title2: '수료확인',
     href: '/traffic/4',
     icon: <CertificateIcon />,

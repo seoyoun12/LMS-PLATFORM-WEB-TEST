@@ -1,13 +1,8 @@
 import type { NextPage } from 'next';
-import styles from '@styles/common.module.scss';
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { ContentCard, CategoryCarousel, Spinner } from '@components/ui';
-import cn from 'clsx';
-import { Link } from '@components/common';
-import { Grid } from '@mui/material';
-import { useCourseList } from '@common/api/course';
-import { useState } from 'react';
+import { Box, Grid } from '@mui/material';
 import { CategoryCard } from '@components/ui/CategoryCard/CategoryCard';
 import { CategoryBoard } from '@components/ui/CategoryBoard/CategoryBoard';
 
@@ -36,13 +31,13 @@ export function Category() {
   // if (!data) return <Spinner />;
 
   return (
-    <div>
+    <Box>
+      {/*팝업 필수 */}
+      {/* <PopupBox /> */}
       <CategoryCarousel datas={bannerData} />
-
       <CategoryCard></CategoryCard>
-
       <CategoryBoard></CategoryBoard>
-    </div>
+    </Box>
   );
 }
 

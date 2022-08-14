@@ -12,6 +12,7 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { getMyUser, MyUser, UserRole } from '@common/api/user';
 import { SiteMap } from '@components/common/GlobalNavigationBar';
 import { AppBar } from '@mui/material';
+import { PopupBox } from '@components/common/PopupBox/PopupBox';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
@@ -133,6 +134,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           <TrafficGlobalNavigationBar />
         )}
       </AppBar>
+      {router.route.includes('/category') && <PopupBox />}
+      {/* category에 넣으면 css 붕괴. 이유 알수없음.(popupBox 넣으면 여러 상관없는 컴포넌트의 css들이 무작위로 지정됨.) */}
 
       <main className="fit">{children}</main>
       <Footer />

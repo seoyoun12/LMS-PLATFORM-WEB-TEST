@@ -7,7 +7,7 @@ import * as React from 'react';
 const hideNavList = [
   // { href: '/course/[courseSeq]' },
   { href: '/admin-center' },
-  { href: '/sign-up' },
+  // { href: '/sign-up' },
   // { href: '/'}
 ];
 

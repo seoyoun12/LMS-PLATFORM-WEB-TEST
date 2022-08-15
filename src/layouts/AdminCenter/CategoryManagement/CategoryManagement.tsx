@@ -35,8 +35,8 @@ const headRows = [
   { name: '상태' }, // status
   { name: '조회수' }, // hit
   { name: '파일' }, // s3Files
-  { name: '수정' }, // s3Files
-  { name: '삭제' }, // s3Files
+  { name: '수정' },
+  { name: '삭제' },
 ];
 
 const tabsConfig = [

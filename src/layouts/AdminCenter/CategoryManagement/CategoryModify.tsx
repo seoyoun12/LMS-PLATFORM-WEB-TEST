@@ -1,5 +1,10 @@
 import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
-import { CategoryBoard, CategoryBoardInput, modifyCategoryBoard, useCategoryBoard } from '@common/api/categoryBoard';
+import {
+  CategoryBoard,
+  CategoryBoardInput,
+  modifyCategoryBoard,
+  useCategoryBoard,
+} from '@common/api/categoryBoard';
 import { CategoryUploadForm } from '@components/admin-center';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { Container } from '@mui/material';
@@ -15,7 +20,13 @@ export function CategoryModify() {
 
   console.log('categorySeq : ', categorySeq);
 
-  const handleSubmit = async ({ files, categoryBoardInput }: { files: File[]; categoryBoardInput: CategoryBoardInput }) => {
+  const handleSubmit = async ({
+    files,
+    categoryBoardInput,
+  }: {
+    files: File[];
+    categoryBoardInput: CategoryBoardInput;
+  }) => {
     try {
       if (data?.seq) {
         await modifyCategoryBoard({ seq: data?.seq, categoryBoardInput });
@@ -70,7 +81,12 @@ export function CategoryModify() {
 
   return (
     <Container className={styles.globalContainer}>
-      <CategoryUploadForm mode="modify" category={data} courseSeq={data?.courseSeq} onHandleSubmit={handleSubmit} />
+      <CategoryUploadForm
+        mode="modify"
+        category={data}
+        courseSeq={data?.courseSeq}
+        onHandleSubmit={handleSubmit}
+      />
     </Container>
   );
 }

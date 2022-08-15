@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Box, LinearProgress, Typography } from "@mui/material";
 import { VideoPlayer } from "@components/common";
-import type { LessonDetailClientResponseDto } from "@common/api/types/Api";
+import type { LessonDetailClientResponseDto } from "@common/api/Api";
 import type { Notice } from "./Lesson.types";
 
 interface TimeSession {

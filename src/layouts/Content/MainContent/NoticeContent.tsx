@@ -4,7 +4,7 @@ import styled from "@emotion/styled"
 import { Typography } from "@mui/material"
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import type { CourseDetailClientResponseDto } from "@common/api/types/Api";
+import type { CourseDetailClientResponseDto } from "@common/api/Api";
 
 interface Props{
     course:CourseDetailClientResponseDto;

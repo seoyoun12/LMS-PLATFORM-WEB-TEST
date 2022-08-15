@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { NoticeContent } from "./NoticeContent";
 import { Box, LinearProgress, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import type { CourseDetailClientResponseDto } from "@common/api/types/Api";
+import type { CourseDetailClientResponseDto } from "@common/api/Api";
 
 interface Props {
   course: CourseDetailClientResponseDto;

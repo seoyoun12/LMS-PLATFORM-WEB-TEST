@@ -19,7 +19,7 @@ import { LessonTabs } from "@components/ui/Tabs";
 import DownloadIcon from "@mui/icons-material/Download";
 import { useRecoilState } from "recoil";
 import { contentSeqState, revealVideoState } from "@common/recoil";
-import type { CourseDetailClientResponseDto } from "@common/api/types/Api";
+import type { CourseDetailClientResponseDto } from "@common/api/Api";
 
 interface Props {
   course: CourseDetailClientResponseDto;

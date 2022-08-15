@@ -3,7 +3,7 @@ import { DELETE, GET, POST } from '@common/httpClient';
 import { FilterType } from '@layouts/Calendar/Calendar';
 import useSWR, { SWRResponse } from 'swr';
 import { ProductStatus } from './course';
-import type { CourseDetailClientResponseDto } from "@common/api/types/Api";
+import type { CourseDetailClientResponseDto } from "@common/api/Api";
 
 export enum businessType {
   TYPE_ALL = 'TYPE_ALL',

@@ -24,3 +24,6 @@ export { CalendarUpload } from './CalendarManagement/CalendarUpload';
 
 export { BannerManagement } from './BannerManagement/BannerManagement';
 export { BannerUpload } from './BannerManagement/BannerUpload';
+
+export { QnaManagement } from './QnaManagement/QnaManagement';
+export { QnaAnswer } from './QnaManagement/QnaAnswer';

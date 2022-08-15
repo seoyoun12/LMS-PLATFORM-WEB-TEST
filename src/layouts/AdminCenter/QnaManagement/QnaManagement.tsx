@@ -43,6 +43,12 @@ export function QnaManagement() {
   const [seq, setSeq] = useState<number | null>(null);
   const { data, error, mutate } = qnaAdmList({ page });
 
+  // 답변
+  const onClickAnswerQna = async (seq: number) => {
+    router.push(`/admin-center/qna/qna-answer/${seq}`);
+    mutate();
+  };
+
   // Pagination
   useEffect(() => {
     const { page } = router.query;
@@ -106,7 +112,7 @@ export function QnaManagement() {
                   variant="text"
                   color="warning"
                   size="small"
-                  // onClick={() => onClickRemoveCategory(qna.seq)}
+                  onClick={() => onClickAnswerQna(qna.seq)}
                 >
                   답변
                 </Button>

@@ -4,6 +4,7 @@ import { Box, LinearProgress, Typography } from "@mui/material";
 import { VideoPlayer } from "@components/common";
 import type { LessonDetailClientResponseDto } from "@common/api/Api";
 import type { Notice } from "./Lesson.types";
+import ApiClient from "@common/api/ApiClient";
 
 interface TimeSession {
   start: number;
@@ -11,6 +12,8 @@ interface TimeSession {
 }
 
 interface Props {
+  courseUserSeq: number;
+  courseProgressSeq: number;
   lesson: LessonDetailClientResponseDto;
   notice: Notice[];
   onProgress: (sessions: TimeSession[]) => void;
@@ -32,14 +35,20 @@ export function LessonContent(props: Props) {
 
   // 콜백.
 
+  const getWatchedTime = React.useCallback(() => {
+
+    return (props.lesson.totalTime * 1000) + timeSessions.map((session) => (session.end - session.start)).reduce((p, c) => p + c, 0);
+
+  }, [props.lesson.totalTime, timeSessions]);
+
   const getProgress = React.useCallback(() => {
 
-    const watchedTime = (props.lesson.totalTime * 1000) + timeSessions.map((session) => (session.end - session.start)).reduce((p, c) => p + c, 0);
+    const watchedTime = getWatchedTime();
     const totalTime = props.lesson.min * 60000 + props.lesson.sec * 1000;
 
     return totalTime === 0 ? 0 : watchedTime / totalTime;
 
-  }, [props.lesson.totalTime, props.lesson.min, props.lesson.sec, timeSessions]);
+  }, [getWatchedTime, props.lesson.min, props.lesson.sec]);
 
   const endTimeSession = React.useCallback((end: number, startAgainImmediately = false) => {
 
@@ -58,14 +67,35 @@ export function LessonContent(props: Props) {
 
   // 콜백 - 타이머.
 
-  const stopTimer = React.useCallback(() => {
+  const stopTimer = React.useCallback(async (isEnd = false) => {
+
+    if (timer.current !== null) {
+      
+      window.clearInterval(timer.current);
+
+      await ApiClient.courseLog
+        .createCourseModulesUsingPost1({
+          courseUserSeq: props.courseUserSeq,
+          lessonSeq: props.lesson.seq,
+          studyTime: apiSeconds.current,
+        })
+        .then(() => {
+
+          return ApiClient.courseProgress
+            .updateCourseProgressUsingPut({
+              courseUserSeq: props.courseUserSeq,
+              lessonSeq: props.lesson.seq,
+              studyLastTime: isEnd ? (props.lesson.min * 60 + props.lesson.sec) : Math.floor(getWatchedTime() / 1000),
+            });
+
+        });
+
+    }
 
     timerSeconds.current = 0;
     apiSeconds.current = 0;
 
-    if (timer.current !== null) window.clearInterval(timer.current);
-
-  }, []);
+  }, [getWatchedTime, props.courseUserSeq, props.lesson.min, props.lesson.sec, props.lesson.seq]);
 
   const startTimer = React.useCallback(() => {
 
@@ -76,16 +106,21 @@ export function LessonContent(props: Props) {
       timerSeconds.current++;
       apiSeconds.current++;
 
-      if (apiSeconds.current === 300) {
+      if (apiSeconds.current >= 300) {
 
-        
+        ApiClient.courseLog
+          .createCourseModulesUsingPost1({
+            courseUserSeq: props.courseUserSeq,
+            lessonSeq: props.lesson.seq,
+            studyTime: apiSeconds.current,
+          });
         apiSeconds.current = 0;
 
       }
 
     }, 1000);
 
-  }, [stopTimer]);
+  }, [props.courseUserSeq, props.lesson.seq, stopTimer]);
 
   // 콜백 - 이벤트.
   // 
@@ -102,19 +137,28 @@ export function LessonContent(props: Props) {
 
   const onPlay = React.useCallback(() => {
 
+    ApiClient.courseLog
+      .createCourseModulesUsingPost1({
+        courseUserSeq: props.courseUserSeq,
+        lessonSeq: props.lesson.seq,
+        studyTime: 0,
+      });
+
     setTimePaused(false);
     setTimeStart(Date.now());
     startTimer();
 
-  }, [startTimer]);
+  }, [props.courseUserSeq, props.lesson.seq, startTimer]);
 
   const onPlaying = React.useCallback(() => {
 
     if (!timePaused || (timePaused && timeStart !== null)) endTimeSession(Date.now());
 
-    onPlay();
+    setTimePaused(false);
+    setTimeStart(Date.now());
+    startTimer();
 
-  }, [endTimeSession, onPlay, timePaused, timeStart]);
+  }, [endTimeSession, startTimer, timePaused, timeStart]);
 
   const onSeeking = React.useCallback(() => {
 
@@ -132,7 +176,7 @@ export function LessonContent(props: Props) {
 
     setTimePaused(true);
     endTimeSession(Date.now());
-    stopTimer();
+    stopTimer(true);
 
   }, [endTimeSession, stopTimer]);
 

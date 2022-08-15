@@ -14,10 +14,12 @@ import { Api } from './Api';
 
 // 클라이언트.
 
-export const ApiClient = new Api({
+const ApiClient = new Api({
   baseURL: axiosSetting.server(),
   headers: axiosHeaders,
 });
+
+export default ApiClient;
 
 // 리퀘스트 인터셉터.
 

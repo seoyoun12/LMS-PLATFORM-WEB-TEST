@@ -94,18 +94,17 @@ export function Lesson() {
 
   const lessonIndex = course.lessons.findIndex((lesson) => lesson.seq === lessonSeq);
   const lesson = lessonIndex >= 0 ? course.lessons[lessonIndex] : null;
+  const courseProgressSeq = lesson && course.courseProgressResponseDtoList.find((v) => v.lessonSeq = lesson.seq)?.courseProgressSeq || null;
 
-  // 함수.
-  
-  
-  
   // 렌더.
 
   return (
     <LessonContainer maxWidth={false}>
       <LessonVideoContainer>
-        {lesson ?
+        {lesson && courseProgressSeq ?
           <LessonContent
+            courseUserSeq={course.courseUserSeq}
+            courseProgressSeq={courseProgressSeq}
             lesson={lesson}
             notice={noticeConfig}
             onProgress={() => undefined}

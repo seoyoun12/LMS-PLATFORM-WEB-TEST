@@ -97,7 +97,7 @@ export function Lesson() {
 
   // 함수.
   
-
+  
   
   // 렌더.
 
@@ -108,6 +108,7 @@ export function Lesson() {
           <LessonContent
             lesson={lesson}
             notice={noticeConfig}
+            onProgress={() => undefined}
           /> :
           <LessonVideoNotFount>강의가 존재하지 않습니다.</LessonVideoNotFount>
         }

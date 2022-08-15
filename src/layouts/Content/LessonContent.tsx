@@ -13,7 +13,7 @@ interface TimeSession {
 interface Props {
   lesson: LessonDetailClientResponseDto;
   notice: Notice[];
-  // onPlay: () => void;
+  onProgress: (sessions: TimeSession[]) => void;
 }
 
 export function LessonContent(props: Props) {
@@ -23,6 +23,12 @@ export function LessonContent(props: Props) {
   const [timePaused, setTimePaused] = React.useState<boolean>(true);
   const [timeSessions, setTimeSessions] = React.useState<TimeSession[]>([]);
   const [timeStart, setTimeStart] = React.useState<number | null>(null);
+
+  // 레퍼런스.
+
+  const timer = React.useRef<number | null>(null);
+  const timerSeconds = React.useRef<number>(0);
+  const apiSeconds = React.useRef<number>(0);
 
   // 콜백.
 
@@ -35,9 +41,7 @@ export function LessonContent(props: Props) {
 
   }, [props.lesson.totalTime, props.lesson.min, props.lesson.sec, timeSessions]);
 
-  // 콜백.
-
-  const endTimeSession = React.useCallback((end: number) => {
+  const endTimeSession = React.useCallback((end: number, startAgainImmediately = false) => {
 
     if (timeStart === null) return;
 
@@ -48,9 +52,46 @@ export function LessonContent(props: Props) {
         end: end,
       }
     ]);
-    setTimeStart(null);
+    setTimeStart(startAgainImmediately ? end : null);
 
   }, [timeSessions, timeStart]);
+
+  // 콜백 - 타이머.
+
+  const stopTimer = React.useCallback(() => {
+
+    timerSeconds.current = 0;
+    apiSeconds.current = 0;
+
+    if (timer.current !== null) window.clearInterval(timer.current);
+
+  }, []);
+
+  const startTimer = React.useCallback(() => {
+
+    stopTimer();
+
+    timer.current = window.setInterval(() => {
+
+      timerSeconds.current++;
+      apiSeconds.current++;
+
+      if (apiSeconds.current === 300) {
+
+        
+        apiSeconds.current = 0;
+
+      }
+
+    }, 1000);
+
+  }, [stopTimer]);
+
+  // 콜백 - 이벤트.
+  // 
+  // 사실 여기 이렇게 하는게 맞는지 모르겠음...
+  // 일단 여러번 실행 결과 이게 가장 안정적이게 나왔지만
+  // 만약 prop으로 전달해도 문제 없으면 바꾸는게 좋을지도.
 
   const onPause = React.useCallback(() => {
 
@@ -63,8 +104,9 @@ export function LessonContent(props: Props) {
 
     setTimePaused(false);
     setTimeStart(Date.now());
+    startTimer();
 
-  }, []);
+  }, [startTimer]);
 
   const onPlaying = React.useCallback(() => {
 
@@ -90,18 +132,25 @@ export function LessonContent(props: Props) {
 
     setTimePaused(true);
     endTimeSession(Date.now());
+    stopTimer();
 
-  }, [endTimeSession]);
-
+  }, [endTimeSession, stopTimer]);
 
   // 이펙트.
 
   React.useEffect(() => {
 
+    stopTimer();
     setTimeSessions([]);
     setTimeStart(null);
 
-  }, [props.lesson]);
+  }, [props.lesson, stopTimer]);
+
+  React.useEffect(() => {
+
+    if (timer.current !== null) props.onProgress(timeSessions);
+
+  }, [props, timeSessions]);
 
   // 렌더.
 

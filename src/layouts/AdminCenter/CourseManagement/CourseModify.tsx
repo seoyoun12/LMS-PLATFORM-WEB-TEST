@@ -9,13 +9,15 @@ import { EvaluationInfo } from '@layouts/AdminCenter/CourseManagement/Evaluation
 import { Forum } from '@layouts/AdminCenter/CourseManagement/Forum';
 import { Course, courseDetail, CourseInput, courseModify } from '@common/api/course';
 import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
+import { CourseModule } from './CourseModule';
 
 enum TabValue {
   CourseInfo = 'course-info',
   ContentList = 'content-list',
   EvaluationInfo = 'evaluation-info',
   Forum = 'forum',
-  Library = 'library'
+  Library = 'library',
+  CourseModule = 'course-module',
 }
 
 const tabsConfig = [
@@ -23,24 +25,24 @@ const tabsConfig = [
   { label: '콘텐츠 목록', value: TabValue.ContentList },
   { label: '평가 정보', value: TabValue.EvaluationInfo },
   { label: '토론', value: TabValue.Forum },
-  { label: '강의자료', value: TabValue.Library }
+  { label: '강의자료', value: TabValue.Library },
+  { label: '과정모듈', value: TabValue.CourseModule },
 ];
 
 export function CourseModify() {
-
   const router = useRouter();
   const snackbar = useSnackbar();
   const { courseSeq, tab } = router.query;
   const { data, error } = courseDetail(Number(courseSeq));
 
-  console.log("CourseModify courseSeq : ", courseSeq);
+  console.log('CourseModify courseSeq : ', courseSeq);
 
-  const handleSubmit = async ({ 
-    files, 
-    // isFileDelete, 
-    courseInput, 
-    // seq
-    } : {
+  const handleSubmit = async ({
+    files,
+    // isFileDelete,
+    courseInput,
+  }: // seq
+  {
     files: File[];
     // isFileDelete: boolean;
     courseInput: CourseInput;
@@ -48,20 +50,19 @@ export function CourseModify() {
   }) => {
     try {
       if (data?.seq) {
-        await courseModify({ seq : data.seq, courseInput });
+        await courseModify({ seq: data.seq, courseInput });
         await fileHandler(files);
         snackbar({ variant: 'success', message: '성공적으로 수정되었습니다.' });
         router.push('/admin-center/course');
       }
     } catch (e: any) {
       console.error(e);
-      snackbar({ variant: "error", message: '업로드에 실패했습니다.' });
+      snackbar({ variant: 'error', message: '업로드에 실패했습니다.' });
       // snackbar({ variant: 'error', message: e.data.message });
     }
   };
 
   const fileHandler = async (files: File[]) => {
-
     if (files == undefined) {
       await deleteFile({
         fileTypeId: data?.seq,
@@ -72,14 +73,14 @@ export function CourseModify() {
       await deleteFile({
         fileTypeId: data?.seq,
         fileType: BbsType.TYPE_COURSE,
-        fileSeqList: data.s3Files.map(v => v.seq)
+        fileSeqList: data.s3Files.map(v => v.seq),
       });
       await uploadFile({
         fileTypeId: data?.seq,
         fileType: BbsType.TYPE_COURSE,
-        files
+        files,
       });
-    } 
+    }
   };
 
   if (error) return <div>...ERROR</div>;
@@ -92,20 +93,14 @@ export function CourseModify() {
       </Box>
       {
         {
-          [TabValue.CourseInfo]:
-            <CourseUploadForm
-              mode="modify"
-              course={data}
-              onHandleSubmit={handleSubmit}
-            />,
-          [TabValue.ContentList]:
-            <ContentList />,
-          [TabValue.EvaluationInfo]:
-            <EvaluationInfo />,
-          [TabValue.Forum]:
-            <Forum />,
-          [TabValue.Library]:
-            <Library />
+          [TabValue.CourseInfo]: (
+            <CourseUploadForm mode="modify" course={data} onHandleSubmit={handleSubmit} />
+          ),
+          [TabValue.ContentList]: <ContentList />,
+          [TabValue.EvaluationInfo]: <EvaluationInfo />,
+          [TabValue.Forum]: <Forum />,
+          [TabValue.Library]: <Library />,
+          [TabValue.CourseModule]: <CourseModule />,
         }[tab as string]
       }
     </Container>

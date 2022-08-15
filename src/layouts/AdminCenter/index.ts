@@ -24,3 +24,7 @@ export { CalendarUpload } from './CalendarManagement/CalendarUpload';
 
 export { BannerManagement } from './BannerManagement/BannerManagement';
 export { BannerUpload } from './BannerManagement/BannerUpload';
+
+export { SurveyManagement } from './SurveyMenagement/SurveyManagement';
+export { SurveyUpload } from './SurveyMenagement/SurveyUpload';
+export { SurveyModify } from './SurveyMenagement/SurveyModify';

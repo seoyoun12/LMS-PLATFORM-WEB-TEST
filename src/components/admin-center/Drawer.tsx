@@ -81,6 +81,22 @@ export function Drawer({ children }: { children: ReactNode }) {
       icon: <SourceOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
     },
     {
+      name: '설문관리',
+      children: [
+        {
+          name: '설문 목록',
+          href: '/admin-center/survey',
+          isActive: router.pathname === '/admin-center/survey',
+        },
+        {
+          name: '설문 등록',
+          href: '/admin-center/survey/upload',
+          isActive: router.pathname === '/admin-center/survey/upload',
+        },
+      ],
+      icon: <SourceOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    },
+    {
       name: '회원관리',
       children: [
         {

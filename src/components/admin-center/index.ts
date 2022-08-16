@@ -6,3 +6,5 @@ export { QuestionPreviewModal } from './QuestionPreviewModal';
 export { UserModifyModal } from './UserModifyModal';
 export { LibraryUploadModal } from './LibraryUploadModal';
 export { CategoryUploadForm } from './CategoryUploadForm';
+export { SurveyQuestionItem } from './Survey/SurveyQuestionItem';
+export { SurveyQuestionModifyModal } from './Survey/SurveyQuestionModifyModal';

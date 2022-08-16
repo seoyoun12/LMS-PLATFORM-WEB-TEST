@@ -1,4 +1,4 @@
-import { GET, POST, PUT } from '@common/httpClient';
+import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { FetchPaginationResponse } from 'types/fetch';
 import { ProductStatus } from '../course';
@@ -71,4 +71,8 @@ export function modifySurvey(surveySeq: number, req: SurveyRequestDto) {
 
 export function uploadSurvey(req: SurveyRequestDto) {
   return POST(`/survey/adm/`, req);
+}
+
+export function deleteSurvey(seq: number) {
+  return DELETE(`/survey/adm/${seq}`);
 }

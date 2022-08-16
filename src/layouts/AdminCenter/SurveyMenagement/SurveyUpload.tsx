@@ -4,6 +4,7 @@ import {
   SurveyQuestionRequestDto,
   SurveyRequestDto,
 } from '@common/api/types/Api';
+import { SurveyQuestionItem } from '@components/admin-center';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
@@ -19,10 +20,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-interface SurveyQuestion extends SurveyQuestionRequestDto {
+export interface SurveyQuestion extends SurveyQuestionRequestDto {
   dummySeq: number;
 }
 
@@ -44,6 +46,7 @@ const defaultValue = {
 
 export function SurveyUpload() {
   const snackbar = useSnackbar();
+  const router = useRouter();
   const [questions, setQuestions] = useState<SurveyQuestion[]>([]);
   const [type, setType] = useState<QuestionType>(QuestionType.TYPE_MULTIPLE_CHOICE);
   const [title, setTitle] = useState<string>();
@@ -51,7 +54,7 @@ export function SurveyUpload() {
   const { register, watch, setValue, handleSubmit, reset } =
     useForm<SurveyQuestionRequestDto>({ defaultValues: defaultValue });
 
-    //change question Type
+  //change question Type
   const onChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value === QuestionType.TYPE_MULTIPLE_CHOICE) {
       setType(QuestionType.TYPE_MULTIPLE_CHOICE);
@@ -62,6 +65,7 @@ export function SurveyUpload() {
 
   //add question
   const onClickAddQuestion = () => {
+    if (!title || title === '') return window.alert('설문제목이 필요합니다!');
     if (!watch().content || watch().content === '') {
       return window.alert('문항 제목을 입력해 주세요!');
     }
@@ -81,38 +85,10 @@ export function SurveyUpload() {
     setDisableTitle(true);
   };
 
-  //delete question
-  const onClickDeleteQuestion = (dummySeq: number) => {
-    setQuestions(prev => prev.filter(item => item.dummySeq !== dummySeq));
-  };
-
   //title lock
   useEffect(() => {
     if (questions.length === 0) setDisableTitle(false);
   }, [questions]);
-
-  //exchange
-  const objToJsx = (objParam: SurveyMultipleChoiceRequestDto): React.ReactNode => {
-    let arr: string[] = [];
-    for (let [key, obj] of Object.entries(objParam)) {
-      if (!obj) break;
-      arr.push(obj);
-    }
-    return arr.map((item, index) => (
-      <Box key={index} className="question-child" display="flex">
-        <Box
-          sx={{
-            borderRight: '1px solid #cacaca',
-            paddingRight: '0.5rem',
-            marginRight: '0.5rem',
-          }}
-        >
-          {index + 1}번째 항목
-        </Box>
-        <Box>{item}</Box>
-      </Box>
-    ));
-  };
 
   const onClickSubmit = async () => {
     let arr = questions.map(item => {
@@ -122,15 +98,16 @@ export function SurveyUpload() {
         surveyMultipleChoice: item.surveyMultipleChoice,
       };
     });
-    console.log(arr, '임니다');
+    console.log(arr, 'arr');
     try {
       const data: SurveyRequestDto = {
         title,
         surveyQuestionList: arr,
       };
-      console.log('최종', data);
+      console.log('data: ', data);
       await uploadSurvey(data);
       snackbar({ variant: 'success', message: '업로드 완료했습니다.' });
+      router.push(`/admin-center/survey`);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
     }
@@ -153,6 +130,7 @@ export function SurveyUpload() {
             placeholder="설문 제목"
             disabled={disableTitle}
             onChange={e => setTitle(e.target.value)}
+            value={title}
           />
         </Box>
         <Box mb={4} mt={4}>
@@ -198,23 +176,7 @@ export function SurveyUpload() {
             추가
           </Button>
           {questions.map(item => (
-            <Table key={item.dummySeq}>
-              <TableBody>
-                <TableRow>
-                  <TableCell width="20%">{item.content}</TableCell>
-                  <TableCell width="70%">{objToJsx(item.surveyMultipleChoice)}</TableCell>
-                  <TableCell width="10%">
-                    <Button
-                      variant="contained"
-                      color="warning"
-                      onClick={() => onClickDeleteQuestion(item.dummySeq)}
-                    >
-                      삭제
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+            <SurveyQuestionItem item={item} setQuestions={setQuestions} />
           ))}
         </Box>
         <Button variant="contained" onClick={onClickSubmit} fullWidth>

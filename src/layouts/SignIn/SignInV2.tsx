@@ -34,7 +34,14 @@ export function SignInV2() {
   const loadingRef = React.useRef(false);
 
   const { watch, setValue } = useForm({
-    defaultValues: { name: '', identify1: '', identify2: '', usernameErr: false, identify1Err: false, identify2Err: false },
+    defaultValues: {
+      name: '',
+      identify1: '',
+      identify2: '',
+      usernameErr: false,
+      identify1Err: false,
+      identify2Err: false,
+    },
   });
   const { name, identify1, identify2, usernameErr, identify1Err, identify2Err } = watch();
 
@@ -54,7 +61,7 @@ export function SignInV2() {
     const password = identify1 + identify2;
 
     if (usernameErr || identify1Err || identify2Err) return;
-    if (!smsYn) return window.alert('문자수신동의하셔야 합니다!');
+    if (!smsYn) return window.alert('개인정보 수집 및 이용에 동의해야합니다.');
     if (loadingRef.current) return console.log('Block multiple click');
 
     loadingRef.current = true;
@@ -136,7 +143,9 @@ export function SignInV2() {
             error={usernameErr}
             autoFocus
           />
-          <FormHelperText sx={{ color: 'red' }}>{usernameErr && '이름을 입력해 주세요'}</FormHelperText>
+          <FormHelperText sx={{ color: 'red' }}>
+            {usernameErr && '이름을 입력해 주세요'}
+          </FormHelperText>
           {/* <TextField
             margin="normal"
             required
@@ -177,7 +186,8 @@ export function SignInV2() {
             />
           </Box>
           <FormHelperText sx={{ color: 'red' }}>
-            {(identify1Err || identify2Err) && '올바르지 않은 주민등록번호 입니다. 다시 한번 확인해주세요.'}
+            {(identify1Err || identify2Err) &&
+              '올바르지 않은 주민등록번호 입니다. 다시 한번 확인해주세요.'}
           </FormHelperText>
           <IndividualCheckBox>
             <Box>
@@ -187,11 +197,19 @@ export function SignInV2() {
                   setSmsYn(checked);
                 }}
               />
-              <Typography component="span">개인정보 수집 및 이용에 동의합니다.</Typography>
+              <Typography component="span">
+                개인정보 수집 및 이용에 동의합니다.
+              </Typography>
             </Box>
             <ViewContentBox onClick={() => setOpen(true)}>내용보기</ViewContentBox>
           </IndividualCheckBox>
-          <Button type="submit" fullWidth variant="contained" disabled={loading} sx={{ mt: 1, mb: 2 }}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            disabled={loading}
+            sx={{ mt: 1, mb: 2 }}
+          >
             {loading ? <Spinner fit={true} /> : '확인'}
           </Button>
           <Modal
@@ -201,8 +219,20 @@ export function SignInV2() {
             // sx={{ maxWidth: '800px', margin: 'auto' }}
             maxWidth="md"
             action={
-              <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', gap: '1rem', paddingBottom: '1rem' }}>
-                <ConfirmButton variant="contained" onClick={() => setOpen(false)} fullWidth>
+              <Box
+                sx={{
+                  display: 'flex',
+                  width: '100%',
+                  justifyContent: 'center',
+                  gap: '1rem',
+                  paddingBottom: '1rem',
+                }}
+              >
+                <ConfirmButton
+                  variant="contained"
+                  onClick={() => setOpen(false)}
+                  fullWidth
+                >
                   확인
                 </ConfirmButton>
               </Box>

@@ -1,5 +1,16 @@
 import styled from '@emotion/styled';
-import { Box, FormControl, InputLabel, Select, Table, TableCell, TableContainer, TableRow, Typography, MenuItem } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  Table,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+  MenuItem,
+} from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -13,19 +24,34 @@ import {
   useSingleCourseClass,
 } from '@common/api/courseClass';
 import { Spinner } from '@components/ui';
-import { courseCategory, courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
+import {
+  courseCategory,
+  courseSubCategory,
+} from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
 import { courseBusinessTypeList, FilterType } from '@layouts/Calendar/Calendar';
 import { courseClassEnrollInfo } from '@common/recoil';
 import { useRecoilState } from 'recoil';
 import { useSnackbar } from '@hooks/useSnackbar';
 
-export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransSaveInputDataType> }) {
-  const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(null); //교육과정
+export function EduOverview({
+  setValue,
+}: {
+  setValue: UseFormSetValue<UserTransSaveInputDataType>;
+}) {
+  const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(
+    null
+  ); //교육과정
   const [courseBusinessType, setCourseBusinessType] = useState<businessType | null>(null); //업종구분
   const [stepSeq, setStepSeq] = useState<number | null>(null); //업종구분
-  const [values, setValues] = useState<{ step: number; studyStartDate: string; studyEndDate: string }>();
-  const [stepsRes, setStepsRes] = useState<{ seq: number; step: number; studyStartDate: string; studyEndDate: string }[]>([]); //기수 교육시작 교육끝
+  const [values, setValues] = useState<{
+    step: number;
+    studyStartDate: string;
+    studyEndDate: string;
+  }>();
+  const [stepsRes, setStepsRes] = useState<
+    { seq: number; step: number; studyStartDate: string; studyEndDate: string }[]
+  >([]); //기수 교육시작 교육끝
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo); //전역에 교육정보 저장
   const router = useRouter();
   const snackbar = useSnackbar();
@@ -38,7 +64,11 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
       setCourseCategoryType(data.course.courseCategoryType);
       setCourseBusinessType(data.course.courseBusinessType); //임시타입
       setStepSeq(data.seq);
-      setValues({ step: data.step, studyStartDate: data.studyStartDate, studyEndDate: data.studyEndDate });
+      setValues({
+        step: data.step,
+        studyStartDate: data.studyStartDate,
+        studyEndDate: data.studyEndDate,
+      });
       // setValue('businessType', data.course.courseCategoryType);
 
       console.log('get courseClass', data, enrollInfo);
@@ -63,7 +93,8 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
   // }, [data, stepSeq, stepsRes]);
 
   const getSteps = async () => {
-    if (!courseCategoryType || !courseBusinessType) return window.alert('기수 가져오기 실패');
+    if (!courseCategoryType || !courseBusinessType)
+      return window.alert('기수 가져오기 실패');
     const { data } = await getCourseClassStep(courseCategoryType, courseBusinessType);
     setStepsRes([...data]);
     console.log(data, stepsRes);
@@ -95,7 +126,10 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
                     id="student"
                     value={courseCategoryType}
                     onChange={e => {
-                      setCourseCategoryType(courseCategory.filter(cate => cate.type === e.target.value)[0].type);
+                      setCourseCategoryType(
+                        courseCategory.filter(cate => cate.type === e.target.value)[0]
+                          .type
+                      );
                       // setEnrollInfo(prev => {
                       // return { ...prev, courseCategoryType: courseCategory.filter(cate => cate.type === e.target.value)[0].type };
                       // });
@@ -121,7 +155,11 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
                     id="courseBusinessType"
                     value={courseBusinessType}
                     onChange={e => {
-                      setCourseBusinessType(courseBusinessTypeList.filter(filter => filter.enType === e.target.value)[0].enType);
+                      setCourseBusinessType(
+                        courseBusinessTypeList.filter(
+                          filter => filter.enType === e.target.value
+                        )[0].enType
+                      );
                       // setEnrollInfo(prev => {
                       // return {
                       // ...prev,

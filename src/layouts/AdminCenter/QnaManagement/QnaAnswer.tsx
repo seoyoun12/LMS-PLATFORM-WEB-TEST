@@ -1,5 +1,11 @@
 import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
-import { uploadQnaAnswer, QnaAnswerInput, QnaAnswer, qnaDetail } from '@common/api/qna';
+import {
+  uploadQnaAnswer,
+  QnaAnswerInput,
+  QnaAnswer,
+  qnaDetail,
+  Qna,
+} from '@common/api/qna';
 import { QnaAnswerForm } from '@components/admin-center/QnaAnswerForm';
 import { QnaQuestionForm } from '@components/admin-center/QnaQuestionForm';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -23,15 +29,17 @@ export function QnaAnswer() {
 
   const handleSubmit = async ({
     files,
+    seq,
     qnaAnswerInput,
   }: {
     files: File[];
+    seq: Qna['seq'];
     qnaAnswerInput: QnaAnswerInput;
   }) => {
     try {
       // await uploadQnaAnswer({ seq: data?.seq, qnaAnswerInput });
-      // const qnaAnswer = await uploadQnaAnswer(qnaAnswer?.seq, qnaAnswerInput);
-      // await fileHandler(files, qnaAnswer.data);
+      const qnaAnswer = await uploadQnaAnswer(seq, qnaAnswerInput);
+      await fileHandler(files, qnaAnswer.data);
       snackbar({ variant: 'success', message: '답변이 등록되었습니다.' });
       router.push(`/admin-center/qna`);
     } catch (e: any) {

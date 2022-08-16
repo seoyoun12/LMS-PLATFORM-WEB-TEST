@@ -16,6 +16,7 @@ import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import ViewComfyAltOutlinedIcon from '@mui/icons-material/ViewComfyAltOutlined';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
+import ChromeReaderModeOutlinedIcon from '@mui/icons-material/ChromeReaderModeOutlined';
 import { ReactNode } from 'react';
 import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
@@ -63,6 +64,22 @@ export function Drawer({ children }: { children: ReactNode }) {
         },
       ],
       icon: <QuestionAnswerOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    },
+    {
+      name: '학습자료관리',
+      children: [
+        {
+          name: '학습자료 목록',
+          href: '/admin-center/learning-material',
+          isActive: router.pathname === '/admin-center/learning-material',
+        },
+        {
+          name: '학습자료 등록',
+          href: '/admin-center/learning-material/upload',
+          isActive: router.pathname === '/admin-center/learning-material/upload',
+        },
+      ],
+      icon: <ChromeReaderModeOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
     },
     {
       name: '과정관리',

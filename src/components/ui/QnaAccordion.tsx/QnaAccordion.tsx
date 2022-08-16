@@ -33,6 +33,7 @@ interface QnaBoardAccordionList {
     thirdContent?: string;
     fourthContent?: string;
     fifthContent?: string;
+    sixthContent?: string;
     isActive?: boolean;
   }[];
 }
@@ -104,6 +105,7 @@ export function QnaAccordion({
                       thirdContent,
                       fourthContent,
                       fifthContent,
+                      sixthContent,
                       isActive,
                     }) => (
                       <ListItem
@@ -166,6 +168,10 @@ export function QnaAccordion({
                                 <ListItemText
                                   primary={fifthContent}
                                   className="FifthContent"
+                                />
+                                <ListItemText
+                                  primary={sixthContent}
+                                  className="SixthContent"
                                 />
                               </AnswerBoardBox>
                             </TableCellRight>

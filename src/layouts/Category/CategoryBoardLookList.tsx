@@ -47,6 +47,9 @@ export function CategoryBoardLookList() {
                   thirdContent: data.s3Files[0] ? data.s3Files[0].name : '파일없음',
                   fourthContent: dateFormat(data.qnaAnswer?.createdDtime, 'isoDate'),
                   fifthContent: data.qnaAnswer?.content,
+                  sixthContent: data.qnaAnswer?.s3Files[0]
+                    ? data.qnaAnswer?.s3Files[0].name
+                    : '파일없음',
                 },
               ],
             },

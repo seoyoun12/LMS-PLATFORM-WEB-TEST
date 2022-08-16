@@ -1,7 +1,7 @@
 import { ChangeEvent, useRef, useState } from 'react';
 import { Editor as EditorType } from '@toast-ui/react-editor';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { QnaAnswerInput } from '@common/api/qna';
+import { QnaAnswerInput, qnaDetail } from '@common/api/qna';
 import {
   Box,
   Button,
@@ -13,10 +13,11 @@ import {
   TableCell,
   TableRow,
 } from '@mui/material';
-import { TuiEditor } from '@components/common/TuiEditor';
+import { TuiEditor, TuiViewer } from '@components/common/TuiEditor';
 import { FileUploader } from '@components/ui/FileUploader';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { css } from '@emotion/css';
+import router from 'next/router';
 
 interface Props {
   qnaSeq?: number;
@@ -38,6 +39,9 @@ interface FormType extends QnaAnswerInput {
 export function QnaAnswerForm({ onHandleSubmit }: Props) {
   const editorRef = useRef<EditorType>(null);
   const [fileName, setFileName] = useState<string | null>(null);
+  const { qnaSeq } = router.query;
+  const { data } = qnaDetail(Number(qnaSeq));
+  // const { data } = qnaDetail(Number(qna.qnaSeq));
 
   const {
     register,
@@ -84,13 +88,19 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
         <TableBody className={pt20} sx={{ display: 'table', width: '100%' }}>
           <TableRow>
             <TableCellLeft sx={{ width: '10%', textAlign: 'center' }}>답변</TableCellLeft>
-            <TuiEditor
-              previewStyle="vertical"
-              height="600px"
-              initialEditType="wysiwyg"
-              useCommandShortcut={true}
-              ref={editorRef}
-            />
+            {data.qnaAnswer?.content ? (
+              <TuiViewerBox>
+                <TuiViewer initialValue={data.qnaAnswer?.content} />
+              </TuiViewerBox>
+            ) : (
+              <TuiEditor
+                previewStyle="vertical"
+                height="600px"
+                initialEditType="wysiwyg"
+                useCommandShortcut={true}
+                ref={editorRef}
+              />
+            )}
           </TableRow>
         </TableBody>
         <div className="board-uploader">
@@ -111,9 +121,14 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
           ) : null}
         </div>
       </FormControl>
-      <SubmitBtn variant="contained" type="submit">
-        문의 답변 등록
-      </SubmitBtn>
+
+      {data.qnaAnswer?.content ? (
+        <Button>123</Button>
+      ) : (
+        <SubmitBtn variant="contained" type="submit">
+          문의 답변 등록
+        </SubmitBtn>
+      )}
     </Box>
   );
 }
@@ -137,4 +152,8 @@ const SubmitBtn = styled(Button)`
 `;
 const pt20 = css`
   border: 1px solid #b4b4b4;
+`;
+
+const TuiViewerBox = styled(Box)`
+  height: 600px;
 `;

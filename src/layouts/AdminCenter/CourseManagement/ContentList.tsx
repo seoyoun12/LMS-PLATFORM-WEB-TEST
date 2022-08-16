@@ -12,6 +12,7 @@ import { ContentConnectModal } from '@components/admin-center/ContentConnectModa
 import { courseDetail, useCourse } from '@common/api/course';
 import { ContentTypeHuman } from '@common/api/content';
 import { Link } from '@components/common';
+import dateFormat from 'dateformat';
 
 const headRows: {
   name: string;
@@ -32,8 +33,8 @@ export function ContentList() {
   const { data, error, mutate } = courseDetail(Number(courseSeq));
 
   // console.log(' course : ', course);
-  console.log(' data : ', data);
-  console.log(' data.content : ', data.content);
+  // console.log(' data : ', data);
+  // console.log(' data.content : ', data.content);
 
   const handleCloseModal = async () => {
     setOpenModal(false);
@@ -55,6 +56,7 @@ export function ContentList() {
       >
         콘텐츠 연결
       </ContentConnectButton>
+
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -67,7 +69,7 @@ export function ContentList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data ? (
+          {data.content ? (
             <TableRow hover>
               <TableCell align="left">{data.content.seq}</TableCell>
               <TableCell align="right">
@@ -75,10 +77,11 @@ export function ContentList() {
                   {data.content.contentName}
                 </Link>
               </TableCell>
-              {/* <TableCell align="right">{ContentTypeHuman[data.courseName]}</TableCell> */}
               <TableCell align="right">{data.content.contentType}</TableCell>
-              <TableCell align="right">{data.content.createdDtime}</TableCell>
-              <TableCell align="right">{data.content.status}</TableCell>
+              <TableCell align="right">
+                {dateFormat(data.content.createdDtime, 'isoDate')}
+              </TableCell>
+              <TableCell align="right">{data.status}</TableCell>
             </TableRow>
           ) : null}
         </TableBody>

@@ -4,7 +4,18 @@ import { ProductStatus } from '@common/api/course';
 import { FileUploader } from '@components/ui/FileUploader';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { Box, Button, Chip, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Chip,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
@@ -97,8 +108,14 @@ export function BannerUpload() {
         <Typography variant="h5" fontWeight="bold">
           배너 등록
         </Typography>
-        <TextField placeholder="배너 제목" {...register('title', { required: '배너이름을 입력해주세요.' })} />
-        <TextField placeholder="콘텐츠 내용" {...register('content', { required: '콘텐츠를 입력해주세요.' })} />
+        <TextField
+          placeholder="배너 제목"
+          {...register('title', { required: '배너이름을 입력해주세요.' })}
+        />
+        <TextField
+          placeholder="콘텐츠 내용"
+          {...register('content', { required: '콘텐츠를 입력해주세요.' })}
+        />
         {/*mui의 textarea나 tui의 폼을 사용 */}
         <Typography fontWeight="bold">게시 시작날짜</Typography>
         <DatePicker
@@ -108,8 +125,12 @@ export function BannerUpload() {
           minDate={new Date()}
           customInput={<TextField InputProps={{ endAdornment: <CalendarMonthIcon /> }} />}
           selected={new Date(watch().startDate)}
-          onSelect={() => {}}
-          onChange={date => setValue('startDate', date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd'))}
+          onChange={date =>
+            setValue(
+              'startDate',
+              date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd')
+            )
+          }
         />
         <Typography fontWeight="bold">게시 종료날짜</Typography>
         <DatePicker
@@ -119,11 +140,18 @@ export function BannerUpload() {
           minDate={new Date()}
           customInput={<TextField InputProps={{ endAdornment: <CalendarMonthIcon /> }} />}
           selected={new Date(watch().endDate)}
-          onSelect={() => {}}
           // popperPlacement="right"
-          onChange={date => setValue('endDate', date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd'))}
+          onChange={date =>
+            setValue(
+              'endDate',
+              date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd')
+            )
+          }
         />
-        <TextField placeholder="페이지 이동 url" {...register('toUrl', { required: '입력해주세요.' })} />
+        <TextField
+          placeholder="페이지 이동 url"
+          {...register('toUrl', { required: '입력해주세요.' })}
+        />
         <FormControl className="form-control">
           <FormLabel focused={false}>상태</FormLabel>
           <Controller
@@ -132,8 +160,16 @@ export function BannerUpload() {
             name="status"
             render={({ field }) => (
               <RadioGroup row {...field}>
-                <FormControlLabel value={ProductStatus.APPROVE} control={<Radio />} label="정상" />
-                <FormControlLabel value={ProductStatus.REJECT} control={<Radio />} label="중지" />
+                <FormControlLabel
+                  value={ProductStatus.APPROVE}
+                  control={<Radio />}
+                  label="정상"
+                />
+                <FormControlLabel
+                  value={ProductStatus.REJECT}
+                  control={<Radio />}
+                  label="중지"
+                />
               </RadioGroup>
             )}
           />
@@ -141,7 +177,14 @@ export function BannerUpload() {
         <FileUploader register={register} regName="files" onFileChange={handleFileChange}>
           <FileUploader.Label>파일업로드</FileUploader.Label>
         </FileUploader>
-        {fileName ? <Chip sx={{ mt: '8px' }} icon={<OndemandVideoOutlinedIcon />} label={fileName} onDelete={handleDeleteFile} /> : null}
+        {fileName ? (
+          <Chip
+            sx={{ mt: '8px' }}
+            icon={<OndemandVideoOutlinedIcon />}
+            label={fileName}
+            onDelete={handleDeleteFile}
+          />
+        ) : null}
         <Button variant="contained" type="submit">
           업로드
         </Button>

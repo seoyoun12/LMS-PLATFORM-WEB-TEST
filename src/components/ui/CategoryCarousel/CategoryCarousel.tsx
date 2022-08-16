@@ -77,9 +77,9 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
           onSwiper={(swiper: any) => setFirstSwiper(swiper)}
           controller={{ control: secondSwiper }}
           style={{
-            maxWidth: '676px',
+            maxWidth: '640px',
             width: '100%',
-            minHeight: '370px',
+            minHeight: '360px',
             marginLeft: '0',
             top: '32px',
           }}

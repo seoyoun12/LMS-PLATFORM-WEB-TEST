@@ -2,17 +2,27 @@ import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { FetchPaginationResponse } from 'types/fetch';
 import { CourseInput, CourseRes } from '@common/api/course';
+import { CourseModuleFindResponseDto } from '../types/Api';
 
 export async function uploadCourse(courseInput: CourseInput) {
   return await POST(`/course/adm`, courseInput);
 }
 
-export async function modifyCourse({ courseSeq, courseInput }: { courseSeq: number; courseInput: CourseInput }) {
+export async function modifyCourse({
+  courseSeq,
+  courseInput,
+}: {
+  courseSeq: number;
+  courseInput: CourseInput;
+}) {
   return await PUT(`/course/adm/${courseSeq}`, courseInput);
 }
 
 export function useCourse(courseSeq?: number) {
-  const { data, error, mutate } = useSWR<SWRResponse<CourseRes>>(courseSeq ? `/course/${courseSeq}` : null, GET);
+  const { data, error, mutate } = useSWR<SWRResponse<CourseRes>>(
+    courseSeq ? `/course/${courseSeq}` : null,
+    GET
+  );
   return {
     course: data?.data,
     courseError: error,
@@ -51,10 +61,28 @@ export function useCourseList({
   };
 }
 
-export const connectCourseToContent = async ({ courseSeq, contentSeq }: { courseSeq: number; contentSeq: number }) => {
+export const connectCourseToContent = async ({
+  courseSeq,
+  contentSeq,
+}: {
+  courseSeq: number;
+  contentSeq: number;
+}) => {
   return await POST(`/course/adm/link/content`, { courseSeq, contentSeq });
 };
 
 export const disConnectContent = async (courseSeq: number) => {
   return await DELETE(`/course/adm/link/content/${courseSeq}`);
 };
+
+export function useCourseModule(courseSeq: number) {
+  const { data, error, mutate } = useSWR<SWRResponse<CourseModuleFindResponseDto[]>>(
+    [`/course-module/adm`, { params: { courseSeq } }],
+    GET
+  );
+  return {
+    data: data?.data,
+    error,
+    mutate,
+  };
+}

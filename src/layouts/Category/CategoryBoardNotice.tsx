@@ -41,7 +41,7 @@ export function CategoryBoardNotice() {
               children: [{ name: content.content }],
             },
           ];
-          return <BoardAccordion boardAccordionList={accordionInfo} />;
+          return <BoardAccordion key={content.seq} boardAccordionList={accordionInfo} />;
         })}
       <Box ref={target} height="100px">
         {loading ? <Spinner /> : ''}

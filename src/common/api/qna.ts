@@ -5,12 +5,10 @@ import { PaginationResult } from "types/fetch";
 import { S3Files } from "types/file";
 
 export enum QnaType {
-
   TYPE_SIGNUP_OR_SIGNIN = "TYPE_SIGNUP_OR_SIGNIN",
   TYPE_EDU_OR_COMPLETE = "TYPE_EDU_OR_COMPLETE",
   TYPE_WEB_OR_APP = "TYPE_WEB_OR_APP",
   TYPE_ETC = "TYPE_ETC"
-
 }
 
 export enum AnsweredYn {
@@ -19,7 +17,6 @@ export enum AnsweredYn {
 }
 
 export interface Qna {
-
   answeredYn: YN;
   content: string;
   createdDtime: string;
@@ -31,47 +28,24 @@ export interface Qna {
   title: string;
   type: QnaType;
   userSeq: number;
-
 }
 
-export interface QnaAnswer {
+export type QnaInput = Partial<Qna>;
 
+
+export interface QnaAnswer {
   content: string;
   createdDtime: string;
   modifiedDtime: string;
   s3Files: S3Files;
   seq: number;
   status: number;
-
 }
 
-export interface QnaInput {
-
-  content: string;
-  phone: string;
-  smsYn: YN;
-  title: string;
-  type: QnaType;
-  s3Files: S3Files;
-
-}
-
-export interface QnaAnserList {
-  
-  content: string;
-
-}
-
-
-
-// 1:1문의 리스트 조회
-// export async function qn1aList() {
-//   return await GET(`/qna`, {
-//     headers: {
-//       ACCESS_TOKEN: 'login-token'
-//     }
-//   });
+// export interface QnaAnswerInput {
+//   content: string;
 // }
+export type QnaAnswerInput = Partial<QnaAnswer>;
 
 
 // qna list
@@ -112,19 +86,22 @@ export function qnaAdmList({ page, elementCnt } : {
 export function qnaDetail(seq: number | null) {
   const { data, error } = useSWR<SWRResponse<Qna>>(seq ? `/qna/adm/${seq}`: null , GET);
   return {
-    detailData : data?.data,
-    detailError : error
+    data : data?.data,
+    error : error
   }
 }
 
-
-// qna answer
-export async function qnaAnswerList(qnaSeq : number) {
-  return await GET(`/qna/adm/${qnaSeq}`)
+// qna list
+export async function qnaAnswerList(seq : number) {
+  return await GET(`/qna/adm/${seq}`)
 }
-
 
 // qna upload
 export async function uploadQna(qnaInput : QnaInput) {
   return await POST(`/qna`, qnaInput)
+}
+
+// answer upload
+export async function uploadQnaAnswer(seq: number | null, qnaAnswerInput: QnaAnswerInput) {
+  return await POST(`/qna/adm/${seq}`, qnaAnswerInput)
 }

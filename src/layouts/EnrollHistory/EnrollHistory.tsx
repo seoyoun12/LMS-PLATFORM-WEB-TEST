@@ -1,14 +1,26 @@
+import { RegisterType } from '@common/api/courseClass';
 import { useCourseUser } from '@common/api/courseUser';
-import { ContentCard, Spinner } from '@components/ui';
+import { Modal, Spinner } from '@components/ui';
 import styled from '@emotion/styled';
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { EnrollHistoryCard } from './EnrollHistoryCard/EnrollHistoryCard';
+import { EnrollHistoryModal } from './EnrollHistoryModal/EnrollHistoryModal';
 
 export function EnrollHistory() {
   const router = useRouter();
   const { data, error, mutate } = useCourseUser();
   console.log(data);
+  const [open, setOpen] = useState(false);
+  const [modalData, setModalData] = useState<{
+    courseUserSeq: number;
+    regType: RegisterType;
+  }>();
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   if (!data) return <Spinner />;
   return (
     <Container>
@@ -28,17 +40,34 @@ export function EnrollHistory() {
             <Grid item xs={1} sm={1} md={1} lg={1} key={item.seq}>
               <Box
                 onClick={() => {
-                  return window.alert(
-                    '수업이 존재하지 않습니다. 관리자에게 문의해주세요.'
-                  );
+                  setOpen(true);
+                  setModalData({
+                    courseUserSeq: item.seq,
+                    regType:
+                      item.regType === RegisterType.TYPE_INDIVIDUAL
+                        ? RegisterType.TYPE_INDIVIDUAL
+                        : RegisterType.TYPE_ORGANIZATION,
+                  });
                 }}
               >
-                <ContentCard title={'개발중'} />
+                <EnrollHistoryCard title={'개발중'} seq={item.seq} item={item} />
               </Box>
             </Grid>
           ))}
         </Grid>
       </EnrollHistoryWrap>
+      {open && (
+        <EnrollHistoryModal
+          open={open}
+          handleClose={handleClose}
+          courseUserSeq={modalData.courseUserSeq}
+          regType={
+            modalData.regType === RegisterType.TYPE_INDIVIDUAL
+              ? RegisterType.TYPE_INDIVIDUAL
+              : RegisterType.TYPE_ORGANIZATION
+          }
+        />
+      )}
     </Container>
   );
 }

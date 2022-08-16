@@ -1,9 +1,140 @@
-interface Props {}
+import { ChangeEvent, useRef, useState } from 'react';
+import { Editor as EditorType } from '@toast-ui/react-editor';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { QnaAnswerInput } from '@common/api/qna';
+import {
+  Box,
+  Button,
+  Chip,
+  Container,
+  FormControl,
+  styled,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@mui/material';
+import { TuiEditor } from '@components/common/TuiEditor';
+import { FileUploader } from '@components/ui/FileUploader';
+import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
+import { css } from '@emotion/css';
 
-export function QnaAnswerForm() {
+interface Props {
+  qnaSeq?: number;
+  onHandleSubmit: ({
+    qnaAnswerInput,
+    files,
+    qnaSeq,
+  }: {
+    qnaAnswerInput: QnaAnswerInput;
+    files?: File[];
+    qnaSeq?: number;
+  }) => void;
+}
+
+interface FormType extends QnaAnswerInput {
+  files: File[];
+}
+
+export function QnaAnswerForm({ onHandleSubmit }: Props) {
+  const editorRef = useRef<EditorType>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    reset,
+    resetField,
+  } = useForm<FormType>();
+
+  const handleFileChange = (e: ChangeEvent) => {
+    e.preventDefault();
+    const files = (e.target as HTMLInputElement).files;
+    if (!files?.length) return null;
+    setFileName(files[0].name);
+  };
+
+  const handleDeleteFile = async () => {
+    resetField('files');
+    setFileName(null);
+  };
+
+  const onSubmit: SubmitHandler<FormType> = async ({ files, ...qnaAnswer }, event) => {
+    event?.preventDefault();
+
+    if (!editorRef.current) return;
+    const markdownContent = editorRef.current.getInstance().getMarkdown();
+    const qnaAnswerInput = {
+      ...qnaAnswer,
+      content: markdownContent,
+    };
+    onHandleSubmit({ qnaAnswerInput, files });
+  };
+
   return (
-    <>
-      <div>여기서 답변을 달거에오</div>
-    </>
+    <Box
+      component="form"
+      encType="multipart/form-data"
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+      className={boxStyles}
+    >
+      <FormControl>
+        <TableBody className={pt20} sx={{ display: 'table', width: '100%' }}>
+          <TableRow>
+            <TableCellLeft sx={{ width: '10%', textAlign: 'center' }}>답변</TableCellLeft>
+            <TuiEditor
+              previewStyle="vertical"
+              height="600px"
+              initialEditType="wysiwyg"
+              useCommandShortcut={true}
+              ref={editorRef}
+            />
+          </TableRow>
+        </TableBody>
+        <div className="board-uploader">
+          <FileUploader
+            register={register}
+            regName="files"
+            onFileChange={handleFileChange}
+          >
+            {}
+          </FileUploader>
+          {fileName ? (
+            <Chip
+              sx={{ mt: '8px' }}
+              icon={<OndemandVideoOutlinedIcon />}
+              label={fileName}
+              onDelete={handleDeleteFile}
+            />
+          ) : null}
+        </div>
+      </FormControl>
+      <SubmitBtn variant="contained" type="submit">
+        문의 답변 등록
+      </SubmitBtn>
+    </Box>
   );
 }
+
+const TableCellLeft = styled(TableCell)`
+  background: #e0e0e0;
+  border-top: 1px solid #b4b4b4;
+  border-bottom: 1px solid #b4b4b4;
+  width: 20%;
+  text-align: center;
+`;
+
+const boxStyles = css`
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+`;
+
+const SubmitBtn = styled(Button)`
+  margin: 30px 30px 30px 0;
+`;
+const pt20 = css`
+  border: 1px solid #b4b4b4;
+`;

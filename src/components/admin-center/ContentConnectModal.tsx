@@ -2,7 +2,14 @@ import { Modal, Table } from '@components/ui';
 import { FormEvent, useRef, useState } from 'react';
 import { useContentList } from '@common/api/adm/content';
 import styles from '@styles/common.module.scss';
-import { Button, Container, InputBase, TableBody, TableHead, Typography } from '@mui/material';
+import {
+  Button,
+  Container,
+  InputBase,
+  TableBody,
+  TableHead,
+  Typography,
+} from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { Link } from '@components/common';
@@ -22,7 +29,10 @@ interface Props {
   handleClose: () => void;
 }
 
-const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
+const headRows: {
+  name: string;
+  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+}[] = [
   { name: 'ID', align: 'left' },
   { name: '콘텐츠명', align: 'right' },
   { name: '연결된 과정 ID', align: 'right' },
@@ -32,8 +42,8 @@ const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' |
 export function ContentConnectModal({ open, handleClose, courseSeq }: Props) {
   const dialog = useDialog();
   const snackbar = useSnackbar();
-  const [ page, setPage ] = useState(0);
-  const [ keyword, setKeyword ] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
+  const [keyword, setKeyword] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const { data, mutate } = useContentList({ page, contentName: keyword });
 
@@ -53,7 +63,7 @@ export function ContentConnectModal({ open, handleClose, courseSeq }: Props) {
         title: '콘텐츠 연결 해제하기',
         description: '정말 콘텐츠 연결을 해제하시겠습니까?',
         confirmText: '해제하기',
-        cancelText: '취소하기'
+        cancelText: '취소하기',
       });
 
       if (dialogConfirmed) {
@@ -117,66 +127,70 @@ export function ContentConnectModal({ open, handleClose, courseSeq }: Props) {
             전체 다시 불러오기
           </ReloadButton>
         </TableTitleSection>
-        {data ? <Table
-          pagination={true}
-          totalNum={data.totalElements}
-          page={data.number}
-          onChangePage={onChangePage}
-          size="small"
-        >
-          <TableHead>
-            <TableRow>
-              {headRows.map(({ name, align }) =>
-                <TableCell key={name} align={align}>{name}</TableCell>
-              )}
-              <TableCell>{}</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.content.map((content) => (
-              <TableRow key={content.seq} hover>
-                <TableCell component="th" scope="row">
-                  {content.seq}
-                </TableCell>
-                <TableCell align="right">
-                  <Link
-                    href={`/content/${content.seq}`}
-                    underline="hover"
-                    color={grey[900]}
-                  >
-                    {content.contentName}
-                  </Link>
-                </TableCell>
-                <TableCell align="right">
-                  {content.courseSeq ? content.courseSeq : '-'}
-                </TableCell>
-                <TableCell align="right">
-                  {content.courseName ? content.courseName : '-'}
-                </TableCell>
-                <TableCell align="right">
-                  <ConnectButton
-                    disabled={!!content.courseSeq}
-                    variant="outlined"
-                    color="primary"
-                    size="small"
-                    onClick={() => handleConnect(content.seq)}
-                  >
-                    연결하기
-                  </ConnectButton>
-                  <Button
-                    disabled={!content.courseSeq}
-                    variant="outlined"
-                    color="neutral"
-                    size="small"
-                    onClick={() => handleDisconnect(content.courseSeq)}
-                  >
-                    해제하기
-                  </Button>
-                </TableCell>
+        {data ? (
+          <Table
+            pagination={true}
+            totalNum={data.totalElements}
+            page={data.number}
+            onChangePage={onChangePage}
+            size="small"
+          >
+            <TableHead>
+              <TableRow>
+                {headRows.map(({ name, align }) => (
+                  <TableCell key={name} align={align}>
+                    {name}
+                  </TableCell>
+                ))}
+                <TableCell>{}</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table> : null}
+            </TableHead>
+            <TableBody>
+              {data.content.map(content => (
+                <TableRow key={content.seq} hover>
+                  <TableCell component="th" scope="row">
+                    {content.seq}
+                  </TableCell>
+                  <TableCell align="right">
+                    <Link
+                      href={`/content/${content.seq}`}
+                      underline="hover"
+                      color={grey[900]}
+                    >
+                      {content.contentName}
+                    </Link>
+                  </TableCell>
+                  <TableCell align="right">
+                    {content.courseSeq ? content.courseSeq : '-'}
+                  </TableCell>
+                  <TableCell align="right">
+                    {content.courseName ? content.courseName : '-'}
+                  </TableCell>
+                  <TableCell align="right">
+                    <ConnectButton
+                      disabled={!!content.courseSeq}
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      onClick={() => handleConnect(content.seq)}
+                    >
+                      연결하기
+                    </ConnectButton>
+                    <Button
+                      disabled={!content.courseSeq}
+                      variant="outlined"
+                      color="neutral"
+                      size="small"
+                      onClick={() => handleDisconnect(content.courseSeq)}
+                    >
+                      해제하기
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        ) : null}
       </ContentBody>
     </Modal>
   );

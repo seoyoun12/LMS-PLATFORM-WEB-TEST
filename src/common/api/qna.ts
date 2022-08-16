@@ -42,9 +42,10 @@ export interface QnaAnswer {
   status: number;
 }
 
-export interface QnaAnswerInput {
-  content: string;
-}
+// export interface QnaAnswerInput {
+//   content: string;
+// }
+export type QnaAnswerInput = Partial<QnaAnswer>;
 
 
 // qna list
@@ -90,12 +91,10 @@ export function qnaDetail(seq: number | null) {
   }
 }
 
-
-// qna answer
+// qna list
 export async function qnaAnswerList(seq : number) {
   return await GET(`/qna/adm/${seq}`)
 }
-
 
 // qna upload
 export async function uploadQna(qnaInput : QnaInput) {

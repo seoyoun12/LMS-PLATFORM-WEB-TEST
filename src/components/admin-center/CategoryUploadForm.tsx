@@ -35,7 +35,7 @@ interface Props {
     courseSeq,
   }: {
     categoryBoardInput: CategoryBoardInput;
-    files: File[];
+    files?: File[];
     // isFileDelete: boolean;
     categorySeq?: number;
     courseSeq?: number;

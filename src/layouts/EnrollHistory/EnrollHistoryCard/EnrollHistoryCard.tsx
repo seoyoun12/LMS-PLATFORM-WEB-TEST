@@ -45,9 +45,9 @@ export function EnrollHistoryCard({
         <Title gutterBottom variant="h5" mt={1}>
           {title}
         </Title>
-        <Divider sx={{ borderBottom: `1px solid #D4D4D4` }} />
+        {/* <Divider sx={{ borderBottom: `1px solid #D4D4D4` }} /> */}
         <Typography mt={1} mb={2} color="primary.main">
-          {content2}
+          {content1}
         </Typography>
       </CardActionArea>
     </Box>

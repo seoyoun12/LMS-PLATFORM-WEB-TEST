@@ -1,4 +1,4 @@
-import { GET, PUT } from '@common/httpClient';
+import { DELETE, GET, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import {
   businessType,
@@ -7,11 +7,19 @@ import {
   RegisterType,
   userBusinessType,
 } from './courseClass';
-import { CourseUserResponseDto, CourseUserTransDetailsResponseDto } from './types/Api';
 import { userRegistrationType } from './user';
 
+export interface CourseUserResDto {
+  courseTitle: string;
+  createdDtime: string;
+  modifiedDtime: string;
+  regType: RegisterType;
+  regUserSeq: number;
+  seq: number;
+}
+
 export function useCourseUser() {
-  const { data, error, mutate } = useSWR<SWRResponse<CourseUserResponseDto[]>>(
+  const { data, error, mutate } = useSWR<SWRResponse<CourseUserResDto[]>>(
     '/course-user',
     GET
   );
@@ -71,4 +79,11 @@ export function modifyCourseUserOrga(
   reqDto: ModifyCourseUserReqDto
 ) {
   return PUT(`/course-user/modify/organization/${courseUserSeq}`, reqDto);
+}
+
+export function delelteCourseUserIndi(courseUserSeq: number) {
+  return DELETE(`/course-user/cancel/individual/${courseUserSeq}`);
+}
+export function delelteCourseUserOrga(courseUserSeq: number) {
+  return DELETE(`/course-user/cancel/organization/${courseUserSeq}`);
 }

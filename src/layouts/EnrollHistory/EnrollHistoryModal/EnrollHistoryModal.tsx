@@ -5,6 +5,8 @@ import {
   modifyCourseUserOrga,
   ModifyCourseUserReqDto,
   RegType,
+  delelteCourseUserIndi,
+  delelteCourseUserOrga,
 } from '@common/api/courseUser';
 import { Modal } from '@components/ui';
 import { useDialog } from '@hooks/useDialog';
@@ -33,10 +35,17 @@ interface Props {
   open: boolean;
   handleClose: () => void;
   courseUserSeq: number;
+  courseTitle: string;
   regType: RegisterType;
 }
 
-export function EnrollHistoryModal({ open, handleClose, courseUserSeq, regType }: Props) {
+export function EnrollHistoryModal({
+  open,
+  handleClose,
+  courseUserSeq,
+  regType,
+  courseTitle,
+}: Props) {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const [phone1, setPhone1] = useState('');
@@ -70,6 +79,13 @@ export function EnrollHistoryModal({ open, handleClose, courseUserSeq, regType }
   }, []);
 
   const onSubmit = async () => {
+    for (let [key, obj] of Object.entries(watch())) {
+      if (!obj || obj === '') return window.alert('모두 입력해 주세요!');
+    }
+    if (phone1.length !== 3 || phone2.length !== 4 || phone3.length !== 4) {
+      return window.alert('모두 입력해 주세요!');
+    }
+
     try {
       const dialogConfirmed = await dialog({
         title: '정보 수정하기',
@@ -96,11 +112,33 @@ export function EnrollHistoryModal({ open, handleClose, courseUserSeq, regType }
     }
   };
 
+  const onClickDelete = async () => {
+    try {
+      const dialogConfirmed = await dialog({
+        title: '신청 취소하기',
+        description: '정말로 신청을 취소하시겠습니까?',
+        confirmText: '신청 취소하기',
+        cancelText: '돌아가기',
+      });
+      if (!dialogConfirmed) return;
+      if (regType === RegisterType.TYPE_INDIVIDUAL) {
+        await delelteCourseUserIndi(courseUserSeq);
+      }
+      if (regType === RegisterType.TYPE_ORGANIZATION) {
+        await delelteCourseUserOrga(courseUserSeq);
+      }
+      snackbar({ variant: 'success', message: '성공적으로 수정완료 했씁니다.' });
+      handleClose();
+    } catch (e: any) {
+      snackbar({ variant: 'error', message: e.data.message });
+    }
+  };
+
   return (
     <Modal
       open={open}
       onCloseModal={handleClose}
-      title="모달"
+      title={courseTitle}
       maxWidth="lg"
       action={
         <Box width="100%" display="flex" justifyContent="center" gap={2}>
@@ -108,9 +146,9 @@ export function EnrollHistoryModal({ open, handleClose, courseUserSeq, regType }
             variant="contained"
             color="warning"
             sx={{ width: '100px' }}
-            onClick={() => handleClose()}
+            onClick={onClickDelete}
           >
-            취소
+            신청 취소
           </Button>
           <Button variant="contained" sx={{ width: '100px' }} onClick={onSubmit}>
             수정

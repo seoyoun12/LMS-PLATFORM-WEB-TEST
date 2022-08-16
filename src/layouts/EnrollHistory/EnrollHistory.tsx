@@ -14,12 +14,14 @@ export function EnrollHistory() {
   console.log(data);
   const [open, setOpen] = useState(false);
   const [modalData, setModalData] = useState<{
+    title: string;
     courseUserSeq: number;
     regType: RegisterType;
   }>();
 
   const handleClose = () => {
     setOpen(false);
+    mutate();
   };
   if (!data) return <Spinner />;
   return (
@@ -42,6 +44,7 @@ export function EnrollHistory() {
                 onClick={() => {
                   setOpen(true);
                   setModalData({
+                    title: item.courseTitle,
                     courseUserSeq: item.seq,
                     regType:
                       item.regType === RegisterType.TYPE_INDIVIDUAL
@@ -50,7 +53,14 @@ export function EnrollHistory() {
                   });
                 }}
               >
-                <EnrollHistoryCard title={'개발중'} seq={item.seq} item={item} />
+                <EnrollHistoryCard
+                  title={item.courseTitle}
+                  content1={
+                    item.regType === RegisterType.TYPE_INDIVIDUAL ? '개인' : '단체'
+                  }
+                  seq={item.seq}
+                  item={item}
+                />
               </Box>
             </Grid>
           ))}
@@ -60,6 +70,7 @@ export function EnrollHistory() {
         <EnrollHistoryModal
           open={open}
           handleClose={handleClose}
+          courseTitle={modalData.title}
           courseUserSeq={modalData.courseUserSeq}
           regType={
             modalData.regType === RegisterType.TYPE_INDIVIDUAL

@@ -8,8 +8,6 @@ export function QnaQuestionForm() {
   const qna = router.query;
   const { data } = qnaDetail(Number(qna.qnaSeq));
 
-  console.log('data : ', data);
-
   return (
     <QuestionBox>
       <TableBody sx={{ display: 'table', width: '100%' }}>

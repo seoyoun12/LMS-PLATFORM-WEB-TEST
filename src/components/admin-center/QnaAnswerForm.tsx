@@ -123,7 +123,9 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
       </FormControl>
 
       {data.qnaAnswer?.content ? (
-        <Button>123</Button>
+        <SubmitBtn variant="contained" href="/admin-center/qna">
+          돌아가기
+        </SubmitBtn>
       ) : (
         <SubmitBtn variant="contained" type="submit">
           문의 답변 등록
@@ -156,4 +158,5 @@ const pt20 = css`
 
 const TuiViewerBox = styled(Box)`
   height: 600px;
+  padding: 20px;
 `;

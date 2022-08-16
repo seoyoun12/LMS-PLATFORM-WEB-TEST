@@ -54,15 +54,10 @@ export function Drawer({ children }: { children: ReactNode }) {
       icon: <ListAltIcon sx={{ mr: '32px', color: grey[700] }} />,
     },
     {
-      name: '1대1 문의 관리',
+      name: '1대1문의관리',
       children: [
         {
-          name: '1대1 문의 목록',
-          href: '/admin-center/qna',
-          isActive: router.pathname === '/admin-center/qna',
-        },
-        {
-          name: '게시판 등록',
+          name: '1대1문의 목록',
           href: '/admin-center/qna',
           isActive: router.pathname === '/admin-center/qna',
         },

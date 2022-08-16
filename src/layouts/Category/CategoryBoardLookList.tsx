@@ -39,6 +39,7 @@ export function CategoryBoardLookList() {
             {
               seq: data.seq,
               title: data.title,
+              date: data.createdDtime,
               answeredYN: data.answeredYn,
               children: [
                 {
@@ -54,10 +55,10 @@ export function CategoryBoardLookList() {
               ],
             },
           ];
-          return <QnaAccordion qnaAccordionList={accordionInfo} />;
+          return <QnaAccordion qnaAccordionList={accordionInfo} key={data.seq} />;
         })}
       <Box ref={target} height="100px">
-        {loading ? <div /> : ''}
+        {loading ? <Container /> : ''}
       </Box>
     </LkContainer>
   );

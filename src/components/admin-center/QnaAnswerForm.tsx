@@ -43,6 +43,8 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
   const { data } = qnaDetail(Number(qnaSeq));
   // const { data } = qnaDetail(Number(qna.qnaSeq));
 
+  console.log('데이터는 이거다 : ', data);
+
   const {
     register,
     handleSubmit,
@@ -103,23 +105,29 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
             )}
           </TableRow>
         </TableBody>
-        <div className="board-uploader">
-          <FileUploader
-            register={register}
-            regName="files"
-            onFileChange={handleFileChange}
-          >
-            {}
-          </FileUploader>
-          {fileName ? (
-            <Chip
-              sx={{ mt: '8px' }}
-              icon={<OndemandVideoOutlinedIcon />}
-              label={fileName}
-              onDelete={handleDeleteFile}
-            />
-          ) : null}
-        </div>
+        {data.qnaAnswer?.content ? (
+          <div>
+            {data.qnaAnswer?.s3Files[0] ? data.qnaAnswer?.s3Files[0].name : '파일없음'}
+          </div>
+        ) : (
+          <div className="board-uploader">
+            <FileUploader
+              register={register}
+              regName="files"
+              onFileChange={handleFileChange}
+            >
+              {}
+            </FileUploader>
+            {fileName ? (
+              <Chip
+                sx={{ mt: '8px' }}
+                icon={<OndemandVideoOutlinedIcon />}
+                label={fileName}
+                onDelete={handleDeleteFile}
+              />
+            ) : null}
+          </div>
+        )}
       </FormControl>
 
       {data.qnaAnswer?.content ? (

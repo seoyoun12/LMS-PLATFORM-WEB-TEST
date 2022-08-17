@@ -253,7 +253,7 @@ const AnswerBoardBox = styled(Box)`
 const BoardAccordionDetails = styled(AccordionDetails)`
   background-color: #e0e0e0;
   padding: 0px;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 `;
 
 const TableCellLeft = styled(TableCell)`

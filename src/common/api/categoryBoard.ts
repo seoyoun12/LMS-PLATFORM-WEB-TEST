@@ -2,7 +2,7 @@ import { YN } from "@common/constant";
 import { GET, POST, PUT, DELETE } from "@common/httpClient";
 import useSWR, { SWRResponse } from "swr";
 import { PaginationResult } from "types/fetch";
-import { S3File, S3Files } from "types/file";
+import { S3Files } from "types/file";
 import { ProductStatus } from "./course";
 
 

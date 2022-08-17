@@ -6,9 +6,6 @@ import styled from 'styled-components';
 
 export function CategoryBoardLookList() {
   const [target, loadedItem, loading] = useInfiniteScrollQna(`/qna`);
-  console.log('loadedItem : ', loadedItem);
-  console.log('target : ', target);
-  // console.log('file있나? : ', data.qnaAnswer);
 
   return (
     <LkContainer>
@@ -71,6 +68,7 @@ const LkContainer = styled(Container)`
   width: 100%;
   height: 100%;
 `;
+
 const TableHeaderCell = styled(TableCell)`
   font-size: 16px;
   font-weight: 400;

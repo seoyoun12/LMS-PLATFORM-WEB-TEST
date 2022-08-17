@@ -144,38 +144,43 @@ export function QnaAccordion({
                               </QuestionBoardBox>
                             </TableCellRight>
                           </TableRow>
-                          <TableRow sx={{ backgroundColor: 'white' }}>
-                            <TableCellLeft
-                              align="center"
-                              sx={{
-                                fontSize: '1.2rem',
-                                fontWeight: 'bold',
-                                backgroundColor: 'white',
-                              }}
-                            >
-                              답변
-                            </TableCellLeft>
-                            <TableCellRight>
-                              <AnswerBoardBox
-                                display="flex"
-                                flexDirection={'column'}
-                                width="100%"
+
+                          {answeredYN === AnsweredYn.ANSWEREDY ? (
+                            <TableRow sx={{ backgroundColor: 'white' }}>
+                              <TableCellLeft
+                                align="center"
+                                sx={{
+                                  fontSize: '1.2rem',
+                                  fontWeight: 'bold',
+                                  backgroundColor: 'white',
+                                }}
                               >
-                                <ListItemText
-                                  primary={fourthContent}
-                                  className="FourthContent"
-                                />
-                                <ListItemText
-                                  primary={fifthContent}
-                                  className="FifthContent"
-                                />
-                                <ListItemText
-                                  primary={sixthContent}
-                                  className="SixthContent"
-                                />
-                              </AnswerBoardBox>
-                            </TableCellRight>
-                          </TableRow>
+                                답변
+                              </TableCellLeft>
+                              <TableCellRight>
+                                <AnswerBoardBox
+                                  display="flex"
+                                  flexDirection={'column'}
+                                  width="100%"
+                                >
+                                  <ListItemText
+                                    primary={fourthContent}
+                                    className="FourthContent"
+                                  />
+                                  <ListItemText
+                                    primary={fifthContent}
+                                    className="FifthContent"
+                                  />
+                                  <ListItemText
+                                    primary={sixthContent}
+                                    className="SixthContent"
+                                  />
+                                </AnswerBoardBox>
+                              </TableCellRight>
+                            </TableRow>
+                          ) : (
+                            <div></div>
+                          )}
                         </TableBody>
                       </ListItem>
                     )
@@ -248,7 +253,7 @@ const AnswerBoardBox = styled(Box)`
 const BoardAccordionDetails = styled(AccordionDetails)`
   background-color: #e0e0e0;
   padding: 0px;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 `;
 
 const TableCellLeft = styled(TableCell)`
@@ -291,5 +296,12 @@ const TableCellRight = styled(TableCell)`
     margin-left: 80%;
     margin-top: -2%;
     margin-bottom: -0.5%;
+  }
+
+  .SixthContent {
+    color: #a59d9d;
+    position: relative;
+    float: right;
+    text-align: center;
   }
 `;

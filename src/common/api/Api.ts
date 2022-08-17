@@ -999,6 +999,15 @@ export interface CourseModuleFindResponseDto {
    * @format int32
    */
   status?: number;
+
+  /** 제출여부 */
+  submitYn?: "Y" | "N";
+
+  /**
+   * 설문지 시퀀스
+   * @format int64
+   */
+  surveySeq?: number;
 }
 
 export interface CourseModuleSaveRequestDto {
@@ -1090,8 +1099,8 @@ export interface CourseModuleSaveResponseDto {
    */
   status?: number;
 
-  /** 제출 여부 */
-  submitYn?: string;
+  /** 제출여부 */
+  submitYn?: "Y" | "N";
 
   /**
    * 설문지 시퀀스
@@ -1185,6 +1194,15 @@ export interface CourseModuleUpdateResponseDto {
    * @format int32
    */
   status?: number;
+
+  /** 제출여부 */
+  submitYn?: "Y" | "N";
+
+  /**
+   * 설문지 시퀀스
+   * @format int64
+   */
+  surveySeq?: number;
 }
 
 export interface CourseModules {
@@ -4921,6 +4939,18 @@ export interface MainDisplayUpdateResponseDto {
   status?: 1 | -1;
 }
 
+export interface MobileCourseClassResponseDto {
+  /** 과정 클래스 리스트 */
+  courseClassList?: CourseClassResponseDto[];
+
+  /**
+   * 일자
+   * @format date
+   * @example 2022-07-05
+   */
+  date?: string;
+}
+
 export interface MultipartUpload {
   /** @format date-time */
   initiated?: string;
@@ -6047,6 +6077,51 @@ export interface SurveyResponseDto {
    * @example 교육만족도 조사 설문
    */
   title?: string;
+}
+
+export interface TermsResponseDto {
+  /** 약관 내용 */
+  content?: string;
+
+  /**
+   * 약관 시퀀스
+   * @format int64
+   */
+  termsSeq?: number;
+
+  /**
+   * 약관 제목
+   *  CONDITIONS_TERMS :: 이용 약관
+   *  PERSONAL_INFORMATION_TERMS :: 개인정보 수집 및 이용 동의
+   *  LOCATION_BASED_TERMS :: 위치기반 서비스 이용 약관
+   */
+  termsTypeEnums?: "CONDITIONS_TERMS" | "PERSONAL_INFORMATION_TERMS" | "LOCATION_BASED_TERMS";
+}
+
+export interface TermsSaveRequestDto {
+  /** 약관 내용 */
+  content?: string;
+
+  /**
+   * 약관 제목
+   *  CONDITIONS_TERMS :: 이용 약관
+   *  PERSONAL_INFORMATION_TERMS :: 개인정보 수집 및 이용 동의
+   *  LOCATION_BASED_TERMS :: 위치기반 서비스 이용 약관
+   */
+  termsTypeEnums?: "CONDITIONS_TERMS" | "PERSONAL_INFORMATION_TERMS" | "LOCATION_BASED_TERMS";
+}
+
+export interface TermsUpdateRequestDto {
+  /** 약관 내용 */
+  content?: string;
+
+  /**
+   * 약관 제목
+   *  CONDITIONS_TERMS :: 이용 약관
+   *  PERSONAL_INFORMATION_TERMS :: 개인정보 수집 및 이용 동의
+   *  LOCATION_BASED_TERMS :: 위치기반 서비스 이용 약관
+   */
+  termsTypeEnums?: "CONDITIONS_TERMS" | "PERSONAL_INFORMATION_TERMS" | "LOCATION_BASED_TERMS";
 }
 
 export interface URI {
@@ -7718,6 +7793,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<CourseClassResponseDto, void>({
         path: `/course-class/adm/${courseClassSeq}`,
         method: "DELETE",
+        ...params,
+      }),
+
+    /**
+     * @description 모바일 클라이언트의 과정 클래스 리스트에 대한 전체 데이터를 조회한다. status 가 -1인 데이터는 조회하지 않는다.
+     *
+     * @tags [App & 관리자] 과정 클래스(기수) API
+     * @name MobileFindAllCourseClassesUsingGet
+     * @summary [App - 모바일 전용] 과정 클래스 전체 조회 API
+     * @request GET:/course-class/mobile
+     */
+    mobileFindAllCourseClassesUsingGet: (query?: { date?: string }, params: RequestParams = {}) =>
+      this.request<MobileCourseClassResponseDto[], any>({
+        path: `/course-class/mobile`,
+        method: "GET",
+        query: query,
         ...params,
       }),
 
@@ -10115,6 +10206,75 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/survey/participant`,
         method: "POST",
         body: requestDto,
+        type: ContentType.Json,
+        ...params,
+      }),
+  };
+  terms = {
+    /**
+     * @description 관리자 페이지에서 생성한 이용 약관을 전체 조회한다.
+     *
+     * @tags [관리자] 이용 약관 API
+     * @name AdmFindAllTermsUsingGet
+     * @summary [관리자] 이용 약관 전체 조회 API
+     * @request GET:/terms/adm
+     */
+    admFindAllTermsUsingGet: (params: RequestParams = {}) =>
+      this.request<TermsResponseDto, void>({
+        path: `/terms/adm`,
+        method: "GET",
+        ...params,
+      }),
+
+    /**
+     * @description 관리자 페이지에서 이용 약관을 생성한다.
+     *
+     * @tags [관리자] 이용 약관 API
+     * @name AdmSaveTermsUsingPost
+     * @summary [관리자] 이용 약관 생성 API
+     * @request POST:/terms/adm
+     */
+    admSaveTermsUsingPost: (termsSaveRequestDto: TermsSaveRequestDto, params: RequestParams = {}) =>
+      this.request<TermsResponseDto, void>({
+        path: `/terms/adm`,
+        method: "POST",
+        body: termsSaveRequestDto,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 관리자 페이지에서 생성한 이용 약관을 조회한다.
+     *
+     * @tags [관리자] 이용 약관 API
+     * @name AdmFindTermsUsingGet
+     * @summary [관리자] 이용 약관 단건 조회 API
+     * @request GET:/terms/adm/{termsSeq}
+     */
+    admFindTermsUsingGet: (termsSeq: number, params: RequestParams = {}) =>
+      this.request<TermsResponseDto, void>({
+        path: `/terms/adm/${termsSeq}`,
+        method: "GET",
+        ...params,
+      }),
+
+    /**
+     * @description 관리자 페이지에서 이용 약관을 수정한다.
+     *
+     * @tags [관리자] 이용 약관 API
+     * @name AdmUpdateTermsUsingPut
+     * @summary [관리자] 이용 약관 수정 API
+     * @request PUT:/terms/adm/{termsSeq}
+     */
+    admUpdateTermsUsingPut: (
+      termsSeq: number,
+      termsUpdateRequestDto: TermsUpdateRequestDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<TermsResponseDto, void>({
+        path: `/terms/adm/${termsSeq}`,
+        method: "PUT",
+        body: termsUpdateRequestDto,
         type: ContentType.Json,
         ...params,
       }),

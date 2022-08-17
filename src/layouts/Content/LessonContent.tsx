@@ -32,6 +32,7 @@ export function LessonContent(props: Props) {
   const timer = React.useRef<number | null>(null);
   const timerSeconds = React.useRef<number>(0);
   const apiSeconds = React.useRef<number>(0);
+  const videoSeconds = React.useRef<number>(0);
 
   // 콜백.
 
@@ -85,7 +86,7 @@ export function LessonContent(props: Props) {
             .updateCourseProgressUsingPut({
               courseUserSeq: props.courseUserSeq,
               lessonSeq: props.lesson.seq,
-              studyLastTime: isEnd ? (props.lesson.min * 60 + props.lesson.sec) : Math.floor(getWatchedTime() / 1000),
+              studyLastTime: isEnd ? (props.lesson.min * 60 + props.lesson.sec) : videoSeconds.current,
             });
 
         });
@@ -95,7 +96,7 @@ export function LessonContent(props: Props) {
     timerSeconds.current = 0;
     apiSeconds.current = 0;
 
-  }, [getWatchedTime, props.courseUserSeq, props.lesson.min, props.lesson.sec, props.lesson.seq]);
+  }, [props.courseUserSeq, props.lesson.min, props.lesson.sec, props.lesson.seq]);
 
   const startTimer = React.useCallback(() => {
 
@@ -180,6 +181,12 @@ export function LessonContent(props: Props) {
 
   }, [endTimeSession, stopTimer]);
 
+  const onTimeChange = React.useCallback((time: number) => {
+
+    videoSeconds.current = time;
+
+  }, []);
+
   // 이펙트.
 
   React.useEffect(() => {
@@ -187,6 +194,7 @@ export function LessonContent(props: Props) {
     stopTimer();
     setTimeSessions([]);
     setTimeStart(null);
+    videoSeconds.current = props.lesson.studyLastTime;
 
   }, [props.lesson, stopTimer]);
 
@@ -212,6 +220,7 @@ export function LessonContent(props: Props) {
           onSeeking={onSeeking}
           onSeeked={onSeeked}
           onEnded={onEnded}
+          onTimeChange={onTimeChange}
         />
       </VideoWrapper>
       <ContentInfoContainer>

@@ -27,15 +27,17 @@ export interface CourseModuleFindRes {
   limitScore: number; //시험일때
   moduleName: string; //모듈이름
   moduleType: CourseModuleType; //모듈타입
+  submitYn: YN; //설문
   status: ProductStatus; //사용여부
+  surveySeq: number;
 }
 
 //swr get
 export function useCourseModule(courseSeq: number) {
-  const { data, error, mutate } = useSWR<SWRResponse<CourseModuleFindRes>>([
-    `/course-module/adm`,
-    { params: { courseSeq } },
-  ]);
+  const { data, error, mutate } = useSWR<SWRResponse<CourseModuleFindRes[]>>(
+    [`/course-module/adm`, { params: { courseSeq } }],
+    GET
+  );
   return {
     data: data?.data,
     error,
@@ -44,18 +46,18 @@ export function useCourseModule(courseSeq: number) {
 }
 
 export function getDetailCourseModule(courseModuleSeq: number) {
-  return GET(`/course-module/adm/${courseModuleSeq}`);
+  return GET<{ data: CourseModuleFindRes }>(`/course-module/adm/${courseModuleSeq}`);
 }
 
 export interface CourseModuleSaveReqDto {
-  examSeq: number; //시험
+  examSeq: number | null; //시험
   limitProgress: number; //진도율일떄
   limitScore: number; //시험일때
   moduleName: string; //모듈이름
   moduleType: CourseModuleType; //모듈타입
   status: ProductStatus; //사용여부
   submitYn: YN; //설문
-  surveySeq: number; //설문
+  surveySeq: number | null; //설문
 }
 
 export interface CourseModuleSaveResDto {

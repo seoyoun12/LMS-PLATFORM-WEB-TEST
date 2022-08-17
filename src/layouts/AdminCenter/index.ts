@@ -21,10 +21,10 @@ export { CategoryModify } from './CategoryManagement/CategoryModify';
 export { CategoryUploadForm } from '@components/admin-center/CategoryUploadForm';
 export { CalendarManagement } from './CalendarManagement/CalendarManagement';
 export { CalendarUpload } from './CalendarManagement/CalendarUpload';
+export { CalendarModify } from './CalendarManagement/CalendarModify';
 
 export { BannerManagement } from './BannerManagement/BannerManagement';
 export { BannerUpload } from './BannerManagement/BannerUpload';
-
 
 export { SurveyManagement } from './SurveyMenagement/SurveyManagement';
 export { SurveyUpload } from './SurveyMenagement/SurveyUpload';
@@ -32,4 +32,3 @@ export { SurveyModify } from './SurveyMenagement/SurveyModify';
 
 export { QnaManagement } from './QnaManagement/QnaManagement';
 export { QnaAnswer } from './QnaManagement/QnaAnswer';
-

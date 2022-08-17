@@ -21,10 +21,14 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { grey } from '@mui/material/colors';
-import { FormEvent, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { CourseRegiModal } from './CourseRegiModal';
-import { courseClassCreate, CourseClassCreate } from '@common/api/adm/courseClass';
+import {
+  courseClassCreate,
+  CourseClassCreate,
+  getDetailCourseClass,
+} from '@common/api/adm/courseClass';
 import { YN } from '@common/constant';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -32,23 +36,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
 import dateFormat from 'dateformat';
-
-// const defaultValues = {
-//   seq: 1,
-//   className: 'PASSENGER',
-//   title: `접수중`,
-//   eduTypeAndTime: '신규교육/24시간',
-//   description: '동영상(VOD)',
-//   year: 9929,
-//   jobType: '화물',
-//   eduLegend: '보수교육',
-//   currentJoin: 592,
-//   limit: 992,
-//   eduStart: '2022-07-20',
-//   eduEnd: '2022-07-26',
-//   start: '2022-07-12',
-//   end: '2022-07-15',
-// };
+import { useRouter } from 'next/router';
 
 // interface CourseClassForm extends CourseClassCreate {
 //   courseName: string;
@@ -60,7 +48,9 @@ const defaultValues: Partial<CourseClassCreate> = {
   studyEndDate: dateFormat(new Date(), 'yyyy-mm-dd'),
 };
 
-export function CalendarUpload() {
+export function CalendarModify() {
+  const router = useRouter();
+  const { courseClassSeq } = router.query;
   const snackbar = useSnackbar();
   const [openModal, setOpenModal] = useState(false);
   const [courseName, setCourseName] = useState('');
@@ -76,6 +66,21 @@ export function CalendarUpload() {
     setValue,
   } = useForm<CourseClassCreate>({ defaultValues });
   console.log(watch(), 'ss');
+
+  useEffect(() => {
+    (async function () {
+      try {
+        console.log('successGet data', courseClassSeq);
+        const { data } = await getDetailCourseClass(Number(courseClassSeq));
+        console.log('successGet data', data);
+      } catch (e: any) {
+        window.alert(
+          `데이터를 불러오는데 실패했습니다.(seq: ${courseClassSeq}) ` + e.data.message
+        );
+      }
+    })();
+  }, []);
+
   const onSubmit: SubmitHandler<CourseClassCreate> = async e => {
     console.log('dsdasda', e, limitPeopleCheck);
     const { step, year, limitPeople, courseSeq } = e;

@@ -22,7 +22,7 @@ export function Course() {
       title: '수강 신청',
       description: '해당 과정 수강을 신청하시겠습니까?',
       confirmText: '신청하기',
-      cancelText: '취소하기'
+      cancelText: '취소하기',
     });
 
     if (dialogConfirmed) {
@@ -30,30 +30,29 @@ export function Course() {
       snackbar({ variant: 'success', message: '수강 신청이 완료되었습니다.' });
     }
   };
-  console.log(course)
+  console.log(course);
 
-  if (courseError) return (<div>NOT FOUND</div>);
+  if (courseError) return <div>NOT FOUND</div>;
   if (!course) return <Spinner />;
   return (
     <Container className={cx(styles.globalContainer, containerStyle)}>
       <MainSection>
         <ThumbnailImg>
-          {course.s3Files ? <Image
-            className="thumbnailImg"
-            src={course.s3Files[0].path} // course.courseFile
-            layout="responsive"
-            width="100%"
-            height="56.25"
-          /> : null}
+          {course.s3Files ? (
+            <Image
+              className="thumbnailImg"
+              src={course.s3Files[0].path} // course.courseFile
+              layout="responsive"
+              width="100%"
+              height="56.25"
+            />
+          ) : null}
         </ThumbnailImg>
 
-        {/* <TuiViewer initialValue={course.courseName} /> content1 */} 
+        {/* <TuiViewer initialValue={course.courseName} /> content1 */}
 
         <CurriculumContainer>
-          <Typography
-            variant="h5"
-            className={curriculumTitle}
-          >
+          <Typography variant="h5" className={curriculumTitle}>
             커리큘럼
           </Typography>
         </CurriculumContainer>
@@ -61,24 +60,12 @@ export function Course() {
 
       <StickySideBar>
         <TopSection>
-          <Typography variant="subtitle2">
-            {course.courseName}
-          </Typography>
-          <Typography
-            variant="h6"
-            className={fontWeightBold}
-          >
+          <Typography variant="subtitle2">{course.courseName}</Typography>
+          <Typography variant="h6" className={fontWeightBold}>
             {course.courseName} {/* subname */}
           </Typography>
-          <Divider
-            light
-            className={dividerStyle}
-          />
-          <Button
-            fullWidth
-            variant="contained" color="primary"
-            onClick={onHandleSubmit}
-          >
+          <Divider light className={dividerStyle} />
+          <Button fullWidth variant="contained" color="primary" onClick={onHandleSubmit}>
             수강신청
           </Button>
         </TopSection>

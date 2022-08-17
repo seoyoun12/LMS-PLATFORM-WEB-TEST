@@ -40,6 +40,7 @@ const headRows = [
 ];
 
 const tabsConfig = [
+  // { name: '전체', value: '' }, // board Type이 required
   { name: '공지사항', value: 'TYPE_NOTICE' },
   { name: '자주묻는질문', value: 'TYPE_FAQ' },
   { name: '회원가입 및 로그인', value: 'TYPE_GUIDE_AUTH ' },
@@ -61,7 +62,6 @@ export function CategoryManagement() {
 
   // 수정
   const onClickmodifyCategoryBoard = async (seq: number) => {
-    setSeq(seq);
     router.push(`/admin-center/category/modify/${seq}`);
     mutate();
   };
@@ -117,7 +117,7 @@ export function CategoryManagement() {
         ))}
       </RadioGroup>
 
-      <Typography variant="h5">게시판 글 목록</Typography>
+      <Typography variant="h5">게시판 목록</Typography>
 
       <Table
         pagination={true}

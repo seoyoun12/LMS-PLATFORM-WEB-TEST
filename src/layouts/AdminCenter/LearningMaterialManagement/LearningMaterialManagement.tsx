@@ -62,6 +62,7 @@ export function LearningMaterialManagement() {
   const [seq, setSeq] = useState<number | null>(null);
   const [typeValue, setTypeValue] = useState('');
   const [subTypeValue, setSubTypeValue] = useState('');
+  const [subType, setSubType] = useState<boolean>(true);
 
   const { data, error, mutate } = learningMaterialList({
     materialType: typeValue,
@@ -71,8 +72,9 @@ export function LearningMaterialManagement() {
 
   // 수정
   const onClickModifyLM = async (seq: number) => {
+    setSubType(false);
     router.push(`/admin-center/learning-material/modify/${seq}`);
-    mutate();
+    await mutate();
   };
 
   // 삭제

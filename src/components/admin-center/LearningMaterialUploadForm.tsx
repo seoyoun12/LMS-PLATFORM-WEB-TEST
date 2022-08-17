@@ -58,7 +58,7 @@ export function LearningMaterialUploadForm({
   const [fileName, setFileName] = useState<string | null>(null);
   const [subType, setSubType] = useState<boolean>(true);
   const [openOrigin, setOpenOrigin] = useState<boolean>(false);
-  // const [materialSubType, setMaterialSubType] = useState(null);
+
   const {
     register,
     handleSubmit,
@@ -73,6 +73,14 @@ export function LearningMaterialUploadForm({
     if (mode === 'modify' && !!learningMaterial) {
       reset({ ...learningMaterial });
       setFileName(learningMaterial.s3Files[0]?.name || null);
+      // setSubType(false);
+      // console.log('learningMaterial  : ', learningMaterial);
+      if (learningMaterial.materialSubType === null) {
+        setSubType(false);
+        if (learningMaterial.materialType === 'TYPE_VIDEO') {
+          setOpenOrigin(true);
+        }
+      }
     }
   }, [mode, learningMaterial, reset]);
 
@@ -85,16 +93,12 @@ export function LearningMaterialUploadForm({
   const onClickCloseSubType = async () => {
     setSubType(false);
     setOpenOrigin(false);
-    // setMaterialSubType(null);
-    // console.log('materialSubType : ', materialSubType);
     setValue('materialSubType', null);
   };
 
   const onClickCloseSubTypeAndOpenOrigin = async () => {
     setSubType(false);
     setOpenOrigin(true);
-    // setMaterialSubType(null);
-    // console.log('materialSubType : ', materialSubType);
     setValue('materialSubType', null);
   };
 
@@ -123,6 +127,7 @@ export function LearningMaterialUploadForm({
       content: markdownContent,
     };
     console.log('learningMaterialInput : ', learningMaterialInput);
+    console.log('files : ', files);
     onHandleSubmit({ learningMaterialInput, files });
   };
 
@@ -172,6 +177,7 @@ export function LearningMaterialUploadForm({
           />
         </FormControl>
 
+        {/* {mode === 'upload' && subType ? ( */}
         {subType ? (
           <FormControl className={pt20}>
             <FormLabel focused={false}>수강생 타입</FormLabel>

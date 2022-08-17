@@ -20,7 +20,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { Table } from '@components/ui';
+import { Spinner, Table } from '@components/ui';
 import dateFormat from 'dateformat';
 import styled from '@emotion/styled';
 
@@ -40,6 +40,7 @@ const headRows = [
 ];
 
 const typeTabsConfig = [
+  { name: '전체', value: '' },
   { name: '연령별 교수학습 지도안', value: 'TYPE_BY_AGE' },
   { name: '교육자료', value: 'TYPE_EDUCATIONAL' },
   { name: '교육영상', value: 'TYPE_VIDEO ' },
@@ -61,12 +62,20 @@ export function LearningMaterialManagement() {
   const [seq, setSeq] = useState<number | null>(null);
   const [typeValue, setTypeValue] = useState('');
   const [subTypeValue, setSubTypeValue] = useState('');
+  const [subType, setSubType] = useState<boolean>(true);
 
   const { data, error, mutate } = learningMaterialList({
     materialType: typeValue,
     materialSubType: subTypeValue,
     page,
   });
+
+  // 수정
+  const onClickModifyLM = async (seq: number) => {
+    setSubType(false);
+    router.push(`/admin-center/learning-material/modify/${seq}`);
+    await mutate();
+  };
 
   // 삭제
   const onClickRemoveLM = async (seq: number) => {
@@ -102,6 +111,9 @@ export function LearningMaterialManagement() {
     });
   };
 
+  if (error) return <div>...ERROR</div>;
+  if (!data) return <Spinner />;
+
   return (
     <div>
       <RadioGroup row>
@@ -116,7 +128,7 @@ export function LearningMaterialManagement() {
         ))}
       </RadioGroup>
 
-      <Typography variant="h5">게시판 글 목록</Typography>
+      <Typography variant="h5">학습자료 목록</Typography>
 
       <Table
         pagination={true}
@@ -163,7 +175,7 @@ export function LearningMaterialManagement() {
                   variant="text"
                   color="neutral"
                   size="small"
-                  // onClick={() => (seq)}
+                  onClick={() => onClickModifyLM(lm.seq)}
                 >
                   수정
                 </Button>

@@ -3,16 +3,20 @@ import { Editor as EditorType } from '@toast-ui/react-editor';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   Box,
-  Button, Chip, FormControl,
-  FormControlLabel, FormHelperText,
-  FormLabel, InputAdornment,
+  Button,
+  Chip,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  FormLabel,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Radio,
   RadioGroup,
   Select,
   TextField,
-  Typography
+  Typography,
 } from '@mui/material';
 import styled from '@emotion/styled';
 import { ProductStatus, CourseRes, CourseInput } from '@common/api/course';
@@ -23,20 +27,32 @@ import { css, cx } from '@emotion/css';
 import { ErrorMessage } from '@hookform/error-message';
 import { FileUploader } from '@components/ui/FileUploader';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
-import { courseReg, courseCategory, courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
-import { courseCategoryType, courseType, courseSubCategoryType } from '@common/api/courseClass';
-
+import {
+  courseReg,
+  courseCategory,
+  courseSubCategory,
+} from '@layouts/Calendar/CalendarBody/CalendarBody';
+import {
+  courseCategoryType,
+  courseType,
+  courseSubCategoryType,
+} from '@common/api/courseClass';
+import Image from 'next/image';
 
 interface Props {
-  mode?: 'upload' | 'modify',
-  course?: CourseInput,
+  mode?: 'upload' | 'modify';
+  course?: CourseInput;
   // onHandleSubmit: ({ courseInput, files, courseSeq }: {
-  onHandleSubmit: ({ courseInput, files, isFileDelete }: {
+  onHandleSubmit: ({
+    courseInput,
+    files,
+    isFileDelete,
+  }: {
     courseInput: CourseInput;
     files: File[];
     isFileDelete: boolean;
     // courseSeq?: number
-  }) => void
+  }) => void;
 }
 
 interface FormType extends CourseInput {
@@ -47,17 +63,30 @@ const defaultValues = {
   // contentType: ContentType.CONTENT_MP4,
   status: ProductStatus.APPROVE,
   displayYn: YN.YES,
-  files: []
+  files: [],
 };
 
 export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Props) {
   // const editorRef = useRef<EditorType>(null);
-  const [ isFileDelete, setIsFileDelete ] = useState(false);
-  const [ fileName, setFileName ] = useState<string | null>(null);
+  const [isFileDelete, setIsFileDelete] = useState(false);
+  const [fileName, setFileName] = useState<string | null>(null);
 
-  const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(null); //교육과정
-  const [courseSubCategoryType, setCourseSubCategoryType] = useState<courseSubCategoryType | null>(null); //교육과정
-  const [courseType, setCourseType] = useState<courseType | null>(null); //교육과정
+  const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(
+    null
+  ); //교육과정
+  const [courseSubCategoryType, setCourseSubCategoryType] =
+    useState<courseSubCategoryType | null>(null); //교육과정
+  const [courseType, setCourseType] = useState<courseType | null>(null); //교육과정\
+
+  const [fileImage, setFileImage] = useState('');
+
+  const saveFileImage = e => {
+    setFileImage(URL.createObjectURL(e.target.files[0]));
+  };
+  const deleteFileImage = () => {
+    URL.revokeObjectURL(fileImage);
+    setFileImage('');
+  };
 
   const {
     register,
@@ -65,7 +94,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
     formState: { errors },
     control,
     reset,
-    resetField
+    resetField,
   } = useForm<FormType>({ defaultValues });
 
   useEffect(() => {
@@ -73,12 +102,12 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
       reset({ ...course });
       setFileName(course.s3Files[0]?.name || null);
     }
-  }, [ mode, course, reset ]);
+  }, [mode, course, reset]);
 
   const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();
 
-    const files = (e.target as HTMLInputElement).files; 
+    const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setFileName(files[0].name);
     setIsFileDelete(false);
@@ -90,20 +119,22 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
     setIsFileDelete(true);
   };
 
+  console.log('course 체크 : ', course);
+
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...course }, event) => {
     event?.preventDefault();
     // if (!editorRef.current) return;
 
     // const markdownContent = editorRef.current.getInstance().getMarkdown();
     const courseInput = {
-      ...course, courseCategoryType, courseSubCategoryType, courseType
+      ...course,
+      courseCategoryType,
+      courseSubCategoryType,
+      courseType,
       // content1: markdownContent,
     };
-
     onHandleSubmit({ courseInput, files, isFileDelete });
   };
-
-
 
   return (
     <Container>
@@ -115,54 +146,16 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
         className={boxStyles}
       >
         <InputContainer>
-
-          <FormControl fullWidth className='courseUploadInputBox'>
-            {/* <FormControlLabel></FormControlLabel> */}
-            <InputLabel>교육분류</InputLabel>
-            <Select
-              labelId="courseCategory"
-              id="courseCategory"
-              value={courseCategoryType}
-              onChange={e => {
-                setCourseCategoryType(courseCategory.filter(cate => cate.type === e.target.value)[0].type);
-              }}
-              label="교육분류"
-            >
-              {courseCategory.map(item => (
-                <MenuItem key={item.type} value={item.type}>
-                  {item.ko}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl fullWidth className='courseUploadInputBox'>
-            <InputLabel>업종</InputLabel>
-            <Select
-              labelId="courseSubCategoryType"
-              id="courseSubCategoryType"
-              value={courseSubCategoryType}
-              onChange={e => {
-                setCourseSubCategoryType(courseSubCategory.filter(cate => cate.type === e.target.value)[0].type);
-              }}
-              label="업종"
-            >
-              {courseSubCategory.map(item => (
-                <MenuItem key={item.type} value={item.type}>
-                  {item.ko}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl fullWidth className='courseUploadInputBox'>
+          <FormControl fullWidth className="courseUploadInputBox">
             <InputLabel>과정분류</InputLabel>
             <Select
               labelId="courseType"
               id="courseType"
               value={courseType}
               onChange={e => {
-                setCourseType(courseReg.filter(cate => cate.type === e.target.value)[0].type);
+                setCourseType(
+                  courseReg.filter(cate => cate.type === e.target.value)[0].type
+                );
               }}
               label="과정분류"
             >
@@ -174,8 +167,48 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             </Select>
           </FormControl>
 
+          <FormControl fullWidth className="courseUploadInputBox">
+            {/* <FormControlLabel></FormControlLabel> */}
+            <InputLabel>교육분류</InputLabel>
+            <Select
+              labelId="courseCategory"
+              id="courseCategory"
+              value={courseCategoryType}
+              onChange={e => {
+                setCourseCategoryType(
+                  courseCategory.filter(cate => cate.type === e.target.value)[0].type
+                );
+              }}
+              label="교육분류"
+            >
+              {courseCategory.map(item => (
+                <MenuItem key={item.type} value={item.type}>
+                  {item.ko}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-
+          <FormControl fullWidth className="courseUploadInputBox">
+            <InputLabel>업종</InputLabel>
+            <Select
+              labelId="courseSubCategoryType"
+              id="courseSubCategoryType"
+              value={courseSubCategoryType}
+              onChange={e => {
+                setCourseSubCategoryType(
+                  courseSubCategory.filter(cate => cate.type === e.target.value)[0].type
+                );
+              }}
+              label="업종"
+            >
+              {courseSubCategory.map(item => (
+                <MenuItem key={item.type} value={item.type}>
+                  {item.ko}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
           <FormControl className={textField}>
             <TextField
@@ -184,7 +217,11 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               label="과정명"
               variant="outlined"
             />
-            <ErrorMessage errors={errors} name="courseName" as={<FormHelperText error />} />
+            <ErrorMessage
+              errors={errors}
+              name="courseName"
+              as={<FormHelperText error />}
+            />
           </FormControl>
 
           <div className="thumbnail-uploader">
@@ -192,21 +229,43 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               register={register}
               regName="files"
               onFileChange={handleFileChange}
+              // onFileChange={saveFileImage}
             >
+              {/* <ThumbnailImg>
+                {course.s3Files ? (
+                  <Image
+                    className="thumbnailImg"
+                    src={course.s3Files[0].path} // course.courseFile
+                    layout="responsive"
+                    width="100%"
+                    height="56.25"
+                  />
+                ) : null}
+              </ThumbnailImg> */}
             </FileUploader>
 
-            {fileName
-              ? <Chip
+            {fileName ? (
+              <Chip
                 sx={{ mt: '8px' }}
                 icon={<OndemandVideoOutlinedIcon />}
                 label={fileName}
-                onDelete={handleDeleteFile} />
-              : null
-            }
+                onDelete={handleDeleteFile}
+              />
+            ) : null}
           </div>
+
+          {/* <ThumbnailImg>
+            {course.s3Files ? (
+              <Image
+                className="thumbnailImg"
+                src={course.s3Files[0].path} // course.courseFile
+                layout="responsive"
+                width="100%"
+                height="56.25"
+              />
+            ) : null}
+          </ThumbnailImg> */}
         </InputContainer>
-          
-        
 
         <FormControl className={cx(textField, lessonTime)}>
           <TextField
@@ -229,8 +288,17 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             name="status"
             render={({ field }) => (
               <RadioGroup row {...field}>
-                <FormControlLabel value={ProductStatus.APPROVE} control={<Radio />} label="정상" />
-                <FormControlLabel value={ProductStatus.REJECT} control={<Radio />} label="중지" /> </RadioGroup>
+                <FormControlLabel
+                  value={ProductStatus.APPROVE}
+                  control={<Radio />}
+                  label="정상"
+                />
+                <FormControlLabel
+                  value={ProductStatus.REJECT}
+                  control={<Radio />}
+                  label="중지"
+                />{' '}
+              </RadioGroup>
             )}
           />
         </FormControl>
@@ -300,7 +368,6 @@ const boxStyles = css`
   margin-top: 8px;
 `;
 
-
 const pt20 = css`
   padding-top: 20px;
 `;
@@ -308,4 +375,7 @@ const pt20 = css`
 const lessonTime = css`
   width: 30%;
   margin-top: 20px;
+`;
+const ThumbnailImg = styled.div`
+  padding-bottom: 30px;
 `;

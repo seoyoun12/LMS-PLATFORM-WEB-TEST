@@ -1,4 +1,4 @@
-import { CategoryBoardInput } from '@common/api/categoryBoard';
+import { BoardType, CategoryBoardInput } from '@common/api/categoryBoard';
 import { YN } from '@common/constant';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Editor as EditorType } from '@toast-ui/react-editor';
@@ -47,7 +47,7 @@ interface FormType extends CategoryBoardInput {
 }
 
 const defaultValues = {
-  boardType: 'TYPE_NOTICE',
+  boardType: BoardType.TYPE_NOTICE,
   // TYPE_NOTICE -> 공지사항
   // TYPE_FAQ -> 자주묻는질문
   // TYPE_GUIDE_AUTH -> 회원가입 및 로그인
@@ -158,7 +158,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
         <InputContainer>
           <FormControl className={textField}>
             <TextField
-              {...register('subject', { required: '과정 명을 입력해주세요.' })}
+              {...register('subject', { required: '공지사항 제목을 입력해주세요.' })}
               size="small"
               label="공지사항 제목"
               variant="outlined"

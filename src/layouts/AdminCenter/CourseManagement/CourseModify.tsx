@@ -35,7 +35,7 @@ export function CourseModify() {
   const { courseSeq, tab } = router.query;
   const { data, error } = courseDetail(Number(courseSeq));
 
-  console.log('CourseModify courseSeq : ', courseSeq);
+  console.log('CourseModify courseSeq : ', data);
 
   const handleSubmit = async ({
     files,

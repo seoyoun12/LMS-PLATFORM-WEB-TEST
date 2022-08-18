@@ -7,6 +7,7 @@ import {
   businessType,
   courseCategoryType,
   courseSubCategoryType,
+  courseType,
   getCourseClassStep,
   UserTransSaveInputDataType,
   useSingleCourseClass,
@@ -42,7 +43,7 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
 
   const getSteps = async () => {
     if (!courseCategoryType || !courseBusinessType) return window.alert('기수 가져오기 실패');
-    const { data } = await getCourseClassStep(courseCategoryType, courseBusinessType);
+    const { data } = await getCourseClassStep(courseType.TYPE_PROVINCIAL, courseCategoryType, courseBusinessType);
     setStepsRes([...data]);
     console.log(data, stepsRes);
   };

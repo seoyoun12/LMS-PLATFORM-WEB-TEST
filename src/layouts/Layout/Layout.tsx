@@ -13,6 +13,7 @@ import { getMyUser, MyUser, UserRole } from '@common/api/user';
 import { SiteMap } from '@components/common/GlobalNavigationBar';
 import { AppBar } from '@mui/material';
 import { PopupBox } from '@components/common/PopupBox/PopupBox';
+import { courseType } from '@common/api/courseClass';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
@@ -36,6 +37,16 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         const currentPageNotNeedLogin = notNeededLoginPathList.some(item =>
           router.route.includes(item.href)
         );
+        // if (router.route.includes('stebMove')) {
+        //null or undefined check
+        const isCourseType = localStorage.getItem('site_course_type');
+        if (!isCourseType) router.push('/');
+
+        //validate
+        const isValid = Object.values(courseType).some(item => item === isCourseType);
+        if (isValid) return;
+        if (!isValid) return router.push('/');
+        // }
 
         if (currentPageNotNeedLogin && !localStorage.getItem('ACCESS_TOKEN')) return;
 

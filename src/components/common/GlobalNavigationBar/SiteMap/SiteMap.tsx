@@ -1,3 +1,4 @@
+import { courseType } from '@common/api/courseClass';
 import styled from '@emotion/styled';
 import { AppBar, Box } from '@mui/material';
 import styles from '@styles/common.module.scss';
@@ -6,9 +7,21 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 const moveLinkList = [
-  { name: '운수종사자', href: '/category' },
-  { name: '저상버스 운전자', href: '/category' },
-  { name: '도민교통', href: '/traffic/category' },
+  {
+    name: '운수종사자',
+    href: '/category',
+    type: courseType.TYPE_TRANS_WORKER,
+  },
+  {
+    name: '저상버스 운전자',
+    href: '/category',
+    type: courseType.TYPE_LOW_FLOOR_BUS,
+  },
+  {
+    name: '도민교통',
+    href: '/traffic/category',
+    type: courseType.TYPE_PROVINCIAL,
+  },
 ];
 
 const hideNavList = [
@@ -35,9 +48,15 @@ export function SiteMap() {
     <SiteMapWrap>
       <Header className={styles.globalContainer}>
         {moveLinkList.map(item => (
-          <Link key={item.name} href={item.href}>
-            <HeaderItem>{item.name}</HeaderItem>
-          </Link>
+          <HeaderItem
+            key={item.name}
+            onClick={() => {
+              router.push(item.href);
+              localStorage.setItem('site_course_type', item.type);
+            }}
+          >
+            {item.name}
+          </HeaderItem>
         ))}
       </Header>
     </SiteMapWrap>

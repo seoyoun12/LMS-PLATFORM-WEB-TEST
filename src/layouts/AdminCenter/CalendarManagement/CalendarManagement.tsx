@@ -3,16 +3,7 @@ import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { Table } from '@components/ui';
-import {
-  Box,
-  Button,
-  Container,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Container, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import dateFormat from 'dateformat';
@@ -20,6 +11,7 @@ import { businessType } from '@common/api/courseClass';
 import { courseClassRemove, useCourseClassAdm } from '@common/api/adm/courseClass';
 import { Link } from '@components/common';
 import { courseBusinessTypeList } from '@layouts/Calendar/Calendar';
+import { AdminCalendar } from './AdminCalendar';
 
 const headRows: {
   name: string;
@@ -45,7 +37,7 @@ export function CalendarManagement() {
   const dialog = useDialog();
   const router = useRouter();
   // const [ page, setPage ] = useState(0);
-  const { data, error, mutate } = useCourseClassAdm(businessType.TYPE_ALL, '2022-07');
+  const { data, error, mutate } = useCourseClassAdm(businessType.TYPE_ALL, '2022-08');
 
   useEffect(() => {
     console.log('useEffect Triggered');
@@ -114,10 +106,7 @@ export function CalendarManagement() {
         </TableHead>
         <TableBody>
           {data.map(data => {
-            const isReceive =
-              new Date(data.requestEndDate).getTime() - new Date().getTime() > 0
-                ? true
-                : false;
+            const isReceive = new Date(data.requestEndDate).getTime() - new Date().getTime() > 0 ? true : false;
             return (
               <TableRow key={data.seq} hover>
                 <TableCell>{data.seq}</TableCell>
@@ -130,11 +119,7 @@ export function CalendarManagement() {
                   {/* {dateFormat(data.eduTypeAndTime, 'isoDate')} */}
                 </TableCell>
                 <TableCell align="right">
-                  {
-                    courseBusinessTypeList.filter(
-                      business => business.enType === data.course.courseBusinessType
-                    )[0].type
-                  }
+                  {courseBusinessTypeList.filter(business => business.enType === data.course.courseBusinessType)[0].type}
                   {/* <Chip
                   label={data.displayYn === YN.YES ? '보임' : '숨김'}
                   variant="outlined"
@@ -158,12 +143,10 @@ export function CalendarManagement() {
                   {data.enrolledPeopleCnt} / {data.limitPeople}
                 </TableCell>
                 <TableCell align="right">
-                  {dateFormat(data.studyStartDate, 'yyyy-mm-dd')} ~{' '}
-                  {dateFormat(data.studyEndDate, 'yyyy-mm-dd')}
+                  {dateFormat(data.studyStartDate, 'yyyy-mm-dd')} ~ {dateFormat(data.studyEndDate, 'yyyy-mm-dd')}
                 </TableCell>
                 <TableCell align="right">
-                  {dateFormat(data.requestStartDate, 'yyyy-mm-dd')} ~{' '}
-                  {dateFormat(data.requestEndDate, 'yyyy-mm-dd')}
+                  {dateFormat(data.requestStartDate, 'yyyy-mm-dd')} ~ {dateFormat(data.requestEndDate, 'yyyy-mm-dd')}
                 </TableCell>
                 <TableCell>
                   <Link href={`/admin-center/calendar/modify/${data.seq}`}>
@@ -171,12 +154,7 @@ export function CalendarManagement() {
                       상세
                     </Button>
                   </Link>
-                  <Button
-                    variant="text"
-                    color="warning"
-                    onClick={() => onRemoveCourse(data.seq)}
-                    size="small"
-                  >
+                  <Button variant="text" color="warning" onClick={() => onRemoveCourse(data.seq)} size="small">
                     삭제
                   </Button>
                 </TableCell>
@@ -195,6 +173,7 @@ export function CalendarManagement() {
           })}
         </TableBody>
       </Table>
+      <AdminCalendar />
     </CalendarManagementWrap>
   );
 }

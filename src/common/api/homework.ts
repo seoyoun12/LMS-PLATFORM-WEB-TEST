@@ -20,15 +20,17 @@ export interface Homework {
   subject: string
 }
 
-export interface HomeworkInput {
-  bestAnswer: string,
-  content: string,
-  contentSeq: number,
-  markingRole: string,
-  s3Files: S3Files,
-  status: number,
-  subject: string
-}
+// export interface HomeworkInput {
+//   bestAnswer: string,
+//   content: string,
+//   contentSeq: number,
+//   markingRole: string,
+//   s3Files: S3Files,
+//   status: number,
+//   subject: string
+// }
+
+export type HomeworkInput = Partial<Homework>;
 
 // 전체 조회
 export function homeworkList({contentSeq, page, elementCnt} : {

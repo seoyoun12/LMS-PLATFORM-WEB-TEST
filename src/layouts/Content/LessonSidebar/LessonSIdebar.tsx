@@ -1,24 +1,24 @@
-import { Box, BoxProps, Container, Divider, Typography } from "@mui/material";
-import styled from "@emotion/styled";
-import { headerHeight } from "@styles/variables";
-import { Spinner, Tabs } from "@components/ui";
-import React, { useState, useLayoutEffect, useEffect } from "react";
-import { useRouter } from "next/router";
-import { Link, VideoPlayer } from "@components/common";
-import { CourseRes, useCourse } from "@common/api/course";
-import { grey } from "@mui/material/colors";
-import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
-import { totalSecToMinSec } from "@utils/totalSecToMinSec";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import PlayCircleIcon from "@mui/icons-material/PlayCircle";
-import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import FeedIcon from "@mui/icons-material/Feed";
-import dateFormat, { masks } from "dateformat";
-import { TuiViewer } from "@components/common/TuiEditor";
-import { LessonTabs } from "@components/ui/Tabs";
-import DownloadIcon from "@mui/icons-material/Download";
-import { useRecoilState } from "recoil";
-import { contentSeqState, revealVideoState } from "@common/recoil";
+import { Box, BoxProps, Container, Divider, Typography } from '@mui/material';
+import styled from '@emotion/styled';
+import { headerHeight } from '@styles/variables';
+import { Spinner, Tabs } from '@components/ui';
+import React, { useState, useLayoutEffect, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { Link, VideoPlayer } from '@components/common';
+import { CourseRes, useCourse } from '@common/api/course';
+import { grey } from '@mui/material/colors';
+import PlayCircleOutlinedIcon from '@mui/icons-material/PlayCircleOutlined';
+import { totalSecToMinSec } from '@utils/totalSecToMinSec';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import FeedIcon from '@mui/icons-material/Feed';
+import dateFormat, { masks } from 'dateformat';
+import { TuiViewer } from '@components/common/TuiEditor';
+import { LessonTabs } from '@components/ui/Tabs';
+import DownloadIcon from '@mui/icons-material/Download';
+import { useRecoilState } from 'recoil';
+import { contentSeqState, revealVideoState } from '@common/recoil';
 
 interface Props {
   course: CourseRes;
@@ -47,10 +47,16 @@ interface Props {
   }[];
 }
 
-export function LessonSidebar({ course, tabsConfig, testList, noticeConfig, fileList }: Props) {
+export function LessonSidebar({
+  course,
+  tabsConfig,
+  testList,
+  noticeConfig,
+  fileList,
+}: Props) {
   const router = useRouter();
   const { query, pathname } = router;
-  const { courseSeq, lessonId } = query;
+  const { courseSeq, lessonSeq } = query;
 
   const [changeMenu, setChangeMenu] = useState(tabsConfig[0].value);
   const [check, setCheck] = useState(false);
@@ -82,17 +88,17 @@ export function LessonSidebar({ course, tabsConfig, testList, noticeConfig, file
         rerender={false}
         // variant={"fullWidth"}
         changeMenu={changeMenu}
-      />{" "}
+      />{' '}
       {/*메뉴바 헤더 */}
       {/*첫 메뉴 리스트 */}
       <TabPanel value={changeMenu} index={tabsConfig[0].value}>
         <MenuList>
-          {course.lessons.map((lesson) => {
+          {course.lessons.map(lesson => {
             const { min, sec } = totalSecToMinSec(lesson.totalTime);
 
             return (
               <MenuCellLink
-                className={Number(lessonId) === lesson.seq ? "active" : ""}
+                className={Number(lessonSeq) === lesson.seq ? 'active' : ''}
                 key={lesson.seq}
                 href={`/course/${course.seq}/lesson/${lesson.seq}`}
                 onClick={() => {
@@ -110,8 +116,10 @@ export function LessonSidebar({ course, tabsConfig, testList, noticeConfig, file
                   </LessonInfo>
                 </Box>
                 <LessonCheck>
-                  <CheckCircleIcon sx={{ color: lesson.seq == 27 ? "text.secondary" : "#ff5600" }} />
-                  {lesson.seq == 27 ? <PlayCircleIcon /> : ""}
+                  <CheckCircleIcon
+                    sx={{ color: lesson.seq == 27 ? 'text.secondary' : '#ff5600' }}
+                  />
+                  {lesson.seq == 27 ? <PlayCircleIcon /> : ''}
                 </LessonCheck>
               </MenuCellLink>
             );

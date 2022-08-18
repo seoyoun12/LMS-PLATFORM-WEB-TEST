@@ -1,24 +1,12 @@
 import {
-  detailHomework,
-  HomeworkInput,
-  HomeworkStatus,
-  modifyHomework,
-  uploadHomework,
+  detailHomework, HomeworkInput, HomeworkStatus,
+  modifyHomework, uploadHomework
 } from '@common/api/homework';
 import { ErrorMessage } from '@hookform/error-message';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
-  Box,
-  Button,
-  Chip,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
+  Box, Button, Chip, FormControl, FormControlLabel, FormHelperText,
+  FormLabel, Radio, RadioGroup, TextField, Typography
 } from '@mui/material';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -30,43 +18,42 @@ import { css } from '@emotion/css';
 import { Modal } from '@components/ui';
 
 const defaultValues = {
-  status: HomeworkStatus.APPROVE,
+  status: HomeworkStatus.APPROVE
 };
 
-export function HomeworkModal({
-  open,
-  handleClose,
-  seq,
-  contentSeq,
-  mode = 'upload',
-}: {
+export function HomeworkModal({ open, handleClose, seq, contentSeq, mode = 'upload' }: {
   open: boolean;
   handleClose: (isSubmit: boolean) => void;
   seq: number | null;
   contentSeq: number;
-  mode: 'modify' | 'upload';
+  mode: 'modify' | 'upload'
 }) {
+
   const input: HTMLInputElement | null = document.querySelector('#input-file');
   const snackbar = useSnackbar();
   const { detailData, detailError } = detailHomework(Number(seq));
-  const [submitLoading, setSubmitLoading] = useState(false);
-  const [fileName, setFileName] = useState<string | null>();
+  const [ submitLoading, setSubmitLoading ] = useState(false);
+  const [ fileName, setFileName ] = useState<string | null>();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const loading = open && mode === 'modify' && !detailData;
+  const loading = (open && mode === 'modify' && !detailData);
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    reset,
+    reset
   } = useForm<HomeworkInput>({ defaultValues });
 
   // Mode useEffect
   useEffect(() => {
     if (open) {
-      reset(mode === 'modify' && !!detailData ? { ...detailData } : { ...defaultValues });
+      reset(
+        mode === 'modify' && !!detailData
+          ? { ...detailData }
+          : { ...defaultValues }
+      );
     }
-  }, [mode, detailData, open, fileInputRef, reset]);
+  }, [ mode, detailData, open, fileInputRef, reset ]);
 
   // File Upload
   const uploadFile = (e: ChangeEvent) => {
@@ -77,7 +64,8 @@ export function HomeworkModal({
   };
 
   // Submit
-  const onSubmit: SubmitHandler<HomeworkInput> = async detailData => {
+  const onSubmit: SubmitHandler<HomeworkInput> = async (detailData) => {
+
     const s3Files = detailData?.s3Files?.length ? detailData.s3Files : [];
     const inputParams = { ...detailData, contentSeq: contentSeq, s3Files };
     setSubmitLoading(true);
@@ -86,10 +74,7 @@ export function HomeworkModal({
     const fileName = !!files?.length ? files[0].name : undefined;
     const formData = new FormData();
     formData.append('files', file, fileName);
-    formData.append(
-      'data',
-      new Blob([JSON.stringify(inputParams)], { type: 'application/json' })
-    );
+    formData.append('data', new Blob([ JSON.stringify(inputParams) ], { type: 'application/json' }));
 
     if (fileName !== undefined) {
       try {
@@ -114,6 +99,7 @@ export function HomeworkModal({
       setSubmitLoading(false);
     }
   };
+
 
   if (open && detailError) return <div>error</div>;
 
@@ -142,9 +128,7 @@ export function HomeworkModal({
           </FormControl>
 
           <FormControl className="form-control">
-            <Typography variant="subtitle2" className="subtitle">
-              파일 업로드
-            </Typography>
+            <Typography variant="subtitle2" className="subtitle">파일 업로드</Typography>
             <label htmlFor="input-file">
               <input
                 style={{ display: 'none' }}
@@ -163,19 +147,17 @@ export function HomeworkModal({
                 파일 선택
               </Button>
             </label>
-            {!!fileInputRef.current?.files?.length && (
-              <Chip
-                className={chipStyles}
-                icon={<ImageOutlinedIcon />}
-                label={fileName}
-                onDelete={() => {
-                  if (input) {
-                    input.value = '';
-                    setFileName(null);
-                  }
-                }}
-              />
-            )}
+            {!!fileInputRef.current?.files?.length && <Chip
+              className={chipStyles}
+              icon={<ImageOutlinedIcon />}
+              label={fileName}
+              onDelete={() => {
+                if (input) {
+                  input.value = '';
+                  setFileName(null);
+                }
+              }}
+            />}
           </FormControl>
 
           <FormControl className="form-control">
@@ -186,25 +168,20 @@ export function HomeworkModal({
               name="status"
               render={({ field }) => (
                 <RadioGroup row {...field}>
-                  <FormControlLabel
-                    value={HomeworkStatus.APPROVE}
-                    control={<Radio />}
-                    label="정상"
-                  />
-                  <FormControlLabel
-                    value={HomeworkStatus.REJECT}
-                    control={<Radio />}
-                    label="중지"
-                  />
+                  <FormControlLabel value={HomeworkStatus.APPROVE} control={<Radio />} label="정상" />
+                  <FormControlLabel value={HomeworkStatus.REJECT} control={<Radio />} label="중지" />
                 </RadioGroup>
               )}
             />
           </FormControl>
+
         </FormContainer>
       </Box>
     </Modal>
   );
+
 }
+
 
 const FormContainer = styled.div`
   display: flex;

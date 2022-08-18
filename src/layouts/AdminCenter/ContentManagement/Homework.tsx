@@ -1,4 +1,12 @@
-import { Container, TableBody, TableHead, Typography, Button, TableCell, Chip } from '@mui/material';
+import {
+  Container,
+  TableBody,
+  TableHead,
+  Typography,
+  Button,
+  TableCell,
+  Chip,
+} from '@mui/material';
 import styles from '@styles/common.module.scss';
 import { Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
@@ -13,7 +21,7 @@ import { useDialog } from '@hooks/useDialog';
 import { homeworkList, HomeworkStatus, removeHomework } from '@common/api/homework';
 import { HomeworkModal } from '@components/admin-center/HomeworkModal';
 
-//////////// 2022 07 05 /////////////////// 
+//////////// 2022 07 05 ///////////////////
 
 const headRows = [
   { name: 'seq' },
@@ -23,124 +31,123 @@ const headRows = [
   { name: '상태' },
   { name: '수정' },
   { name: '삭제' },
-]
+];
 
 export function Homework() {
-
   const router = useRouter();
   const snackbar = useSnackbar();
   const dialog = useDialog();
 
-  const [ openHomeworkModal, setOpenHomeworkModal ] = useState(false);
-  const [ seq, setSeq ] = useState<number | null>(null);
-  const [ page, setPage ] = useState(0);
+  const [openHomeworkModal, setOpenHomeworkModal] = useState(false);
+  const [seq, setSeq] = useState<number | null>(null);
+  const [page, setPage] = useState(0);
   const { contentSeq } = router.query;
-  const {
-    pageData, pageError, mutate
-  } = homeworkList({ contentSeq: Number(contentSeq), page });
+  const { pageData, pageError, mutate } = homeworkList({
+    contentSeq: Number(contentSeq),
+    page,
+  });
 
   // Pagination
   const onChangePage = async (page: number) => {
-		await router.push({
-			pathname: router.pathname,
-			query: {
-				...router.query,
-				page
-			}
-		});
-	};
+    await router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        page,
+      },
+    });
+  };
   useEffect(() => {
-		const { page } = router.query;
-		setPage(!isNaN(Number(page)) ? Number(page) : 0);
-	}, [router.query]);
+    const { page } = router.query;
+    setPage(!isNaN(Number(page)) ? Number(page) : 0);
+  }, [router.query]);
 
   // Modal control
   const handleCloseModal = async (isSubmit: boolean) => {
     if (openHomeworkModal) {
-      setOpenHomeworkModal(false);
+      // 열려있으면
+      setOpenHomeworkModal(false); // 닫아라
       await mutate();
     }
-  }
+  };
 
   // Homework Modify
-  const onModifyHomework = async (seq : number) => {
+  const onModifyHomework = async (seq: number) => {
     setSeq(seq);
-    setOpenHomeworkModal(true);
+    setOpenHomeworkModal(true); // 열어라
     await mutate();
-  }
+  };
 
   // Homework Remove
-  const onRemoveHomrwork = async (seq : number) => {
+  const onRemoveHomrwork = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
-        title : "과제 삭제하기",
-        description : "정말로 삭제하시겠습니까?",
-        confirmText : "삭제하기",
-        cancelText : "취소"
+        title: '과제 삭제하기',
+        description: '정말로 삭제하시겠습니까?',
+        confirmText: '삭제하기',
+        cancelText: '취소',
       });
       if (dialogConfirmed) {
+        // dialogConfirmed이 true면
         await removeHomework(seq);
-        snackbar({ variant : "success", message : "성공적으로 삭제되었습니다." });
+        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
         await mutate();
       }
     } catch (e: any) {
-      snackbar({ variant: "error", message: e.data.message });
+      snackbar({ variant: 'error', message: e.data.message });
     }
-  }
-
+  };
 
   return (
-
     <Container className={styles.globalContainer}>
       {/* 업로드 버튼 */}
       <UploadBtn>
-				<Button
-					color="secondary"
-					variant="contained"
-					startIcon={<FileUploadIcon />}
-					onClick={async () => {
-						setSeq(null);
-						setOpenHomeworkModal(true);
-					}}
-				>
-					과제 등록
-				</Button>
-			</UploadBtn>
+        <Button
+          color="secondary"
+          variant="contained"
+          startIcon={<FileUploadIcon />}
+          onClick={async () => {
+            setSeq(null);
+            setOpenHomeworkModal(true);
+          }}
+        >
+          과제 등록
+        </Button>
+      </UploadBtn>
 
       <Table
-				size="small"
-				pagination={true}
-				totalNum={pageData?.totalElements}
-				page={pageData?.number}
-				onChangePage={onChangePage}
-			>
-      
+        size="small"
+        pagination={true}
+        totalNum={pageData?.totalElements}
+        page={pageData?.number}
+        onChangePage={onChangePage}
+      >
         <TableHead>
-
           <TableRow>
-            {headRows.map(({ name }) =>
+            {headRows.map(({ name }) => (
               <TableCell key={name}>{name}</TableCell>
-            )}
-            <TableCell>{ }</TableCell>
+            ))}
+            <TableCell>{}</TableCell>
           </TableRow>
 
           <TableBody>
-
-            {pageData?.content.map((homework) => 
+            {pageData?.content.map(homework => (
               <TableRow key={homework.seq} hover>
                 <TableCell>{homework.seq}</TableCell>
                 <TableCell>{homework.subject}</TableCell>
                 <TableCell>{dateFormat(homework.createdDtime, 'isoDate')}</TableCell>
-							  <TableCell>{dateFormat(homework.modifiedDtime, 'isoDate')}</TableCell>
+                <TableCell>{dateFormat(homework.modifiedDtime, 'isoDate')}</TableCell>
 
                 <TableCell style={{ width: 10 }} align="right">
                   <Chip
                     variant="outlined"
                     size="small"
                     label={homework.status === HomeworkStatus.APPROVE ? '정상' : '중지'}
-                    color={homework.status === HomeworkStatus.APPROVE ? 'secondary' : 'default'}
+                    color={
+                      homework.status === HomeworkStatus.APPROVE ? 'secondary' : 'default'
+                    }
                   />
-						  	</TableCell>
+                </TableCell>
 
                 <TableCell>
                   <Button
@@ -161,21 +168,19 @@ export function Homework() {
                   >
                     삭제
                   </Button>
-							  </TableCell>
-
+                </TableCell>
               </TableRow>
-            )}
+            ))}
           </TableBody>
-
         </TableHead>
       </Table>
 
       <HomeworkModal
-        mode = {seq ? "modify" : "upload"}
-        seq = {Number(seq)}
-        contentSeq = {Number(contentSeq)} 
-        open = {openHomeworkModal}
-        handleClose = {(isSubmit) => handleCloseModal(isSubmit)}
+        mode={seq ? 'modify' : 'upload'}
+        seq={Number(seq)}
+        contentSeq={Number(contentSeq)}
+        open={openHomeworkModal}
+        handleClose={isSubmit => handleCloseModal(isSubmit)}
       />
     </Container>
   );

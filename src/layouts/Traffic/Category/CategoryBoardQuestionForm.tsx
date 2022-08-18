@@ -153,8 +153,6 @@ export function CategoryBoardQuestionForm({
       type: questionType,
     };
 
-    console.log('1대1문의 qnaInput : ', qnaInput);
-
     onHandleSubmit({ qnaInput, files, isFileDelete });
   };
 

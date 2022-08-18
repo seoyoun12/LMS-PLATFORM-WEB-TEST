@@ -3,7 +3,16 @@ import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { Table } from '@components/ui';
-import { Box, Button, Container, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import dateFormat from 'dateformat';
@@ -12,7 +21,10 @@ import { courseClassRemove, useCourseClassAdm } from '@common/api/adm/courseClas
 import { Link } from '@components/common';
 import { courseBusinessTypeList } from '@layouts/Calendar/Calendar';
 
-const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify' }[] = [
+const headRows: {
+  name: string;
+  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+}[] = [
   { name: 'seq', align: 'left' },
   { name: '접수여부', align: 'right' },
   { name: '교육타입/시간', align: 'right' },
@@ -102,7 +114,10 @@ export function CalendarManagement() {
         </TableHead>
         <TableBody>
           {data.map(data => {
-            const isReceive = new Date(data.requestEndDate).getTime() - new Date().getTime() > 0 ? true : false;
+            const isReceive =
+              new Date(data.requestEndDate).getTime() - new Date().getTime() > 0
+                ? true
+                : false;
             return (
               <TableRow key={data.seq} hover>
                 <TableCell>{data.seq}</TableCell>
@@ -115,7 +130,11 @@ export function CalendarManagement() {
                   {/* {dateFormat(data.eduTypeAndTime, 'isoDate')} */}
                 </TableCell>
                 <TableCell align="right">
-                  {courseBusinessTypeList.filter(business => business.enType === data.course.courseBusinessType)[0].type}
+                  {
+                    courseBusinessTypeList.filter(
+                      business => business.enType === data.course.courseBusinessType
+                    )[0].type
+                  }
                   {/* <Chip
                   label={data.displayYn === YN.YES ? '보임' : '숨김'}
                   variant="outlined"
@@ -139,18 +158,25 @@ export function CalendarManagement() {
                   {data.enrolledPeopleCnt} / {data.limitPeople}
                 </TableCell>
                 <TableCell align="right">
-                  {dateFormat(data.studyStartDate, 'yyyy-mm-dd')} ~ {dateFormat(data.studyEndDate, 'yyyy-mm-dd')}
+                  {dateFormat(data.studyStartDate, 'yyyy-mm-dd')} ~{' '}
+                  {dateFormat(data.studyEndDate, 'yyyy-mm-dd')}
                 </TableCell>
                 <TableCell align="right">
-                  {dateFormat(data.requestStartDate, 'yyyy-mm-dd')} ~ {dateFormat(data.requestEndDate, 'yyyy-mm-dd')}
+                  {dateFormat(data.requestStartDate, 'yyyy-mm-dd')} ~{' '}
+                  {dateFormat(data.requestEndDate, 'yyyy-mm-dd')}
                 </TableCell>
                 <TableCell>
-                  <Link href={`/admin-center/calendar/modify/`}>
+                  <Link href={`/admin-center/calendar/modify/${data.seq}`}>
                     <Button variant="text" color="neutral" size="small">
                       상세
                     </Button>
                   </Link>
-                  <Button variant="text" color="warning" onClick={() => onRemoveCourse(data.seq)} size="small">
+                  <Button
+                    variant="text"
+                    color="warning"
+                    onClick={() => onRemoveCourse(data.seq)}
+                    size="small"
+                  >
                     삭제
                   </Button>
                 </TableCell>

@@ -5,12 +5,19 @@ import { businessType, CourseClassRes } from '../courseClass';
 
 //admin 조회
 export function useCourseClassAdm(businessType: businessType, date: string) {
-  const { data, error, mutate } = useSWR<SWRResponse<CourseClassRes[]>>([`/course-class/adm`, { params: { businessType, date } }], GET);
+  const { data, error, mutate } = useSWR<SWRResponse<CourseClassRes[]>>(
+    [`/course-class/adm`, { params: { businessType, date } }],
+    GET
+  );
   return {
     data: data?.data,
     error,
     mutate,
   };
+}
+
+export function getDetailCourseClass(courseClassSeq: number) {
+  return GET<{ data: CourseClassRes }>(`/course-class/adm/${courseClassSeq}`);
 }
 
 export interface CourseClassCreate {

@@ -1,181 +1,130 @@
+import { Spinner, Table } from '@components/ui';
+import styled from '@emotion/styled';
 import {
-  Container,
-  TableBody,
-  TableHead,
-  Typography,
+  Box,
   Button,
-  TableCell,
   Chip,
+  Container,
+  MenuItem,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
 } from '@mui/material';
-import styles from '@styles/common.module.scss';
-import { Table } from '@components/ui';
-import TableRow from '@mui/material/TableRow';
-import { Spinner } from '@components/ui';
-import dateFormat from 'dateformat';
 import { useRouter } from 'next/router';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { useEffect, useState } from 'react';
-import styled from '@emotion/styled';
+import { useState } from 'react';
+import { CourseModuleUploadModal } from '@components/admin-center';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { useDialog } from '@hooks/useDialog';
-import { libraryList, LibraryStatus, removeLibrary } from '@common/api/library';
-import { LibraryUploadModal } from '@components/admin-center/LibraryUploadModal';
-import { useCourseModule } from '@common/api/adm/course';
+import { useCourseModule } from '@common/api/adm/courseModule';
+import { moduleTypeArr } from '@components/admin-center/CourseModule/CourseModuleUploadModal';
+import { ProductStatus } from '@common/api/course';
+import { css } from '@emotion/css';
 
-const headRows = [
-  { name: 'seq' },
-  { name: '강의명' },
-  { name: '등록날짜' },
-  { name: '수정일자' },
-  { name: '상태' },
-  { name: '수정' },
-  { name: '삭제' },
+const headRows: {
+  name: string;
+  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+}[] = [
+  { name: 'seq', align: 'left' },
+  { name: '과정모듈명', align: 'left' },
+  { name: '과정모듈 타입', align: 'left' },
+  { name: '상태', align: 'left' },
 ];
 
 export function CourseModule() {
   const router = useRouter();
   const snackbar = useSnackbar();
-  const dialog = useDialog();
-  const [openLibraryModal, setOpenLibraryModal] = useState(false);
-  const [seq, setSeq] = useState<number | null>(null);
-  const [page, setPage] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
+  const [courseModuleSeq, setCourseModuleSeq] = useState<number>(null);
   const { courseSeq } = router.query;
   const { data, error, mutate } = useCourseModule(Number(courseSeq));
-  console.log(data);
 
-  const onRemoveLibrary = async (seq: number) => {
-    try {
-      const dialogConfirmed = await dialog({
-        title: '콘텐츠 삭제하기',
-        description: '정말로 삭제하시겠습니까?',
-        confirmText: '삭제하기',
-        cancelText: '취소',
-      });
-      if (dialogConfirmed) {
-        await removeLibrary(seq);
-        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-        await mutate();
-      }
-    } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
-    }
+  const handleClose = () => {
+    setOpenModal(false);
+    mutate();
   };
-
-  const handleCloseModal = async (isSubmit: boolean) => {
-    if (openLibraryModal) {
-      setOpenLibraryModal(false);
-      await mutate();
-    }
-  };
-
-  const onModifyLibrary = async (seq: number) => {
-    setSeq(seq);
-    setOpenLibraryModal(true);
-    await mutate();
-  };
-
-  useEffect(() => {
-    const { page } = router.query;
-    setPage(!isNaN(Number(page)) ? Number(page) : 0);
-  }, [router.query]);
-
-  // const onChangePage = async (page: number) => {
-  //   await router.push({
-  //     pathname: router.pathname,
-  //     query: {
-  //       ...router.query,
-  //       page,
-  //     },
-  //   });
-  // };
-
+  console.log(data, '데이탕');
   if (error) return <div>error</div>;
   if (!data) return <Spinner />;
-  return <Spinner />;
-
-  // return (
-  //   <Container className={styles.globalContainer}>
-  //     <UploadBtn>
-  //       <Button
-  //         color="secondary"
-  //         variant="contained"
-  //         startIcon={<FileUploadIcon />}
-  //         onClick={async () => {
-  //           setSeq(null);
-  //           setOpenLibraryModal(true);
-  //         }}
-  //       >
-  //         과정모듈 업로드
-  //       </Button>
-  //     </UploadBtn>
-
-  //     <Table
-  //       size="small"
-  //       // pagination={true}
-  //       // totalNum={libraryPaginationResult.totalElements}
-  //       // page={libraryPaginationResult.number}
-  //       // onChangePage={onChangePage}
-  //     >
-  //       <TableHead>
-  //         <TableRow>
-  //           {headRows.map(({ name }) => (
-  //             <TableCell key={name}>{name}</TableCell>
-  //           ))}
-  //           <TableCell>{}</TableCell>
-  //         </TableRow>
-  //       </TableHead>
-
-  //       <TableBody>
-  //         {data.map(item => (
-  //           <TableRow key={item.courseSeq} hover>
-  //             <TableCell>{item.seq}</TableCell>
-  //             <TableCell>{item.subject}</TableCell>
-  //             <TableCell>{dateFormat(item.createdDtime, 'isoDate')}</TableCell>
-  //             <TableCell>{dateFormat(item.modifiedDtime, 'isoDate')}</TableCell>
-  //             <TableCell style={{ width: 10 }} align="right">
-  //               <Chip
-  //                 variant="outlined"
-  //                 size="small"
-  //                 label={item.status === LibraryStatus.APPROVE ? '정상' : '중지'}
-  //                 color={
-  //                   item.status === LibraryStatus.APPROVE ? 'secondary' : 'default'
-  //                 }
-  //               />
-  //             </TableCell>
-  //             <TableCell>
-  //               <Button
-  //                 variant="text"
-  //                 color="neutral"
-  //                 size="small"
-  //                 onClick={() => onModifyLibrary(item.seq)}
-  //               >
-  //                 수정
-  //               </Button>
-  //             </TableCell>
-  //             <TableCell>
-  //               <Button
-  //                 variant="text"
-  //                 color="warning"
-  //                 onClick={() => onRemoveLibrary(item.seq)}
-  //                 size="small"
-  //               >
-  //                 삭제
-  //               </Button>
-  //             </TableCell>
-  //           </TableRow>
-  //         ))}
-  //       </TableBody>
-  //     </Table>
-
-  //     <LibraryUploadModal
-  //       mode={seq ? 'modify' : 'upload'}
-  //       seq={Number(seq)}
-  //       courseSeq={Number(courseSeq)}
-  //       open={openLibraryModal}
-  //       handleClose={isSubmit => handleCloseModal(isSubmit)}
-  //     />
-  //   </Container>
-  // );
+  return (
+    <Container>
+      <UploadBtn>
+        <Button
+          color="secondary"
+          variant="contained"
+          startIcon={<FileUploadIcon />}
+          onClick={() => {
+            setCourseModuleSeq(null);
+            setOpenModal(true);
+          }}
+        >
+          모듈 등록
+        </Button>
+      </UploadBtn>
+      <Typography variant="h5">과정 모듈 관리</Typography>
+      <Table
+        pagination={true}
+        // totalNum={data.totalElements}
+        // page={data.number}
+        // onChangePage={onChangePage}
+        size="small"
+      >
+        <TableHead>
+          <TableRow>
+            {headRows.map(({ name, align }) => (
+              <TableCell className={spaceNoWrap} key={name} align={align}>
+                {name}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map(item => (
+            <CustomTableRow
+              key={item.courseSeq}
+              hover
+              onClick={() => {
+                if (!item.courseModuleSeq) {
+                  return snackbar({
+                    variant: 'error',
+                    message: `지정된 모듈의 시퀀스가 존재하지 않습니다!`,
+                  });
+                }
+                setCourseModuleSeq(item.courseModuleSeq);
+                setOpenModal(true);
+              }}
+            >
+              <TableCell>{item.courseModuleSeq}</TableCell>
+              <TableCell>{item.moduleName}</TableCell>
+              <TableCell>
+                {moduleTypeArr.filter(filt => filt.type === item.moduleType)[0].title}
+              </TableCell>
+              <TableCell>
+                <Chip
+                  variant="outlined"
+                  size="small"
+                  label={item.status === ProductStatus.APPROVE ? '정상' : '중지'}
+                  color={item.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
+                />
+              </TableCell>
+              {/* <TableCell>{item.seq}</TableCell>
+          <TableCell>{item.seq}</TableCell> */}
+            </CustomTableRow>
+          ))}
+        </TableBody>
+      </Table>
+      {openModal && (
+        <CourseModuleUploadModal
+          open={openModal}
+          onClose={handleClose}
+          courseModuleSeq={courseModuleSeq}
+          courseSeq={Number(courseSeq)}
+          isModify={courseModuleSeq ? true : false}
+        />
+      )}
+    </Container>
+  );
 }
 
 const UploadBtn = styled.div`
@@ -188,4 +137,11 @@ const UploadBtn = styled.div`
   > button:last-of-type {
     margin-left: 12px;
   }
+`;
+
+const spaceNoWrap = css`
+  white-space: nowrap;
+`;
+const CustomTableRow = styled(TableRow)`
+  cursor: pointer;
 `;

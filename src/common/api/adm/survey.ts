@@ -48,9 +48,9 @@ export interface SurveyQuestion {
 }
 
 //get multiple res
-export function useSurveyAdm({ page }: { page: number }) {
+export function useSurveyAdm({ page, title }: { page: number; title?: string }) {
   const { data, error, mutate } = useSWR<FetchPaginationResponse<SurveyRes[]>>(
-    [`/survey/adm`, { params: { page } }],
+    [`/survey/adm`, { params: { page, title } }],
     GET
   );
   return {

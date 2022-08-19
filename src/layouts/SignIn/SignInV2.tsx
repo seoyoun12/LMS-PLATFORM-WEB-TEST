@@ -21,6 +21,7 @@ import { Modal, Spinner } from '@components/ui';
 import Image from 'next/image';
 import styled from '@emotion/styled';
 import { transIndividualSummary } from '@utils/individualSummaries';
+import { UserRole } from '@common/api/user';
 
 export function SignInV2() {
   const router = useRouter();
@@ -70,7 +71,7 @@ export function SignInV2() {
       const res = await signIn(username, password, loginType.TYPE_TRANS_EDU, name);
       if (res.success) {
         setIsLoginState(true);
-        setUsetInfo({ username: res.data.username, regCategory: [...res.data.roles] }); // api가 있었음 필요없을듯
+        setUsetInfo({ name: res.data.username, role: [...res.data.roles as unknown as UserRole[] ] }); // api가 있었음 필요없을듯
         snackbar({ variant: 'success', message: '로그인이 완료되었습니다.' });
         router.push('/category');
       }

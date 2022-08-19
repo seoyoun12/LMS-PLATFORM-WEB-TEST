@@ -19,6 +19,7 @@ import { useSnackbar } from "@hooks/useSnackbar";
 import { regCategory } from "@common/api/auth/signUp";
 import { userInfo } from "@common/recoil/user";
 import {loginType as LOGIN_TYPE} from "@common/api/auth/signIn";
+import { UserRole } from "@common/api/user";
 
 
 export function SignIn() {
@@ -45,7 +46,7 @@ export function SignIn() {
       const res = await signIn(username, password , loginType);
       if (res.success) {
         setIsLoginState(true);
-        setUsetInfo({username:res.data.username , regCategory:[...res.data.roles]}) // api가 있었음 필요없을듯
+        setUsetInfo({name:res.data.username , role:[...res.data.roles as unknown as UserRole[] ]}) // api가 있었음 필요없을듯
         snackbar({ variant: "success", message: "로그인이 완료되었습니다." });
         return router.push("/");
       }

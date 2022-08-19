@@ -15,6 +15,7 @@ import {
   useCourseClass,
 } from '@common/api/courseClass';
 import { Spinner } from '@components/ui';
+import { useCourseClassAdm } from '@common/api/adm/courseClass';
 
 export interface ClickedPlanInfo {
   seq: number;
@@ -97,16 +98,16 @@ export const courseBusinessTypeList = [
 
 const modalInfoTItle = ['기수', '보수교육', '업종구분', '교육일', '신청/정원', '예약가능시간'];
 
-export function CNCalendar() {
+export function AdminCalendar() {
   const [date, setDate] = useState(new Date());
   const [filter, setFilter] = useState<businessType>(businessType.TYPE_ALL);
   const [openModal, setOpenModal] = useState(false);
   const [modalInfo, setModalInfo] = useState<ClickedPlanInfo>();
-  const { data, error, mutate } = useCourseClass({
-    courseType: typeof window !== 'undefined' && (localStorage.getItem('site_course_type') as courseType),
-    businessType: filter,
-    date: dateFormat(date, 'yyyy-mm'),
-  });
+  const { data, error, mutate } = useCourseClassAdm(
+    // courseType: typeof window !== 'undefined' && (localStorage.getItem('site_course_type') as courseType),
+    filter,
+    dateFormat(date, 'yyyy-mm')
+  );
   const [schedule, setSchedule] = useState<CourseClassRes[]>();
 
   const [month, setMonth] = useState(new Date().getMonth() + 1);

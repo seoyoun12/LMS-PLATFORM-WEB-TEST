@@ -28,6 +28,7 @@ import {
   courseClassCreate,
   CourseClassCreate,
   getDetailCourseClass,
+  modifyCourseClass,
 } from '@common/api/adm/courseClass';
 import { YN } from '@common/constant';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -37,6 +38,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
 import dateFormat from 'dateformat';
 import { useRouter } from 'next/router';
+import { useDialog } from '@hooks/useDialog';
 
 // interface CourseClassForm extends CourseClassCreate {
 //   courseName: string;
@@ -48,13 +50,18 @@ const defaultValues: Partial<CourseClassCreate> = {
   studyEndDate: dateFormat(new Date(), 'yyyy-mm-dd'),
 };
 
+interface FormType extends CourseClassCreate {
+  courseClassSeq: number;
+}
+
 export function CalendarModify() {
   const router = useRouter();
   const { courseClassSeq } = router.query;
-  const snackbar = useSnackbar();
+  const dialog = useDialog();
   const [openModal, setOpenModal] = useState(false);
   const [courseName, setCourseName] = useState('');
   const [limitPeopleCheck, setLimitPeopleCheck] = useState(false);
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -64,7 +71,7 @@ export function CalendarModify() {
     resetField,
     watch,
     setValue,
-  } = useForm<CourseClassCreate>({ defaultValues });
+  } = useForm<FormType>({ defaultValues });
   console.log(watch(), 'ss');
 
   useEffect(() => {
@@ -73,6 +80,17 @@ export function CalendarModify() {
         console.log('successGet data', courseClassSeq);
         const { data } = await getDetailCourseClass(Number(courseClassSeq));
         console.log('successGet data', data);
+        setValue('year', data.year);
+        setValue('step', data.step);
+        setValue('limitPeopleYn', data.limitPeopleYn);
+        setLimitPeopleCheck(data.limitPeopleYn === YN.YES ? true : false);
+        setValue('limitPeople', data.limitPeople);
+        setValue('requestStartDate', dateFormat(data.requestStartDate, 'yyyy-mm-dd'));
+        setValue('requestEndDate', dateFormat(data.requestEndDate, 'yyyy-mm-dd'));
+        setValue('studyStartDate', dateFormat(data.studyStartDate, 'yyyy-mm-dd'));
+        setValue('studyEndDate', dateFormat(data.studyEndDate, 'yyyy-mm-dd'));
+        setValue('courseClassSeq', data.seq);
+        setCourseName(data.course.courseName);
       } catch (e: any) {
         window.alert(
           `데이터를 불러오는데 실패했습니다.(seq: ${courseClassSeq}) ` + e.data.message
@@ -81,23 +99,36 @@ export function CalendarModify() {
     })();
   }, []);
 
-  const onSubmit: SubmitHandler<CourseClassCreate> = async e => {
+  const onSubmit: SubmitHandler<FormType> = async e => {
     console.log('dsdasda', e, limitPeopleCheck);
-    const { step, year, limitPeople, courseSeq } = e;
+    const { step, year, limitPeople, courseClassSeq, ...rest } = e;
 
-    if (!courseSeq) return window.alert('과정을 등록해야합니다!');
+    // if (!courseSeq) return window.alert('과정을 등록해야합니다!');
     try {
-      await courseClassCreate({
-        ...watch(),
+      setLoading(true);
+      const dialogConfirmed = await dialog({
+        title: '일정 수정하기',
+        description: '정말로 일정을 수정하시겠습니까?',
+        confirmText: '확인',
+        cancelText: '취소',
+      });
+
+      if (!dialogConfirmed) return setLoading(false);
+      await modifyCourseClass({
+        // ...watch(),
+        ...rest,
         step: Number(step),
         year: Number(year),
         limitPeople: Number(limitPeople),
-        courseSeq: Number(courseSeq),
+        courseClassSeq: Number(courseClassSeq),
       });
       window.alert('완료 되었습니다.');
+      router.push('/admin-center/calendar');
     } catch (e: any) {
       // snackbar({ variant: 'error', message: e });
       console.log(e);
+      window.alert(e.data.message);
+      setLoading(false);
     }
   };
 
@@ -122,18 +153,16 @@ export function CalendarModify() {
       >
         일정 등록
       </Typography>
-      <CourseConnectButton
+      {/* <CourseConnectButton
         variant="contained"
         color="secondary"
         onClick={() => setOpenModal(true)}
+        disabled
       >
         과정 선택
-      </CourseConnectButton>
+      </CourseConnectButton> */}
       <Box>
-        <Typography color={'red'}>
-          과정에 콘텐츠를 연결해 주셔야 오류가 나지않습니다!{' '}
-        </Typography>
-        <Typography component="span">선택됨: </Typography>
+        <Typography component="span">과정: </Typography>
         {watch().courseSeq && (
           <Typography component="span">
             {watch().courseSeq} - {courseName}
@@ -151,18 +180,14 @@ export function CalendarModify() {
       >
         {/* <TextField label="seq" {...register('seq')} /> */}
         <FormControl>
-          <TextField
-            label="연도"
-            {...register('year', { required: '연도를 입력해주세요' })}
-          />
+          <Typography>연도</Typography>
+          <TextField {...register('year', { required: '연도를 입력해주세요' })} />
           <ErrorMessage errors={errors} name="year" as={<FormHelperText error />} />
         </FormControl>
         <Box display={'flex'} gap="1rem">
           <FormControl sx={{ flexGrow: 1 }}>
-            <TextField
-              label="기수"
-              {...register('step', { required: '기수를 입력해주세요' })}
-            />
+            <Typography>기수</Typography>
+            <TextField {...register('step', { required: '기수를 입력해주세요' })} />
             <ErrorMessage errors={errors} name="year" as={<FormHelperText error />} />
           </FormControl>
         </Box>
@@ -265,15 +290,6 @@ export function CalendarModify() {
                 )
               }
             />
-            {/* <TextField
-              label="교육시작일"
-              {...register('studyStartDate', { required: '교육시작일을 입력해주세요' })}
-            />
-            <ErrorMessage
-              errors={errors}
-              name="studyStartDate"
-              as={<FormHelperText error />}
-            /> */}
           </FormControl>
           <FormControl sx={{ flexGrow: 1 }}>
             <Typography>교육종료일</Typography>
@@ -298,8 +314,8 @@ export function CalendarModify() {
           </FormControl>
         </Box>
 
-        <Button type="submit" variant="contained">
-          등록
+        <Button type="submit" variant="contained" disabled={loading}>
+          {loading ? <Spinner fit={true} /> : '수정'}
         </Button>
         <Typography>
           날짜 입력 방식은 YYYY-MM-DD로 해야합니다. ex{')'} 2022-07-22

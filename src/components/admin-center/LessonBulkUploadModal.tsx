@@ -60,6 +60,7 @@ export function LessonBulkUploadModal({
     const lessonInput = xlsxData
       .filter(data => !!data)
       .map(data => {
+        console.log('test', data);
         const totalTime = data.min * 60 + data.sec;
         const completeTime = Math.round(totalTime * 0.9);
         return {
@@ -70,6 +71,7 @@ export function LessonBulkUploadModal({
         };
       });
 
+    return;
     try {
       const contentSeq = Number(query.contentSeq);
       console.log('im lesson.', lessonInput);

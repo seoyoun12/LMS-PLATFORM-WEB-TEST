@@ -17,34 +17,44 @@ import { pageRegType } from '@common/recoil/pageType/atom';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { regCategoryType, useMyUser, UserRole } from '@common/api/user';
 import { useRouter } from 'next/router';
+import { courseType } from '@common/api/courseClass';
 
 const LinkList = [
   {
     mainDisplayType: MainDisplayType.EDUCATION_TRANSPORT_WORKER,
     pageType: pageRegType.TYPE_TRANS_EDU,
     displayWord: '운수종사자',
-    textColor:'#0A9A4E',
+    textColor: '#0A9A4E',
     color: '#0A9A4E',
     href: '/category',
     imgPath: '/assets/images/unsu.png',
+    onClickCard: () => {
+      localStorage.setItem('site_course_type', courseType.TYPE_TRANS_WORKER);
+    },
   },
   {
     mainDisplayType: MainDisplayType.EDUCATION_GROUND_BUS_DRIVER,
     pageType: pageRegType.TYPE_TRANS_EDU,
     displayWord: '저상버스',
-    textColor:'#256AEF',
+    textColor: '#256AEF',
     color: '#256AEF',
     href: '/category',
     imgPath: '/assets/images/lowFloor.png',
+    onClickCard: () => {
+      localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
+    },
   },
   {
     mainDisplayType: MainDisplayType.EDUCATION_PROVINCIAL_TRAFFIC_SAFETY,
     pageType: pageRegType.TYPE_TRAFFIC_SAFETY_EDU,
     displayWord: '도민교통',
-    textColor:'#711D14',
+    textColor: '#711D14',
     color: '#FEC901',
     href: 'traffic/category',
     imgPath: '/assets/images/domin.png',
+    onClickCard: () => {
+      localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
+    },
   },
 ];
 const MainPage: NextPage = () => {
@@ -55,14 +65,14 @@ const MainPage: NextPage = () => {
   const { user, error: userError } = useMyUser();
   const { data, error } = useMainDisplay();
   React.useEffect(() => {
-    if (isLogin && user) {
-      if (user.roles.some(item => item === UserRole.ROLE_ADMIN)) return;
-      if (user.regCategory === regCategoryType.TYPE_TRANS_EDU) {
-        router.push('/category');
-      } else if (user.regCategory === regCategoryType.TYPE_TRAFFIC_SAFETY_EDU) {
-        router.push('/traffic/category');
-      }
-    }
+    // if (isLogin && user) {
+    //   if (user.roles.some(item => item === UserRole.ROLE_ADMIN)) return;
+    //   if (user.regCategory === regCategoryType.TYPE_TRANS_EDU) {
+    //     router.push('/category');
+    //   } else if (user.regCategory === regCategoryType.TYPE_TRAFFIC_SAFETY_EDU) {
+    //     router.push('/traffic/category');
+    //   }
+    // }
     console.log(screen.availHeight);
     setScreenHeight(screen.availHeight);
   }, [isLogin, user]);
@@ -100,12 +110,18 @@ const MainPage: NextPage = () => {
             >
               {data.map(item => {
                 if (item.status === 1) {
-                  const { href, color,textColor, displayWord, imgPath, pageType } = LinkList.filter(
+                  const { href, color, textColor, displayWord, imgPath, pageType, onClickCard } = LinkList.filter(
                     filter => filter.mainDisplayType === item.mainDisplayType
                   )[0];
                   return (
                     <MainCategoryCard sx={{ borderTop: `7px solid ${color}` }}>
-                      <Link href={href} onClick={() => setUserPageType(pageType)}>
+                      <Link
+                        href={href}
+                        onClick={() => {
+                          setUserPageType(pageType);
+                          onClickCard();
+                        }}
+                      >
                         <Box width="270px" borderRadius="8px 8px 0 0" overflow="hidden">
                           <Image src={imgPath} width="270" height="184" objectFit="fill" />
                         </Box>
@@ -289,20 +305,19 @@ const CardInContainer = styled(Box)`
   margin: auto;
   padding-top: 2rem;
 
-  
   .button-bot-line {
     position: absolute;
     left: 0;
     top: 2rem;
     width: 100%;
-    border-bottom: 2px solid #DADADA;
+    border-bottom: 2px solid #dadada;
   }
   .button-right-line {
     position: absolute;
     right: 9px;
     top: 0.5rem;
     height: 75%;
-    border-right: 2px solid #DADADA;
+    border-right: 2px solid #dadada;
     transform: rotate(-40deg);
   }
 `;
@@ -310,7 +325,7 @@ const FooterContainer = styled(Box)`
   position: relative;
   width: 100%;
   height: 250px;
-  background: #144AAA;
+  background: #144aaa;
   overflow: hidden;
 `;
 const FooterWord = styled(Box)`
@@ -322,7 +337,7 @@ const FooterWord = styled(Box)`
   bottom: 1rem;
   font-size: 13rem;
   font-weight: bold;
-  color: #1A53BA;
+  color: #1a53ba;
   transform: rotate(-15deg);
 
   /* @media (max-width: 1230px) {

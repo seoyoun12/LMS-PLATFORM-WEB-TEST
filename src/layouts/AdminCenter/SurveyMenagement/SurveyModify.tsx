@@ -46,18 +46,18 @@ export function SurveyModify() {
   const { register, setValue, watch, reset } = useForm<SurveyQuestionRequestDto>({
     defaultValues: defaultValue,
   });
+  console.log('하기싫어', watch());
 
   useEffect(() => {
     (async function () {
       try {
         const { data } = await getSingleSurvey(Number(surveySeq));
         console.log(data, '데이터임');
-        const randomSeq = Math.floor(Math.random() * 1000);
         let arr = data.surveyQuestionList.map(item => {
+          const randomSeq = Math.floor(Math.random() * 1000);
           const { seq } = item;
           return { ...item, dummySeq: randomSeq };
         });
-        console.log('십?', arr);
         setQuestions(arr);
         setTitle(data.title);
       } catch (e: any) {
@@ -88,19 +88,35 @@ export function SurveyModify() {
       return window.alert('문항 제목을 입력해 주세요!');
     }
     if (
-      !watch().surveyMultipleChoice.item1 ||
-      watch().surveyMultipleChoice.item1 === ''
+      (!watch().surveyMultipleChoice.item1 ||
+        watch().surveyMultipleChoice.item1 === '') &&
+      type === QuestionType.TYPE_MULTIPLE_CHOICE
     ) {
       return window.alert('적어도 하나의 문항 , 첫번째 문항이 필요합니다!');
+    } else {
+      const randomSeq = Math.floor(Math.random() * 1000);
+      console.log(watch(), type, 'AddQuestion Test', randomSeq);
+      if (!watch().surveyMultipleChoice.item1) {
+        setQuestions(prev => [
+          ...prev,
+          {
+            ...watch(),
+            dummySeq: randomSeq,
+            questionType: type,
+            surveyMultipleChoice: null,
+          },
+        ]);
+        reset();
+        setDisableTitle(true);
+        return;
+      }
+      setQuestions(prev => [
+        ...prev,
+        { ...watch(), dummySeq: randomSeq, questionType: type },
+      ]);
+      reset();
+      setDisableTitle(true);
     }
-    const randomSeq = Math.floor(Math.random() * 1000);
-    console.log(watch(), type, 'AddQuestion Test', randomSeq);
-    setQuestions(prev => [
-      ...prev,
-      { ...watch(), dummySeq: randomSeq, questionType: type },
-    ]);
-    reset();
-    setDisableTitle(true);
   };
 
   const onClickModifySubmit = async () => {
@@ -180,40 +196,72 @@ export function SurveyModify() {
               onChange={onChangeType}
               checked={type === QuestionType.TYPE_MULTIPLE_CHOICE}
             />
-            <span>멀티플타입</span>
+            <span>객관식</span>
             <Radio
               value={QuestionType.TYPE_SUBJECTIVE}
               onChange={onChangeType}
               checked={type === QuestionType.TYPE_SUBJECTIVE}
             />
-            <span>서브젝타입</span>
+            <span>주관식</span>
           </Box>
 
-          <Typography
-            variant="h6"
-            sx={{
-              mt: '12px',
-              fontWeight: 700,
-            }}
-          >
-            각 문항별 이름 (문항 순서대로 작성해주세요!)
-          </Typography>
-          <TextField placeholder="1번 문항" {...register('surveyMultipleChoice.item1')} />
-          <TextField placeholder="2번 문항" {...register('surveyMultipleChoice.item2')} />
-          <TextField placeholder="3번 문항" {...register('surveyMultipleChoice.item3')} />
-          <TextField placeholder="4번 문항" {...register('surveyMultipleChoice.item4')} />
-          <TextField placeholder="5번 문항" {...register('surveyMultipleChoice.item5')} />
-          <TextField placeholder="6번 문항" {...register('surveyMultipleChoice.item6')} />
-          <TextField placeholder="7번 문항" {...register('surveyMultipleChoice.item7')} />
-          <TextField placeholder="8번 문항" {...register('surveyMultipleChoice.item8')} />
-          <TextField placeholder="9번 문항" {...register('surveyMultipleChoice.item9')} />
-          <TextField
-            placeholder="10번 문항"
-            {...register('surveyMultipleChoice.item10')}
-          />
+          {type === QuestionType.TYPE_MULTIPLE_CHOICE && (
+            <>
+              <Typography
+                variant="h6"
+                sx={{
+                  mt: '12px',
+                  fontWeight: 700,
+                }}
+              >
+                각 문항별 이름 (문항 순서대로 작성해주세요!)
+              </Typography>
+              <TextField
+                placeholder="1번 문항"
+                {...register('surveyMultipleChoice.item1')}
+              />
+              <TextField
+                placeholder="2번 문항"
+                {...register('surveyMultipleChoice.item2')}
+              />
+              <TextField
+                placeholder="3번 문항"
+                {...register('surveyMultipleChoice.item3')}
+              />
+              <TextField
+                placeholder="4번 문항"
+                {...register('surveyMultipleChoice.item4')}
+              />
+              <TextField
+                placeholder="5번 문항"
+                {...register('surveyMultipleChoice.item5')}
+              />
+              <TextField
+                placeholder="6번 문항"
+                {...register('surveyMultipleChoice.item6')}
+              />
+              <TextField
+                placeholder="7번 문항"
+                {...register('surveyMultipleChoice.item7')}
+              />
+              <TextField
+                placeholder="8번 문항"
+                {...register('surveyMultipleChoice.item8')}
+              />
+              <TextField
+                placeholder="9번 문항"
+                {...register('surveyMultipleChoice.item9')}
+              />
+              <TextField
+                placeholder="10번 문항"
+                {...register('surveyMultipleChoice.item10')}
+              />
+            </>
+          )}
           <Button variant="contained" onClick={onClickAddQuestion} fullWidth>
             추가
           </Button>
+
           {questions.map(item => (
             <SurveyQuestionItem item={item} setQuestions={setQuestions} />
           ))}

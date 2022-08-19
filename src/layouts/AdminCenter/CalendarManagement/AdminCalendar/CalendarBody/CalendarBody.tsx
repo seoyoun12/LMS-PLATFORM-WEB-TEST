@@ -121,8 +121,8 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
               end,
             },
           }: { event: { _def: { extendedProps: Partial<ClickedPlanInfo> }; start: Date | null; end: Date | null } } = e;
-          if (!e.event._def.extendedProps.prevSchedule) return window.alert('마감된 교육입니다!');
-          if (!e.event._def.extendedProps.isReceive) return window.alert('신청기간이 아닙니다!');
+          // if (!e.event._def.extendedProps.prevSchedule) return window.alert('마감된 교육입니다!');
+          // if (!e.event._def.extendedProps.isReceive) return window.alert('신청기간이 아닙니다!');
           setModalInfo({
             seq: extendedProps.seq as number,
             step: extendedProps.step as number,
@@ -156,12 +156,12 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
                 });
                 if (!isLogin) {
                   window.alert('로그인이 필요한 서비스입니다.');
-                  return router.push('/sign-in');
+                  return router.push('/admin-center');
                 }
-                router.push('/stebMove/steb2');
+                router.push(`/admin-center/calendar/modify/${modalInfo.seq}`);
               }}
             >
-              교육신청
+              상세보기
             </JoinButton>
             <CloseButton variant="contained" onClick={() => setOpenModal(false)}>
               닫기

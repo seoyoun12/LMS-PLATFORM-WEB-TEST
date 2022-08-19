@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import { useRouter } from 'next/router';
 import React, { SyntheticEvent, useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import styled from 'styled-components';
+import { SxProps } from '@mui/system';
 
 interface Props {
   tabsConfig: {
@@ -16,6 +17,7 @@ interface Props {
   rendering?: boolean;
   onChange?: (newValue: string) => void;
   value?: string;
+  fontSx?: SxProps;
 }
 
 export function Tabs2({
@@ -26,6 +28,7 @@ export function Tabs2({
   rendering = true,
   onChange,
   value,
+  fontSx,
   ...props
 }: Props) {
   const router = useRouter();
@@ -87,7 +90,7 @@ export function Tabs2({
         variant={variant}
       >
         {tabsConfig.map(({ value, label }) => (
-          <MuiTab key={value} className="mui-tabs-item" label={label} value={value} />
+          <MuiTab key={value} className="mui-tabs-item" label={label} value={value} sx={fontSx} />
         ))}
       </MuiTabs>
     </TabBox>

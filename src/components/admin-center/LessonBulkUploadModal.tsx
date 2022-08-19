@@ -51,9 +51,11 @@ export function LessonBulkUploadModal({ open, handleClose }: { open: boolean; ha
     const file = await files[0].arrayBuffer();
     const workbook = read(file);
     const xlsxData: XlsxData[] = utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+    console.log('???', xlsxData);
     const lessonInput = xlsxData
       .filter(data => !!data)
       .map(data => {
+        console.log('test', data);
         const totalTime = data.min * 60 + data.sec;
         const completeTime = Math.round(totalTime * 0.9);
         return {
@@ -64,6 +66,7 @@ export function LessonBulkUploadModal({ open, handleClose }: { open: boolean; ha
         };
       });
 
+    return;
     try {
       const contentSeq = Number(query.contentSeq);
       console.log('im lesson.', lessonInput);

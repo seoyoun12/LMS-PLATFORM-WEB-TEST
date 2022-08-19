@@ -1,27 +1,30 @@
-import { atom, atomFamily } from "recoil";
+import { UserRole } from '@common/api/user';
+import { atom, atomFamily } from 'recoil';
 
 export const isLoginState = atom({
-  key: "isLoginState",
+  key: 'isLoginState',
   default: false,
 });
 
-type regCategory =
-  | ""
-  | "TYPE_TRANS_EDU"
-  | "ROLE_TRANS_MANAGER"
-  | "TYPE_TRAFFIC_SAFETY_EDU"
-  | "ROLE_TRAFFIC_SAFETY_MANAGER"
-  | "ROLE_ADMIN";
+export type regCategory =
+  | ''
+  | 'TYPE_TRANS_EDU'
+  | 'ROLE_TRANS_MANAGER'
+  | 'TYPE_TRAFFIC_SAFETY_EDU'
+  | 'ROLE_TRAFFIC_SAFETY_MANAGER'
+  | 'ROLE_ADMIN';
 
 interface userInfoType {
-  username: string;
-  regCategory: regCategory[];
+  name: string;
+  regCategory?: regCategory;
+  role?: UserRole[];
 }
 
 export const userInfo = atom<userInfoType>({
-  key: "userInfo",
+  key: 'userInfo',
   default: {
-    username: "",
-    regCategory: [],
+    name: '',
+    regCategory: '',
+    role: [],
   },
 });

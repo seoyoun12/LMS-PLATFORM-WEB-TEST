@@ -20,6 +20,7 @@ import { regCategory } from '@common/api/auth/signUp';
 import { userInfo } from '@common/recoil/user';
 import { loginType } from '@common/api/auth/signIn';
 import { Spinner } from '@components/ui';
+import { UserRole } from '@common/api/user';
 
 export function SignInV2() {
   const router = useRouter();
@@ -50,7 +51,7 @@ export function SignInV2() {
       const res = await signIn(username, password, loginType.TYPE_TRAFFIC_SAFETY_EDU);
       if (res.success) {
         setIsLoginState(true);
-        setUsetInfo({ username: res.data.username, regCategory: [...res.data.roles] }); // api가 있었음 필요없을듯
+        setUsetInfo({ name: res.data.username, role: [...res.data.roles as unknown as UserRole[]] }); // api가 있었음 필요없을듯
         snackbar({ variant: 'success', message: '로그인이 완료되었습니다.' });
         router.push('/traffic/category');
       }

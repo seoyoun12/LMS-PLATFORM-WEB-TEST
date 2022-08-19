@@ -39,3 +39,12 @@ export async function modifyLesson({ lessonSeq, lesson }: {
 export async function removeLesson(lessonSeq: number) {
   return await DELETE(`/lesson/adm/delete/${lessonSeq}`);
 }
+
+// 업로드
+export async function lessonUpload({ contentSeq, lessonInput }:{
+  contentSeq?: number, 
+  lessonInput : LessonInput[]
+}) {
+  return await POST(`/lesson/adm/${contentSeq}`, lessonInput);
+}
+

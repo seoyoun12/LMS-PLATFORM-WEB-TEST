@@ -102,8 +102,8 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
     setSubmitLoading(true);
 
     try {
-      await fileHandler(files, lesson);
       await modifyLesson({ lessonSeq: lesson.seq, lesson });
+      await fileHandler(files, lesson);
       setSubmitLoading(false);
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
     } catch (e: any) {

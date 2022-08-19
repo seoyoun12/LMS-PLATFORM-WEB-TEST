@@ -38,6 +38,7 @@ export function LessonList() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const dialog = useDialog();
+  // const [openBulkUploadModal, setOpenBulkUploadModal] = useState(false);
   const [openBulkUploadModal, setOpenBulkUploadModal] = useState(false);
   const [openUploadModal, setOpenUploadModal] = useState(false);
   const [lessonId, setLessonId] = useState<number | null>(null);
@@ -166,7 +167,8 @@ export function LessonList() {
           })}
         </TableBody>
       </Table>
-
+      {/* <LessonUpload */}
+      {/* <LessonBulkUpload */}
       <LessonBulkUploadModal
         open={openBulkUploadModal}
         handleClose={isSubmit => handleModalClose(isSubmit)}

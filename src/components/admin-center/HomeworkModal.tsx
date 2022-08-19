@@ -109,10 +109,11 @@ export function HomeworkModal({
         snackbar(e.message || e.data?.message);
       }
       handleClose(true);
-    } else {
-      alert('과제를 첨부해주십시오.');
-      setSubmitLoading(false);
     }
+    // else {
+    //   alert('과제를 첨부해주십시오.');
+    //   setSubmitLoading(false);
+    // }
   };
 
   if (open && detailError) return <div>error</div>;

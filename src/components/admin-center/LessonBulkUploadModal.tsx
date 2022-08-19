@@ -22,11 +22,7 @@ interface XlsxData extends LessonInput {
   sec: number;
 }
 
-const contentTypeOptions = [
-  { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
-  { value: ContentType.CONTENT_MP4, name: 'mp4' },
-  { value: ContentType.CONTENT_EXTERNAL, name: '외부링크' },
-];
+const contentTypeOptions = [{ value: ContentType.CONTENT_MP4, name: 'mp4' }];
 
 const defaultValues = {
   contentType: ContentType.CONTENT_MP4,
@@ -77,7 +73,7 @@ export function LessonBulkUploadModal({
     try {
       const contentSeq = Number(query.contentSeq);
       console.log('im lesson.', lessonInput);
-      // await uploadLessons({ contentSeq, lessonInput });
+      await uploadLessons({ contentSeq, lessonInput });
       snackbar({ variant: 'success', message: '성공적으로 업로드 되었습니다.' });
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });

@@ -18,8 +18,6 @@ export function QnaAnswer() {
   const { qnaSeq } = router.query;
   const { data, error } = qnaDetail(Number(qnaSeq));
 
-  console.log('이러지마제발', data);
-
   const fileHandler = async (files: File[], qnaAnswer: QnaAnswer) => {
     const isFileUpload = files.length > 0;
     if (isFileUpload) {
@@ -43,14 +41,8 @@ export function QnaAnswer() {
     qnaAnswerInput: QnaAnswerInput;
   }) => {
     try {
-      console.log('1: ', data.seq);
-      console.log('2: ', qnaAnswerInput);
-      console.log('3: ', files);
-      console.log('4: ', data);
       const qnaAnswer = await uploadQnaAnswer(data.seq, qnaAnswerInput);
-      console.log('qnaAnswerInput : ', qnaAnswerInput);
       await fileHandler(files, qnaAnswer.data);
-      // await fileHandler(files, data);
       snackbar({ variant: 'success', message: '답변이 등록되었습니다.' });
       router.push(`/admin-center/qna`);
     } catch (e: any) {

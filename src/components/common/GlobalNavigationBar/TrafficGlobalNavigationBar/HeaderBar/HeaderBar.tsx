@@ -24,7 +24,7 @@ export function HeaderBar() {
   return (
     <Header className={styles.globalContainer}>
       <ContentContainer>
-        <Link href="/" underline="none">
+        <Link href="/traffic/category" underline="none">
           <Image src="/assets/images/cttsLogo.png" height={40} width={224} alt="Your Name" />
         </Link>
         {/* <Link href="/" underline="none" color={grey[800]}>

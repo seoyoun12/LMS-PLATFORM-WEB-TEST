@@ -88,7 +88,10 @@ export function SurveyQuestionModifyModal({
             dummySeq: surveyQuestion.dummySeq,
             content: watch().content,
             questionType: type,
-            surveyMultipleChoice: watch().surveyMultipleChoice,
+            surveyMultipleChoice:
+              type === QuestionType.TYPE_MULTIPLE_CHOICE
+                ? watch().surveyMultipleChoice
+                : null,
           };
         }
         return item;

@@ -13,8 +13,8 @@ export function useLessonList(contentSeq: number) {
   };
 }
 
-export function useLesson(lessonId: number | null) {
-  const { data, error } = useSWR<SWRResponse<Lesson>>(lessonId ? `/lesson/adm/detail/${lessonId}` : null, GET);
+export function useLesson(lessonSeq: number | null) {
+  const { data, error } = useSWR<SWRResponse<Lesson>>(lessonSeq ? `/lesson/adm/detail/${lessonSeq}` : null, GET);
 
   return {
     lesson: data?.data,
@@ -29,13 +29,22 @@ export function uploadLessons({ contentSeq, lessonInput }: {
   return POST(`/lesson/adm/${contentSeq}`, lessonInput);
 }
 
-export async function modifyLesson({ lessonId, lesson }: {
-  lessonId: number,
+export async function modifyLesson({ lessonSeq, lesson }: {
+  lessonSeq: number,
   lesson: Lesson,
 }) {
-  return PUT(`/lesson/adm/modification/${lessonId}`, lesson);
+  return PUT(`/lesson/adm/modification/${lessonSeq}`, lesson);
 }
 
-export async function removeLesson(lessonId: number) {
-  return await DELETE(`/lesson/adm/delete/${lessonId}`);
+export async function removeLesson(lessonSeq: number) {
+  return await DELETE(`/lesson/adm/delete/${lessonSeq}`);
 }
+
+// 업로드
+export async function lessonUpload({ contentSeq, lessonInput }:{
+  contentSeq?: number, 
+  lessonInput : LessonInput[]
+}) {
+  return await POST(`/lesson/adm/${contentSeq}`, lessonInput);
+}
+

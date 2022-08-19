@@ -2,14 +2,17 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import {
-  Box, Chip,
-  FormControl, FormControlLabel,
+  Box,
+  Chip,
+  FormControl,
+  FormControlLabel,
   FormHelperText,
   FormLabel,
   InputAdornment,
-  MenuItem, Radio,
+  MenuItem,
+  Radio,
   RadioGroup,
-  Select
+  Select,
 } from '@mui/material';
 import { ErrorMessage } from '@hookform/error-message';
 import { ContentType } from '@common/api/content';
@@ -42,7 +45,7 @@ interface FormType extends Lesson {
 const contentTypeOptions = [
   { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
   { value: ContentType.CONTENT_MP4, name: 'mp4' },
-  { value: ContentType.CONTENT_EXTERNAL, name: '외부링크' }
+  { value: ContentType.CONTENT_EXTERNAL, name: '외부링크' },
 ];
 
 const defaultValues = {
@@ -53,9 +56,9 @@ const defaultValues = {
 
 export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   const snackbar = useSnackbar();
-  const [ submitLoading, setSubmitLoading ] = useState(false);
-  const [ isFileDelete, setIsFileDelete ] = useState(false);
-  const [ fileName, setFileName ] = useState<string | null>(null);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [isFileDelete, setIsFileDelete] = useState(false);
+  const [fileName, setFileName] = useState<string | null>(null);
   const { handleUpload } = useFileUpload();
   const {
     register,
@@ -63,7 +66,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
     formState: { errors },
     control,
     reset,
-    resetField
+    resetField,
   } = useForm<FormType>({ defaultValues });
 
   useEffect(() => {
@@ -71,7 +74,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
       reset({ ...lesson });
       setFileName(lesson?.s3Files[0]?.name || null);
     }
-  }, [ lesson, open, reset ]);
+  }, [lesson, open, reset]);
 
   const fileHandler = async (files: File[], lesson: Lesson) => {
     const isFileUpload = files.length > 0;
@@ -82,7 +85,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
         dataId: lesson.seq,
         file,
         fileName,
-        fileUploadType: FileType.LESSON_FILE
+        fileUploadType: FileType.LESSON_FILE,
       });
     } else {
       if (isFileDelete) {
@@ -99,8 +102,8 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
     setSubmitLoading(true);
 
     try {
+      await modifyLesson({ lessonSeq: lesson.seq, lesson });
       await fileHandler(files, lesson);
-      await modifyLesson({ lessonId: lesson.seq, lesson });
       setSubmitLoading(false);
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
     } catch (e: any) {
@@ -157,7 +160,11 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
               label="강의명"
               variant="outlined"
             />
-            <ErrorMessage errors={errors} name="contentName" as={<FormHelperText error />} />
+            <ErrorMessage
+              errors={errors}
+              name="contentName"
+              as={<FormHelperText error />}
+            />
           </FormControl>
 
           <FormControl className="form-control">
@@ -167,18 +174,20 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
               control={control}
               name="contentType"
               render={({ field }) => (
-                <Select
-                  {...field}
-                  size="small"
-                  label="콘텐츠 타입"
-                >
-                  {contentTypeOptions.map(({ value, name }) =>
-                    <MenuItem value={value} key={value}>{name}</MenuItem>
-                  )}
+                <Select {...field} size="small" label="콘텐츠 타입">
+                  {contentTypeOptions.map(({ value, name }) => (
+                    <MenuItem value={value} key={value}>
+                      {name}
+                    </MenuItem>
+                  ))}
                 </Select>
               )}
             />
-            <ErrorMessage errors={errors} name="contentType" as={<FormHelperText error />} />
+            <ErrorMessage
+              errors={errors}
+              name="contentType"
+              as={<FormHelperText error />}
+            />
           </FormControl>
 
           <FormControl className="form-control">
@@ -190,14 +199,14 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
             >
               <FileUploader.Label>파일 업로드</FileUploader.Label>
             </FileUploader>
-            {fileName
-              ? <Chip
+            {fileName ? (
+              <Chip
                 sx={{ mt: '8px' }}
                 icon={<OndemandVideoOutlinedIcon />}
                 label={fileName}
-                onDelete={handleDeleteFile} />
-              : null
-            }
+                onDelete={handleDeleteFile}
+              />
+            ) : null}
           </FormControl>
 
           <FormControl className="form-control">
@@ -209,7 +218,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                   size="small"
                   variant="outlined"
                   InputProps={{
-                    endAdornment: <InputAdornment position="end">분</InputAdornment>
+                    endAdornment: <InputAdornment position="end">분</InputAdornment>,
                   }}
                 />
                 <TextField
@@ -217,7 +226,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                   size="small"
                   variant="outlined"
                   InputProps={{
-                    endAdornment: <InputAdornment position="end">초</InputAdornment>
+                    endAdornment: <InputAdornment position="end">초</InputAdornment>,
                   }}
                 />
               </InputContainer>
@@ -267,8 +276,7 @@ const FormContainer = styled.div`
   }
 `;
 
-const CompleteTimeControl = styled.div`
-`;
+const CompleteTimeControl = styled.div``;
 
 const Label = styled(Typography)`
   padding-bottom: 8px;

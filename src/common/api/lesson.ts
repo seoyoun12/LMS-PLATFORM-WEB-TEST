@@ -4,18 +4,18 @@ import { ProductStatus } from '@common/api/course';
 import useSWR, { SWRResponse } from 'swr';
 import { S3Files } from 'types/file';
 
-export interface LessonInput {
-  contentType?: ContentType;
-  completeTime?: number;
-  lessonNm?: string;
-  mobileUrl?: string;
-  pcUrl?: string;
-  chapter?: number;
-  totalPage?: number;
-  totalTime?: number;
-  min?: number;
-  sec?: number;
-}
+// export interface LessonInput {
+//   contentType?: ContentType;
+//   completeTime?: number;
+//   lessonNm?: string;
+//   mobileUrl?: string;
+//   pcUrl?: string;
+//   chapter?: number;
+//   totalPage?: number;
+//   totalTime?: number;
+//   min?: number;
+//   sec?: number;
+// }
 
 export interface Lesson {
   completeTime: number;
@@ -36,3 +36,5 @@ export interface Lesson {
   min: number;
   sec: number;
 }
+
+export type LessonInput = Partial<Lesson>;

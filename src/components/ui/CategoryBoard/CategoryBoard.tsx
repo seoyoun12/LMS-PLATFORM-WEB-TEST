@@ -39,11 +39,11 @@ export function CategoryBoard() {
           onChange={onChange}
           value={value}
           showBorderBottom={true}
+          gap={3}
+          fontSx={{ fontWeight: 700, fontSize: '20px' }}
         />
       </Box>
-      <Box
-        sx={{ borderBottom: '1px solid #2A2A2A', position: 'relative', top: '-1px' }}
-      ></Box>
+      <Box sx={{ borderBottom: '1px solid #2A2A2A', position: 'relative', top: '-1px' }}></Box>
       <NoticeContainer>
         <Box mt={6}>
           {tabsConfig.map(item => {

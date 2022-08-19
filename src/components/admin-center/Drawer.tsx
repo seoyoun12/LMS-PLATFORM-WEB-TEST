@@ -17,6 +17,7 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import ViewComfyAltOutlinedIcon from '@mui/icons-material/ViewComfyAltOutlined';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import ChromeReaderModeOutlinedIcon from '@mui/icons-material/ChromeReaderModeOutlined';
+import DriveFolderUploadOutlinedIcon from '@mui/icons-material/DriveFolderUploadOutlined';
 import { ReactNode } from 'react';
 import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
@@ -130,6 +131,7 @@ export function Drawer({ children }: { children: ReactNode }) {
       ],
       icon: <CalendarMonthIcon sx={{ mr: '32px', color: grey[900] }} />,
     },
+
     {
       name: '배너관리',
       children: [

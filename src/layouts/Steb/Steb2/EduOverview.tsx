@@ -18,6 +18,7 @@ import {
   businessType,
   courseCategoryType,
   courseSubCategoryType,
+  courseType,
   getCourseClassStep,
   getSingleCourseClass,
   UserTransSaveInputDataType,
@@ -95,7 +96,11 @@ export function EduOverview({
   const getSteps = async () => {
     if (!courseCategoryType || !courseBusinessType)
       return window.alert('기수 가져오기 실패');
-    const { data } = await getCourseClassStep(courseCategoryType, courseBusinessType);
+    const { data } = await getCourseClassStep(
+      localStorage.getItem('site_course_type') as courseType,
+      courseCategoryType,
+      courseBusinessType
+    );
     setStepsRes([...data]);
     console.log(data, stepsRes);
   };

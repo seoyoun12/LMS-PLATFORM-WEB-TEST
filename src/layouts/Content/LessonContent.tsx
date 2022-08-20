@@ -54,7 +54,10 @@ export function LessonContent(props: Props) {
 
       if (mode !== "RESET") {
 
-        if (mode === "CURRENT" && (props.lesson === null || props.courseProgressSeq === null)) return;
+        if (
+          (mode === "CURRENT" && (props.lesson === null || props.courseProgressSeq === null)) ||
+          (mode === "PREV" && props.courseUserSeq === prevCourseUserSeq.current && props.lesson.seq === prevLesson.current.seq)
+        ) return;
   
         const courseUserSeq = mode === "PREV" ? prevCourseUserSeq.current : props.courseUserSeq;
         const courseProgressSeq = mode === "PREV" ? prevCourseProgressSeq.current : props.courseProgressSeq;
@@ -200,7 +203,7 @@ export function LessonContent(props: Props) {
 
   }, [props.lesson, props.courseProgressSeq, props.courseUserSeq, stopTimer, updateProgress]);
 
-  // 렌더.
+  // 렌더링.
 
   return (
     <LessonVideoContainer>
@@ -246,7 +249,6 @@ export function LessonContent(props: Props) {
 
 const LessonVideoContainer = styled.div`
   flex: 1;
-  padding-top: 32px;
 `;
 
 const LessonVideoNotFount = styled.div`

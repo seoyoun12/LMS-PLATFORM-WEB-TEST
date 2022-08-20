@@ -4,11 +4,13 @@ import Box from '@mui/material/Box';
 import React, { SyntheticEvent, useCallback } from 'react';
 import { styled } from '@mui/material';
 
+export interface TabsConfig {
+  label: string;
+  value: string;
+}
+
 interface Props {
-  tabsConfig: {
-    label: string;
-    value: string;
-  }[];
+  tabsConfig: TabsConfig[];
   showBorderBottom?: boolean;
   rerender?: boolean;
   onChangeMenu: (menu?: string | string[]) => void;

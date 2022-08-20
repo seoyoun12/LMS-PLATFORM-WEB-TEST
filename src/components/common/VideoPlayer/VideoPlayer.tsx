@@ -105,7 +105,7 @@ export function VideoPlayer(props: Props) {
 
   }, [scriptLoaded, playlist, props]);
 
-  // 렌더.
+  // 렌더링.
 
   return (
     <>

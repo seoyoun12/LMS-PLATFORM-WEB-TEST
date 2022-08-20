@@ -6,57 +6,7 @@ import { useRouter } from "next/router";
 import { useCourse } from "@common/api/course";
 import { LessonSidebar } from "./LessonSidebar";
 import { LessonContent } from "./LessonContent";
-
-const tabsConfig = [
-  { label: '커리큘럼', value: 'curriculum' },
-  // { label: '공지사항', value: 'notice' },
-  // { label: '수업자료', value: 'stuff' },
-];
-
-const testList = [
-  {
-    title: '중간평가입니다.',
-    score: 70,
-    description: '시험',
-    type: 'test',
-    isTest: true,
-    complete: true,
-  },
-  // {title:"과제평가입니다." , score: 0 , description:"과제",type:"report", isTest:false , complete:false} 보류
-];
-
-const noticeConfig = [
-  {
-    seq: 0,
-    title: '오쩔',
-    type: 'notice',
-    content: '## 안녕하세요\n**수강완료!**\n잠이나 자세요!\n',
-    date: '2022.04.12 18:46:21',
-    complete: true,
-  },
-  {
-    seq: 1,
-    title: '오지사항 제목입니다.',
-    type: 'notice',
-    content: '요를레히후.',
-    date: '2022.04.15 9:46:21',
-    complete: false,
-  },
-  {
-    seq: 2,
-    title: '오지사항 제목입니다.지사항 제목입니다.',
-    type: 'notice',
-    content: '요를레히요를레히요를레히요를레히요를레히요를레히요를레히후.',
-    date: '2022.04.19 14:46:21',
-    complete: false,
-  },
-];
-
-const fileList = [
-  { seq: 0, title: '어쩔파일입니다.pdf' },
-  { seq: 1, title: '어쩔파일입니다2.pdf' },
-  { seq: 2, title: '어쩔파일입니다3.pdf' },
-];
+import { noticeConfig } from "./Lesson.types";
 
 export function Lesson() {
 
@@ -96,7 +46,7 @@ export function Lesson() {
   const lesson = lessonIndex >= 0 ? course.lessons[lessonIndex] : null;
   const courseProgressSeq = lesson && course.courseProgressResponseDtoList.find((v) => v.lessonSeq = lesson.seq)?.courseProgressSeq || null;
 
-  // 렌더.
+  // 렌더링.
 
   return (
     <LessonContainer maxWidth={false}>
@@ -107,11 +57,9 @@ export function Lesson() {
         notice={noticeConfig}
       />
       <LessonSidebar
-        course={course}
-        tabsConfig={tabsConfig}
-        testList={testList}
-        noticeConfig={noticeConfig}
-        fileList={fileList}
+        courseUserSeq={course.courseUserSeq}
+        lessons={course.lessons}
+        lessonSeq={lessonSeq}
       />
     </LessonContainer>
   );
@@ -125,10 +73,11 @@ const CourseErrorContainer = styled(Box)`
 `;
 
 const LessonContainer = styled(Container)`
+  margin: 0 auto;
+  margin-top: 32px;
   padding: 0 50px;
   display: flex;
   flex: 1 1 auto;
   position: relative;
-  width: 100%;
-  max-width: calc(100% - 68px);
+  max-width: 1920px;
 `;

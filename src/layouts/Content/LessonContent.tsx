@@ -6,105 +6,96 @@ import type { LessonDetailClientResponseDto } from "@common/api/Api";
 import type { Notice } from "./Lesson.types";
 import ApiClient from "@common/api/ApiClient";
 
-interface TimeSession {
-  start: number;
-  end: number;
-}
-
 interface Props {
   courseUserSeq: number;
-  courseProgressSeq: number;
-  lesson: LessonDetailClientResponseDto;
+  courseProgressSeq: number | null;
+  lesson: LessonDetailClientResponseDto | null;
   notice: Notice[];
-  onProgress: (sessions: TimeSession[]) => void;
 }
 
 export function LessonContent(props: Props) {
 
   // 스테이트.
 
-  const [timePaused, setTimePaused] = React.useState<boolean>(true);
-  const [timeSessions, setTimeSessions] = React.useState<TimeSession[]>([]);
-  const [timeStart, setTimeStart] = React.useState<number | null>(null);
+  const [progress, setProgress] = React.useState<number>(0);
 
   // 레퍼런스.
 
-  const timer = React.useRef<number | null>(null);
-  const timerSeconds = React.useRef<number>(0);
+  const prevCourseUserSeq = React.useRef<number | null>(null);
+  const prevCourseProgressSeq = React.useRef<number | null>(null);
+  const prevLesson = React.useRef<LessonDetailClientResponseDto | null>(null);
+
+  const apiTimer = React.useRef<number | null>(null);
   const apiSeconds = React.useRef<number>(0);
-  const videoSeconds = React.useRef<number>(0);
+  const apiVideoSeconds = React.useRef<number>(0);
 
-  // 콜백.
+  const vidoeDurationSeconds = React.useRef<number>(0);
+  const videoCurrentSeconds = React.useRef<number>(0);
+  const videoPlayedSeconds = React.useRef<number>(0);
+  const videoIsSeeking = React.useRef<boolean>(false);
+  const videoIsPaused = React.useRef<boolean>(true);
+  const videoIsFirst = React.useRef<boolean>(true);
 
-  const getWatchedTime = React.useCallback(() => {
+  // 콜백
 
-    return (props.lesson.totalTime * 1000) + timeSessions.map((session) => (session.end - session.start)).reduce((p, c) => p + c, 0);
+  const updateProgress = React.useCallback(() => {
 
-  }, [props.lesson.totalTime, timeSessions]);
+    setProgress(vidoeDurationSeconds.current > 0 ? (props.lesson.totalTime + videoPlayedSeconds.current) / vidoeDurationSeconds.current : 1);
 
-  const getProgress = React.useCallback(() => {
-
-    const watchedTime = getWatchedTime();
-    const totalTime = props.lesson.min * 60000 + props.lesson.sec * 1000;
-
-    return totalTime === 0 ? 0 : watchedTime / totalTime;
-
-  }, [getWatchedTime, props.lesson.min, props.lesson.sec]);
-
-  const endTimeSession = React.useCallback((end: number, startAgainImmediately = false) => {
-
-    if (timeStart === null) return;
-
-    setTimeSessions([
-      ...timeSessions,
-      {
-        start: timeStart,
-        end: end,
-      }
-    ]);
-    setTimeStart(startAgainImmediately ? end : null);
-
-  }, [timeSessions, timeStart]);
+  }, [props.lesson.totalTime]);
 
   // 콜백 - 타이머.
 
-  const stopTimer = React.useCallback(async (isEnd = false) => {
+  const stopTimer = React.useCallback(async (mode: "PREV" | "CURRENT" | "RESET") => {
 
-    if (timer.current !== null) {
-      
-      window.clearInterval(timer.current);
+    if (apiTimer.current !== null) {
 
-      await ApiClient.courseLog
-        .createCourseModulesUsingPost1({
-          courseUserSeq: props.courseUserSeq,
-          lessonSeq: props.lesson.seq,
-          studyTime: apiSeconds.current,
-        })
-        .then(() => {
+      window.clearInterval(apiTimer.current);
 
-          return ApiClient.courseProgress
-            .updateCourseProgressUsingPut({
-              courseUserSeq: props.courseUserSeq,
-              lessonSeq: props.lesson.seq,
-              studyLastTime: isEnd ? (props.lesson.min * 60 + props.lesson.sec) : videoSeconds.current,
-            });
+      if (mode !== "RESET") {
 
-        });
+        if (mode === "CURRENT" && (props.lesson === null || props.courseProgressSeq === null)) return;
+  
+        const courseUserSeq = mode === "PREV" ? prevCourseUserSeq.current : props.courseUserSeq;
+        const courseProgressSeq = mode === "PREV" ? prevCourseProgressSeq.current : props.courseProgressSeq;
+        const lessonSeq = mode === "PREV" ? prevLesson.current.seq : props.lesson.seq;
+
+        console.log(await ApiClient.courseLog
+          .createCourseModulesUsingPost1({
+            courseUserSeq: courseUserSeq,
+            lessonSeq: lessonSeq,
+            studyTime: apiVideoSeconds.current,
+          })
+          .then(() => {
+  
+            return ApiClient.courseProgress
+              .updateCourseProgressUsingPut({
+                courseUserSeq: courseUserSeq,
+                courseProgressSeq: courseProgressSeq,
+                lessonSeq: lessonSeq,
+                studyLastTime: videoCurrentSeconds.current,
+              });
+  
+          }));
+
+      }
 
     }
 
-    timerSeconds.current = 0;
+    apiTimer.current = null;
     apiSeconds.current = 0;
+    apiVideoSeconds.current = 0;
 
-  }, [props.courseUserSeq, props.lesson.min, props.lesson.sec, props.lesson.seq]);
+  }, [props.courseProgressSeq, props.courseUserSeq, props.lesson]);
 
   const startTimer = React.useCallback(() => {
 
-    stopTimer();
+    stopTimer("RESET");
 
-    timer.current = window.setInterval(() => {
+    if (props.lesson === null || props.courseProgressSeq === null) return;
 
-      timerSeconds.current++;
+    apiTimer.current = window.setInterval(() => {
+
       apiSeconds.current++;
 
       if (apiSeconds.current >= 300) {
@@ -113,135 +104,157 @@ export function LessonContent(props: Props) {
           .createCourseModulesUsingPost1({
             courseUserSeq: props.courseUserSeq,
             lessonSeq: props.lesson.seq,
-            studyTime: apiSeconds.current,
+            studyTime: apiVideoSeconds.current,
           });
+
         apiSeconds.current = 0;
+        apiVideoSeconds.current = 0;
 
       }
 
     }, 1000);
 
-  }, [props.courseUserSeq, props.lesson.seq, stopTimer]);
+  }, [props.courseProgressSeq, props.courseUserSeq, props.lesson, stopTimer]);
 
   // 콜백 - 이벤트.
-  // 
-  // 사실 여기 이렇게 하는게 맞는지 모르겠음...
-  // 일단 여러번 실행 결과 이게 가장 안정적이게 나왔지만
-  // 만약 prop으로 전달해도 문제 없으면 바꾸는게 좋을지도.
 
   const onPause = React.useCallback(() => {
 
-    setTimePaused(true);
-    endTimeSession(Date.now());
+    videoIsPaused.current = true;
 
-  }, [endTimeSession]);
-
-  const onPlay = React.useCallback(() => {
-
-    ApiClient.courseLog
-      .createCourseModulesUsingPost1({
-        courseUserSeq: props.courseUserSeq,
-        lessonSeq: props.lesson.seq,
-        studyTime: 0,
-      });
-
-    setTimePaused(false);
-    setTimeStart(Date.now());
-    startTimer();
-
-  }, [props.courseUserSeq, props.lesson.seq, startTimer]);
+  }, []);
 
   const onPlaying = React.useCallback(() => {
 
-    if (!timePaused || (timePaused && timeStart !== null)) endTimeSession(Date.now());
+    if (props.lesson === null || props.courseProgressSeq === null) return;
 
-    setTimePaused(false);
-    setTimeStart(Date.now());
-    startTimer();
+    if (videoIsFirst.current) {
 
-  }, [endTimeSession, startTimer, timePaused, timeStart]);
+      ApiClient.courseLog
+        .createCourseModulesUsingPost1({
+          courseUserSeq: props.courseUserSeq,
+          lessonSeq: props.lesson.seq,
+          studyTime: 0,
+        });
+
+      videoIsFirst.current = false;
+
+      startTimer();
+
+    }
+
+    videoIsPaused.current = false;
+
+  }, [props.courseProgressSeq, props.courseUserSeq, props.lesson, startTimer]);
 
   const onSeeking = React.useCallback(() => {
 
-    if (!timePaused) endTimeSession(Date.now());
+    videoIsSeeking.current = true;
 
-  }, [endTimeSession, timePaused]);
+  }, []);
 
   const onSeeked = React.useCallback(() => {
 
-    if (!timePaused) setTimeStart(Date.now());
+    videoIsSeeking.current = false;
 
-  }, [timePaused]);
-
-  const onEnded = React.useCallback(() => {
-
-    setTimePaused(true);
-    endTimeSession(Date.now());
-    stopTimer(true);
-
-  }, [endTimeSession, stopTimer]);
+  }, []);
 
   const onTimeChange = React.useCallback((time: number) => {
 
-    videoSeconds.current = time;
+    if (time === videoCurrentSeconds.current) return;
+    if (time !== videoCurrentSeconds.current + 1 || videoIsPaused.current || videoIsSeeking.current) {
 
-  }, []);
+      videoCurrentSeconds.current = time;
+      return;
+
+    }
+
+    videoCurrentSeconds.current = time;
+    videoPlayedSeconds.current++;
+    apiVideoSeconds.current++;
+
+    if (videoCurrentSeconds.current === vidoeDurationSeconds.current) stopTimer("CURRENT");
+
+    updateProgress();
+
+  }, [stopTimer, updateProgress]);
 
   // 이펙트.
 
   React.useEffect(() => {
 
-    stopTimer();
-    setTimeSessions([]);
-    setTimeStart(null);
-    videoSeconds.current = props.lesson.studyLastTime;
+    stopTimer("PREV");
 
-  }, [props.lesson, stopTimer]);
+    vidoeDurationSeconds.current = props.lesson ? props.lesson.min * 60 + props.lesson.sec : 0;
+    videoCurrentSeconds.current = props.lesson ? props.lesson.studyLastTime : 0;
+    videoPlayedSeconds.current = 0;
+    videoIsSeeking.current = false;
+    videoIsPaused.current = true;
+    videoIsFirst.current = true;
 
-  React.useEffect(() => {
+    prevCourseUserSeq.current = props.courseUserSeq;
+    prevCourseProgressSeq.current = props.courseProgressSeq;
+    prevLesson.current = props.lesson;
+    
+    updateProgress();
 
-    if (timer.current !== null) props.onProgress(timeSessions);
-
-  }, [props, timeSessions]);
+  }, [props.lesson, props.courseProgressSeq, props.courseUserSeq, stopTimer, updateProgress]);
 
   // 렌더.
 
   return (
-    <React.Fragment>
-      <VideoWrapper>
-        <VideoPlayer
-          playlist={props.lesson.s3Files[0]?.path}
-          initialPlayerId="lesson-player"
-          initialConfig={{ autostart: false }}
-          seconds={props.lesson.studyLastTime}
-          onPause={onPause}
-          onPlay={onPlay}
-          onPlaying={onPlaying}
-          onSeeking={onSeeking}
-          onSeeked={onSeeked}
-          onEnded={onEnded}
-          onTimeChange={onTimeChange}
-        />
-      </VideoWrapper>
-      <ContentInfoContainer>
-        <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "0.25rem" }}>
-          {props.lesson.lessonNm}
-        </Typography>
-        <ContentInfoProgressContainer>
-          <Box>
-            <Typography variant="h6" fontWeight="bold" color="#ff5600">
-              {Math.floor(getProgress() * 100)}% 수강 완료
-            </Typography>
-          </Box>
-          <Box sx={{ width: "100%", mr: 1 }}>
-            <LinearProgress variant="determinate" value={Math.floor(getProgress() * 100)} />
-          </Box>
-        </ContentInfoProgressContainer>
-      </ContentInfoContainer>
-    </React.Fragment>
+    <LessonVideoContainer>
+      {props.lesson !== null && props.courseProgressSeq !== null ?
+        (
+          <React.Fragment>
+            <VideoWrapper>
+              <VideoPlayer
+                playlist={props.lesson.s3Files[0]?.path}
+                initialPlayerId="lesson-player"
+                initialConfig={{ autostart: false }}
+                seconds={props.lesson.studyLastTime}
+                onPause={onPause}
+                onPlaying={onPlaying}
+                onSeeking={onSeeking}
+                onSeeked={onSeeked}
+                onTimeChange={onTimeChange}
+              />
+            </VideoWrapper>
+            <ContentInfoContainer>
+              <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "0.25rem" }}>
+                {props.lesson.lessonNm}
+              </Typography>
+              <ContentInfoProgressContainer>
+                <Box>
+                  <Typography variant="h6" fontWeight="bold" color="#ff5600">
+                    {Math.floor(progress * 100)}% 수강 완료
+                  </Typography>
+                </Box>
+                <Box sx={{ width: "100%", mr: 1 }}>
+                  <LinearProgress variant="determinate" value={Math.floor(progress * 100)} />
+                </Box>
+              </ContentInfoProgressContainer>
+            </ContentInfoContainer>
+          </React.Fragment>
+        ) :
+        <LessonVideoNotFount>강의가 존재하지 않습니다.</LessonVideoNotFount>
+      }
+    </LessonVideoContainer>
   );
 
 }
+
+const LessonVideoContainer = styled.div`
+  flex: 1;
+  padding-top: 32px;
+`;
+
+const LessonVideoNotFount = styled.div`
+  display: flex;
+  aspect-ratio: 16 / 9;
+  align-items : center;
+  justify-content: center;
+`
 
 const VideoWrapper = styled.div`
   display: flex;

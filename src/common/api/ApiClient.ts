@@ -32,6 +32,8 @@ ApiClient.instance.interceptors.request.use(
       ...config.headers,
       Authorization: accessToken ? `Bearer ${accessToken}` : '',
     };
+
+    return config;
     
   },
 );

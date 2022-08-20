@@ -32,6 +32,7 @@ export function LearningMaterialModify() {
         await learningMaterialModify({ seq: data?.seq, learningMaterialInput });
         await fileHandler(files);
         snackbar({ variant: 'success', message: '수정 되었습니다.' });
+        await mutate();
         router.push(`/admin-center/learning-material`);
         await mutate();
       }

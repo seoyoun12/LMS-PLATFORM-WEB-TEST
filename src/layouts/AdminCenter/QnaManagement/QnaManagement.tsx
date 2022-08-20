@@ -3,6 +3,7 @@ import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
   Button,
+  Chip,
   Container,
   FormControl,
   FormControlLabel,
@@ -20,19 +21,20 @@ import { useEffect, useState } from 'react';
 import { Spinner, Table } from '@components/ui';
 import dateFormat from 'dateformat';
 import styled from '@emotion/styled';
-import { qnaAdmList } from '@common/api/qna';
+import { AnsweredYn, qnaAdmList } from '@common/api/qna';
+import { ProductStatus } from '@common/api/course';
 
 const headRows = [
-  { name: 'seq' }, // seq
-  { name: 'userSeq' }, // 유저시퀀스
-  { name: 'title' }, // 문의제목
-  { name: 'content' }, // 문의내용
-  { name: 'type' }, // 문의유형
-  { name: 'createdDtime' }, // 생성일
-  { name: 's3Files' }, // 첨부파일
-  { name: 'status' }, // 상태
-  { name: 'answerdYn' }, // 답변여부
-  { name: '답변' },
+  { name: '글번호' }, // seq
+  { name: '유저번호' }, // 유저시퀀스
+  { name: '제목' }, // 문의제목
+  { name: '본문' }, // 문의내용
+  { name: '문의유형' }, // 문의유형
+  { name: '작성일' }, // 생성일
+  { name: '첨부파일' }, // 첨부파일
+  { name: '상태' }, // 상태
+  { name: '답변여부' }, // 답변여부
+  { name: '답변등록' },
 ];
 
 export function QnaManagement() {
@@ -42,7 +44,7 @@ export function QnaManagement() {
   const [page, setPage] = useState(0);
   const [seq, setSeq] = useState<number | null>(null);
   const { data, error, mutate } = qnaAdmList({ page });
-
+  console.log(data);
   // 답변
   const onClickAnswerQna = async (seq: number) => {
     router.push(`/admin-center/qna/qna-answer/${seq}`);
@@ -104,9 +106,28 @@ export function QnaManagement() {
               <TableCell align="center">
                 {qna.s3Files[0] ? qna.s3Files[0].name : '파일없음'}
               </TableCell>
-              <TableCell align="center">{qna.status}</TableCell>
-              <TableCell align="center">{qna.answeredYn}</TableCell>
-
+              <TableCell align="center">
+                <Chip
+                  variant="outlined"
+                  size="small"
+                  label={qna.status === ProductStatus.APPROVE ? '정상' : '중지'}
+                  color={qna.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
+                />
+              </TableCell>
+              {/* <TableCell align="center">{qna.answeredYn}</TableCell> */}
+              <TableCell>
+                <Chip
+                  sx={{ width: '80px', marginLeft: '10px', marginBottom: '3px' }}
+                  // variant="outlined"
+                  size="small"
+                  label={
+                    qna.answeredYn === AnsweredYn.ANSWEREDY ? '답변 완료' : '답변 대기'
+                  }
+                  color={
+                    qna.answeredYn === AnsweredYn.ANSWEREDY ? 'secondary' : 'warning'
+                  }
+                />
+              </TableCell>
               <TableCell align="center">
                 <Button
                   variant="text"

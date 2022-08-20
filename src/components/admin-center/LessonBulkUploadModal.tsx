@@ -45,6 +45,17 @@ export function LessonBulkUploadModal({
   const router = useRouter();
   const { query } = router;
 
+  // excel sample file
+  const onClickDownloadFile = async () => {
+    const link = document.createElement('a');
+    link.download = `Sample.xlsx`;
+    // link.href = '../public/assets/files/Sample.xlsx';
+    link.href = './Sample.xlsx';
+    // link.href =
+    //   'C:Users//MirimDesktop//LSJ_code//MirimProject01//LMS-PLATFORM-WEB//public//assets//files//Sample.xlsx';
+    link.click();
+  };
+
   const onSubmit: SubmitHandler<{ contentType: ContentType }> = async ({
     contentType,
   }) => {
@@ -60,7 +71,6 @@ export function LessonBulkUploadModal({
     const lessonInput = xlsxData
       .filter(data => !!data)
       .map(data => {
-        console.log('test', data);
         const totalTime = data.min * 60 + data.sec;
         const completeTime = Math.round(totalTime * 0.9);
         return {
@@ -71,7 +81,6 @@ export function LessonBulkUploadModal({
         };
       });
 
-    return;
     try {
       const contentSeq = Number(query.contentSeq);
       console.log('im lesson.', lessonInput);
@@ -100,7 +109,17 @@ export function LessonBulkUploadModal({
         <Alert variant="info">
           <Typography variant="body2" component="div">
             <Typography variant="body2">
-              1. 샘플양식을 다운로드 받아 작성한 후 업로드 하셔야 합니다. <br />
+              1. 샘플양식을 다운로드 받아 작성한 후 업로드 하셔야 합니다.
+              <Button
+                onClick={onClickDownloadFile}
+                sx={{
+                  border: '1px solid skyblue',
+                  padding: '1px',
+                  float: 'right',
+                }}
+              >
+                Sample.xlsx
+              </Button>
             </Typography>
             <Typography variant="body2">
               2. 업로드파일은 .xls 파일만 가능합니다. 복수 시트는 지원하지 않습니다.

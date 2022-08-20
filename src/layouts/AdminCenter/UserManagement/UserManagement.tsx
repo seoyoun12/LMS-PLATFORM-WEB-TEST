@@ -1,41 +1,35 @@
-import {
-  Container,
-  TableBody,
-  TableHead,
-  Typography,
-  Button,
-} from "@mui/material";
-import styles from "@styles/common.module.scss";
-import { Table } from "@components/ui";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { userList, removeUser } from "@common/api/adm/user";
-import styled from "@emotion/styled";
-import { Spinner } from "@components/ui";
-import dateFormat from "dateformat";
-import { UserModifyModal } from "@components/admin-center/UserModifyModal";
-import { useSnackbar } from "@hooks/useSnackbar";
-import { useDialog } from "@hooks/useDialog";
+import { Container, TableBody, TableHead, Typography, Button, Box } from '@mui/material';
+import styles from '@styles/common.module.scss';
+import { Table } from '@components/ui';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { userList, removeUser } from '@common/api/adm/user';
+import styled from '@emotion/styled';
+import { Spinner } from '@components/ui';
+import dateFormat from 'dateformat';
+import { UserModifyModal } from '@components/admin-center/UserModifyModal';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { useDialog } from '@hooks/useDialog';
 
 const headRows = [
-  { name: "회원번호" },
-  { name: "아이디" },
-  { name: "이름" },
-  { name: "성별" },
-  { name: "생년월일" },
-  { name: "계정생성일" },
-  { name: "핸드폰번호" },
-  { name: "문자수신동의" },
-  { name: "메일수신동의" },
-  { name: "로그인실패횟수" },
-  { name: "로그인잠김여부" },
-  { name: "유저수정일" },
-  { name: "암호변경일" },
-  { name: "가입구분" },
-  { name: "수정" },
-  { name: "삭제" },
+  { name: '회원번호' },
+  { name: '아이디' },
+  { name: '이름' },
+  { name: '성별' },
+  { name: '생년월일' },
+  { name: '계정생성일' },
+  { name: '핸드폰번호' },
+  { name: '문자수신동의' },
+  { name: '메일수신동의' },
+  { name: '로그인실패횟수' },
+  { name: '로그인잠김여부' },
+  { name: '유저수정일' },
+  { name: '암호변경일' },
+  { name: '가입구분' },
+  { name: '수정' },
+  { name: '삭제' },
 ];
 
 export function UserManagement() {
@@ -53,15 +47,15 @@ export function UserManagement() {
         title: '유저 삭제하기',
         description: '정말로 삭제하시겠습니까?',
         confirmText: '삭제하기',
-        cancelText: '취소'
+        cancelText: '취소',
       });
       if (dialogConfirmed) {
         await removeUser(userSeq);
-        snackbar({ variant: "success", message: "성공적으로 삭제되었습니다." });
+        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
         await mutate();
       }
     } catch (e: any) {
-      snackbar({ variant: "error", message: e.data.message });
+      snackbar({ variant: 'error', message: e.data.message });
     }
   };
 
@@ -96,7 +90,8 @@ export function UserManagement() {
 
   return (
     // <div>
-    <Container className={styles.globalContainer}>
+    // <Box className={styles.globalContainer}>
+    <Box>
       <UserTypo variant="h5">회원 목록</UserTypo>
       <Table
         pagination={true}
@@ -116,29 +111,21 @@ export function UserManagement() {
         </TableHead>
 
         <TableBody>
-          {data.content.map((user) => (
+          {data.content.map(user => (
             <TableRow key={user.seq} hover>
               <UserTableCell>{user.seq}</UserTableCell>
               <UserTableCell>{user.username}</UserTableCell>
               <UserTableCell>{user.name}</UserTableCell>
               <UserTableCell>{user.gender}</UserTableCell>
-              <UserTableCell>
-                {dateFormat(user.birth, "yyyy-mm-dd")}
-              </UserTableCell>
-              <UserTableCell>
-                {dateFormat(user.createdDtime, "isoDate")}
-              </UserTableCell>
+              <UserTableCell>{dateFormat(user.birth, 'yyyy-mm-dd')}</UserTableCell>
+              <UserTableCell>{dateFormat(user.createdDtime, 'isoDate')}</UserTableCell>
               <UserTableCell>{user.phone}</UserTableCell>
               <UserTableCell>{user.smsYn}</UserTableCell>
               <UserTableCell>{user.emailYn}</UserTableCell>
               <UserTableCell>{user.loginFailedCount}</UserTableCell>
               <UserTableCell>{user.failedYn}</UserTableCell>
-              <UserTableCell>
-                {dateFormat(user.modifiedDtime, "isoDate")}
-              </UserTableCell>
-              <UserTableCell>
-                {dateFormat(user.lastPwUpdDtime, "isoDate")}
-              </UserTableCell>
+              <UserTableCell>{dateFormat(user.modifiedDtime, 'isoDate')}</UserTableCell>
+              <UserTableCell>{dateFormat(user.lastPwUpdDtime, 'isoDate')}</UserTableCell>
               <UserTableCell>{user.regCategory}</UserTableCell>
               <UserTableCell>
                 <Button
@@ -168,11 +155,11 @@ export function UserManagement() {
 
       <UserModifyModal
         open={openUserModifyModal}
-        handleClose={(isSubmit) => handleModalClose(isSubmit)}
-        userData={data.content.find((item) => item.seq === userSeq)!}
+        handleClose={isSubmit => handleModalClose(isSubmit)}
+        userData={data.content.find(item => item.seq === userSeq)!}
         error={error}
       />
-    </Container>
+    </Box>
     // {/* </div> */}
   );
 }

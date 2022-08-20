@@ -23,9 +23,9 @@ enum TabValue {
 const tabsConfig = [
   { label: '콘텐츠 정보', value: TabValue.ContentInfo },
   { label: '강의 목차', value: TabValue.LessonList },
-  { label: '문제은행', value: TabValue.Question },
-  { label: '시험', value: TabValue.Exam },
-  { label: '과제', value: TabValue.Homework },
+  // { label: '문제은행', value: TabValue.Question },
+  // { label: '시험', value: TabValue.Exam },
+  // { label: '과제', value: TabValue.Homework },
 ];
 
 export function ContentModify() {
@@ -34,9 +34,12 @@ export function ContentModify() {
   const { contentSeq, tab } = router.query;
   const { data, error } = useContent(Number(contentSeq));
 
-  const handleSubmit = async ({ contentInput, contentSeq }: {
-    contentInput: ContentInput,
-    contentSeq?: number
+  const handleSubmit = async ({
+    contentInput,
+    contentSeq,
+  }: {
+    contentInput: ContentInput;
+    contentSeq?: number;
   }) => {
     try {
       if (contentSeq) {
@@ -46,7 +49,7 @@ export function ContentModify() {
       }
     } catch (e: any) {
       console.error(e);
-      snackbar({ variant: "error", message: '업로드에 실패했습니다.' });
+      snackbar({ variant: 'error', message: '업로드에 실패했습니다.' });
     }
   };
 
@@ -59,20 +62,17 @@ export function ContentModify() {
       </Box>
       {
         {
-          [TabValue.ContentInfo]:
+          [TabValue.ContentInfo]: (
             <ContentUploadForm
               mode="modify"
               onHandleSubmit={handleSubmit}
               content={data}
-            />,
-          [TabValue.LessonList]:
-            <LessonList />,
-          [TabValue.Question]:
-            <Question />,
-          [TabValue.Exam]:
-            <Examination />,
-          [TabValue.Homework]:
-            <Homework />,
+            />
+          ),
+          [TabValue.LessonList]: <LessonList />,
+          [TabValue.Question]: <Question />,
+          [TabValue.Exam]: <Examination />,
+          [TabValue.Homework]: <Homework />,
         }[tab as string]
       }
     </Container>

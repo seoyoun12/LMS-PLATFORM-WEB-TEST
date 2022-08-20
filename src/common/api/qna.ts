@@ -17,7 +17,7 @@ export enum AnsweredYn {
 }
 
 export interface Qna {
-  answeredYn: YN;
+  answeredYn: AnsweredYn; // 위에 enum타입 만들어두고 YN을 임포트해온건 대체 뭘까
   content: string;
   createdDtime: string;
   modifiedDtime: string;

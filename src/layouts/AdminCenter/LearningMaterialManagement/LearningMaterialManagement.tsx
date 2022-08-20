@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import {
   Button,
+  Chip,
   Container,
   FormControl,
   FormControlLabel,
@@ -23,20 +24,21 @@ import {
 import { Spinner, Table } from '@components/ui';
 import dateFormat from 'dateformat';
 import styled from '@emotion/styled';
+import { ProductStatus } from '@common/api/course';
 
 const headRows = [
-  { name: 'seq' },
-  { name: 'title' },
-  { name: 'content' },
-  { name: 'materialType' },
-  { name: 'materialSubType' },
-  { name: 'createdDtime' },
-  { name: 'modifiedDtime' },
-  { name: 'origin' },
-  { name: 's3Files' },
-  { name: 'status' },
+  { name: '글번호' },
+  { name: '제목' },
+  { name: '본문' },
+  { name: '타입' },
+  { name: '서브타입' },
+  { name: '생성날짜' },
+  { name: '수정날짜' },
+  { name: 'Url' },
+  { name: '첨부파일' },
+  { name: '상태' },
   { name: '수정' },
-  { name: '삭제' },
+  // { name: '삭제' },
 ];
 
 const typeTabsConfig = [
@@ -77,24 +79,24 @@ export function LearningMaterialManagement() {
     await mutate();
   };
 
-  // 삭제
-  const onClickRemoveLM = async (seq: number) => {
-    try {
-      const dialogConfirmed = await dialog({
-        title: '공지사항 삭제하기',
-        description: '정말로 삭제하시겠습니까?',
-        confirmText: '삭제하기',
-        cancelText: '취소',
-      });
-      if (dialogConfirmed) {
-        await learningMaterialRemove(seq);
-        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-        await mutate();
-      }
-    } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
-    }
-  };
+  // // 삭제
+  // const onClickRemoveLM = async (seq: number) => {
+  //   try {
+  //     const dialogConfirmed = await dialog({
+  //       title: '학습자료 삭제하기',
+  //       description: '정말로 삭제하시겠습니까?',
+  //       confirmText: '삭제하기',
+  //       cancelText: '취소',
+  //     });
+  //     if (dialogConfirmed) {
+  //       await learningMaterialRemove(seq);
+  //       snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
+  //       await mutate();
+  //     }
+  //   } catch (e: any) {
+  //     snackbar({ variant: 'error', message: e.data.message });
+  //   }
+  // };
 
   // Pagination
   useEffect(() => {
@@ -169,18 +171,26 @@ export function LearningMaterialManagement() {
               <TableCell align="center">
                 {lm.s3Files[0] ? lm.s3Files[0].name : '파일없음'}
               </TableCell>
-              <TableCell align="center">{lm.status}</TableCell>
+              <TableCell style={{ width: 10 }} align="right">
+                <Chip
+                  variant="outlined"
+                  size="small"
+                  label={lm.status === ProductStatus.APPROVE ? '정상' : '중지'}
+                  color={lm.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
+                />
+              </TableCell>
               <TableCell align="center">
                 <Button
                   variant="text"
-                  color="neutral"
+                  color="warning"
+                  // color="neutral"
                   size="small"
                   onClick={() => onClickModifyLM(lm.seq)}
                 >
                   수정
                 </Button>
               </TableCell>
-              <TableCell align="center">
+              {/* <TableCell align="center">
                 <Button
                   variant="text"
                   color="warning"
@@ -189,7 +199,7 @@ export function LearningMaterialManagement() {
                 >
                   삭제
                 </Button>
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>

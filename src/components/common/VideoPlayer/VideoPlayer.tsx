@@ -103,14 +103,14 @@ export function VideoPlayer(props: Props) {
           dummyDiv.style.display = "none";
           document.body.appendChild(dummyDiv);
 
-          const dummyPlayer = new window.ncplayer("DUMMY_PLAYER", undefined);
+          const dummyPlayer = new window.ncplayer("DUMMY_PLAYER", { playlist });
 
           Object.defineProperty(Object.getPrototypeOf(dummyPlayer._corePlayer), 'onCurrentTimeChange', {
             get: function () {
-              return this.onCurrentTimeChange;
+              return this.player.onCurrentTimeChange;
             },
             set: function (f) {
-              this.onCurrentTimeChange = f;
+              this.player.onCurrentTimeChange = f;
             },
             enumerable: true,
             configurable: true,

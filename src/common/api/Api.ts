@@ -651,6 +651,13 @@ export interface CourseClassStepResponseDto {
 
 export interface CourseClassUpdateRequestDto {
   /**
+   * 과정 클래스 시퀀스
+   * @format int64
+   * @example 1
+   */
+  courseClassSeq?: number;
+
+  /**
    * 수강인원제한 인원수 / 0은 무제한
    * @format int32
    */
@@ -6225,6 +6232,9 @@ export interface UserDetailsImpl {
   createdDtime?: string;
   credentialsNonExpired?: boolean;
 
+  /** 유저 이메일 */
+  email?: string;
+
   /** 유저 이메일수신동의여부 */
   emailYn?: string;
   enabled?: boolean;
@@ -7487,6 +7497,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description 관리자 페이지에서 특정 콘텐츠를 제거한다. 만일, 연결된 과정이 있다면, 해당 과정 내에 수강 인원이 한 명이라도 있을 경우(운영 중인 상태) 예외를 발생시킨다. 삭제 시, 콘텐츠에 연결된 시험, 레슨도 모두 제거된다.
+     *
+     * @tags [관리자] 콘텐츠 API
+     * @name DeleteContentUsingDelete
+     * @summary [관리자] 콘텐츠 삭제 API - JWT
+     * @request DELETE:/content/adm/{contentSeq}
+     */
+    deleteContentUsingDelete: (contentSeq: number, params: RequestParams = {}) =>
+      this.request<InputStream, any>({
+        path: `/content/adm/${contentSeq}`,
+        method: "DELETE",
+        ...params,
+      }),
+
+    /**
      * No description
      *
      * @tags [관리자] 콘텐츠 API
@@ -7691,7 +7716,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   };
   courseClass = {
     /**
-     * @description 클라이언트의 캘린더에서 과정 클래스에 대한 전체 데이터를 조회한다. status 가 -1인 데이터는 조회하지 않는다.
+     * @description 클라이언트의 캘린더에서 과정 클래스에 대한 전체 데이터를 조회한다. 과정타입(courseType) 을 통해 운수 또는 저상에 해당하는 클래스를 조회한다. status 가 -1인 데이터는 조회하지 않는다. <courseType Enum 목록> * TYPE_TRANS_WORKER: 운수종사자 * TYPE_LOW_FLOOR_BUS: 저상버스 * TYPE_PROVINCIAL: 도민교통
      *
      * @tags [App & 관리자] 과정 클래스(기수) API
      * @name FindAllCourseClassesUsingGet
@@ -7699,7 +7724,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/course-class
      */
     findAllCourseClassesUsingGet: (
-      query: { businessType: "TYPE_ALL" | "TYPE_PASSENGER" | "TYPE_CARGO"; date?: string },
+      query: {
+        businessType: "TYPE_ALL" | "TYPE_PASSENGER" | "TYPE_CARGO";
+        courseType: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
+        date?: string;
+      },
       params: RequestParams = {},
     ) =>
       this.request<CourseClassResponseDto[], any>({
@@ -7746,6 +7775,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
+     * @description 특정 과정 클래스를 수정한다.
+     *
+     * @tags [App & 관리자] 과정 클래스(기수) API
+     * @name AdmModifyCourseClassUsingPut
+     * @summary [관리자] 과정 클래스 수정 API
+     * @request PUT:/course-class/adm
+     */
+    admModifyCourseClassUsingPut: (requestDto: CourseClassUpdateRequestDto, params: RequestParams = {}) =>
+      this.request<InputStream, any>({
+        path: `/course-class/adm`,
+        method: "PUT",
+        body: requestDto,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
      * @description 관리자 페이지의 클래스 관리 캘린더에서 특정 과정에 대한 클래스 정보를 단건 조회한다.
      *
      * @tags [App & 관리자] 과정 클래스(기수) API
@@ -7757,27 +7803,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<CourseClassResponseDto, void>({
         path: `/course-class/adm/${courseClassSeq}`,
         method: "GET",
-        ...params,
-      }),
-
-    /**
-     * @description 특정 과정 클래스를 수정한다.
-     *
-     * @tags [App & 관리자] 과정 클래스(기수) API
-     * @name AdmModifyCourseClassUsingPut
-     * @summary [관리자] 과정 클래스 수정 API
-     * @request PUT:/course-class/adm/{courseClassSeq}
-     */
-    admModifyCourseClassUsingPut: (
-      courseClassSeq: number,
-      requestDto: CourseClassUpdateRequestDto,
-      params: RequestParams = {},
-    ) =>
-      this.request<InputStream, any>({
-        path: `/course-class/adm/${courseClassSeq}`,
-        method: "PUT",
-        body: requestDto,
-        type: ContentType.Json,
         ...params,
       }),
 
@@ -7797,14 +7822,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description 모바일 클라이언트의 과정 클래스 리스트에 대한 전체 데이터를 조회한다. status 가 -1인 데이터는 조회하지 않는다.
+     * @description 모바일 클라이언트의 과정 클래스 리스트에 대한 전체 데이터를 조회한다. status 가 -1인 데이터는 조회하지 않는다. <courseType Enum 목록> * TYPE_TRANS_WORKER: 운수종사자 * TYPE_LOW_FLOOR_BUS: 저상버스 * TYPE_PROVINCIAL: 도민교통
      *
      * @tags [App & 관리자] 과정 클래스(기수) API
      * @name MobileFindAllCourseClassesUsingGet
      * @summary [App - 모바일 전용] 과정 클래스 전체 조회 API
      * @request GET:/course-class/mobile
      */
-    mobileFindAllCourseClassesUsingGet: (query?: { date?: string }, params: RequestParams = {}) =>
+    mobileFindAllCourseClassesUsingGet: (
+      query: { courseType: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL"; date?: string },
+      params: RequestParams = {},
+    ) =>
       this.request<MobileCourseClassResponseDto[], any>({
         path: `/course-class/mobile`,
         method: "GET",
@@ -7813,7 +7841,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description 교육 과정과 업종 구분 Enum 을 쿼리 스트링으로 전달받아 해당하는 과정 클래스(기수) 정보를 조회한다. 조회 이후, 일치하는 클래스의 정보를 리스트로 반환한다. 검색 시, 현재 일자를 기준으로 신청이 가능한 클래스만 조회한다. [courseCategoryType Enum] * TYPE_SUP_COMMON -> 보수일반 * TYPE_SUP_CONSTANT -> 보수 수시 * TYPE_CONSTANT -> 수시 * TYPE_NEW -> 신규 * TYPE_ILLEGAL -> 법령위반자 * TYPE_HANDICAPPED -> 교통약자 이동편의 증진 * TYPE_DANGEROUS -> 위험물진 운송차량 운전자 [CourseClassBusinessTypeEnum Enum] TYPE_ALL: 전체 (여기서는 사용하지 말 것.) TYPE_PASSENGER: 여객 TYPE_CARGO: 화물
+     * @description 교육 과정과 업종 구분 Enum 을 쿼리 스트링으로 전달받아 해당하는 과정 클래스(기수) 정보를 조회한다. 조회 이후, 일치하는 클래스의 정보를 리스트로 반환한다. 검색 시, 현재 일자를 기준으로 신청이 가능한 클래스만 조회한다. [courseType Enum - 운수종사자/저상버스교육자 구분] * TYPE_TRANS_WORKER: 운수종사자 * TYPE_LOW_FLOOR_BUS: 저상버스 * TYPE_PROVINCIAL: 도민교통(사용 X) [courseCategoryType Enum - 교육 과정] * TYPE_SUP_COMMON -> 보수일반 * TYPE_SUP_CONSTANT -> 보수 수시 * TYPE_CONSTANT -> 수시 * TYPE_NEW -> 신규 * TYPE_ILLEGAL -> 법령위반자 * TYPE_HANDICAPPED -> 교통약자 이동편의 증진 * TYPE_DANGEROUS -> 위험물진 운송차량 운전자 [CourseClassBusinessTypeEnum Enum - 업종 구분] TYPE_ALL: 전체 (여기서는 사용하지 말 것.) TYPE_PASSENGER: 여객 TYPE_CARGO: 화물
      *
      * @tags [App & 관리자] 과정 클래스(기수) API
      * @name FindClassStepUsingGet
@@ -7831,6 +7859,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           | "TYPE_ILLEGAL"
           | "TYPE_HANDICAPPED"
           | "TYPE_DANGEROUS";
+        courseType: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
       },
       params: RequestParams = {},
     ) =>

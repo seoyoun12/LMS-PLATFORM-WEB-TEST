@@ -1,4 +1,8 @@
-import { categoryBoardList, removeCategoryBoard } from '@common/api/categoryBoard';
+import {
+  CategoryBoard,
+  categoryBoardList,
+  removeCategoryBoard,
+} from '@common/api/categoryBoard';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
@@ -20,6 +24,7 @@ import { useEffect, useState } from 'react';
 import { Spinner, Table } from '@components/ui';
 import dateFormat from 'dateformat';
 import styled from '@emotion/styled';
+import { CatchingPokemonSharp } from '@mui/icons-material';
 
 const headRows = [
   { name: 'seq' }, // seq
@@ -59,6 +64,21 @@ export function CategoryManagement() {
     boardType: typeValue,
     page,
   });
+
+  console.log('파일 다운로드 구현해보기');
+  console.log('data : ', data);
+  // console.log('data.content : ', data.content);
+
+  console.log('123 : ', data?.content[0]?.s3Files[0].path);
+
+  // 다운로드
+  const onClickDownloadFile = async () => {
+    const link = document.createElement('a');
+    link.download = `${data.content[0]?.s3Files[0]}`;
+    // link.href = `${data.content[0]?.s3Files[0].path}`;
+    // link.href = data.content[0]?.s3Files[0]?.path;
+    link.click();
+  };
 
   // 수정
   const onClickmodifyCategoryBoard = async (seq: number) => {
@@ -160,7 +180,14 @@ export function CategoryManagement() {
               <TableCell align="center">{category.status}</TableCell>
               <TableCell align="center">{category.hit}</TableCell>
               <TableCell align="center">
-                {category.s3Files[0] ? category.s3Files[0].name : '파일없음'}
+                <Button
+                  onClick={onClickDownloadFile}
+                  // download={category.s3Files[0] ? category.s3Files[0] : null}
+                  // href={category.s3Files[0] ? category.s3Files[0].path : null}
+                  // href=""
+                >
+                  {category.s3Files[0] ? category.s3Files[0].name : '파일없음'}
+                </Button>
               </TableCell>
               <TableCell align="center">
                 <Button

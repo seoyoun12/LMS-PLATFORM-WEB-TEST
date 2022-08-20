@@ -80,7 +80,7 @@ export function QnaAccordion({
                   <Typography className="QnaBoardTwo">{title}</Typography>
                   <Box className="QnaBoardThird">
                     <Chip
-                      sx={{ width: '100px', marginLeft: '10px', marginBottom: '3px' }}
+                      sx={{ width: '80px', marginLeft: '10px', marginBottom: '3px' }}
                       // variant="outlined"
                       size="small"
                       label={

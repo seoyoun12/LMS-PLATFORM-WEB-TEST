@@ -45,7 +45,11 @@ export function NavBarV2() {
         <NavContainer>
           <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
             {HeaderList.map(item => (
-              <HeaderItem key={item.category} onMouseOver={handleHover} onMouseOut={handleOut}>
+              <HeaderItem
+                key={item.category}
+                onMouseOver={handleHover}
+                onMouseOut={handleOut}
+              >
                 <Link href={item.href} color={grey[900]}>
                   <Box className="header-title">{item.category}</Box>
                 </Link>
@@ -64,7 +68,7 @@ export function NavBarV2() {
         </NavContainer>
         {/* 여기에 리모컨 */}
       </ContentContainer>
-      {isShowRemote && (
+      {/* {isShowRemote && (
         <RemoteWrap>
           <Box className="remote-box" color="primary.main">
             <MenuItem>내 정보</MenuItem>
@@ -84,7 +88,7 @@ export function NavBarV2() {
             </MenuItem>
           </Box>
         </RemoteWrap>
-      )}
+      )} */}
     </nav>
   );
 }

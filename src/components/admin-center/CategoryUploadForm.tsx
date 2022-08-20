@@ -1,4 +1,8 @@
-import { BoardType, CategoryBoardInput } from '@common/api/categoryBoard';
+import {
+  BoardType,
+  CategoryBoardInput,
+  removeCategoryBoard,
+} from '@common/api/categoryBoard';
 import { YN } from '@common/constant';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Editor as EditorType } from '@toast-ui/react-editor';
@@ -22,6 +26,10 @@ import { css } from '@emotion/css';
 import { ErrorMessage } from '@hookform/error-message';
 import { FileUploader } from '@components/ui/FileUploader';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
+import { ProductStatus } from '@common/api/course';
+import { useDialog } from '@hooks/useDialog';
+import { useSnackbar } from '@hooks/useSnackbar';
+import router from 'next/router';
 
 interface Props {
   mode?: 'upload' | 'modify';
@@ -55,6 +63,7 @@ const defaultValues = {
   // TYPE_GUIDE_EDU_LEARNING -> 학습방법
   noticeYn: YN.YES,
   publicYn: YN.YES,
+  status: ProductStatus.APPROVE,
   files: [],
 };
 
@@ -62,6 +71,8 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
   const editorRef = useRef<EditorType>(null);
   // const [ isFileDelete, setIsFileDelete ] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
+  const dialog = useDialog();
+  const snackbar = useSnackbar();
 
   const {
     register,
@@ -91,6 +102,25 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
     resetField('files');
     setFileName(null);
     // setIsFileDelete(true);
+  };
+
+  const onClickRemoveCategory = async (seq: number) => {
+    try {
+      const dialogConfirmed = await dialog({
+        title: '공지사항 삭제하기',
+        description: '정말로 삭제하시겠습니까?',
+        confirmText: '삭제하기',
+        cancelText: '취소',
+      });
+      if (dialogConfirmed) {
+        await removeCategoryBoard(seq);
+        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
+        router.push(`/admin-center/category`);
+        // await mutate();
+      }
+    } catch (e: any) {
+      snackbar({ variant: 'error', message: e.data.message });
+    }
   };
 
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...category }, event) => {
@@ -224,9 +254,39 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
           />
         </FormControl>
 
+        <FormControl className={pt20}>
+          <FormLabel focused={false}>상태</FormLabel>
+          <Controller
+            rules={{ required: true }}
+            control={control}
+            name="status"
+            render={({ field }) => (
+              <RadioGroup row {...field}>
+                <FormControlLabel
+                  value={ProductStatus.APPROVE}
+                  control={<Radio />}
+                  label="정상"
+                />
+                <FormControlLabel
+                  value={ProductStatus.REJECT}
+                  control={<Radio />}
+                  label="중지"
+                />{' '}
+              </RadioGroup>
+            )}
+          />
+        </FormControl>
+
         <SubmitBtn variant="contained" type="submit">
           {mode === 'upload' ? '업로드하기' : '수정하기'}
         </SubmitBtn>
+        <DeleteBtn
+          color="warning"
+          variant="contained"
+          onClick={() => onClickRemoveCategory(category.seq)}
+        >
+          삭제
+        </DeleteBtn>
       </Box>
     </Container>
   );
@@ -257,7 +317,13 @@ const InputContainer = styled.div`
 `;
 
 const SubmitBtn = styled(Button)`
-  margin: 30px 30px 30px 0;
+  /* margin: 30px 30px 30px 0; */
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
+
+const DeleteBtn = styled(Button)`
+  /* background-color: #dd0000; */
 `;
 
 const textField = css`

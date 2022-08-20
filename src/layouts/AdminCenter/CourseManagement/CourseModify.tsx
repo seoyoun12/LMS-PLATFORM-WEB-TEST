@@ -23,9 +23,9 @@ enum TabValue {
 const tabsConfig = [
   { label: '과정 정보', value: TabValue.CourseInfo },
   { label: '콘텐츠 목록', value: TabValue.ContentList },
-  { label: '평가 정보', value: TabValue.EvaluationInfo },
-  { label: '토론', value: TabValue.Forum },
-  { label: '강의자료', value: TabValue.Library },
+  // { label: '평가 정보', value: TabValue.EvaluationInfo },
+  // { label: '토론', value: TabValue.Forum },
+  // { label: '강의자료', value: TabValue.Library },
   { label: '과정모듈', value: TabValue.CourseModule },
 ];
 

@@ -1,4 +1,5 @@
 import {
+  BoardType,
   CategoryBoard,
   categoryBoardList,
   removeCategoryBoard,
@@ -7,6 +8,7 @@ import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
   Button,
+  Chip,
   Container,
   FormControl,
   FormControlLabel,
@@ -25,23 +27,24 @@ import { Spinner, Table } from '@components/ui';
 import dateFormat from 'dateformat';
 import styled from '@emotion/styled';
 import { CatchingPokemonSharp } from '@mui/icons-material';
+import { ProductStatus } from '@common/api/course';
 
 const headRows = [
-  { name: 'seq' }, // seq
-  { name: 'userSeq' }, // userSeq
-  { name: 'userId' }, // username
+  { name: '글번호' }, // seq
+  { name: '유저번호' }, // userSeq
+  { name: '유저ID' }, // username
   { name: '제목' }, // subject
   { name: '본문' }, // content
-  { name: '타입' }, // boardType
-  { name: '생성일' }, // createdDtime
+  { name: '게시판유형' }, // boardType
+  { name: '작성일' }, // createdDtime
   { name: '수정일' }, // modifiedDtime
   { name: '공지여부' }, // noticeYn
   { name: '공개여부' }, // publicYn
   { name: '상태' }, // status
   { name: '조회수' }, // hit
-  { name: '파일' }, // s3Files
+  { name: '첨부파일' }, // s3Files
   { name: '수정' },
-  { name: '삭제' },
+  // { name: '삭제' },
 ];
 
 const tabsConfig = [
@@ -67,9 +70,17 @@ export function CategoryManagement() {
 
   console.log('파일 다운로드 구현해보기');
   console.log('data : ', data);
+  console.log('한글변환 : ', tabsConfig[0].value);
   // console.log('data.content : ', data.content);
 
-  console.log('123 : ', data?.content[0]?.s3Files[0].path);
+  console.log('123 : ', data?.content);
+
+  // for (let i = 0; i < tabsConfig.length; i++) {
+  //   console.log('i는 : ', i);
+  //   if (tabsConfig[i].value === data.content) {
+  //     console.log('asd');
+  //   }
+  // }
 
   // 다운로드
   const onClickDownloadFile = async () => {
@@ -177,7 +188,16 @@ export function CategoryManagement() {
               </TableCell>
               <TableCell align="center">{category.noticeYn}</TableCell>
               <TableCell align="center">{category.publicYn}</TableCell>
-              <TableCell align="center">{category.status}</TableCell>
+              <TableCell style={{ width: 10 }} align="right">
+                <Chip
+                  variant="outlined"
+                  size="small"
+                  label={category.status === ProductStatus.APPROVE ? '정상' : '중지'}
+                  color={
+                    category.status === ProductStatus.APPROVE ? 'secondary' : 'default'
+                  }
+                />
+              </TableCell>
               <TableCell align="center">{category.hit}</TableCell>
               <TableCell align="center">
                 <Button
@@ -192,14 +212,15 @@ export function CategoryManagement() {
               <TableCell align="center">
                 <Button
                   variant="text"
-                  color="neutral"
+                  // color="neutral"
+                  color="warning"
                   size="small"
                   onClick={() => onClickmodifyCategoryBoard(category.seq)}
                 >
                   수정
                 </Button>
               </TableCell>
-              <TableCell align="center">
+              {/* <TableCell align="center">
                 <Button
                   variant="text"
                   color="warning"
@@ -208,7 +229,7 @@ export function CategoryManagement() {
                 >
                   삭제
                 </Button>
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>

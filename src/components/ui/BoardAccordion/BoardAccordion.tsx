@@ -1,15 +1,22 @@
-import * as React from 'react';
-import MuiAccordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Box, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
-import { grey } from '@mui/material/colors';
-import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
-import dateFormat from 'dateformat';
-import styled from '@emotion/styled';
-import { width } from '@mui/system';
+import * as React from "react";
+import MuiAccordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {
+  Box,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+} from "@mui/material";
+import { grey } from "@mui/material/colors";
+import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
+import dateFormat from "dateformat";
+import styled from "@emotion/styled";
+import { width } from "@mui/system";
+import { format } from "date-fns";
 
 interface BoardAccordionAccordionList {
   seq: number;
@@ -36,17 +43,19 @@ export function BoardAccordion({
           disableGutters
           elevation={0}
           sx={{
-            '&:before': {
-              display: 'none',
+            "&:before": {
+              display: "none",
             },
           }}
         >
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon sx={{ position: 'absolute', width: '100px' }} />}
+            expandIcon={
+              <ExpandMoreIcon sx={{ position: "absolute", width: "100px" }} />
+            }
             aria-controls="panel1a-content"
             sx={{
               padding: 0,
-              '&:hover': {
+              "&:hover": {
                 backgroundColor: grey[50],
               },
             }}
@@ -60,7 +69,7 @@ export function BoardAccordion({
                 {name}
               </Typography>
               <Typography width="20%" textAlign="center">
-                {dateFormat(date, 'isoDate')}
+                {date.toString()}
               </Typography>
             </BoardBox>
           </AccordionSummary>
@@ -72,8 +81,8 @@ export function BoardAccordion({
                   <BoardContentBox
                     key={name} // key props error
                     sx={{
-                      display: 'flex',
-                      width: '100%',
+                      display: "flex",
+                      width: "100%",
                       // backgroundColor: `${isActive ? grey[50] : 'inherit'}`,
                     }}
                   >

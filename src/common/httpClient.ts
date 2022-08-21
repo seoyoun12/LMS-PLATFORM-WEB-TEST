@@ -1,7 +1,7 @@
-import Axios, { AxiosError } from 'axios';
-import { jwpInterceptor, responseInterceptor } from '@common/httpInterceptor';
-import { tokenInterceptor } from '@common/httpInterceptor/tokenInterceptor';
-import { HttpError } from '@common/errors';
+import Axios, { AxiosError, AxiosRequestConfig } from "axios";
+import { jwpInterceptor, responseInterceptor } from "@common/httpInterceptor";
+import { tokenInterceptor } from "@common/httpInterceptor/tokenInterceptor";
+import { HttpError } from "@common/errors";
 
 /**
  *  * Basic
@@ -10,8 +10,8 @@ import { HttpError } from '@common/errors';
  */
 
 export const axiosHeaders = {
-  'Api-Key': 'bWlyaW06MTIzNA==',
-  withCredentials: true
+  "Api-Key": "bWlyaW06MTIzNA==",
+  withCredentials: true,
 };
 
 export const axiosSetting = {
@@ -33,7 +33,7 @@ triggerInterceptors();
 
 export const GET = async <T>(
   url: string,
-  { params = {}, headers = {}, } = {}
+  { params = {}, headers = {} } = {}
 ): Promise<T> => {
   try {
     const response = await api.get(url, { params, headers });
@@ -43,36 +43,33 @@ export const GET = async <T>(
   }
 };
 
-export const POST = async (
+export const POST = async <T>(
   url: string,
   data: object = {},
-  { params = {}, headers = {}, } = {}
+  config: AxiosRequestConfig = {}
 ) => {
   try {
-    const response = await api.post(url, data, { params, headers });
+    const response = await api.post<T>(url, data, config);
     return response.data;
   } catch (error: any) {
     return handleError(error);
   }
 };
 
-export const PUT = async (
+export const PUT = async <T>(
   url: string,
   data: object = {},
-  { params = {}, headers = {}, } = {}
+  { params = {}, headers = {} } = {}
 ) => {
   try {
-    const response = await api.put(url, data, { params, headers });
+    const response = await api.put<T>(url, data, { params, headers });
     return response.data;
   } catch (error: any) {
     return handleError(error);
   }
 };
 
-export const DELETE = async (
-  url: string,
-  data: object = {}
-) => {
+export const DELETE = async (url: string, data: object = {}) => {
   try {
     const response = await api.delete(url, { data });
     return response.data;
@@ -81,13 +78,12 @@ export const DELETE = async (
   }
 };
 
-
 const handleError = (error: AxiosError | any) => {
   if (error.response) {
     throw error.response;
   }
 
-  throw (error);
+  throw error;
 };
 
 function triggerInterceptors() {
@@ -98,6 +94,3 @@ function triggerInterceptors() {
   responseInterceptor();
   tokenInterceptor();
 }
-
-
-

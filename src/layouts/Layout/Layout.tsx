@@ -10,13 +10,14 @@ import { useRouter } from 'next/router';
 import { allowUserPahtList, notNeededLoginPathList } from '@utils/loginPathList';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { getMyUser, MyUser, UserRole } from '@common/api/user';
-import { SiteMap } from '@components/common/GlobalNavigationBar';
+import { MobileNav, SiteMap } from '@components/common/GlobalNavigationBar';
 import { AppBar } from '@mui/material';
 import { PopupBox } from '@components/common/PopupBox/PopupBox';
 import { courseType } from '@common/api/courseClass';
 import { regCategory } from '@common/recoil/user/atom';
 import { CourseType } from '@common/api/adm/courseClass';
 import useResponsive from '@hooks/useResponsive';
+import MenuIcon from '@mui/icons-material/Menu';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
@@ -128,10 +129,14 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         }}
       >
         {isDesktop && <SiteMap />}
-        {typeof window !== 'undefined' && localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL ? (
-          <TrafficGlobalNavigationBar />
+        {typeof window !== 'undefined' && isDesktop ? (
+          localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL ? (
+            <TrafficGlobalNavigationBar />
+          ) : (
+            <GlobalNavigationBar />
+          )
         ) : (
-          <GlobalNavigationBar />
+          <MobileNav />
         )}
       </AppBar>
       {router.route.includes('/category') && <PopupBox />}

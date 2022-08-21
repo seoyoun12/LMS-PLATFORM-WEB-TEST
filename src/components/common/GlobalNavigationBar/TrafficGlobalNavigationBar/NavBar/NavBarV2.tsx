@@ -12,7 +12,7 @@ const showRemoteList = [
   { href: '/traffic/category' },
 ];
 
-const HeaderList = [
+export const ProvintialHeaderList = [
   {
     category: '교육이용안내',
     href: '',
@@ -93,7 +93,7 @@ export function NavBarV2() {
         ></HeaderBackground>
         <NavContainer>
           <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
-            {HeaderList.map(item => (
+            {ProvintialHeaderList.map(item => (
               <HeaderItem key={item.category} onMouseOver={handleHover} onMouseOut={handleOut}>
                 <Link href={item.href} color={grey[900]}>
                   <Box className="header-title">{item.category}</Box>
@@ -191,6 +191,7 @@ const NavContainer = styled.div`
     display: flex;
     flex-grow: 1;
     align-items: center;
+    color: black;
   }
   .link-item {
     display: flex;

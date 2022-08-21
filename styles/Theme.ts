@@ -33,7 +33,7 @@ const theme = createTheme({
       // '"Segoe UI Symbol"',
       'Black-Han-Sans',
       'Noto-Sans-Kr',
-      'sans-serif'
+      'sans-serif',
     ].join(','),
   },
   components: {

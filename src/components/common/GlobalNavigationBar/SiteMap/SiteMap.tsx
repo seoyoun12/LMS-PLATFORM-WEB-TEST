@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 
-const moveLinkList = [
+export const siteMapList = [
   {
     name: '운수종사자',
     href: '/category',
@@ -80,7 +80,7 @@ export function SiteMap() {
   return (
     <SiteMapWrap>
       <Header className={styles.globalContainer}>
-        {moveLinkList.map(item => (
+        {siteMapList.map(item => (
           <HeaderItem
             key={item.name}
             onClick={() => {

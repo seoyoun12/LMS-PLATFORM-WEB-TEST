@@ -44,7 +44,7 @@ export function NavBarV2() {
         ></HeaderBackground>
         <NavContainer>
           <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
-            {HeaderList.map(item => (
+            {TransHeaderList.map(item => (
               <HeaderItem key={item.category} onMouseOver={handleHover} onMouseOut={handleOut}>
                 <Link href={item.href} color={grey[900]}>
                   <Box className="header-title">{item.category}</Box>
@@ -52,9 +52,9 @@ export function NavBarV2() {
                 <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
                   <Box className="link-wrap">
                     {item.items.map(menuItem => (
-                      <MenuItem key={menuItem.title} className="link-item">
-                        <Link href={menuItem.href}>{menuItem.title}</Link>
-                      </MenuItem>
+                      <Link className="link-items" href={menuItem.href} key={menuItem.title}>
+                        <MenuItem className="link-item">{menuItem.title}</MenuItem>
+                      </Link>
                     ))}
                   </Box>
                 </Box>
@@ -140,6 +140,7 @@ const NavContainer = styled.div`
     display: flex;
     flex-grow: 1;
     align-items: center;
+    color: black;
   }
   .link-item {
     display: flex;
@@ -201,7 +202,7 @@ const RemoteWrap = styled(Box)`
   }
 `;
 
-const HeaderList = [
+export const TransHeaderList = [
   {
     category: '온라인교육',
     href: '/stebMove/steb1',

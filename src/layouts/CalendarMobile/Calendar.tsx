@@ -142,7 +142,8 @@ export function CalendarMobile() {
     businessType: filter,
     date: dateFormat(date, 'yyyy-mm'),
   });
-  const [schedule, setSchedule] = useState<CourseClassRes[]>();
+  const [schedule, setSchedule] =
+    useState<{ date: Date; day: string; children: CourseClassRes[] }[]>();
 
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const calendarRef = useRef<FullCalendar>(null);
@@ -173,12 +174,12 @@ export function CalendarMobile() {
   }, [calendarRef, date]);
 
   useEffect(() => {
-    setSchedule(data);
+    if (data) setSchedule(checkIsDate(data, date));
   }, [data]);
 
-  useEffect(() => {
-    checkIsDate(schedule, date);
-  }, []);
+  // useEffect(() => {
+  //   if (schedule) checkIsDate(data, date);
+  // }, [schedule, date]);
 
   // if (!data) return <Spinner />;
   return (

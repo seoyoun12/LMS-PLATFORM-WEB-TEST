@@ -27,6 +27,7 @@ import {
 import { courseClassEnrollInfo } from '@common/recoil';
 import { useRecoilState } from 'recoil';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
+import { Spinner } from '@components/ui';
 
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,7 +37,7 @@ interface Props {
   calendarRef: React.RefObject<FullCalendar>;
   // CalendarEvent: CalendarEvent[];
   filter: string;
-  schedule?: CourseClassRes[];
+  schedule?: { date: Date; day: string; children: CourseClassRes[] }[];
 }
 
 export const courseReg = [
@@ -84,108 +85,130 @@ export function CalendarBody({
   const router = useRouter();
   const isLogin = useIsLoginStatus();
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
-  const scheduleList = schedule?.map(item => {
-    //마감여부
-    console.log('난 아이템이야!', item, eduLegendList);
-    const prevSchedule =
-      new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0 ? true : false;
-    const isReceive =
-      new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0
-        ? new Date(item.requestStartDate).getTime() - new Date().getTime() <= 0
-          ? true
-          : false
-        : false;
-
+  const scheduleItem = schedule?.map(({ date, day, children }) => {
     return {
-      ...item,
-      title: prevSchedule ? (isReceive ? '접수중' : '준비중') : '마감', //말
-      isReceive,
-      prevSchedule,
-      step: item.step, //기수
-      lessonTime: item.course.lessonTime,
-      mediaType: '동영상(VOD)',
-      courseCategoryType: courseCategory.filter(
-        categoryItem => categoryItem.type === item.course.courseCategoryType
-      )[0], //eduType
-      courseSubCategoryType: courseSubCategory.filter(
-        sub => sub.type === item.course.courseSubCategoryType
-      )[0], //업종
-      eduTypeAndTime: item.course.lessonTime, // eduTime
-      currentJoin: item.enrolledPeopleCnt, //현재 수강
-      limit: item.limitPeople, //수강 제한
-      studyStartDate: item.studyStartDate, //studyStartDate
-      studyEndDate: item.studyEndDate, //studyStartDate
-      start: item.requestStartDate, //start: requestStartDate
-      end: item.requestEndDate, //start: requestStartDate
-      className: isReceive
-        ? eduLegendList.filter(
-            legend => legend.enType === item.course.courseCategoryType
-          )[0]?.enType || 'TYPE_NONE'
-        : 'TYPE_NONE',
+      date: date,
+      day,
+      children: children.map(item => {
+        //마감여부
+        // console.log('난 아이템이야!', eduLegendList);
+
+        //이전 날짜일경우
+        const prevSchedule =
+          new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0
+            ? true
+            : false;
+
+        //이후 날짜일 경우.
+        const isReceive =
+          new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0
+            ? new Date(item.requestStartDate).getTime() - new Date().getTime() <= 0
+              ? true
+              : false
+            : false;
+
+        return {
+          ...item,
+          title: prevSchedule ? (isReceive ? '접수중' : '준비중') : '마감', //말
+          isReceive,
+          prevSchedule,
+          step: item.step, //기수
+          lessonTime: item.course.lessonTime,
+          mediaType: '동영상(VOD)',
+          courseCategoryType: courseCategory.filter(
+            categoryItem => categoryItem.type === item.course.courseCategoryType
+          )[0], //eduType
+          courseSubCategoryType: courseSubCategory.filter(
+            sub => sub.type === item.course.courseSubCategoryType
+          )[0], //업종
+          eduTypeAndTime: item.course.lessonTime, // eduTime
+          currentJoin: item.enrolledPeopleCnt, //현재 수강
+          limit: item.limitPeople, //수강 제한
+          studyStartDate: item.studyStartDate, //studyStartDate
+          studyEndDate: item.studyEndDate, //studyStartDate
+          start: item.requestStartDate, //start: requestStartDate
+          end: item.requestEndDate, //start: requestStartDate
+          className: isReceive
+            ? eduLegendList.filter(
+                legend => legend.enType === item.course.courseCategoryType
+              )[0]?.enType || 'TYPE_NONE'
+            : 'TYPE_NONE',
+        };
+      }),
     };
   });
 
+  const onClickOpenModal = (
+    item: CourseClassRes,
+    prevSchedule: boolean,
+    isReceive: boolean
+  ) => {
+    if (!prevSchedule) return window.alert('마감된 교육입니다!');
+    if (!isReceive) return window.alert('신청기간이 아닙니다!');
+    setModalInfo({
+      seq: item.seq,
+      step: item.step,
+      lessonTime: item.lessonTime,
+      courseCategoryType: item.courseCategoryType as {
+        type: courseCategoryType;
+        ko: string;
+      },
+      courseSubCategoryType: item.courseSubCategoryType as {
+        type: courseSubCategoryType;
+        ko: string;
+      },
+      enrolledPeopleCnt: item.enrolledPeopleCnt,
+      limitPeople: item.limitPeople,
+      studyStartDate: item.studyStartDate,
+      studyEndDate: item.studyEndDate,
+      start: dateFormat(item.start, 'yyyy-mm-dd'),
+      end: dateFormat(item.end, 'yyyy-mm-dd'),
+    });
+    setOpenModal(true);
+  };
+
+  if (!scheduleItem) return <Spinner />;
   return (
     <CalendarWrap filter={filter}>
-      <FullCalendar
-        ref={calendarRef}
-        plugins={[dayGridPlugin]}
-        headerToolbar={{ start: '', end: '' }} //헤더 제거
-        // locale="ko"
-        // dayCellContent={['😁', '😂', '😁', '😂', '😁', '😂']}
-        // dayCellClassNames={date => ['fc-day-header-sun', '월', '화', '수', '목', '금', 'fc-day-header-sat'][date.dow]}
-        dayHeaderClassNames={date =>
-          ['fc-day-header-sun', '월', '화', '수', '목', '금', 'fc-day-header-sat'][
-            date.dow
-          ]
-        }
-        dayHeaderContent={date => ['일', '월', '화', '수', '목', '금', '토'][date.dow]}
-        // showNonCurrentDates={false}
+      <Box>
+        {scheduleItem.map(item => (
+          <Box>
+            <CalendarSummary>
+              <Box>{dateFormat(item.date, 'yyyy-mm-dd')}</Box>
+              <Box>{item.day}</Box>
+            </CalendarSummary>
+            <CalendarDetail>
+              {item.children.map(child => (
+                <CalendarItem
+                  onClick={() =>
+                    onClickOpenModal(child, child.prevSchedule, child.isReceive)
+                  }
+                >
+                  <CalendarItemHeader
+                    sx={{ background: child.isReceive ? '#df280a' : '#7a7a7a' }}
+                  >
+                    {child.title}
+                  </CalendarItemHeader>
+                  <Box mt={1}>
+                    [{child.courseCategoryType.ko}] {child.courseSubCategoryType.ko} -{' '}
+                    {child.courseCategoryType.ko} 교육
+                  </Box>
+                  <Box mt={1}>
+                    {dateFormat(child.requestStartDate, 'yyyy-mm-dd')} ~{' '}
+                    {dateFormat(child.requestEndDate, 'yyyy-mm-dd')} [
+                    {child.limitPeople === 0
+                      ? '인원제한없음'
+                      : `${child.currentJoin}/
+                    ${child.limitPeople}`}
+                    ]
+                  </Box>
+                </CalendarItem>
+              ))}
+            </CalendarDetail>
+          </Box>
+        ))}
+      </Box>
 
-        contentHeight="auto" //스크롤 제거
-        eventContent={renderEventContent}
-        events={scheduleList}
-        eventClick={e => {
-          const {
-            event: {
-              _def: { extendedProps },
-              start,
-              end,
-            },
-          }: {
-            event: {
-              _def: { extendedProps: Partial<ClickedPlanInfo> };
-              start: Date | null;
-              end: Date | null;
-            };
-          } = e;
-          if (!e.event._def.extendedProps.prevSchedule)
-            return window.alert('마감된 교육입니다!');
-          if (!e.event._def.extendedProps.isReceive)
-            return window.alert('신청기간이 아닙니다!');
-          setModalInfo({
-            seq: extendedProps.seq as number,
-            step: extendedProps.step as number,
-            lessonTime: extendedProps.lessonTime as number,
-            courseCategoryType: extendedProps.courseCategoryType as {
-              type: courseCategoryType;
-              ko: string;
-            },
-            courseSubCategoryType: extendedProps.courseSubCategoryType as {
-              type: courseSubCategoryType;
-              ko: string;
-            },
-
-            enrolledPeopleCnt: extendedProps.enrolledPeopleCnt as number,
-            limitPeople: extendedProps.limitPeople as number,
-            studyStartDate: extendedProps.studyStartDate as string,
-            studyEndDate: extendedProps.studyEndDate as string,
-            start: dateFormat(start as Date, 'yyyy-mm-dd'),
-            end: dateFormat(end as Date, 'yyyy-mm-dd'),
-          });
-          setOpenModal(true);
-        }}
-      />
       <Modal
         open={openModal}
         onCloseModal={() => setOpenModal(false)}
@@ -224,10 +247,6 @@ export function CalendarBody({
         }
       >
         <TableContainer sx={{ width: '500px', padding: '0 2rem' }}>
-          {/* <Box display="flex" alignItems="center" fontWeight="bold" mb={2}>
-            <HorizontalRuleRoundedIcon sx={{ color: '#2980b9' }} />
-            <span>교육개요</span>
-          </Box> */}
           <EduGuide>
             <span>교육안내</span>
           </EduGuide>
@@ -288,103 +307,8 @@ export function CalendarBody({
     </CalendarWrap>
   );
 }
-function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
-  const {
-    //@ts-ignore
-    event: {
-      _def: {
-        extendedProps: { lessonTime, courseCategoryType, isReceive },
-      },
-      title,
-    },
-  } = info;
-  // @ts-ignore
-  return (
-    <Box display="flex">
-      <Typography sx={{ color: isReceive ? '#df280a' : '#7a7a7a' }} fontWeight="bold">
-        [{title}]
-      </Typography>
-      <Typography color="black">
-        {courseCategoryType?.ko ? courseCategoryType.ko : 'null'}교육 /{' '}
-        {lessonTime ? (lessonTime === 0 ? '종일' : lessonTime) : 'null'}시간
-      </Typography>
-      <Typography color="black">
-        {
-          //@ts-ignore
-          info && info.event._def.extendedProps.mediaType
-        }
-      </Typography>
-    </Box>
-  );
-}
+
 const CalendarWrap = styled(Box)<{ filter: string }>`
-  .fc-dayGridMonth-view {
-    border-top: 3px solid #000;
-  }
-  .fc-col-header {
-    // 헤더css
-    .fc-scrollgrid-sync-inner {
-      background: #fafafa;
-      font-weight: bold;
-      padding: 1rem 0;
-    }
-  }
-  .fc-daygrid-day-top {
-    justify-content: flex-end; //날짜 왼쪽정렬
-    a {
-      /* background: #8e8e8e;
-      color: white;
-      padding: 5px;
-      border-radius: 220px; */
-    }
-  }
-
-  .fc-day-today {
-    background-color: white !important; // as possible as Avoid using '!important' !!!!
-  }
-  //date
-  .fc-day-sun {
-    color: #ea0b0b;
-  }
-  .fc-daygrid-day-top {
-    padding: 10px 0 0 10px;
-  }
-
-  .fc-day-header-sun {
-    color: #ea0b0b;
-  }
-  .fc-day-header-sat {
-    color: #256aef;
-  }
-
-  .fc-daygrid-block-event {
-    height: 60px;
-    display: flex;
-    align-items: center;
-    border: 1px solid #dae2f3 !important;
-    margin: 0.75rem 0;
-    overflow: hidden;
-    padding-left: 1rem;
-  }
-
-  //calendar event start in date
-  .fc-event-start {
-    border-radius: 4px 0 0 4px;
-    padding-left: 1rem;
-    /* margin-left: 1rem !important; */
-    /* text-align: left; */
-  }
-  //calendar event end in date
-  .fc-event-end {
-    border-radius: 0 4px 4px 0;
-    padding-right: 1rem;
-    /* margin-right: 1rem !important; */
-    /* text-align: right; */
-  }
-  /* .fc-day-sat {
-    color: red;
-  } */
-
   .TYPE_SUP_COMMON {
     background: #f0ffdf;
     border: #d3f2a0;
@@ -418,6 +342,31 @@ const CalendarWrap = styled(Box)<{ filter: string }>`
     border: #dfdfdf;
   }
 `;
+
+const CalendarSummary = styled(Box)`
+  background: #f0f0f0;
+  border-top: 2px solid #c6c6c6;
+  border-bottom: 2px solid #c6c6c6;
+  padding: 8px 16px;
+  font-weight: 700;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+`;
+const CalendarDetail = styled(Box)``;
+
+const CalendarItem = styled(Box)`
+  border-bottom: 2px solid #c6c6c6;
+  padding: 8px 16px;
+`;
+
+const CalendarItemHeader = styled(Box)`
+  width: fit-content;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+`;
+
 const EduGuide = styled(Typography)`
   width: fit-content;
   font-weight: 700;

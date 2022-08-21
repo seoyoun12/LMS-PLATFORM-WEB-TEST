@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import styles from '@styles/common.module.scss';
-import { Button, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { Link } from '@components/common';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
@@ -9,6 +9,8 @@ import { AccountMenu } from '@components/ui';
 import Image from 'next/image';
 import { NavBarV2 } from '../NavBar';
 import { useEffect, useState } from 'react';
+import SigninIcon from '/public/assets/svgs/signin.svg';
+import SignupIcon from '/public/assets/svgs/signup.svg';
 
 export function HeaderBar() {
   const router = useRouter();
@@ -47,18 +49,20 @@ export function HeaderBar() {
 
         <RightSection>
           {!isLogin ? (
-            <div>
-              <Link href="/admin-center/apply-tutor" underline="none">
-                <Button className="align-left" color="neutral">
-                  튜터 지원
-                </Button>
-              </Link>
-              <Link href="/traffic/sign-in" underline="none">
-                <Button className="align-left" color="neutral">
+            <SignBoxes>
+              <Link href="/traffic/sign-in" underline="none" display="flex" alignItems="center" width="80px">
+                <SigninIcon />
+                <Box color="black" ml={1}>
                   로그인
-                </Button>
+                </Box>
               </Link>
-            </div>
+              <Link href="/traffic/sign-up" underline="none" display="flex" alignItems="center" width="100px">
+                <SignupIcon />
+                <Box color="black" ml={1}>
+                  회원가입
+                </Box>
+              </Link>
+            </SignBoxes>
           ) : (
             <Stack direction="row" alignItems="center">
               {!!user?.roles?.length &&
@@ -109,6 +113,9 @@ const ContentContainer = styled.div`
   @media screen and (min-width: 1024px) {
     height: 78px;
   }
+`;
+const SignBoxes = styled(Box)`
+  display: flex;
 `;
 
 // const NavContainer = styled.div`

@@ -17,6 +17,7 @@ export function Step2({ handleStep, resName }: Props) {
   const [nameErr, setNameErr] = useState(false);
   const [usernameErr, setUserNameErr] = useState(false);
   const [passwordErr, setPasswordErr] = useState(false);
+  const [confirmPasswordErr, setconfirmPasswordErr] = useState(false);
   const [emailErr, setEmailErr] = useState(false);
   const [phoneErr, setPhoneErr] = useState(false);
   const [phone, setPhone] = useState<string>();
@@ -27,12 +28,14 @@ export function Step2({ handleStep, resName }: Props) {
     // const name = data.get('name') as string;
     const username = data.get('username') as string;
     const password = data.get('password') as string;
+    const confirmPassword = data.get('password-confirm') as string;
     const email = data.get('email') as string;
     const phone = data.get('phone') as string;
     console.log(phone);
     console.log(resName);
 
     if (nameErr || usernameErr || passwordErr || emailErr || phoneErr) return;
+    if (password !== confirmPassword) return window.alert('비밀번호확인이 일치하지 않습니다!');
 
     if (!!resName && !!username && !!password) {
       try {
@@ -71,6 +74,12 @@ export function Step2({ handleStep, resName }: Props) {
       setPasswordErr(true);
     }
   };
+  // const onChangeConfirmPassword = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setconfirmPasswordErr(false);
+  //   if (!passwordRegex.test(e.target.value) || e.target.value.length < 8) {
+  //     setconfirmPasswordErr(true);
+  //   }
+  // };
   const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
     setEmailErr(false);
     if (!emailRegex.test(e.target.value)) {
@@ -114,7 +123,7 @@ export function Step2({ handleStep, resName }: Props) {
               required
               fullWidth
               id="username"
-              // label="아이디"
+              label="아이디"
               name="username"
               onChange={onChangeUsername}
               error={usernameErr}
@@ -132,7 +141,7 @@ export function Step2({ handleStep, resName }: Props) {
               name="password"
               onChange={onChangePassword}
               error={passwordErr}
-              // label="비밀번호"
+              label="비밀번호"
               type="password"
               id="password"
               autoComplete="current-password"
@@ -148,12 +157,27 @@ export function Step2({ handleStep, resName }: Props) {
             </FormHelperText>
           </FormControl>
           <FormControl>
-            <TextField name="email" placeholder="이메일을 입력해주세요" onChange={onChangeEmail} error={emailErr} required />
+            <TextField
+              placeholder="비밀번호확인"
+              required
+              fullWidth
+              name="password-confirm"
+              // onChange={onChangePassword}
+              error={passwordErr}
+              label="비밀번호확인"
+              type="password"
+              id="password-confirm"
+              autoComplete="current-password"
+            />
+          </FormControl>
+          <FormControl>
+            <TextField name="email" label="이메일" placeholder="이메일을 입력해주세요" onChange={onChangeEmail} error={emailErr} required />
             <FormHelperText sx={{ color: 'red' }}>{emailErr && '올바른 형식이 아닙니다.'}</FormHelperText>
           </FormControl>
           <FormControl>
             <TextField
               name="phone"
+              label="전화번호"
               placeholder="전화번호를 입력해주세요"
               onChange={onChangePhone}
               error={phoneErr}

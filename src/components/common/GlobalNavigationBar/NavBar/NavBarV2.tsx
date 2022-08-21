@@ -107,7 +107,7 @@ const ContentContainer = styled.div`
     top: 78px;
     box-shadow: 2px 10px 12px 1px rgba(0, 0, 0, 0.1);
     left: 0;
-    min-height: 300px;
+    min-height: 250px;
     border-radius: 0 0 4px 4px;
     transition: min-height 0.2s ease-in-out;
   }
@@ -129,12 +129,23 @@ const NavContainer = styled.div`
     align-items: center;
     height: 100%;
   }
+
   .link-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* height: 200px; */
+  }
+  .link-items {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
   }
   .link-item {
     display: flex;
     width: 100%;
     justify-content: center;
+    align-items: center;
   }
 
   li {
@@ -148,7 +159,7 @@ const NavContainer = styled.div`
 
   .dropdown-box {
     position: relative;
-    height: 300px;
+    height: 200px;
     transition: height 0.2s ease-in-out;
     overflow: hidden;
   }

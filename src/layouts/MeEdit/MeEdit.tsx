@@ -11,6 +11,7 @@ import { Tabs } from '@components/ui';
 import { BoxProps } from '@material-ui/core';
 import { Educator } from './Educator';
 import { logout } from '@common/api';
+import { courseType } from '@common/api/courseClass';
 
 const tabsConfig = [
   { label: '운수종사자', value: 'TYPE_TRANS_EDU' },
@@ -103,87 +104,17 @@ export function MeEdit() {
     <Container>
       {/* <Tabs tabsConfig={tabsConfig} variant={'fullWidth'} gap={5} rendering={false} onChange={onChangeTabValue} value={tabValue} /> */}
       {/* <Tabs tabsConfig={tabsConfig} variant={"fullWidth"} gap={5} rendering={false} onChange={onChange} value={value} /> */}
-      <TabPanel value={tabValue} index={tabsConfig[0].value}>
+      {/* <TabPanel value={tabValue} index={tabsConfig[0].value}>
         <TransWorker type="transport" locationList={locationList} />
       </TabPanel>
       <TabPanel value={tabValue} index={tabsConfig[1].value}>
         <Educator locationList={locationList} />
-      </TabPanel>
-      {/* <Box component="form" onSubmit={handleSubmit} noValidate sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        mt: 1
-      }}
-      >
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="name"
-          label="이름"
-          name="name"
-          autoComplete="name"
-          autoFocus
-          size="small"
-          value={nameInput}
-          onChange={(e) => setNameInput(e.target.value)}
-        />
-        <Box sx={{
-          display: 'flex',
-          alignItems: 'center',
-          mt: '8px'
-        }}
-        >
-          <Typography variant="body2">이메일 수신 여부</Typography>
-          <Switch
-            name="emailYn"
-            sx={{ ml: 'auto' }}
-            checked={emailChecked}
-            onChange={(e, checked) => {
-              setEmailChecked(checked);
-            }}
-          />
-        </Box>
-        <Box sx={{
-          display: 'flex',
-          alignItems: 'center',
-          mt: '8px'
-        }}
-        >
-          <Typography variant="body2">SMS 수신 여부</Typography>
-          <Switch
-            name="smsYn"
-            sx={{ ml: 'auto' }}
-            checked={smsChecked}
-            onChange={(e, checked) => {
-              setSmsChecked(checked);
-            }}
-          />
-        </Box>
-        <Button
-          type="button"
-          fullWidth
-          variant="outlined"
-          color="neutral"
-          sx={{ mt: 3, mb: 2 }}
-          onClick={() => setOpenPromptDialog(true)}
-        >
-          비밀번호 변경
-        </Button>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          수정하기
-        </Button>
-      </Box>
-
-      <PasswordChangeModal
-        open={openPromptDialog}
-        onClose={() => setOpenPromptDialog(false)}
-      /> */}
+      </TabPanel> */}
+      {typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL ? (
+        <Educator locationList={locationList} />
+      ) : (
+        <TransWorker type="transport" locationList={locationList} />
+      )}
     </Container>
   );
 }

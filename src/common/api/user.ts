@@ -106,6 +106,7 @@ export enum regCategoryType {
 export interface User {
   birth: string;
   createdDtime: string;
+  email: string;
   emailYn: string;
   failedYn: string;
   gender: string;

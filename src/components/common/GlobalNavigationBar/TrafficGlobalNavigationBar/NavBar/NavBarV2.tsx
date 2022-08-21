@@ -12,7 +12,7 @@ const showRemoteList = [
   { href: '/traffic/category' },
 ];
 
-const HeaderList = [
+export const ProvintialHeaderList = [
   {
     category: '교육이용안내',
     href: '',
@@ -93,7 +93,7 @@ export function NavBarV2() {
         ></HeaderBackground>
         <NavContainer>
           <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
-            {HeaderList.map(item => (
+            {ProvintialHeaderList.map(item => (
               <HeaderItem
                 key={item.category}
                 onMouseOver={handleHover}
@@ -105,7 +105,7 @@ export function NavBarV2() {
                 <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
                   <Box className="link-wrap">
                     {item.items.map(menuItem => (
-                      <Link href={menuItem.href}>
+                      <Link href={menuItem.href} className="link-items">
                         <MenuItem key={menuItem.title} className="link-item">
                           {menuItem.title}
                         </MenuItem>
@@ -163,7 +163,7 @@ const ContentContainer = styled.div`
     top: 78px;
     box-shadow: 2px 10px 12px 1px rgba(0, 0, 0, 0.1);
     left: 0;
-    min-height: 300px;
+    min-height: 250px;
     border-radius: 0 0 4px 4px;
     transition: min-height 0.2s ease-in-out;
   }
@@ -185,16 +185,23 @@ const NavContainer = styled.div`
     align-items: center;
     height: 100%;
   }
-
-  .dropdown-box {
-    position: relative;
-  }
   .link-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* height: 200px; */
+  }
+  .link-items {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    color: black;
   }
   .link-item {
     display: flex;
     width: 100%;
     justify-content: center;
+    align-items: center;
   }
 
   li {
@@ -207,7 +214,8 @@ const NavContainer = styled.div`
   }
   .dropdown-box {
     position: relative;
-    height: 300px;
+    flex-grow: 1;
+    height: 200px;
     transition: height 0.2s ease-in-out;
     overflow: hidden;
   }

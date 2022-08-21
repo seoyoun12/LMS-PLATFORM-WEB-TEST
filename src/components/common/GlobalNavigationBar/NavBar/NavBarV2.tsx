@@ -44,7 +44,7 @@ export function NavBarV2() {
         ></HeaderBackground>
         <NavContainer>
           <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
-            {HeaderList.map(item => (
+            {TransHeaderList.map(item => (
               <HeaderItem
                 key={item.category}
                 onMouseOver={handleHover}
@@ -56,9 +56,13 @@ export function NavBarV2() {
                 <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
                   <Box className="link-wrap">
                     {item.items.map(menuItem => (
-                      <MenuItem key={menuItem.title} className="link-item">
-                        <Link href={menuItem.href}>{menuItem.title}</Link>
-                      </MenuItem>
+                      <Link
+                        className="link-items"
+                        href={menuItem.href}
+                        key={menuItem.title}
+                      >
+                        <MenuItem className="link-item">{menuItem.title}</MenuItem>
+                      </Link>
                     ))}
                   </Box>
                 </Box>
@@ -111,7 +115,7 @@ const ContentContainer = styled.div`
     top: 78px;
     box-shadow: 2px 10px 12px 1px rgba(0, 0, 0, 0.1);
     left: 0;
-    min-height: 300px;
+    min-height: 250px;
     border-radius: 0 0 4px 4px;
     transition: min-height 0.2s ease-in-out;
   }
@@ -133,12 +137,24 @@ const NavContainer = styled.div`
     align-items: center;
     height: 100%;
   }
+
   .link-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* height: 200px; */
+  }
+  .link-items {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    color: black;
   }
   .link-item {
     display: flex;
     width: 100%;
     justify-content: center;
+    align-items: center;
   }
 
   li {
@@ -152,7 +168,7 @@ const NavContainer = styled.div`
 
   .dropdown-box {
     position: relative;
-    height: 300px;
+    height: 200px;
     transition: height 0.2s ease-in-out;
     overflow: hidden;
   }
@@ -194,7 +210,7 @@ const RemoteWrap = styled(Box)`
   }
 `;
 
-const HeaderList = [
+export const TransHeaderList = [
   {
     category: '온라인교육',
     href: '/stebMove/steb1',

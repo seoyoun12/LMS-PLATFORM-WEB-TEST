@@ -42,21 +42,21 @@ export function Me() {
           <UserProfile>M</UserProfile>
           <div>
             <Typography>{user.name}</Typography>
-            <Typography>{user.username}</Typography>
+            <Typography>{user.email ? user.email : <Box color={grey[400]}>이메일이 없습니다.</Box>}</Typography>
           </div>
         </Link>
       </UserInfoSection>
       <ContentBody>
         <SideBar>
+          <SideBarTitle variant="h6">내 정보</SideBarTitle>
           <SideBarContent>
-            <SideBarTitle variant="h6">내 정보</SideBarTitle>
             {myInfoList.map(item => (
-              <Link color={grey[900]} href={`/me/${item.value}`}>
-                <MenuItem sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <SideBarInfoLink color={grey[900]} href={`/me/${item.value}`}>
+                <SideBarInfoItem>
                   {item.label}
                   <ArrowForwardIcon />
-                </MenuItem>
-              </Link>
+                </SideBarInfoItem>
+              </SideBarInfoLink>
             ))}
             {/* {myInfoList.map(({ href, name }) => (
               <Link
@@ -86,7 +86,12 @@ export function Me() {
                         return window.alert('수업이 존재하지 않습니다. 관리자에게 문의해주세요.');
                       }}
                     >
-                      <ContentCardV2 title={res.courseTitle} content1={'버그수정정'} content2={`현재 진도율 ${res.progress}%`} />
+                      <ContentCardV2
+                        title={res.courseTitle}
+                        content1={'지금 바로 수강하기!'}
+                        content2={`${res.leftDays}일 남음`}
+                        // content2={`현재 진도율 ${res.progress}%`}
+                      />
                     </Box>
                   </Grid>
                 );
@@ -126,14 +131,36 @@ const SideBar = styled.aside`
   }
 `;
 
+const SideBarTitle = styled(Typography)`
+  margin-bottom: 16px;
+  font-weight: 700;
+  /* padding-bottom: 0.5rem; */
+  font-size: 24px;
+  /* border-bottom: 1px solid #e5e5e5; */
+`;
+
 const SideBarContent = styled.section`
   display: flex;
   flex-direction: column;
   margin-bottom: 48px;
 `;
 
-const SideBarTitle = styled(Typography)`
-  margin-bottom: 16px;
+const SideBarInfoLink = styled(Link)`
+  :first-child {
+    border-top: 1px solid #e5e5e5;
+  }
+`;
+
+const SideBarInfoItem = styled(MenuItem)`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 18px;
+  font-weight: 500;
 `;
 
 const ArrowForwardIcon = styled(ArrowForwardIosIcon)`

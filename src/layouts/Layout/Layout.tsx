@@ -10,15 +10,19 @@ import { useRouter } from 'next/router';
 import { allowUserPahtList, notNeededLoginPathList } from '@utils/loginPathList';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { getMyUser, MyUser, UserRole } from '@common/api/user';
-import { SiteMap } from '@components/common/GlobalNavigationBar';
+import { MobileNav, SiteMap } from '@components/common/GlobalNavigationBar';
 import { AppBar } from '@mui/material';
 import { PopupBox } from '@components/common/PopupBox/PopupBox';
 import { courseType } from '@common/api/courseClass';
 import { regCategory } from '@common/recoil/user/atom';
+import { CourseType } from '@common/api/adm/courseClass';
+import useResponsive from '@hooks/useResponsive';
+import MenuIcon from '@mui/icons-material/Menu';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const snackbar = useSnackbar();
+  const isDesktop = useResponsive();
   const [userPageType, setUserPageType] = useRecoilState(pageType);
   const [user, setUser] = useState<MyUser>(null);
   const [userInfoData, setUserInfo] = useRecoilState(userInfo);
@@ -53,16 +57,22 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         if (currentPageNotNeedLogin && !localStorage.getItem('ACCESS_TOKEN')) return;
 
         if (!currentPageNotNeedLogin && !localStorage.getItem('ACCESS_TOKEN')) {
+          console.log(currentPageNotNeedLogin, notNeededLoginPathList, '머양');
           window.alert('로그인이 필요한 서비스입니다.');
           return router.push(
-            userPageType === pageRegType.TYPE_TRANS_EDU
-              ? '/category'
-              : '/traffic/category'
+            localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL
+              ? '/traffic/category'
+              : '/category'
           );
         }
 
         const { data }: { data: MyUser } = await getMyUser();
         console.log('user Data', data);
+        setUserInfo({
+          name: data.name,
+          role: [...data.roles],
+          regCategory: data.regCategory,
+        });
         setUserInfo({
           name: data.name,
           role: [...data.roles],
@@ -147,15 +157,19 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           boxShadow: 'rgb(0 0 0 / 12%) 0 1px 0 0',
         }}
       >
-        <SiteMap />
-        {userPageType === pageRegType.TYPE_TRANS_EDU ? (
-          <GlobalNavigationBar />
+        {isDesktop && <SiteMap />}
+        {typeof window !== 'undefined' && isDesktop ? (
+          localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL ? (
+            <TrafficGlobalNavigationBar />
+          ) : (
+            <GlobalNavigationBar />
+          )
         ) : (
-          <TrafficGlobalNavigationBar />
+          <MobileNav />
         )}
       </AppBar>
       {router.route.includes('/category') && <PopupBox />}
-      {/* category에 넣으면 css 붕괴. 이유 알수없음.(popupBox 넣으면 여러 상관없는 컴포넌트의 css들이 무작위로 지정됨.) */}
+      {/* category에 넣으면 css 붕괴. 이유 알수없음.(popupBox 넣으면 여러 상관없는 컴포넌트의 css들이 무작위로 지정됨. ex)카드 리스트에 Spinner의 스타일이 지정 ) */}
 
       <main className="fit">{children}</main>
       <Footer />

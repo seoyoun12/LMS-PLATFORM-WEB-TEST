@@ -6,7 +6,6 @@ import { useDialog } from '@hooks/useDialog';
 import { useInput } from '@hooks/useInput';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
-  Autocomplete,
   Avatar,
   Box,
   Button,
@@ -134,7 +133,7 @@ export function TransWorker({ type, locationList }: Props) {
   useEffect(() => {
     (async function () {
       const { data } = await getTransport();
-      console.log(data.phone.slice(0, 3), 'holymmoly');
+      console.log(data, 'holymmoly');
       setVehicleNumber(data.carNumber);
       setCompany(data.company);
       setPhone(data.phone.slice(0, 3));
@@ -146,6 +145,7 @@ export function TransWorker({ type, locationList }: Props) {
       setVehicleRegi(data.userRegistrationType);
     })();
   }, []);
+  console.log(occupation1, userBusinessTypeOne, occupation2, userBusinessTypeTwo);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -200,10 +200,12 @@ export function TransWorker({ type, locationList }: Props) {
         </Box>
         <TextField required fullWidth id="name" label="이름" name="name" value={user?.name ? user.name : 'Error'} disabled />
         <FormControl fullWidth>
-          <InputLabel id="occ1-select-label">업종</InputLabel>
+          <Typography>업종</Typography>
+          {/* <InputLabel id="occ1-select-label">업종</InputLabel> */}
           <Select
             labelId="occ1-select-label"
             id="occ1-select"
+            value={occupation1 || ''}
             onChange={e => {
               onChangeOcc1(e);
               setShowCompany(false);
@@ -218,8 +220,8 @@ export function TransWorker({ type, locationList }: Props) {
           </Select>
         </FormControl>
         <FormControl fullWidth>
-          <InputLabel id="occ2-select-label">업종구분</InputLabel>
-          <Select labelId="occ2-select-label" id="occ2-select" onChange={e => onChangeOcc2(e)} required>
+          <Typography>업종구분</Typography>
+          <Select labelId="occ2-select-label" id="occ2-select" value={occupation2 || ''} onChange={e => onChangeOcc2(e)} required>
             {
               // occupation1 === "PASSENGER"
               // ?
@@ -255,20 +257,21 @@ export function TransWorker({ type, locationList }: Props) {
         </FormControl>
 
         {/* {showCompany && <TextField required fullWidth id="company" label="회사명" name="company" value={company} onChange={onChangeComp} />} */}
-        <TextField required fullWidth id="company" label="회사명" name="company" value={company} onChange={onChangeComp} />
+        <Typography>회사명</Typography>
+        <TextField required fullWidth id="company" name="company" value={company} onChange={onChangeComp} />
+        <Typography>차량번호</Typography>
         <TextField
           required
           fullWidth
           id="vehicle-number"
-          label="차량번호"
           placeholder="예) 01가1234 또는 서울 01가1234"
           name="car-number"
           value={vehicleNumber}
           onChange={onChangeVehicleNum}
         />
         <FormControl fullWidth>
-          <InputLabel id="regi-select-label">차량등록지</InputLabel>
-          <Select labelId="regi-select-label" id="regi-select" onChange={e => onChangeVehicleRegi(e)} required>
+          <Typography>차량등록지</Typography>
+          <Select labelId="regi-select-label" id="regi-select" value={vehicleRegi || ''} onChange={e => onChangeVehicleRegi(e)} required>
             {locationList.map(locate => (
               <MenuItem key={locate.en} value={locate.en}>
                 {locate.ko}
@@ -276,31 +279,10 @@ export function TransWorker({ type, locationList }: Props) {
             ))}
           </Select>
         </FormControl>
-        {/* <Box display={'flex'} alignItems="center" gap="1rem">
-           <FormControl fullWidth>
-            <Select onChange={e => setPhone(String(e.target.value))}>
-              {phoneNumbers.map(phone => (
-                <MenuItem key={phone} value={phone}>
-                  {phone}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>{" "}
-          - *
-          <TextField
-            required
-            fullWidth
-            id="name"
-            label="휴대전화"
-            placeholder="'-'를 제외한 숫자만 입력해주세요."
-            name="name"
-            value={phone}
-            onChange={onChagePhone}
-          />
-        </Box> */}
+        <Typography>휴대전화</Typography>
         <Box display={'flex'} alignItems="center" gap="1rem">
           <FormControl sx={{ minWidth: '130px' }}>
-            <Select labelId="phone-type-label" id="phone-type" onChange={onChangePhone1} value={phone}>
+            <Select labelId="phone-type-label" id="phone-type" onChange={onChangePhone1} value={phone || ''}>
               {phoneList.map(item => (
                 <MenuItem value={item}>{item}</MenuItem>
               ))}

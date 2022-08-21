@@ -31,7 +31,7 @@ export const api = Axios.create({
 });
 triggerInterceptors();
 
-export const GET = async <T>(
+export const GET = async <T = any>(
   url: string,
   { params = {}, headers = {} } = {}
 ): Promise<T> => {
@@ -43,7 +43,7 @@ export const GET = async <T>(
   }
 };
 
-export const POST = async <T>(
+export const POST = async <T = any>(
   url: string,
   data: object = {},
   config: AxiosRequestConfig = {}
@@ -56,7 +56,7 @@ export const POST = async <T>(
   }
 };
 
-export const PUT = async <T>(
+export const PUT = async <T = any>(
   url: string,
   data: object = {},
   { params = {}, headers = {} } = {}

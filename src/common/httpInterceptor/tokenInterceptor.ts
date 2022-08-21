@@ -1,8 +1,8 @@
-import { REFRESH_TOKEN, ACCESS_TOKEN } from '@common/constant';
-import { api, POST } from '@common/httpClient';
-import { localStore } from '@common/storage';
-import { AxiosError } from 'axios';
-import { STATUS_CODE } from 'types/fetch';
+import { REFRESH_TOKEN, ACCESS_TOKEN } from "@common/constant";
+import { api, POST } from "@common/httpClient";
+import { localStore } from "@common/storage";
+import { AxiosError } from "axios";
+import { STATUS_CODE } from "types/fetch";
 
 interface ErrorResponse {
   success: boolean;
@@ -40,20 +40,17 @@ export const tokenInterceptor = () => {
     }
   );
 
-
   const getNewToken = async (accessToken: string, refreshToken: string) => {
     return await POST(`/auth/token/refresh`, {
-        accessToken: `Bearer ${accessToken}`,
-        refreshToken: refreshToken
-      },
-    )
-      .catch(err => {
-        if (err.status === STATUS_CODE.REFRESH_TOKEN_EXPIRED) {
-          localStore.removeItem(ACCESS_TOKEN);
-          localStore.removeItem(REFRESH_TOKEN);
-        }
+      accessToken: `Bearer ${accessToken}`,
+      refreshToken: refreshToken,
+    }).catch((err) => {
+      if (err.status === STATUS_CODE.REFRESH_TOKEN_EXPIRED) {
+        localStore.removeItem(ACCESS_TOKEN);
+        localStore.removeItem(REFRESH_TOKEN);
+      }
 
-        return Promise.reject(err);
-      });
+      return Promise.reject(err);
+    });
   };
 };

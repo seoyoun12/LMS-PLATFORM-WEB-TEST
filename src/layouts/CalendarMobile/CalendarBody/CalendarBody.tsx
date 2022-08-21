@@ -148,15 +148,13 @@ export function CalendarBody({
     setModalInfo({
       seq: item.seq,
       step: item.step,
-      lessonTime: item.lessonTime,
-      courseCategoryType: item.courseCategoryType as {
-        type: courseCategoryType;
-        ko: string;
-      },
-      courseSubCategoryType: item.courseSubCategoryType as {
-        type: courseSubCategoryType;
-        ko: string;
-      },
+      lessonTime: item.course.lessonTime,
+      courseCategoryType: courseCategory.filter(
+        categoryItem => categoryItem.type === item.course.courseCategoryType
+      )[0],
+      courseSubCategoryType: courseSubCategory.filter(
+        sub => sub.type === item.course.courseSubCategoryType
+      )[0],
       enrolledPeopleCnt: item.enrolledPeopleCnt,
       limitPeople: item.limitPeople,
       studyStartDate: item.studyStartDate,

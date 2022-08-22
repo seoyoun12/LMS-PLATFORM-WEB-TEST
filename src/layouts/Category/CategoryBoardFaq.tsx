@@ -7,43 +7,50 @@ import { NotFound } from '@components/ui/NotFound';
 export function CategoryBoardFaq() {
   const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_FAQ');
 
-  if (!loadedItem || loadedItem.length === 0)
-    return <NotFound content="자주묻는질문이 존재하지 않습니다!" />;
+  console.log(loadedItem);
   return (
     <Container>
-      <Table>
-        <TableHead>
-          <TableRow
-            sx={{
-              background: '#fbfbfb',
-              borderTop: '3px solid #333333',
-              borderBottom: '1px solid #cdcdcd',
-            }}
-          >
-            <TableHeaderCell align="center" width="10%">
-              번호
-            </TableHeaderCell>
-            <TableHeaderCell align="center" width="70%">
-              제목
-            </TableHeaderCell>
-            <TableHeaderCell align="center" width="20%">
-              등록일
-            </TableHeaderCell>
-          </TableRow>
-        </TableHead>
-      </Table>
-      {loadedItem &&
-        loadedItem.map(content => {
-          const accordionInfo = [
-            {
-              seq: content.seq,
-              date: content.createdDtimeYmd.slice(0, -1),
-              name: content.subject,
-              children: [{ name: content.content }],
-            },
-          ];
-          return <BoardAccordion key={content.seq} boardAccordionList={accordionInfo} />;
-        })}
+      {loadedItem && loadedItem.length > 0 ? (
+        <>
+          <Table>
+            <TableHead>
+              <TableRow
+                sx={{
+                  background: '#fbfbfb',
+                  borderTop: '3px solid #333333',
+                  borderBottom: '1px solid #cdcdcd',
+                }}
+              >
+                <TableHeaderCell align="center" width="10%">
+                  번호
+                </TableHeaderCell>
+                <TableHeaderCell align="center" width="70%">
+                  제목
+                </TableHeaderCell>
+                <TableHeaderCell align="center" width="20%">
+                  등록일
+                </TableHeaderCell>
+              </TableRow>
+            </TableHead>
+          </Table>
+          {loadedItem &&
+            loadedItem.map(content => {
+              const accordionInfo = [
+                {
+                  seq: content.seq,
+                  date: content.createdDtimeYmd.slice(0, -1),
+                  name: content.subject,
+                  children: [{ name: content.content }],
+                },
+              ];
+              return (
+                <BoardAccordion key={content.seq} boardAccordionList={accordionInfo} />
+              );
+            })}
+        </>
+      ) : (
+        <NotFound content="자주묻는질문이 존재하지 않습니다!" />
+      )}
       <Box ref={target} height="100px">
         {loading ? <div /> : ''}
       </Box>

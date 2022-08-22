@@ -249,8 +249,7 @@ const ViewContentBox = styled(Box)`
   width: 72px;
   height: 30px;
   box-sizing: border-box;
-  color: white;
-  background-color: #171717;
+  border: 1px solid #171717;
   border-radius: 4px;
   cursor: pointer;
 `;

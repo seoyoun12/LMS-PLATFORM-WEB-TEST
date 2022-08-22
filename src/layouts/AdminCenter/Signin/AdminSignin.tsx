@@ -22,7 +22,7 @@ export function AdminSignin() {
       const { data } = await getMyUser();
       if (data && data.roles.some(item => item === UserRole.ROLE_ADMIN)) {
         snackbar({ variant: 'success', message: '관리자 로그인이 완료되었습니다' });
-        router.push('/admin-center');
+        router.push('/admin-center/user');
       } else {
         snackbar({ variant: 'error', message: '일치하지 않는 정보입니다.' });
         await logout();
@@ -40,7 +40,7 @@ export function AdminSignin() {
         const { data } = await getMyUser();
         if (data && data.roles.some(item => item === UserRole.ROLE_ADMIN)) {
           snackbar({ variant: 'success', message: '관리자 로그인이 완료되었습니다' });
-          router.push('/admin-center');
+          router.push('/admin-center/user');
         }
       } catch (e: any) {
         snackbar({ variant: 'error', message: e.data.message });

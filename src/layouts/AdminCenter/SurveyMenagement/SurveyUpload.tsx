@@ -3,7 +3,7 @@ import {
   SurveyMultipleChoiceRequestDto,
   SurveyQuestionRequestDto,
   SurveyRequestDto,
-} from '@common/api/types/Api';
+} from '@common/api/Api';
 import { SurveyQuestionItem } from '@components/admin-center';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';

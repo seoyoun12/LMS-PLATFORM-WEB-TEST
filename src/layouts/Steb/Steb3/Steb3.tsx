@@ -22,6 +22,7 @@ import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded
 import { useRouter } from 'next/router';
 import {
   businessType,
+  courseCategoryType,
   getSingleCourseClass,
   useSingleCourseClass,
 } from '@common/api/courseClass';
@@ -88,7 +89,7 @@ export function Steb3() {
   // const [enrollList, setEnrollList] = useRecoilState(courseClassEnrollList);
   const [enrollList, setEnrollList] = useState([]);
   const [info, setInfo] = useState<{
-    courseCategoryType: string;
+    courseCategoryType: courseCategoryType;
     courseBusinessType: businessType;
     step: number;
     studyStartDate: string;
@@ -106,8 +107,8 @@ export function Steb3() {
         studyEndDate,
       } = data;
       setInfo({
-        courseCategoryType,
-        courseBusinessType,
+        courseCategoryType: courseCategoryType as courseCategoryType,
+        courseBusinessType: courseBusinessType as businessType,
         step,
         studyStartDate,
         studyEndDate,

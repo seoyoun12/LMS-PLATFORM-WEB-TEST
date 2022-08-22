@@ -1,5 +1,5 @@
 import { regCategory } from '@common/api/auth/signUp';
-import { SignUpRequestDto } from '@common/api/types/Api';
+import { SignUpRequestDto } from '@common/api/Api';
 import { YN } from '@common/constant';
 import { POST } from '@common/httpClient';
 

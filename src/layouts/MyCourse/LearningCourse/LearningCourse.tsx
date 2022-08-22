@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { progressStatus, useMyUser } from '@common/api/user';
 import { Spinner } from '@components/ui';
 import { ContentCardV2 } from '@components/ui/ContentCard';
@@ -5,6 +6,7 @@ import styled from '@emotion/styled';
 import { Box, Grid } from '@mui/material';
 
 export function LearningCourse() {
+  const router = useRouter();
   const { user, error } = useMyUser();
   console.log(user);
   if (!user) return <Spinner />;
@@ -17,11 +19,7 @@ export function LearningCourse() {
             <Grid item xs={1} sm={1} md={1} lg={1} key={item.courseClassSeq}>
               <Box
                 // href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}
-                onClick={() => {
-                  return window.alert('수업이 존재하지 않습니다. 관리자에게 문의해주세요.');
-
-                  // router.push(`/course/${res.seq}/lesson/${res.lessons[0].seq}`);
-                }}
+                onClick={() => router.push(`/course/${item.courseUserSeq}`)}
               >
                 <ContentCardV2
                   title={item.courseTitle}

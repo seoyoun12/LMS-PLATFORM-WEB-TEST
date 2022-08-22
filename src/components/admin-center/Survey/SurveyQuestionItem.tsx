@@ -1,4 +1,4 @@
-import { SurveyMultipleChoiceRequestDto } from '@common/api/types/Api';
+import { SurveyMultipleChoiceRequestDto } from '@common/api/Api';
 import styled from '@emotion/styled';
 import { SurveyQuestion } from '@layouts/AdminCenter/SurveyMenagement/SurveyUpload';
 import { Box, Button, Table, TableBody, TableCell, TableRow } from '@mui/material';

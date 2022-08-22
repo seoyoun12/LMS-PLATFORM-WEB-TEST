@@ -1,8 +1,6 @@
 import { businessType, courseSubCategoryType } from '@common/api/courseClass';
 import { getTransport, modifTransWorker, useMyUser } from '@common/api/user';
 import { YN } from '@common/constant';
-import { FileUploaderTrans } from '@components/ui/FileUploader';
-import { IOSSwitch } from '@components/ui/Switch';
 import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
 import { useInput } from '@hooks/useInput';
@@ -25,11 +23,9 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  SwitchProps,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
 
 interface Props {
   type: 'transport' | 'lowfloorbus' | 'educator';
@@ -121,13 +117,6 @@ export const userBusinessTypeTwo = [
   },
 ];
 
-interface FormType {
-  files: File[];
-}
-const defaultValues = {
-  files: [],
-};
-
 export function TransWorker({ type, locationList }: Props) {
   const { user, error } = useMyUser();
   const [occupation1, setOccupation1, onChangeOcc1] = useInput();
@@ -141,8 +130,6 @@ export function TransWorker({ type, locationList }: Props) {
   const [phone2, setPhone2, onChangePhone2] = useInput();
   const [phone3, setPhone3, onChangePhone3] = useInput();
   const [smsChecked, setSmsChecked] = useState(false);
-  const [fileName, setFileName] = useState<string | null>(null);
-  const { register, reset, resetField, setValue, watch } = useForm<FormType>({ defaultValues });
   const dialog = useDialog();
   const snackbar = useSnackbar();
   const router = useRouter();
@@ -199,14 +186,6 @@ export function TransWorker({ type, locationList }: Props) {
     }
   };
 
-  const handleFileChange = async (e: ChangeEvent) => {
-    e.preventDefault();
-
-    const files = (e.target as HTMLInputElement).files;
-    if (!files?.length) return null;
-    setFileName(files[0].name);
-  };
-
   return (
     <TransAndLowFloorContainer
       sx={{
@@ -214,26 +193,20 @@ export function TransWorker({ type, locationList }: Props) {
         padding: '72px 30px 48px',
         minWidth: '375px',
       }}
+      maxWidth="sm"
     >
       <Box display="flex" flexDirection={'column'} gap="1rem" component={'form'} onSubmit={handleSubmit}>
         <Box sx={{ margin: 'auto' }}>
-          <FileUploaderTrans register={register} regName="files" onFileChange={handleFileChange}>
-            <UserProfile />
-          </FileUploaderTrans>
+          <UserProfile />
         </Box>
-        <TableCustomContainer sx={{ marginTop: '32px' }}>
-          <TableCustomBody sx={{ display: 'table', width: '100%' }}>
+        <TableContainer>
+          <TableBody sx={{ display: 'table', width: '100%' }}>
             <TableCustomRow>
               <TableLeftCell>이름</TableLeftCell>
               <TableRightCell>
                 <TextField required fullWidth id="name" name="name" value={user?.name ? user.name : 'Error'} disabled />
               </TableRightCell>
             </TableCustomRow>
-          </TableCustomBody>
-        </TableCustomContainer>
-
-        <TableCustomContainer sx={{ marginTop: '64px' }}>
-          <TableCustomBody sx={{ display: 'table', width: '100%' }}>
             <TableCustomRow>
               <TableLeftCell>업종</TableLeftCell>
               <TableRightCell>
@@ -316,7 +289,7 @@ export function TransWorker({ type, locationList }: Props) {
               <TableLeftCell>휴대전화</TableLeftCell>
               <TableRightCell>
                 <Box display={'flex'} alignItems="center" gap="1rem">
-                  <FormControl sx={{ minWidth: '130px' }} fullWidth>
+                  <FormControl sx={{ minWidth: '130px' }}>
                     <Select labelId="phone-type-label" id="phone-type" onChange={onChangePhone1} value={phone || ''}>
                       {phoneList.map(item => (
                         <MenuItem value={item}>{item}</MenuItem>
@@ -331,7 +304,6 @@ export function TransWorker({ type, locationList }: Props) {
                       onChangePhone2(e);
                     }}
                     value={phone2}
-                    fullWidth
                   />
                   -
                   <TextField
@@ -341,25 +313,136 @@ export function TransWorker({ type, locationList }: Props) {
                       onChangePhone3(e);
                     }}
                     value={phone3}
-                    fullWidth
                   />
                 </Box>
               </TableRightCell>
             </TableCustomRow>
-          </TableCustomBody>
-        </TableCustomContainer>
+            <TableCustomRow>
+              <TableLeftCell></TableLeftCell>
+              <TableRightCell></TableRightCell>
+            </TableCustomRow>
+          </TableBody>
+        </TableContainer>
 
+        <FormControl fullWidth>
+          <Typography>업종</Typography>
+          {/* <InputLabel id="occ1-select-label">업종</InputLabel> */}
+          <Select
+            labelId="occ1-select-label"
+            id="occ1-select"
+            value={occupation1 || ''}
+            onChange={e => {
+              onChangeOcc1(e);
+              setShowCompany(false);
+            }}
+            required
+          >
+            {userBusinessTypeOne.map(occ => (
+              <MenuItem key={occ.enType} value={occ.enType}>
+                {occ.type}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <Typography>업종구분</Typography>
+          <Select labelId="occ2-select-label" id="occ2-select" value={occupation2 || ''} onChange={e => onChangeOcc2(e)} required>
+            {
+              // occupation1 === "PASSENGER"
+              // ?
+              userBusinessTypeTwo
+                .filter(item => item.category === occupation1)
+                .map((item, index) => (
+                  <MenuItem
+                    key={item.enType}
+                    value={item.enType}
+                    // onClick={() => (item.isMoreInfo ? setShowCompany(true) : setShowCompany(false))}
+                  >
+                    {item.type}
+                  </MenuItem>
+                ))
+              //     :
+              // occupationOptions2.filter((item)=>item.category === occ1).map((item)=>
+              // <MenuItem value={item.enType} onClick={()=>item.isMoreInfo ? setShowCompany(true) : setShowCompany(false)} >{item.type}</MenuItem>
+              // )
+            }
+            {/* {occupationOptions2.map(
+                        (occ)=> <MenuItem 
+                                    value={occ.type} 
+                                    onClick={()=>{
+                                        occ ? setShowCompany(true) : setShowCompany(false)
+
+                                    }} 
+                                >
+                                {occ.type}
+                                </MenuItem> 
+                        )
+                    } */}
+          </Select>
+        </FormControl>
+
+        {/* {showCompany && <TextField required fullWidth id="company" label="회사명" name="company" value={company} onChange={onChangeComp} />} */}
+        <Typography>회사명</Typography>
+        <TextField required fullWidth id="company" name="company" value={company} onChange={onChangeComp} />
+        <Typography>차량번호</Typography>
+        <TextField
+          required
+          fullWidth
+          id="vehicle-number"
+          placeholder="예) 01가1234 또는 서울 01가1234"
+          name="car-number"
+          value={vehicleNumber}
+          onChange={onChangeVehicleNum}
+        />
+        <FormControl fullWidth>
+          <Typography>차량등록지</Typography>
+          <Select labelId="regi-select-label" id="regi-select" value={vehicleRegi || ''} onChange={e => onChangeVehicleRegi(e)} required>
+            {locationList.map(locate => (
+              <MenuItem key={locate.en} value={locate.en}>
+                {locate.ko}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Typography>휴대전화</Typography>
+        <Box display={'flex'} alignItems="center" gap="1rem">
+          <FormControl sx={{ minWidth: '130px' }}>
+            <Select labelId="phone-type-label" id="phone-type" onChange={onChangePhone1} value={phone || ''}>
+              {phoneList.map(item => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          -
+          <TextField
+            onChange={e => {
+              if (e.target.value.length > 4) return;
+              if (!phoneRegex.test(e.target.value)) return;
+              onChangePhone2(e);
+            }}
+            value={phone2}
+          />
+          -
+          <TextField
+            onChange={e => {
+              if (e.target.value.length > 4) return;
+              if (!phoneRegex.test(e.target.value)) return;
+              onChangePhone3(e);
+            }}
+            value={phone3}
+          />
+        </Box>
         <Box display={'flex'} alignItems="center">
-          <Typography variant="body2">SMS 수신 여부</Typography>
-          <IOSSwitch
+          <Checkbox
             name="smsYn"
             checked={smsChecked}
             onChange={(e, checked) => {
               setSmsChecked(checked);
             }}
           />
+          <Typography variant="body2">SMS 수신 여부</Typography>
         </Box>
-        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, maxWidth: 650, margin: 'auto' }}>
+        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
           수정하기
         </Button>
       </Box>
@@ -367,7 +450,7 @@ export function TransWorker({ type, locationList }: Props) {
   );
 }
 
-const TransAndLowFloorContainer = styled(Box)`
+const TransAndLowFloorContainer = styled(Container)`
   .front-box {
     background: #fff;
   }
@@ -388,17 +471,6 @@ const UserProfile = styled(Avatar)`
   margin-right: 36px;
 `;
 
-const TableCustomContainer = styled(TableContainer)`
-  border-top: 3px solid #000;
-`;
-const TableCustomBody = styled(TableBody)``;
-
 const TableCustomRow = styled(TableRow)``;
-const TableLeftCell = styled(TableCell)`
-  font-size: 20px;
-  font-weight: 700;
-  width: 20%;
-`;
-const TableRightCell = styled(TableCell)`
-  width: 80%;
-`;
+const TableLeftCell = styled(TableCell)``;
+const TableRightCell = styled(TableCell)``;

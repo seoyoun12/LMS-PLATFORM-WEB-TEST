@@ -13,7 +13,7 @@ import {
 } from "@components/MeCertificate/style";
 import { useGetUserMyinfoCertificates } from "@common/api/user/myinfo/certificates";
 import { POST } from "@common/httpClient";
-import { UserMyinfoCertificatesResponseDto } from "@common/api/types/Api";
+import { UserMyinfoCertificatesResponseDto } from '@common/api/Api';
 import { format } from "date-fns";
 import BackgroundImage from "public/assets/images/certificates_background.svg";
 

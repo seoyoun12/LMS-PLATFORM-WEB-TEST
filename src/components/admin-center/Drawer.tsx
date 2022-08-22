@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { Button, Drawer as MuiDrawer, MenuItem } from '@mui/material';
+import { Button, Divider, Drawer as MuiDrawer, MenuItem, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -24,6 +24,7 @@ import { grey } from '@mui/material/colors';
 import { useRouter } from 'next/router';
 import { Accordion } from '@components/ui';
 import { logout } from '@common/api';
+import Logo from 'public/assets/svgs/logo.svg';
 
 const drawerWidth = 240;
 
@@ -39,6 +40,22 @@ export function Drawer({ children }: { children: ReactNode }) {
   };
 
   const accordionList = [
+    {
+      name: '회원관리',
+      children: [
+        {
+          name: '회원 목록',
+          href: '/admin-center/user',
+          isActive: router.pathname === '/admin-center/user',
+        },
+        {
+          name: '회원 생성',
+          href: '/admin-center/user/create-user',
+          isActive: router.pathname === '/admin-center/user/create-user',
+        },
+      ],
+      icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
+    },
     {
       name: '게시판관리',
       children: [
@@ -176,22 +193,6 @@ export function Drawer({ children }: { children: ReactNode }) {
       icon: <SourceOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
     },
     {
-      name: '회원관리',
-      children: [
-        {
-          name: '회원 목록',
-          href: '/admin-center/user',
-          isActive: router.pathname === '/admin-center/user',
-        },
-        {
-          name: '회원 생성',
-          href: '/admin-center/user/create-user',
-          isActive: router.pathname === '/admin-center/user/create-user',
-        },
-      ],
-      icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
-    },
-    {
       name: '통계',
       children: [
         {
@@ -248,7 +249,12 @@ export function Drawer({ children }: { children: ReactNode }) {
           }}
         >
           <List>
-            <Box display="flex" gap="1rem" flexDirection="column" padding="1rem">
+            <Box display="flex" gap="8px" flexDirection="column" padding="1rem">
+              <Logo />
+              <Typography fontWeight="bold" fontSize="18px" textAlign="center">
+                학습관리센터
+              </Typography>
+              <Divider sx={{ marginTop: '12px', marginBottom: '12px' }} />
               <Button variant="contained" onClick={onClickToMain}>
                 메인사이트로
               </Button>
@@ -256,18 +262,11 @@ export function Drawer({ children }: { children: ReactNode }) {
                 로그아웃
               </Button>
             </Box>
-            <Link
-              href="/admin-center/dashboard"
-              color={
-                router.pathname === '/admin-center/dashboard' ? grey[900] : grey[800]
-              }
-            >
+            {/* <Link href="/admin-center/dashboard" color={router.pathname === '/admin-center/dashboard' ? grey[900] : grey[800]}>
               <ListItem
                 button
                 sx={{
-                  backgroundColor: `${
-                    router.pathname === '/admin-center/dashboard' ? grey[50] : 'inherit'
-                  }`,
+                  backgroundColor: `${router.pathname === '/admin-center/dashboard' ? grey[50] : 'inherit'}`,
                 }}
               >
                 <ListItemIcon>
@@ -275,7 +274,7 @@ export function Drawer({ children }: { children: ReactNode }) {
                 </ListItemIcon>
                 <ListItemText primary="대시보드" />
               </ListItem>
-            </Link>
+            </Link> */}
             <Accordion accordionList={accordionList} />
           </List>
         </Box>

@@ -38,15 +38,14 @@ export function Course() {
     <Container className={cx(styles.globalContainer, containerStyle)}>
       <MainSection>
         <ThumbnailImg>
-          {course.s3Files ? (
-            <Image
-              className="thumbnailImg"
-              src={course.s3Files[0].path} // course.courseFile
-              layout="responsive"
-              width="100%"
-              height="56.25"
-            />
-          ) : null}
+          {course.s3Files && course.s3Files[0] && <Image
+            className="thumbnailImg"
+            src={course.s3Files[0].path} // course.courseFile
+            layout="responsive"
+            width="100%"
+            height="56.25"
+            alt="강좌 썸네일"
+          />}
         </ThumbnailImg>
 
         {/* <TuiViewer initialValue={course.courseName} /> content1 */}

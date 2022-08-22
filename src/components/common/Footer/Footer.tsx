@@ -156,10 +156,6 @@ const UplineFootConatainer = styled(Grid)`
   margin-bottom: 30px;
   margin-top: 15px;
 
-  .uplineFoot:first-of-type {
-    color: #1c80dc;
-  }
-
   .uplineFoot {
     margin-right: 20px;
     font-weight: bold;

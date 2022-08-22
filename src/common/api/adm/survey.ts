@@ -2,7 +2,7 @@ import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { FetchPaginationResponse } from 'types/fetch';
 import { ProductStatus } from '../course';
-import { SurveyRequestDto } from '../types/Api';
+import { SurveyRequestDto } from '../Api';
 
 export interface SurveyRes {
   seq: number;

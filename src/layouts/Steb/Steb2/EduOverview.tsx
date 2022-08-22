@@ -62,8 +62,8 @@ export function EduOverview({
     try {
       const { data } = await getSingleCourseClass(courseClassSeq);
 
-      setCourseCategoryType(data.course.courseCategoryType);
-      setCourseBusinessType(data.course.courseBusinessType); //임시타입
+      setCourseCategoryType(data.course.courseCategoryType as courseCategoryType);
+      setCourseBusinessType(data.course.courseBusinessType as businessType); //임시타입
       setStepSeq(data.seq);
       setValues({
         step: data.step,

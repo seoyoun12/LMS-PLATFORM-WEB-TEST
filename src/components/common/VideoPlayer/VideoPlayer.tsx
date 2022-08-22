@@ -1,89 +1,130 @@
-import { useCallback, useEffect, useState } from 'react';
-import Script from 'next/script';
 import * as React from 'react';
-import { Config, Ncplayer } from 'types/ncplayer';
+import Script from 'next/script';
+import { Config, EventType, Ncplayer } from 'types/ncplayer';
+import styled from '@emotion/styled';
 
 const CDN_URL = 'https://cn-lms-storage.cdn.gov-ntruss.com/common/js/ncplayer-1.2.5.umd.min-c808bb53.js';
 
-type Props = {
-  config: Config
-  onReady?(player: Ncplayer): void;
-  onPlay?(e: Event): void;
-  onPause?(e: Event): void;
-  onCanplay?(e: Event): void;
-  onError?(e: Event): void;
-  onPlaying?(e: Event): void;
-  onEnded?(e: Event): void;
-  onSeeking?(e: Event): void;
-  onSeeked?(e: Event): void;
-  onWaiting?(e: Event): void;
-  onProgress?(e: Event): void;
-  onTimeupdate?(e: Event): void;
-  onVolumechange?(e: Event): void;
-  onBlur?(e: Event): void;
-  onWindowresize?(e: Event): void;
+type Events = { [Key in `on${Capitalize<EventType>}`]?: (e: Event) => void; };
+
+interface Props extends Events {
+  initialConfig: Omit<Config, "playlist">;
+  initialPlayerId: string;
+  playlist: Config["playlist"];
+  seconds: number;
+  onReady?: (player: Ncplayer) => void;
+  onTimeChange?: (time: number) => void;
 }
 
 export function VideoPlayer(props: Props) {
-  const [ player, setPlayer ] = useState<Ncplayer | null>(null);
 
-  const setNcPlayer = useCallback(() => {
-    const ncplayer = new window.ncplayer('NC_PLAYER', {
-      ...props.config
-    });
-    setPlayer(ncplayer);
+  // 스테이트.
 
-    if (props.onReady) {
-      props.onReady(ncplayer);
-    }
-  }, [ props ]);
+  const [scriptLoaded, setScriptLoaded] = React.useState<boolean>(false);
+  const [playlist, setPlaylist] = React.useState<Config["playlist"] | null>(null);
+
+  // 레퍼런스.
+
+  const player = React.useRef<Ncplayer | null>(null);
+  const playerTimeObserver = React.useRef<MutationObserver | null>(null);
+  const playerElement = React.useRef(null);
+  
+  const needUpdate = React.useRef<boolean>(false);
+  const initialConfig = React.useRef<Omit<Config, "playlist">>(props.initialConfig);
+  const initialPlayerId = React.useRef<string>(props.initialPlayerId);
+  const eventsPrev = React.useRef<Parameters<Ncplayer["_detachEvent"]>[0][]>([]);
+
+  // 이펙트.
 
   React.useLayoutEffect(() => {
-    if (!!window.ncplayer) {
-      setNcPlayer();
+
+    if (!scriptLoaded || !window.ncplayer) return;
+
+    if (Array.isArray(playlist) && Array.isArray(props.playlist) ? playlist.length !== props.playlist.length || playlist.some((v, i) => v !== props.playlist[i]) : playlist !== props.playlist) {
+      
+      setPlaylist(props.playlist);
+      needUpdate.current = true;
+      return;
+
     }
 
-    const removePlayer = () => {
-      if (!!document.getElementById('NC_PLAYER')?.children.length) {
-        document.getElementById('NC_PLAYER')?.children[0].remove();
+    if (needUpdate.current) {
+
+      needUpdate.current = false;
+      playerElement.current.replaceChildren();
+
+      player.current = new window.ncplayer(initialPlayerId.current, { ...initialConfig.current, playlist: props.playlist });
+      player.current.currentTime(props.seconds);
+      player.current._corePlayer.onCurrentTimeChange = props.onTimeChange;
+
+      eventsPrev.current = [];
+
+      if (props.onReady) props.onReady(player.current);
+
+    }
+    
+    if (player.current !== null) {
+
+      for (const item of eventsPrev.current) player.current._detachEvent(item);
+      for (const key of Object.keys(props)) {
+  
+        if (!key.startsWith("on")) continue;
+
+        const event = key.slice(2).toLocaleLowerCase() as EventType;
+        eventsPrev.current.push({ type: event, listner: props[key] });
+        player.current.on(event, props[key]);
+
       }
-    };
 
-    return () => removePlayer();
-  }, [ setNcPlayer ]);
+      player.current.on("play", () => console.log("play from player"));
+      playerTimeObserver.current?.disconnect();
+      playerTimeObserver.current = new MutationObserver((mutationList) => {
 
-  useEffect(() => {
-    if (!!player) {
-      player.on('play', (e) => props.onPlay ? props.onPlay(e) : null);
-      player.on('pause', (e) => props.onPause ? props.onPause(e) : null);
-      player.on('canplay', (e) => props.onCanplay ? props.onCanplay(e) : null);
-      player.on('error', (e) => props.onError ? props.onError(e) : null);
-      player.on('playing', (e) => props.onPlaying ? props.onPlaying(e) : null);
-      player.on('ended', (e) => props.onEnded ? props.onEnded(e) : null);
-      player.on('seeking', (e) => props.onSeeking ? props.onSeeking(e) : null);
-      player.on('seeked', (e) => props.onSeeked ? props.onSeeked(e) : null);
-      player.on('wating', (e) => props.onWaiting ? props.onWaiting(e) : null);
-      player.on('progress', (e) => props.onProgress ? props.onProgress(e) : null);
-      player.on('timeupdate', (e) => props.onTimeupdate ? props.onTimeupdate(e) : null);
-      player.on('volumechange', (e) => props.onVolumechange ? props.onVolumechange(e) : null);
-      player.on('blur', (e) => props.onBlur ? props.onBlur(e) : null);
-      player.on('windowresize', (e) => props.onWindowresize ? props.onWindowresize(e) : null);
+        mutationList.forEach((mutation) => {
+
+          if (mutation.type !== "characterData") return;
+
+          const timeSplit = mutation.target.textContent.split(":");
+          if (timeSplit.length !== 2 && timeSplit.length !== 3) return;
+
+          const hours = timeSplit.length === 3 ? parseInt(timeSplit[0]) : 0;
+          const minutes = parseInt(timeSplit[timeSplit.length - 2]);
+          const seconds = parseInt(timeSplit[timeSplit.length - 2 + 1]);
+
+          if (!Number.isNaN(hours) && !Number.isNaN(minutes) && !Number.isNaN(seconds)) props.onTimeChange((hours * 60 * 60) + (minutes * 60) + seconds);
+
+        });
+
+      });
+      playerTimeObserver.current.observe(
+        document.querySelector(`#${props.initialPlayerId} .current`),
+        { characterData: true, attributes: false, childList: false, subtree: true },
+      );
+
     }
-  }, [ player, props ]);
 
-  const handleOnload = () => {
-    setNcPlayer();
-  };
+  }, [scriptLoaded, playlist, props]);
+
+  // 렌더링.
 
   return (
     <>
       <Script
         src={CDN_URL}
         strategy="lazyOnload"
-        onLoad={handleOnload}
+        onLoad={() => setScriptLoaded(true)}
       />
-      <div id="NC_PLAYER"></div>
+      <Player id={initialPlayerId.current} ref={playerElement}></Player>
     </>
   );
+
 }
 
+const Player = styled.div`
+  
+  & .webplayer-internal-core-shadow {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+`

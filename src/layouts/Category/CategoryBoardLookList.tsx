@@ -8,7 +8,8 @@ import styled from 'styled-components';
 export function CategoryBoardLookList() {
   const [target, loadedItem, loading] = useInfiniteScrollQna(`/qna`);
 
-  if (!loadedItem || loadedItem.length === 0)
+  console.log(loadedItem, loading);
+  if (loadedItem.length === 0)
     return <NotFound content="문의하신 내역이 존재하지 않습니다!" />;
   return (
     <LkContainer>

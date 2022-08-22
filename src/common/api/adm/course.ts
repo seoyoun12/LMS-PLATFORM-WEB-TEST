@@ -2,7 +2,7 @@ import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { FetchPaginationResponse } from 'types/fetch';
 import { CourseInput, CourseRes } from '@common/api/course';
-import { CourseModuleFindResponseDto } from '../types/Api';
+import { CourseDetailClientResponseDto, CourseModuleFindResponseDto } from '../Api';
 
 export async function uploadCourse(courseInput: CourseInput) {
   return await POST(`/course/adm`, courseInput);
@@ -45,7 +45,7 @@ export function useCourseList({
   elementCnt?: number;
   chapter?: string;
 }) {
-  const { data, error } = useSWR<FetchPaginationResponse<CourseRes[]>>(
+  const { data, error } = useSWR<FetchPaginationResponse<CourseDetailClientResponseDto[]>>(
     [
       `/course/adm`,
       {

@@ -9,7 +9,7 @@
     "lint": "next lint",
     "check-types": "tsc",
     "json-server": "json-server --watch db.json --port 8080",
-    "build-api-spec": "swagger-typescript-api --path https://api.bonobono.dev/api/v1/v2/api-docs --output ./src/common/api/types --clean-output --axios"
+    "build-api-spec": "swagger-typescript-api --path https://api.bonobono.dev/api/v1/v2/api-docs --output ./src/common/api --axios"
   },
   "dependencies": {
     "@closeio/use-infinite-scroll": "^1.0.0",

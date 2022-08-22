@@ -6,6 +6,7 @@ import { S3Files } from 'types/file';
 import { Content } from '@common/api/content';
 import { Lesson } from '@common/api/lesson';
 import { businessType, courseCategoryType, courseType ,courseSubCategoryType } from './courseClass';
+import { CourseDetailClientResponseDto } from './Api';
 
 export enum ProductStatus {
   APPROVE = 1,
@@ -122,7 +123,7 @@ export async function courseModify({seq, courseInput} : {
 
 
 export function useCourse(courseSeq?: number) {
-  const { data, error, mutate } = useSWR<SWRResponse<CourseRes>>(courseSeq ? `/course/${courseSeq}` : null, GET);
+  const { data, error, mutate } = useSWR<SWRResponse<CourseDetailClientResponseDto>>(courseSeq ? `/course/${courseSeq}` : null, GET);
   return {
     course: data?.data,
     courseError: error,

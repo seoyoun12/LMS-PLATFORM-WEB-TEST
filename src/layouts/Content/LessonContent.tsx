@@ -64,7 +64,7 @@ export function LessonContent(props: Props) {
         const lessonSeq = mode === "PREV" ? prevLesson.current.seq : props.lesson.seq;
         const currentSecond = videoCurrentSeconds.current;
 
-        console.log(await ApiClient.courseLog
+        await ApiClient.courseLog
           .createCourseModulesUsingPost1({
             courseUserSeq: courseUserSeq,
             lessonSeq: lessonSeq,
@@ -80,7 +80,7 @@ export function LessonContent(props: Props) {
                 studyLastTime: currentSecond,
               });
   
-          }));
+          });
 
       }
 
@@ -205,7 +205,7 @@ export function LessonContent(props: Props) {
   }, [props.lesson, props.courseProgressSeq, props.courseUserSeq, stopTimer, updateProgress]);
 
   // 렌더링.
-  console.log(props.lesson);
+
   return (
     <LessonVideoContainer>
       {props.lesson !== null && props.courseProgressSeq !== null ?

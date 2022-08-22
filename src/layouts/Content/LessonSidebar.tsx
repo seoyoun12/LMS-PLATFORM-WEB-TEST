@@ -54,10 +54,8 @@ export function LessonSidebar(props: Props) {
                   </LessonInfo>
                 </Box>
                 <LessonCheck>
-                  {lesson.completedYn === "N" ?
-                    <PlayCircleIcon sx={{ color: "text.secondary" }} /> :
-                    <CheckCircleIcon sx={{ color: "#ff5600" }} />
-                  }
+                  {props.lessonSeq === lesson.seq && <PlayCircleIcon sx={{ color: "text.secondary" }} style={{ marginRight: 8 }} />}
+                  <CheckCircleIcon sx={{ color: lesson.completedYn === "N" ? "#256aef" : "text.secondary" }} />
                 </LessonCheck>
               </TabItem>
             </TabItemWrapper>

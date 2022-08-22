@@ -91,7 +91,6 @@ export function CalendarBody({
       day,
       children: children.map(item => {
         //마감여부
-        // console.log('난 아이템이야!', eduLegendList);
 
         //이전 날짜일경우
         const prevSchedule =

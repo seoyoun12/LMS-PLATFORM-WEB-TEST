@@ -120,7 +120,6 @@ export function Educator({ locationList }: Props) {
   useEffect(() => {
     (async function () {
       const { data } = await getProvincial();
-      console.log(data, 'holymmoly');
       setCompany(data.company);
       // setPhone(data.phone.slice(0, 3));
       // setPhone2(data.phone.slice(3, 7));
@@ -148,7 +147,6 @@ export function Educator({ locationList }: Props) {
   const handleOnCloseConfirm = async (isConfirm: boolean) => {
     if (isConfirm) {
       const smsYn = smsChecked ? YN.YES : YN.NO;
-      console.log(company, email);
       if (!user || !location || !email || !company) return window.alert('수정 실패하였습니다.');
       const data = {
         userSeq: user.seq,
@@ -160,7 +158,6 @@ export function Educator({ locationList }: Props) {
         userRegistrationType: location,
         username: user.username,
       };
-      console.log(data, user, 'q보냊잖아');
 
       await modifyProvincialTrafficSafety(data);
       return router.push('/me');

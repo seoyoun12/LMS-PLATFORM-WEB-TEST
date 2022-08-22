@@ -148,14 +148,12 @@ export function CourseModuleUploadModal({
     setValue,
     watch,
   } = useForm<CourseModuleSaveReqDto>({ defaultValues });
-  console.log('제발 그만 해~', watch());
 
   useEffect(() => {
     (async function () {
       if (!isModify) return;
       try {
         const { data } = await getDetailCourseModule(Number(courseModuleSeq));
-        console.log('ㅎㅇㅎㅇ', data);
         setValue('moduleName', data.moduleName);
         setValue('moduleType', data.moduleType);
         setValue('submitYn', data.submitYn);
@@ -200,7 +198,6 @@ export function CourseModuleUploadModal({
       return window.alert('모두 입력해주세요!');
     }
 
-    console.log('.tq아', inputParams);
     if (moduleType === CourseModuleType.COURSE_MODULE_SURVEY) {
       if (!inputParams.surveySeq || !inputParams.submitYn)
         return window.alert('모두 입력해주세요! 설문');

@@ -32,12 +32,10 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
   useEffect(() => {
     console.log(data);
     if (data) {
-      console.log('안녕', data, stepsRes, enrollInfo, values);
       setCourseCategoryType(data.course.courseCategoryType);
       setCourseBusinessType(data.course.courseBusinessType); //임시타입
       setStepSeq(data.seq);
       setValues({ step: data.step, studyStartDate: data.studyStartDate, studyEndDate: data.studyEndDate });
-      console.log('하세요', stepSeq, values, courseCategoryType, courseBusinessType);
     }
   }, [data, stepSeq, stepsRes]);
 
@@ -135,7 +133,6 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
                       setStepSeq(Number(e.target.value));
                       setValue('courseClassSeq', Number(e.target.value));
                       setEnrollInfo({ seq: Number(e.target.value) });
-                      console.log('아이', enrollInfo, e.target.value);
                       // setEnrollInfo(prev => {
                       // return {
                       // ...prev,
@@ -146,7 +143,6 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
                     label="student"
                   >
                     {stepsRes.map(item => {
-                      console.log('아니', item);
                       return (
                         <MenuItem key={item.step} value={item.seq}>
                           {item.step}기 / {item.studyStartDate} ~ {item.studyEndDate}

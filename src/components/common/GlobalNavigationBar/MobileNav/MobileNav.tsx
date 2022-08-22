@@ -122,7 +122,7 @@ export function MobileNav() {
               {isLoginStatus ? <Box onClick={onClickLogout}>로그아웃</Box> : <Box onClick={onClickSignin}>로그인</Box>}
               <CloseIcon fontSize="large" onClick={() => handleClose()} />
             </DrawerTopBox>
-            <SiteMapTypo>사이트맵 이동하기</SiteMapTypo>
+            {/* <SiteMapTypo>사이트맵 이동하기</SiteMapTypo>
             <SiteMapWrap>
               {siteMapList.map(item => (
                 <SiteMapItem key={item.href}>
@@ -131,7 +131,7 @@ export function MobileNav() {
                   </Link>
                 </SiteMapItem>
               ))}
-            </SiteMapWrap>
+            </SiteMapWrap> */}
             <Accordion accordionList={list} />
           </Drawer>
         </MobileContentContainer>

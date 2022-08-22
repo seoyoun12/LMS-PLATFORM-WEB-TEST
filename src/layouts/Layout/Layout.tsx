@@ -168,7 +168,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           <MobileNav />
         )}
       </AppBar>
-      {router.route.includes('/category') && <PopupBox />}
+      {router.route.includes('/category') && !router.route.includes('/admin') && (
+        <PopupBox />
+      )}
       {/* category에 넣으면 css 붕괴. 이유 알수없음.(popupBox 넣으면 여러 상관없는 컴포넌트의 css들이 무작위로 지정됨. ex)카드 리스트에 Spinner의 스타일이 지정 ) */}
 
       <main className="fit">{children}</main>

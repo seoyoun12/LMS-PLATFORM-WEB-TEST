@@ -50,9 +50,9 @@ export const ProvintialHeaderList = [
     category: '나의강의실',
     href: '/me',
     items: [
-      { title: '학습현황', href: '/me/my-course' },
+      { title: '정보보기', href: '/me' },
       { title: '정보수정', href: '/me/edit' },
-      { title: '문의하기', href: '/traffic/service?tab=Question' },
+      { title: '학습현황', href: '/me/my-course' },
     ],
   },
   {

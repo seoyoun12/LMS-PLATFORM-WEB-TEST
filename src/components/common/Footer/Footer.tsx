@@ -32,6 +32,7 @@ export const Footer: FC<Props> = () => {
   if (isHideFooter) return null;
   return (
     <footer>
+      <Hrhrhrhrhr />
       <div className={styles.globalContainer}>
         <ContentContainer>
           {/* <IntroductionSection> */}
@@ -42,33 +43,47 @@ export const Footer: FC<Props> = () => {
             <Typography variant="body1" className="desc">1</Typography> */}
           {/* </IntroductionSection> */}
 
-          <Hrhrhrhrhr />
-
           <UplineFootConatainer>
-            <Link className="uplineFoot" color="" href="https://www.ctti.or.kr/kor/page.do?menuIdx=185&bbscd=0&tcd=0">
+            <Link
+              className="uplineFoot"
+              href="https://www.ctti.or.kr/kor/page.do?menuIdx=185&bbscd=0&tcd=0"
+            >
               개인정보처리방침
             </Link>
-            <Link className="uplineFoot" color="inherit" href="https://www.ctti.or.kr/kor/page.do?menuIdx=186&bbscd=0&tcd=0">
+            <Link
+              className="uplineFoot"
+              href="https://www.ctti.or.kr/kor/page.do?menuIdx=186&bbscd=0&tcd=0"
+            >
               이메일무단수집거부
             </Link>
-            <Link className="uplineFoot" color="inherit" href="https://www.ctti.or.kr/kor/memberClause.do?menuIdx=182">
+            <Link
+              className="uplineFoot"
+              href="https://www.ctti.or.kr/kor/memberClause.do?menuIdx=182"
+            >
               이용약관
             </Link>
-            <Link className="uplineFoot" color="inherit" href="https://www.ctti.or.kr/kor/page.do?menuIdx=130&bbscd=0&tcd=0">
+            <Link
+              className="uplineFoot"
+              href="https://www.ctti.or.kr/kor/page.do?menuIdx=130&bbscd=0&tcd=0"
+            >
               찾아오시는길
             </Link>
           </UplineFootConatainer>
 
           <DownLineFootConatainer>
-            <Typography className="boldTypo">[32589] 충청남도 공주시 연수원길 83 (금흥동 110-2)</Typography>
+            <Typography className="boldTypo">
+              [32589] 충청남도 공주시 연수원길 83 (금흥동 110-2)
+            </Typography>
             <FirstBox>
               <Typography className="boldTypo">
-                교육문의(연수과) : 041.854.2101~2 | 임대문의(총무과) : 041.854.2106 | 연수원 운영문의 : 041.854.2107
+                교육문의(연수과) : 041.854.2101~2 | 임대문의(총무과) : 041.854.2106 |
+                연수원 운영문의 : 041.854.2107
               </Typography>
             </FirstBox>
             <SecondBox>
               <Typography className="boldTypo">
-                Copyright ⓒ 2022 Chungcheongnamdo Traffic Training Institute All Rights Reserved.
+                Copyright ⓒ 2022 Chungcheongnamdo Traffic Training Institute All Rights
+                Reserved.
               </Typography>
             </SecondBox>
           </DownLineFootConatainer>
@@ -112,20 +127,21 @@ export const Footer: FC<Props> = () => {
 };
 
 const ContentContainer = styled.div`
-  /* display: flex; */
-  flex-direction: row;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   /* padding-top: 224px; */
   /* box-sizing: border-box;
   border: 1px solid black; */
-  margin-top: 150px;
   margin-bottom: 20px;
-  margin-left: 110px;
   overflow: hidden;
 
   .boldTypo {
     font-weight: 500;
     font-size: 0.95rem;
+  }
+  @media (max-width: 1200px) {
+    text-align: center;
   }
 `;
 
@@ -135,8 +151,8 @@ const UplineFootConatainer = styled(Grid)`
   border: 1px solid black; */
   width: 100%;
   height: 50%;
-  position: relative;
-  float: left;
+  /* position: relative;
+  float: left; */
   margin-bottom: 30px;
   margin-top: 15px;
 
@@ -154,10 +170,12 @@ const UplineFootConatainer = styled(Grid)`
 const DownLineFootConatainer = styled.div`
   /* box-sizing: border-box;
   border: 1px solid black; */
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 50%;
-  float: left;
-  position: relative;
+  /* float: left;
+  position: relative; */
 `;
 
 const FirstBox = styled(Box)`

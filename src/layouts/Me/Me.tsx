@@ -41,7 +41,7 @@ export function Me() {
         <Link href={`/me/edit`} className={s.myInfo}>
           <UserProfile>M</UserProfile>
           <div>
-            <Typography>{user.name}</Typography>
+            <Typography fontSize={22} >{user.name}</Typography>
             <Typography>{user.email ? user.email : <Box color={grey[400]}>이메일이 없습니다.</Box>}</Typography>
           </div>
         </Link>
@@ -73,7 +73,7 @@ export function Me() {
           </SideBarContent>
         </SideBar>
         <LessonListContainer>
-          <Typography variant="h6" sx={{ marginBottom: '16px' }}>
+          <Typography variant="h6" fontSize={22} fontWeight={700} sx={{ marginBottom: '16px' }}>
             내 강의
           </Typography>
           <Grid container rowSpacing={4} columnSpacing={2} columns={{ xs: 1, sm: 1, md: 2, lg: 2 }}>
@@ -135,7 +135,7 @@ const SideBarTitle = styled(Typography)`
   margin-bottom: 16px;
   font-weight: 700;
   /* padding-bottom: 0.5rem; */
-  font-size: 24px;
+  font-size: 22px;
   /* border-bottom: 1px solid #e5e5e5; */
 `;
 

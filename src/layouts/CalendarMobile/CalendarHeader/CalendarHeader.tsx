@@ -85,11 +85,6 @@ export function CalendarHeader({
           }}
         >
           {Months.map(month => (
-            // <Box
-            //   sx={{ height: '50px', flexGrow: 1, cursor: 'pointer' }}
-            //   className={`header-month-box `}
-            //   onClick={() => handleMonthClick(month.value)}
-            // >
             <Tab
               label={month.title}
               className={`header-month ${
@@ -97,7 +92,6 @@ export function CalendarHeader({
               }`}
               onClick={() => handleMonthClick(month.value)}
             />
-            //</Box>
           ))}
         </MonthWrap>
         {/* <MonthWrap>
@@ -122,27 +116,6 @@ export function CalendarHeader({
           onClick={handleRightBtnClick}
         /> */}
       </DateWrap>
-      {/* <Box>
-        <Typography fontSize="18px">- 교육 유형</Typography>
-        {filterList.map(item => (
-          <>
-            <Radio
-              value={item.enType}
-              onChange={onChangeFilter}
-              checked={filter === item.enType}
-            />
-            <span>{item.type}</span>
-          </>
-        ))}
-      </Box>
-      <Box display="flex" flexWrap="wrap" justifyContent="flex-end" gap="1rem" mt={2}>
-        {eduLegendList.map(legend => (
-          <Box display="flex" alignItems="center">
-            <CircleRoundedIcon sx={{ fontSize: '1rem', color: legend.color }} />{' '}
-            <span>{legend.title}</span>
-          </Box>
-        ))}
-      </Box> */}
     </CalendarHeaderWrap>
   );
 }

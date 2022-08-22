@@ -230,9 +230,9 @@ export const TransHeaderList = [
     category: '마이페이지',
     href: '/me',
     items: [
+      { title: '정보보기', href: '/me' },
       { title: '학습현황', href: '/me/my-course' },
       { title: '정보수정', href: '/me/edit' },
-      { title: '문의하기', href: '/' },
     ],
   },
   {

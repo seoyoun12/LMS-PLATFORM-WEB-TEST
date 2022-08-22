@@ -8,7 +8,7 @@ import { setLineClamp } from '@styles/mixins';
 import { grey } from '@mui/material/colors';
 import { useState } from 'react';
 import { EnrollHistoryModal } from '../EnrollHistoryModal/EnrollHistoryModal';
-import { CourseUserResponseDto } from '@common/api/types/Api';
+import { CourseUserResponseDto } from '@common/api/Api';
 import { RegisterType } from '@common/api/courseClass';
 
 interface Props {

@@ -32,8 +32,8 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
   useEffect(() => {
     console.log(data);
     if (data) {
-      setCourseCategoryType(data.course.courseCategoryType);
-      setCourseBusinessType(data.course.courseBusinessType); //임시타입
+      setCourseCategoryType(data.course.courseCategoryType as courseCategoryType);
+      setCourseBusinessType(data.course.courseBusinessType as businessType); //임시타입
       setStepSeq(data.seq);
       setValues({ step: data.step, studyStartDate: data.studyStartDate, studyEndDate: data.studyEndDate });
     }

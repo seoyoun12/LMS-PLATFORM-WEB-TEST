@@ -1,6 +1,6 @@
 import useSWR, { SWRResponse } from "swr";
 import { GET } from "@common/httpClient";
-import { UserMyinfoCertificatesResponseDto } from "@common/api/types/Api";
+import { UserMyinfoCertificatesResponseDto } from '@common/api/Api';
 
 export function useGetUserMyinfoCertificates() {
   const { data, mutate, error } = useSWR<

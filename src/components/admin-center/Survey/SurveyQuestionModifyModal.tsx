@@ -15,7 +15,7 @@ import { useForm } from 'react-hook-form';
 import {
   SurveyQuestionRequestDto,
   SurveyMultipleChoiceRequestDto,
-} from '@common/api/types/Api';
+} from '@common/api/Api';
 import { useEffect, useState } from 'react';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { QuestionType, SurveyMultipleChoice } from '@common/api/adm/survey';

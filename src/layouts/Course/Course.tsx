@@ -38,9 +38,9 @@ export function Course() {
     <Container className={cx(styles.globalContainer, containerStyle)}>
       <MainSection>
         <ThumbnailImg>
-          {course.files && course.files[0] && <Image
+          {course.s3Files && course.s3Files[0] && <Image
             className="thumbnailImg"
-            src={course.files[0].filePath} // course.courseFile
+            src={course.s3Files[0].path} // course.courseFile
             layout="responsive"
             width="100%"
             height="56.25"

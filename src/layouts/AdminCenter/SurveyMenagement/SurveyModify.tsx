@@ -5,7 +5,7 @@ import {
   QuestionType,
   SurveyRes,
 } from '@common/api/adm/survey';
-import { SurveyQuestionRequestDto, SurveyRequestDto } from '@common/api/types/Api';
+import { SurveyQuestionRequestDto, SurveyRequestDto } from '@common/api/Api';
 import { SurveyQuestionItem } from '@components/admin-center';
 import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';

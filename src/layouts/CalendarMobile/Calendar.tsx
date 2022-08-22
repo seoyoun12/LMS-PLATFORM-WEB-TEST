@@ -74,8 +74,8 @@ export const eduLegendList = [
   {
     title: '보수수시 교육',
     enType: courseCategoryType.TYPE_SUP_CONSTANT,
-    color: '#036c19',
-    borderColor: '#eed4ba',
+    color: '#d9fdf1',
+    borderColor: '#baeedc',
   },
   {
     title: '수시 교육',

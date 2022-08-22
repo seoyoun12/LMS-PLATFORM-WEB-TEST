@@ -70,7 +70,12 @@ export const eduLegendList = [
     color: '#f0ffdf',
     borderColor: '#d3f2a0',
   },
-  { title: '보수수시 교육', enType: courseCategoryType.TYPE_SUP_CONSTANT, color: '#036c19', borderColor: '#eed4ba' },
+  {
+    title: '보수수시 교육',
+    enType: courseCategoryType.TYPE_SUP_CONSTANT,
+    color: '#d9fdf1',
+    borderColor: '#baeedc',
+  },
   { title: '수시 교육', enType: courseCategoryType.TYPE_CONSTANT, color: '#036c19', borderColor: '#eed4ba' },
   { title: '신규 교육', enType: courseCategoryType.TYPE_NEW, color: '#2980b9', borderColor: '#e0e095' },
   { title: '법령위반자 교육', enType: courseCategoryType.TYPE_ILLEGAL, color: '#4c0c0c', borderColor: '#cce0ed' },

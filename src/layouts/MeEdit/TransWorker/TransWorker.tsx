@@ -133,7 +133,6 @@ export function TransWorker({ type, locationList }: Props) {
   useEffect(() => {
     (async function () {
       const { data } = await getTransport();
-      console.log(data, 'holymmoly');
       setVehicleNumber(data.carNumber);
       setCompany(data.company);
       setPhone(data.phone.slice(0, 3));
@@ -145,7 +144,6 @@ export function TransWorker({ type, locationList }: Props) {
       setVehicleRegi(data.userRegistrationType);
     })();
   }, []);
-  console.log(occupation1, userBusinessTypeOne, occupation2, userBusinessTypeTwo);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -155,7 +153,6 @@ export function TransWorker({ type, locationList }: Props) {
     if (!vehicleRegi) return window.alert('올바른 등록지를 입력하세요!');
     if (!occupation1) return window.alert('업종을 선택해주세요.');
     if (!occupation2) return window.alert('업종구분을 선택해주세요.');
-    console.log('last confirm', phone + phone2 + phone3, company, vehicleNumber, vehicleRegi, occupation1, occupation2, user?.name);
     const dialogConfirmed = await dialog({
       title: '회원 정보 수정',
       description: '회원 정보를 수정하시겠습니까?',

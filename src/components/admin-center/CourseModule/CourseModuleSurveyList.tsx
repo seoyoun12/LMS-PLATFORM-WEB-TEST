@@ -49,7 +49,6 @@ export function CourseModuleSurveyList({
   const onChangePage = (page: number) => {
     setPage(page);
   };
-  console.log(data, '네', watch());
 
   if (error) return <Box>Error..</Box>;
   if (!data) return <Spinner />;

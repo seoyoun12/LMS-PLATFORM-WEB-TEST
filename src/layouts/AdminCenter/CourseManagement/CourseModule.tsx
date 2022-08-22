@@ -44,7 +44,6 @@ export function CourseModule() {
     setOpenModal(false);
     mutate();
   };
-  console.log(data, '데이탕');
   if (error) return <div>error</div>;
   if (!data) return <Spinner />;
   return (

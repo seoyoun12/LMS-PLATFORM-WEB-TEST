@@ -65,7 +65,6 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
   const scheduleList = schedule?.map(item => {
     //마감여부
-    console.log('난 아이템이야!', item, eduLegendList);
     const prevSchedule = new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0 ? true : false;
     const isReceive =
       new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0

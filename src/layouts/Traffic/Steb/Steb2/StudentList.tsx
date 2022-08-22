@@ -19,7 +19,6 @@ export function StudentList({ registerType, setRegisterType }: Props) {
   const snackbar = useSnackbar();
 
   const onClickDelete = async (seq: number, test: any) => {
-    console.log('아', seq, test);
     try {
       // await courseClassCancel(courseUserSeq); 삭제 통신
       setOrganization(prev => prev.filter(item => item.seq !== seq));

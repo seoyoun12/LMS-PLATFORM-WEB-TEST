@@ -44,6 +44,7 @@ export function SignInV2() {
       identify2Err: false,
     },
   });
+  console.log(smsYn, '???');
   const { name, identify1, identify2, usernameErr, identify1Err, identify2Err } = watch();
 
   useEffect(() => {
@@ -71,7 +72,7 @@ export function SignInV2() {
       const res = await signIn(username, password, loginType.TYPE_TRANS_EDU, name);
       if (res.success) {
         setIsLoginState(true);
-        setUsetInfo({ name: res.data.username, role: [...res.data.roles as unknown as UserRole[] ] }); // api가 있었음 필요없을듯
+        setUsetInfo({ name: res.data.username, role: [...(res.data.roles as unknown as UserRole[])] }); // api가 있었음 필요없을듯
         snackbar({ variant: 'success', message: '로그인이 완료되었습니다.' });
         router.push('/category');
       }
@@ -144,9 +145,7 @@ export function SignInV2() {
             error={usernameErr}
             autoFocus
           />
-          <FormHelperText sx={{ color: 'red' }}>
-            {usernameErr && '이름을 입력해 주세요'}
-          </FormHelperText>
+          <FormHelperText sx={{ color: 'red' }}>{usernameErr && '이름을 입력해 주세요'}</FormHelperText>
           {/* <TextField
             margin="normal"
             required
@@ -187,30 +186,22 @@ export function SignInV2() {
             />
           </Box>
           <FormHelperText sx={{ color: 'red' }}>
-            {(identify1Err || identify2Err) &&
-              '올바르지 않은 주민등록번호 입니다. 다시 한번 확인해주세요.'}
+            {(identify1Err || identify2Err) && '올바르지 않은 주민등록번호 입니다. 다시 한번 확인해주세요.'}
           </FormHelperText>
           <IndividualCheckBox>
-            <Box>
+            <Box onClick={() => setSmsYn(prev => !prev)} sx={{ cursor: 'pointer' }}>
               <Checkbox
-                value={smsYn}
-                onChange={(e, checked) => {
-                  setSmsYn(checked);
-                }}
+                checked={smsYn}
+                // inputProps={{ 'aria-label': 'controlled' }}
+                // onChange={(e, checked) => {
+                //   setSmsYn(checked);
+                // }}
               />
-              <Typography component="span">
-                개인정보 수집 및 이용에 동의합니다.
-              </Typography>
+              <Typography component="span">개인정보 수집 및 이용에 동의합니다.</Typography>
             </Box>
             <ViewContentBox onClick={() => setOpen(true)}>내용보기</ViewContentBox>
           </IndividualCheckBox>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            disabled={loading}
-            sx={{ mt: 1, mb: 2 }}
-          >
+          <Button type="submit" fullWidth variant="contained" disabled={loading} sx={{ mt: 1, mb: 2 }}>
             {loading ? <Spinner fit={true} /> : '확인'}
           </Button>
           <Modal
@@ -229,11 +220,7 @@ export function SignInV2() {
                   paddingBottom: '1rem',
                 }}
               >
-                <ConfirmButton
-                  variant="contained"
-                  onClick={() => setOpen(false)}
-                  fullWidth
-                >
+                <ConfirmButton variant="contained" onClick={() => setOpen(false)} fullWidth>
                   확인
                 </ConfirmButton>
               </Box>

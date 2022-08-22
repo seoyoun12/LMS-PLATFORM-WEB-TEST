@@ -25,7 +25,7 @@ export function LearningCourse() {
               >
                 <ContentCardV2
                   title={item.courseTitle}
-                  content1={`${item.leftDays === 0 ? '오늘마감 입니다!' : item.leftDays}`}
+                  // content1={`${item.leftDays === 0 ? '오늘마감 입니다!' : item.leftDays}`}
                   content2={`현재 진도율 ${item.progress}%`}
                 />
               </Box>

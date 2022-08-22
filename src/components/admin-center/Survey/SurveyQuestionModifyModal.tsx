@@ -59,7 +59,6 @@ export function SurveyQuestionModifyModal({
   const { register, setValue, watch } = useForm<SurveyQuestionRequestDto>({
     defaultValues: defaultValue,
   });
-  console.log('ㅋㅋ', watch());
   useEffect(() => {
     setValue('content', surveyQuestion.content);
     setValue('questionType', surveyQuestion.questionType);

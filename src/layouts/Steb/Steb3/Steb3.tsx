@@ -92,14 +92,11 @@ export function Steb3() {
     studyStartDate: string;
     studyEndDate: string;
   }>();
-  console.log(enrollList);
 
   const getData = async (seq: number) => {
     setLoading(true);
-    console.log('첫번째', loading);
     try {
       const { data } = await getSingleCourseClass(seq);
-      console.log('sadasd', data);
       const {
         course: { courseCategoryType, courseBusinessType },
         step,
@@ -116,7 +113,6 @@ export function Steb3() {
       const userData = await getMyUser();
       setName(userData.data.name);
       setLoading(false);
-      console.log('두번째', loading);
     } catch (e: any) {
       // snackbar({ variant: 'error', message: e });
       console.log(e);

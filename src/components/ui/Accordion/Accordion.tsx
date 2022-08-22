@@ -49,7 +49,7 @@ export function Accordion({ accordionList }: { accordionList: AccordionList[] })
               <Typography className='CategoryBoardTwo'>{name}</Typography>
             </Box>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails sx={{background:grey[100]}} >
             <nav aria-label="secondary mailbox folders">
               <List disablePadding={true}>
                 {children.map(({ name, href, isActive }, idx) => (

@@ -8,8 +8,8 @@ export const notNeededLoginPathList: { href: string }[] = [
   { href: 'sign-up' },
   { href: 'find' },
   { href: 'guide' },
-  { href: 'me' },
-  { href: 'edit' },
+  // { href: 'me' },
+  // { href: 'edit' },
 ];
 
 export const allowUserPahtList: { href: string; roles: UserRole[] }[] = [

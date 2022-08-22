@@ -48,20 +48,17 @@ export function Steb2() {
   const onClickEnroll = async () => {
     //단체 신청시 스택쌓이는 구조. 개인상태에서는 혼자 신청
     const { seq, firstIdentityNumber, secondIdentityNumber, firstPhone, secondPhone, thirdPhone, ...rest } = watch();
-    console.log('user datas2', watch(), enrollInfo);
     if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7) return window.alert('주민번호를 모두 입력해주세요!');
     if (!enrollInfo || !enrollInfo.seq) return window.alert('기수를 선택해주세요!');
     // if (!enrollInfo || !enrollInfo.seq) return window.alert('기수를 선택해주세요!');
     if (!isIndividualCheck) return window.alert('개인정보 수집 및 이용동의에 체크해주세요!');
 
-    console.log('user datas2', watch());
     const postData = {
       ...rest,
       businessType: watch().businessType, //TYPE_PASSENGER 이런식인줄 알았으나 PASSENGER식으로 요청해야함
       identityNumber: firstIdentityNumber + secondIdentityNumber,
       phone: firstPhone + secondPhone + thirdPhone,
     }; //민증번호때문에 구분
-    console.log('user datas', postData);
 
     try {
       //개인으로 신청

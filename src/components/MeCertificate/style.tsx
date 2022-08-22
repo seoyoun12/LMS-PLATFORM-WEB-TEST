@@ -1,16 +1,25 @@
 import styled from "@emotion/styled";
-import {Button} from "@mui/material";
+import { ButtonBase } from "@mui/material";
 
 export const MeCertificateContainer = styled.div``;
 
 export const MeCertificateHeaderContainer = styled.div`
-	width: 100%;
-	display: flex;
+  width: 100%;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 262px;
-  background-color: #666;
+  position: relative;
+  overflow: hidden;
+
+  > svg {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, 0);
+    z-index: -1;
+  }
 `;
 
 export const MeCertificateHeaderTitle = styled.p`
@@ -36,12 +45,14 @@ export const MeCertificateContentContainer = styled.div`
   margin: 62px auto 0 auto;
 `;
 
-export const MeCertificateItemContainer = styled.div`
+export const MeCertificateItemContainer = styled(ButtonBase)`
   display: flex;
   flex-direction: column;
   width: 280px;
   margin: 0 26px 30px 0;
-  
+  text-align: left;
+  align-items: flex-start;
+
   &:nth-of-type(4n) {
     margin-right: 0;
   }
@@ -50,22 +61,28 @@ export const MeCertificateItemContainer = styled.div`
 export const MeCertificateItemImageContainer = styled.div`
   width: 100%;
   height: 200px;
-  background-color: #F6F6F6;
+  background-color: #f6f6f6;
   border-radius: 8px;
   margin-bottom: 10px;
-  
+
   > img {
     width: 100%;
     height: 100%;
   }
 `;
 
-export const MeCertificateItemContentContainer = styled.div``;
+export const MeCertificateItemContentContainer = styled.div`
+  width: 100%;
+`;
 
 export const MeCertificateItemContentTitle = styled.p`
+  width: 100%;
   font-size: 20px;
   font-weight: 500;
   line-height: 25px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #d4d4d4;
+  margin-bottom: 4px;
 `;
 
 export const MeCertificateItemContentSubtitle = styled.p`
@@ -76,6 +93,5 @@ export const MeCertificateItemContentSubtitle = styled.p`
 `;
 
 export const MeCertificateItemConfirmButton = styled.p`
-  color: #256AEF;
-  cursor: pointer;
+  color: #256aef;
 `;

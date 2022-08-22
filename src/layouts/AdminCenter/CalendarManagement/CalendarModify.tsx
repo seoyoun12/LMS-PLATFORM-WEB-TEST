@@ -72,7 +72,6 @@ export function CalendarModify() {
     watch,
     setValue,
   } = useForm<FormType>({ defaultValues });
-  console.log(watch(), 'ss');
 
   useEffect(() => {
     (async function () {

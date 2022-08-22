@@ -20,7 +20,6 @@ export function Steb3() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const [trafficInfo, setTrafficInfo] = useRecoilState(courseClassTrafficInfo);
-  console.log('ㅎㅇ', trafficInfo);
 
   return (
     <Steb3Wrap>

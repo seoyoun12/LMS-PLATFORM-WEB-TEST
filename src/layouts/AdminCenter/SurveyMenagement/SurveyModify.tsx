@@ -46,13 +46,11 @@ export function SurveyModify() {
   const { register, setValue, watch, reset } = useForm<SurveyQuestionRequestDto>({
     defaultValues: defaultValue,
   });
-  console.log('하기싫어', watch());
 
   useEffect(() => {
     (async function () {
       try {
         const { data } = await getSingleSurvey(Number(surveySeq));
-        console.log(data, '데이터임');
         let arr = data.surveyQuestionList.map(item => {
           const randomSeq = Math.floor(Math.random() * 1000);
           const { seq } = item;
@@ -66,7 +64,6 @@ export function SurveyModify() {
     })();
   }, []);
 
-  console.log(questions, 'gdgd');
   //title lock
   useEffect(() => {
     if (questions.length === 0) setDisableTitle(false);

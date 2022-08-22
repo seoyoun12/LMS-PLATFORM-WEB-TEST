@@ -28,13 +28,9 @@ export function Step1({ handleStep, setResName }: Props) {
   useEffect(() => {
     if (popUpState) {
       const interval = setInterval(async () => {
-        console.log('UUID', uuidRef.current);
-        console.log('ㅇㅇㅇ', popUpState);
         if (popUpState.closed) {
-          console.log('죽었쪙', popUpState.closed);
           try {
             const { data } = await niceConfirm(uuidRef.current);
-            console.log(data);
             setResName(data.name);
             handleStep(2);
           } catch (e: any) {

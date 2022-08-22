@@ -28,6 +28,7 @@ import { courseClassEnrollInfo } from '@common/recoil';
 import { useRecoilState } from 'recoil';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { Spinner } from '@components/ui';
+import { NotFound } from '@components/ui/NotFound';
 
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -165,6 +166,7 @@ export function CalendarBody({
   };
 
   if (!scheduleItem) return <Spinner />;
+  if (scheduleItem.length === 0) return <NotFound content="일정이 존재하지 않습니다!" />;
   return (
     <CalendarWrap filter={filter}>
       <Box>
@@ -306,6 +308,7 @@ export function CalendarBody({
 }
 
 const CalendarWrap = styled(Box)<{ filter: string }>`
+  margin-top: 48px;
   .TYPE_SUP_COMMON {
     background: #f0ffdf;
     border: #d3f2a0;

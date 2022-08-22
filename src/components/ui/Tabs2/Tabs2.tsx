@@ -18,6 +18,8 @@ interface Props {
   onChange?: (newValue: string) => void;
   value?: string;
   fontSx?: SxProps;
+  scrollable ?: boolean;
+  showIndicator ?: boolean
 }
 
 export function Tabs2({
@@ -29,6 +31,8 @@ export function Tabs2({
   onChange,
   value,
   fontSx,
+  scrollable = false,
+  showIndicator = true,
   ...props
 }: Props) {
   const router = useRouter();
@@ -88,6 +92,9 @@ export function Tabs2({
         onChange={handleChange}
         aria-label="basic tabs example"
         variant={variant}
+        scrollButtons={scrollable} 
+        allowScrollButtonsMobile={scrollable} 
+        TabIndicatorProps={{ style: { display: !showIndicator && 'none', }, }}
       >
         {tabsConfig.map(({ value, label }) => (
           <MuiTab key={value} className="mui-tabs-item" label={label} value={value} sx={fontSx} />

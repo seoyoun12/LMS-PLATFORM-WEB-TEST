@@ -1,3 +1,4 @@
+import { NotFound } from '@components/ui/NotFound';
 import { QnaAccordion } from '@components/ui/QnaAccordion.tsx';
 import { useInfiniteScrollQna } from '@hooks/useInfiniteScrollQna';
 import { Box, Container, Table, TableCell, TableHead, TableRow } from '@mui/material';
@@ -7,6 +8,8 @@ import styled from 'styled-components';
 export function CategoryBoardLookList() {
   const [target, loadedItem, loading] = useInfiniteScrollQna(`/qna`);
 
+  if (!loadedItem || loadedItem.length === 0)
+    return <NotFound content="문의하신 내역이 존재하지 않습니다!" />;
   return (
     <LkContainer>
       <Table>
@@ -39,7 +42,7 @@ export function CategoryBoardLookList() {
             {
               seq: data.seq,
               title: data.title,
-              date: data.createdDtime,
+              date: data.createdDtimeYmd.slice(0, -1),
               answeredYN: data.answeredYn,
               children: [
                 {

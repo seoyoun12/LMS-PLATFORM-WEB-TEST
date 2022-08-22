@@ -35,7 +35,7 @@ export function CategoryBoardNotice() {
           const accordionInfo = [
             {
               seq: content.seq,
-              date: content.createdDtime,
+              date: content.createdDtimeYmd.slice(0, -1),
               name: content.subject,
               children: [{ name: content.content }],
             },

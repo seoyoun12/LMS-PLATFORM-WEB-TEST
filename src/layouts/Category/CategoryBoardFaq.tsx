@@ -2,10 +2,13 @@ import { Box, Container, Table, TableCell, TableHead, TableRow } from '@mui/mate
 import { BoardAccordion } from '@components/ui/BoardAccordion';
 import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
 import styled from '@emotion/styled';
+import { NotFound } from '@components/ui/NotFound';
 
 export function CategoryBoardFaq() {
   const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_FAQ');
 
+  if (!loadedItem || loadedItem.length === 0)
+    return <NotFound content="자주묻는질문이 존재하지 않습니다!" />;
   return (
     <Container>
       <Table>
@@ -34,7 +37,7 @@ export function CategoryBoardFaq() {
           const accordionInfo = [
             {
               seq: content.seq,
-              date: content.createdDtime,
+              date: content.createdDtimeYmd.slice(0, -1),
               name: content.subject,
               children: [{ name: content.content }],
             },

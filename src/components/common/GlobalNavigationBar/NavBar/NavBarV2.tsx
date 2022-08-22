@@ -35,43 +35,41 @@ export function NavBarV2() {
   }, [router]);
 
   return (
-    <nav className={styles.globalContainer}>
-      <ContentContainer>
-        <HeaderBackground
-          className={`dropdown-back  ${open ? '' : 'hidden'}`}
-          onMouseOver={handleHover}
-          onMouseOut={handleOut}
-        ></HeaderBackground>
-        <NavContainer>
-          <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
-            {TransHeaderList.map(item => (
-              <HeaderItem
-                key={item.category}
-                onMouseOver={handleHover}
-                onMouseOut={handleOut}
-              >
-                <Link href={item.href} color={grey[900]}>
-                  <Box className="header-title">{item.category}</Box>
-                </Link>
-                <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
-                  <Box className="link-wrap">
-                    {item.items.map(menuItem => (
-                      <Link
-                        className="link-items"
-                        href={menuItem.href}
-                        key={menuItem.title}
-                      >
-                        <MenuItem className="link-item">{menuItem.title}</MenuItem>
-                      </Link>
-                    ))}
-                  </Box>
+    <ContentContainer>
+      <HeaderBackground
+        className={`dropdown-back  ${open ? '' : 'hidden'}`}
+        onMouseOver={handleHover}
+        onMouseOut={handleOut}
+      ></HeaderBackground>
+      <NavContainer>
+        <HeaderTitleWrap>
+          {TransHeaderList.map(item => (
+            <HeaderItem
+              key={item.category}
+              onMouseOver={handleHover}
+              onMouseOut={handleOut}
+            >
+              <Link href={item.href} color={grey[900]}>
+                <Box className="header-title">{item.category}</Box>
+              </Link>
+              <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
+                <Box className="link-wrap">
+                  {item.items.map(menuItem => (
+                    <Link
+                      className="link-items"
+                      href={menuItem.href}
+                      key={menuItem.title}
+                    >
+                      <MenuItem className="link-item">{menuItem.title}</MenuItem>
+                    </Link>
+                  ))}
                 </Box>
-              </HeaderItem>
-            ))}
-          </Box>
-        </NavContainer>
-        {/* 여기에 리모컨 */}
-      </ContentContainer>
+              </Box>
+            </HeaderItem>
+          ))}
+        </HeaderTitleWrap>
+      </NavContainer>
+      {/* 여기에 리모컨 */}
       {/* {isShowRemote && (
         <RemoteWrap>
           <Box className="remote-box" color="primary.main">
@@ -93,16 +91,19 @@ export function NavBarV2() {
           </Box>
         </RemoteWrap>
       )} */}
-    </nav>
+    </ContentContainer>
   );
 }
 
-const ContentContainer = styled.div`
+const ContentContainer = styled.nav`
   display: flex;
   align-items: center;
   height: 100%;
   color: black;
+  flex-basis: 850px;
+  color: black;
   /* padding-bottom: 12px; */
+  padding: 0 20px;
 
   .bold-600 {
     font-weight: 600;
@@ -176,6 +177,12 @@ const NavContainer = styled.div`
     height: 0;
   }
 `;
+const HeaderTitleWrap = styled(Box)`
+  display: flex;
+  height: 100%;
+  width: calc(100% - 160px);
+  margin: auto;
+`;
 
 const HeaderBackground = styled(Box)``;
 const HeaderItem = styled(Box)`
@@ -223,9 +230,9 @@ export const TransHeaderList = [
     category: '마이페이지',
     href: '/me',
     items: [
+      { title: '정보보기', href: '/me' },
       { title: '학습현황', href: '/me/my-course' },
       { title: '정보수정', href: '/me/edit' },
-      { title: '문의하기', href: '/' },
     ],
   },
   {

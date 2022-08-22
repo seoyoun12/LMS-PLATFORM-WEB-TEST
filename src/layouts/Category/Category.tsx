@@ -5,6 +5,8 @@ import { ContentCard, CategoryCarousel, Spinner } from '@components/ui';
 import { Box, Grid } from '@mui/material';
 import { CategoryCard } from '@components/ui/CategoryCard/CategoryCard';
 import { CategoryBoard } from '@components/ui/CategoryBoard/CategoryBoard';
+import useResponsive from '@hooks/useResponsive';
+import { CategoryCarouselMobile } from '@components/ui/CategoryCarouselMobile';
 
 const bannerData = [
   {
@@ -23,6 +25,7 @@ const bannerData = [
 
 // const SecondPage: NextPage = (res) => {
 export function Category() {
+  const isDesktop = useResponsive(1024);
   // const [ page, setPage ] = useState(0);
   // const { data, error } = useCourseList({ page });
   // // console.log(data);
@@ -34,7 +37,11 @@ export function Category() {
     <Box>
       {/*팝업 필수 */}
       {/* <PopupBox /> */}
-      <CategoryCarousel datas={bannerData} />
+      {isDesktop ? (
+        <CategoryCarousel datas={bannerData} />
+      ) : (
+        <CategoryCarouselMobile datas={bannerData} />
+      )}
       <CategoryCard></CategoryCard>
       <CategoryBoard></CategoryBoard>
     </Box>

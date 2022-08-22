@@ -4,10 +4,13 @@ import React from 'react';
 import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
 import { Spinner } from '@components/ui';
 import styled from '@emotion/styled';
+import { NotFound } from '@components/ui/NotFound';
 
 export function CategoryBoardNotice() {
   const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_NOTICE');
 
+  if (!loadedItem || loadedItem.length === 0)
+    return <NotFound content="공지사항이 존재하지 않습니다!" />;
   return (
     <Container>
       <Table>
@@ -36,7 +39,7 @@ export function CategoryBoardNotice() {
           const accordionInfo = [
             {
               seq: content.seq,
-              date: content.createdDtime,
+              date: content.createdDtimeYmd.slice(0, -1),
               name: content.subject,
               children: [{ name: content.content }],
             },

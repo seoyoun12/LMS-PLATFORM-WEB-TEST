@@ -41,6 +41,8 @@ export function CategoryBoard() {
           showBorderBottom={true}
           gap={3}
           fontSx={{ fontWeight: 700, fontSize: '20px' }}
+          scrollable={true}
+          showIndicator={false}
         />
       </Box>
       <Box sx={{ borderBottom: '1px solid #2A2A2A', position: 'relative', top: '-1px' }}></Box>

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Box, Radio, Typography } from '@mui/material';
+import { Box, Radio, Tab, Tabs, Typography } from '@mui/material';
 import React from 'react';
 import { eduLegendList, FilterType, MonthClickType } from '../Calendar';
 import { grey } from '@mui/material/colors';
@@ -7,6 +7,8 @@ import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded
 import ArrowLeftRoundedIcon from '@mui/icons-material/ArrowLeftRounded';
 import ArrowRightRoundedIcon from '@mui/icons-material/ArrowRightRounded';
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
+import LeftArrow from '/public/assets/svgs/LeftArrow.svg';
+import RightArrow from '/public/assets/svgs/RightArrow.svg';
 
 interface Props {
   onChangeMonth: (type: MonthClickType, value: number) => void;
@@ -31,7 +33,13 @@ const Months = [
   { title: '12월', value: 12 },
 ];
 
-export function CalendarHeader({ onChangeMonth, date, filterList, onChangeFilter, filter }: Props) {
+export function CalendarHeader({
+  onChangeMonth,
+  date,
+  filterList,
+  onChangeFilter,
+  filter,
+}: Props) {
   const handleLeftBtnClick = () => {
     const clickType = MonthClickType.BTN_CLICK;
     onChangeMonth(clickType, -1);
@@ -40,7 +48,7 @@ export function CalendarHeader({ onChangeMonth, date, filterList, onChangeFilter
     const clickType = MonthClickType.BTN_CLICK;
     onChangeMonth(clickType, 1);
   };
-  const handleLeftMonthClick = (value: number) => {
+  const handleMonthClick = (value: number) => {
     const clickType = MonthClickType.MONTH_CLICK;
     onChangeMonth(clickType, value);
   };
@@ -48,43 +56,66 @@ export function CalendarHeader({ onChangeMonth, date, filterList, onChangeFilter
   return (
     <CalendarHeaderWrap>
       <TopYearWrap>
-        <ArrowLeftRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleLeftBtnClick} />
+        {/* <ArrowLeftRoundedIcon
+          sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }}
+          onClick={handleLeftBtnClick}
+        /> */}
+        <LeftArrow style={{ transform: 'scale(0.6)' }} onClick={handleLeftBtnClick} />
         <YearWrap>{date.getFullYear()}년</YearWrap>
-        <ArrowRightRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleRightBtnClick} />
+        {/* <ArrowRightRoundedIcon
+          sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }}
+          onClick={handleRightBtnClick}
+        /> */}
+        <RightArrow style={{ transform: 'scale(0.6)' }} onClick={handleRightBtnClick} />
       </TopYearWrap>
       <DateWrap>
-        <ArrowLeftRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleLeftBtnClick} />
-        <MonthWrap>
+        {/* <ArrowLeftRoundedIcon
+          sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }}
+          onClick={handleLeftBtnClick}
+        /> */}
+        <MonthWrap
+          value={date.getMonth()}
+          variant="scrollable"
+          scrollButtons
+          allowScrollButtonsMobile
+          TabIndicatorProps={{
+            style: {
+              display: 'none',
+            },
+          }}
+        >
+          {Months.map(month => (
+            <Tab
+              label={month.title}
+              className={`header-month ${
+                month.value === date.getMonth() + 1 ? 'active' : ''
+              }`}
+              onClick={() => handleMonthClick(month.value)}
+            />
+          ))}
+        </MonthWrap>
+        {/* <MonthWrap>
           {Months.map(month => (
             <Box
               sx={{ height: '50px', flexGrow: 1, cursor: 'pointer' }}
               className={`header-month-box `}
               onClick={() => handleLeftMonthClick(month.value)}
             >
-              <Typography className={`header-month ${month.value === date.getMonth() + 1 ? 'active' : ''}`}>{month.title}</Typography>
+              <Typography
+                className={`header-month ${
+                  month.value === date.getMonth() + 1 ? 'active' : ''
+                }`}
+              >
+                {month.title}
+              </Typography>
             </Box>
           ))}
-        </MonthWrap>
-        <ArrowRightRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleRightBtnClick} />
+        </MonthWrap> */}
+        {/* <ArrowRightRoundedIcon
+          sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }}
+          onClick={handleRightBtnClick}
+        /> */}
       </DateWrap>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
-        <Typography fontSize="18px">- 해당 일정을 클릭 하시면 자세한 교육내용을 확인하실 수 있습니다.</Typography>
-        <Box>
-          {filterList.map(item => (
-            <>
-              <Radio value={item.enType} onChange={onChangeFilter} checked={filter === item.enType} />
-              <span>{item.type}</span>
-            </>
-          ))}
-        </Box>
-      </Box>
-      <Box display="flex" justifyContent="flex-end" gap="1rem" mt={6}>
-        {eduLegendList.map(legend => (
-          <Box display="flex" alignItems="center">
-            <CircleRoundedIcon sx={{ fontSize: '1rem', color: legend.color }} /> <span>{legend.title}</span>
-          </Box>
-        ))}
-      </Box>
     </CalendarHeaderWrap>
   );
 }
@@ -98,29 +129,30 @@ const CalendarHeaderWrap = styled(Box)`
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    top: -10px;
-    right: 10%;
-    left: 10%;
-    bottom: -10px;
     font-size: 20px;
+    border: 1px solid #d6d6d6;
+    border-radius: 30px;
+    width: 76px;
+    margin: 0 4px;
   }
   .active {
     z-index: 4;
-    color: white;
+    color: white !important ;
     font-weight: bold;
     background: #3c3c3c;
-    border-radius: 4px;
+    border: 1px solid #d6d6d6;
+    border-radius: 30px;
   }
 `;
 
 const TopYearWrap = styled(Box)`
-  width: fit-content;
+  width: calc(100% - 40px);
   display: flex;
   align-items: center;
   font-weight: 700;
   margin: auto;
   margin-bottom: 1.5rem;
+  justify-content: space-between;
 `;
 
 const DateWrap = styled(Box)`
@@ -128,14 +160,12 @@ const DateWrap = styled(Box)`
   height: 60px;
   align-items: center;
   font-size: 1.25rem;
-  border: 1px solid #d6d6d6;
-  border-radius: 30px;
 `;
 const YearWrap = styled(Box)`
   padding: 0.5rem 0;
   font-size: 28px;
 `;
-const MonthWrap = styled(Box)`
+const MonthWrap = styled(Tabs)`
   display: flex;
   flex-grow: 1;
 `;

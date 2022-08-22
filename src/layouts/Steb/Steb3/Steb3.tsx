@@ -33,6 +33,7 @@ import { Spinner } from '@components/ui';
 import { courseBusinessTypeList } from '@layouts/Calendar/Calendar';
 import CheckedCircle from '/public/assets/svgs/CheckedCircle.svg';
 import { getMyUser } from '@common/api/user';
+import useResponsive from '@hooks/useResponsive';
 
 // const dummyEnrollList = [
 //   {
@@ -80,6 +81,7 @@ import { getMyUser } from '@common/api/user';
 export function Steb3() {
   const router = useRouter();
   const snackbar = useSnackbar();
+  const isDesktop = useResponsive();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState<string>('');
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
@@ -138,7 +140,7 @@ export function Steb3() {
   if (loading || !info) return <Spinner />;
   return (
     <Steb3Wrap>
-      <StebHeader value={3} />
+      {isDesktop && <StebHeader value={3} />}
       <Steb3BodyWrap>
         {/* <HeaderTypo variant="h5">신청완료</HeaderTypo> */}
         <CompleteRegi>

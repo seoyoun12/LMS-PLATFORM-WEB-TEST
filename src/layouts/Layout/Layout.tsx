@@ -22,7 +22,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const snackbar = useSnackbar();
-  const isDesktop = useResponsive();
+  const isDesktop = useResponsive(1024);
   const [userPageType, setUserPageType] = useRecoilState(pageType);
   const [user, setUser] = useState<MyUser>(null);
   const [userInfoData, setUserInfo] = useRecoilState(userInfo);
@@ -61,8 +61,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           window.alert('로그인이 필요한 서비스입니다.');
           return router.push(
             localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL
-              ? '/traffic/category'
-              : '/category'
+              ? '/traffic/sign-in'
+              : '/sign-in'
           );
         }
 
@@ -90,7 +90,11 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             data.roles.filter(item => allowUserPage.roles.includes(item)).length === 0
           ) {
             window.alert('로그인이 필요합니다!');
-            return router.back();
+            return router.push(
+              localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL
+                ? '/traffic/sign-in'
+                : '/sign-in'
+            );
           }
         }
       } catch (e: any) {
@@ -125,9 +129,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         item => item === UserRole.ROLE_TRANS_USER || item === UserRole.ROLE_TRANS_MANAGER
       );
       if (!imTrans) return;
-      window.alert(
-        '잘못된 접근입니다! 로그아웃 후 해당 페이지로 다시 로그인하세요! Trans'
-      );
+      window.alert('잘못된 접근입니다! 로그아웃 후 해당 페이지로 다시 로그인하세요!');
       router.push('/category');
     }
     //if you traffic user , block access trans page
@@ -138,9 +140,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           item === UserRole.ROLE_TRAFFIC_SAFETY_MANAGER
       );
       if (!imSafe) return;
-      window.alert(
-        '잘못된 접근입니다! 로그아웃 후 해당 페이지로 다시 로그인하세요! Domin'
-      );
+      window.alert('잘못된 접근입니다! 로그아웃 후 해당 페이지로 다시 로그인하세요!');
       router.push('/traffic/category');
     }
   }, [router, user]);
@@ -168,7 +168,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           <MobileNav />
         )}
       </AppBar>
-      {router.route.includes('/category') && <PopupBox />}
+      {router.route.includes('/category') && !router.route.includes('/admin') && (
+        <PopupBox />
+      )}
       {/* category에 넣으면 css 붕괴. 이유 알수없음.(popupBox 넣으면 여러 상관없는 컴포넌트의 css들이 무작위로 지정됨. ex)카드 리스트에 Spinner의 스타일이 지정 ) */}
 
       <main className="fit">{children}</main>

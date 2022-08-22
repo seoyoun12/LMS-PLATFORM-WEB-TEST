@@ -1,68 +1,68 @@
-import styled from "@emotion/styled";
-import styles from "@styles/common.module.scss";
-import { grey } from "@mui/material/colors";
-import { Box, MenuItem } from "@mui/material";
-import { Link } from "@components/common";
-import React, { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router";
+import styled from '@emotion/styled';
+import styles from '@styles/common.module.scss';
+import { grey } from '@mui/material/colors';
+import { Box, MenuItem } from '@mui/material';
+import { Link } from '@components/common';
+import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 
 const showRemoteList = [
   // { href: '/traffic/course/[courseSeq]' },
   // { href: '/traffic/admin-center' },
-  { href: "/traffic/category" },
+  { href: '/traffic/category' },
 ];
 
 export const ProvintialHeaderList = [
   {
-    category: "교육이용안내",
-    href: "",
+    category: '교육이용안내',
+    href: '',
     items: [
       {
-        title: "회원가입 및 로그인",
-        href: "/traffic/guide?tab=TYPE_GUIDE_AUTH",
+        title: '회원가입 및 로그인',
+        href: '/traffic/guide?tab=TYPE_GUIDE_AUTH',
       },
-      { title: "교육신청방법", href: "/traffic/guide?tab=TYPE_GUIDE_EDU_REGI" },
-      { title: "학습방법", href: "/traffic/guide?tab=TYPE_GUIDE_EDU_LEARNING" },
+      { title: '교육신청방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_REGI' },
+      { title: '학습방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_LEARNING' },
     ],
   },
   {
-    category: "학습자료",
-    href: "/traffic/learning-material/learning-guide",
+    category: '학습자료',
+    href: '/traffic/learning-material/learning-guide',
     items: [
       {
-        title: "연령별 교수학습지도안",
-        href: "/traffic/learning-material/learning-guide",
+        title: '연령별 학습지도안',
+        href: '/traffic/learning-material/learning-guide',
       },
-      { title: "교육자료", href: "/traffic/learning-material/education" },
-      { title: "교육영상", href: "/traffic/learning-material/video" },
-      { title: "타기관자료모음", href: "/traffic/learning-material/reference" },
+      { title: '교육자료', href: '/traffic/learning-material/education' },
+      { title: '교육영상', href: '/traffic/learning-material/video' },
+      { title: '타기관자료모음', href: '/traffic/learning-material/reference' },
     ],
   },
   {
-    category: "온라인교육",
-    href: "",
+    category: '온라인교육',
+    href: '',
     items: [
-      { title: "온라인교육 신청", href: "/traffic/stebMove/steb2" },
-      { title: "온라인교육 수정/취소", href: "/traffic/stebMove/steb2" }, // 미완
+      { title: '온라인교육 신청', href: '/traffic/stebMove/steb2' },
+      { title: '온라인교육 수정', href: '/traffic/stebMove/steb2' }, // 미완
     ],
   },
   {
-    category: "나의강의실",
-    href: "/me",
+    category: '나의강의실',
+    href: '/me',
     items: [
-      { title: "학습현황", href: "/me/my-course" },
-      { title: "정보수정", href: "/me/edit" },
-      { title: "문의하기", href: "/traffic/service?tab=Question" },
+      { title: '학습현황', href: '/me/my-course' },
+      { title: '정보수정', href: '/me/edit' },
+      { title: '문의하기', href: '/traffic/service?tab=Question' },
     ],
   },
   {
-    category: "고객센터",
-    href: "",
+    category: '고객센터',
+    href: '',
     items: [
-      { title: "공지사항", href: "/traffic/service?tab=Notice" },
-      { title: "자주묻는질문", href: "/traffic/service?tab=Faq" },
-      { title: "교육문의", href: "/traffic/service?tab=Question" },
-      { title: "문의내역조회", href: "/traffic/service?tab=Look" },
+      { title: '공지사항', href: '/traffic/service?tab=Notice' },
+      { title: '자주묻는질문', href: '/traffic/service?tab=Faq' },
+      { title: '교육문의', href: '/traffic/service?tab=Question' },
+      { title: '문의내역조회', href: '/traffic/service?tab=Look' },
     ],
   },
 ];
@@ -85,47 +85,45 @@ export function NavBarV2() {
   };
 
   useEffect(() => {
-    const show = showRemoteList.some((e) => router.route.includes(e.href));
+    const show = showRemoteList.some(e => router.route.includes(e.href));
     // console.log(show);
     setIsShowRemote(show);
   }, [router]);
 
   return (
-    <nav className={styles.globalContainer}>
-      <ContentContainer>
-        <HeaderBackground
-          className={`dropdown-back  ${open ? "" : "hidden"}`}
-          onMouseOver={handleHover}
-          onMouseOut={handleOut}
-        ></HeaderBackground>
-        <NavContainer>
-          <Box sx={{ display: "flex", height: "100%", width: "100%" }}>
-            {ProvintialHeaderList.map((item) => (
-              <HeaderItem
-                key={item.category}
-                onMouseOver={handleHover}
-                onMouseOut={handleOut}
-              >
-                <Link href={item.href} color={grey[900]}>
-                  <Box className="header-title">{item.category}</Box>
-                </Link>
-                <Box className={`dropdown-box ${open ? "" : "hidden"}`}>
-                  <Box className="link-wrap">
-                    {item.items.map((menuItem) => (
-                      <Link href={menuItem.href} className="link-items">
-                        <MenuItem key={menuItem.title} className="link-item">
-                          {menuItem.title}
-                        </MenuItem>
-                      </Link>
-                    ))}
-                  </Box>
+    <ContentContainer>
+      <HeaderBackground
+        className={`dropdown-back  ${open ? '' : 'hidden'}`}
+        onMouseOver={handleHover}
+        onMouseOut={handleOut}
+      ></HeaderBackground>
+      <NavContainer>
+        <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
+          {ProvintialHeaderList.map(item => (
+            <HeaderItem
+              key={item.category}
+              onMouseOver={handleHover}
+              onMouseOut={handleOut}
+            >
+              <Link href={item.href} color={grey[900]}>
+                <Box className="header-title">{item.category}</Box>
+              </Link>
+              <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
+                <Box className="link-wrap">
+                  {item.items.map(menuItem => (
+                    <Link href={menuItem.href} className="link-items">
+                      <MenuItem key={menuItem.title} className="link-item">
+                        {menuItem.title}
+                      </MenuItem>
+                    </Link>
+                  ))}
                 </Box>
-              </HeaderItem>
-            ))}
-          </Box>
-        </NavContainer>
-        {/* 여기에 리모컨 */}
-      </ContentContainer>
+              </Box>
+            </HeaderItem>
+          ))}
+        </Box>
+      </NavContainer>
+      {/* 여기에 리모컨 */}
       {/* {isShowRemote && (
         <RemoteWrap>
           <Box className="remote-box" color="primary.main">
@@ -148,16 +146,19 @@ export function NavBarV2() {
           </Box>
         </RemoteWrap>
       )} */}
-    </nav>
+    </ContentContainer>
   );
 }
 
-const ContentContainer = styled.div`
+const ContentContainer = styled.nav`
   display: flex;
   align-items: center;
   height: 100%;
+  /* width: 100%; */
+  flex-basis: 820px;
   color: black;
   /* padding-bottom: 12px; */
+  padding: 0 20px;
 
   .bold-600 {
     font-weight: 600;
@@ -191,6 +192,7 @@ const NavContainer = styled.div`
     justify-content: center;
     align-items: center;
     height: 100%;
+    flex-grow: 1;
   }
   .link-wrap {
     display: flex;
@@ -209,6 +211,9 @@ const NavContainer = styled.div`
     width: 100%;
     justify-content: center;
     align-items: center;
+    @media (max-width: 1200px) {
+      font-size: 14px;
+    }
   }
 
   li {

@@ -6,6 +6,7 @@ import CalendarIcon from '/public/assets/svgs/calendarIcon.svg';
 import PromiseIcon from '/public/assets/svgs/promiseIcon.svg';
 import StudyIcon from '/public/assets/svgs/studyIcon.svg';
 import CertificateIcon from '/public/assets/svgs/certificateIcon.svg';
+import { courseType } from '@common/api/courseClass';
 
 const categoryData = [
   {
@@ -51,8 +52,9 @@ export function CategoryCard() {
         container={true}
         spacing={0}
         columns={{ xs: 1, sm: 2, md: 2, lg: 4, xl: 4 }}
-        mt={16}
+        mt={6}
         mb={10}
+        rowSpacing={6}
       >
         {categoryData.map(categoryData => (
           <GridItem
@@ -71,7 +73,12 @@ export function CategoryCard() {
               <Box mt={2}>
                 {/* <div className='categoryIcon'/> */}
                 <GridTitleTypography fontWeight={500} fontSize="18px">
-                  {categoryData.title}
+                  {/* {categoryData.title} */}
+                  {typeof window !== 'undefined' &&
+                  localStorage.getItem('site_course_type') ===
+                    courseType.TYPE_TRANS_WORKER
+                    ? '운수종사자'
+                    : '저상버스'}
                 </GridTitleTypography>
                 <GridTitleTypography fontWeight={700} fontSize="24px">
                   {categoryData.btnText}

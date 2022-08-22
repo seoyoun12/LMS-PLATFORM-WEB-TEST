@@ -39,7 +39,7 @@ export function CategoryBoardLookList() {
             {
               seq: data.seq,
               title: data.title,
-              date: data.createdDtime,
+              date: data.createdDtimeYmd.slice(0, -1),
               answeredYN: data.answeredYn,
               children: [
                 {

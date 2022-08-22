@@ -56,8 +56,9 @@ export function CategoryCard() {
         container
         spacing={0}
         columns={{ xs: 1, sm: 2, md: 2, lg: 4, xl: 4 }}
-        mt={16}
+        mt={6}
         mb={10}
+        rowSpacing={6}
       >
         {categoryData.map(categoryData => (
           <GridItem

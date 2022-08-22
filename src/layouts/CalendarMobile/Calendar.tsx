@@ -132,7 +132,7 @@ const modalInfoTItle = [
 
 export function CalendarMobile() {
   const [date, setDate] = useState(new Date());
-  const [filter, setFilter] = useState<businessType>(businessType.TYPE_ALL);
+  const [filter, setFilter] = useState<businessType>(businessType.TYPE_ALL); //fixed ALL
   const [openModal, setOpenModal] = useState(false);
   const [modalInfo, setModalInfo] = useState<ClickedPlanInfo>();
   const { data, error, mutate } = useCourseClass({
@@ -156,10 +156,16 @@ export function CalendarMobile() {
     mutate();
   };
 
+  console.log(date.getMonth());
+
   //Month changer
   const onChangeMonth = (type: MonthClickType, value: number) => {
-    if (type === MonthClickType.BTN_CLICK)
-      return setDate(prev => new Date(prev.setMonth(prev.getMonth() + value)));
+    console.log('??', value);
+    if (type === MonthClickType.BTN_CLICK) {
+      const dummyDate = new Date();
+      dummyDate.setMonth(date.getMonth() + value);
+      return setDate(dummyDate);
+    }
     if (type === MonthClickType.MONTH_CLICK)
       return setDate(prev => new Date(prev.setMonth(value - 1)));
   };

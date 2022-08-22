@@ -25,17 +25,17 @@ export function GlobalNavigationBar() {
 
   if (isHideNavbar) return null; // 추가
   return (
-    <
-      // position="sticky"
-      // sx={{
-      //   zIndex: (theme) => theme.zIndex.drawer + 1,
-      //   backgroundColor: '#FFFFFF',
-      //   borderColor: '#E5E5E5',
-      //   boxShadow: 'rgb(0 0 0 / 12%) 0 1px 0 0'
-      // }}
+    <AppBar
+      position="sticky"
+      sx={{
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+        backgroundColor: '#FFFFFF',
+        borderColor: '#E5E5E5',
+        boxShadow: 'rgb(0 0 0 / 12%) 0 1px 0 0'
+      }}
     >
       <HeaderBar />
       <>{/* {isHideNavbar || <NavBar />} */}</>
-    </>
+    </AppBar>
   );
 }

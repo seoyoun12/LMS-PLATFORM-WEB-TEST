@@ -21,11 +21,13 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { signUp } from '@common/api';
 import { IndividualSummary } from './IndividualSummary';
+import useResponsive from '@hooks/useResponsive';
 
 export function Steb2() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const isLogin = useIsLoginStatus();
+  const isDesktop = useResponsive();
   const [isIndividual, setIsIndividual] = useState(true); //individual or team button
   const [registerType, setRegisterType] = useState<RegisterType>(RegisterType.TYPE_INDIVIDUAL); //개인신청 단체신청 토글
   const [enroll, setEnroll] = useRecoilState(courseClassEnrollList); //전역에 신청자 정보 저장
@@ -147,7 +149,7 @@ export function Steb2() {
 
   return (
     <Steb2Wrap>
-      <StebHeader value={2} />
+      {isDesktop && <StebHeader value={2} />}
       <Steb2BodyContainer>
         <EduOverview setValue={setValue} />
         <CompanyInfo isIndividual={isIndividual} setIsIndividual={setIsIndividual} register={register} watch={watch} />

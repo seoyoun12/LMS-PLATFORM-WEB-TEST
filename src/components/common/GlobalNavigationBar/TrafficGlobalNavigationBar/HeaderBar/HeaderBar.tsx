@@ -26,8 +26,20 @@ export function HeaderBar() {
   return (
     <Header className={styles.globalContainer}>
       <ContentContainer>
-        <Link href="/traffic/category" underline="none" height="100%" display="flex" alignItems="center">
-          <Image src="/assets/images/cttsLogo.png" height={40} width={224} alt="Your Name" />
+        <Link
+          href="/traffic/category"
+          underline="none"
+          height="100%"
+          flexBasis={224}
+          display="flex"
+          alignItems="center"
+        >
+          <Image
+            src="/assets/images/cttsLogo.png"
+            height={40}
+            width={224}
+            alt="Your Name"
+          />
         </Link>
         {/* <Link href="/" underline="none" color={grey[800]}>
           <TitleTypography>충남교통연수원</TitleTypography>
@@ -50,13 +62,25 @@ export function HeaderBar() {
         <RightSection>
           {!isLogin ? (
             <SignBoxes>
-              <Link href="/traffic/sign-in" underline="none" display="flex" alignItems="center" width="80px">
+              <Link
+                href="/traffic/sign-in"
+                underline="none"
+                display="flex"
+                alignItems="center"
+                width="80px"
+              >
                 <SigninIcon />
                 <Box color="black" ml={1}>
                   로그인
                 </Box>
               </Link>
-              <Link href="/traffic/sign-up" underline="none" display="flex" alignItems="center" width="100px">
+              <Link
+                href="/traffic/sign-up"
+                underline="none"
+                display="flex"
+                alignItems="center"
+                width="100px"
+              >
                 <SignupIcon />
                 <Box color="black" ml={1}>
                   회원가입
@@ -68,7 +92,9 @@ export function HeaderBar() {
               {!!user?.roles?.length &&
               user.roles.some(
                 role =>
-                  role === UserRole.ROLE_ADMIN || role === UserRole.ROLE_TRANS_MANAGER || role === UserRole.ROLE_TRAFFIC_SAFETY_MANAGER
+                  role === UserRole.ROLE_ADMIN ||
+                  role === UserRole.ROLE_TRANS_MANAGER ||
+                  role === UserRole.ROLE_TRAFFIC_SAFETY_MANAGER
               ) ? (
                 <Link href="/admin-center/dashboard" underline="none">
                   <Button className="align-left" color="neutral" size="large">
@@ -116,6 +142,7 @@ const ContentContainer = styled.div`
 `;
 const SignBoxes = styled(Box)`
   display: flex;
+  justify-content: space-between;
 `;
 
 // const NavContainer = styled.div`
@@ -137,5 +164,5 @@ const SignBoxes = styled(Box)`
 // `;
 
 const RightSection = styled.div`
-  margin-left: auto;
+  flex-basis: 200px;
 `;

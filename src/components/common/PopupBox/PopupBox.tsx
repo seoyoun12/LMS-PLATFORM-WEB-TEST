@@ -51,6 +51,9 @@ const Popup = styled(Box)`
   z-index: 222;
   background: white;
   /* box-shadow: 2px 2px 10px 1px; */
+  @media(max-width : 600px){
+    width:100vw;
+  }
 `;
 const PopupContent = styled(Box)`
   width: 100%;

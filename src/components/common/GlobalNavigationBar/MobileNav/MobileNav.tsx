@@ -44,7 +44,6 @@ export function MobileNav() {
   );
   const [isHideNavbar, setIsHideNavbar] = useState(false);
 
-
   useEffect(() => {
     if (router.route === '/') {
       setIsHideNavbar(true);
@@ -53,18 +52,19 @@ export function MobileNav() {
       setIsHideNavbar(hide);
     }
 
-    
-    setList((typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
-    ? ProvintialHeaderList
-    : TransHeaderList
-  ).map(item => {
-    return {
-      name: item.category,
-      children: item.items.map(menuitem => {
-        return { name: menuitem.title, href: menuitem.href };
-      }),
-    };
-  }))
+    setList(
+      (typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
+        ? ProvintialHeaderList
+        : TransHeaderList
+      ).map(item => {
+        return {
+          name: item.category,
+          children: item.items.map(menuitem => {
+            return { name: menuitem.title, href: menuitem.href };
+          }),
+        };
+      })
+    );
   }, [router]);
 
   const handleClose = () => {
@@ -77,13 +77,10 @@ export function MobileNav() {
 
   const onClickSignin = () => {
     if (localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL) {
-      router.push('/traffic/sign-in')
-    }
-    else {
+      router.push('/traffic/sign-in');
+    } else {
       router.push('/sign-in');
     }
-
-   
   };
 
   const onClickLogout = () => {
@@ -91,9 +88,8 @@ export function MobileNav() {
     handleClose();
   };
 
-  const onClickSitemap = (item: { name: string; href: string; type: courseType; regCategory: regCategoryType }) =>{
+  const onClickSitemap = (item: { name: string; href: string; type: courseType; regCategory: regCategoryType }) => {
     const isEqual = userInfoData.regCategory.includes(item.regCategory);
-
 
     if (isLoginStatus && !isEqual) {
       console.log('이퀄', isEqual, userInfoData.regCategory, item.regCategory);
@@ -101,7 +97,7 @@ export function MobileNav() {
       const isConfirm = window.confirm('정말로 이동하시겠습니까? 로그아웃됩니다.');
       try {
         if (!isConfirm) return;
-         logout();
+        logout();
         router.push(item.href);
         localStorage.setItem('site_course_type', item.type);
         return;
@@ -111,31 +107,35 @@ export function MobileNav() {
     }
     router.push(item.href);
     localStorage.setItem('site_course_type', item.type);
-  }
+  };
 
   return (
     <Header>
-      {!isHideNavbar &&
-      <ContentContainer>
-        <Link href="/category" underline="none" height="100%" display="flex" alignItems="center">
-          <Image src="/assets/images/cttsLogo.png" height={40} width={224} alt="Your Name" />
-        </Link>
-        <MenuIcon fontSize="large" sx={{ color: 'black ' }} onClick={() => setOpen(true)} />
-        <Drawer open={open} anchor="right" onClose={handleClose} sx={{ zIndex: 1202 }}>
-          <DrawerTopBox>
-            {isLoginStatus ? <Box onClick={onClickLogout}>로그아웃</Box> : <Box onClick={onClickSignin}>로그인</Box>}
-            <CloseIcon fontSize="large" onClick={() => handleClose()} />
-          </DrawerTopBox>
-          <SiteMapTypo>사이트맵 이동하기</SiteMapTypo>
-          <SiteMapWrap>
-            {siteMapList.map(item => (
-              <SiteMapItem key={item.href}><Link href={item.href} onClick={()=>onClickSitemap(item)} >{item.name}</Link></SiteMapItem>
+      {!isHideNavbar && (
+        <MobileContentContainer>
+          <Link href="/category" underline="none" height="100%" display="flex" alignItems="center">
+            <Image src="/assets/images/cttsLogo.png" height={40} width={224} alt="Your Name" />
+          </Link>
+          <MenuIcon fontSize="large" sx={{ color: 'black ' }} onClick={() => setOpen(true)} />
+          <Drawer open={open} anchor="right" onClose={handleClose} sx={{ zIndex: 1202 }}>
+            <DrawerTopBox>
+              {isLoginStatus ? <Box onClick={onClickLogout}>로그아웃</Box> : <Box onClick={onClickSignin}>로그인</Box>}
+              <CloseIcon fontSize="large" onClick={() => handleClose()} />
+            </DrawerTopBox>
+            <SiteMapTypo>사이트맵 이동하기</SiteMapTypo>
+            <SiteMapWrap>
+              {siteMapList.map(item => (
+                <SiteMapItem key={item.href}>
+                  <Link href={item.href} onClick={() => onClickSitemap(item)}>
+                    {item.name}
+                  </Link>
+                </SiteMapItem>
               ))}
-          </SiteMapWrap>
-          <Accordion accordionList={list} />
-        </Drawer>
-      </ContentContainer>
-  }
+            </SiteMapWrap>
+            <Accordion accordionList={list} />
+          </Drawer>
+        </MobileContentContainer>
+      )}
     </Header>
   );
 }
@@ -144,7 +144,7 @@ const Header = styled.header`
   width: 100%;
   height: 100%;
 `;
-const ContentContainer = styled.div`
+const MobileContentContainer = styled.div`
   display: flex;
   align-items: center;
   width: calc(100% - 48px);
@@ -163,7 +163,7 @@ const ContentContainer = styled.div`
 
 const DrawerTopBox = styled(Box)`
   display: flex;
-  width: 420px;
+  width: 360px;
   height: 64px;
   padding: 0 1rem;
   align-items: center;
@@ -190,12 +190,12 @@ const SiteMapItem = styled(Box)`
   align-items: center;
   justify-content: center;
   background: #70c043;
-  
+
   border-right: 1px solid white;
   :last-child {
     border-right: none;
   }
-  a{
+  a {
     color: white;
   }
 `;

@@ -1,15 +1,14 @@
-import { YN } from "@common/constant";
-import { GET, POST, PUT, DELETE } from "@common/httpClient";
-import useSWR, { SWRResponse } from "swr";
-import { PaginationResult } from "types/fetch";
-import { S3Files } from "types/file";
-import { ProductStatus } from "./course";
-
+import { YN } from '@common/constant';
+import { GET, POST, PUT, DELETE } from '@common/httpClient';
+import useSWR, { SWRResponse } from 'swr';
+import { PaginationResult } from 'types/fetch';
+import { S3Files } from 'types/file';
+import { ProductStatus } from './course';
 
 export enum BoardType {
-  TYPE_NOTICE = "TYPE_NOTICE", 
-  TYPE_REVIEW = "TYPE_REVIEW", 
-  TYPE_FAQ = "TYPE_FAQ"
+  TYPE_NOTICE = 'TYPE_NOTICE',
+  TYPE_REVIEW = 'TYPE_REVIEW',
+  TYPE_FAQ = 'TYPE_FAQ',
 }
 
 export interface CategoryBoard {
@@ -17,6 +16,7 @@ export interface CategoryBoard {
   content: string;
   courseSeq: number;
   createdDtime: string;
+  createdDtimeYmd: string;
   hit: number;
   modifiedDtime: string;
   noticeYn: YN;
@@ -43,21 +43,29 @@ export type CategoryBoardInput = Partial<CategoryBoard>;
 // }
 
 // 공지사항 리스트
-export function categoryBoardList({ page, elementCnt, boardType } : {
+export function categoryBoardList({
+  page,
+  elementCnt,
+  boardType,
+}: {
   page: number;
   elementCnt?: number;
   boardType: string | null;
 }) {
-  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<CategoryBoard[]>>>([
-    // `/post/adm`, {
-    `/post/adm`, {
-      params: { page, elementCnt, boardType }
-    }
-  ], GET);
+  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<CategoryBoard[]>>>(
+    [
+      // `/post/adm`, {
+      `/post/adm`,
+      {
+        params: { page, elementCnt, boardType },
+      },
+    ],
+    GET
+  );
   return {
     data: data?.data,
     error,
-    mutate
+    mutate,
   };
 }
 
@@ -79,38 +87,39 @@ export function categoryBoardList({ page, elementCnt, boardType } : {
 //   };
 // }
 
-
 // 게시판 상세
 export function useCategoryBoard(seq: number | null) {
-  const { data, error, mutate } = useSWR<SWRResponse<CategoryBoard>>(seq? `/post/adm/${seq}` : null, GET);
+  const { data, error, mutate } = useSWR<SWRResponse<CategoryBoard>>(
+    seq ? `/post/adm/${seq}` : null,
+    GET
+  );
   return {
     data: data?.data,
     error,
-    mutate
+    mutate,
   };
 }
 
 // 게시판 업로드
-export async function uploadCategoryBoard(categoryBoardInput : CategoryBoardInput) {
+export async function uploadCategoryBoard(categoryBoardInput: CategoryBoardInput) {
   return await POST(`/post`, categoryBoardInput);
 }
 
 // 게시판 수정
-export async function modifyCategoryBoard({seq, categoryBoardInput} : {
-  seq: number, categoryBoardInput : CategoryBoardInput
+export async function modifyCategoryBoard({
+  seq,
+  categoryBoardInput,
+}: {
+  seq: number;
+  categoryBoardInput: CategoryBoardInput;
 }) {
   return await PUT(`/post/${seq}`, categoryBoardInput);
 }
-
 
 // 게시판 삭제
 export async function removeCategoryBoard(seq: number) {
   return await DELETE(`/post/${seq}`);
 }
-
-
-
-
 
 // // 자주묻는질문(QnA) 리스트
 // export function categoryBoardQnaList() {
@@ -121,4 +130,3 @@ export async function removeCategoryBoard(seq: number) {
 // export function categoryBoardLookList() {
 
 // }
-

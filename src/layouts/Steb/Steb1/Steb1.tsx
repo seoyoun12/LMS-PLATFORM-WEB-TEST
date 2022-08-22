@@ -8,7 +8,7 @@ export function Steb1() {
   const isDesktop = useResponsive();
   return (
     <Steb1Wrap>
-      <StebHeader value={1} />
+      {isDesktop && <StebHeader value={1} />}
       {isDesktop ? <CNCalendar /> : <CalendarMobile />}
     </Steb1Wrap>
   );

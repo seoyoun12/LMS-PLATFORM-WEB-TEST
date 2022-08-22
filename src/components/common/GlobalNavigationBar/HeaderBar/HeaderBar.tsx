@@ -19,8 +19,20 @@ export function HeaderBar() {
   return (
     <Header className={styles.globalContainer}>
       <ContentContainer>
-        <Link href="/category" underline="none" height="100%" display="flex" alignItems="center">
-          <Image src="/assets/images/cttsLogo.png" height={40} width={224} alt="Your Name" />
+        <Link
+          href="/category"
+          underline="none"
+          height="100%"
+          flexBasis={224}
+          display="flex"
+          alignItems="center"
+        >
+          <Image
+            src="/assets/images/cttsLogo.png"
+            height={40}
+            width={224}
+            alt="Your Name"
+          />
         </Link>
         {/* <Link href="/" underline="none" color={grey[800]}>
           <TitleTypography>충남교통연수원</TitleTypography>
@@ -48,7 +60,13 @@ export function HeaderBar() {
                   튜터 지원
                 </Button>
               </Link> */}
-              <Link href="/sign-in" underline="none" display="flex" alignItems="center" width="80px">
+              <Link
+                href="/sign-in"
+                underline="none"
+                display="flex"
+                alignItems="center"
+                width="80px"
+              >
                 <SigninIcon />
                 {/* <Button className="align-left" color="neutral">
                   로그인
@@ -63,7 +81,9 @@ export function HeaderBar() {
               {!!user?.roles?.length &&
               user.roles.some(
                 role =>
-                  role === UserRole.ROLE_ADMIN || role === UserRole.ROLE_TRANS_MANAGER || role === UserRole.ROLE_TRAFFIC_SAFETY_MANAGER
+                  role === UserRole.ROLE_ADMIN ||
+                  role === UserRole.ROLE_TRANS_MANAGER ||
+                  role === UserRole.ROLE_TRAFFIC_SAFETY_MANAGER
               ) ? (
                 <Link href="/admin-center/dashboard" underline="none">
                   <Button className="align-left" color="neutral" size="large">
@@ -100,6 +120,8 @@ const ContentContainer = styled.div`
   display: flex;
   align-items: center;
   height: 100%;
+  max-width: 1200px;
+  margin: auto;
 
   @media screen and (min-width: 640px) {
     height: 56px;
@@ -133,5 +155,5 @@ const SignBoxes = styled(Box)`
 // `;
 
 const RightSection = styled.div`
-  margin-left: auto;
+  flex-basis: 200px;
 `;

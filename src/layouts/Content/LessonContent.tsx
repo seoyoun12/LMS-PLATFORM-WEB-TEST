@@ -62,6 +62,7 @@ export function LessonContent(props: Props) {
         const courseUserSeq = mode === "PREV" ? prevCourseUserSeq.current : props.courseUserSeq;
         const courseProgressSeq = mode === "PREV" ? prevCourseProgressSeq.current : props.courseProgressSeq;
         const lessonSeq = mode === "PREV" ? prevLesson.current.seq : props.lesson.seq;
+        const currentSecond = videoCurrentSeconds.current;
 
         console.log(await ApiClient.courseLog
           .createCourseModulesUsingPost1({
@@ -70,13 +71,13 @@ export function LessonContent(props: Props) {
             studyTime: apiVideoSeconds.current,
           })
           .then(() => {
-  
+
             return ApiClient.courseProgress
               .updateCourseProgressUsingPut({
                 courseUserSeq: courseUserSeq,
                 courseProgressSeq: courseProgressSeq,
                 lessonSeq: lessonSeq,
-                studyLastTime: videoCurrentSeconds.current,
+                studyLastTime: currentSecond,
               });
   
           }));
@@ -204,7 +205,7 @@ export function LessonContent(props: Props) {
   }, [props.lesson, props.courseProgressSeq, props.courseUserSeq, stopTimer, updateProgress]);
 
   // 렌더링.
-
+  console.log(props.lesson);
   return (
     <LessonVideoContainer>
       {props.lesson !== null && props.courseProgressSeq !== null ?

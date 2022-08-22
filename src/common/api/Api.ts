@@ -467,6 +467,9 @@ export interface CourseClassResponseDto {
    */
   createdDtime?: string;
 
+  /** 수강신청가능여부 */
+  enableToEnrollYn?: "Y" | "N";
+
   /**
    * 현재 수강 신청 인원
    * @format int32
@@ -2232,7 +2235,41 @@ export interface CourseUserTransSaveRequestDto {
   /** 교육신청자정보 - 차량번호 */
   carNumber?: string;
 
-  /** 교육신청자정보 - 차량 등록지 */
+  /**
+   * 교육신청자정보 - 차량 등록지
+   * 천안 - CHEONAN
+   * 공주 - GONGJU
+   * 보령 - BORYEONG
+   * 아산 - ASAN
+   * 서산 - SEOSAN
+   * 논산 - NONSAN
+   * 계룡 - GYERYONG
+   * 당진 - DANGJIN
+   * 금산 - GEUMSAN
+   * 부여 - BUYEO
+   * 서천 - SEOCHEON
+   * 청양 - CHEONGYANG
+   * 홍성 - HONGSEONG
+   * 예산 - YESAN
+   * 태안 - TAEAN
+   * 충남 - CHUNGNAM
+   * 세종 - SEJONG
+   * 서울 - SEOUL
+   * 부산 - BUSAN
+   * 대구 - DAEGU
+   * 인천 - INCHEON
+   * 광주 - GWANGJU
+   * 대전 - DAEJEON
+   * 울산 - ULSAN
+   * 경기 - GYEONGGI
+   * 강원 - GANGWON
+   * 충북 - CHUNGBUK
+   * 전북 - JEONBUK
+   * 전남 - JEONNAM
+   * 경북 - GYEONGBUK
+   * 경남 - GYEONGNAM
+   * 제주 - JEJU
+   */
   carRegisteredRegion?:
     | "CHEONAN"
     | "GONGJU"
@@ -5209,6 +5246,9 @@ export interface PostResponseDto {
    */
   createdDtime?: string;
 
+  /** 생성일 - yyyy. MM. dd. 형식 */
+  createdDtimeYmd?: string;
+
   /**
    * 조회수
    * @format int32
@@ -6178,7 +6218,6 @@ export interface URL {
 export type URLStreamHandler = object;
 
 export interface User {
-  /** @format date-time */
   birth?: string;
   courseUsers?: CourseUser[];
 
@@ -6219,10 +6258,7 @@ export interface UserDetailsImpl {
   accountNonExpired?: boolean;
   accountNonLocked?: boolean;
 
-  /**
-   * 유저 생년월일
-   * @format date-time
-   */
+  /** 유저 생년월일 */
   birth?: string;
 
   /**
@@ -6767,10 +6803,7 @@ export interface UserProvincialUpdateResponseDto {
 }
 
 export interface UserResponseDto {
-  /**
-   * 유저 생년월일
-   * @format date-time
-   */
+  /** 유저 생년월일 */
   birth?: string;
 
   /**
@@ -7887,16 +7920,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   };
   courseLog = {
     /**
-     * @description 관리자 페이지에서 과정 학습로그 생성 수강생이 강의를 들을때마다 기본값 ( 0 ) API 입력 5분에 한번씩 API 입력 수강생이 강의를 나갈때 API 입력수강을 완료해도 API 입력
+     * @description 과정 학습로그 생성 수강생이 강의를 들을때마다 기본값 ( 0 ) API 입력 5분에 한번씩 API 입력 <b>수강생이 강의를 나갈때 CourseProgress (/course-progress) Put API 호출</b>수강을 완료해도 API 입력
      *
-     * @tags [관리자] 과정 학습 로그 API
+     * @tags [App] 과정 학습 로그 API
      * @name CreateCourseModulesUsingPost1
-     * @summary [관리자] 과정 학습로그 생성 API - JWT 사용
-     * @request POST:/course-log/adm
+     * @summary [App] 과정 학습로그 생성 API - JWT 사용
+     * @request POST:/course-log
      */
     createCourseModulesUsingPost1: (courseUserLogRequestDto: CourseUserLogRequestDto, params: RequestParams = {}) =>
       this.request<CourseUserLogResponseDto, void>({
-        path: `/course-log/adm`,
+        path: `/course-log`,
         method: "POST",
         body: courseUserLogRequestDto,
         type: ContentType.Json,
@@ -7904,6 +7937,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
   };
   courseModule = {
+    /**
+     * @description 클라이언트에서 과정에 대한 모듈을 전체조회
+     *
+     * @tags [App & 관리자] 과정 모듈 API
+     * @name ClientFindAllCourseModulesUsingGet
+     * @summary [App] 과정 모듈 전체 조회 API - JWT 사용
+     * @request GET:/course-module
+     */
+    clientFindAllCourseModulesUsingGet: (query: { courseSeq: number }, params: RequestParams = {}) =>
+      this.request<CourseModuleFindResponseDto, void>({
+        path: `/course-module`,
+        method: "GET",
+        query: query,
+        ...params,
+      }),
+
     /**
      * @description 관리자 페이지에서 과정에 대한 모듈을 전체조회
      *
@@ -7989,6 +8038,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "POST",
         body: courseModuleSaveRequestDto,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 클라이언트에서 과정에 대한 모듈을 상세 조회
+     *
+     * @tags [App & 관리자] 과정 모듈 API
+     * @name ClientFindByCourseModulesUsingGet
+     * @summary [App] 과정 모듈 상세 조회 API - JWT 사용
+     * @request GET:/course-module/{courseModuleSeq}
+     */
+    clientFindByCourseModulesUsingGet: (courseModuleSeq: number, params: RequestParams = {}) =>
+      this.request<CourseModuleFindResponseDto, void>({
+        path: `/course-module/${courseModuleSeq}`,
+        method: "GET",
         ...params,
       }),
   };

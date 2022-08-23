@@ -21,7 +21,7 @@ export function LearningCourse() {
             <Grid item xs={1} sm={1} md={1} lg={1} key={item.courseClassSeq}>
               <Box
                 // href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}
-                onClick={() => router.push(`/course/${item.courseUserSeq}`)}
+                onClick={() => router.push(`/course/${item.courseUserSeq}/lesson/${!item.recentLessonSeq ? 1 : item.recentLessonSeq}`)}
               >
                 <ContentCardV2
                   title={item.courseTitle}

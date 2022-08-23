@@ -76,7 +76,6 @@ export function VideoPlayer(props: Props) {
 
       }
 
-      player.current.on("play", () => console.log("play from player"));
       playerTimeObserver.current?.disconnect();
       playerTimeObserver.current = new MutationObserver((mutationList) => {
 

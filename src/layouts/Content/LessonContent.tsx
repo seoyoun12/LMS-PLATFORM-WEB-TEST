@@ -6,6 +6,8 @@ import type { CourseProgressResponseDto, LessonDetailClientResponseDto } from "@
 import type { Notice } from "./Lesson.types";
 import ApiClient from "@common/api/ApiClient";
 
+const PLAYER_ELEMENT_ID = "lesson-player" as const;
+
 interface Props {
   courseUserSeq: number;
   courseProgress: CourseProgressResponseDto | null;
@@ -161,6 +163,7 @@ export function LessonContent(props: Props) {
   const onSeeked = React.useCallback(() => {
 
     videoIsSeeking.current = false;
+    document.querySelector<HTMLVideoElement>(`#${PLAYER_ELEMENT_ID} video`).load();
 
   }, []);
 
@@ -191,7 +194,7 @@ export function LessonContent(props: Props) {
     stopTimer("PREV");
 
     vidoeDurationSeconds.current = props.lesson ? props.lesson.totalTime : 0;
-    videoCurrentSeconds.current = props.lesson ? props.lesson.studyLastTime : 0;
+    videoCurrentSeconds.current = props.lesson ? props.courseProgress.studyLastTime : 0;
     videoPlayedSeconds.current = 0;
     videoIsSeeking.current = false;
     videoIsPaused.current = true;
@@ -215,7 +218,7 @@ export function LessonContent(props: Props) {
             <VideoWrapper>
               <VideoPlayer
                 playlist={props.lesson.s3Files[0]?.path}
-                initialPlayerId="lesson-player"
+                initialPlayerId={PLAYER_ELEMENT_ID}
                 initialConfig={{ autostart: false }}
                 seconds={props.courseProgress.studyLastTime}
                 onPause={onPause}

@@ -45,7 +45,7 @@ export function Lesson() {
 
   const lessonIndex = course.lessons.findIndex((lesson) => lesson.seq === lessonSeq);
   const lesson = lessonIndex >= 0 ? course.lessons[lessonIndex] : null;
-  const courseProgressSeq = lesson && course.courseProgressResponseDtoList.find((v) => v.lessonSeq = lesson.seq)?.courseProgressSeq || null;
+  const courseProgress = lesson && course.courseProgressResponseDtoList.find((v) => v.lessonSeq = lesson.seq) || null;
 
   // 렌더링.
 
@@ -53,12 +53,13 @@ export function Lesson() {
     <LessonContainer maxWidth={false}>
       <LessonContent
         courseUserSeq={course.courseUserSeq}
-        courseProgressSeq={courseProgressSeq}
+        courseProgress={courseProgress}
         lesson={lesson}
         notice={noticeConfig}
       />
       <LessonSidebar
         courseUserSeq={course.courseUserSeq}
+        courseProgresses={course.courseProgressResponseDtoList}
         lessons={course.lessons}
         lessonSeq={lessonSeq}
       />

@@ -1,8 +1,9 @@
-import { BbsType, uploadFile } from '@common/api/adm/file';
+import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
 import { UserTransportUpdateResponseDto } from '@common/api/Api';
 import { businessType, courseSubCategoryType } from '@common/api/courseClass';
 import { getTransport, modifTransWorker, useMyUser } from '@common/api/user';
 import { YN } from '@common/constant';
+import { Spinner } from '@components/ui';
 import { FileUploaderTrans } from '@components/ui/FileUploader';
 import { IOSSwitch } from '@components/ui/Switch';
 import styled from '@emotion/styled';
@@ -38,7 +39,7 @@ interface Props {
   locationList: { ko: string; en: string }[];
 }
 const phoneRegex = /[0-9]$/;
-const phoneList = ['010', '011', '012', '013' , '014' , '015' , '016' , '017' , '018' , '019'];
+const phoneList = ['010', '011', '012', '013', '014', '015', '016', '017', '018', '019'];
 
 export const userBusinessTypeOne = [
   { type: '여객', enType: 'PASSENGER' },
@@ -149,15 +150,21 @@ export function TransWorker({ type, locationList }: Props) {
   const dialog = useDialog();
   const snackbar = useSnackbar();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  //  /[^0-9]/g 은 문자넣으면 true
+  //  /[0-9]/g 은 문자넣으면 false
+  const isStringInPhone = (phoneNum: string) => /[0-9]/g.test(phoneNum);
 
   useEffect(() => {
     (async function () {
       const { data } = await getTransport();
+      console.log(data);
       setVehicleNumber(data.carNumber);
       setCompany(data.company);
-      setPhone(data.phone.slice(0, 3));
-      setPhone2(data.phone.slice(3, 7));
-      setPhone3(data.phone.slice(7, 11));
+      setPhone(isStringInPhone(data.phone) ? data.phone.slice(0, 3) : '');
+      setPhone2(isStringInPhone(data.phone) ? data.phone.slice(3, 7) : '');
+      setPhone3(isStringInPhone(data.phone) ? data.phone.slice(7, 11) : '');
       setSmsChecked(data.smsYn === YN.YES ? true : false);
       setOccupation1(data.userBusinessTypeOne);
       setOccupation2(data.userBusinessTypeTwo);
@@ -179,14 +186,16 @@ export function TransWorker({ type, locationList }: Props) {
       confirmText: '수정하기',
       cancelText: '취소하기',
     });
+    setLoading(true);
     await handleOnCloseConfirm(dialogConfirmed);
+    setLoading(false);
   };
 
   const handleOnCloseConfirm = async (isConfirm: boolean) => {
     if (isConfirm) {
       const smsYn = smsChecked ? YN.YES : YN.NO;
       if (!user) return snackbar({ variant: 'error', message: '수정 실패하였습니다.' });
-      const data = {
+      const postData = {
         carNumber: vehicleNumber, //차번호
         company: company, //회사
         name: user.name, //이름
@@ -197,8 +206,9 @@ export function TransWorker({ type, locationList }: Props) {
         userRegistrationType: vehicleRegi, //지역
       };
       try {
-        const modifiedTrans: { data: UserTransportUpdateResponseDto } = await modifTransWorker(data);
-        console.log(modifiedTrans);
+        const { data }: { data: UserTransportUpdateResponseDto } = await modifTransWorker(postData);
+        if(watch().files.length > 0) await deleteFile({ fileType: BbsType.TYPE_USER_PROFILE, fileTypeId: data.userSeq, fileSeqList: [fileSeq] });
+        await fileHandler(watch().files, data.userSeq);
       } catch (e: any) {
         window.alert(e.data.message);
       }
@@ -381,8 +391,8 @@ export function TransWorker({ type, locationList }: Props) {
             }}
           />
         </Box>
-        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, maxWidth: 650, margin: 'auto' }}>
-          수정하기
+        <Button type="submit" fullWidth variant="contained" disabled={loading} sx={{ mt: 3, mb: 2, maxWidth: 650, margin: 'auto' }}>
+          {loading ? <Spinner fit={true} /> : '수정하기'}
         </Button>
       </Box>
     </TransAndLowFloorContainer>

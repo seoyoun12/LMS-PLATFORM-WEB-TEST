@@ -38,7 +38,7 @@ interface Props {
   locationList: { ko: string; en: string }[];
 }
 const phoneRegex = /[0-9]$/;
-const phoneList = ['010', '032', '02', '031'];
+const phoneList = ['010', '011', '012', '013' , '014' , '015' , '016' , '017' , '018' , '019'];
 
 export const userBusinessTypeOne = [
   { type: '여객', enType: 'PASSENGER' },

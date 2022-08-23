@@ -90,9 +90,11 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
       studyEndDate: item.studyEndDate, //studyStartDate
       start: item.requestStartDate, //start: requestStartDate
       end: item.requestEndDate, //start: requestStartDate
-      className: isReceive
-        ? eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType || 'TYPE_NONE'
-        : 'TYPE_NONE',
+      className:
+        (prevSchedule && eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType) || 'TYPE_NONE',
+      // className: isReceive
+      // ? eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType || 'TYPE_NONE'
+      // : 'TYPE_NONE',
     };
   });
 
@@ -225,7 +227,7 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
     //@ts-ignore
     event: {
       _def: {
-        extendedProps: { lessonTime, courseCategoryType, isReceive },
+        extendedProps: { lessonTime, courseCategoryType, isReceive, prevSchedule },
       },
       title,
     },
@@ -233,8 +235,8 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
   // @ts-ignore
   return (
     <Box display="flex">
-      <Typography sx={{ color: isReceive ? '#df280a' : '#7a7a7a' }} fontWeight="bold">
-        [{title}]
+      <Typography sx={{ color: prevSchedule ? '#df280a' : '#7a7a7a' }} fontWeight="bold">
+        [{title}]&nbsp;
       </Typography>
       <Typography color="black">
         {courseCategoryType?.ko ? courseCategoryType.ko : 'null'}교육 / {lessonTime ? (lessonTime === 0 ? '종일' : lessonTime) : 'null'}시간
@@ -288,13 +290,14 @@ const CalendarWrap = styled(Box)<{ filter: string }>`
     color: #256aef;
   }
 
+  //이벤트 블록
   .fc-daygrid-block-event {
     height: 60px;
     display: flex;
     align-items: center;
     border: 1px solid #dae2f3 !important;
     margin: 0.75rem 0;
-    overflow: hidden;
+    /* overflow: hidden; */
     padding-left: 1rem;
   }
 
@@ -312,41 +315,43 @@ const CalendarWrap = styled(Box)<{ filter: string }>`
     /* margin-right: 1rem !important; */
     /* text-align: right; */
   }
-  /* .fc-day-sat {
-    color: red;
-  } */
+
+  //블록 넘치는 글자 hide
+  .fc-daygrid-event {
+    overflow: hidden;
+  }
 
   .TYPE_SUP_COMMON {
     background: #f0ffdf;
     border: #d3f2a0;
   }
   .TYPE_SUP_CONSTANT {
-    background: #036c19;
-    border: #eed4ba;
+    background: #d9fdf1;
+    border: #baeedc;
   }
   .TYPE_CONSTANT {
-    background: #036c19;
-    border: #eed4ba;
+    background: #eed4ba;
+    border: #036c19;
   }
   .TYPE_NEW {
-    background: #2980b9;
-    border: #e0e095;
+    background: #e0e095;
+    border: #2980b9;
   }
   .TYPE_ILLEGAL {
-    background: #4c0c0c;
-    border: #cce0ed;
+    background: #cce0ed;
+    border: #4c0c0c;
   }
   .TYPE_HANDICAPPED {
-    background: #190b99;
-    border: #c2c0ea;
+    background: #c2c0ea;
+    border: #3f2de2;
   }
   .TYPE_DANGEROUS {
-    background: #b807a9;
-    border: #e8c0cf;
+    background: #e8c0cf;
+    border: #b34caa;
   }
   .TYPE_NONE {
-    background: #e0e0e0;
-    border: #dfdfdf;
+    background: #dfdfdf;
+    border: #e0e0e0;
   }
 `;
 const EduGuide = styled(Typography)`

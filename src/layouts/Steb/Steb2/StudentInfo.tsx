@@ -21,15 +21,17 @@ import { FieldValues, UseFormRegister, UseFormSetValue, UseFormWatch } from 'rea
 import { RegisterType, UserTransSaveInputDataType } from '@common/api/courseClass';
 import { YN } from '@common/constant';
 import { useMyUser, UserRole } from '@common/api/user';
+import { Phone3Regex, Phone4Regex } from '@utils/inputRegexes';
 
 interface Props {
   register: UseFormRegister<UserTransSaveInputDataType>;
   setValue: UseFormSetValue<UserTransSaveInputDataType>;
   registerType: RegisterType;
   setRegisterType: React.Dispatch<React.SetStateAction<RegisterType>>;
+  watch:UseFormWatch<UserTransSaveInputDataType>;
 }
 
-export function StudentInfo({ register, setValue, registerType, setRegisterType }: Props) {
+export function StudentInfo({ register, setValue, registerType, setRegisterType ,watch }: Props) {
   const [name, setName] = useState<string>(); //이름
   const [firstIdentityNumber, setFirstIdentityNumber] = useState<string>(); //주민앞
   const [secondIdentityNumber, setSecondidentityNumber] = useState<string>(); //주민뒷
@@ -138,7 +140,12 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
               <TextField
                 // placeholder="'-'를 제외한 숫자만 11자리 입력해주세요."
                 // {...register('phone', { maxLength: { value: 12, message: 'phone must be longer than 12 characters' } })}
-                {...register('firstPhone', { pattern: /[0-9]{3}/ })}
+                {...register('firstPhone')} onChange={(e)=>{
+                  if(!Phone3Regex.test(e.target.value) || e.target.value.length > 3 ){
+                    return
+                  }
+                  setValue('firstPhone', e.target.value);
+                }} value={watch().firstPhone}
                 // onChange={e => {
                 //   console.log(e.target.value.length);
                 //   if (e.target.value.length > 11) return;
@@ -147,9 +154,19 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
                 fullWidth
               />
               -
-              <TextField {...register('secondPhone')} fullWidth />
+              <TextField {...register('secondPhone' )} onChange={(e)=>{
+                  if(!Phone4Regex.test(e.target.value) || e.target.value.length > 4 ){
+                    return
+                  }
+                  setValue('secondPhone', e.target.value);
+                }}  value={watch().secondPhone} fullWidth />
               -
-              <TextField {...register('thirdPhone')} fullWidth />
+              <TextField {...register('thirdPhone' )} onChange={(e)=>{
+                  if(!Phone4Regex.test(e.target.value) || e.target.value.length > 4 ){
+                    return
+                  }
+                  setValue('thirdPhone', e.target.value);
+                }}  value={watch().thirdPhone} fullWidth />
             </TableRightCell>
           </TableCustomRow>
         </Table>

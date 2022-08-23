@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { StebHeader } from '../StebHeader';
 import { useRecoilState } from 'recoil';
-import { courseClassEnrollInfo, courseClassEnrollList } from '@common/recoil';
+import { courseClassEnrollInfo, courseClassEnrollList, userInfo } from '@common/recoil';
 import CheckIcon from '@mui/icons-material/Check';
 import { locationList } from '@layouts/MeEdit/MeEdit';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
@@ -86,6 +86,7 @@ export function Steb3() {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState<string>('');
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
+  const [user, setUser] = useRecoilState(userInfo);
   // const [enrollList, setEnrollList] = useRecoilState(courseClassEnrollList);
   const [enrollList, setEnrollList] = useState([]);
   const [info, setInfo] = useState<{
@@ -95,6 +96,7 @@ export function Steb3() {
     studyStartDate: string;
     studyEndDate: string;
   }>();
+  console.log(enrollInfo, enrollList);
 
   const getData = async (seq: number) => {
     setLoading(true);
@@ -303,7 +305,7 @@ export function Steb3() {
         <BottomBox>
           <Box padding="1rem" textAlign="center">
             <Typography fontWeight={400} fontSize="24px">
-              홍길동님의 교육신청이 완료되었습니다.
+              {user.name || 'null'}님의 교육신청이 완료되었습니다.
             </Typography>
             <Typography fontWeight={400} fontSize="24px">
               알차고 실속있는 서비스로 찾아뵙겠습니다.
@@ -342,7 +344,7 @@ export function Steb3() {
 
 const Steb3Wrap = styled(Box)``;
 const Steb3BodyWrap = styled(Container)`
-  margin-top: 3rem;
+  margin-top: 6rem;
 `;
 const HeaderTypo = styled(Typography)`
   padding-bottom: 1rem;

@@ -32,6 +32,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
 import dateFormat from 'dateformat';
+import { useRouter } from 'next/router';
 
 // const defaultValues = {
 //   seq: 1,
@@ -58,6 +59,7 @@ const defaultValues: Partial<CourseClassCreate> = {
   requestEndDate: dateFormat(new Date(), 'yyyy-mm-dd'),
   studyStartDate: dateFormat(new Date(), 'yyyy-mm-dd'),
   studyEndDate: dateFormat(new Date(), 'yyyy-mm-dd'),
+  limitPeople:0,
 };
 
 export function CalendarUpload() {
@@ -65,6 +67,8 @@ export function CalendarUpload() {
   const [openModal, setOpenModal] = useState(false);
   const [courseName, setCourseName] = useState('');
   const [limitPeopleCheck, setLimitPeopleCheck] = useState(false);
+  const [loading ,setLoading] = useState(false)
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -75,13 +79,14 @@ export function CalendarUpload() {
     watch,
     setValue,
   } = useForm<CourseClassCreate>({ defaultValues });
-  console.log(watch(), 'ss');
+  
   const onSubmit: SubmitHandler<CourseClassCreate> = async e => {
     console.log('dsdasda', e, limitPeopleCheck);
     const { step, year, limitPeople, courseSeq } = e;
 
     if (!courseSeq) return window.alert('과정을 등록해야합니다!');
     try {
+      setLoading(true);
       await courseClassCreate({
         ...watch(),
         step: Number(step),
@@ -90,8 +95,11 @@ export function CalendarUpload() {
         courseSeq: Number(courseSeq),
       });
       window.alert('완료 되었습니다.');
+      setLoading(false);
+      router.push('/admin-center/calendar')
     } catch (e: any) {
       // snackbar({ variant: 'error', message: e });
+      setLoading(false);
       console.log(e);
     }
   };
@@ -293,8 +301,8 @@ export function CalendarUpload() {
           </FormControl>
         </Box>
 
-        <Button type="submit" variant="contained">
-          등록
+        <Button type="submit" variant="contained" disabled={true}>
+          {loading ? <Spinner fit={true} /> : '등록'}
         </Button>
         <Typography>
           날짜 입력 방식은 YYYY-MM-DD로 해야합니다. ex{')'} 2022-07-22

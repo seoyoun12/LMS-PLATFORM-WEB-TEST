@@ -33,6 +33,7 @@ import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
+import { Spinner } from "@components/ui";
 
 
 const questionTypeList = [
@@ -61,6 +62,7 @@ interface Props {
     isFileDelete: boolean;
     qnaSeq?: number;
   }) => void
+  loading:boolean;
 }
 
 interface FormType extends QnaInput {
@@ -72,7 +74,7 @@ const defaultValues = {
 };
 
 
-export function CategoryBoardQuestionForm({  mode = "upload", qna, onHandleSubmit }: Props) {
+export function CategoryBoardQuestionForm({  mode = "upload", qna, onHandleSubmit, loading}: Props) {
   const [ isFileDelete, setIsFileDelete ] = useState(false);
   const [ fileName, setFileName ] = useState<string | null>(null);
 
@@ -298,8 +300,8 @@ export function CategoryBoardQuestionForm({  mode = "upload", qna, onHandleSubmi
           <Typography color={"#2ecc71"}>(필수)</Typography>
         </Box>
       </Box>
-      <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-        등록하기
+      <Button type="submit" fullWidth variant="contained" disabled={loading}  sx={{ mt: 3, mb: 2 }}>
+        { loading ? <Spinner fit={true} /> : '등록하기' }
       </Button>
     </Box>
   );

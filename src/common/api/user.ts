@@ -85,6 +85,8 @@ export interface MyInfoCourseRes {
   step: number; //기수
   studyEndDate: string; //교육만료일
   thumbnailImage: string; //썸네일 이미지 S3경로
+  firstLessonSeq:number;
+  recentLessonSeq:number;
 }
 
 export interface MyUser extends User {

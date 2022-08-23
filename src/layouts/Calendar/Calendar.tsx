@@ -76,9 +76,9 @@ export const eduLegendList = [
     color: '#d9fdf1',
     borderColor: '#baeedc',
   },
-  { title: '수시 교육', enType: courseCategoryType.TYPE_CONSTANT, color: '#036c19', borderColor: '#eed4ba' },
-  { title: '신규 교육', enType: courseCategoryType.TYPE_NEW, color: '#2980b9', borderColor: '#e0e095' },
-  { title: '법령위반자 교육', enType: courseCategoryType.TYPE_ILLEGAL, color: '#4c0c0c', borderColor: '#cce0ed' },
+  { title: '수시 교육', enType: courseCategoryType.TYPE_CONSTANT, color: '#eed4ba', borderColor: '#036c19' },
+  { title: '신규 교육', enType: courseCategoryType.TYPE_NEW, color: '#e0e095', borderColor: '#2980b9' },
+  { title: '법령위반자 교육', enType: courseCategoryType.TYPE_ILLEGAL, color: '#cce0ed', borderColor: '#4c0c0c' },
   {
     title: '교통약자 교육',
     enType: courseCategoryType.TYPE_HANDICAPPED,
@@ -88,8 +88,8 @@ export const eduLegendList = [
   {
     title: '위험물질 운송차량교육',
     enType: courseCategoryType.TYPE_DANGEROUS,
-    color: '#b807a9',
-    borderColor: '#e8c0cf',
+    color: '#e8c0cf',
+    borderColor: '#b34caa',
   },
   { title: '마감', enType: courseCategoryType.TYPE_NONE, color: '#e0e0e0', borderColor: '#dfdfdf' },
 ];
@@ -167,4 +167,6 @@ export function CNCalendar() {
     </CalendarWrap>
   );
 }
-const CalendarWrap = styled(Container)``;
+const CalendarWrap = styled(Container)`
+  margin-top: 6rem;
+`;

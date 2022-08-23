@@ -184,6 +184,7 @@ const SecondBox = styled(Box)`
 
 const Hrhrhrhrhr = styled.hr`
   opacity: 30%;
+  margin:0;
 `;
 
 // const ContentItem = styled.div`

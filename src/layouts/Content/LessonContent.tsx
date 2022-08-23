@@ -2,13 +2,13 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Box, LinearProgress, Typography } from "@mui/material";
 import { VideoPlayer } from "@components/common";
-import type { LessonDetailClientResponseDto } from "@common/api/Api";
+import type { CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
 import type { Notice } from "./Lesson.types";
 import ApiClient from "@common/api/ApiClient";
 
 interface Props {
   courseUserSeq: number;
-  courseProgressSeq: number | null;
+  courseProgress: CourseProgressResponseDto | null;
   lesson: LessonDetailClientResponseDto | null;
   notice: Notice[];
 }
@@ -22,7 +22,7 @@ export function LessonContent(props: Props) {
   // 레퍼런스.
 
   const prevCourseUserSeq = React.useRef<number | null>(null);
-  const prevCourseProgressSeq = React.useRef<number | null>(null);
+  const prevCourseProgress = React.useRef<CourseProgressResponseDto | null>(null);
   const prevLesson = React.useRef<LessonDetailClientResponseDto | null>(null);
 
   const apiTimer = React.useRef<number | null>(null);
@@ -40,10 +40,10 @@ export function LessonContent(props: Props) {
 
   const updateProgress = React.useCallback(() => {
 
-    const seconds = props.lesson.totalTime + videoPlayedSeconds.current;
+    const seconds = props.courseProgress.studyTime + videoPlayedSeconds.current;
     setProgress(vidoeDurationSeconds.current > 0 && seconds < vidoeDurationSeconds.current ? seconds / vidoeDurationSeconds.current : 1);
 
-  }, [props.lesson.totalTime]);
+  }, [props.courseProgress.studyTime]);
 
   // 콜백 - 타이머.
 
@@ -56,12 +56,12 @@ export function LessonContent(props: Props) {
       if (mode !== "RESET") {
 
         if (
-          (mode === "CURRENT" && (props.lesson === null || props.courseProgressSeq === null)) ||
+          (mode === "CURRENT" && (props.lesson === null || props.courseProgress.courseProgressSeq === null)) ||
           (mode === "PREV" && props.courseUserSeq === prevCourseUserSeq.current && props.lesson.seq === prevLesson.current.seq)
         ) return;
   
         const courseUserSeq = mode === "PREV" ? prevCourseUserSeq.current : props.courseUserSeq;
-        const courseProgressSeq = mode === "PREV" ? prevCourseProgressSeq.current : props.courseProgressSeq;
+        const courseProgressSeq = mode === "PREV" ? prevCourseProgress.current.courseProgressSeq : props.courseProgress.courseProgressSeq;
         const lessonSeq = mode === "PREV" ? prevLesson.current.seq : props.lesson.seq;
         const currentSecond = videoCurrentSeconds.current;
 
@@ -91,13 +91,13 @@ export function LessonContent(props: Props) {
     apiSeconds.current = 0;
     apiVideoSeconds.current = 0;
 
-  }, [props.courseProgressSeq, props.courseUserSeq, props.lesson]);
+  }, [props.courseProgress.courseProgressSeq, props.courseUserSeq, props.lesson]);
 
   const startTimer = React.useCallback(() => {
 
     stopTimer("RESET");
 
-    if (props.lesson === null || props.courseProgressSeq === null) return;
+    if (props.lesson === null || props.courseProgress.courseProgressSeq === null) return;
 
     apiTimer.current = window.setInterval(() => {
 
@@ -119,7 +119,7 @@ export function LessonContent(props: Props) {
 
     }, 1000);
 
-  }, [props.courseProgressSeq, props.courseUserSeq, props.lesson, stopTimer]);
+  }, [props.courseProgress.courseProgressSeq, props.courseUserSeq, props.lesson, stopTimer]);
 
   // 콜백 - 이벤트.
 
@@ -131,7 +131,7 @@ export function LessonContent(props: Props) {
 
   const onPlaying = React.useCallback(() => {
 
-    if (props.lesson === null || props.courseProgressSeq === null) return;
+    if (props.lesson === null || props.courseProgress.courseProgressSeq === null) return;
 
     if (videoIsFirst.current) {
 
@@ -150,7 +150,7 @@ export function LessonContent(props: Props) {
 
     videoIsPaused.current = false;
 
-  }, [props.courseProgressSeq, props.courseUserSeq, props.lesson, startTimer]);
+  }, [props.courseProgress.courseProgressSeq, props.courseUserSeq, props.lesson, startTimer]);
 
   const onSeeking = React.useCallback(() => {
 
@@ -190,7 +190,7 @@ export function LessonContent(props: Props) {
 
     stopTimer("PREV");
 
-    vidoeDurationSeconds.current = props.lesson ? props.lesson.min * 60 + props.lesson.sec : 0;
+    vidoeDurationSeconds.current = props.lesson ? props.lesson.totalTime : 0;
     videoCurrentSeconds.current = props.lesson ? props.lesson.studyLastTime : 0;
     videoPlayedSeconds.current = 0;
     videoIsSeeking.current = false;
@@ -198,18 +198,18 @@ export function LessonContent(props: Props) {
     videoIsFirst.current = true;
 
     prevCourseUserSeq.current = props.courseUserSeq;
-    prevCourseProgressSeq.current = props.courseProgressSeq;
+    prevCourseProgress.current = props.courseProgress;
     prevLesson.current = props.lesson;
     
     updateProgress();
 
-  }, [props.lesson, props.courseProgressSeq, props.courseUserSeq, stopTimer, updateProgress]);
+  }, [props.lesson, props.courseProgress, props.courseUserSeq, stopTimer, updateProgress]);
 
   // 렌더링.
 
   return (
     <LessonVideoContainer>
-      {props.lesson !== null && props.courseProgressSeq !== null ?
+      {props.lesson !== null && props.courseProgress !== null ?
         (
           <React.Fragment>
             <VideoWrapper>
@@ -217,7 +217,7 @@ export function LessonContent(props: Props) {
                 playlist={props.lesson.s3Files[0]?.path}
                 initialPlayerId="lesson-player"
                 initialConfig={{ autostart: false }}
-                seconds={props.lesson.studyLastTime}
+                seconds={props.courseProgress.studyLastTime}
                 onPause={onPause}
                 onPlaying={onPlaying}
                 onSeeking={onSeeking}

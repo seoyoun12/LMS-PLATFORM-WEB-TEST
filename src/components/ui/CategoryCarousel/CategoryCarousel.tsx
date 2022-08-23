@@ -208,13 +208,14 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
 
 const Slider = styled.div`
   position: relative;
+  // background:#fafafa;
   /* background: linear-gradient(
       270.44deg,
       rgb(255, 122, 0) 0.21%,
       rgba(255, 122, 0, 0.4) 99.18%
     )
     0% 0% / 100%; */
-  margin-bottom: 32px;
+  // margin-bottom: 32px;
   .swiper-z-index {
     z-index: 111;
   }

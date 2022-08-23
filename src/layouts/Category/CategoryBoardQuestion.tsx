@@ -77,4 +77,5 @@ const NtContainer = styled(Container)`
   width: 100%;
   height: 100%;
   background-color: #fff;
+  border-radius: 0 0 4px 4px; 
 `;

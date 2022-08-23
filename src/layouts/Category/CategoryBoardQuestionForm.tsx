@@ -300,7 +300,7 @@ export function CategoryBoardQuestionForm({  mode = "upload", qna, onHandleSubmi
           <Typography color={"#2ecc71"}>(필수)</Typography>
         </Box>
       </Box>
-      <Button type="submit" fullWidth variant="contained" disabled={loading}  sx={{ mt: 3, mb: 2 }}>
+      <Button type="submit" fullWidth variant="contained" disabled={loading}  sx={{ mt: 3 }}>
         { loading ? <Spinner fit={true} /> : '등록하기' }
       </Button>
     </Box>

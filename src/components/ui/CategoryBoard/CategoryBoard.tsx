@@ -63,7 +63,8 @@ export function CategoryBoard() {
 }
 
 const NoticeWrap = styled(Box)`
-  padding-top: 4rem;
+padding-top: 4rem;
+padding-bottom: 6rem;
   background: #e6edf3;
 `;
 const NoticeContainer = styled(Container)``;

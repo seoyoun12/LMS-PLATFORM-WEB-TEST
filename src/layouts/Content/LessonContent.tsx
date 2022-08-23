@@ -37,6 +37,7 @@ export function LessonContent(props: Props) {
   const videoIsSeeking = React.useRef<boolean>(false);
   const videoIsPaused = React.useRef<boolean>(true);
   const videoIsFirst = React.useRef<boolean>(true);
+  const videoIsFinished = React.useRef<boolean>(false);
 
   // 콜백
 
@@ -180,11 +181,22 @@ export function LessonContent(props: Props) {
     videoPlayedSeconds.current++;
     apiVideoSeconds.current++;
 
-    if (videoCurrentSeconds.current === vidoeDurationSeconds.current) stopTimer("CURRENT");
+    if (
+      !videoIsFinished.current &&
+      (
+        props.courseProgress.studyTime + videoPlayedSeconds.current >= vidoeDurationSeconds.current ||
+        videoCurrentSeconds.current >= vidoeDurationSeconds.current
+      )
+    ) {
+      
+      stopTimer("CURRENT");
+      videoIsFinished.current = true;
+
+    }
 
     updateProgress();
 
-  }, [stopTimer, updateProgress]);
+  }, [props.courseProgress.studyTime, stopTimer, updateProgress]);
 
   // 이펙트.
 
@@ -198,6 +210,7 @@ export function LessonContent(props: Props) {
     videoIsSeeking.current = false;
     videoIsPaused.current = true;
     videoIsFirst.current = true;
+    videoIsFinished.current = false;
 
     prevCourseUserSeq.current = props.courseUserSeq;
     prevCourseProgress.current = props.courseProgress;
@@ -218,8 +231,8 @@ export function LessonContent(props: Props) {
               <VideoPlayer
                 playlist={props.lesson.s3Files[0]?.path}
                 initialPlayerId={PLAYER_ELEMENT_ID}
-                initialConfig={{ autostart: false }}
-                seconds={props.courseProgress.studyLastTime}
+                initialConfig={{ autostart: true }}
+                seconds={props.courseProgress.studyLastTime === props.lesson.totalTime ? props.lesson.totalTime + 1 : props.courseProgress.studyLastTime}
                 onPause={onPause}
                 onPlaying={onPlaying}
                 onSeeking={onSeeking}

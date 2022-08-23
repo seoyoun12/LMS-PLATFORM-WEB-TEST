@@ -40,7 +40,7 @@ export function LessonTabs({ tabsConfig, showBorderBottom = true, rerender = tru
     >
       <MuiTabs className="mui-tabs" value={changeMenu || tabsConfig[0].value} onChange={handleChange} aria-label="basic tabs example">
         {tabsConfig.map(({ value, label }) => (
-          <MuiTab key={value} className="mui-tabs-item" label={label} value={value} />
+          <CustomMuiTab key={value} className="mui-tabs-item" label={label} value={value} />
         ))}
       </MuiTabs>
     </TabBox>
@@ -50,5 +50,12 @@ export function LessonTabs({ tabsConfig, showBorderBottom = true, rerender = tru
 const TabBox = styled(Box)`
   .mui-tabs {
     display: flex;
+  }
+`;
+
+const CustomMuiTab = styled(MuiTab)`
+  font-size: 1rem;
+  &[aria-selected="true"] {
+    font-weight: bold;
   }
 `;

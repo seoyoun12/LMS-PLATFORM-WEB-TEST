@@ -45,7 +45,7 @@ export function Lesson() {
 
   const lessonIndex = course.lessons.findIndex((lesson) => lesson.seq === lessonSeq);
   const lesson = lessonIndex >= 0 ? course.lessons[lessonIndex] : null;
-  const courseProgress = lesson && course.courseProgressResponseDtoList.find((v) => v.lessonSeq = lesson.seq) || null;
+  const courseProgress = lesson && course.courseProgressResponseDtoList.find((v) => v.lessonSeq === lesson.seq) || null;
 
   // 렌더링.
 
@@ -76,7 +76,8 @@ const CourseErrorContainer = styled(Box)`
 
 const LessonContainer = styled(Container)`
   margin: 0 auto;
-  margin-top: 32px;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
   padding: 0 50px;
   display: flex;
   flex: 1 1 auto;

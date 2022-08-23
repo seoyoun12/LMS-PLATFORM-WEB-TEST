@@ -59,7 +59,7 @@ const defaultValues: Partial<CourseClassCreate> = {
   requestEndDate: dateFormat(new Date(), 'yyyy-mm-dd'),
   studyStartDate: dateFormat(new Date(), 'yyyy-mm-dd'),
   studyEndDate: dateFormat(new Date(), 'yyyy-mm-dd'),
-  limitPeople:0,
+  limitPeople: 0,
 };
 
 export function CalendarUpload() {
@@ -67,8 +67,8 @@ export function CalendarUpload() {
   const [openModal, setOpenModal] = useState(false);
   const [courseName, setCourseName] = useState('');
   const [limitPeopleCheck, setLimitPeopleCheck] = useState(false);
-  const [loading ,setLoading] = useState(false)
-  const router = useRouter()
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -79,7 +79,7 @@ export function CalendarUpload() {
     watch,
     setValue,
   } = useForm<CourseClassCreate>({ defaultValues });
-  
+
   const onSubmit: SubmitHandler<CourseClassCreate> = async e => {
     console.log('dsdasda', e, limitPeopleCheck);
     const { step, year, limitPeople, courseSeq } = e;
@@ -96,7 +96,7 @@ export function CalendarUpload() {
       });
       window.alert('완료 되었습니다.');
       setLoading(false);
-      router.push('/admin-center/calendar')
+      router.push('/admin-center/calendar');
     } catch (e: any) {
       // snackbar({ variant: 'error', message: e });
       setLoading(false);
@@ -301,7 +301,7 @@ export function CalendarUpload() {
           </FormControl>
         </Box>
 
-        <Button type="submit" variant="contained" disabled={true}>
+        <Button type="submit" variant="contained" disabled={loading}>
           {loading ? <Spinner fit={true} /> : '등록'}
         </Button>
         <Typography>

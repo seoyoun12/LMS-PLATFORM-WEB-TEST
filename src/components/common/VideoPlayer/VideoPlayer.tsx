@@ -121,9 +121,13 @@ export function VideoPlayer(props: Props) {
 
 const Player = styled.div`
   
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+
   & .webplayer-internal-core-shadow {
     width: 100% !important;
     height: auto !important;
   }
 
-`
+`;

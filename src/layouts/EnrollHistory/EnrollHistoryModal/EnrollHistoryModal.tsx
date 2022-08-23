@@ -8,7 +8,7 @@ import {
   delelteCourseUserIndi,
   delelteCourseUserOrga,
 } from '@common/api/courseUser';
-import { Modal } from '@components/ui';
+import { Modal, Spinner } from '@components/ui';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { locationList } from '@layouts/MeEdit/MeEdit';
@@ -52,10 +52,13 @@ export function EnrollHistoryModal({
   const [phone2, setPhone2] = useState('');
   const [phone3, setPhone3] = useState('');
   const { register, setValue, reset, watch } = useForm<ModifyCourseUserReqDto>();
+  const [getDateLoading, setGetDataLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (async function () {
       try {
+        setGetDataLoading(true);
         const { data } = await getSingleCourseUser(
           courseUserSeq,
           (regType === RegisterType.TYPE_INDIVIDUAL ? 'individual' : 'organization') ===
@@ -72,7 +75,9 @@ export function EnrollHistoryModal({
         setPhone1(data.phone.slice(0, 3));
         setPhone2(data.phone.slice(3, 7));
         setPhone3(data.phone.slice(7, 11));
+        setGetDataLoading(false);
       } catch (e: any) {
+        setGetDataLoading(false);
         snackbar({ variant: 'error', message: e.data.message });
       }
     })();
@@ -87,6 +92,7 @@ export function EnrollHistoryModal({
     }
 
     try {
+      setLoading(true);
       const dialogConfirmed = await dialog({
         title: '정보 수정하기',
         description: '정말로 수정하시겠습니까?',
@@ -104,10 +110,12 @@ export function EnrollHistoryModal({
         if (regType === RegisterType.TYPE_ORGANIZATION) {
           const data = await modifyCourseUserOrga(courseUserSeq, dataValue);
         }
-        snackbar({ variant: 'success', message: '성공적으로 수정완료 했씁니다.' });
+        snackbar({ variant: 'success', message: '성공적으로 수정완료 했습니다.' });
         handleClose();
+        setLoading(false);
       }
     } catch (e: any) {
+      setLoading(false);
       snackbar({ variant: 'error', message: e.data.message });
     }
   };
@@ -134,6 +142,7 @@ export function EnrollHistoryModal({
     }
   };
 
+  if (getDateLoading) return <Spinner />;
   return (
     <Modal
       open={open}
@@ -142,17 +151,23 @@ export function EnrollHistoryModal({
       maxWidth="lg"
       action={
         <Box width="100%" display="flex" justifyContent="center" gap={2}>
-          <Button
-            variant="contained"
-            color="warning"
-            sx={{ width: '100px' }}
-            onClick={onClickDelete}
-          >
-            신청 취소
-          </Button>
-          <Button variant="contained" sx={{ width: '100px' }} onClick={onSubmit}>
-            수정
-          </Button>
+          {loading ? (
+            <Spinner fit={true} />
+          ) : (
+            <>
+              <Button
+                variant="contained"
+                color="warning"
+                sx={{ width: '100px' }}
+                onClick={onClickDelete}
+              >
+                신청 취소
+              </Button>
+              <Button variant="contained" sx={{ width: '100px' }} onClick={onSubmit}>
+                수정
+              </Button>
+            </>
+          )}
         </Box>
       }
     >

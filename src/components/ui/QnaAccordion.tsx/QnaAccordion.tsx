@@ -214,8 +214,9 @@ const BoardBox = styled(Box)`
     width: 10%;
   }
   .QnaBoardTwo {
-    font-weight: bold;
-    font-size: 1.3rem;
+    // font-weight: bold;
+    // font-size: 1.3rem;
+    text-align: center;
     width: 55%;
   }
   .QnaBoardThird {
@@ -236,16 +237,16 @@ const QuestionBoardBox = styled(Box)`
   }
 
   .QnaBoardTwo {
-    font-weight: bold;
-    font-size: 1.3rem;
+    // font-weight: bold;
+    // font-size: 1.3rem;
     width: 100%;
   }
 `;
 
 const AnswerBoardBox = styled(Box)`
   .QnaBoardTwo {
-    font-weight: bold;
-    font-size: 1.3rem;
+    // font-weight: bold;
+    // font-size: 1.3rem;
     width: 100%;
   }
 `;

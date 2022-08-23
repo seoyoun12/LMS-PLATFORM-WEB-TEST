@@ -89,7 +89,7 @@ const MainPage: NextPage = () => {
           <LogoBox>
             <Image src="/assets/images/cttsLogo.png" height={48} width={320} alt="Your Name" style={{ margin: 'auto' }} />
           </LogoBox>
-          <NoticeContainer>
+          {/* <NoticeContainer>
             <NoticeTitle>
               <NoticeTitleTypography>{`충남교통연수원 알림판`}</NoticeTitleTypography>
             </NoticeTitle>
@@ -98,15 +98,13 @@ const MainPage: NextPage = () => {
                 {`운수종사자의 경우 첫번째 "운수종사자교육"\n저상버스운전자의 경우 두번째 "저상버스운전자교육"\n도민교통안전교육자의 경우 세번째 "도민교통안전교육"을\n이용해주시기 바랍니다.`}
               </NoticeContentTypography>
             </NoticeContent>
-          </NoticeContainer>
+          </NoticeContainer> */}
           <Box position="relative">
             <CategoryGrid
               container={true}
               spacing={0}
               columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
-              position="relative"
               height={'100%'}
-              top={60}
             >
               {data.map(item => {
                 if (item.status === 1) {
@@ -203,7 +201,7 @@ const WrapMainContainer = styled.div`
 const MainContainer = styled(Box)`
   /* background: #DCF3FF; */
   height: 70%;
-  min-height: 728px;
+  min-height: 719px;
   padding-top: 130px;
 `;
 const ContentBox = styled(Box)`
@@ -271,7 +269,6 @@ const NoticeContentTypography = styled(Typography)`
 const CategoryGrid = styled(Grid)`
   gap: 4px;
   position: relative;
-  top: 60px;
   height: 100%;
   display: flex;
   justify-content: center;

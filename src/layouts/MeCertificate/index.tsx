@@ -16,6 +16,7 @@ import { POST } from "@common/httpClient";
 import { UserMyinfoCertificatesResponseDto } from '@common/api/Api';
 import { format } from "date-fns";
 import BackgroundImage from "public/assets/images/certificates_background.svg";
+import { NotFound } from "@components/ui/NotFound";
 
 const MeCertificate: NextPage = () => {
   const { certificateList } = useGetUserMyinfoCertificates();
@@ -57,14 +58,15 @@ const MeCertificate: NextPage = () => {
   return (
     <MeCertificateContainer>
       <MeCertificateHeaderContainer>
-        <MeCertificateHeaderTitle>수료증 발급</MeCertificateHeaderTitle>
+        <MeCertificateHeaderTitle>증명서 발급</MeCertificateHeaderTitle>
         <MeCertificateHeaderSubtitle>
-          학습중인 과정의 수료확인 및 수료증 발급을 받을 수 있습니다!
+          학습중인 과정의 수료확인 및 증명서 발급을 받을 수 있습니다!
         </MeCertificateHeaderSubtitle>
         <BackgroundImage />
       </MeCertificateHeaderContainer>
 
       <MeCertificateContentContainer>
+        {certificateList?.data.length <= 0 && <NotFound content='신청한 과정이 존재하지 않습니다!' />}
         {certificateList?.data &&
           certificateList.data.map((item, index) => (
             <MeCertificateItemContainer

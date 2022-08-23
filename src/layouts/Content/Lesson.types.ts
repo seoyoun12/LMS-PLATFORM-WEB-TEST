@@ -1,7 +1,7 @@
 export const tabsConfig = Object.freeze([
   { label: "커리큘럼", value: "curriculum" },
-  { label: '공지사항', value: 'notice' },
-  { label: '수업자료', value: 'stuff' },
+  // { label: '공지사항', value: 'notice' },
+  // { label: '수업자료', value: 'stuff' },
 ] as const);
 
 export type TabsConfig = typeof tabsConfig[number];

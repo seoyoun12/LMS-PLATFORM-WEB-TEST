@@ -1,4 +1,3 @@
-
 import styled from '@emotion/styled';
 import styles from '@styles/common.module.scss';
 import { grey } from '@mui/material/colors';
@@ -232,8 +231,8 @@ export const TransHeaderList = [
     href: '/me',
     items: [
       { title: '정보보기', href: '/me' },
-      { title: '학습현황', href: '/me/my-course' },
       { title: '정보수정', href: '/me/edit' },
+      { title: '학습현황', href: '/me/my-course' },
     ],
   },
   {

@@ -52,6 +52,7 @@ const FileUploaderRoot = ({ onFileChange, register, regName, accept = undefined,
         <Button
           // variant="outlined"
           // startIcon={<UploadOutlinedIcon htmlColor={grey[700]} />}
+          style={{ backgroundColor: 'transparent' }}
           onClick={() => inputRef.current?.click()}
         >
           <Box sx={{ margin: 'auto' }}>{children}</Box>

@@ -22,6 +22,7 @@ import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { signUp } from '@common/api';
 import { IndividualSummary } from './IndividualSummary';
 import useResponsive from '@hooks/useResponsive';
+import { Spinner } from '@components/ui';
 
 export function Steb2() {
   const router = useRouter();
@@ -34,6 +35,7 @@ export function Steb2() {
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo); //전역에 교육정보 저장
   const [confirm, setConfirm] = useState(false);
   const [isIndividualCheck, setIsIndividualCheck] = useState(false);
+  const [loading, setLoading] = useState(false);
   const confirmRef = useRef<boolean>();
 
   const { register, setValue, watch } = useForm<UserTransSaveInputDataType>({
@@ -46,6 +48,7 @@ export function Steb2() {
   useEffect(() => {
     setValue('registerType', RegisterType.TYPE_INDIVIDUAL);
   }, []);
+  console.log(watch(), enrollInfo);
 
   const onClickEnroll = async () => {
     //단체 신청시 스택쌓이는 구조. 개인상태에서는 혼자 신청
@@ -62,19 +65,24 @@ export function Steb2() {
       phone: firstPhone + secondPhone + thirdPhone,
     }; //민증번호때문에 구분
 
+    console.log(postData, watch());
+
     try {
       //개인으로 신청
       if (registerType === RegisterType.TYPE_INDIVIDUAL) {
         confirmRef.current = true;
+        setLoading(true);
         const test = await courseClassIndividualEnroll(postData);
         setEnroll([watch()]);
-        // setEnrollInfo(prev => {
-        //   return { ...prev, seq: enrollInfo.seq };
-        // });
+        setEnrollInfo(prev => {
+          return { ...prev, seq: enrollInfo.seq };
+        });
+        setLoading(false);
         router.push('/stebMove/steb3');
       }
       //단체로 신청
       if (registerType === RegisterType.TYPE_ORGANIZATION) {
+        setLoading(true);
         signUp({
           username: watch().firstIdentityNumber + secondIdentityNumber,
           password: watch().firstIdentityNumber + secondIdentityNumber,
@@ -90,6 +98,8 @@ export function Steb2() {
             const { data } = await courseClassOrganizationEnrll(postData);
             setValue('seq', data.seq);
             setEnroll(prev => [...prev, watch()]);
+            setLoading(false);
+            router.push('/stebMove/steb3');
           })
           .catch(async e => {
             console.dir(e.data.status);
@@ -98,11 +108,14 @@ export function Steb2() {
               const { data } = await courseClassOrganizationEnrll(postData);
               setValue('seq', data.seq);
               setEnroll(prev => [...prev, watch()]);
+              setLoading(false);
+              router.push('/stebMove/steb3');
             }
           });
       }
     } catch (e: any) {
       confirmRef.current = false;
+      setLoading(false);
       snackbar({ variant: 'error', message: e.data.message });
     }
   };
@@ -154,15 +167,15 @@ export function Steb2() {
         <EduOverview setValue={setValue} />
         <CompanyInfo isIndividual={isIndividual} setIsIndividual={setIsIndividual} register={register} watch={watch} />
         <StudentList registerType={registerType} setRegisterType={setRegisterType} />
-        <StudentInfo register={register} setValue={setValue} registerType={registerType} setRegisterType={setRegisterType} />
+        <StudentInfo register={register} setValue={setValue} registerType={registerType} setRegisterType={setRegisterType} watch={watch} />
         <IndividualSummary isIndividualCheck={isIndividualCheck} setIsIndividualCheck={setIsIndividualCheck} />
         <ConfirmButtonsWrap>
-          <Button variant="contained" onClick={onClickEnroll} fullWidth sx={{ mb: 2 }}>
-            신청하기
+          <Button variant="contained" onClick={onClickEnroll} disabled={loading} fullWidth sx={{ mb: 2 }}>
+            {loading ? <Spinner fit={true} /> : '신청하기'}
           </Button>
           {registerType === RegisterType.TYPE_ORGANIZATION && (
-            <Button variant="contained" onClick={onClickConfirm} fullWidth>
-              확인
+            <Button variant="contained" onClick={onClickConfirm} disabled={loading} fullWidth>
+              {loading ? <Spinner fit={true} /> : '확인'}
             </Button>
           )}
         </ConfirmButtonsWrap>
@@ -175,6 +188,7 @@ const Steb2Wrap = styled(Box)``;
 
 const Steb2BodyContainer = styled(Container)`
   padding: 0 1rem;
+  margin-top: 6rem;
 `;
 
 const ConfirmButtonsWrap = styled(Box)`

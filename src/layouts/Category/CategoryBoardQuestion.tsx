@@ -7,9 +7,11 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { Qna, QnaInput, uploadQna } from '@common/api/qna';
 import { BbsType, uploadFile } from '@common/api/adm/file';
 import router from 'next/router';
+import { useState } from 'react';
 
 export function CategoryBoardQuestion() {
   const isLoginStatus = useIsLoginStatus();
+  const [loading, setLoading] = useState(false);
   // const [isNonMenberQuestion, setIsNonMenberQuestion] = useState(false);
   // const [isOpenQues, setIsOpneQues] = useState(false);
   // const [memberType, setMemberType] = useState<undefined | MemberType>();
@@ -36,11 +38,14 @@ export function CategoryBoardQuestion() {
     qnaInput: QnaInput;
   }) => {
     try {
+      setLoading(true);
       const qna = await uploadQna(qnaInput); // 게시판 내용 업로드. 파일보다 먼저
       await fileHandler(files, qna.data); // 파일업로드. 게시판 뒤
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
-      router.push(`/traffic/category`);
+      setLoading(false);
+      router.reload();
     } catch (e: any) {
+      setLoading(false);
       console.error(e);
     }
   };
@@ -57,7 +62,7 @@ export function CategoryBoardQuestion() {
   return (
     <NtContainer>
       {isLoginStatus ? (
-        <CategoryBoardQuestionForm onHandleSubmit={handleSubmit} />
+        <CategoryBoardQuestionForm onHandleSubmit={handleSubmit} loading={loading} />
       ) : (
         // <CategoryBoardQuestionLogin setIsOpneQues={setIsOpneQues} setMemberType={setMemberType} />
         <CategoryBoardQuestionLogin />

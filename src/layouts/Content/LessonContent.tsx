@@ -40,7 +40,8 @@ export function LessonContent(props: Props) {
 
   const updateProgress = React.useCallback(() => {
 
-    setProgress(vidoeDurationSeconds.current > 0 ? (props.lesson.totalTime + videoPlayedSeconds.current) / vidoeDurationSeconds.current : 1);
+    const seconds = props.lesson.totalTime + videoPlayedSeconds.current;
+    setProgress(vidoeDurationSeconds.current > 0 && seconds < vidoeDurationSeconds.current ? seconds / vidoeDurationSeconds.current : 1);
 
   }, [props.lesson.totalTime]);
 

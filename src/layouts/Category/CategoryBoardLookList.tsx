@@ -8,59 +8,63 @@ import styled from 'styled-components';
 export function CategoryBoardLookList() {
   const [target, loadedItem, loading] = useInfiniteScrollQna(`/qna`);
 
-  console.log(loadedItem, loading);
-  if (loadedItem.length === 0)
-    return <NotFound content="문의하신 내역이 존재하지 않습니다!" />;
+  console.log(loadedItem);
   return (
     <LkContainer>
-      <Table>
-        <TableHead>
-          <TableRow
-            sx={{
-              background: '#fbfbfb',
-              borderTop: '3px solid #333333',
-              borderBottom: '1px solid #cdcdcd',
-            }}
-          >
-            <TableHeaderCell align="center" width="10%">
-              번호
-            </TableHeaderCell>
-            <TableHeaderCell align="center" width="55%">
-              제목
-            </TableHeaderCell>
-            <TableHeaderCell align="center" width="15%">
-              답변상태
-            </TableHeaderCell>
-            <TableHeaderCell align="center" width="20%">
-              등록일
-            </TableHeaderCell>
-          </TableRow>
-        </TableHead>
-      </Table>
-      {loadedItem &&
-        loadedItem.map(data => {
-          const accordionInfo = [
-            {
-              seq: data.seq,
-              title: data.title,
-              date: data.createdDtimeYmd.slice(0, -1),
-              answeredYN: data.answeredYn,
-              children: [
+      {loadedItem && loadedItem.length > 0 ? (
+        <>
+          <Table>
+            <TableHead>
+              <TableRow
+                sx={{
+                  background: '#fbfbfb',
+                  borderTop: '3px solid #333333',
+                  borderBottom: '1px solid #cdcdcd',
+                }}
+              >
+                <TableHeaderCell align="center" width="10%">
+                  번호
+                </TableHeaderCell>
+                <TableHeaderCell align="center" width="55%">
+                  제목
+                </TableHeaderCell>
+                <TableHeaderCell align="center" width="15%">
+                  답변상태
+                </TableHeaderCell>
+                <TableHeaderCell align="center" width="20%">
+                  등록일
+                </TableHeaderCell>
+              </TableRow>
+            </TableHead>
+          </Table>
+          {loadedItem &&
+            loadedItem.map(data => {
+              const accordionInfo = [
                 {
-                  firstContent: data.content,
-                  secondContent: dateFormat(data.createdDtime, 'isoDate'),
-                  thirdContent: data.s3Files[0] ? data.s3Files[0].name : '파일없음',
-                  fourthContent: dateFormat(data.qnaAnswer?.createdDtime, 'isoDate'),
-                  fifthContent: data.qnaAnswer?.content,
-                  sixthContent: data.qnaAnswer?.s3Files[0]
-                    ? data.qnaAnswer?.s3Files[0].name
-                    : '파일없음',
+                  seq: data.seq,
+                  title: data.title,
+                  date: data.createdDtimeYmd?.slice(0, -1),
+                  answeredYN: data.answeredYn,
+                  children: [
+                    {
+                      firstContent: data.content,
+                      secondContent: dateFormat(data.createdDtime, 'isoDate'),
+                      thirdContent: data.s3Files[0] ? data.s3Files[0].name : '파일없음',
+                      fourthContent: dateFormat(data.qnaAnswer?.createdDtime, 'isoDate'),
+                      fifthContent: data.qnaAnswer?.content,
+                      sixthContent: data.qnaAnswer?.s3Files[0]
+                        ? data.qnaAnswer?.s3Files[0].name
+                        : '파일없음',
+                    },
+                  ],
                 },
-              ],
-            },
-          ];
-          return <QnaAccordion qnaAccordionList={accordionInfo} key={data.seq} />;
-        })}
+              ];
+              return <QnaAccordion qnaAccordionList={accordionInfo} key={data.seq} />;
+            })}
+        </>
+      ) : (
+        <NotFound content="내 질문내역이 존재하지 않습니다" />
+      )}
       <Box ref={target} height="100px">
         {loading ? <Container /> : ''}
       </Box>

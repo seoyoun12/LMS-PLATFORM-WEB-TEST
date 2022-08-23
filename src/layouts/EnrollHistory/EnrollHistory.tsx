@@ -1,6 +1,7 @@
 import { RegisterType } from '@common/api/courseClass';
 import { useCourseUser } from '@common/api/courseUser';
 import { Modal, Spinner } from '@components/ui';
+import { NotFound } from '@components/ui/NotFound';
 import styled from '@emotion/styled';
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
@@ -31,6 +32,7 @@ export function EnrollHistory() {
           온라인 교육 신청내역
         </Typography>
         <Typography>온라인 교육 신청내역을 확인하실 수 있습니다.</Typography>
+        {data.length  <= 0 && <NotFound content='신청한 과정이 존재하지 않습니다!' />}
         <Grid
           container
           rowSpacing={4}

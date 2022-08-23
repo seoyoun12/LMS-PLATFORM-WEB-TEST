@@ -55,7 +55,7 @@ export function LessonSidebar(props: Props) {
                 </Box>
                 <LessonCheck>
                   {props.lessonSeq === lesson.seq && <PlayCircleIcon sx={{ color: "text.secondary" }} style={{ marginRight: 8 }} />}
-                  <CheckCircleIcon sx={{ color: lesson.completedYn === "N" ? "#256aef" : "text.secondary" }} />
+                  <CheckCircleIcon sx={{ color: lesson.completedYn === "Y" ? "#256aef" : "text.secondary" }} />
                 </LessonCheck>
               </TabItem>
             </TabItemWrapper>
@@ -83,6 +83,7 @@ const StickySideBar = styled.aside`
 
 const TabMenu = styled(LessonTabs)`
   padding-bottom: 30px;
+  font-weight: bold;
 `;
 
 const Tab = styled(Box)`

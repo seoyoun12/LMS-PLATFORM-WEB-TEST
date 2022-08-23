@@ -1,3 +1,5 @@
+import { BbsType, uploadFile } from '@common/api/adm/file';
+import { UserTransportUpdateResponseDto } from '@common/api/Api';
 import { businessType, courseSubCategoryType } from '@common/api/courseClass';
 import { getTransport, modifTransWorker, useMyUser } from '@common/api/user';
 import { YN } from '@common/constant';
@@ -36,7 +38,7 @@ interface Props {
   locationList: { ko: string; en: string }[];
 }
 const phoneRegex = /[0-9]$/;
-const phoneList = ['010', '032', '02', '031'];
+const phoneList = ['010', '011', '012', '013' , '014' , '015' , '016' , '017' , '018' , '019'];
 
 export const userBusinessTypeOne = [
   { type: '여객', enType: 'PASSENGER' },
@@ -123,6 +125,7 @@ export const userBusinessTypeTwo = [
 
 interface FormType {
   files: File[];
+  urlImage: string;
 }
 const defaultValues = {
   files: [],
@@ -193,8 +196,13 @@ export function TransWorker({ type, locationList }: Props) {
         userBusinessTypeTwo: occupation2, // 구분
         userRegistrationType: vehicleRegi, //지역
       };
+      try {
+        const modifiedTrans: { data: UserTransportUpdateResponseDto } = await modifTransWorker(data);
+        console.log(modifiedTrans);
+      } catch (e: any) {
+        window.alert(e.data.message);
+      }
 
-      await modifTransWorker(data);
       return router.push('/me');
     }
   };
@@ -204,7 +212,19 @@ export function TransWorker({ type, locationList }: Props) {
 
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
+    setValue('urlImage', URL.createObjectURL(files[0]));
     setFileName(files[0].name);
+  };
+
+  const fileHandler = async (files: File[], userSeq: number) => {
+    const isFileUpload = files.length > 0;
+    if (isFileUpload) {
+      await uploadFile({
+        fileTypeId: userSeq,
+        fileType: BbsType.TYPE_USER_PROFILE,
+        files,
+      });
+    }
   };
 
   return (
@@ -218,7 +238,7 @@ export function TransWorker({ type, locationList }: Props) {
       <Box display="flex" flexDirection={'column'} gap="1rem" component={'form'} onSubmit={handleSubmit}>
         <Box sx={{ margin: 'auto' }}>
           <FileUploaderTrans register={register} regName="files" onFileChange={handleFileChange}>
-            <UserProfile />
+            <UserProfile src={watch().urlImage || ''} sx={{ marginRight: `0 !important` }} />
           </FileUploaderTrans>
         </Box>
         <TableCustomContainer sx={{ marginTop: '32px' }}>
@@ -319,7 +339,9 @@ export function TransWorker({ type, locationList }: Props) {
                   <FormControl sx={{ minWidth: '130px' }} fullWidth>
                     <Select labelId="phone-type-label" id="phone-type" onChange={onChangePhone1} value={phone || ''}>
                       {phoneList.map(item => (
-                        <MenuItem value={item}>{item}</MenuItem>
+                        <MenuItem key={item} value={item}>
+                          {item}
+                        </MenuItem>
                       ))}
                     </Select>
                   </FormControl>

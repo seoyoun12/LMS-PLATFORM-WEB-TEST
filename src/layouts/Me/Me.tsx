@@ -29,10 +29,6 @@ export function Me() {
   console.log(user);
   const [value, setValue] = React.useState(myInfoList[0].value);
 
-  useEffect(() => {
-    console.log(user);
-  }, []);
-
   if (error) return <div>error</div>;
   if (!user) return <Spinner />;
   return (
@@ -41,7 +37,7 @@ export function Me() {
         <Link href={`/me/edit`} className={s.myInfo}>
           <UserProfile>M</UserProfile>
           <div>
-            <Typography fontSize={22} >{user.name}</Typography>
+            <Typography fontSize={22}>{user.name}</Typography>
             <Typography>{user.email ? user.email : <Box color={grey[400]}>이메일이 없습니다.</Box>}</Typography>
           </div>
         </Link>
@@ -81,9 +77,7 @@ export function Me() {
               user.learningCourses.map(res => {
                 return (
                   <Grid item xs={1} sm={1} md={1} lg={1} key={res.courseClassSeq}>
-                    <Box
-                      onClick={() => router.push(`/course/${res.courseUserSeq}`)}
-                    >
+                    <Box onClick={() => router.push(`/course/${res.courseUserSeq}/lesson/${!res.recentLessonSeq ? 1 : res.recentLessonSeq}`)}>
                       <ContentCardV2
                         title={res.courseTitle}
                         content1={'지금 바로 수강하기!'}

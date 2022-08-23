@@ -29,6 +29,7 @@ export function Lesson() {
   // API.
 
   const { course, courseError } = useCourse(courseUserSeq);
+  console.log(course , courseError ,courseUserSeq)
 
   // 렌더 - 에러.
 

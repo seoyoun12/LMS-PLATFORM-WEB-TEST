@@ -40,10 +40,10 @@ export function LessonContent(props: Props) {
 
   const updateProgress = React.useCallback(() => {
 
-    const seconds = props.lesson.totalTime + videoPlayedSeconds.current;
+    const seconds = props.lesson.completeTime + videoPlayedSeconds.current;
     setProgress(vidoeDurationSeconds.current > 0 && seconds < vidoeDurationSeconds.current ? seconds / vidoeDurationSeconds.current : 1);
 
-  }, [props.lesson.totalTime]);
+  }, [props.lesson.completeTime]);
 
   // 콜백 - 타이머.
 
@@ -190,7 +190,7 @@ export function LessonContent(props: Props) {
 
     stopTimer("PREV");
 
-    vidoeDurationSeconds.current = props.lesson ? props.lesson.min * 60 + props.lesson.sec : 0;
+    vidoeDurationSeconds.current = props.lesson ? props.lesson.totalTime : 0;
     videoCurrentSeconds.current = props.lesson ? props.lesson.studyLastTime : 0;
     videoPlayedSeconds.current = 0;
     videoIsSeeking.current = false;

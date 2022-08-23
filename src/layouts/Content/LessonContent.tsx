@@ -163,7 +163,6 @@ export function LessonContent(props: Props) {
   const onSeeked = React.useCallback(() => {
 
     videoIsSeeking.current = false;
-    document.querySelector<HTMLVideoElement>(`#${PLAYER_ELEMENT_ID} video`).load();
 
   }, []);
 

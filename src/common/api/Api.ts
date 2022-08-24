@@ -846,14 +846,8 @@ export interface CourseDetailClientResponseDto {
    */
   status?: number;
 
-  /** 유저의 설문 완료 여부 */
-  surveyCompletedYn?: "Y" | "N";
-
-  /**
-   * 설문 시퀀스
-   * @format int64
-   */
-  surveySeq?: number;
+  /** 설문 목록 */
+  surveyList?: CourseSurveyDto[];
 
   /**
    * 과정 전체 진도율
@@ -1330,44 +1324,6 @@ export interface CourseProgressRecentResponseDto {
   studyTime?: number;
 }
 
-export interface CourseProgressRequestDto {
-  /**
-   * 유저-과정 시퀀스
-   * @format int64
-   */
-  courseUserSeq?: number;
-
-  /**
-   * 마지막 수강 날짜
-   * @format date-time
-   */
-  lastViewDtime?: string;
-
-  /**
-   * 레슨 시퀀스
-   * @format int64
-   */
-  lessonSeq?: number;
-
-  /**
-   * 마지막 학습 시간
-   * @format double
-   */
-  studyLastTime?: number;
-
-  /**
-   * 총 학습 시간
-   * @format double
-   */
-  studyTime?: number;
-
-  /**
-   * 조회수
-   * @format int32
-   */
-  viewCnt?: number;
-}
-
 export interface CourseProgressResponseDto {
   /**
    * 챕터 수료 일자
@@ -1664,6 +1620,17 @@ export interface CourseSaveRequestDto {
   status?: 1 | -1;
 }
 
+export interface CourseSurveyDto {
+  /** 유저의 설문 완료 여부 */
+  surveyCompletedYn?: "Y" | "N";
+
+  /**
+   * 설문 시퀀스
+   * @format int64
+   */
+  surveySeq?: number;
+}
+
 export interface CourseSurveyLinkRequestDto {
   /**
    * 과정 시퀀스
@@ -1792,7 +1759,7 @@ export interface CourseUser {
   completeYn?: string;
   courseClass?: CourseClass;
   courseProgressList?: CourseProgress[];
-  courseUserSurvey?: CourseUserSurvey;
+  courseUserSurvey?: CourseUserSurvey[];
 
   /** @format date-time */
   createdDtime?: string;
@@ -6501,6 +6468,149 @@ export interface UserCourseInfoAvalStepsResponseDto {
   courseSeq?: number;
 }
 
+export interface UserCourseInfoDetailCourseInfoDto {
+  /** 상태 */
+  classLearningStatus?: "정상" | "퇴교";
+
+  /** 수료 여부 */
+  completeYn?: "Y" | "N";
+
+  /** 과정명 */
+  courseName?: string;
+
+  /**
+   * 실명
+   * @example 홍길동
+   */
+  name?: string;
+
+  /**
+   * 신청일 (yyyy.MM.dd)
+   * @example 2022.08.20
+   */
+  regDate?: string;
+
+  /**
+   * 학습기간 (yyyy.MM.dd ~ yyyy.MM.dd)
+   * @example 2022.08.23 ~ 2022.09.10
+   */
+  studyDate?: string;
+
+  /**
+   * 회원아이디 - 도민만 해당, 운수/저상은 null
+   * @example example
+   */
+  username?: string;
+
+  /**
+   * 연도 / 기수
+   * @example 2022/001
+   */
+  yearAndStep?: string;
+}
+
+export interface UserCourseInfoDetailLearningStatusDto {
+  /**
+   * 항목 (모듈타입 / 모듈 이름)
+   * @example 설문/교육만족도 설문
+   */
+  elementName?: string;
+
+  /** 상태 (완료, 학습중, 미제출) */
+  learningStatus?: "완료" | "학습중" | "미제출";
+
+  /**
+   * 응시가능 진도율 (%), 시험 및 설문만 해당
+   * @example 50%
+   */
+  leastProgress?: string;
+
+  /**
+   * 성적(진도율 - %, 시험 - 점, 설문은 표시 X)
+   * @example 30% | 70점
+   */
+  point?: string;
+
+  /**
+   * 제출일(시험, 설문만 해당, yyyy.MM.dd)
+   * @example 2022.08.23
+   */
+  submitDate?: string;
+
+  /** 제출자 아이피 - 미정(ERD 에 관련 필드 미존재) */
+  submitIp?: string;
+
+  /**
+   * 제출여부(시험, 설문만 해당)
+   * @example Y
+   */
+  submitYn?: "Y" | "N";
+
+  /**
+   * 이수기준(진도율 - %, 시험점수 - 점, 설문필수제출여부 - Y, N)
+   * @example 80% | 66점 | N
+   */
+  threshold?: string;
+}
+
+export interface UserCourseInfoDetailProgressStatusDto {
+  /**
+   * 차시
+   * @format int32
+   */
+  chapter?: number;
+
+  /** 차시명 */
+  chapterName?: string;
+
+  /**
+   * 차시 인정 시간 (00분 00초)
+   * @example 20분 50초
+   */
+  completeTimeStr?: string;
+
+  /**
+   * 차시 수료 여부
+   * @example Y
+   */
+  completeYn?: "Y" | "N";
+
+  /**
+   * 차시 수료일 (yyyy.MM.dd)
+   * @example 2022.08.19
+   */
+  completedDate?: string;
+
+  /**
+   * 수강생이 학습한 시간 (00분 00초)
+   * @example 94분 52초
+   */
+  learningTimeStr?: string;
+
+  /**
+   * 진도율 (%)
+   * @example 100%
+   */
+  progressRatio?: string;
+
+  /**
+   * 차시 총 시간 (00분 00초)
+   * @example 32분 16초
+   */
+  totalTimeStr?: string;
+}
+
+export interface UserCourseInfoDetailResponseDto {
+  /** 수강정보 */
+  courseInfo?: UserCourseInfoDetailCourseInfoDto;
+
+  /** 학습현황 리스트 */
+  learningStatusList?: UserCourseInfoDetailLearningStatusDto[];
+
+  /** 진도현황 리스트 */
+  progressStatusList?: UserCourseInfoDetailProgressStatusDto[];
+}
+
 export interface UserCourseInfoDto {
   /** 과정명 */
   courseName?: string;
@@ -6934,6 +7044,9 @@ export interface UserProvincialFindResponseDto {
   /** 휴대번호 */
   phone?: string;
 
+  /** s3 파일 */
+  s3Files?: FileResponseDto[];
+
   /** SMS수신동의여부 */
   smsYn?: string;
 
@@ -7243,6 +7356,9 @@ export interface UserTransportFindResponseDto {
 
   /** 휴대번호 */
   phone?: string;
+
+  /** s3 파일 */
+  s3Files?: FileResponseDto[];
 
   /** SMS수신동의여부 */
   smsYn?: string;
@@ -7603,18 +7719,28 @@ export class HttpClient<SecurityDataType = unknown> {
   };
 }
 
+import ApiResponseWrapper from "./ApiResponseWrapper";
+
 /**
- * @title eGov Mirim LMS API Document
- * @version 1.0.0
- * @baseUrl //api.bonobono.dev/api/v1
- * @contact 정지현 (dinb1242@naver.com)
+ * @title eGov Mirim LMS API Document* @version 1.0.0* @baseUrl //api.bonobono.dev/api/v1* @contact 정지현 (dinb1242@naver.com)*  * 미림미디어랩 LMS 프로젝트 API 를 명세하는 문서
  *
- * 미림미디어랩 LMS 프로젝트 API 를 명세하는 문서
- *
- * 개발 방향 변경으로 인한 기존 미림 LMS 개발에서 충남형 LMS 로 변경됨.
- */
+ * 개발 방향 변경으로 인한 기존 미림 LMS 개발에서 충남형 LMS 로 변경됨.*/
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   adm = {
+    /**
+     * @description 관리자페이지의 수강 정보에서 특정 유저에 대한 전체 수강 리스트를 조회한 이후, courseUserSeq 를 Path Variable 로 전달받아 해당 유저의 상세 수강 정보를 조회한다. 반환되는 데이터는 수강정보, 학습현황, 진도현황이다. 수강정보란은 과정 클래스에 대한 유저의 메타데이터(과정명, 연도/기수, 실명, 학습기간 등)를 표시한다. 학습현황은 해당 과정 클래스에 대한 유저의 진도율, 시험, 설문 수행 여부 등의 데이터를 표시한다. 진도현황은 해당 과정 클래스 내 유저가 이수한 차시에 대한 정보를 표시한다. 진도현황의 경우, 각 차시의 진도율이 100%일 경우, 이수 삭제 API 를 호출하여 완료된 진도(0%로 만듦)를 제거할 수 있으며, 진도율이 100%가 아닐 경우 이수 처리 API 를 호출하여 현재 진도율을 100%로 변경 및 이수처리할 수 있다. 진도현황에서 "전체 이수처리" API 를 호출하여 모든 차시를 수료처리할 수 있으며, 반대로 "전체 미이수 처리" API 를 호출하여 모든 차시를 미수료처리 할 수 있다.
+     *
+     * @tags [관리자] 유저 수강 정보 API
+     * @name AdmFindDetailCourseInfoUsingGet
+     * @summary [관리자] 수강정보 상세 조회 API - JWT
+     * @request GET:/adm/course-info/detail/{courseUserSeq}
+     */
+    admFindDetailCourseInfoUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<UserCourseInfoDetailResponseDto>, any>({
+        path: `/adm/course-info/detail/${courseUserSeq}`,
+        method: "GET",
+        ...params,
+      })
     /**
      * @description 관리자 페이지에서 수강 신청 가능한 과정 선택 API 를 통해 기수를 선택한 이후, 유저 시퀀스(userSeq), 과정 클래스 시퀀스(courseClassSeq) 를 Request Body 로 전달받아 대리 수강신청을 수행한다. 이미 유저가 신청한 과정일 경우 예외를 발생시킨다. <b>교육신청대상자의 정보(회사업종, 회사명, 차량번호 등)가 없을 경우, 예외를 반환한다. 교육신청대상자의 정보는 관리자페이지의 유저 정보란에서 수정할 수 있다.</b>
      *
@@ -7622,16 +7748,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmEnrollCourseClassUsingPost
      * @summary [관리자] 유저 대리 수강신청 API - JWT
      * @request POST:/adm/course-info/enroll
-     */
+     */,
     admEnrollCourseClassUsingPost: (requestDto: UserCourseInfoEnrollRequestDto, params: RequestParams = {}) =>
-      this.request<CourseUserResponseDto, any>({
+      this.request<ApiResponseWrapper<CourseUserResponseDto>, any>({
         path: `/adm/course-info/enroll`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description userSeq 를 Path Variable 로 전달받고, 관리자 페이지의 수강 정보 내 특정 유저에 대한 강제 수강신청을 위해 현재 수강 가능한 과정 리스트를 반환한다. 과정 리스트는 과정 클래스(courseClass) 가 개설된 데이터만 조회한다. 수강신청기간이 초과된 과정도 전부 조회한다. 단, 학습 종료 기간이 지난 과정은 조회하지 않는다. [필수 - page] 페이징 인덱스는 0부터 시작한다. [선택 값 - elementCnt] 페이지 당 보여질 데이터 개수, default: 10[선택 값 - courseType] 과정 구분(courseType, 전체/운수/저상/도민) 을 통해 데이터를 필터링 할 수 있다.<b>null 일 경우, 전체 데이터를 조회한다.</b> [선택 값 - courseName] 과정 이름을 통해 데이터를 필터링 할 수 있다.
      *
@@ -7639,7 +7764,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindAllAvailableCoursesUsingGet
      * @summary [관리자] 수강 신청 가능한 과정 조회 API - JWT, Pagination
      * @request GET:/adm/course-info/enroll/courses
-     */
+     */,
     admFindAllAvailableCoursesUsingGet: (
       query: {
         courseName?: string;
@@ -7649,13 +7774,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<PageCourseResponseDto, any>({
+      this.request<ApiResponseWrapper<PageCourseResponseDto>, any>({
         path: `/adm/course-info/enroll/courses`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자페이지에서 수강 신청 가능한 과정 조회 API 를 통해 조회한 과정들 중, 특정 과정을 선택할 때 호출한다. 결과로 선택한 과정의 시퀀스, 제목, 신청 가능한 기수 리스트를 반환한다.
      *
@@ -7663,14 +7787,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmSelectAvailableCourseUsingGet
      * @summary [관리자] 수강 신청 가능한 과정 선택 API - JWT
      * @request GET:/adm/course-info/enroll/courses/{courseSeq}
-     */
+     */,
     admSelectAvailableCourseUsingGet: (courseSeq: number, params: RequestParams = {}) =>
-      this.request<UserCourseInfoAvalStepsResponseDto, void>({
+      this.request<ApiResponseWrapper<UserCourseInfoAvalStepsResponseDto>, void>({
         path: `/adm/course-info/enroll/courses/${courseSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 userSeq 를 전달받아 해당하는 사용자에 대한 수강 정보 리스트를 반환한다. 현재 사용자가 수강 중인 과정 리스트인 learningCourses, 학습 기간이 종료된 outdatedCourses 프로퍼티에 과정에 대한 리스트가 담겨서 반환된다.
      *
@@ -7678,9 +7801,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindAllCourseInfoUsingGet
      * @summary [관리자] 수강정보 전체 리스트 조회 API - JWT
      * @request GET:/adm/course-info/{userSeq}
-     */
+     */,
     admFindAllCourseInfoUsingGet: (userSeq: number, params: RequestParams = {}) =>
-      this.request<UserCourseInfoResponseDto, void>({
+      this.request<ApiResponseWrapper<UserCourseInfoResponseDto>, void>({
         path: `/adm/course-info/${userSeq}`,
         method: "GET",
         ...params,
@@ -7696,14 +7819,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/auth/signin
      */
     signInUsingPost: (signInRequestDto: SignInRequestDto, params: RequestParams = {}) =>
-      this.request<SignInResponseDto, void>({
+      this.request<ApiResponseWrapper<SignInResponseDto>, void>({
         path: `/auth/signin`,
         method: "POST",
         body: signInRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description Access Token 을 전달받아 특정 사용자의 로그아웃을 수행한다.
      *
@@ -7711,15 +7833,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name SignOutUsingPost
      * @summary [App] 로그아웃 API - JWT 사용
      * @request POST:/auth/signout
-     */
+     */,
     signOutUsingPost: (params: RequestParams = {}) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/auth/signout`,
         method: "POST",
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 전용 계정을 생성한다.
      *
@@ -7727,16 +7848,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name SignUpAdminUsingPost
      * @summary [관리자] 관리자 계정 생성 - JWT 사용
      * @request POST:/auth/signup/admin
-     */
+     */,
     signUpAdminUsingPost: (signUpRequestDto: SignUpRequestDto, params: RequestParams = {}) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/auth/signup/admin`,
         method: "POST",
         body: signUpRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description Request DTO 를 전달받아 일반 회원가입을 수행한다. <b>운수/저상의 경우 username 과 password 는 주민번호로 저장한다.</b>
      *
@@ -7744,16 +7864,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name SignUpCommonUsingPost
      * @summary 일반 회원가입 API
      * @request POST:/auth/signup/common
-     */
+     */,
     signUpCommonUsingPost: (signUpRequestDto: SignUpRequestDto, params: RequestParams = {}) =>
-      this.request<boolean, void>({
+      this.request<ApiResponseWrapper<boolean>, void>({
         path: `/auth/signup/common`,
         method: "POST",
         body: signUpRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 사용자의 aT 와 rT 를 전달받아 새 aT 를 발급한다. <br/>이때, rT 가 만료되었을 경우, DB 내 해당 사용자의 토큰 정보를 제거하며, rT 만료를 알리는 998번 커스텀 예외를 발생시킨다.
      *
@@ -7761,12 +7880,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AccessTokenRefreshUsingPost
      * @summary Access Token 재발급 API
      * @request POST:/auth/token/refresh
-     */
+     */,
     accessTokenRefreshUsingPost: (
       accessTokenRefreshRequestDto: AccessTokenRefreshRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<InputStream, void>({
+      this.request<ApiResponseWrapper<InputStream>, void>({
         path: `/auth/token/refresh`,
         method: "POST",
         body: accessTokenRefreshRequestDto,
@@ -7784,12 +7903,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/banner
      */
     findAllBannersUsingGet: (params: RequestParams = {}) =>
-      this.request<BannerResponseDto[], any>({
+      this.request<ApiResponseWrapper<BannerResponseDto[]>, any>({
         path: `/banner`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 전체 배너를 조회한다. 이때, 상태 여부에 관계 없이 전체 데이터를 반환한다.
      *
@@ -7797,14 +7915,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindAllBannersUsingGet
      * @summary [App & 관리자] 배너 전체 조회 API
      * @request GET:/banner/adm
-     */
+     */,
     admFindAllBannersUsingGet: (params: RequestParams = {}) =>
-      this.request<BannerResponseDto[], any>({
+      this.request<ApiResponseWrapper<BannerResponseDto[]>, any>({
         path: `/banner/adm`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 새로운 메인 배너를 등록한다.
      *
@@ -7812,16 +7929,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmCreateBannerUsingPost
      * @summary [관리자] 배너 등록 API
      * @request POST:/banner/adm
-     */
+     */,
     admCreateBannerUsingPost: (requestDto: BannerSaveRequestDto, params: RequestParams = {}) =>
-      this.request<BannerResponseDto, any>({
+      this.request<ApiResponseWrapper<BannerResponseDto>, any>({
         path: `/banner/adm`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 배너에 대한 bannerSeq 를 PathVariable 로 전달받아 특정 배너 데이터를 반환한다.
      *
@@ -7829,14 +7945,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindBannerUsingGet
      * @summary [관리자] 배너 단건 조회 API
      * @request GET:/banner/adm/{bannerSeq}
-     */
+     */,
     admFindBannerUsingGet: (bannerSeq: number, params: RequestParams = {}) =>
-      this.request<BannerResponseDto, void>({
+      this.request<ApiResponseWrapper<BannerResponseDto>, void>({
         path: `/banner/adm/${bannerSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 배너에 대한 시퀀스인 bannerSeq 를 PathVariable 로, 수정할 DTO 를 RequestBody 로 전달받아 특정 배너를 수정한다.
      *
@@ -7844,16 +7959,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmUpdateBannerUsingPut
      * @summary [관리자] 배너 수정 API
      * @request PUT:/banner/adm/{bannerSeq}
-     */
+     */,
     admUpdateBannerUsingPut: (bannerSeq: number, requestDto: BannerUpdateRequestDto, params: RequestParams = {}) =>
-      this.request<BannerResponseDto, void>({
+      this.request<ApiResponseWrapper<BannerResponseDto>, void>({
         path: `/banner/adm/${bannerSeq}`,
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 배너에 대한 시퀀스인 bannerSeq 를 PathVariable 로 전달받아 해당하는 배너를 제거한다.
      *
@@ -7861,9 +7975,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmDeleteBannerUsingDelete
      * @summary [관리자] 배너 삭제 API
      * @request DELETE:/banner/adm/{bannerSeq}
-     */
+     */,
     admDeleteBannerUsingDelete: (bannerSeq: number, params: RequestParams = {}) =>
-      this.request<BannerResponseDto, void>({
+      this.request<ApiResponseWrapper<BannerResponseDto>, void>({
         path: `/banner/adm/${bannerSeq}`,
         method: "DELETE",
         ...params,
@@ -7882,13 +7996,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query: { contentName?: string; elementCnt?: number; page: number },
       params: RequestParams = {},
     ) =>
-      this.request<ContentResponseDto, any>({
+      this.request<ApiResponseWrapper<ContentResponseDto>, any>({
         path: `/content/adm`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description Course 에 탑재하기 위한 Content 를 생성한다.
      *
@@ -7896,16 +8009,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateContentUsingPost
      * @summary [관리자] 콘텐츠 생성 API - JWT 필요
      * @request POST:/content/adm
-     */
+     */,
     createContentUsingPost: (contentSaveRequestDto: ContentSaveRequestDto, params: RequestParams = {}) =>
-      this.request<ContentResponseDto, any>({
+      this.request<ApiResponseWrapper<ContentResponseDto>, any>({
         path: `/content/adm`,
         method: "POST",
         body: contentSaveRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지 내에서 콘텐츠에 대한 상세 정보를 조회한다.
      *
@@ -7913,14 +8025,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindContentUsingGet
      * @summary [관리자] 콘텐츠 단건 조회 API
      * @request GET:/content/adm/{contentSeq}
-     */
+     */,
     findContentUsingGet: (contentSeq: number, params: RequestParams = {}) =>
-      this.request<ContentDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<ContentDetailResponseDto>, void>({
         path: `/content/adm/${contentSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 특정 콘텐츠를 제거한다. 만일, 연결된 과정이 있다면, 해당 과정 내에 수강 인원이 한 명이라도 있을 경우(운영 중인 상태) 예외를 발생시킨다. 삭제 시, 콘텐츠에 연결된 시험, 레슨도 모두 제거된다.
      *
@@ -7928,14 +8039,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteContentUsingDelete
      * @summary [관리자] 콘텐츠 삭제 API - JWT
      * @request DELETE:/content/adm/{contentSeq}
-     */
+     */,
     deleteContentUsingDelete: (contentSeq: number, params: RequestParams = {}) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/content/adm/${contentSeq}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * No description
      *
@@ -7943,13 +8053,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateContentUsingPut
      * @summary [관리자] 콘텐츠 수정 API - JWT 필요
      * @request PUT:/content/adm/{seq}
-     */
+     */,
     updateContentUsingPut: (
       seq: number,
       contentUpdateRequestDto: ContentUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/content/adm/${seq}`,
         method: "PUT",
         body: contentUpdateRequestDto,
@@ -7970,13 +8080,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query: { contentTitle?: string; elementCnt?: number; page: number; sort?: string },
       params: RequestParams = {},
     ) =>
-      this.request<CourseResponseDto[], any>({
+      this.request<ApiResponseWrapper<CourseResponseDto[]>, any>({
         path: `/course`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 검색에 필요한 키워드를 전달받아 현재 등록된 모든 과정에 대한 정보를 elementCnt 개수 만큼 조회한다.<br/>이때, status 가 -1인 데이터들도 모두 조회한다.
      *
@@ -7984,18 +8093,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindCoursesAdminUsingGet
      * @summary [관리자] 과정 전체 조회 API - JWT 사용/Pagination
      * @request GET:/course/adm
-     */
+     */,
     findCoursesAdminUsingGet: (
       query: { courseTitle?: string; elementCnt?: number; page: number; sort?: string },
       params: RequestParams = {},
     ) =>
-      this.request<CourseResponseDto[], any>({
+      this.request<ApiResponseWrapper<CourseResponseDto[]>, any>({
         path: `/course/adm`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자의 Access Token 을 통해 과정을 생성한다.<br/>data 명세<br/>{ "content1": "과정설명 마크다운", "courseName": "과정제목", "courseSubName": "과정부제목", "displayYn": "노출여부 Y/N", "fullScore": 0, "lessonTerm": 0, "lessonTime": 0, "limitPeople": 0, "limitPeopleYn": "수강제한인원 설정 Y/N", "limitTotalScore": 0, "price": 0, "restudyDay": 0, "restudyYn": "복습허용여부 Y/N", "saleYn": "판매여부 Y/N" "status": "사용 여부 1 or -1" }
      *
@@ -8003,16 +8111,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateCourseUsingPost
      * @summary [관리자] 과정 생성 API - JWT 사용
      * @request POST:/course/adm
-     */
+     */,
     createCourseUsingPost: (courseSaveRequestDto: CourseSaveRequestDto, params: RequestParams = {}) =>
-      this.request<CourseResponseDto, any>({
+      this.request<ApiResponseWrapper<CourseResponseDto>, any>({
         path: `/course/adm`,
         method: "POST",
         body: courseSaveRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 과정 시퀀스와 연결할 콘텐츠 시퀀스를 전달받아 해당하는 콘텐츠를 과정에 연결한다.
      *
@@ -8020,16 +8127,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name LinkCourseAndContentUsingPost
      * @summary [관리자] 과정-콘텐츠 연동 API
      * @request POST:/course/adm/link/content
-     */
+     */,
     linkCourseAndContentUsingPost: (requestDto: CourseContentLinkRequestDto, params: RequestParams = {}) =>
-      this.request<CourseDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseDetailResponseDto>, void>({
         path: `/course/adm/link/content`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 과정 시퀀스를 Path Variable 로 전달받아 해당하는 과정과 연결된 콘텐츠의 연결을 해제한다.
      *
@@ -8037,14 +8143,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteLinkedContentUsingDelete
      * @summary [관리자] 과정-콘텐츠 연동 해제 API
      * @request DELETE:/course/adm/link/content/{courseSeq}
-     */
+     */,
     deleteLinkedContentUsingDelete: (courseSeq: number, params: RequestParams = {}) =>
-      this.request<CourseDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseDetailResponseDto>, void>({
         path: `/course/adm/link/content/${courseSeq}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 과정 시퀀스와 특정 설문을 시퀀스로 전달받아 설문을 연결한다. 연결에 성공하면 설문에 대한 ResponseDTO 를 반환한다.
      *
@@ -8052,16 +8157,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name LinkCourseAndSurveyUsingPut
      * @summary [관리자] 과정-설문 연결 API
      * @request PUT:/course/adm/link/survey
-     */
+     */,
     linkCourseAndSurveyUsingPut: (requestDto: CourseSurveyLinkRequestDto, params: RequestParams = {}) =>
-      this.request<SurveyResponseDto, void>({
+      this.request<ApiResponseWrapper<SurveyResponseDto>, void>({
         path: `/course/adm/link/survey`,
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 과정 시퀀스를 시퀀스로 전달받아 연결되어있는 설문을 제거한다. 해제에 성공하면 설문에 대한 ResponseDTO 를 반환한다.
      *
@@ -8069,14 +8173,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteLinkedSurveyUsingDelete
      * @summary [관리자] 과정-설문 연결 해제 API
      * @request DELETE:/course/adm/link/survey/{courseSeq}
-     */
+     */,
     deleteLinkedSurveyUsingDelete: (courseSeq: number, params: RequestParams = {}) =>
-      this.request<SurveyResponseDto, void>({
+      this.request<ApiResponseWrapper<SurveyResponseDto>, void>({
         path: `/course/adm/link/survey/${courseSeq}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 특정 과정의 seq 를 Path Variable 로 전달받아 해당 과정에 대한 정보를 조회한다
      *
@@ -8084,14 +8187,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindCourseUsingGet
      * @summary [관리자] 특정 과정 조회 API
      * @request GET:/course/adm/{seq}
-     */
+     */,
     admFindCourseUsingGet: (seq: number, params: RequestParams = {}) =>
-      this.request<CourseDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseDetailResponseDto>, void>({
         path: `/course/adm/${seq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자의 Access Token 을 통해 과정을 생성한다.<br/>data 명세<br/>{ "content1": "과정설명 마크다운", "courseName": "과정제목", "courseSubName": "과정부제목", "displayYn": "노출여부 Y/N", "fullScore": 0 -> 총 점수, "lessonTerm": 0 -> 과정 수강일, "lessonTime": 0 -> 과정 수료 인정시간, "limitPeople": 0 -> 수강제한인원 수, "limitPeopleYn": "수강제한인원 설정 Y/N", "limitTotalScore": 0 -> 최소 수료 점수, "price": 0 -> 가격, "restudyDay": 0 -> 복습기간, "restudyYn": "복습허용여부 Y/N", "saleYn": "판매여부 Y/N" "status": "사용 여부 1 or -1" }
      *
@@ -8099,16 +8201,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateCourseUsingPut
      * @summary [관리자] 과정 수정 API - JWT 사용
      * @request PUT:/course/adm/{seq}
-     */
+     */,
     updateCourseUsingPut: (seq: number, courseUpdateRequestDto: CourseUpdateRequestDto, params: RequestParams = {}) =>
-      this.request<CourseResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseResponseDto>, void>({
         path: `/course/adm/${seq}`,
         method: "PUT",
         body: courseUpdateRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description <b>현재는 과정 수강생에 관계 없이 삭제되나, 추후 업데이트 예정</b><br/>관리자의 Access Token 을 통해 과정를 삭제한다. 과정을 수강 중인 사람이 한 명이라도 존재할 경우 삭제 할 수 없으며, S3 내에서 오브젝트가 삭제되지는 않는다.
      *
@@ -8116,14 +8217,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteCourseUsingDelete
      * @summary [관리자] 과정 삭제 API - JWT 사용
      * @request DELETE:/course/adm/{seq}
-     */
+     */,
     deleteCourseUsingDelete: (seq: number, params: RequestParams = {}) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/course/adm/${seq}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 유저의 과정 신청 시퀀스인 courseUserSeq 를 Path Variable 로 전달받아 해당 과정에 대한 정보를 조회한다 이때, 사용자의 학습 진행 상황도 함께 포함하여 DTO 로 반환한다.
      *
@@ -8131,9 +8231,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindCourseUsingGet
      * @summary [App] 특정 과정 조회 API
      * @request GET:/course/{courseUserSeq}
-     */
+     */,
     findCourseUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
-      this.request<CourseDetailClientResponseDto, any>({
+      this.request<ApiResponseWrapper<CourseDetailClientResponseDto>, any>({
         path: `/course/${courseUserSeq}`,
         method: "GET",
         ...params,
@@ -8156,13 +8256,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<CourseClassResponseDto[], any>({
+      this.request<ApiResponseWrapper<CourseClassResponseDto[]>, any>({
         path: `/course-class`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지의 클래스 관리 캘린더에서 전체 과정 클래스 정보를 조회한다. <b>courseType 파라미터가 Null 이라면 전체 조회한다.</b>
      *
@@ -8170,7 +8269,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindAllCourseClassesUsingGet
      * @summary [관리자] 과정 클래스 전체 조회 API
      * @request GET:/course-class/adm
-     */
+     */,
     admFindAllCourseClassesUsingGet: (
       query: {
         businessType: "TYPE_ALL" | "TYPE_PASSENGER" | "TYPE_CARGO";
@@ -8179,13 +8278,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<CourseClassResponseDto[], any>({
+      this.request<ApiResponseWrapper<CourseClassResponseDto[]>, any>({
         path: `/course-class/adm`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 과정에 대한 클래스를 생성한다.
      *
@@ -8193,16 +8291,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmCreateCourseClassUsingPost
      * @summary [관리자] 과정 클래스 생성 API
      * @request POST:/course-class/adm
-     */
+     */,
     admCreateCourseClassUsingPost: (requestDto: CourseClassSaveRequestDto, params: RequestParams = {}) =>
-      this.request<CourseClassResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseClassResponseDto>, void>({
         path: `/course-class/adm`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 특정 과정 클래스를 수정한다.
      *
@@ -8210,16 +8307,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmModifyCourseClassUsingPut
      * @summary [관리자] 과정 클래스 수정 API
      * @request PUT:/course-class/adm
-     */
+     */,
     admModifyCourseClassUsingPut: (requestDto: CourseClassUpdateRequestDto, params: RequestParams = {}) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/course-class/adm`,
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지의 클래스 관리 캘린더에서 특정 과정에 대한 클래스 정보를 단건 조회한다.
      *
@@ -8227,14 +8323,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindCourseClassUsingGet
      * @summary [관리자] 과정 클래스 단건 조회 API
      * @request GET:/course-class/adm/{courseClassSeq}
-     */
+     */,
     admFindCourseClassUsingGet: (courseClassSeq: number, params: RequestParams = {}) =>
-      this.request<CourseClassResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseClassResponseDto>, void>({
         path: `/course-class/adm/${courseClassSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 특정 과정 클래스를 제거한다. 이때, 만일 한 명이라도 수강 중일 경우 제거가 불가능하다. 실제로 DB 내에서 제거되지는 않으며, status 값만 -1로 변경한다.
      *
@@ -8242,14 +8337,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmDeleteCourseClassUsingDelete
      * @summary [관리자] 과정 클래스 삭제 API
      * @request DELETE:/course-class/adm/{courseClassSeq}
-     */
+     */,
     admDeleteCourseClassUsingDelete: (courseClassSeq: number, params: RequestParams = {}) =>
-      this.request<CourseClassResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseClassResponseDto>, void>({
         path: `/course-class/adm/${courseClassSeq}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 모바일 클라이언트의 과정 클래스 리스트에 대한 전체 데이터를 조회한다. status 가 -1인 데이터는 조회하지 않는다. <courseType Enum 목록> * TYPE_TRANS_WORKER: 운수종사자 * TYPE_LOW_FLOOR_BUS: 저상버스 * TYPE_PROVINCIAL: 도민교통
      *
@@ -8257,18 +8351,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name MobileFindAllCourseClassesUsingGet
      * @summary [App - 모바일 전용] 과정 클래스 전체 조회 API
      * @request GET:/course-class/mobile
-     */
+     */,
     mobileFindAllCourseClassesUsingGet: (
       query: { courseType: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL"; date?: string },
       params: RequestParams = {},
     ) =>
-      this.request<MobileCourseClassResponseDto[], any>({
+      this.request<ApiResponseWrapper<MobileCourseClassResponseDto[]>, any>({
         path: `/course-class/mobile`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 교육 과정과 업종 구분 Enum 을 쿼리 스트링으로 전달받아 해당하는 과정 클래스(기수) 정보를 조회한다. 조회 이후, 일치하는 클래스의 정보를 리스트로 반환한다. 검색 시, 현재 일자를 기준으로 신청이 가능한 클래스만 조회한다. [courseType Enum - 운수종사자/저상버스교육자 구분] * TYPE_TRANS_WORKER: 운수종사자 * TYPE_LOW_FLOOR_BUS: 저상버스 * TYPE_PROVINCIAL: 도민교통(사용 X) [courseCategoryType Enum - 교육 과정] * TYPE_SUP_COMMON -> 보수일반 * TYPE_SUP_CONSTANT -> 보수 수시 * TYPE_CONSTANT -> 수시 * TYPE_NEW -> 신규 * TYPE_ILLEGAL -> 법령위반자 * TYPE_HANDICAPPED -> 교통약자 이동편의 증진 * TYPE_DANGEROUS -> 위험물진 운송차량 운전자 [CourseClassBusinessTypeEnum Enum - 업종 구분] TYPE_ALL: 전체 (여기서는 사용하지 말 것.) TYPE_PASSENGER: 여객 TYPE_CARGO: 화물
      *
@@ -8276,7 +8369,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindClassStepUsingGet
      * @summary [App] 과정 클래수(기수) 검색 API
      * @request GET:/course-class/step
-     */
+     */,
     findClassStepUsingGet: (
       query: {
         courseBusinessType: "TYPE_ALL" | "TYPE_PASSENGER" | "TYPE_CARGO";
@@ -8292,13 +8385,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<CourseClassStepResponseDto[], any>({
+      this.request<ApiResponseWrapper<CourseClassStepResponseDto[]>, any>({
         path: `/course-class/step`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 클라이언트의 캘린더에서 특정 과정 클래스에 대해 단건 조회한다.
      *
@@ -8306,9 +8398,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindCourseClassUsingGet
      * @summary [App] 과정 클래스 단건 조회 API
      * @request GET:/course-class/{courseClassSeq}
-     */
+     */,
     findCourseClassUsingGet: (courseClassSeq: number, params: RequestParams = {}) =>
-      this.request<CourseClassResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseClassResponseDto>, void>({
         path: `/course-class/${courseClassSeq}`,
         method: "GET",
         ...params,
@@ -8316,7 +8408,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   };
   courseLog = {
     /**
-     * @description 과정 학습로그 생성 수강생이 강의를 들을때마다 기본값 ( 0 ) API 입력 5분에 한번씩 API 입력 <b>수강생이 강의를 나갈때 CourseProgress (/course-progress) Put API 호출</b>수강을 완료해도 API 입력
+     * @description 과정 학습로그 생성 수강생이 강의를 듣기위해 페이지에 들어오면 기본값 ( 0 ) API 입력 5분에 한번씩 API 입력 수강생이 강의를 나갈때 로그 호출<b> CourseProgress (/course-progress) Put API 호출 </b>
      *
      * @tags [App] 과정 학습 로그 API
      * @name CreateCourseModulesUsingPost1
@@ -8324,7 +8416,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/course-log
      */
     createCourseModulesUsingPost1: (courseUserLogRequestDto: CourseUserLogRequestDto, params: RequestParams = {}) =>
-      this.request<CourseUserLogResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseUserLogResponseDto>, void>({
         path: `/course-log`,
         method: "POST",
         body: courseUserLogRequestDto,
@@ -8342,13 +8434,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/course-module
      */
     clientFindAllCourseModulesUsingGet: (query: { courseSeq: number }, params: RequestParams = {}) =>
-      this.request<CourseModuleFindResponseDto[], void>({
+      this.request<ApiResponseWrapper<CourseModuleFindResponseDto[]>, void>({
         path: `/course-module`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 과정에 대한 모듈을 전체조회
      *
@@ -8356,15 +8447,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindAllCourseModulesUsingGet
      * @summary [관리자] 과정 모듈 전체 조회 API - JWT 사용
      * @request GET:/course-module/adm
-     */
+     */,
     findAllCourseModulesUsingGet: (query: { courseSeq: number }, params: RequestParams = {}) =>
-      this.request<CourseModuleFindResponseDto[], void>({
+      this.request<ApiResponseWrapper<CourseModuleFindResponseDto[]>, void>({
         path: `/course-module/adm`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 과정에 대한 모듈을 상세 조회
      *
@@ -8372,14 +8462,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindByCourseModulesUsingGet
      * @summary [관리자] 과정 모듈 상세 조회 API - JWT 사용
      * @request GET:/course-module/adm/{courseModuleSeq}
-     */
+     */,
     findByCourseModulesUsingGet: (courseModuleSeq: number, params: RequestParams = {}) =>
-      this.request<CourseModuleFindResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseModuleFindResponseDto>, void>({
         path: `/course-module/adm/${courseModuleSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 과정에 대한 모듈을 수정
      *
@@ -8387,20 +8476,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateCourseModulesUsingPut
      * @summary [관리자] 과정 모듈 수정 API - JWT 사용
      * @request PUT:/course-module/adm/{courseModuleSeq}
-     */
+     */,
     updateCourseModulesUsingPut: (
       courseModuleSeq: number,
       courseModuleUpdateRequestDto: CourseModuleUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<CourseModuleUpdateResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseModuleUpdateResponseDto>, void>({
         path: `/course-module/adm/${courseModuleSeq}`,
         method: "PUT",
         body: courseModuleUpdateRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 과정에 대한 모듈을 삭제
      *
@@ -8408,14 +8496,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateCourseModulesUsingDelete
      * @summary [관리자] 과정 모듈 삭제 API - JWT 사용
      * @request DELETE:/course-module/adm/{courseModuleSeq}
-     */
+     */,
     updateCourseModulesUsingDelete: (courseModuleSeq: number, params: RequestParams = {}) =>
-      this.request<CourseModuleUpdateResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseModuleUpdateResponseDto>, void>({
         path: `/course-module/adm/${courseModuleSeq}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 과정에 대한 모듈을 입력
      *
@@ -8423,20 +8510,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateCourseModulesUsingPost
      * @summary [관리자] 과정 모듈 생성 API - JWT 사용
      * @request POST:/course-module/adm/{courseSeq}
-     */
+     */,
     createCourseModulesUsingPost: (
       courseSeq: number,
       courseModuleSaveRequestDto: CourseModuleSaveRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<CourseModuleSaveResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseModuleSaveResponseDto>, void>({
         path: `/course-module/adm/${courseSeq}`,
         method: "POST",
         body: courseModuleSaveRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 클라이언트에서 과정에 대한 모듈을 상세 조회
      *
@@ -8444,32 +8530,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ClientFindByCourseModulesUsingGet
      * @summary [App] 과정 모듈 상세 조회 API - JWT 사용
      * @request GET:/course-module/{courseModuleSeq}
-     */
+     */,
     clientFindByCourseModulesUsingGet: (courseModuleSeq: number, params: RequestParams = {}) =>
-      this.request<CourseModuleFindResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseModuleFindResponseDto>, void>({
         path: `/course-module/${courseModuleSeq}`,
         method: "GET",
         ...params,
       }),
   };
   courseProgress = {
-    /**
-     * @description 과정 진도율 생성
-     *
-     * @tags [App & 관리자] 과정 진도율 API - * 관리자 통계 로직 등은 추후 논의
-     * @name CreateCourseProgressUsingPost
-     * @summary [App & 관리자] 과정 진도율 API - JWT 사용
-     * @request POST:/course-progress
-     */
-    createCourseProgressUsingPost: (courseProgressRequestDto: CourseProgressRequestDto, params: RequestParams = {}) =>
-      this.request<CourseProgressResponseDto, void>({
-        path: `/course-progress`,
-        method: "POST",
-        body: courseProgressRequestDto,
-        type: ContentType.Json,
-        ...params,
-      }),
-
     /**
      * @description 과정 진도율 수정 수강생이 강의를 듣고 페이지를 나갈때 실행되는 API
      *
@@ -8482,10 +8551,25 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       courseProgressRequestDto: CourseProgressUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<CourseProgressResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseProgressResponseDto>, void>({
         path: `/course-progress`,
         method: "PUT",
         body: courseProgressRequestDto,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 과정 진도율 전체 수정
+     *
+     * @tags [App & 관리자] 과정 진도율 API - * 관리자 통계 로직 등은 추후 논의
+     * @name UpdateAllCourseProgressUsingPut
+     * @summary [App & 관리자] 과정 진도율 전체 수정 API - JWT 사용
+     * @request PUT:/course-progress/{courseUserSeq}
+     */,
+    updateAllCourseProgressUsingPut: (courseUserSeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<CourseProgressResponseDto>, void>({
+        path: `/course-progress/${courseUserSeq}`,
+        method: "PUT",
         type: ContentType.Json,
         ...params,
       }),
@@ -8500,12 +8584,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/course-user
      */
     findAllTransCourseUsersUsingGet: (params: RequestParams = {}) =>
-      this.request<CourseUserTransResponseDto[], void>({
+      this.request<ApiResponseWrapper<CourseUserTransResponseDto[]>, void>({
         path: `/course-user`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 특정 교육 신청 건에 대한 시퀀스를 전달받아 해당하는 교육을 제거(취소)한다. 데이터베이스에서 outYn 과 관련된 데이터를 수정하고, status 를 -1로 수정한다. 제거 시, 제거하려는 대상(courseUser)의 신청자 시퀀스가 요청자의 시퀀스와 다를 경우 오류를 발생시킨다.
      *
@@ -8513,14 +8596,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CancelTransIndvUsingDelete
      * @summary [App] 운수/저상 교육 취소 API (개인) - JWT
      * @request DELETE:/course-user/cancel/individual/{courseUserSeq}
-     */
+     */,
     cancelTransIndvUsingDelete: (courseUserSeq: number, params: RequestParams = {}) =>
-      this.request<CourseUserResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseUserResponseDto>, void>({
         path: `/course-user/cancel/individual/${courseUserSeq}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 운수/저상 관리자가 특정 사용자에 대한 특정 교육 신청 건을 취소한다. 데이터베이스에서 outYn 과 관련된 데이터를 수정하고, status 를 -1로 수정한다. 제거 시, 제거하려는 대상(courseUser)의 regUserSeq 가 요청자(관리자)의 시퀀스와 다를 경우 오류를 발생시킨다.
      *
@@ -8528,14 +8610,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CancelTransOrganUsingDelete
      * @summary [App] 운수/저상 교육 취소 API (단체) - JWT
      * @request DELETE:/course-user/cancel/organization/{courseUserSeq}
-     */
+     */,
     cancelTransOrganUsingDelete: (courseUserSeq: number, params: RequestParams = {}) =>
-      this.request<CourseUserResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseUserResponseDto>, void>({
         path: `/course-user/cancel/organization/${courseUserSeq}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 해당 과정에 대한 수료 여부 체크
      *
@@ -8543,14 +8624,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UserCourseCompletionUsingGet
      * @summary 과정 수료 여부 API - JWT 사용
      * @request GET:/course-user/complete/{courseUserSeq}
-     */
+     */,
     userCourseCompletionUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
-      this.request<CourseUserCompletionResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseUserCompletionResponseDto>, void>({
         path: `/course-user/complete/${courseUserSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 클라이언트에서 운수/저상에 대한 <b>개인 교육</b>을 신청한다. 교육신청자 정보 란에서, 이름과 주민등록번호와 같은 개인정보는 유저 API 의 회원정보 조회 API 를 통해 가져온다. 개인 신청의 경우, 이름과 주민등록번호 란은 Read-only 이다. 업체 정보 혹은 차량 정보와 같은 추가 정보는 유저 (운수종사자 / 저상버스운전자) 조회 API 를 통해 가져온다. 교육신청자 정보 중, 차량 번호에 대한 정규식은 체크하지 않는다. 기입한 정보를 바탕으로 해당 유저의 추가정보(예. 업종, 차량번호 등. 마이페이지 내 정보 수정에서도 기입 가능)를 DB 에 업데이트 시켜준다. 최종적으로 신청된 과정 정보를 반환한다.
      *
@@ -8558,16 +8638,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name EnrollTransIndvUsingPost
      * @summary [App] 운수/저상 교육신청 API (개인) - JWT
      * @request POST:/course-user/enroll/individual
-     */
+     */,
     enrollTransIndvUsingPost: (requestDto: CourseUserTransSaveRequestDto, params: RequestParams = {}) =>
-      this.request<CourseUserResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseUserResponseDto>, void>({
         path: `/course-user/enroll/individual`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 클라이언트에서 운수/저상에 대한 <b>단체 교육</b>을 신청한다. 단체 신청의 경우, 이름과 주민등록번호 입력란은 쓰기 작업이 가능하다. 운수/저상에 대한 관리자만 신청이 가능하며, 교육신청자 정보 란은 유저 API 의 회원정보 조회 API 를 통해 가져온다. 교육신청자 정보는 화면 상에서 N 개의 개수만큼 추가할 수 있으며, <b>새로운 폼을 추가할 때마다(신청 버튼 클릭 시) 입력한 데이터가 실제 데이터베이스에 즉각 저장된다.(단건 신청)</b> 입력한 교육신청자 정보에 대하여 이미 DB 에 존재하는 운수/저상 회원일 경우, 바로 과정이 신청되며 해당 유저에 대한 추가정보 데이터가 업데이트 된다. DB 에 존재하지 않는 사람인 경우 회원가입 진행 후 과정이 신청된다. 매 신청 시마다, 신청된 과정 정보가 리턴된다.
      *
@@ -8575,16 +8654,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name EnrollTransOrganUsingPost
      * @summary [App] 운수/저상 교육신청 API (단체, 단건 신청) - JWT
      * @request POST:/course-user/enroll/organization
-     */
+     */,
     enrollTransOrganUsingPost: (requestDto: CourseUserTransSaveRequestDto, params: RequestParams = {}) =>
-      this.request<CourseResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseResponseDto>, void>({
         path: `/course-user/enroll/organization`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 클라이언트에서 개인에 대한 특정 교육 신청 건에 대한 내용을 조회한다. outYn 이 'Y' 데이터는 조회되지 않는다. 요청자의 JWT 내 유저 시퀀스와 반환될 데이터의 userSeq 가 자기 자신이 아닐 경우 예외를 호출한다.
      *
@@ -8592,14 +8670,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindTransCourseUserIndvUsingGet
      * @summary [App] 운수/저상 교육 신청 단건 조회 API (개인) - JWT
      * @request GET:/course-user/find/individual/{courseUserSeq}
-     */
+     */,
     findTransCourseUserIndvUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
-      this.request<CourseUserTransDetailsResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseUserTransDetailsResponseDto>, void>({
         path: `/course-user/find/individual/${courseUserSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 클라이언트에서 개인에 대한 특정 교육 신청 건에 대한 내용을 조회한다. outYn 이 'Y' 데이터는 조회되지 않는다. 요청자의 유저 시퀀스가 실제 교육 신청 정보자의 유저 시퀀스와 다르더라도 조회가 가능하다. 다만, regUserSeq(단체 신청해준 사람의 시퀀스) 로 요청자의 시퀀스와 비교하고, 다를 경우 예외를 발생시킨다.
      *
@@ -8607,14 +8684,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindTransCourseUserOrganUsingGet
      * @summary [App] 운수/저상 교육 신청 단건 조회 API (단체) - JWT
      * @request GET:/course-user/find/organization/{courseUserSeq}
-     */
+     */,
     findTransCourseUserOrganUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
-      this.request<CourseUserTransDetailsResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseUserTransDetailsResponseDto>, void>({
         path: `/course-user/find/organization/${courseUserSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 개인의 특정 교육 신청 건에 대한 정보를 수정한다. 이름과 주민번호를 제외한 모든 정보를 수정 가능하다. 수정된 개인정보/추가정보는 유저 DB 데이터에 반영된다. 개인이 신청한 courseUserSeq 의 userSeq 와 요청자의 userSeq 를 비교하여 서로 일치하지 않을 경우 예외를 발생시킨다.
      *
@@ -8622,20 +8698,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ModifyTransCourseUserIndvUsingPut
      * @summary [App] 운수/저상 교육 수정 API (개인) - JWT
      * @request PUT:/course-user/modify/individual/{courseUserSeq}
-     */
+     */,
     modifyTransCourseUserIndvUsingPut: (
       courseUserSeq: number,
       requestDto: CourseUserTransUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<CourseUserTransDetailsResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseUserTransDetailsResponseDto>, void>({
         path: `/course-user/modify/individual/${courseUserSeq}`,
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 단체의 특정 교육 신청 건에 대한 정보를 수정한다. 이름과 주민번호를 제외한 모든 정보를 수정 가능하다. 수정된 개인정보/추가정보는 유저 DB 데이터에 반영된다. 단체의 관리자가 신청한 courseUserSeq 의 regUserSeq 와 요청자의 userSeq 를 비교하여 서로 일치하지 않을 경우 예외를 발생시킨다.
      *
@@ -8643,13 +8718,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ModifyTransCourseUserOrganUsingPut
      * @summary [App] 운수/저상 교육 수정 API (단체) - JWT
      * @request PUT:/course-user/modify/organization/{courseUserSeq}
-     */
+     */,
     modifyTransCourseUserOrganUsingPut: (
       courseUserSeq: number,
       requestDto: CourseUserTransUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<CourseUserTransDetailsResponseDto, void>({
+      this.request<ApiResponseWrapper<CourseUserTransDetailsResponseDto>, void>({
         path: `/course-user/modify/organization/${courseUserSeq}`,
         method: "PUT",
         body: requestDto,
@@ -8670,14 +8745,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       examMultipleChoiceResultRequestDto: ExamMultipleChoiceResultRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<ExamMultipleChoiceResultResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamMultipleChoiceResultResponseDto>, void>({
         path: `/exam-multiple-choice`,
         method: "POST",
         body: examMultipleChoiceResultRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 해당 객관식의 시퀀스로 유저가 답안을 선택할때마다 실행되는 API
      *
@@ -8685,13 +8759,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateExamMultipleChoiceUsingPut
      * @summary 시험 문제 선택답안 API
      * @request PUT:/exam-multiple-choice/{examMultiSeq}
-     */
+     */,
     updateExamMultipleChoiceUsingPut: (
       examMultiSeq: number,
       examMultipleChoiceResultUpdateRequestDto: ExamMultipleChoiceResultUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<ExamMultipleChoiceResultResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamMultipleChoiceResultResponseDto>, void>({
         path: `/exam-multiple-choice/${examMultiSeq}`,
         method: "PUT",
         body: examMultipleChoiceResultUpdateRequestDto,
@@ -8709,13 +8783,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/exam-question
      */
     findExamUserUsingGet: (query: { elementCnt?: number; examSeq: number; page: number }, params: RequestParams = {}) =>
-      this.request<ExamQuestionFindResponseDto[], void>({
+      this.request<ApiResponseWrapper<ExamQuestionFindResponseDto[]>, void>({
         path: `/exam-question`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 examSeq 를 Request Param 으로 전달받아 전체 시험 문제 데이터를 조회한다.
      *
@@ -8723,15 +8796,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindExamUsingGet
      * @summary 시험 문제 전체 조회 API - Pagination
      * @request GET:/exam-question/adm
-     */
+     */,
     findExamUsingGet: (query: { elementCnt?: number; examSeq: number; page: number }, params: RequestParams = {}) =>
-      this.request<ExamQuestionFindResponseDto[], void>({
+      this.request<ApiResponseWrapper<ExamQuestionFindResponseDto[]>, void>({
         path: `/exam-question/adm`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 시험 문제 생성 Enum QUESTION_OBJ : 객관식 QUESTION_SUBJ : 주관식 * 객관식일땐 정답 설명 컬럼에 값을 넣지않는다. * 주관식일땐 보기 컬럼에 값을 넣지않는다.
      *
@@ -8739,16 +8811,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateExamQuestionUsingPost
      * @summary 시험 문제 생성 API
      * @request POST:/exam-question/adm
-     */
+     */,
     createExamQuestionUsingPost: (examQuestionSaveRequestDto: ExamQuestionSaveRequestDto, params: RequestParams = {}) =>
-      this.request<ExamQuestionSaveResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamQuestionSaveResponseDto>, void>({
         path: `/exam-question/adm`,
         method: "POST",
         body: examQuestionSaveRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 examSeq 를 Path Var 로 전달받아 해당하는 데이터를 가져온다.
      *
@@ -8756,14 +8827,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindExamDetailUsingGet1
      * @summary [관리자] 시험 문제 단건 조회 API
      * @request GET:/exam-question/adm/{examQuestionSeq}
-     */
+     */,
     findExamDetailUsingGet1: (examQuestionSeq: number, params: RequestParams = {}) =>
-      this.request<ExamQuestionFindResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamQuestionFindResponseDto>, void>({
         path: `/exam-question/adm/${examQuestionSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 examSeq 를 Path Variable 로, 수정을 위한 DTO 를 전달받아 해당하는 시험 문제를 수정한다.
      *
@@ -8771,20 +8841,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateExamQuestionUsingPut
      * @summary 시험 문제 수정 API
      * @request PUT:/exam-question/adm/{examQuestionSeq}
-     */
+     */,
     updateExamQuestionUsingPut: (
       examQuestionSeq: number,
       examQuestionUpdateRequestDto: ExamQuestionUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<ExamQuestionResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamQuestionResponseDto>, void>({
         path: `/exam-question/adm/${examQuestionSeq}`,
         method: "PUT",
         body: examQuestionUpdateRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 exam 에 대한 seq 를 Path Variable 로 전달받아 해당하는 시험 문제를 삭제한다.
      *
@@ -8792,9 +8861,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteExamUsingDelete1
      * @summary 시험 문제 삭제 API
      * @request DELETE:/exam-question/adm/{examQuestionSeq}
-     */
+     */,
     deleteExamUsingDelete1: (examSeq: number, examQuestionSeq: string, params: RequestParams = {}) =>
-      this.request<ExamQuestionResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamQuestionResponseDto>, void>({
         path: `/exam-question/adm/${examQuestionSeq}`,
         method: "DELETE",
         ...params,
@@ -8813,14 +8882,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       examSubjectiveResultRequestSaveDto: ExamSubjectiveResultRequestSaveDto,
       params: RequestParams = {},
     ) =>
-      this.request<ExamSubjectiveResultRequestSaveDto, void>({
+      this.request<ApiResponseWrapper<ExamSubjectiveResultRequestSaveDto>, void>({
         path: `/exam-subject`,
         method: "POST",
         body: examSubjectiveResultRequestSaveDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 해당 주관식의 시퀀스로 유저가 Input 타입을 벗어날때 실행되는 API
      *
@@ -8828,13 +8896,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateExamSubjectUsingPut
      * @summary 시험 문제 주관식답안 API
      * @request PUT:/exam-subject/{examSubjectSeq}
-     */
+     */,
     updateExamSubjectUsingPut: (
       examSubjectSeq: number,
       examExamSubjectiveResultUpdateRequestDto: ExamExamSubjectiveResultUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<ExamMultipleChoiceResultResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamMultipleChoiceResultResponseDto>, void>({
         path: `/exam-subject/${examSubjectSeq}`,
         method: "PUT",
         body: examExamSubjectiveResultUpdateRequestDto,
@@ -8855,13 +8923,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query: { elementCnt?: number; page: number },
       params: RequestParams = {},
     ) =>
-      this.request<ExamUserResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamUserResponseDto>, void>({
         path: `/exam-user/adm/complete`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 유저가 제출한 시험 채점여부 N 대한 전체 조회
      *
@@ -8869,15 +8936,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindAllExamUserTemporaryUsingGet
      * @summary [관리자] 유저 시험 채점여부 N (전체) 조회 API
      * @request GET:/exam-user/adm/temporary
-     */
+     */,
     findAllExamUserTemporaryUsingGet: (query: { elementCnt?: number; page: number }, params: RequestParams = {}) =>
-      this.request<ExamUserResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamUserResponseDto>, void>({
         path: `/exam-user/adm/temporary`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 유저가 제출한 시험에 관리자가 채점을 하기위한 단건 조회 제출한 시험의 채첨을 위한 상세 내역 조회
      *
@@ -8885,14 +8951,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindExamUserDetailUsingGet
      * @summary [관리자] 유저 시험 채점 제출시험지 조회 API
      * @request GET:/exam-user/adm/{courseUserSeq}
-     */
+     */,
     findExamUserDetailUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
-      this.request<ExamFindUserDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamFindUserDetailResponseDto>, void>({
         path: `/exam-user/adm/${courseUserSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 유저가 제출한 시험 채점을 위한 단건 조회
      *
@@ -8900,14 +8965,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindExamUserUsingGet1
      * @summary [관리자] 유저 시험 채점 (단건) 조회 API
      * @request GET:/exam-user/adm/{examUserSeq}
-     */
+     */,
     findExamUserUsingGet1: (examUserSeq: number, params: RequestParams = {}) =>
-      this.request<ExamUserResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamUserResponseDto>, void>({
         path: `/exam-user/adm/${examUserSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 유저가 제출한 시험에 관리자가 채점
      *
@@ -8915,20 +8979,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ExamManagerGradingUsingPut
      * @summary [관리자] 유저 시험 채점 API
      * @request PUT:/exam-user/adm/{examUserSeq}
-     */
+     */,
     examManagerGradingUsingPut: (
       examUserSeq: number,
       examUserRequestDto: ExamUserRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<ExamFindUserDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamFindUserDetailResponseDto>, void>({
         path: `/exam-user/adm/${examUserSeq}`,
         method: "PUT",
         body: examUserRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 제출한 유저시험에 대한 관리자의 평가 삭제
      *
@@ -8936,9 +8999,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteExamUserDetailUsingDelete
      * @summary [관리자] 유저 시험 채점 삭제 API
      * @request DELETE:/exam-user/adm/{examUserSeq}
-     */
+     */,
     deleteExamUserDetailUsingDelete: (examUserSeq: number, params: RequestParams = {}) =>
-      this.request<ExamFindUserDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamFindUserDetailResponseDto>, void>({
         path: `/exam-user/adm/${examUserSeq}`,
         method: "DELETE",
         ...params,
@@ -8954,13 +9017,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/exam/adm
      */
     findExamsUsingGet: (query: { contentSeq: number; elementCnt?: number; page: number }, params: RequestParams = {}) =>
-      this.request<ExamResponseDto[], void>({
+      this.request<ApiResponseWrapper<ExamResponseDto[]>, void>({
         path: `/exam/adm`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 DTO 를 전달받아 시험을 생성한다.
      *
@@ -8968,16 +9030,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateExamUsingPost
      * @summary 시험 생성 API
      * @request POST:/exam/adm
-     */
+     */,
     createExamUsingPost: (examSaveRequestDto: ExamSaveRequestDto, params: RequestParams = {}) =>
-      this.request<ExamResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamResponseDto>, void>({
         path: `/exam/adm`,
         method: "POST",
         body: examSaveRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 시험 시퀀스에 해당하는 examSeq 를 Path Var 로 전달받아 현재 시험에 등록된 문제 은행 목록을 조회한다.
      *
@@ -8985,14 +9046,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindEnrolledQuestionOntoExamUsingGet
      * @summary [관리자] 시험 내 등록된 문제 은행 조회 API - 문항관리
      * @request GET:/exam/adm/question-bank/{examSeq}
-     */
+     */,
     findEnrolledQuestionOntoExamUsingGet: (examSeq: number, params: RequestParams = {}) =>
-      this.request<ExamQuestionResponseDto[], void>({
+      this.request<ApiResponseWrapper<ExamQuestionResponseDto[]>, void>({
         path: `/exam/adm/question-bank/${examSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 시험 시퀀스에 해당하는 examSeq 를 Path Var 로 전달받아 문제 은행을 등록한다.<br/>문제 은행에 대한 DTO 내 문제 시퀀스를 리스트로 전달받아 수행한다
      *
@@ -9000,20 +9060,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name EnrollQuestionOntoExamUsingPost
      * @summary [관리자] 시험 내 문제 은행 등록 API - 문항관리
      * @request POST:/exam/adm/question-bank/{examSeq}
-     */
+     */,
     enrollQuestionOntoExamUsingPost: (
       examSeq: number,
       requestDto: ExamQuestionBankSaveRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/exam/adm/question-bank/${examSeq}`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 시험 시퀀스에 해당하는 examSeq 를 Path Var 로, 삭제할 문제은행 시퀀스를 리스트로 전달받아 등록된 문제 은행을 제거한다.
      *
@@ -9021,19 +9080,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteEnrolledQuestionOnExamUsingDelete
      * @summary [관리자] 시험 내 등록된 특정 문제 은행 제거 API - 문항관리
      * @request DELETE:/exam/adm/question-bank/{examSeq}
-     */
+     */,
     deleteEnrolledQuestionOnExamUsingDelete: (
       examSeq: number,
       query: { questionSeqList: number[] },
       params: RequestParams = {},
     ) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/exam/adm/question-bank/${examSeq}`,
         method: "DELETE",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 examSeq 를 Path Var 로 전달받아 해당하는 데이터를 가져온다.
      *
@@ -9041,14 +9099,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindExamDetailUsingGet
      * @summary [관리자] 시험 단건 조회 API
      * @request GET:/exam/adm/{examSeq}
-     */
+     */,
     findExamDetailUsingGet: (examSeq: number, params: RequestParams = {}) =>
-      this.request<ExamDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamDetailResponseDto>, void>({
         path: `/exam/adm/${examSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 examSeq 를 Path Variable 로, 수정을 위한 DTO 를 전달받아 해당하는 시험을 수정한다.
      *
@@ -9056,16 +9113,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateExamUsingPut
      * @summary 시험 수정 API
      * @request PUT:/exam/adm/{examSeq}
-     */
+     */,
     updateExamUsingPut: (examSeq: number, examUpdateRequestDto: ExamUpdateRequestDto, params: RequestParams = {}) =>
-      this.request<ExamResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamResponseDto>, void>({
         path: `/exam/adm/${examSeq}`,
         method: "PUT",
         body: examUpdateRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 exam 에 대한 seq 를 Path Variable 로 전달받아 해당하는 시험을 삭제한다.
      *
@@ -9073,14 +9129,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteExamUsingDelete
      * @summary 시험 삭제 API
      * @request DELETE:/exam/adm/{examSeq}
-     */
+     */,
     deleteExamUsingDelete: (examSeq: number, params: RequestParams = {}) =>
-      this.request<ExamResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamResponseDto>, void>({
         path: `/exam/adm/${examSeq}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 유저-과정 시퀀스를 받아 유저가 시험을 제출할때 호출되는 API
      *
@@ -9088,20 +9143,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindExamUsingPut
      * @summary 유저 시험 제출 API
      * @request PUT:/exam/submission/{courseUserSeq}
-     */
+     */,
     findExamUsingPut: (
       courseUserSeq: string,
       query: { courseUserSeq: number; examSeq: number },
       params: RequestParams = {},
     ) =>
-      this.request<ExamMultiSubjectUpdateResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamMultiSubjectUpdateResponseDto>, void>({
         path: `/exam/submission/${courseUserSeq}`,
         method: "PUT",
         query: query,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 유저가 시험을 시작하면 해당 시험리스트를 뿌려주고 임시 저장이 시작되는 API
      *
@@ -9109,15 +9163,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ExamTestListUsingGet
      * @summary 시험 (유저) 테스트 API
      * @request GET:/exam/test
-     */
+     */,
     examTestListUsingGet: (query: { courseUserSeq: number; examSeq: number }, params: RequestParams = {}) =>
-      this.request<ExamTestResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamTestResponseDto>, void>({
         path: `/exam/test`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 유저가 입력 하던 시험에 관한 정보를 보여주는 API * 임시 저장된 값을 불러온다 * 시간이 지났다면 재응시 해야한다.
      *
@@ -9125,9 +9178,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindTestListTemporaryUsingGet
      * @summary 시험 임시 저장화면 조회 API
      * @request GET:/exam/test/temporary
-     */
+     */,
     findTestListTemporaryUsingGet: (query: { courseUserSeq: number; examSeq: number }, params: RequestParams = {}) =>
-      this.request<ExamTestTemporaryResponseDto, void>({
+      this.request<ApiResponseWrapper<ExamTestTemporaryResponseDto>, void>({
         path: `/exam/test/temporary`,
         method: "GET",
         query: query,
@@ -9144,15 +9197,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/example
      */
     createExampleUsingPost: (requestDto: ExampleSaveRequestDto, params: RequestParams = {}) =>
-      this.request<ExampleResponseDto, any>({
+      this.request<ApiResponseWrapper<ExampleResponseDto>, any>({
         path: `/example`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         format: "json",
         ...params,
-      }),
-
+      })
     /**
      * No description
      *
@@ -9160,16 +9212,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name PostFileUsingPost
      * @summary 파일 업로드 테스트
      * @request POST:/example/file
-     */
+     */,
     postFileUsingPost: (data: any, params: RequestParams = {}) =>
-      this.request<boolean, any>({
+      this.request<ApiResponseWrapper<boolean>, any>({
         path: `/example/file`,
         method: "POST",
         body: data,
         type: ContentType.FormData,
         ...params,
-      }),
-
+      })
     /**
      * No description
      *
@@ -9177,16 +9228,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UploadHtmlUsingPost
      * @summary HTML 업로드
      * @request POST:/example/html
-     */
+     */,
     uploadHtmlUsingPost: (requestDto: ExampleHtmlSaveRequestDto, params: RequestParams = {}) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/example/html`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description identity 를 Path Variable 로 전달받아 해당하는 HTML String 을 전송한다.
      *
@@ -9194,14 +9244,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name GetHtmlUsingGet
      * @summary HTML 조회
      * @request GET:/example/html/{identity}
-     */
+     */,
     getHtmlUsingGet: (identity: number, params: RequestParams = {}) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/example/html/${identity}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * No description
      *
@@ -9209,14 +9258,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DoNothingUsingGet
      * @summary doNothing
      * @request GET:/example/none
-     */
+     */,
     doNothingUsingGet: (params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<ApiResponseWrapper<void>, any>({
         path: `/example/none`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * No description
      *
@@ -9224,14 +9272,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name EncTokenTestUsingGet
      * @summary encTokenTest
      * @request GET:/example/none/encToken
-     */
+     */,
     encTokenTestUsingGet: (params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<ApiResponseWrapper<void>, any>({
         path: `/example/none/encToken`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * No description
      *
@@ -9239,15 +9286,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ConvertHtmlToPdfUsingGet
      * @summary HTML to PDF 변환 실험
      * @request GET:/example/pdf
-     */
+     */,
     convertHtmlToPdfUsingGet: (query: { courseUserSeq: number }, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<ApiResponseWrapper<void>, any>({
         path: `/example/pdf`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * No description
      *
@@ -9255,14 +9301,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name IndexUsingGet
      * @summary index
      * @request GET:/example/pdf/index
-     */
+     */,
     indexUsingGet: (params: RequestParams = {}) =>
-      this.request<string, any>({
+      this.request<ApiResponseWrapper<string>, any>({
         path: `/example/pdf/index`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * No description
      *
@@ -9270,14 +9315,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindAllMultipartRequestsUsingGet
      * @summary [실험] 멀티파트 전체 요청 조회 API
      * @request GET:/example/s3/multipart/all
-     */
+     */,
     findAllMultipartRequestsUsingGet: (params: RequestParams = {}) =>
-      this.request<MultipartUploadListing, any>({
+      this.request<ApiResponseWrapper<MultipartUploadListing>, any>({
         path: `/example/s3/multipart/all`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 처리 이후, 삭제된 요청들을 반환한다.
      *
@@ -9285,14 +9329,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteAllMultipartRequestsUsingDelete
      * @summary [실험] 전체 멀티파트 삭제 API
      * @request DELETE:/example/s3/multipart/all
-     */
+     */,
     deleteAllMultipartRequestsUsingDelete: (params: RequestParams = {}) =>
-      this.request<MultipartUpload[], any>({
+      this.request<ApiResponseWrapper<MultipartUpload[]>, any>({
         path: `/example/s3/multipart/all`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 멀티파트 S3 에 대한 업로드가 모두 완료되었음을 S3 에 알린 후, 지금까지 업로드한 청크 파일을 최종적으로 하나로 합쳐 버킷에 업로드한다.
      *
@@ -9300,16 +9343,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CompleteMultipartFileUsingPost
      * @summary [실험] 멀티파트 업로드 완료 API
      * @request POST:/example/s3/multipart/complete
-     */
+     */,
     completeMultipartFileUsingPost: (requestDto: FileMultipartCompleteRequestDto, params: RequestParams = {}) =>
-      this.request<ExampleMultipartCompleteResponseDto, any>({
+      this.request<ApiResponseWrapper<ExampleMultipartCompleteResponseDto>, any>({
         path: `/example/s3/multipart/complete`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description S3 에 멀티파트 업로드를 위한 요청을 생성한다. 반환되는 값은 인코딩된 파일 이름과 업로드 키이다.
      *
@@ -9317,7 +9359,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateMultipartRequestUsingPost
      * @summary [실험] 멀티파트 업로드 요청 생성 API
      * @request POST:/example/s3/multipart/init
-     */
+     */,
     createMultipartRequestUsingPost: (
       query: {
         dirType?:
@@ -9347,14 +9389,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/example/s3/multipart/init`,
         method: "POST",
         query: query,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 청크 파일과 업로드 키를 전달받아 청크파일을 S3 에 업로드한다. 업로드 이후, 식별가능한 청크 고유 키인 eTag 를 반환한다.
      *
@@ -9362,16 +9403,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UploadMultipartUsingPost
      * @summary [실험] 멀티파트 업로드 API
      * @request POST:/example/s3/multipart/upload
-     */
+     */,
     uploadMultipartUsingPost: (data: any, params: RequestParams = {}) =>
-      this.request<ExampleMultipartEtagResponseDto, any>({
+      this.request<ApiResponseWrapper<ExampleMultipartEtagResponseDto>, any>({
         path: `/example/s3/multipart/upload`,
         method: "POST",
         body: data,
         type: ContentType.FormData,
         ...params,
-      }),
-
+      })
     /**
      * @description 처리 이후, 삭제된 요청을 반환한다.
      *
@@ -9379,9 +9419,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteMultipartRequestUsingDelete
      * @summary [실험] 특정 멀티파트 요청 삭제 API
      * @request DELETE:/example/s3/multipart/{uploadRequestId}
-     */
+     */,
     deleteMultipartRequestUsingDelete: (uploadRequestId: string, params: RequestParams = {}) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/example/s3/multipart/${uploadRequestId}`,
         method: "DELETE",
         ...params,
@@ -9397,12 +9437,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/file/multipart/all
      */
     findAllMultipartRequestsUsingGet1: (params: RequestParams = {}) =>
-      this.request<MultipartUploadListing, any>({
+      this.request<ApiResponseWrapper<MultipartUploadListing>, any>({
         path: `/file/multipart/all`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 처리 이후, 삭제된 요청들을 반환한다.
      *
@@ -9410,14 +9449,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteAllMultipartRequestsUsingDelete1
      * @summary [관리자] 전체 멀티파트 삭제 API
      * @request DELETE:/file/multipart/all
-     */
+     */,
     deleteAllMultipartRequestsUsingDelete1: (params: RequestParams = {}) =>
-      this.request<MultipartUpload[], any>({
+      this.request<ApiResponseWrapper<MultipartUpload[]>, any>({
         path: `/file/multipart/all`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 멀티파트 S3 에 대한 업로드가 모두 완료되었음을 S3 에 알린 후, 지금까지 업로드한 청크 파일을 최종적으로 하나로 합쳐 버킷에 업로드한다.
      *
@@ -9425,16 +9463,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CompleteMultipartRequestUsingPost
      * @summary [관리자] 멀티파트 업로드 완료 API
      * @request POST:/file/multipart/complete
-     */
+     */,
     completeMultipartRequestUsingPost: (requestDto: FileMultipartCompleteRequestDto, params: RequestParams = {}) =>
-      this.request<CompleteMultipartUploadResult, any>({
+      this.request<ApiResponseWrapper<CompleteMultipartUploadResult>, any>({
         path: `/file/multipart/complete`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description S3 에 멀티파트 업로드를 위한 요청을 생성한다. 반환되는 값은 인코딩된 파일 이름과 업로드 키이다.
      *
@@ -9442,16 +9479,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateMultipartRequestUsingPost1
      * @summary [관리자] 멀티파트 업로드 요청 생성 API
      * @request POST:/file/multipart/init
-     */
+     */,
     createMultipartRequestUsingPost1: (requestDto: FileMultipartCreateRequestDto, params: RequestParams = {}) =>
-      this.request<FileMultipartCreateResponseDto, void>({
+      this.request<ApiResponseWrapper<FileMultipartCreateResponseDto>, void>({
         path: `/file/multipart/init`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 청크 파일과 업로드 키를 전달받아 청크파일을 S3 에 업로드한다. 업로드 이후, 식별가능한 청크 고유 키인 eTag 를 반환한다. { uploadRequestKey: "업로드 키" encFileName: "인코딩 파일 이름" }
      *
@@ -9459,16 +9495,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UploadMultipartUsingPost1
      * @summary [관리자] 멀티파트 업로드 API
      * @request POST:/file/multipart/upload
-     */
+     */,
     uploadMultipartUsingPost1: (data: any, params: RequestParams = {}) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/file/multipart/upload`,
         method: "POST",
         body: data,
         type: ContentType.FormData,
         ...params,
-      }),
-
+      })
     /**
      * @description 처리 이후, 삭제된 요청을 반환한다.
      *
@@ -9476,14 +9511,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteMultipartRequestUsingDelete1
      * @summary [관리자] 특정 멀티파트 요청 삭제 API
      * @request DELETE:/file/multipart/{uploadRequestId}
-     */
+     */,
     deleteMultipartRequestUsingDelete1: (uploadRequestId: string, params: RequestParams = {}) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/file/multipart/${uploadRequestId}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 업로드하고자하는 bbsType Enum(TYPE_FORUM, TYPE_CONTENT 등)과 특정 시퀀스를(토론, 과정 시퀀스 등) Path Varialble 로 전달받고, 업로드 하고자하는 파일을 전달받아 해당하는 S3 에 단일파일 업로드를 수행한다. 50MB 를 초과하는 파일은 업로드할 수 없다. .exe, .ico, .link 파일은 업로드할 수 없다.
      *
@@ -9491,7 +9525,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UploadFilesUsingPost
      * @summary [App & 관리자] 파일 업로드
      * @request POST:/file/{bbsType}/{bbsSeq}
-     */
+     */,
     uploadFilesUsingPost: (
       bbsSeq: number,
       bbsType:
@@ -9514,14 +9548,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: { files: File[] },
       params: RequestParams = {},
     ) =>
-      this.request<FileResponseDto[], void>({
+      this.request<ApiResponseWrapper<FileResponseDto[]>, void>({
         path: `/file/${bbsType}/${bbsSeq}`,
         method: "POST",
         body: data,
         type: ContentType.FormData,
         ...params,
-      }),
-
+      })
     /**
      * @description bbsType Enum(TYPE_FORUM, TYPE_CONTENT 등)과 특정 시퀀스를(토론, 과정 시퀀스 등)을 Path Variable 로, 삭제하고자하는 파일 시퀀스 리스트를 RequestBody 로 전달받아 해당하는 시퀀스의 파일을 제거한다.
      *
@@ -9529,7 +9562,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteFilesUsingDelete
      * @summary [App & 관리자] 파일 삭제
      * @request DELETE:/file/{bbsType}/{bbsSeq}
-     */
+     */,
     deleteFilesUsingDelete: (
       bbsSeq: number,
       bbsType:
@@ -9552,7 +9585,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       requestDto: FileSeqListRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/file/${bbsType}/${bbsSeq}`,
         method: "DELETE",
         body: requestDto,
@@ -9573,13 +9606,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query: { elementCnt?: number; forumSeq: number; page: number },
       params: RequestParams = {},
     ) =>
-      this.request<ForumCommentResponseDto[], void>({
+      this.request<ApiResponseWrapper<ForumCommentResponseDto[]>, void>({
         path: `/forum/comment`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 특정 토론 시퀀스 forumSeq 에 대해 댓글을 작성한다.<br/><b>부모 댓글일 경우, DTO 내 reference 가 null 이어야하며, 부모 댓글에 대한 대댓글일 경우 DTO 내 reference 는 부모 댓글 시퀀스를 가져야한다.</b>
      *
@@ -9587,16 +9619,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateForumCommentUsingPost
      * @summary [App] 댓글 등록 API
      * @request POST:/forum/comment
-     */
+     */,
     createForumCommentUsingPost: (requestDto: ForumCommentSaveRequestDto, params: RequestParams = {}) =>
-      this.request<ForumCommentResponseDto, void>({
+      this.request<ApiResponseWrapper<ForumCommentResponseDto>, void>({
         path: `/forum/comment`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 특정 댓글 시퀀스를 수정한다. 이때 요청한 사용자는 작성한 사용자와 동일한 사용자여야한다. 그렇지 않을 경우, 예외를 발생시킨다.
      *
@@ -9604,20 +9635,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateForumCommentUsingPut
      * @summary [App] 댓글 수정 API
      * @request PUT:/forum/comment/{forumCommentSeq}
-     */
+     */,
     updateForumCommentUsingPut: (
       forumCommentSeq: number,
       requestDto: ForumCommentUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<ForumCommentResponseDto, void>({
+      this.request<ApiResponseWrapper<ForumCommentResponseDto>, void>({
         path: `/forum/comment/${forumCommentSeq}`,
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 특정 댓글 시퀀스를 Path Var 로 전달받아 해당 댓글을 삭제한다. 이때 요청한 사용자는 작성한 사용자와 동일한 사용자여야한다. 그렇지 않을 경우, 예외를 발생시킨다.<br/>댓글 및 게시글 삭제의 경우, status 를 -1 로 변경시킨다.<br/>관리자는 댓글을 자유롭게 삭제할 수 있다.
      *
@@ -9625,14 +9655,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteForumCommentUsingDelete
      * @summary [App] 댓글 삭제 API
      * @request DELETE:/forum/comment/{forumCommentSeq}
-     */
+     */,
     deleteForumCommentUsingDelete: (forumCommentSeq: number, params: RequestParams = {}) =>
-      this.request<ForumCommentResponseDto, void>({
+      this.request<ApiResponseWrapper<ForumCommentResponseDto>, void>({
         path: `/forum/comment/${forumCommentSeq}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지 내 특정 강의에 대한 courseSeq 와 페이징 처리를 위한 인자를 RequestParam 으로 전달받아 해당하는 토론을 전체 조회한다.
      *
@@ -9640,15 +9669,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindForumsUsingGet
      * @summary [관리자 & 튜터] 토론 전체 조회 API - Pagination, JWT, 파일
      * @request GET:/forum/tutor
-     */
+     */,
     findForumsUsingGet: (query: { courseSeq: number; elementCnt?: number; page: number }, params: RequestParams = {}) =>
-      this.request<ForumResponseDto, void>({
+      this.request<ApiResponseWrapper<ForumResponseDto>, void>({
         path: `/forum/tutor`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지 내 강의에서 DTO 를 전달받아 토론을 생성한다.
      *
@@ -9656,16 +9684,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateForumUsingPost
      * @summary [관리자 & 튜터] 토론 생성 API - JWT, 파일
      * @request POST:/forum/tutor
-     */
+     */,
     createForumUsingPost: (requestDto: ForumSaveRequestDto, params: RequestParams = {}) =>
-      this.request<ForumResponseDto, void>({
+      this.request<ApiResponseWrapper<ForumResponseDto>, void>({
         path: `/forum/tutor`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지 내 특정 토론에 대한 forumSeq 를 PathVar 로 전달받아 해당 토론을 조회한다.
      *
@@ -9673,14 +9700,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindForumUsingGet
      * @summary [관리자 & 튜터] 토론 단건 조회 API
      * @request GET:/forum/tutor/{forumSeq}
-     */
+     */,
     findForumUsingGet: (forumSeq: number, params: RequestParams = {}) =>
-      this.request<ForumDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<ForumDetailResponseDto>, void>({
         path: `/forum/tutor/${forumSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 특정 forumSeq 를 PathVar 로 전달받아 해당하는 토론을 수정한다.{ "content": "string", "courseSeq": 0, "status": 0, "subject": "string", "userSeq": 0 }
      *
@@ -9688,16 +9714,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateForumUsingPut
      * @summary [관리자 & 튜터] 토론 수정 API
      * @request PUT:/forum/tutor/{forumSeq}
-     */
+     */,
     updateForumUsingPut: (forumSeq: number, requestDto: ForumUpdateRequestDto, params: RequestParams = {}) =>
-      this.request<ForumResponseDto, void>({
+      this.request<ApiResponseWrapper<ForumResponseDto>, void>({
         path: `/forum/tutor/${forumSeq}`,
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지 내 토론 시퀀스에 해당하는 forumSeq 를 전달받아 해당 토론을 DB 에서 제거한다.
      *
@@ -9705,9 +9730,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteForumUsingDelete
      * @summary [관리자 & 튜터] 토론 삭제 API
      * @request DELETE:/forum/tutor/{forumSeq}
-     */
+     */,
     deleteForumUsingDelete: (forumSeq: number, params: RequestParams = {}) =>
-      this.request<ForumResponseDto, void>({
+      this.request<ApiResponseWrapper<ForumResponseDto>, void>({
         path: `/forum/tutor/${forumSeq}`,
         method: "DELETE",
         ...params,
@@ -9726,13 +9751,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query: { contentSeq: number; elementCnt?: number; page: number },
       params: RequestParams = {},
     ) =>
-      this.request<HomeworkResponseDto[], void>({
+      this.request<ApiResponseWrapper<HomeworkResponseDto[]>, void>({
         path: `/homework/adm`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지의 콘텐츠 내 과제 탭에서 DTO 와 파일 리스트를 전달받아 과제를 생성한다.{ "bestAnswer": "모범답안", "content": "내용 마크다운", "contentSeq": 1, "markingRole": "채점기준", "status": 1, "subject": "제목" }
      *
@@ -9740,16 +9764,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateHomeworkUsingPost
      * @summary [관리자] 과제 생성 API
      * @request POST:/homework/adm
-     */
+     */,
     createHomeworkUsingPost: (requestDto: HomeworkSaveRequestDto, params: RequestParams = {}) =>
-      this.request<HomeworkResponseDto, any>({
+      this.request<ApiResponseWrapper<HomeworkResponseDto>, any>({
         path: `/homework/adm`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지의 콘텐츠 내 과제 탭에서 콘텐츠 시퀀스인 contentSeq 를 PathVariable 로 전달받고, DTO 리스트를 전달받아 과제를 생성한다.<br/><b>일괄 생성의 경우, DTO 내의 contentSeq 는 비우거나 삭제해도 무관하다.</b><br/>일괄 등록 시 파일은 업로드 할 수없다.
      *
@@ -9757,20 +9780,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateHomeworksUsingPost
      * @summary [관리자] 과제 일괄 생성 API
      * @request POST:/homework/adm/{contentSeq}
-     */
+     */,
     createHomeworksUsingPost: (
       contentSeq: number,
       requestDtoList: HomeworkSaveRequestDto[],
       params: RequestParams = {},
     ) =>
-      this.request<HomeworkResponseDto[], void>({
+      this.request<ApiResponseWrapper<HomeworkResponseDto[]>, void>({
         path: `/homework/adm/${contentSeq}`,
         method: "POST",
         body: requestDtoList,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지의 콘텐츠 내 과제 탭에서 특정 과제를 조회한다. 이때, homeworkSeq 를 Path Var 로 전달받아 조회한다.
      *
@@ -9778,14 +9800,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindHomeworkUsingGet
      * @summary [관리자] 과제 단건 조회 API
      * @request GET:/homework/adm/{homeworkSeq}
-     */
+     */,
     findHomeworkUsingGet: (homeworkSeq: number, params: RequestParams = {}) =>
-      this.request<HomeworkDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<HomeworkDetailResponseDto>, void>({
         path: `/homework/adm/${homeworkSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지의 콘텐츠 내 특정 과제에서 수정할 DTO 와 파일 리스트를 RequestPart 로, 그리고 homeworkSeq 를 Path Var 로 전달받아 과제를 수정한다.{ "bestAnswer": "string", "content": "string", "contentSeq": 0, "markingRole": "string", "status": 0, "subject": "string" }
      *
@@ -9793,16 +9814,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateHomeworkUsingPut
      * @summary [관리자] 과제 수정 API
      * @request PUT:/homework/adm/{homeworkSeq}
-     */
+     */,
     updateHomeworkUsingPut: (homeworkSeq: number, requestDto: HomeworkUpdateRequestDto, params: RequestParams = {}) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/homework/adm/${homeworkSeq}`,
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지의 콘텐츠 내 과제 탭에서 특정 과제를 제거한다. 이때, homewworkSeq 를 Path Var 로 전달받아 삭제한다.
      *
@@ -9810,9 +9830,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteHomeworkUsingDelete
      * @summary [관리자] 과제 삭제 API
      * @request DELETE:/homework/adm/{homeworkSeq}
-     */
+     */,
     deleteHomeworkUsingDelete: (homeworkSeq: number, params: RequestParams = {}) =>
-      this.request<HomeworkResponseDto, void>({
+      this.request<ApiResponseWrapper<HomeworkResponseDto>, void>({
         path: `/homework/adm/${homeworkSeq}`,
         method: "DELETE",
         ...params,
@@ -9835,13 +9855,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<LearningMaterialResponseDto[], any>({
+      this.request<ApiResponseWrapper<LearningMaterialResponseDto[]>, any>({
         path: `/learning-material`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 등록된 전체 학습 자료를 조회한다.
      *
@@ -9849,7 +9868,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindAllLearningMaterialUsingGet
      * @summary [관리자] 학습 자료 전체 조회 API - JWT, Pagination
      * @request GET:/learning-material/adm
-     */
+     */,
     admFindAllLearningMaterialUsingGet: (
       query: {
         elementCnt?: number;
@@ -9860,13 +9879,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<LearningMaterialResponseDto[], any>({
+      this.request<ApiResponseWrapper<LearningMaterialResponseDto[]>, any>({
         path: `/learning-material/adm`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 학습 자료를 등록한다. 파일은 File API 를 호출하여 따로 생성한다.
      *
@@ -9874,16 +9892,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmCreateLearningMaterialUsingPost
      * @summary [관리자] 학습 자료 생성 API - JWT, 파일
      * @request POST:/learning-material/adm
-     */
+     */,
     admCreateLearningMaterialUsingPost: (requestDto: LearningMaterialSaveRequestDto, params: RequestParams = {}) =>
-      this.request<LearningMaterialResponseDto, any>({
+      this.request<ApiResponseWrapper<LearningMaterialResponseDto>, any>({
         path: `/learning-material/adm`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 특정 학습자료를 조회한다.
      *
@@ -9891,14 +9908,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindLearningMaterialUsingGet
      * @summary [관리자] 학습자료 단건 조회 API - JWT
      * @request GET:/learning-material/adm/{learningMaterialSeq}
-     */
+     */,
     admFindLearningMaterialUsingGet: (learningMaterialSeq: number, params: RequestParams = {}) =>
-      this.request<LearningMaterialResponseDto, void>({
+      this.request<ApiResponseWrapper<LearningMaterialResponseDto>, void>({
         path: `/learning-material/adm/${learningMaterialSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 특정 학습자료를 수정한다.
      *
@@ -9906,20 +9922,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmUpdateLearningMaterialUsingPut
      * @summary [관리자] 학습자료 수정 API - JWT
      * @request PUT:/learning-material/adm/{learningMaterialSeq}
-     */
+     */,
     admUpdateLearningMaterialUsingPut: (
       learningMaterialSeq: number,
       requestDto: LearningMaterialUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<LearningMaterialResponseDto, void>({
+      this.request<ApiResponseWrapper<LearningMaterialResponseDto>, void>({
         path: `/learning-material/adm/${learningMaterialSeq}`,
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 특정 학습자료를 삭제한다.
      *
@@ -9927,9 +9942,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmDeleteLearningMaterialUsingDelete
      * @summary [관리자] 학습자료 삭제 API - JWT
      * @request DELETE:/learning-material/adm/{learningMaterialSeq}
-     */
+     */,
     admDeleteLearningMaterialUsingDelete: (learningMaterialSeq: number, params: RequestParams = {}) =>
-      this.request<LearningMaterialResponseDto, void>({
+      this.request<ApiResponseWrapper<LearningMaterialResponseDto>, void>({
         path: `/learning-material/adm/${learningMaterialSeq}`,
         method: "DELETE",
         ...params,
@@ -9945,12 +9960,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request DELETE:/lesson/adm/delete/{lessonSeq}
      */
     deleteLessonUsingDelete: (lessonSeq: number, params: RequestParams = {}) =>
-      this.request<LessonDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<LessonDetailResponseDto>, void>({
         path: `/lesson/adm/delete/${lessonSeq}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 권한으로 Lesson 의 시퀀스를 전달받아 해당 Lesson 을 단건 조회한다.
      *
@@ -9958,14 +9972,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindLessonUsingGet
      * @summary [관리자] 레슨 단건 조회 API
      * @request GET:/lesson/adm/detail/{lessonSeq}
-     */
+     */,
     findLessonUsingGet: (lessonSeq: number, params: RequestParams = {}) =>
-      this.request<LessonDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<LessonDetailResponseDto>, void>({
         path: `/lesson/adm/detail/${lessonSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 권한으로 Lesson 의 시퀀스를 Path Variable 로 전달받아 해당 Lesson 을 수정한다.{ "completeTime": 1532 -> 수료시간, "lessonNm": "string" -> 레슨 이름, "lessonType": 0 -> 레슨 타입 Enum, "chapter": 3 -> 차시, "status": 1 -> 사용 여부, "totalPage": 12 -> 전체 페이지, "totalTime": 1532 -> 총 시간 }
      *
@@ -9973,20 +9986,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateLessonUsingPut
      * @summary [관리자] 레슨 수정 API
      * @request PUT:/lesson/adm/modification/{lessonSeq}
-     */
+     */,
     updateLessonUsingPut: (
       lessonSeq: number,
       lessonUpdateRequestDto: LessonUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<LessonResponseDto, void>({
+      this.request<ApiResponseWrapper<LessonResponseDto>, void>({
         path: `/lesson/adm/modification/${lessonSeq}`,
         method: "PUT",
         body: lessonUpdateRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 권한으로 콘텐트의 seq 를 Path Variable 로 전달받아 해당 콘텐트에 해당하는 전체 Lesson 을 chapter(차시) 순으로 조회한다.
      *
@@ -9994,14 +10006,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindLessonsUsingGet
      * @summary [관리자] 레슨 전체 조회 API
      * @request GET:/lesson/adm/{contentSeq}
-     */
+     */,
     findLessonsUsingGet: (contentSeq: number, params: RequestParams = {}) =>
-      this.request<LessonResponseDto[], void>({
+      this.request<ApiResponseWrapper<LessonResponseDto[]>, void>({
         path: `/lesson/adm/${contentSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 권한으로 contentSeq 를 PathVar 로, DTO를 Body 로 전달받아 Lesson 을 일괄 생성한다.<br/><b>일괄 생성의 경우, DTO 내의 contentSeq 는 비우거나 삭제해도 무관하다.</b>
      *
@@ -10009,13 +10020,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateLessonUsingPost
      * @summary [관리자] 레슨 일괄 생성 API
      * @request POST:/lesson/adm/{contentSeq}
-     */
+     */,
     createLessonUsingPost: (
       contentSeq: number,
       lessonSaveRequestDtoList: LessonSaveRequestDto[],
       params: RequestParams = {},
     ) =>
-      this.request<LessonResponseDto[], any>({
+      this.request<ApiResponseWrapper<LessonResponseDto[]>, any>({
         path: `/lesson/adm/${contentSeq}`,
         method: "POST",
         body: lessonSaveRequestDtoList,
@@ -10036,13 +10047,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query: { courseSeq: number; elementCnt?: number; page: number },
       params: RequestParams = {},
     ) =>
-      this.request<LibraryResponseDto, void>({
+      this.request<ApiResponseWrapper<LibraryResponseDto>, void>({
         path: `/library/tutor`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 Request DTO 를 전달받아 강의 자료 등록을 수행한다.{ "subject": "string" -> 강의 자료 제목 "content": "string" -> 강의 자료 내용 마크다운, "courseSeq": 0 -> 과정 시퀀스, "status": 0 -> 사용 여부 1 or -1, }
      *
@@ -10050,16 +10060,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateLibraryUsingPost
      * @summary [관리자 & 튜터] 강의 자료 생성 API
      * @request POST:/library/tutor
-     */
+     */,
     createLibraryUsingPost: (requestDto: LibrarySaveRequestDto, params: RequestParams = {}) =>
-      this.request<LibraryResponseDto, void>({
+      this.request<ApiResponseWrapper<LibraryResponseDto>, void>({
         path: `/library/tutor`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 강의자료에 해당하는 시퀀스를 Path Variable 로 전달받아 해당하는 강의 자료를 단건 조회한다.
      *
@@ -10067,14 +10076,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindLibraryUsingGet
      * @summary [관리자 & 튜터] 강의 자료 상세조회 API
      * @request GET:/library/tutor/{librarySeq}
-     */
+     */,
     findLibraryUsingGet: (librarySeq: number, params: RequestParams = {}) =>
-      this.request<LibraryDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<LibraryDetailResponseDto>, void>({
         path: `/library/tutor/${librarySeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 강의자료에 해당하는 시퀀스를 Path Variable 로 전달받아 해당 강의 자료를 수정한다. { "subject": "강의 자료 제목" "content": "강의 자료 내용 마크다운" "status": "상태 1 or -1" }
      *
@@ -10082,16 +10090,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateLibraryUsingPut
      * @summary [관리자 & 튜터] 강의 자료 수정 API
      * @request PUT:/library/tutor/{librarySeq}
-     */
+     */,
     updateLibraryUsingPut: (librarySeq: number, requestDto: LibraryUpdateRequestDto, params: RequestParams = {}) =>
-      this.request<LibraryResponseDto, void>({
+      this.request<ApiResponseWrapper<LibraryResponseDto>, void>({
         path: `/library/tutor/${librarySeq}`,
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 강의자료에 해당하는 시퀀스를 Path Var 로 전달받아 해당 강의 자료를 수정한다.
      *
@@ -10099,9 +10106,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteLibraryUsingDelete
      * @summary [관리자 & 튜터] 강의 자료 삭제 API
      * @request DELETE:/library/tutor/{librarySeq}
-     */
+     */,
     deleteLibraryUsingDelete: (librarySeq: number, params: RequestParams = {}) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/library/tutor/${librarySeq}`,
         method: "DELETE",
         ...params,
@@ -10117,12 +10124,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/main-display
      */
     findMainDisplayUsingGet: (params: RequestParams = {}) =>
-      this.request<MainDisplayResponseDto[], void>({
+      this.request<ApiResponseWrapper<MainDisplayResponseDto[]>, void>({
         path: `/main-display`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 해당 화면에 상태 수정 한다.
      *
@@ -10130,13 +10136,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateMainDisplayUsingPut
      * @summary [관리자] 메인 화면 수정 API
      * @request PUT:/main-display/adm/{mainDisplaySeq}
-     */
+     */,
     updateMainDisplayUsingPut: (
       mainDisplaySeq: string,
       mainDisplayUpdateRequestDto: MainDisplayUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<MainDisplayUpdateResponseDto, void>({
+      this.request<ApiResponseWrapper<MainDisplayUpdateResponseDto>, void>({
         path: `/main-display/adm/${mainDisplaySeq}`,
         method: "PUT",
         body: mainDisplayUpdateRequestDto,
@@ -10154,7 +10160,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/nice/phone/confirm
      */
     phoneConfirmUsingGet: (query: { uuid: string }, params: RequestParams = {}) =>
-      this.request<NicePhoneResultResponseDto, void>({
+      this.request<ApiResponseWrapper<NicePhoneResultResponseDto>, void>({
         path: `/nice/phone/confirm`,
         method: "GET",
         query: query,
@@ -10185,13 +10191,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<PostResponseDto, void>({
+      this.request<ApiResponseWrapper<PostResponseDto>, void>({
         path: `/post`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 게시글을 작성한다. 이때, 공지, FAQ, 가이드 타입의 게시글은 관리자만 허용된다. 해당 타입에 대해서 관리자 권한이 없을 경우 예외를 발생시킨다. <b>courseSeq 가 0일 경우, 전체 공지 및 전체 자주묻는 질문, 전체 가이드로 등록된다.</b>
      *
@@ -10199,16 +10204,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreatePostUsingPost
      * @summary [App & 관리자] 게시글 작성 API - JWT
      * @request POST:/post
-     */
+     */,
     createPostUsingPost: (requestDto: PostSaveRequestDto, params: RequestParams = {}) =>
-      this.request<PostResponseDto, void>({
+      this.request<ApiResponseWrapper<PostResponseDto>, void>({
         path: `/post`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 게시글의 타입을 전달받아 해당하는 타입의 전체 게시글을 조회한다.
      *
@@ -10216,7 +10220,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindPostsUsingGet
      * @summary [관리자] 게시글 전체 조회 - Pagination
      * @request GET:/post/adm
-     */
+     */,
     admFindPostsUsingGet: (
       query: {
         boardType:
@@ -10231,13 +10235,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<PostResponseDto, any>({
+      this.request<ApiResponseWrapper<PostResponseDto>, any>({
         path: `/post/adm`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 게시글의 시퀀스를 Path Var 로 전달받아 해당 게시글을 단건 조회한다.
      *
@@ -10245,14 +10248,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindPostUsingGet
      * @summary [관리자] 게시글 단건 조회
      * @request GET:/post/adm/{postSeq}
-     */
+     */,
     admFindPostUsingGet: (postSeq: number, params: RequestParams = {}) =>
-      this.request<PostDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<PostDetailResponseDto>, void>({
         path: `/post/adm/${postSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 특정 게시글 시퀀스에 대해 등록된 모든 댓글 데이터를 조회한다. 페이징을 위한 파라미터도 함께 RequestParam 으로 전달받는다.
      *
@@ -10260,18 +10262,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindPostCommentsUsingGet
      * @summary [App] 댓글 전체 조회 API - Pagination
      * @request GET:/post/comment
-     */
+     */,
     findPostCommentsUsingGet: (
       query: { elementCnt?: number; page: number; postSeq: number },
       params: RequestParams = {},
     ) =>
-      this.request<PostCommentResponseDto[], void>({
+      this.request<ApiResponseWrapper<PostCommentResponseDto[]>, void>({
         path: `/post/comment`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 특정 게시글 시퀀스 postSeq 에 대해 댓글을 작성한다.<br/><b>부모 댓글일 경우, DTO 내 reference 가 null 이어야하며, 부모 댓글에 대한 대댓글일 경우 DTO 내 reference 는 부모 댓글 시퀀스를 가져야한다.</b>
      *
@@ -10279,16 +10280,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreatePostCommentUsingPost
      * @summary [App] 댓글 등록 API
      * @request POST:/post/comment
-     */
+     */,
     createPostCommentUsingPost: (requestDto: PostCommentSaveRequestDto, params: RequestParams = {}) =>
-      this.request<PostCommentResponseDto, void>({
+      this.request<ApiResponseWrapper<PostCommentResponseDto>, void>({
         path: `/post/comment`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 특정 댓글 시퀀스를 수정한다. 이때 요청한 사용자는 작성한 사용자와 동일한 사용자여야한다. 그렇지 않을 경우, 예외를 발생시킨다.
      *
@@ -10296,20 +10296,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdatePostCommentUsingPut
      * @summary [App] 댓글 수정 API
      * @request PUT:/post/comment/{postCommentSeq}
-     */
+     */,
     updatePostCommentUsingPut: (
       postCommentSeq: number,
       requestDto: PostCommentUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<PostCommentResponseDto, void>({
+      this.request<ApiResponseWrapper<PostCommentResponseDto>, void>({
         path: `/post/comment/${postCommentSeq}`,
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 특정 댓글 시퀀스를 Path Var 로 전달받아 해당 댓글을 삭제한다. 이때 요청한 사용자는 작성한 사용자와 동일한 사용자여야한다. 그렇지 않을 경우, 예외를 발생시킨다.<br/>댓글 및 게시글 삭제의 경우, status 를 -1 로 변경시킨다.<br/>관리자는 댓글을 자유롭게 삭제할 수 있다.
      *
@@ -10317,14 +10316,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeletePostCommentUsingDelete
      * @summary [App] 댓글 삭제 API
      * @request DELETE:/post/comment/{postCommentSeq}
-     */
+     */,
     deletePostCommentUsingDelete: (postCommentSeq: number, params: RequestParams = {}) =>
-      this.request<PostCommentResponseDto, void>({
+      this.request<ApiResponseWrapper<PostCommentResponseDto>, void>({
         path: `/post/comment/${postCommentSeq}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 앱에서 게시글의 시퀀스를 Path Var 로 전달받아 해당 게시글을 단건 조회한다.또한 게시글 상세조회가 호출되면 조회수를 증가시킨다.
      *
@@ -10332,14 +10330,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindPostUsingGet
      * @summary [App] 게시글 단건 조회
      * @request GET:/post/{postSeq}
-     */
+     */,
     findPostUsingGet: (postSeq: number, params: RequestParams = {}) =>
-      this.request<PostDetailResponseDto, void>({
+      this.request<ApiResponseWrapper<PostDetailResponseDto>, void>({
         path: `/post/${postSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 앱에서 게시글 시퀀스를 Path Variable 로 전달받아 해당 게시글을 수정한다. 이때, 요청자는 작성자의 유저 시퀀스와 일치해야한다. 관리자 페이지에서 수정하는 게시글(공지, FAQ 등)은 요청자와 작성자의 시퀀스가 동일하지 않아도 동작한다.{ "content": "string", "noticeYn": "Y", "publicYn": "Y", "subject": "string" }
      *
@@ -10347,16 +10344,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdatePostUsingPut
      * @summary [App] 게시글 수정 API - JWT
      * @request PUT:/post/{postSeq}
-     */
+     */,
     updatePostUsingPut: (postSeq: number, requestDto: PostUpdateRequestDto, params: RequestParams = {}) =>
-      this.request<PostResponseDto, void>({
+      this.request<ApiResponseWrapper<PostResponseDto>, void>({
         path: `/post/${postSeq}`,
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 앱에서 특정 게시글에 대한 시퀀스를 Path variable 로 전달받아 해당 게시글을 제거한다. 이때, 요청자는 작성자와 일치해야하며, 관리자 권한의 경우 작성자에 관계 없이 게시글 제거가 가능하다. 바로 DB 에서 삭제되지 않으며, status 값이 -1 로 변경된다.
      *
@@ -10364,9 +10360,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeletePostUsingDelete
      * @summary [App] 게시글 삭제 - JWT
      * @request DELETE:/post/{postSeq}
-     */
+     */,
     deletePostUsingDelete: (postSeq: number, params: RequestParams = {}) =>
-      this.request<PostResponseDto, void>({
+      this.request<ApiResponseWrapper<PostResponseDto>, void>({
         path: `/post/${postSeq}`,
         method: "DELETE",
         ...params,
@@ -10382,13 +10378,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/qna
      */
     findAllQnaUsingGet: (query?: { elementCnt?: number; page?: number }, params: RequestParams = {}) =>
-      this.request<QnaResponseDto[], any>({
+      this.request<ApiResponseWrapper<QnaResponseDto[]>, any>({
         path: `/qna`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 사용자 페이지에서 1:1 문의를 등록한다. 파일 첨부가 필요할 경우 별도의 파일 API 를 사용하여 등록한다. 첨부파일은 50MB 이내 첨부불가 타입: .exe, .link, .ico
      *
@@ -10396,16 +10391,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateQnaUsingPost
      * @summary [App] 1:1 문의 등록 - JWT, 파일[별도 API 이용]
      * @request POST:/qna
-     */
+     */,
     createQnaUsingPost: (requestDto: QnaSaveRequestDto, params: RequestParams = {}) =>
-      this.request<QnaResponseDto, any>({
+      this.request<ApiResponseWrapper<QnaResponseDto>, any>({
         path: `/qna`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 등록된 1:1 문의를 전체 조회한다.
      *
@@ -10413,15 +10407,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindAllQnaUsingGet
      * @summary [관리자] 1:1 문의 전체 조회 - JWT, Pagination
      * @request GET:/qna/adm
-     */
+     */,
     admFindAllQnaUsingGet: (query?: { elementCnt?: number; page?: number }, params: RequestParams = {}) =>
-      this.request<QnaResponseDto[], any>({
+      this.request<ApiResponseWrapper<QnaResponseDto[]>, any>({
         path: `/qna/adm`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 특정 1:1 문의를 조회한다.
      *
@@ -10429,14 +10422,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindQnaUsingGet
      * @summary [관리자] 1:1 문의 단건 조회 - JWT
      * @request GET:/qna/adm/{qnaSeq}
-     */
+     */,
     admFindQnaUsingGet: (qnaSeq: number, params: RequestParams = {}) =>
-      this.request<QnaResponseDto, void>({
+      this.request<ApiResponseWrapper<QnaResponseDto>, void>({
         path: `/qna/adm/${qnaSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 특정 1:1 문의에 대한 답변을 작성한다.
      *
@@ -10444,9 +10436,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmCreateQnaAnswerUsingPost
      * @summary [관리자] 1:1 문의 답변 - JWT, 파일[별도 API 이용]
      * @request POST:/qna/adm/{qnaSeq}
-     */
+     */,
     admCreateQnaAnswerUsingPost: (qnaSeq: number, requestDto: QnaAnswerSaveRequestDto, params: RequestParams = {}) =>
-      this.request<QnaAnswerResponseDto, void>({
+      this.request<ApiResponseWrapper<QnaAnswerResponseDto>, void>({
         path: `/qna/adm/${qnaSeq}`,
         method: "POST",
         body: requestDto,
@@ -10467,13 +10459,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query: { contentSeq: number; elementCnt?: number; page: number },
       params: RequestParams = {},
     ) =>
-      this.request<QuestionResponseDto[], void>({
+      this.request<ApiResponseWrapper<QuestionResponseDto[]>, void>({
         path: `/question/adm`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 DTO 를 전달받아 문제를 생성한다.
      *
@@ -10481,16 +10472,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateQuestionUsingPost
      * @summary [관리자] 문제은행 생성 API
      * @request POST:/question/adm
-     */
+     */,
     createQuestionUsingPost: (questionSaveRequestDto: QuestionSaveRequestDto, params: RequestParams = {}) =>
-      this.request<QuestionResponseDto, void>({
+      this.request<ApiResponseWrapper<QuestionResponseDto>, void>({
         path: `/question/adm`,
         method: "POST",
         body: questionSaveRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 콘텐츠의 시험 탭 내 문제은행에 대한 문항 등록 시 문항 검색을 수행한다.<br/>현재 콘텐츠의 seq 를 Path Var 로 전달받고, 문항의 제목을 Optional 하게 Request Param 으로 전달받아 검색을 수행한다. 또한, 현재 Page 또한 Request param 으로 전달받아 페이지네이션을 수행한다.<br/>반환되는 결과는 해당하는 문항에 대한 정보들이다.<br/><b>이때, 문제 은행에서 사용 중지인 상태의 데이터는 조회되지 않는다.<b/>
      *
@@ -10498,19 +10488,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindSpecificQuestionInExamTabUsingGet
      * @summary [관리자] 콘텐츠 내 시험 탭 내 문제은행->문항등록 검색 API
      * @request GET:/question/adm/exam/{contentSeq}
-     */
+     */,
     findSpecificQuestionInExamTabUsingGet: (
       contentSeq: number,
       query: { elementCnt?: number; page: number; questionTitle?: string },
       params: RequestParams = {},
     ) =>
-      this.request<SpecificQuestionInExamTabResponseDto, void>({
+      this.request<ApiResponseWrapper<SpecificQuestionInExamTabResponseDto>, void>({
         path: `/question/adm/exam/${contentSeq}`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 contentSeq 를 Path Var 로, Body 로 DTO 리스트를 전달받아 문제를 일괄 생성한다.<br/><b>일괄 생성의 경우, DTO 내의 contentSeq 는 비우거나 삭제해도 무관하다.</b>
      *
@@ -10518,20 +10507,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateQuestionsUsingPost
      * @summary [관리자] 문제은행 일괄 생성 API
      * @request POST:/question/adm/{contentSeq}
-     */
+     */,
     createQuestionsUsingPost: (
       contentSeq: number,
       requestDtoList: QuestionSaveRequestDto[],
       params: RequestParams = {},
     ) =>
-      this.request<QuestionResponseDto[], void>({
+      this.request<ApiResponseWrapper<QuestionResponseDto[]>, void>({
         path: `/question/adm/${contentSeq}`,
         method: "POST",
         body: requestDtoList,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 특정 questionSeq 를 Path Variable 로 전달받아 해당하는 문제은행 데이터를 단건 조회한다.
      *
@@ -10539,14 +10527,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindQuestionUsingGet
      * @summary [관리자] 문제은행 단건 조회 API
      * @request GET:/question/adm/{questionSeq}
-     */
+     */,
     findQuestionUsingGet: (questionSeq: number, params: RequestParams = {}) =>
-      this.request<QuestionResponseDto, void>({
+      this.request<ApiResponseWrapper<QuestionResponseDto>, void>({
         path: `/question/adm/${questionSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 Update DTO 와 questionSeq 를 Path Var 로 전달받아 문제은행 데이터를 수정한다.
      *
@@ -10554,20 +10541,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UpdateQuestionUsingPut
      * @summary [관리자] 문제은행 수정 API
      * @request PUT:/question/adm/{questionSeq}
-     */
+     */,
     updateQuestionUsingPut: (
       questionSeq: number,
       questionUpdateRequestDto: QuestionUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/question/adm/${questionSeq}`,
         method: "PUT",
         body: questionUpdateRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 특정 questionSeq 를 Path Variable 로 전달받아 해당 문제은행을 삭제한다.
      *
@@ -10575,9 +10561,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DeleteQuestionUsingDelete
      * @summary [관리자] 문제은행 삭제 API
      * @request DELETE:/question/adm/{questionSeq}
-     */
+     */,
     deleteQuestionUsingDelete: (questionSeq: number, params: RequestParams = {}) =>
-      this.request<QuestionResponseDto, void>({
+      this.request<ApiResponseWrapper<QuestionResponseDto>, void>({
         path: `/question/adm/${questionSeq}`,
         method: "DELETE",
         ...params,
@@ -10596,13 +10582,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: { elementCnt?: number; page?: number; title?: string },
       params: RequestParams = {},
     ) =>
-      this.request<SurveyResponseDto[], any>({
+      this.request<ApiResponseWrapper<SurveyResponseDto[]>, any>({
         path: `/survey/adm`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 설문을 생성한다. Json 형태로 Request Body 를 전달받는다.
      *
@@ -10610,16 +10595,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmCreateSurveyUsingPost
      * @summary [관리자] 설문 생성 API
      * @request POST:/survey/adm
-     */
+     */,
     admCreateSurveyUsingPost: (requestDto: SurveyRequestDto, params: RequestParams = {}) =>
-      this.request<SurveyResponseDto, any>({
+      this.request<ApiResponseWrapper<SurveyResponseDto>, any>({
         path: `/survey/adm`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 특정 설문을 단건 조회한다.
      *
@@ -10627,14 +10611,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindSurveyUsingGet
      * @summary [관리자] 설문 단건 조회 API
      * @request GET:/survey/adm/{surveySeq}
-     */
+     */,
     admFindSurveyUsingGet: (surveySeq: number, params: RequestParams = {}) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/survey/adm/${surveySeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 특정 설문을 수정한다.
      *
@@ -10642,16 +10625,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmModifySurveyUsingPut
      * @summary [관리자] 설문 수정 API
      * @request PUT:/survey/adm/{surveySeq}
-     */
+     */,
     admModifySurveyUsingPut: (surveySeq: number, requestDto: SurveyRequestDto, params: RequestParams = {}) =>
-      this.request<SurveyResponseDto, void>({
+      this.request<ApiResponseWrapper<SurveyResponseDto>, void>({
         path: `/survey/adm/${surveySeq}`,
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 특정 설문을 제거한다.
      *
@@ -10659,29 +10641,27 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmDeleteSurveyUsingDelete
      * @summary [관리자] 특정 설문 삭제 API
      * @request DELETE:/survey/adm/{surveySeq}
-     */
+     */,
     admDeleteSurveyUsingDelete: (surveySeq: number, params: RequestParams = {}) =>
-      this.request<SurveyResponseDto, void>({
+      this.request<ApiResponseWrapper<SurveyResponseDto>, void>({
         path: `/survey/adm/${surveySeq}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
-     * @description 클라이언트 단에서 현재 유저가 수강중인 과정 신청 시퀀스를 전달받아 특정 설문을 조회한다. 설문 조회 시, 요청자의 유저 시퀀스에 대하여 현재 과정에 대한 전체 진도율이 100%인지 체크한다. 진도율이 100% 이 아닐 경우 예외를 발생시킨다.
+     * @description 클라이언트 단에서 현재 유저가 수강중인 과정 신청 시퀀스를 전달받아 특정 설문을 조회한다. 설문 조회 시, 요청자의 유저 시퀀스에 대하여 현재 과정에 대한 전체 진도율이 최소 진도율을 충족하는지 체크한다. 그렇지 않을 경우, 예외를 발생시킨다.
      *
      * @tags [App & 관리자] 설문 API
      * @name FindSurveyUsingGet
      * @summary [App] 설문 조회 API
-     * @request GET:/survey/course-class/{courseUserSeq}
-     */
-    findSurveyUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
-      this.request<SurveyResponseDto, void>({
-        path: `/survey/course-class/${courseUserSeq}`,
+     * @request GET:/survey/course-class/{courseUserSeq}/{surveySeq}
+     */,
+    findSurveyUsingGet: (courseUserSeq: number, surveySeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<SurveyResponseDto>, void>({
+        path: `/survey/course-class/${courseUserSeq}/${surveySeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 클라이언트에서 특정 surveySeq 에 대해 설문 참여 이후, 결과를 제출한다. 요청 데이터 중, answer 프로퍼티는 사용자가 선택한 문항 인덱스 또는 주관식에 대한 답변이다. (객관식의 경우 -> item1~item10) item1: 1 item2: 2 itemN: N then 'answer': '3' 주관식의 경우 'answer': '나는 집에 가고 싶다 등' <b>객관식의 '기타' 항목일 경우 etcAnswer 에 값을 포함하여 전송. 이외에는 반드시 null 혹은 공백이어야한다.</b>
      *
@@ -10689,9 +10669,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ParticipateSurveyUsingPost
      * @summary [App] 설문 참여(제출) API
      * @request POST:/survey/participant
-     */
+     */,
     participateSurveyUsingPost: (requestDto: SurveyParticipateRequestDto, params: RequestParams = {}) =>
-      this.request<InputStream, any>({
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/survey/participant`,
         method: "POST",
         body: requestDto,
@@ -10709,12 +10689,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/terms/adm
      */
     admFindAllTermsUsingGet: (params: RequestParams = {}) =>
-      this.request<TermsResponseDto, void>({
+      this.request<ApiResponseWrapper<TermsResponseDto>, void>({
         path: `/terms/adm`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 이용 약관을 생성한다.
      *
@@ -10722,16 +10701,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmSaveTermsUsingPost
      * @summary [관리자] 이용 약관 생성 API
      * @request POST:/terms/adm
-     */
+     */,
     admSaveTermsUsingPost: (termsSaveRequestDto: TermsSaveRequestDto, params: RequestParams = {}) =>
-      this.request<TermsResponseDto, void>({
+      this.request<ApiResponseWrapper<TermsResponseDto>, void>({
         path: `/terms/adm`,
         method: "POST",
         body: termsSaveRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 생성한 이용 약관을 조회한다.
      *
@@ -10739,14 +10717,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindTermsUsingGet
      * @summary [관리자] 이용 약관 단건 조회 API
      * @request GET:/terms/adm/{termsSeq}
-     */
+     */,
     admFindTermsUsingGet: (termsSeq: number, params: RequestParams = {}) =>
-      this.request<TermsResponseDto, void>({
+      this.request<ApiResponseWrapper<TermsResponseDto>, void>({
         path: `/terms/adm/${termsSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 이용 약관을 수정한다.
      *
@@ -10754,13 +10731,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmUpdateTermsUsingPut
      * @summary [관리자] 이용 약관 수정 API
      * @request PUT:/terms/adm/{termsSeq}
-     */
+     */,
     admUpdateTermsUsingPut: (
       termsSeq: number,
       termsUpdateRequestDto: TermsUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<TermsResponseDto, void>({
+      this.request<ApiResponseWrapper<TermsResponseDto>, void>({
         path: `/terms/adm/${termsSeq}`,
         method: "PUT",
         body: termsUpdateRequestDto,
@@ -10778,12 +10755,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request DELETE:/user
      */
     deleteUserUsingDelete: (params: RequestParams = {}) =>
-      this.request<UserDetailsImpl, any>({
+      this.request<ApiResponseWrapper<UserDetailsImpl>, any>({
         path: `/user`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 전체 유저 리스트를 조회한다. 이때, 페이징을 위한 인자를 Request Param 으로 전달받는다.
      *
@@ -10791,15 +10767,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindUsersUsingGet
      * @summary [관리자] 전체 유저 API - JWT | Pagination
      * @request GET:/user/adm
-     */
+     */,
     admFindUsersUsingGet: (query: { elementCnt?: number; page: number }, params: RequestParams = {}) =>
-      this.request<UserResponseDto[], any>({
+      this.request<ApiResponseWrapper<UserResponseDto[]>, any>({
         path: `/user/adm`,
         method: "GET",
         query: query,
         ...params,
-      }),
-
+      })
     /**
      * @description 유저의 시퀀스를 RequestParam 으로 전달받아 해당하는 유저의 계정 잠금을 해제한다.
      *
@@ -10807,16 +10782,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmReleaseAccountLockUsingPost
      * @summary [관리자] 유저 계정 잠김 해제 API - JWT
      * @request POST:/user/adm/account/release
-     */
+     */,
     admReleaseAccountLockUsingPost: (query: { userSeq: number }, params: RequestParams = {}) =>
-      this.request<boolean, void>({
+      this.request<ApiResponseWrapper<boolean>, void>({
         path: `/user/adm/account/release`,
         method: "POST",
         query: query,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 사용자의 접근 권한을 추가한다.
      *
@@ -10824,16 +10798,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmAddRoleUsingPut
      * @summary [관리자] 유저 권한 수정(추가) API - JWT 사용
      * @request PUT:/user/adm/role/add
-     */
+     */,
     admAddRoleUsingPut: (roleUpdateRequestDto: RoleUpdateRequestDto, params: RequestParams = {}) =>
-      this.request<RoleUpdateRequestDto, any>({
+      this.request<ApiResponseWrapper<RoleUpdateRequestDto>, any>({
         path: `/user/adm/role/add`,
         method: "PUT",
         body: roleUpdateRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 사용자의 접근 권한을 삭제한다.
      *
@@ -10841,16 +10814,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmDeleteRoleUsingPut
      * @summary [관리자] 유저 권한 수정(삭제) API - JWT 사용
      * @request PUT:/user/adm/role/delete
-     */
+     */,
     admDeleteRoleUsingPut: (roleUpdateRequestDto: RoleUpdateRequestDto, params: RequestParams = {}) =>
-      this.request<RoleUpdateRequestDto, any>({
+      this.request<ApiResponseWrapper<RoleUpdateRequestDto>, any>({
         path: `/user/adm/role/delete`,
         method: "PUT",
         body: roleUpdateRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자페이지에서 특정 유저에 대한 시퀀스를 Path Variable 로 전달받아 해당하는 사용자의 상세 정보를 조회한다.
      *
@@ -10858,14 +10830,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmFindUserUsingGet
      * @summary [관리자] 유저 단건 조회 API - JWT
      * @request GET:/user/adm/{userSeq}
-     */
+     */,
     admFindUserUsingGet: (userSeq: number, params: RequestParams = {}) =>
-      this.request<UserResponseDto, void>({
+      this.request<ApiResponseWrapper<UserResponseDto>, void>({
         path: `/user/adm/${userSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 수정할 유저의 시퀀스를 PathVar 로 전달받아 해당하는 유저를 수정한다.
      *
@@ -10873,16 +10844,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmUpdateUserInfoUsingPut
      * @summary [관리자] 유저 수정 API - JWT
      * @request PUT:/user/adm/{userSeq}
-     */
+     */,
     admUpdateUserInfoUsingPut: (userSeq: number, requestDto: UserInfoUpdateRequestDto, params: RequestParams = {}) =>
-      this.request<UserResponseDto, void>({
+      this.request<ApiResponseWrapper<UserResponseDto>, void>({
         path: `/user/adm/${userSeq}`,
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 관리자 페이지에서 삭제할 유저의 시퀀스를 PathVar 으로 전달받아 해당하는 유저를 제거한다.
      *
@@ -10890,14 +10860,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AdmDeleteUserUsingDelete
      * @summary [관리자] 유저 제거 API
      * @request DELETE:/user/adm/{userSeq}
-     */
+     */,
     admDeleteUserUsingDelete: (userSeq: number, params: RequestParams = {}) =>
-      this.request<UserResponseDto, void>({
+      this.request<ApiResponseWrapper<UserResponseDto>, void>({
         path: `/user/adm/${userSeq}`,
         method: "DELETE",
         ...params,
-      }),
-
+      })
     /**
      * @description 받아온 인증정보로 유저가 있는지 확인한다.
      *
@@ -10905,50 +10874,47 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ChangePasswordUsingPut
      * @summary [App] 유저 비밀번호 찾기로 비밀번호 변경 API
      * @request PUT:/user/change-password
-     */
+     */,
     changePasswordUsingPut: (userFindChangeRequestDto: UserFindChangeRequestDto, params: RequestParams = {}) =>
-      this.request<UserFindChangeRequestDto, void>({
+      this.request<ApiResponseWrapper<UserFindChangeRequestDto>, void>({
         path: `/user/change-password`,
         method: "PUT",
         body: userFindChangeRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
-     * @description 받아온 인증정보로 유저가 있는지 확인한다.
-     *
-     * @tags [관리자 & App] 유저 API
-     * @name ExistsIdUsingPost
-     * @summary [App] 비밀번호 찾기 API
-     * @request POST:/user/exists-id
-     */
-    existsIdUsingPost: (userFIndPasswordRequestDto: UserFindPasswordRequestDto, params: RequestParams = {}) =>
-      this.request<UserFindPasswordResponseDto, void>({
-        path: `/user/exists-id`,
-        method: "POST",
-        body: userFIndPasswordRequestDto,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description 받아온 인증정보로 유저 아이디를 찾아 보여준다
+     * @description 받아온 인증정보로 유저 아이디를 찾아 보여준다. <b>도민 전용 API 일단 보류 쓰지마세요</b>
      *
      * @tags [관리자 & App] 유저 API
      * @name FindUserIdUsingPost
      * @summary [App] 아이디 찾기 API
      * @request POST:/user/find-id
-     */
+     */,
     findUserIdUsingPost: (userFindIdRequestDto: UserFindIdRequestDto, params: RequestParams = {}) =>
-      this.request<UserFindIdResponseDto, void>({
+      this.request<ApiResponseWrapper<UserFindIdResponseDto>, void>({
         path: `/user/find-id`,
         method: "POST",
         body: userFindIdRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
+    /**
+     * @description 받아온 인증정보로 유저가 있는지 확인한다. <b>도민 전용 API 일단 보류 쓰지마세요</b>
+     *
+     * @tags [관리자 & App] 유저 API
+     * @name ExistsIdUsingPost
+     * @summary [App] 비밀번호 찾기 API
+     * @request POST:/user/find-password
+     */,
+    existsIdUsingPost: (userFIndPasswordRequestDto: UserFindPasswordRequestDto, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<UserFindPasswordResponseDto>, void>({
+        path: `/user/find-password`,
+        method: "POST",
+        body: userFIndPasswordRequestDto,
+        type: ContentType.Json,
+        ...params,
+      })
     /**
      * @description Access Token 을 헤더로 전달받아 해당 유저의 로그인 히스토리를 등록한다.
      *
@@ -10956,15 +10922,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateLoginHistoryUsingPost
      * @summary [App] 유저 로그인 히스토리 등록 API - JWT 사용
      * @request POST:/user/login-history
-     */
+     */,
     createLoginHistoryUsingPost: (params: RequestParams = {}) =>
-      this.request<UserLoginHistoryResponseDto, any>({
+      this.request<ApiResponseWrapper<UserLoginHistoryResponseDto>, any>({
         path: `/user/login-history`,
         method: "POST",
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 특정 유저의 aT 를 헤더로 전달받아 해당하는 유저의 정보를 반환한다.
      *
@@ -10972,14 +10937,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindMyInfoUsingGet
      * @summary [App] 특정 유저 조회 API - JWT 사용
      * @request GET:/user/myinfo
-     */
+     */,
     findMyInfoUsingGet: (params: RequestParams = {}) =>
-      this.request<UserDetailsImpl, any>({
+      this.request<ApiResponseWrapper<UserDetailsImpl>, any>({
         path: `/user/myinfo`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 해당하는 유저가 증명서 발급을 위해 수강중인 모든 과정에 대한 전체 조회.
      *
@@ -10987,14 +10951,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindAllMyCourseListUsingGet
      * @summary [App] 유저 마이페이지 증명서 발급을 위한 과정 전체조회 API
      * @request GET:/user/myinfo/certificates
-     */
+     */,
     findAllMyCourseListUsingGet: (params: RequestParams = {}) =>
-      this.request<UserMyinfoCertificatesResponseDto, void>({
+      this.request<ApiResponseWrapper<UserMyinfoCertificatesResponseDto>, void>({
         path: `/user/myinfo/certificates`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 해당하는 유저가 증명서 발급을 위해 수강중인 특정 과정에 대한 확인.
      *
@@ -11002,14 +10965,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindCertificatesConfirmUsingGet
      * @summary [App] 유저 마이페이지 증명서 발급을 위한 확인 API
      * @request GET:/user/myinfo/certificates/confirm/{courseUserSeq}
-     */
+     */,
     findCertificatesConfirmUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
-      this.request<UserMyinfoCertificatesResponseDto, void>({
+      this.request<ApiResponseWrapper<UserMyinfoCertificatesResponseDto>, void>({
         path: `/user/myinfo/certificates/confirm/${courseUserSeq}`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description courseUserSeq 를 PathVariable 로 전달받아 수료가 완료된 건에 대하여 수료증을 PDF 로 발급한다.
      *
@@ -11017,15 +10979,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name DownloadCertPdfUsingPost
      * @summary [App] 유저 마이페이지 내 증명서 PDF 다운로드
      * @request POST:/user/myinfo/certificates/download/{courseUserSeq}
-     */
+     */,
     downloadCertPdfUsingPost: (courseUserSeq: number, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<ApiResponseWrapper<void>, any>({
         path: `/user/myinfo/certificates/download/${courseUserSeq}`,
         method: "POST",
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 클라이언트에서 현재 유저에 대한 aT 를 헤더로 전달받아 학습 중인 과정, 학습 종료 과정을 조회한다. 학습 중인 과정과 종료된 과정은 수강 가능 기간에 따라 구분된다.
      *
@@ -11033,14 +10994,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindLearningStatusUsingGet
      * @summary [App] 학습현황 조회 API - JWT
      * @request GET:/user/myinfo/learning-status
-     */
+     */,
     findLearningStatusUsingGet: (params: RequestParams = {}) =>
-      this.request<CourseUserMyInfoResponseDto[], any>({
+      this.request<ApiResponseWrapper<CourseUserMyInfoResponseDto[]>, any>({
         path: `/user/myinfo/learning-status`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description Access Token 을 헤더로 전달받아 해당하는 유저의 정보를 수정한다.
      *
@@ -11048,16 +11008,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ModifyMyInfoUsingPut
      * @summary [App] 특정 유저 수정 API - JWT 사용
      * @request PUT:/user/myinfo/modify
-     */
+     */,
     modifyMyInfoUsingPut: (userModifyRequestDto: UserModifyRequestDto, params: RequestParams = {}) =>
-      this.request<UserModifyResponseDto, any>({
+      this.request<ApiResponseWrapper<UserModifyResponseDto>, any>({
         path: `/user/myinfo/modify`,
         method: "PUT",
         body: userModifyRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description Access Token 을 헤더로 전달받아 해당하는 유저의 비밀번호를 변경한다.
      *
@@ -11065,19 +11024,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ModifyMyPasswordUsingPut
      * @summary [App] 특정 유저 패스워드 변경 API - JWT 사용
      * @request PUT:/user/myinfo/modify/password
-     */
+     */,
     modifyMyPasswordUsingPut: (
       userPasswordModifyRequestDto: UserPasswordModifyRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<UserDetailsImpl, void>({
+      this.request<ApiResponseWrapper<UserDetailsImpl>, void>({
         path: `/user/myinfo/modify/password`,
         method: "PUT",
         body: userPasswordModifyRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 해당하는 유저 (도민교통 안전교육자)의 정보를 조회한다.
      *
@@ -11085,14 +11043,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ProvincialFindUserUsingGet
      * @summary [App] 유저 (도민교통 안전교육자) 조회 API
      * @request GET:/user/provincial
-     */
+     */,
     provincialFindUserUsingGet: (params: RequestParams = {}) =>
-      this.request<UserProvincialFindResponseDto, void>({
+      this.request<ApiResponseWrapper<UserProvincialFindResponseDto>, void>({
         path: `/user/provincial`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 해당(로그인한)하는 유저 (도민교통 안전교육자)의 정보를 수정한다.
      *
@@ -11100,19 +11057,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ProvincialTrafficSafetyUpdateUserUsingPut
      * @summary [App] 유저 (도민교통 안전교육자) 수정 API, 파일
      * @request PUT:/user/provincial
-     */
+     */,
     provincialTrafficSafetyUpdateUserUsingPut: (
       userProvincialUpdateRequestDto: UserProvincialUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<UserProvincialUpdateResponseDto, void>({
+      this.request<ApiResponseWrapper<UserProvincialUpdateResponseDto>, void>({
         path: `/user/provincial`,
         method: "PUT",
         body: userProvincialUpdateRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
-
+      })
     /**
      * @description 해당하는 유저 (운수종사자 / 저상버스운전자)의 정보를 조회한다.
      *
@@ -11120,14 +11076,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name TransportFindUserUsingGet
      * @summary [App] 유저 (운수종사자 / 저상버스운전자) 조회 API
      * @request GET:/user/transport
-     */
+     */,
     transportFindUserUsingGet: (params: RequestParams = {}) =>
-      this.request<UserTransportFindResponseDto, void>({
+      this.request<ApiResponseWrapper<UserTransportFindResponseDto>, void>({
         path: `/user/transport`,
         method: "GET",
         ...params,
-      }),
-
+      })
     /**
      * @description 해당(로그인한)하는 유저 (운수종사자 / 저상버스운전자)의 정보를 수정한다.
      *
@@ -11135,12 +11090,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name TransWorkerUpdateUserUsingPut
      * @summary [App] 유저 (운수종사자 / 저상버스운전자) 수정 API, 파일
      * @request PUT:/user/transport
-     */
+     */,
     transWorkerUpdateUserUsingPut: (
       userTransportUpdateRequestDto: UserTransportUpdateRequestDto,
       params: RequestParams = {},
     ) =>
-      this.request<UserTransportUpdateResponseDto, void>({
+      this.request<ApiResponseWrapper<UserTransportUpdateResponseDto>, void>({
         path: `/user/transport`,
         method: "PUT",
         body: userTransportUpdateRequestDto,

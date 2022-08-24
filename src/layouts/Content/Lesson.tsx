@@ -37,12 +37,12 @@ export function Lesson(props: Props) {
       .findCourseUsingGet(courseUserSeq)
       .then((res) => {
 
-        const data = (res.data as any).data;
+        const data = res.data.data;
         setCourse(data);
 
         ApiClient.courseModule
           .clientFindAllCourseModulesUsingGet({ courseSeq: data.seq })
-          .then((res) =>  setModules((res.data as any).data))
+          .then((res) =>  setModules(res.data.data))
           .catch(() => setModules(null))
           .finally(() => setLoading(false));
 

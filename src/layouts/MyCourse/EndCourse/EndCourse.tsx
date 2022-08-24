@@ -1,5 +1,6 @@
 import { progressStatus, useMyUser } from '@common/api/user';
 import { ContentCard, Spinner } from '@components/ui';
+import { ContentCardV2 } from '@components/ui/ContentCard';
 import { NotFound } from '@components/ui/NotFound';
 import styled from '@emotion/styled';
 import { Box, Grid } from '@mui/material';
@@ -24,7 +25,7 @@ export function EndCourse() {
                   // router.push(`/course/${res.seq}/lesson/${res.lessons[0].seq}`);
                 }}
               >
-                <ContentCard title={item.courseTitle} content1={`학습 종료된 강의입니다.`} content2={`진도율 ${item.progress}%`} />
+                <ContentCardV2 image={item.thumbnailImage} title={item.courseTitle} content1={`학습 종료된 강의입니다.`} content2={`진도율 ${item.progress}%`} />
               </Box>
             </Grid>
           ))}

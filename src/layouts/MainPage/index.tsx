@@ -64,6 +64,7 @@ const MainPage: NextPage = () => {
   const isLogin = useIsLoginStatus();
   const { user, error: userError } = useMyUser();
   const { data, error } = useMainDisplay();
+  const wrapRef = React.useRef<HTMLDivElement>();
   React.useEffect(() => {
     // if (isLogin && user) {
     //   if (user.roles.some(item => item === UserRole.ROLE_ADMIN)) return;
@@ -73,13 +74,35 @@ const MainPage: NextPage = () => {
     //     router.push('/traffic/category');
     //   }
     // }
-    console.log(screen.availHeight);
-    setScreenHeight(screen.availHeight);
   }, [isLogin, user]);
+
+  React.useEffect(() => {
+    const htmlTag = document.querySelector('html');
+    const bodyTag = document.querySelector('body');
+    const idTag = document.querySelector('#__next') as HTMLElement;
+    const idTagFirseChildStyle = idTag.childNodes[0] as HTMLElement;
+    const mainTag = document.querySelector('main');
+
+    htmlTag.style.height = '100%';
+    bodyTag.style.height = '100%';
+    idTag.style.height = '100%';
+    idTagFirseChildStyle.style.height = '100%';
+    mainTag.style.height = '100%';
+
+    return () => {
+      htmlTag.style.height = '';
+      bodyTag.style.height = '';
+      idTag.style.height = '';
+      idTagFirseChildStyle.style.height = '';
+      mainTag.style.height = '';
+    };
+  }, []);
+
   if (!data) return <Spinner />;
   return (
     <WrapMainContainer
-    // style={{height:screenHeight ? screenHeight : ''}}
+      ref={wrapRef}
+      // style={{ height: screenHeight ? screenHeight : '' }}
     >
       <Head>
         <title>Main Page</title>
@@ -100,12 +123,7 @@ const MainPage: NextPage = () => {
             </NoticeContent>
           </NoticeContainer> */}
           <Box position="relative">
-            <CategoryGrid
-              container={true}
-              spacing={0}
-              columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
-              height={'100%'}
-            >
+            <CategoryGrid container={true} spacing={0} columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }} height={'100%'}>
               {data.map(item => {
                 if (item.status === 1) {
                   const { href, color, textColor, displayWord, imgPath, pageType, onClickCard } = LinkList.filter(
@@ -143,37 +161,6 @@ const MainPage: NextPage = () => {
                   );
                 }
               })}
-              {/* <MainCategoryCard>
-            <Link href="/category" underline="none">
-              <Box width='270px' borderRadius='8px 8px 0 0' overflow='hidden' >
-              <Image src='/assets/images/banner.jpg' width='270' height='184' objectFit='fill' /></Box>
-              <CardInContainer>
-                <Button color="neutral">Move</Button>
-              </CardInContainer>
-            </Link>
-          </MainCategoryCard>
-          <MainCategoryCard>
-            <Link href="/category" underline="none">
-              <Box width='270px' borderRadius='8px 8px 0 0' overflow='hidden' >
-              <Image src='/assets/images/banner.jpg' width='270' height='184' objectFit='fill' /></Box>
-              <CardInContainer>
-                <Button
-                  color="neutral"
-                >Move</Button>
-              </CardInContainer>
-            </Link>
-          </MainCategoryCard>
-          <MainCategoryCard>
-            <Link href="/category" underline="none">
-              <Box width='270px' borderRadius='8px 8px 0 0' overflow='hidden' >
-              <Image src='/assets/images/banner.jpg' width='270' height='184' objectFit='fill' /></Box>
-              <CardInContainer>
-                <Button
-                  color="neutral"
-                  >Move</Button>
-              </CardInContainer>
-            </Link>
-          </MainCategoryCard> */}
             </CategoryGrid>
           </Box>
         </ContentBox>
@@ -186,10 +173,11 @@ const MainPage: NextPage = () => {
 };
 // Wrap
 const WrapMainContainer = styled.div`
-  /* display: flex; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 100%;
   height: 100%;
-  /* align-content: flex-start; */
   .MuiButton-root.MuiButton-textNeutral:hover {
     background-color: #fff;
   }
@@ -199,9 +187,8 @@ const WrapMainContainer = styled.div`
 `;
 // MainContainer
 const MainContainer = styled(Box)`
-  /* background: #DCF3FF; */
-  height: 70%;
-  min-height: 719px;
+  height: 80%;
+  /* min-height: 719px; */
   padding-top: 130px;
 `;
 const ContentBox = styled(Box)`
@@ -216,59 +203,9 @@ const LogoBox = styled(Box)`
   margin: auto;
 `;
 
-// Notice
-const NoticeContainer = styled(Box)`
-  max-width: 930px;
-  position: relative;
-  height: 25%;
-  margin: auto;
-  margin-top: 80px;
-  border-radius: 1rem;
-  border: 2px solid #d7d7d7;
-  /* width: 936px;
-  height: 110px; */
-  // 알림판 중앙 정렬
-`;
-
-const NoticeTitle = styled(Box)`
-  position: absolute;
-  /* top:-1.5rem; */
-  width: 236px;
-  height: 46px;
-  right: 50%;
-  color: black;
-  background: #f9f9f9;
-  box-sizing: border-box;
-  border-radius: 1rem;
-  border: 1px solid #d7d7d7;
-  padding: 0.5rem 0.25rem;
-  transform: translate(50%, -50%);
-  /* border-radius: 30px 0 0 30px; */
-  /* background-color: rgb(63, 63, 198); */
-`;
-const NoticeTitleTypography = styled(Typography)`
-  /* white-space: pre-wrap; */
-  width: 100%;
-  font-size: 1.15rem;
-  font-weight: bold;
-  text-align: center;
-`;
-const NoticeContent = styled(Box)`
-  /* width: 60%; */
-  height: 100%;
-  margin: 2rem;
-  text-align: center;
-  border-radius: 0 30px 30px 0;
-  background-color: white;
-`;
-// line-break
-const NoticeContentTypography = styled(Typography)`
-  white-space: pre-wrap;
-`;
 // Category Grid
 const CategoryGrid = styled(Grid)`
-  gap: 4px;
-  position: relative;
+  /* position: relative; */
   height: 100%;
   display: flex;
   justify-content: center;
@@ -279,7 +216,6 @@ const MainCategoryCard = styled(Container)`
   display: flex;
   width: 328px;
   height: 386px;
-  /* border-radius: 70px 70px 30px 30px; */
   background: #fff;
   justify-content: center;
   align-items: center;
@@ -296,7 +232,6 @@ const CardInContainer = styled(Box)`
   align-items: center;
   width: 185px;
   height: 130px;
-  /* margin-top: 170px; */
   border-radius: 0 0 30px 30px;
   background-color: white;
   margin: auto;
@@ -329,7 +264,6 @@ const FooterWord = styled(Box)`
   position: absolute;
   width: 435px;
   height: 214px;
-  /* right: 25rem; */
   right: 10%;
   bottom: 1rem;
   font-size: 13rem;
@@ -349,3 +283,46 @@ const FooterWord = styled(Box)`
   }
 `;
 export default MainPage;
+
+// // Notice
+// const NoticeContainer = styled(Box)`
+//   max-width: 930px;
+//   position: relative;
+//   height: 25%;
+//   margin: auto;
+//   margin-top: 80px;
+//   border-radius: 1rem;
+//   border: 2px solid #d7d7d7;
+//   // 알림판 중앙 정렬
+// `;
+
+// const NoticeTitle = styled(Box)`
+//   position: absolute;
+//   width: 236px;
+//   height: 46px;
+//   right: 50%;
+//   color: black;
+//   background: #f9f9f9;
+//   box-sizing: border-box;
+//   border-radius: 1rem;
+//   border: 1px solid #d7d7d7;
+//   padding: 0.5rem 0.25rem;
+//   transform: translate(50%, -50%);
+// `;
+// const NoticeTitleTypography = styled(Typography)`
+//   width: 100%;
+//   font-size: 1.15rem;
+//   font-weight: bold;
+//   text-align: center;
+// `;
+// const NoticeContent = styled(Box)`
+//   height: 100%;
+//   margin: 2rem;
+//   text-align: center;
+//   border-radius: 0 30px 30px 0;
+//   background-color: white;
+// `;
+// // line-break
+// const NoticeContentTypography = styled(Typography)`
+//   white-space: pre-wrap;
+// `;

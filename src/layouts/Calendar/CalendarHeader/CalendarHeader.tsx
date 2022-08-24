@@ -48,9 +48,9 @@ export function CalendarHeader({ onChangeMonth, date, filterList, onChangeFilter
   return (
     <CalendarHeaderWrap>
       <TopYearWrap>
-        <ArrowLeftRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleLeftBtnClick} />
+        {/* <ArrowLeftRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleLeftBtnClick} /> */}
         <YearWrap>{date.getFullYear()}년</YearWrap>
-        <ArrowRightRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleRightBtnClick} />
+        {/* <ArrowRightRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleRightBtnClick} /> */}
       </TopYearWrap>
       <DateWrap>
         <ArrowLeftRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleLeftBtnClick} />

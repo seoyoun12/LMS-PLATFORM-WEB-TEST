@@ -1,7 +1,7 @@
 import useResponsive from '@hooks/useResponsive';
 import { CNCalendar } from '@layouts/Calendar';
 import { CalendarMobile } from '@layouts/CalendarMobile';
-import { Box, Container, styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 import { StebHeader } from '../StebHeader';
 
 export function Steb1() {

@@ -79,10 +79,11 @@ export function Me() {
                   <Grid item xs={1} sm={1} md={1} lg={1} key={res.courseClassSeq}>
                     <Box onClick={() => router.push(`/course/${res.courseUserSeq}/lesson/${!res.recentLessonSeq ? 1 : res.recentLessonSeq}`)}>
                       <ContentCardV2
+                        image={res.thumbnailImage}
                         title={res.courseTitle}
                         content1={'지금 바로 수강하기!'}
                         content2={`${res.leftDays}일 남음`}
-                        // content2={`현재 진도율 ${res.progress}%`}
+                      // content2={`현재 진도율 ${res.progress}%`}
                       />
                     </Box>
                   </Grid>

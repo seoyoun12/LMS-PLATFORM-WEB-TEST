@@ -24,6 +24,7 @@ export function LearningCourse() {
                 onClick={() => router.push(`/course/${item.courseUserSeq}/lesson/${!item.recentLessonSeq ? 1 : item.recentLessonSeq}`)}
               >
                 <ContentCardV2
+                  image={item.thumbnailImage}
                   title={item.courseTitle}
                   // content1={`${item.leftDays === 0 ? '오늘마감 입니다!' : item.leftDays}`}
                   content2={`현재 진도율 ${item.progress}%`}

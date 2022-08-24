@@ -38,10 +38,12 @@ import {
   courseSubCategoryType,
 } from '@common/api/courseClass';
 import Image from 'next/image';
+import { Spinner } from '@components/ui';
 
 interface Props {
   mode?: 'upload' | 'modify';
   course?: CourseInput;
+  loading?: boolean;
   // onHandleSubmit: ({ courseInput, files, courseSeq }: {
   onHandleSubmit: ({
     courseInput,
@@ -66,10 +68,11 @@ const defaultValues = {
   files: [],
 };
 
-export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Props) {
+export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit , loading }: Props) {
   // const editorRef = useRef<EditorType>(null);
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [thumbnail, setThumbnail] = useState('')
 
   const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(
     null
@@ -94,6 +97,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
     formState: { errors },
     control,
     reset,
+    watch,
     resetField,
   } = useForm<FormType>({ defaultValues });
 
@@ -110,6 +114,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setFileName(files[0].name);
+    setThumbnail(URL.createObjectURL(files[0]))
     setIsFileDelete(false);
   };
 
@@ -151,12 +156,13 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             <Select
               labelId="courseType"
               id="courseType"
-              value={courseType}
+              // value={courseType}
               onChange={e => {
                 setCourseType(
                   courseReg.filter(cate => cate.type === e.target.value)[0].type
                 );
               }}
+              value={watch().courseType}
               label="과정분류"
             >
               {courseReg.map(item => (
@@ -173,12 +179,13 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             <Select
               labelId="courseCategory"
               id="courseCategory"
-              value={courseCategoryType}
+              // value={courseCategoryType || ''}
               onChange={e => {
                 setCourseCategoryType(
                   courseCategory.filter(cate => cate.type === e.target.value)[0].type
                 );
               }}
+              value={watch().courseCategoryType}
               label="교육분류"
             >
               {courseCategory.map(item => (
@@ -194,12 +201,13 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             <Select
               labelId="courseSubCategoryType"
               id="courseSubCategoryType"
-              value={courseSubCategoryType}
+              // value={courseSubCategoryType}
               onChange={e => {
                 setCourseSubCategoryType(
                   courseSubCategory.filter(cate => cate.type === e.target.value)[0].type
                 );
               }}
+              value={watch().courseSubCategoryType || ''}
               label="업종"
             >
               {courseSubCategory.map(item => (
@@ -229,7 +237,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               register={register}
               regName="files"
               onFileChange={handleFileChange}
-              // onFileChange={saveFileImage}
+            // onFileChange={saveFileImage}
             >
               {/* <ThumbnailImg>
                 {course.s3Files ? (
@@ -253,18 +261,23 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               />
             ) : null}
           </div>
+          <Box>이미지파일 확장자는 
+            <span style={{color:'red' , fontWeight:'bold'}}> jpg, jpeg, png, gif, bmp</span>
+            만 사용가능합니다. 이미지 사이즈는 
+            <span style={{color:'red' , fontWeight:'bold'}}>16:9</span>
+            비율로 올려주셔야 합니다.
+          </Box>
 
-          {/* <ThumbnailImg>
-            {course.s3Files ? (
-              <Image
+          <Box>썸네일</Box>
+          <ThumbnailImg>
+            {course?.s3Files ? (<Image
                 className="thumbnailImg"
                 src={course.s3Files[0].path} // course.courseFile
-                layout="responsive"
-                width="100%"
-                height="56.25"
+                layout='fill'
               />
-            ) : null}
-          </ThumbnailImg> */}
+            ) : 
+              <Image src={thumbnail} layout='fill' />}
+          </ThumbnailImg>
         </InputContainer>
 
         <FormControl className={cx(textField, lessonTime)}>
@@ -318,8 +331,9 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
           />
         </FormControl>
 
-        <SubmitBtn variant="contained" type="submit">
-          {mode === 'upload' ? '업로드하기' : '수정하기'}
+        <SubmitBtn variant="contained" type="submit" disabled={loading} >
+          {loading ? <Spinner fit={true} /> : mode === 'upload' ? '업로드하기' : '수정하기'}
+          
         </SubmitBtn>
       </Box>
     </Container>
@@ -346,7 +360,7 @@ const InputContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-bottom: 36px;
+    margin-bottom: 16px;
 
     .subtitle {
       margin-bottom: 8px;
@@ -378,4 +392,8 @@ const lessonTime = css`
 `;
 const ThumbnailImg = styled.div`
   padding-bottom: 30px;
+  position:relative;
+  width:500px;
+  height:calc((500px / 16) * 9);
+  margin:auto;
 `;

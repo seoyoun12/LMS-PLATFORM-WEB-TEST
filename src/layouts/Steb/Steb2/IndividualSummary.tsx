@@ -18,12 +18,16 @@ export function IndividualSummary({ setIsIndividualCheck, isIndividualCheck }: P
           <Box>{item}</Box>
         ))}
       </SummaryBox>
-      <Box display="flex" alignItems="center" mt={2} mb={2}>
-        {isIndividualCheck ? (
-          <RadioButtonCheckedIcon onClick={() => setIsIndividualCheck(false)} sx={{ color: '#3498db' }} />
-        ) : (
-          <RadioButtonUncheckedIcon onClick={() => setIsIndividualCheck(true)} sx={{ color: '#b1b1b1' }} />
-        )}
+      <Box
+        display="flex"
+        alignItems="center"
+        width="fit-content"
+        onClick={() => setIsIndividualCheck(prev => !prev)}
+        mt={2}
+        mb={2}
+        sx={{ cursor: 'pointer' }}
+      >
+        {isIndividualCheck ? <RadioButtonCheckedIcon sx={{ color: '#3498db' }} /> : <RadioButtonUncheckedIcon sx={{ color: '#b1b1b1' }} />}
         <Typography ml={1}>개인정보 수집 및 이용 동의합니다</Typography>
         <EssentialWord ml={0.5}>(필수)</EssentialWord>
       </Box>

@@ -60,6 +60,9 @@ export function LessonSidebar(props: Props) {
               </Box>
               <LessonCheck>
                 {props.lessonSeq === lesson.seq && <PlayCircleIcon sx={{ color: "text.secondary" }} style={{ marginRight: 8 }} />}
+                <Typography className="typo" variant="body2" color={grey[500]} style={{ marginRight: 8 }}>
+                  {lesson.completedYn === "Y" ? "학습 완료" : "미학습"}
+                </Typography>
                 <CheckCircleIcon sx={{ color: lesson.completedYn === "Y" ? "#256aef" : "text.secondary" }} />
               </LessonCheck>
             </TabItem>
@@ -92,7 +95,7 @@ export function LessonSidebar(props: Props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setSwitchLessonSeq(null)} autoFocus>취소</Button>
+          <Button onClick={() => setSwitchLessonSeq(null)}>취소</Button>
           <Button
             onClick={() => {
 

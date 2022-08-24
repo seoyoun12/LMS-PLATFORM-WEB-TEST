@@ -2,44 +2,74 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Box, Container, Typography } from "@mui/material";
 import { Spinner } from "@components/ui";
-import { useRouter } from "next/router";
-import { useCourse } from "@common/api/course";
 import { LessonSidebar } from "./LessonSidebar";
 import { LessonContent } from "./LessonContent";
 import { noticeConfig } from "./Lesson.types";
+import type { CourseDetailClientResponseDto, CourseModuleFindResponseDto } from "@common/api/Api";
+import ApiClient from "@common/api/ApiClient";
 
-export function Lesson() {
+export interface Props {
+  courseUserSeq: number;
+  lessonSeq: number;
+}
 
-  const router = useRouter();
+export function Lesson(props: Props) {
 
   // 스테이트.
 
-  const [lessonSeq, setLessonSeq] = React.useState<number>(Number(router.query.lessonSeq));
-  const [courseUserSeq, setCourseUserSeq] = React.useState<number>(Number(router.query.courseUserSeq));
+  const [lessonSeq, setLessonSeq] = React.useState<number>(props.lessonSeq);
+
+  const [loading, setLoading] = React.useState<boolean>(true);
+  const [course, setCourse] = React.useState<CourseDetailClientResponseDto | null>(null);
+  const [modules, setModules] = React.useState<CourseModuleFindResponseDto[] | null>(null);
 
   // 이펙트.
 
   React.useEffect(() => {
 
-    setLessonSeq(Number(router.query.lessonSeq));
-    setCourseUserSeq(Number(router.query.courseUserSeq));
+    const courseUserSeq = Number(props.courseUserSeq);
+    const lessonSeq = Number(props.lessonSeq);
 
-  }, [router.query]);
+    setLessonSeq(lessonSeq);
+    setLoading(true);
 
-  // API.
+    ApiClient.course
+      .findCourseUsingGet(courseUserSeq)
+      .then((res) => {
 
-  const { course, courseError } = useCourse(courseUserSeq);
-  console.log(course , courseError ,courseUserSeq)
+        const data = (res.data as any).data;
+        setCourse(data);
+
+        ApiClient.courseModule
+          .clientFindAllCourseModulesUsingGet({ courseSeq: data.seq })
+          .then((res) =>  setModules((res.data as any).data))
+          .catch(() => setModules(null))
+          .finally(() => setLoading(false));
+
+      })
+      .catch(() => {
+
+        setCourse(null);
+        setModules(null);
+        setLoading(false);
+        
+      });
+
+  }, [props]);
 
   // 렌더 - 에러.
 
-  if (courseError) return (
-    <CourseErrorContainer>
-      <Typography>강의를 불러올 수 없습니다.</Typography>
-    </CourseErrorContainer>
-  );
+  if (course === null) {
 
-  if (!course) return <Spinner />;
+    return loading ?
+      <Spinner /> :
+      (
+        <CourseErrorContainer>
+          <Typography>강의를 불러올 수 없습니다.</Typography>
+        </CourseErrorContainer>
+      );
+
+  }
 
   // 변수.
 
@@ -62,6 +92,7 @@ export function Lesson() {
         courseProgresses={course.courseProgressResponseDtoList}
         lessons={course.lessons}
         lessonSeq={lessonSeq}
+        modules={modules}
       />
     </LessonContainer>
   );
@@ -83,4 +114,5 @@ const LessonContainer = styled(Container)`
   flex: 1 1 auto;
   position: relative;
   max-width: 1920px;
+  align-items: stretch;
 `;

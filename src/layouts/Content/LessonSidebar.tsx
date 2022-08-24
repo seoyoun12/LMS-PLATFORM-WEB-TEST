@@ -4,7 +4,7 @@ import { Box } from "@mui/system";
 import { headerHeight } from "@styles/variables";
 import { LessonTabs } from "@components/ui/Tabs";
 import { tabsConfig, TabsConfig } from "./Lesson.types";
-import { CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
+import { CourseModuleFindResponseDto, CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
 import Link from "next/link";
 import { grey } from "@mui/material/colors";
 import { Typography } from "@mui/material";
@@ -17,6 +17,7 @@ interface Props {
   courseProgresses: CourseProgressResponseDto[];
   lessonSeq: number;
   lessons: LessonDetailClientResponseDto[];
+  modules: CourseModuleFindResponseDto[] | null;
 }
 
 export function LessonSidebar(props: Props) {

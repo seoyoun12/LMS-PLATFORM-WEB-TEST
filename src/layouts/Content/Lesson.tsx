@@ -2,20 +2,22 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Box, Container, Typography } from "@mui/material";
 import { Spinner } from "@components/ui";
-import { useRouter } from "next/router";
 import { LessonSidebar } from "./LessonSidebar";
 import { LessonContent } from "./LessonContent";
 import { noticeConfig } from "./Lesson.types";
 import type { CourseDetailClientResponseDto, CourseModuleFindResponseDto } from "@common/api/Api";
 import ApiClient from "@common/api/ApiClient";
 
-export function Lesson() {
+export interface Props {
+  courseUserSeq: number;
+  lessonSeq: number;
+}
 
-  const router = useRouter();
+export function Lesson(props: Props) {
 
   // 스테이트.
 
-  const [lessonSeq, setLessonSeq] = React.useState<number>(Number(router.query.lessonSeq));
+  const [lessonSeq, setLessonSeq] = React.useState<number>(props.lessonSeq);
 
   const [loading, setLoading] = React.useState<boolean>(true);
   const [course, setCourse] = React.useState<CourseDetailClientResponseDto | null>(null);
@@ -25,10 +27,8 @@ export function Lesson() {
 
   React.useEffect(() => {
 
-    if (!router.query.courseUserSeq || !router.query.lessonSeq) return;
-
-    const courseUserSeq = Number(router.query.courseUserSeq);
-    const lessonSeq = Number(router.query.lessonSeq);
+    const courseUserSeq = Number(props.courseUserSeq);
+    const lessonSeq = Number(props.lessonSeq);
 
     setLessonSeq(lessonSeq);
     setLoading(true);
@@ -55,7 +55,7 @@ export function Lesson() {
         
       });
 
-  }, [router.query]);
+  }, [props]);
 
   // 렌더 - 에러.
 

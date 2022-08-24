@@ -1,5 +1,5 @@
 import { NotFound } from '@components/ui/NotFound';
-import { QnaAccordion } from '@components/ui/QnaAccordion.tsx';
+import { QnaAccordion, QnaAccordionV2 } from '@components/ui/QnaAccordion.tsx';
 import { useInfiniteScrollQna } from '@hooks/useInfiniteScrollQna';
 import { Box, Container, Table, TableCell, TableHead, TableRow } from '@mui/material';
 import dateFormat from 'dateformat';
@@ -37,7 +37,8 @@ export function CategoryBoardLookList() {
               </TableRow>
             </TableHead>
           </Table>
-          {loadedItem &&
+          <QnaAccordionV2 loadedItem={loadedItem} />
+          {/* {loadedItem &&
             loadedItem.map(data => {
               const accordionInfo = [
                 {
@@ -60,7 +61,7 @@ export function CategoryBoardLookList() {
                 },
               ];
               return <QnaAccordion qnaAccordionList={accordionInfo} key={data.seq} />;
-            })}
+            })} */}
         </>
       ) : (
         <NotFound content="내 질문내역이 존재하지 않습니다" />

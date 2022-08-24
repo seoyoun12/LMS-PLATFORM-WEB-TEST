@@ -18,6 +18,7 @@ import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { regCategoryType, useMyUser, UserRole } from '@common/api/user';
 import { useRouter } from 'next/router';
 import { courseType } from '@common/api/courseClass';
+import { logout } from '@common/api';
 
 const LinkList = [
   {
@@ -28,7 +29,15 @@ const LinkList = [
     color: '#0A9A4E',
     href: '/category',
     imgPath: '/assets/images/unsu.png',
-    onClickCard: () => {
+    onClickCard: async () => {
+      if (typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_TRANS_WORKER) return;
+      if (localStorage.getItem('site_course_type') !== courseType.TYPE_TRANS_WORKER) {
+        if (!!localStorage.getItem('ACCESS_TOKEN')) {
+          await logout();
+        } else {
+          return;
+        }
+      }
       localStorage.setItem('site_course_type', courseType.TYPE_TRANS_WORKER);
     },
   },
@@ -40,7 +49,15 @@ const LinkList = [
     color: '#256AEF',
     href: '/category',
     imgPath: '/assets/images/lowFloor.png',
-    onClickCard: () => {
+    onClickCard: async () => {
+      if (typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_LOW_FLOOR_BUS) return;
+      if (localStorage.getItem('site_course_type') !== courseType.TYPE_LOW_FLOOR_BUS) {
+        if (!!localStorage.getItem('ACCESS_TOKEN')) {
+          await logout();
+        } else {
+          return;
+        }
+      }
       localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
     },
   },
@@ -52,7 +69,15 @@ const LinkList = [
     color: '#FEC901',
     href: 'traffic/category',
     imgPath: '/assets/images/domin.png',
-    onClickCard: () => {
+    onClickCard: async () => {
+      if (typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL) return;
+      if (localStorage.getItem('site_course_type') !== courseType.TYPE_PROVINCIAL) {
+        if (!!localStorage.getItem('ACCESS_TOKEN')) {
+          await logout();
+        } else {
+          return;
+        }
+      }
       localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
     },
   },
@@ -122,6 +147,7 @@ const MainPage: NextPage = () => {
               </NoticeContentTypography>
             </NoticeContent>
           </NoticeContainer> */}
+          <SubTitle>충남 교통안전 온라인교육센터</SubTitle>
           <Box position="relative">
             <CategoryGrid container={true} spacing={0} columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }} height={'100%'}>
               {data.map(item => {
@@ -131,11 +157,11 @@ const MainPage: NextPage = () => {
                   )[0];
                   return (
                     <MainCategoryCard sx={{ borderTop: `7px solid ${color}` }}>
-                      <Link
-                        href={href}
-                        onClick={() => {
-                          setUserPageType(pageType);
-                          onClickCard();
+                      <Box
+                        onClick={async () => {
+                          // setUserPageType(pageType);
+                          await onClickCard();
+                          router.push(href);
                         }}
                       >
                         <Box width="270px" borderRadius="8px 8px 0 0" overflow="hidden">
@@ -151,12 +177,12 @@ const MainPage: NextPage = () => {
                             </Typography>
                           </Box>
                           <Button color="neutral" sx={{ position: 'relative' }}>
-                            <Typography>바로가기</Typography>
+                            <Typography fontWeight="bold">바로가기</Typography>
                             <Box className="button-bot-line" />
                             <Box className="button-right-line" />
                           </Button>
                         </CardInContainer>
-                      </Link>
+                      </Box>
                     </MainCategoryCard>
                   );
                 }
@@ -189,7 +215,7 @@ const WrapMainContainer = styled.div`
 const MainContainer = styled(Box)`
   height: 80%;
   /* min-height: 719px; */
-  padding-top: 130px;
+  padding-top: 150px;
 `;
 const ContentBox = styled(Box)`
   width: 80%;
@@ -199,6 +225,13 @@ const ContentBox = styled(Box)`
   }
 `;
 const LogoBox = styled(Box)`
+  width: fit-content;
+  margin: auto;
+`;
+
+const SubTitle = styled(Box)`
+  font-weight: bold;
+  font-size: 1.6rem;
   width: fit-content;
   margin: auto;
 `;
@@ -220,7 +253,7 @@ const MainCategoryCard = styled(Container)`
   justify-content: center;
   align-items: center;
   margin: 0;
-  margin-top: 80px;
+  margin-top: 40px;
   box-shadow: 2px 2px 12px 3px rgba(0, 0, 0, 0.2);
   z-index: 11;
 `;

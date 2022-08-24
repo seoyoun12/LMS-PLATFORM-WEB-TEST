@@ -21,7 +21,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
   const courseUserSeq = Number(context.params.courseUserSeq);
   const lessonSeq = Number(context.params.lessonSeq);
 
-  if (window.isNaN(courseUserSeq) || window.isNaN(lessonSeq)) {
+  if (Number.isNaN(courseUserSeq) || Number.isNaN(lessonSeq)) {
     return {
       notFound: true,
     };

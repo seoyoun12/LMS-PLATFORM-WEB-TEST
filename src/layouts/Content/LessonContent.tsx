@@ -74,17 +74,16 @@ export function LessonContent(props: Props) {
             lessonSeq: lessonSeq,
             studyTime: apiVideoSeconds.current,
           })
-          .then(() => {
-
-            return ApiClient.courseProgress
+          .then(() =>
+            ApiClient.courseProgress
               .updateCourseProgressUsingPut({
                 courseUserSeq: courseUserSeq,
                 courseProgressSeq: courseProgressSeq,
                 lessonSeq: lessonSeq,
                 studyLastTime: currentSecond,
-              });
-  
-          });
+              })
+          )
+          .then(() =>  ApiClient.courseProgress.updateAllCourseProgressUsingPut(courseUserSeq));
 
       }
 

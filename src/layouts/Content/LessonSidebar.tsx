@@ -5,12 +5,12 @@ import { headerHeight } from "@styles/variables";
 import { LessonTabs } from "@components/ui/Tabs";
 import { tabsConfig, TabsConfig } from "./Lesson.types";
 import { CourseModuleFindResponseDto, CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
-import Link from "next/link";
 import { grey } from "@mui/material/colors";
-import { Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Typography } from "@mui/material";
 import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import { useRouter } from "next/router";
 
 interface Props {
   courseUserSeq: number;
@@ -22,9 +22,12 @@ interface Props {
 
 export function LessonSidebar(props: Props) {
 
+  const router = useRouter();
+
   // 스테이트.
 
   const [tabMenu, setTabMenu] = useState<TabsConfig["value"]>(tabsConfig[0].value);
+  const [switchLessonSeq, setSwitchLessonSeq] = useState<number | null>(null);
 
   // 렌더링.
 
@@ -37,50 +40,71 @@ export function LessonSidebar(props: Props) {
         changeMenu={tabMenu}
         onChangeMenu={(v: unknown) => setTabMenu(Array.isArray(v) ? v[0] : v)}
       />
-      <React.Fragment>
-        <Tab hidden={tabMenu !== "curriculum"}>
-          <LessonItemContainer>
-            {props.lessons.map((lesson) => (
-              <TabItemWrapper
-                key={lesson.seq}
-                href={`/course/${props.courseUserSeq}/lesson/${lesson.seq}`}
-                color={grey[900]}
-              >
-                <TabItem className={props.lessonSeq === lesson.seq ? "active" : ""}>
-                  <Box>
-                    <LessonTitle variant="body1">{lesson.lessonNm}</LessonTitle>
-                    <LessonInfo>
-                      <PlayCircleOutlinedIcon fontSize="small" htmlColor={grey[500]} />
-                      <Typography className="typo" variant="body2" color={grey[500]}>
-                        {Math.floor(lesson.totalTime / 60)}:{lesson.totalTime % 60}
-                      </Typography>
-                    </LessonInfo>
-                  </Box>
-                  <LessonCheck>
-                    {props.lessonSeq === lesson.seq && <PlayCircleIcon sx={{ color: "text.secondary" }} style={{ marginRight: 8 }} />}
-                    <CheckCircleIcon sx={{ color: lesson.completedYn === "Y" ? "#256aef" : "text.secondary" }} />
-                  </LessonCheck>
-                </TabItem>
-              </TabItemWrapper>
-            ))}
-          </LessonItemContainer>
-          {props.modules !== null && props.modules.length > 0 && (
-            <LessonModuleContainer>
-              {props.modules.map((module) => {
+      <Tab hidden={tabMenu !== "curriculum"}>
+        <LessonItemContainer>
+          {props.lessons.map((lesson) => (
+            <TabItem
+              className={props.lessonSeq === lesson.seq ? "active" : ""}
+              color={grey[900]}
+              key={lesson.seq}
+              onClick={() => setSwitchLessonSeq(lesson.seq)}
+            >
+              <Box>
+                <LessonTitle variant="body1">{lesson.lessonNm}</LessonTitle>
+                <LessonInfo>
+                  <PlayCircleOutlinedIcon fontSize="small" htmlColor={grey[500]} />
+                  <Typography className="typo" variant="body2" color={grey[500]}>
+                    {Math.floor(lesson.totalTime / 60)}:{lesson.totalTime % 60}
+                  </Typography>
+                </LessonInfo>
+              </Box>
+              <LessonCheck>
+                {props.lessonSeq === lesson.seq && <PlayCircleIcon sx={{ color: "text.secondary" }} style={{ marginRight: 8 }} />}
+                <CheckCircleIcon sx={{ color: lesson.completedYn === "Y" ? "#256aef" : "text.secondary" }} />
+              </LessonCheck>
+            </TabItem>
+          ))}
+        </LessonItemContainer>
+        {props.modules !== null && props.modules.length > 0 && (
+          <LessonModuleContainer>
+            {props.modules.map((module) => {
 
-                switch (module.moduleType) {
+              switch (module.moduleType) {
 
-                  case "COURSE_MODULE_PROGRESS_RATE": return <div>{module.moduleType}</div>;
-                  case "COURSE_MODULE_SURVEY": return <div>{module.moduleType}</div>;
-                  case "COURSE_MODULE_TEST": return <div>{module.moduleType}</div>
+                case "COURSE_MODULE_PROGRESS_RATE": return <div>{module.moduleType}</div>;
+                case "COURSE_MODULE_SURVEY": return <div>{module.moduleType}</div>;
+                case "COURSE_MODULE_TEST": return <div>{module.moduleType}</div>
 
-                }
+              }
 
-              })}
-            </LessonModuleContainer>
-          )}
-        </Tab>
-      </React.Fragment>
+            })}
+          </LessonModuleContainer>
+        )}
+      </Tab>
+      <Dialog
+        open={switchLessonSeq !== null}
+        onClose={() => setSwitchLessonSeq(null)}
+      >
+        {/* <DialogTitle id="alert-dialog-title">정말 페이지를 이동하시겠습니까?</DialogTitle> */}
+        <DialogContent>
+          <DialogContentText>
+            정말 페이지를 이동하시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setSwitchLessonSeq(null)} autoFocus>취소</Button>
+          <Button
+            onClick={() => {
+
+              router.push(`/course/${props.courseUserSeq}/lesson/${switchLessonSeq}`);
+              setSwitchLessonSeq(null);
+
+            }}
+          >
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
     </StickySideBar>
   );
 
@@ -120,10 +144,6 @@ const Tab = styled(Box)`
     font-weight: bold;
     margin-bottom: 1rem;
   }
-`;
-
-const TabItemWrapper = styled(Link)`
-  display: block;
 `;
 
 const TabItem = styled.div`

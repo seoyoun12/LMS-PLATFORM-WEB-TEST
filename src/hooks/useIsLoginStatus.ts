@@ -11,7 +11,7 @@ export function useIsLoginStatus(): boolean {
     const at = localStore.getItem(ACCESS_TOKEN);
     const rt = localStore.getItem(REFRESH_TOKEN);
     setIsLogin(!!at && !!rt);
-  }, [ isLogin ]);
+  }, [isLogin, setIsLogin]);
 
   return isLogin;
 }

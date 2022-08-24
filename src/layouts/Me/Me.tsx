@@ -82,7 +82,7 @@ export function Me() {
                         title={res.courseTitle}
                         content1={'지금 바로 수강하기!'}
                         content2={`${res.leftDays}일 남음`}
-                        // content2={`현재 진도율 ${res.progress}%`}
+                      // content2={`현재 진도율 ${res.progress}%`}
                       />
                     </Box>
                   </Grid>

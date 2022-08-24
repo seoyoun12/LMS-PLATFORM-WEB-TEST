@@ -207,8 +207,8 @@ export function TransWorker({ type, locationList }: Props) {
       };
       try {
         const { data }: { data: UserTransportUpdateResponseDto } = await modifTransWorker(postData);
-        if(watch().files.length > 0) await deleteFile({ fileType: BbsType.TYPE_USER_PROFILE, fileTypeId: data.userSeq, fileSeqList: [fileSeq] });
-        await fileHandler(watch().files, data.userSeq);
+        // if (watch().files.length > 0) await deleteFile({ fileType: BbsType.TYPE_USER_PROFILE, fileTypeId: data.userSeq });
+        // await fileHandler(watch().files, data.userSeq);
       } catch (e: any) {
         window.alert(e.data.message);
       }

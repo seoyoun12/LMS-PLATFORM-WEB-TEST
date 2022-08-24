@@ -12,7 +12,7 @@ export interface Props {
   lessonSeq: number;
 }
 
-export function Lesson(props: Props) {
+export default function Lesson(props: Props) {
 
   // 스테이트.
 

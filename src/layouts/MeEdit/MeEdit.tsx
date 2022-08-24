@@ -101,7 +101,7 @@ export function MeEdit() {
 
   if (!user) return <div></div>; //태그없으면 에러뜸
   return (
-    <Container>
+    <Box>
       {/* <Tabs tabsConfig={tabsConfig} variant={'fullWidth'} gap={5} rendering={false} onChange={onChangeTabValue} value={tabValue} /> */}
       {/* <Tabs tabsConfig={tabsConfig} variant={"fullWidth"} gap={5} rendering={false} onChange={onChange} value={value} /> */}
       {/* <TabPanel value={tabValue} index={tabsConfig[0].value}>
@@ -115,7 +115,7 @@ export function MeEdit() {
       ) : (
         <TransWorker type="transport" locationList={locationList} />
       )}
-    </Container>
+    </Box>
   );
 }
 

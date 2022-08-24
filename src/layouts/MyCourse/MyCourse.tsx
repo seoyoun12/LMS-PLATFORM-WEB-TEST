@@ -19,9 +19,15 @@ export function MyCourse() {
         <MyCourseTitle>학습현황</MyCourseTitle>
         <MyCourseSubTitle>학습중인 과정을 확인할수 있습니다</MyCourseSubTitle>
       </MyCourseContainer>
-      <Box boxSizing={'border-box'} borderBottom={'2px solid #e0e0e0'} >
-        <Box sx={{ width: 'fit-content', margin: 'auto' }}>
-          <Tabs2 tabsConfig={studingCourseList} variant={'fullWidth'} gap={10} showBorderBottom={false} />
+      <Box boxSizing={'border-box'} borderBottom={'2px solid #e0e0e0'}>
+        <Box sx={{ width: 'fit-content', margin: 'auto', marginTop: '1.5rem' }}>
+          <Tabs2
+            tabsConfig={studingCourseList}
+            fontSx={{ color: 'black', fontSize: '20px' }}
+            variant={'fullWidth'}
+            gap={10}
+            showBorderBottom={false}
+          />
         </Box>
       </Box>
       <CourseContainer>
@@ -36,7 +42,12 @@ export function MyCourse() {
   );
 }
 
-const MyCoursewrap = styled(Box)``;
+const MyCoursewrap = styled(Box)`
+  .Mui-selected {
+    color: black !important;
+    font-weight: bold;
+  }
+`;
 
 interface TabPanelProps extends BoxProps {
   children: React.ReactNode;
@@ -73,5 +84,7 @@ const MyCourseSubTitle = styled(Box)`
 `;
 const CourseContainer = styled(Box)`
   max-width: 1200px;
+  padding-top: 2.5rem;
+  padding-bottom: 3rem;
   margin: auto;
 `;

@@ -5,15 +5,16 @@ import { CustomContentGenerator, EventContentArg } from '@fullcalendar/core';
 import { Box, Button, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import FullCalendar from '@fullcalendar/react';
-import { CalendarEvent, ClickedPlanInfo, eduLegendList, FilterType } from '../Calendar';
+import { CalendarEvent, ClickedPlanInfo, courseBusinessTypeList, eduLegendList, FilterType } from '../Calendar';
 import { Modal } from '@components/ui/Modal';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import dateFormat from 'dateformat';
 import { useRouter } from 'next/router';
-import { courseType, courseCategoryType, CourseClassRes, courseSubCategoryType } from '@common/api/courseClass';
+import { courseType, courseCategoryType, CourseClassRes, courseSubCategoryType, businessType } from '@common/api/courseClass';
 import { courseClassEnrollInfo } from '@common/recoil';
 import { useRecoilState } from 'recoil';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
+import { YN } from '@common/constant';
 
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -75,7 +76,7 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
 
     return {
       ...item,
-      title: prevSchedule ? (isReceive ? '접수중' : '준비중') : '마감', //말
+      title: prevSchedule ? (item.enableToEnrollYn === YN.YES ? '접수중' : '준비중') : '마감', //말
       isReceive,
       prevSchedule,
       step: item.step, //기수
@@ -124,13 +125,15 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
           }: { event: { _def: { extendedProps: Partial<ClickedPlanInfo> }; start: Date | null; end: Date | null } } = e;
           if (!e.event._def.extendedProps.prevSchedule) return window.alert('마감된 교육입니다!');
           if (!e.event._def.extendedProps.isReceive) return window.alert('신청기간이 아닙니다!');
+          console.log(e.event._def.extendedProps, '운수운수');
           setModalInfo({
             seq: extendedProps.seq as number,
             step: extendedProps.step as number,
             lessonTime: extendedProps.lessonTime as number,
+            courseBusinessType: e.event._def.extendedProps.course.courseBusinessType as businessType,
             courseCategoryType: extendedProps.courseCategoryType as { type: courseCategoryType; ko: string },
             courseSubCategoryType: extendedProps.courseSubCategoryType as { type: courseSubCategoryType; ko: string },
-
+            enableToEnrollYn: extendedProps.enableToEnrollYn as YN,
             enrolledPeopleCnt: extendedProps.enrolledPeopleCnt as number,
             limitPeople: extendedProps.limitPeople as number,
             studyStartDate: extendedProps.studyStartDate as string,
@@ -193,6 +196,12 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
                   <TableRightCell>{modalInfo.courseCategoryType ? modalInfo.courseCategoryType.ko : '오류'}</TableRightCell>
                 </TableRow>
                 <TableRow>
+                  <TableLeftCell>운수구분</TableLeftCell>
+                  <TableRightCell>
+                    {courseBusinessTypeList.filter(item => item.enType === modalInfo.courseBusinessType)[0]?.type}
+                  </TableRightCell>
+                </TableRow>
+                <TableRow>
                   <TableLeftCell>업종구분</TableLeftCell>
                   <TableRightCell>{modalInfo.courseSubCategoryType ? modalInfo.courseSubCategoryType.ko : '오류'}</TableRightCell>
                 </TableRow>
@@ -226,27 +235,39 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
   const {
     //@ts-ignore
     event: {
-      _def: {
-        extendedProps: { lessonTime, courseCategoryType, isReceive, prevSchedule },
-      },
+      _def: { extendedProps },
       title,
     },
   } = info;
+
   // @ts-ignore
   return (
-    <Box display="flex">
-      <Typography sx={{ color: prevSchedule ? '#df280a' : '#7a7a7a' }} fontWeight="bold">
-        [{title}]&nbsp;
-      </Typography>
-      <Typography color="black">
+    <Box sx={{ color: 'black', fontSize: '1rem' }}>
+      <Box display="flex">
+        <Box
+          sx={{ color: extendedProps.prevSchedule && extendedProps.enableToEnrollYn === YN.YES ? '#df280a' : '#7a7a7a' }}
+          fontWeight="bold"
+        >
+          [{title}]&nbsp;
+        </Box>
+        <Box>
+          {extendedProps.step}기 {extendedProps.courseCategoryType.ko}교육
+        </Box>
+      </Box>
+      <Box>
+        {courseBusinessTypeList.filter(item => item.enType === extendedProps.course.courseBusinessType)[0]?.type} /{' '}
+        {extendedProps.courseSubCategoryType.ko}
+      </Box>
+      <Box>{extendedProps.limitPeople === 0 ? '제한없음' : `${extendedProps.enrolledPeopleCnt} / ${extendedProps.limitPeople}`}</Box>
+      {/* <Typography color="black">
         {courseCategoryType?.ko ? courseCategoryType.ko : 'null'}교육 / {lessonTime ? (lessonTime === 0 ? '종일' : lessonTime) : 'null'}시간
-      </Typography>
-      <Typography color="black">
+      </Typography> */}
+      {/* <Typography color="black">
         {
           //@ts-ignore
           info && info.event._def.extendedProps.mediaType
         }
-      </Typography>
+      </Typography> */}
     </Box>
   );
 }
@@ -292,7 +313,7 @@ const CalendarWrap = styled(Box)<{ filter: string }>`
 
   //이벤트 블록
   .fc-daygrid-block-event {
-    height: 60px;
+    min-height: 80px;
     display: flex;
     align-items: center;
     border: 1px solid #dae2f3 !important;

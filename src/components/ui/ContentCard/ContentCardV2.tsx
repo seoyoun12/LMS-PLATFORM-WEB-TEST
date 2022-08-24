@@ -10,17 +10,18 @@ import { grey } from '@mui/material/colors';
 interface Props {
   maxWidth?: number;
   minWidth?: number;
+  image?:string;
   title: string;
   content1?: string;
   content2?: string;
 }
 
-export function ContentCardV2({ maxWidth, minWidth, title, content1, content2 }: Props) {
+export function ContentCardV2({ maxWidth, minWidth, title, content1, content2, image}: Props) {
   return (
     <Box sx={{ maxWidth, minWidth }}>
       <CardActionArea>
         <Box borderRadius="4px" overflow="hidden">
-          <CardMedia component="img" height="140" image="https://picsum.photos/276" alt="green iguana" />
+          <CardMedia component="img" height="140" image={image || "https://picsum.photos/276"} alt="green iguana" />
         </Box>
         {/* <CardContent> */}
         <Title gutterBottom variant="h5" mt={1}>

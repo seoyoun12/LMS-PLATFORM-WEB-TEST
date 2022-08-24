@@ -3,7 +3,7 @@ import { DELETE, GET, POST } from '@common/httpClient';
 import { FilterType } from '@layouts/Calendar/Calendar';
 import useSWR, { SWRResponse } from 'swr';
 import { ProductStatus } from './course';
-import type { CourseDetailClientResponseDto, CourseResponseDto } from "@common/api/Api";
+import type { CourseDetailClientResponseDto, CourseResponseDto } from '@common/api/Api';
 
 export enum businessType {
   TYPE_ALL = 'TYPE_ALL',
@@ -53,6 +53,7 @@ export enum courseSubCategoryType {
 
 export interface CourseClassRes {
   seq: number; //시퀀스
+  enableToEnrollYn: YN;
   course: CourseResponseDto;
   year: number; //연도
   step: number; //기수
@@ -82,15 +83,7 @@ export interface CourseClassStepsRes {
   studyStartDate: string;
 }
 
-export function useCourseClass({
-  courseType,
-  businessType,
-  date,
-}: {
-  courseType: courseType;
-  businessType: businessType;
-  date: string;
-}) {
+export function useCourseClass({ courseType, businessType, date }: { courseType: courseType; businessType: businessType; date: string }) {
   const { data, error, mutate } = useSWR<SWRResponse<CourseClassRes[]>>(
     ['/course-class', { params: { courseType, businessType, date } }],
     GET
@@ -103,10 +96,7 @@ export function useCourseClass({
 }
 
 export function useSingleCourseClass(classSeq: number) {
-  const { data, error, mutate } = useSWR<SWRResponse<CourseClassRes>>(
-    `/course-class/${classSeq}`,
-    GET
-  );
+  const { data, error, mutate } = useSWR<SWRResponse<CourseClassRes>>(`/course-class/${classSeq}`, GET);
   return {
     data: data?.data,
     error,
@@ -118,11 +108,7 @@ export function getSingleCourseClass(courseClassSeq: number) {
   return GET<{ data: CourseClassRes }>(`/course-class/${courseClassSeq}`);
 }
 
-export function getCourseClassStep(
-  courseType: courseType,
-  courseCategoryType: courseCategoryType,
-  courseBusinessType: businessType
-) {
+export function getCourseClassStep(courseType: courseType, courseCategoryType: courseCategoryType, courseBusinessType: businessType) {
   return GET<{ data: CourseClassStepsRes[] }>('/course-class/step', {
     params: { courseType, courseCategoryType, courseBusinessType },
   });
@@ -155,12 +141,7 @@ export interface UserTransSaveInputDataType {
 export function courseClassIndividualEnroll(
   userTransSaveData: Omit<
     UserTransSaveInputDataType,
-    | 'firstIdentityNumber'
-    | 'secondIdentityNumber'
-    | 'seq'
-    | 'firstPhone'
-    | 'secondPhone'
-    | 'thirdPhone'
+    'firstIdentityNumber' | 'secondIdentityNumber' | 'seq' | 'firstPhone' | 'secondPhone' | 'thirdPhone'
   >
 ) {
   return POST(`/course-user/enroll/individual`, userTransSaveData);
@@ -168,12 +149,7 @@ export function courseClassIndividualEnroll(
 export function courseClassOrganizationEnrll(
   userTransSaveData: Omit<
     UserTransSaveInputDataType,
-    | 'firstIdentityNumber'
-    | 'secondIdentityNumber'
-    | 'seq'
-    | 'firstPhone'
-    | 'secondPhone'
-    | 'thirdPhone'
+    'firstIdentityNumber' | 'secondIdentityNumber' | 'seq' | 'firstPhone' | 'secondPhone' | 'thirdPhone'
   >
 ) {
   return POST(`/course-user/enroll/organization`, userTransSaveData);

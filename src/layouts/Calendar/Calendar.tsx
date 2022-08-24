@@ -15,14 +15,16 @@ import {
   useCourseClass,
 } from '@common/api/courseClass';
 import { Spinner } from '@components/ui';
+import { YN } from '@common/constant';
 
 export interface ClickedPlanInfo {
   seq: number;
   step: number;
   lessonTime: number;
+  courseBusinessType: businessType;
   courseSubCategoryType: { type: courseSubCategoryType; ko: string };
   courseCategoryType: { type: courseCategoryType; ko: string };
-
+  enableToEnrollYn: YN;
   enrolledPeopleCnt: number;
   limitPeople: number;
   studyStartDate: string;

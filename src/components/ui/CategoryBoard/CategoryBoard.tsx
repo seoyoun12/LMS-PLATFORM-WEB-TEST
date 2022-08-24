@@ -40,9 +40,8 @@ export function CategoryBoard() {
           value={value}
           showBorderBottom={true}
           gap={3}
-          fontSx={{ fontWeight: 700, fontSize: '20px' }}
+          fontSx={{ fontSize: '20px' }}
           scrollable={true}
-          showIndicator={false}
         />
       </Box>
       <Box sx={{ borderBottom: '1px solid #2A2A2A', position: 'relative', top: '-1px' }}></Box>
@@ -63,8 +62,14 @@ export function CategoryBoard() {
 }
 
 const NoticeWrap = styled(Box)`
-padding-top: 4rem;
-padding-bottom: 6rem;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  margin-bottom: 1rem;
   background: #e6edf3;
+
+  .Mui-selected {
+    color: black !important;
+    font-weight: bold;
+  }
 `;
 const NoticeContainer = styled(Container)``;

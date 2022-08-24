@@ -64,7 +64,7 @@ const MainPage: NextPage = () => {
   const isLogin = useIsLoginStatus();
   const { user, error: userError } = useMyUser();
   const { data, error } = useMainDisplay();
-  const wrapRef = React.useRef<HTMLDivElement>()
+  const wrapRef = React.useRef<HTMLDivElement>();
   React.useEffect(() => {
     // if (isLogin && user) {
     //   if (user.roles.some(item => item === UserRole.ROLE_ADMIN)) return;
@@ -79,22 +79,30 @@ const MainPage: NextPage = () => {
   React.useEffect(() => {
     const htmlTag = document.querySelector('html');
     const bodyTag = document.querySelector('body');
-    const idTag = document.querySelector('#__next');
+    const idTag = document.querySelector('#__next') as HTMLElement;
+    const idTagFirseChildStyle = idTag.childNodes[0] as HTMLElement;
     const mainTag = document.querySelector('main');
 
     htmlTag.style.height = '100%';
     bodyTag.style.height = '100%';
     idTag.style.height = '100%';
-    idTag.childNodes[0].style.height = "100%";
+    idTagFirseChildStyle.style.height = '100%';
     mainTag.style.height = '100%';
 
-  }, [])
+    return () => {
+      htmlTag.style.height = '';
+      bodyTag.style.height = '';
+      idTag.style.height = '';
+      idTagFirseChildStyle.style.height = '';
+      mainTag.style.height = '';
+    };
+  }, []);
 
   if (!data) return <Spinner />;
   return (
     <WrapMainContainer
       ref={wrapRef}
-    // style={{ height: screenHeight ? screenHeight : '' }}
+      // style={{ height: screenHeight ? screenHeight : '' }}
     >
       <Head>
         <title>Main Page</title>
@@ -115,12 +123,7 @@ const MainPage: NextPage = () => {
             </NoticeContent>
           </NoticeContainer> */}
           <Box position="relative">
-            <CategoryGrid
-              container={true}
-              spacing={0}
-              columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
-              height={'100%'}
-            >
+            <CategoryGrid container={true} spacing={0} columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }} height={'100%'}>
               {data.map(item => {
                 if (item.status === 1) {
                   const { href, color, textColor, displayWord, imgPath, pageType, onClickCard } = LinkList.filter(
@@ -170,9 +173,9 @@ const MainPage: NextPage = () => {
 };
 // Wrap
 const WrapMainContainer = styled.div`
-display:flex;
-flex-direction:column;
-justify-content:space-between;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 100%;
   height: 100%;
   .MuiButton-root.MuiButton-textNeutral:hover {
@@ -199,7 +202,6 @@ const LogoBox = styled(Box)`
   width: fit-content;
   margin: auto;
 `;
-
 
 // Category Grid
 const CategoryGrid = styled(Grid)`
@@ -281,11 +283,6 @@ const FooterWord = styled(Box)`
   }
 `;
 export default MainPage;
-
-
-
-
-
 
 // // Notice
 // const NoticeContainer = styled(Box)`

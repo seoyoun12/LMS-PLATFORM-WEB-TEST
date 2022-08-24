@@ -28,10 +28,10 @@ interface Props {
   setValue: UseFormSetValue<UserTransSaveInputDataType>;
   registerType: RegisterType;
   setRegisterType: React.Dispatch<React.SetStateAction<RegisterType>>;
-  watch:UseFormWatch<UserTransSaveInputDataType>;
+  watch: UseFormWatch<UserTransSaveInputDataType>;
 }
 
-export function StudentInfo({ register, setValue, registerType, setRegisterType ,watch }: Props) {
+export function StudentInfo({ register, setValue, registerType, setRegisterType, watch }: Props) {
   const [name, setName] = useState<string>(); //이름
   const [firstIdentityNumber, setFirstIdentityNumber] = useState<string>(); //주민앞
   const [secondIdentityNumber, setSecondidentityNumber] = useState<string>(); //주민뒷
@@ -140,12 +140,14 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
               <TextField
                 // placeholder="'-'를 제외한 숫자만 11자리 입력해주세요."
                 // {...register('phone', { maxLength: { value: 12, message: 'phone must be longer than 12 characters' } })}
-                {...register('firstPhone')} onChange={(e)=>{
-                  if(!Phone3Regex.test(e.target.value) || e.target.value.length > 3 ){
-                    return
+                {...register('firstPhone')}
+                onChange={e => {
+                  if (!Phone3Regex.test(e.target.value) || e.target.value.length > 3) {
+                    return;
                   }
                   setValue('firstPhone', e.target.value);
-                }} value={watch().firstPhone}
+                }}
+                value={watch().firstPhone}
                 // onChange={e => {
                 //   console.log(e.target.value.length);
                 //   if (e.target.value.length > 11) return;
@@ -154,26 +156,36 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
                 fullWidth
               />
               -
-              <TextField {...register('secondPhone' )} onChange={(e)=>{
-                  if(!Phone4Regex.test(e.target.value) || e.target.value.length > 4 ){
-                    return
+              <TextField
+                {...register('secondPhone')}
+                onChange={e => {
+                  if (!Phone4Regex.test(e.target.value) || e.target.value.length > 4) {
+                    return;
                   }
                   setValue('secondPhone', e.target.value);
-                }}  value={watch().secondPhone} fullWidth />
+                }}
+                value={watch().secondPhone}
+                fullWidth
+              />
               -
-              <TextField {...register('thirdPhone' )} onChange={(e)=>{
-                  if(!Phone4Regex.test(e.target.value) || e.target.value.length > 4 ){
-                    return
+              <TextField
+                {...register('thirdPhone')}
+                onChange={e => {
+                  if (!Phone4Regex.test(e.target.value) || e.target.value.length > 4) {
+                    return;
                   }
                   setValue('thirdPhone', e.target.value);
-                }}  value={watch().thirdPhone} fullWidth />
+                }}
+                value={watch().thirdPhone}
+                fullWidth
+              />
             </TableRightCell>
           </TableCustomRow>
         </Table>
       </TableContainer>
       <Box display="flex" alignItems="center">
         <Checkbox
-          value={smsYn}
+          checked={smsYn}
           onChange={(e, checked) => {
             setSmsYn(checked);
             if (checked) {
@@ -186,7 +198,18 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
             }
           }}
         />
-        <Typography component="span">SMS문자 수신 동의</Typography>
+        <Typography
+          component="span"
+          sx={{ cursor: 'pointer' }}
+          onClick={() => {
+            setSmsYn(prev => {
+              setValue('smsYn', !prev ? YN.YES : YN.NO);
+              return !prev;
+            });
+          }}
+        >
+          SMS문자 수신 동의
+        </Typography>
       </Box>
       <Typography>※ 교육접수 완료 시 예약완료 문자가 발송됩니다.</Typography>
       <Typography>※ 신청인 본인의 휴대폰 번호를 입력하셔야 합니다.</Typography>

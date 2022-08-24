@@ -4,7 +4,7 @@ import { Box } from "@mui/system";
 import { headerHeight } from "@styles/variables";
 import { LessonTabs } from "@components/ui/Tabs";
 import { tabsConfig, TabsConfig } from "./Lesson.types";
-import { CourseModuleFindResponseDto, CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
+import { CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
 import Link from "next/link";
 import { grey } from "@mui/material/colors";
 import { Typography } from "@mui/material";
@@ -17,7 +17,6 @@ interface Props {
   courseProgresses: CourseProgressResponseDto[];
   lessonSeq: number;
   lessons: LessonDetailClientResponseDto[];
-  modules: CourseModuleFindResponseDto[] | null;
 }
 
 export function LessonSidebar(props: Props) {
@@ -39,46 +38,29 @@ export function LessonSidebar(props: Props) {
       />
       <React.Fragment>
         <Tab hidden={tabMenu !== "curriculum"}>
-          <LessonItemContainer>
-            {props.lessons.map((lesson) => (
-              <TabItemWrapper
-                key={lesson.seq}
-                href={`/course/${props.courseUserSeq}/lesson/${lesson.seq}`}
-                color={grey[900]}
-              >
-                <TabItem className={props.lessonSeq === lesson.seq ? "active" : ""}>
-                  <Box>
-                    <LessonTitle variant="body1">{lesson.lessonNm}</LessonTitle>
-                    <LessonInfo>
-                      <PlayCircleOutlinedIcon fontSize="small" htmlColor={grey[500]} />
-                      <Typography className="typo" variant="body2" color={grey[500]}>
-                        {Math.floor(lesson.totalTime / 60)}:{lesson.totalTime % 60}
-                      </Typography>
-                    </LessonInfo>
-                  </Box>
-                  <LessonCheck>
-                    {props.lessonSeq === lesson.seq && <PlayCircleIcon sx={{ color: "text.secondary" }} style={{ marginRight: 8 }} />}
-                    <CheckCircleIcon sx={{ color: lesson.completedYn === "Y" ? "#256aef" : "text.secondary" }} />
-                  </LessonCheck>
-                </TabItem>
-              </TabItemWrapper>
-            ))}
-          </LessonItemContainer>
-          {props.modules !== null && props.modules.length > 0 && (
-            <LessonModuleContainer>
-              {props.modules.map((module) => {
-
-                switch (module.moduleType) {
-
-                  case "COURSE_MODULE_PROGRESS_RATE": return <div>{module.moduleType}</div>;
-                  case "COURSE_MODULE_SURVEY": return <div>{module.moduleType}</div>;
-                  case "COURSE_MODULE_TEST": return <div>{module.moduleType}</div>
-
-                }
-
-              })}
-            </LessonModuleContainer>
-          )}
+          {props.lessons.map((lesson) => (
+            <TabItemWrapper
+              key={lesson.seq}
+              href={`/course/${props.courseUserSeq}/lesson/${lesson.seq}`}
+              color={grey[900]}
+            >
+              <TabItem className={props.lessonSeq === lesson.seq ? "active" : ""}>
+                <Box>
+                  <LessonTitle variant="body1">{lesson.lessonNm}</LessonTitle>
+                  <LessonInfo>
+                    <PlayCircleOutlinedIcon fontSize="small" htmlColor={grey[500]} />
+                    <Typography className="typo" variant="body2" color={grey[500]}>
+                      {Math.floor(lesson.totalTime / 60)}:{lesson.totalTime % 60}
+                    </Typography>
+                  </LessonInfo>
+                </Box>
+                <LessonCheck>
+                  {props.lessonSeq === lesson.seq && <PlayCircleIcon sx={{ color: "text.secondary" }} style={{ marginRight: 8 }} />}
+                  <CheckCircleIcon sx={{ color: lesson.completedYn === "Y" ? "#256aef" : "text.secondary" }} />
+                </LessonCheck>
+              </TabItem>
+            </TabItemWrapper>
+          ))}
         </Tab>
       </React.Fragment>
     </StickySideBar>
@@ -91,6 +73,7 @@ const StickySideBar = styled.aside`
   top: ${headerHeight};
   margin-left: 40px;
   width: 520px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -107,8 +90,6 @@ const TabMenu = styled(LessonTabs)`
 const Tab = styled(Box)`
   flex-grow: 1;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
 
   .file-list-item {
     background: #efefef;
@@ -154,14 +135,3 @@ const LessonCheck = styled(Box)`
   display: flex;
   align-items: center;
 `;
-
-const LessonItemContainer = styled(Box)`
-  flex-grow: 1;
-`;
-
-const LessonModuleContainer = styled(Box)`
-  margin-top: 2rem;
-  border-top: 1px solid #272727;
-  background: #F7F7F7;
-  padding: 10px;
-`

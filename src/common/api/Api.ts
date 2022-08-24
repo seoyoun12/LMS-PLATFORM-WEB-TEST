@@ -1733,59 +1733,6 @@ export interface CourseUpdateRequestDto {
 }
 
 export interface CourseUser {
-  businessName?: string;
-  businessSubType?:
-    | "BUS"
-    | "CHARTER_BUS"
-    | "SPECIAL_PASSENGER"
-    | "CORPORATE_TAXI"
-    | "GENERAL_CARGO"
-    | "PRIVATE_TAXI"
-    | "INDIVIDUAL_CARGO"
-    | "CONSIGNMENT"
-    | "SPECIAL_TRANSPORTATION"
-    | "KNEELING_BUS"
-    | "DANGEROUS_GOODS"
-    | "DESIGNATED_WASTE"
-    | "HAZARDOUS_CHEMICALS"
-    | "HIGH_PRESSURE_GAS_FLAMMABLE"
-    | "HIGH_PRESSURE_GAS_TOXIC";
-  businessType?: "PASSENGER" | "FREIGHT";
-  carNumber?: string;
-  carRegisteredRegion?:
-    | "CHEONAN"
-    | "GONGJU"
-    | "BORYEONG"
-    | "ASAN"
-    | "SEOSAN"
-    | "NONSAN"
-    | "GYERYONG"
-    | "DANGJIN"
-    | "GEUMSAN"
-    | "BUYEO"
-    | "SEOCHEON"
-    | "CHEONGYANG"
-    | "HONGSEONG"
-    | "YESAN"
-    | "TAEAN"
-    | "CHUNGNAM"
-    | "SEJONG"
-    | "SEOUL"
-    | "BUSAN"
-    | "DAEGU"
-    | "INCHEON"
-    | "GWANGJU"
-    | "DAEJEON"
-    | "ULSAN"
-    | "GYEONGGI"
-    | "GANGWON"
-    | "CHUNGBUK"
-    | "JEONBUK"
-    | "JEONNAM"
-    | "GYEONGBUK"
-    | "GYEONGNAM"
-    | "JEJU";
-
   /** @format date-time */
   completeDtime?: string;
   completeNo?: string;
@@ -1814,7 +1761,6 @@ export interface CourseUser {
   outDtime?: string;
   outReason?: string;
   outYn?: string;
-  phone?: string;
 
   /** @format double */
   progressRatio?: number;
@@ -1922,12 +1868,6 @@ export interface CourseUserMyInfoResponseDto {
   courseUserSeq?: number;
 
   /**
-   * 강의 첫 번째 차시 레슨 시퀀스
-   * @format int64
-   */
-  firstLessonSeq?: number;
-
-  /**
    * 교육 만료까지 남은 기한
    * @format int64
    * @example 180
@@ -1947,12 +1887,6 @@ export interface CourseUserMyInfoResponseDto {
    *  * TYPE_ENDED: 학습 종료된 과정
    */
   progressStatus?: "TYPE_PROGRESSING" | "TYPE_ENDED";
-
-  /**
-   * 유저가 마지막으로 수강한 레슨 시퀀스
-   * @format int64
-   */
-  recentLessonSeq?: number;
 
   /**
    * 기수
@@ -1975,68 +1909,6 @@ export interface CourseUserMyInfoResponseDto {
 }
 
 export interface CourseUserResponseDto {
-  /** 업체정보 - 회사명 */
-  businessName?: string;
-
-  /** 업체정보 - 업종구분 */
-  businessSubType?:
-    | "BUS"
-    | "CHARTER_BUS"
-    | "SPECIAL_PASSENGER"
-    | "CORPORATE_TAXI"
-    | "GENERAL_CARGO"
-    | "PRIVATE_TAXI"
-    | "INDIVIDUAL_CARGO"
-    | "CONSIGNMENT"
-    | "SPECIAL_TRANSPORTATION"
-    | "KNEELING_BUS"
-    | "DANGEROUS_GOODS"
-    | "DESIGNATED_WASTE"
-    | "HAZARDOUS_CHEMICALS"
-    | "HIGH_PRESSURE_GAS_FLAMMABLE"
-    | "HIGH_PRESSURE_GAS_TOXIC";
-
-  /** 업체정보 - 업종 */
-  businessType?: "PASSENGER" | "FREIGHT";
-
-  /** 교육신청자정보 - 차량번호 */
-  carNumber?: string;
-
-  /** 교육신청자정보 - 차량 등록지 */
-  carRegisteredRegion?:
-    | "CHEONAN"
-    | "GONGJU"
-    | "BORYEONG"
-    | "ASAN"
-    | "SEOSAN"
-    | "NONSAN"
-    | "GYERYONG"
-    | "DANGJIN"
-    | "GEUMSAN"
-    | "BUYEO"
-    | "SEOCHEON"
-    | "CHEONGYANG"
-    | "HONGSEONG"
-    | "YESAN"
-    | "TAEAN"
-    | "CHUNGNAM"
-    | "SEJONG"
-    | "SEOUL"
-    | "BUSAN"
-    | "DAEGU"
-    | "INCHEON"
-    | "GWANGJU"
-    | "DAEJEON"
-    | "ULSAN"
-    | "GYEONGGI"
-    | "GANGWON"
-    | "CHUNGBUK"
-    | "JEONBUK"
-    | "JEONNAM"
-    | "GYEONGBUK"
-    | "GYEONGNAM"
-    | "JEJU";
-
   /**
    * 수료일
    * @format date-time
@@ -2071,9 +1943,6 @@ export interface CourseUserResponseDto {
   outDtime?: string;
   outReason?: string;
   outYn?: string;
-
-  /** 휴대전화 */
-  phone?: string;
 
   /**
    * 진도율 %
@@ -2307,68 +2176,6 @@ export interface CourseUserTransDetailsResponseDto {
 }
 
 export interface CourseUserTransResponseDto {
-  /** 업체정보 - 회사명 */
-  businessName?: string;
-
-  /** 업체정보 - 업종구분 */
-  businessSubType?:
-    | "BUS"
-    | "CHARTER_BUS"
-    | "SPECIAL_PASSENGER"
-    | "CORPORATE_TAXI"
-    | "GENERAL_CARGO"
-    | "PRIVATE_TAXI"
-    | "INDIVIDUAL_CARGO"
-    | "CONSIGNMENT"
-    | "SPECIAL_TRANSPORTATION"
-    | "KNEELING_BUS"
-    | "DANGEROUS_GOODS"
-    | "DESIGNATED_WASTE"
-    | "HAZARDOUS_CHEMICALS"
-    | "HIGH_PRESSURE_GAS_FLAMMABLE"
-    | "HIGH_PRESSURE_GAS_TOXIC";
-
-  /** 업체정보 - 업종 */
-  businessType?: "PASSENGER" | "FREIGHT";
-
-  /** 교육신청자정보 - 차량번호 */
-  carNumber?: string;
-
-  /** 교육신청자정보 - 차량 등록지 */
-  carRegisteredRegion?:
-    | "CHEONAN"
-    | "GONGJU"
-    | "BORYEONG"
-    | "ASAN"
-    | "SEOSAN"
-    | "NONSAN"
-    | "GYERYONG"
-    | "DANGJIN"
-    | "GEUMSAN"
-    | "BUYEO"
-    | "SEOCHEON"
-    | "CHEONGYANG"
-    | "HONGSEONG"
-    | "YESAN"
-    | "TAEAN"
-    | "CHUNGNAM"
-    | "SEJONG"
-    | "SEOUL"
-    | "BUSAN"
-    | "DAEGU"
-    | "INCHEON"
-    | "GWANGJU"
-    | "DAEJEON"
-    | "ULSAN"
-    | "GYEONGGI"
-    | "GANGWON"
-    | "CHUNGBUK"
-    | "JEONBUK"
-    | "JEONNAM"
-    | "GYEONGBUK"
-    | "GYEONGNAM"
-    | "JEJU";
-
   /** 신청 과정명 */
   courseTitle?: string;
 
@@ -2383,9 +2190,6 @@ export interface CourseUserTransResponseDto {
    * @format date-time
    */
   modifiedDtime?: string;
-
-  /** 휴대전화 */
-  phone?: string;
 
   /** 신청 타입 */
   regType?: "TYPE_INDIVIDUAL" | "TYPE_ORGANIZATION";
@@ -5267,20 +5071,6 @@ export interface Owner {
   id?: string;
 }
 
-export interface Pageable {
-  /** @format int64 */
-  offset?: number;
-
-  /** @format int32 */
-  pageNumber?: number;
-
-  /** @format int32 */
-  pageSize?: number;
-  paged?: boolean;
-  sort?: Sort;
-  unpaged?: boolean;
-}
-
 export interface PartETag {
   etag?: string;
 
@@ -5967,12 +5757,6 @@ export interface SignUpRequestDto {
   username?: string;
 }
 
-export interface Sort {
-  empty?: boolean;
-  sorted?: boolean;
-  unsorted?: boolean;
-}
-
 export interface SpecificQuestionInExamTabResponseDto {
   /**
    * 생성일
@@ -6470,85 +6254,6 @@ export interface User {
   username?: string;
 }
 
-export interface UserCourseInfoAvalStepsDto {
-  /**
-   * 과정 클래스 시퀀스
-   * @format int64
-   */
-  courseClassSeq?: number;
-
-  /**
-   * 기수 (형식: number(yyyy.MM.dd ~ yyyy.MM.dd))
-   * @example 1기 (2022.08.23 ~ 2022.09.11)
-   */
-  stepStr?: string;
-}
-
-export interface UserCourseInfoAvalStepsResponseDto {
-  /** 신청 가능 기수 리스트 */
-  avalStepList?: UserCourseInfoAvalStepsDto[];
-
-  /**
-   * 과정명
-   * @example 지쳐가는 과정
-   */
-  courseName?: string;
-
-  /**
-   * 과정 시퀀스
-   * @format int64
-   */
-  courseSeq?: number;
-}
-
-export interface UserCourseInfoDto {
-  /** 과정명 */
-  courseName?: string;
-
-  /** 운수/저상/도민 구분 */
-  courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
-
-  /**
-   * 과정 유저 시퀀스 -> 과정명 하이퍼 링크 클릭 시 사용하시면 됩니다.
-   * @format int64
-   */
-  courseUserSeq?: number;
-
-  /** 학습 상태 (수료, 학습 중, 미수료) */
-  learningStatus?: string;
-
-  /** 학습기간 (yyyy-MM-dd ~ yyyy-MM-dd) */
-  studyDate?: string;
-
-  /** 진도율 (%) */
-  totalProgress?: string;
-
-  /** 연도 및 기수 (year/step 형태) */
-  yearAndStep?: string;
-}
-
-export interface UserCourseInfoEnrollRequestDto {
-  /**
-   * 과정 클래스 시퀀스
-   * @format int64
-   */
-  courseClassSeq?: number;
-
-  /**
-   * 유저 시퀀스
-   * @format int64
-   */
-  userSeq?: number;
-}
-
-export interface UserCourseInfoResponseDto {
-  /** 학습 중인 과정 */
-  learningCourses?: UserCourseInfoDto[];
-
-  /** 종료된 과정 */
-  outdatedCourses?: UserCourseInfoDto[];
-}
-
 export interface UserDetailsImpl {
   accountNonExpired?: boolean;
   accountNonLocked?: boolean;
@@ -6722,7 +6427,6 @@ export interface UserLoginHistoryResponseDto {
 
   /** @format int64 */
   seq?: number;
-  userAgent?: string;
 
   /** @format int64 */
   userSeq?: number;
@@ -7051,7 +6755,7 @@ export interface UserProvincialUpdateResponseDto {
   phone?: string;
 
   /** SMS수신동의여부 */
-  smsYn?: "Y" | "N";
+  smsYn?: string;
 
   /** 지역등록 */
   userRegistrationType?:
@@ -7394,7 +7098,7 @@ export interface UserTransportUpdateResponseDto {
   phone?: string;
 
   /** SMS수신동의여부 */
-  smsYn?: "Y" | "N";
+  smsYn?: string;
 
   /** 업종선택1 */
   userBusinessTypeOne?: "PASSENGER" | "FREIGHT";
@@ -7457,30 +7161,6 @@ export interface UserTransportUpdateResponseDto {
    * @format int64
    */
   userSeq?: number;
-}
-
-export interface PageCourseResponseDto {
-  content?: CourseResponseDto[];
-  empty?: boolean;
-  first?: boolean;
-  last?: boolean;
-
-  /** @format int32 */
-  number?: number;
-
-  /** @format int32 */
-  numberOfElements?: number;
-  pageable?: Pageable;
-
-  /** @format int32 */
-  size?: number;
-  sort?: Sort;
-
-  /** @format int64 */
-  totalElements?: number;
-
-  /** @format int32 */
-  totalPages?: number;
 }
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, ResponseType } from "axios";
@@ -7614,78 +7294,6 @@ export class HttpClient<SecurityDataType = unknown> {
  * 개발 방향 변경으로 인한 기존 미림 LMS 개발에서 충남형 LMS 로 변경됨.
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  adm = {
-    /**
-     * @description 관리자 페이지에서 수강 신청 가능한 과정 선택 API 를 통해 기수를 선택한 이후, 유저 시퀀스(userSeq), 과정 클래스 시퀀스(courseClassSeq) 를 Request Body 로 전달받아 대리 수강신청을 수행한다. 이미 유저가 신청한 과정일 경우 예외를 발생시킨다. <b>교육신청대상자의 정보(회사업종, 회사명, 차량번호 등)가 없을 경우, 예외를 반환한다. 교육신청대상자의 정보는 관리자페이지의 유저 정보란에서 수정할 수 있다.</b>
-     *
-     * @tags [관리자] 유저 수강 정보 API
-     * @name AdmEnrollCourseClassUsingPost
-     * @summary [관리자] 유저 대리 수강신청 API - JWT
-     * @request POST:/adm/course-info/enroll
-     */
-    admEnrollCourseClassUsingPost: (requestDto: UserCourseInfoEnrollRequestDto, params: RequestParams = {}) =>
-      this.request<CourseUserResponseDto, any>({
-        path: `/adm/course-info/enroll`,
-        method: "POST",
-        body: requestDto,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * @description userSeq 를 Path Variable 로 전달받고, 관리자 페이지의 수강 정보 내 특정 유저에 대한 강제 수강신청을 위해 현재 수강 가능한 과정 리스트를 반환한다. 과정 리스트는 과정 클래스(courseClass) 가 개설된 데이터만 조회한다. 수강신청기간이 초과된 과정도 전부 조회한다. 단, 학습 종료 기간이 지난 과정은 조회하지 않는다. [필수 - page] 페이징 인덱스는 0부터 시작한다. [선택 값 - elementCnt] 페이지 당 보여질 데이터 개수, default: 10[선택 값 - courseType] 과정 구분(courseType, 전체/운수/저상/도민) 을 통해 데이터를 필터링 할 수 있다.<b>null 일 경우, 전체 데이터를 조회한다.</b> [선택 값 - courseName] 과정 이름을 통해 데이터를 필터링 할 수 있다.
-     *
-     * @tags [관리자] 유저 수강 정보 API
-     * @name AdmFindAllAvailableCoursesUsingGet
-     * @summary [관리자] 수강 신청 가능한 과정 조회 API - JWT, Pagination
-     * @request GET:/adm/course-info/enroll/courses
-     */
-    admFindAllAvailableCoursesUsingGet: (
-      query: {
-        courseName?: string;
-        courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
-        elementCnt?: number;
-        page: number;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<PageCourseResponseDto, any>({
-        path: `/adm/course-info/enroll/courses`,
-        method: "GET",
-        query: query,
-        ...params,
-      }),
-
-    /**
-     * @description 관리자페이지에서 수강 신청 가능한 과정 조회 API 를 통해 조회한 과정들 중, 특정 과정을 선택할 때 호출한다. 결과로 선택한 과정의 시퀀스, 제목, 신청 가능한 기수 리스트를 반환한다.
-     *
-     * @tags [관리자] 유저 수강 정보 API
-     * @name AdmSelectAvailableCourseUsingGet
-     * @summary [관리자] 수강 신청 가능한 과정 선택 API - JWT
-     * @request GET:/adm/course-info/enroll/courses/{courseSeq}
-     */
-    admSelectAvailableCourseUsingGet: (courseSeq: number, params: RequestParams = {}) =>
-      this.request<UserCourseInfoAvalStepsResponseDto, void>({
-        path: `/adm/course-info/enroll/courses/${courseSeq}`,
-        method: "GET",
-        ...params,
-      }),
-
-    /**
-     * @description 관리자 페이지에서 userSeq 를 전달받아 해당하는 사용자에 대한 수강 정보 리스트를 반환한다. 현재 사용자가 수강 중인 과정 리스트인 learningCourses, 학습 기간이 종료된 outdatedCourses 프로퍼티에 과정에 대한 리스트가 담겨서 반환된다.
-     *
-     * @tags [관리자] 유저 수강 정보 API
-     * @name AdmFindAllCourseInfoUsingGet
-     * @summary [관리자] 수강정보 전체 리스트 조회 API - JWT
-     * @request GET:/adm/course-info/{userSeq}
-     */
-    admFindAllCourseInfoUsingGet: (userSeq: number, params: RequestParams = {}) =>
-      this.request<UserCourseInfoResponseDto, void>({
-        path: `/adm/course-info/${userSeq}`,
-        method: "GET",
-        ...params,
-      }),
-  };
   auth = {
     /**
      * @description Request DTO 를 전달받아 로그인을 수행한다. 이때, aT 와 rT, 간략한 사용자의 정보와 ROLE 등을 전달한다. <b>로그인 타입이 운수/저상</b>의 경우, loginType, name, username, password 를 필요로 하며, name 은 사용자의 실명을, 주민등록번호는 username 과 password 에 동일하게 입력한다. 이때, 전달받은 성명과 주민등록번호는 나이스 API 국내 실명 인증 확인을 통해 검증된다. <b>로그인 타입이 도민교통</b>인 경우, loginType, username, password 만 필요로 하며, 이때 username 은 도민교통 타입의 유저가 회원가입 시 입력한 아이디, password 는 회원가입시 기입한 Plain text 로 이루어진 password 를 입력한다.
@@ -8164,7 +7772,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description 관리자 페이지의 클래스 관리 캘린더에서 전체 과정 클래스 정보를 조회한다. <b>courseType 파라미터가 Null 이라면 전체 조회한다.</b>
+     * @description 관리자 페이지의 클래스 관리 캘린더에서 전체 과정 클래스 정보를 조회한다.
      *
      * @tags [App & 관리자] 과정 클래스(기수) API
      * @name AdmFindAllCourseClassesUsingGet
@@ -8172,11 +7780,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/course-class/adm
      */
     admFindAllCourseClassesUsingGet: (
-      query: {
-        businessType: "TYPE_ALL" | "TYPE_PASSENGER" | "TYPE_CARGO";
-        courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
-        date?: string;
-      },
+      query: { businessType: "TYPE_ALL" | "TYPE_PASSENGER" | "TYPE_CARGO"; date?: string },
       params: RequestParams = {},
     ) =>
       this.request<CourseClassResponseDto[], any>({
@@ -8342,7 +7946,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/course-module
      */
     clientFindAllCourseModulesUsingGet: (query: { courseSeq: number }, params: RequestParams = {}) =>
-      this.request<CourseModuleFindResponseDto[], void>({
+      this.request<CourseModuleFindResponseDto, void>({
         path: `/course-module`,
         method: "GET",
         query: query,
@@ -8358,7 +7962,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/course-module/adm
      */
     findAllCourseModulesUsingGet: (query: { courseSeq: number }, params: RequestParams = {}) =>
-      this.request<CourseModuleFindResponseDto[], void>({
+      this.request<CourseModuleFindResponseDto, void>({
         path: `/course-module/adm`,
         method: "GET",
         query: query,

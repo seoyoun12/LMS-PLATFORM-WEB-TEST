@@ -56,7 +56,7 @@ export function VideoPlayer(props: Props) {
       player.current = new window.ncplayer(initialPlayerId.current, { ...initialConfig.current, playlist: props.playlist });
       player.current.currentTime(props.seconds);
       player.current._corePlayer.onCurrentTimeChange = props.onTimeChange;
-      player.current.on("canplay", () => player.current._corePlayer._setDuration(player.current._corePlayer.player.duration));
+      player.current.on("canplay", () => console.log(player.current._corePlayer._setDuration(player.current._corePlayer.player.duration)));
 
       eventsPrev.current = [];
 

@@ -112,7 +112,7 @@ export function VideoPlayer(props: Props) {
       <Script
         src={CDN_URL}
         strategy="lazyOnload"
-        onLoad={() => setScriptLoaded(true)}
+        onReady={() => setScriptLoaded(true)}
       />
       <Player id={initialPlayerId.current} ref={playerElement}></Player>
     </>

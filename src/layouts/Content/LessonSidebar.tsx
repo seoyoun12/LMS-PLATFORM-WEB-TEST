@@ -11,6 +11,7 @@ import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { useRouter } from "next/router";
+import LessonSidebarModule from "./LessonSidebarModule";
 
 interface Props {
   courseUserSeq: number;
@@ -20,7 +21,7 @@ interface Props {
   modules: CourseModuleFindResponseDto[] | null;
 }
 
-export function LessonSidebar(props: Props) {
+export default function LessonSidebar(props: Props) {
 
   const router = useRouter();
 
@@ -70,17 +71,7 @@ export function LessonSidebar(props: Props) {
         </LessonItemContainer>
         {props.modules !== null && props.modules.length > 0 && (
           <LessonModuleContainer>
-            {props.modules.map((module) => {
-
-              switch (module.moduleType) {
-
-                case "COURSE_MODULE_PROGRESS_RATE": return <div>{module.moduleType}</div>;
-                case "COURSE_MODULE_SURVEY": return <div>{module.moduleType}</div>;
-                case "COURSE_MODULE_TEST": return <div>{module.moduleType}</div>
-
-              }
-
-            })}
+            {props.modules.map((module) => <LessonSidebarModule key={module.courseModuleSeq} module={module} courseUserSeq={props.courseUserSeq} />)}
           </LessonModuleContainer>
         )}
       </Tab>
@@ -186,5 +177,5 @@ const LessonModuleContainer = styled(Box)`
   margin-top: 2rem;
   border-top: 1px solid #272727;
   background: #F7F7F7;
-  padding: 10px;
+  padding: 1rem;
 `

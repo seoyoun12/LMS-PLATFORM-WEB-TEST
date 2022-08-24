@@ -2,11 +2,10 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Box, Container, Typography } from "@mui/material";
 import { Spinner } from "@components/ui";
-import { LessonSidebar } from "./LessonSidebar";
-import { LessonContent } from "./LessonContent";
-import { noticeConfig } from "./Lesson.types";
 import type { CourseDetailClientResponseDto, CourseModuleFindResponseDto } from "@common/api/Api";
 import ApiClient from "@common/api/ApiClient";
+import LessonSidebar from "./LessonSidebar";
+import LessonContent from "./LessonContent";
 
 export interface Props {
   courseUserSeq: number;
@@ -85,7 +84,6 @@ export function Lesson(props: Props) {
         courseUserSeq={course.courseUserSeq}
         courseProgress={courseProgress}
         lesson={lesson}
-        notice={noticeConfig}
       />
       <LessonSidebar
         courseUserSeq={course.courseUserSeq}

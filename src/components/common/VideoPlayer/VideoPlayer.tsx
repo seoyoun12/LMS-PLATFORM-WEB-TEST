@@ -130,4 +130,8 @@ const Player = styled.div`
     height: auto !important;
   }
 
+  & .ncplayer-progress {
+    display: none;
+  }
+
 `;

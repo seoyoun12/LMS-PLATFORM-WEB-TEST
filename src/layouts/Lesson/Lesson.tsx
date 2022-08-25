@@ -192,6 +192,8 @@ const LessonContentEmptyContainer = styled(Box)`
   display: flex;
   flex-grow: 1;
   min-height: 50vh;
+  width: 100%;
+  max-width: 1000px;
   align-items : center;
   justify-content: center;
 `;

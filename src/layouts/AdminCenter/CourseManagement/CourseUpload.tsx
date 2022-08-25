@@ -7,9 +7,7 @@ import type { CourseDetailResponseDto } from '@common/api/Api';
 import { useSnackbar } from '@hooks/useSnackbar';
 import router from 'next/router';
 
-
 export function CourseUpload() {
-
   const snackbar = useSnackbar();
   const fileHandler = async (files: File[], course: CourseRes) => {
     const isFileUpload = files.length > 0;
@@ -17,24 +15,33 @@ export function CourseUpload() {
       await uploadFile({
         fileTypeId: course.seq,
         fileType: BbsType.TYPE_COURSE,
-        files
+        files,
       });
     }
   };
 
-  const handleSubmit = async ({ files, courseInput, isFileDelete }: {
-    files: File[],
-    courseInput: CourseInput,
+  const handleSubmit = async ({
+    files,
+    courseInput,
+    isFileDelete,
+    setLoading,
+  }: {
+    files: File[];
+    courseInput: CourseInput;
     isFileDelete: boolean;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   }) => {
     try {
+      setLoading(true);
       const course = await courseUpload(courseInput);
       await fileHandler(files, course.data);
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
       router.push(`/admin-center/course`);
+      setLoading(false);
     } catch (e: any) {
       console.error(e);
-      snackbar({ variant: "error", message: '업로드에 실패했습니다.' });
+      snackbar({ variant: 'error', message: '업로드에 실패했습니다.' });
+      setLoading(false);
     }
   };
 

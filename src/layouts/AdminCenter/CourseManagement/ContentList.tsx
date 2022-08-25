@@ -30,7 +30,7 @@ export function ContentList() {
   const [openModal, setOpenModal] = useState(false);
   const { courseSeq } = router.query;
   // const { course, courseError, mutate } = useCourse(Number(courseSeq));
-  const { data, error, mutate } = courseDetail(Number(courseSeq));
+  const { courseData: data, error, mutate } = courseDetail(Number(courseSeq));
 
   // console.log(' course : ', course);
   // console.log(' data : ', data);

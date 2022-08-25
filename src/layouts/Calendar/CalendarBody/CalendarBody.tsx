@@ -2,7 +2,19 @@
 
 import styled from '@emotion/styled';
 import { CustomContentGenerator, EventContentArg } from '@fullcalendar/core';
-import { Box, Button, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import FullCalendar from '@fullcalendar/react';
 import { CalendarEvent, ClickedPlanInfo, courseBusinessTypeList, eduLegendList, FilterType } from '../Calendar';
@@ -68,6 +80,8 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
   const isLogin = useIsLoginStatus();
   const [loading, setLoading] = useState(false);
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
+  const [deplecateEnrollOpen, setDeplecateEnrollOpen] = useState(false);
+
   const scheduleList = schedule?.map(item => {
     //마감여부
     const prevSchedule = new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0 ? true : false;
@@ -173,8 +187,8 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
                   setLoading(true);
                   const { data } = await getIsExistUser(modalInfo.seq);
                   if (!data) {
-                    window.alert('중복신청입니다!');
-                    return router.push(`/me/enroll-history`);
+                    setLoading(false);
+                    return setDeplecateEnrollOpen(true);
                   }
                   setLoading(false);
                 } catch (e: any) {
@@ -253,6 +267,23 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
           </TableBody>
         </TableContainer>
       </Modal>
+
+      <Dialog open={deplecateEnrollOpen} onClose={() => setDeplecateEnrollOpen(false)}>
+        <DialogContent>
+          <DialogContentText>이미 예약하신 신청내역이 있습니다. 신청내역을 확인하시겠습니까?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeplecateEnrollOpen(false)}>취소</Button>
+          <Button
+            onClick={() => {
+              router.push(`/me/enroll-history`);
+              return setDeplecateEnrollOpen(false);
+            }}
+          >
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
     </CalendarWrap>
   );
 }

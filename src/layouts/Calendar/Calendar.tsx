@@ -112,6 +112,7 @@ export function CNCalendar() {
   const { data, error, mutate } = useCourseClass({
     courseType: typeof window !== 'undefined' && (localStorage.getItem('site_course_type') as courseType),
     businessType: filter,
+    // businessType: businessType.TYPE_ALL,
     date: dateFormat(date, 'yyyy-mm'),
   });
   const [schedule, setSchedule] = useState<CourseClassRes[]>();

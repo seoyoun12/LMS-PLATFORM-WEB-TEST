@@ -111,8 +111,8 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
       studyEndDate: item.studyEndDate, //studyStartDate
       start: item.requestStartDate, //start: requestStartDate
       end: item.requestEndDate, //start: requestStartDate
-      className:
-        (prevSchedule && eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType) || 'TYPE_NONE',
+      className: item.enableToEnrollYn === YN.YES ? 'TYPE_SUP_COMMON' : 'TYPE_NONE',
+      // item.enableToEnrollYn === YN.YES ? eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType : 'TYPE_NONE', 나중에 필요시 사용
       // className: isReceive
       // ? eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType || 'TYPE_NONE'
       // : 'TYPE_NONE',

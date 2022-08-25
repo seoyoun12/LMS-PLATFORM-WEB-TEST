@@ -51,7 +51,7 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
       courseSubCategoryType.INDIVIDUAL_CARGO === value
     ) {
       setDisabledCompany(true);
-      setValue('businessName', value);
+      setValue('businessName', userBusinessTypeTwo.filter(item => item.enType === value)[0].type);
       return setValue('businessSubType', value);
     }
     setDisabledCompany(false);
@@ -75,6 +75,7 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
   // const onChangeCompanyName = (e: any) => {
   //   setValue('businessName', e.target.value);
   // };
+  console.log(watch());
 
   return (
     <CompanyInfoWrap>

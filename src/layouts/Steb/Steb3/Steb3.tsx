@@ -87,8 +87,8 @@ export function Steb3() {
   const [name, setName] = useState<string>('');
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
   const [user, setUser] = useRecoilState(userInfo);
-  // const [enrollList, setEnrollList] = useRecoilState(courseClassEnrollList);
-  const [enrollList, setEnrollList] = useState([]);
+  const [enrollList, setEnrollList] = useRecoilState(courseClassEnrollList);
+  // const [enrollList, setEnrollList] = useState([]);
   const [info, setInfo] = useState<{
     courseCategoryType: courseCategoryType;
     courseBusinessType: businessType;
@@ -96,6 +96,8 @@ export function Steb3() {
     studyStartDate: string;
     studyEndDate: string;
   }>();
+
+  console.log(enrollInfo, 'enrollinfo', enrollList, info);
 
   const getData = async (seq: number) => {
     setLoading(true);
@@ -268,7 +270,7 @@ export function Steb3() {
                           <StuTableRightCell>{item.name}</StuTableRightCell>
                         </UserTableRow>
                         <UserTableRow>
-                          <StuTableLeftCell>민증</StuTableLeftCell>
+                          <StuTableLeftCell>주민등록번호</StuTableLeftCell>
                           <StuTableRightCell>
                             {item.firstIdentityNumber} - ●●●●●●●
                           </StuTableRightCell>
@@ -288,7 +290,7 @@ export function Steb3() {
                           </StuTableRightCell>
                         </UserTableRow>
                         <UserTableRow>
-                          <StuTableLeftCell>휴대전화링</StuTableLeftCell>
+                          <StuTableLeftCell>휴대전화</StuTableLeftCell>
                           <StuTableRightCell>
                             {item.firstPhone} - {item.secondPhone} - {item.thirdPhone}
                           </StuTableRightCell>

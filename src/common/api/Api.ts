@@ -8732,7 +8732,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/course-user/exists/${courseClassSeq}`,
         method: "GET",
         ...params,
-      })
+      }),
     /**
      * @description 클라이언트에서 개인에 대한 특정 교육 신청 건에 대한 내용을 조회한다. outYn 이 'Y' 데이터는 조회되지 않는다. 요청자의 JWT 내 유저 시퀀스와 반환될 데이터의 userSeq 가 자기 자신이 아닐 경우 예외를 호출한다.
      *
@@ -8740,7 +8740,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindTransCourseUserIndvUsingGet
      * @summary [App] 운수/저상 교육 신청 단건 조회 API (개인) - JWT
      * @request GET:/course-user/find/individual/{courseUserSeq}
-     */,
+     */
     findTransCourseUserIndvUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<CourseUserTransDetailsResponseDto>, void>({
         path: `/course-user/find/individual/${courseUserSeq}`,
@@ -10984,7 +10984,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: userFIndPasswordRequestDto,
         type: ContentType.Json,
         ...params,
-      })
+      }),
     /**
      * @description Access Token 을 헤더로 전달받아 해당 유저의 로그인 히스토리를 등록한다.
      *
@@ -10992,7 +10992,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateLoginHistoryUsingPost
      * @summary [App] 유저 로그인 히스토리 등록 API - JWT 사용
      * @request POST:/user/login-history
-     */,
+     */
     createLoginHistoryUsingPost: (params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<UserLoginHistoryResponseDto>, any>({
         path: `/user/login-history`,

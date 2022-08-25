@@ -7,7 +7,6 @@ interface Props {
 }
 
 export function Spinner({ fit }: Props) {
-  // console.log(fit);
   return (
     <Container fit={fit}>
       <SpinCircle size={fit ? '1.5rem' : '40px'} />

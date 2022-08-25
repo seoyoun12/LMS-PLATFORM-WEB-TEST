@@ -86,7 +86,6 @@ export function NavBarV2() {
 
   useEffect(() => {
     const show = showRemoteList.some(e => router.route.includes(e.href));
-    // console.log(show);
     setIsShowRemote(show);
   }, [router]);
 

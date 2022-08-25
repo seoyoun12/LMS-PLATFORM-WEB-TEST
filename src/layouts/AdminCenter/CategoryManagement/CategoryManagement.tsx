@@ -68,17 +68,9 @@ export function CategoryManagement() {
     page,
   });
 
-  console.log('파일 다운로드 구현해보기');
-  console.log('data : ', data);
-  console.log('한글변환 : ', tabsConfig[0].value);
-  // console.log('data.content : ', data.content);
-
-  console.log('123 : ', data?.content);
 
   // for (let i = 0; i < tabsConfig.length; i++) {
-  //   console.log('i는 : ', i);
   //   if (tabsConfig[i].value === data.content) {
-  //     console.log('asd');
   //   }
   // }
 

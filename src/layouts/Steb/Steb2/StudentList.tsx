@@ -67,7 +67,6 @@ export function StudentList({ registerType, setRegisterType }: Props) {
   const snackbar = useSnackbar();
 
   const onClickDelete = async (seq: number, test: any) => {
-    console.log('user is deleted', seq, test);
     try {
       await courseUserOrganCancel(seq);
       setOrganization(prev => prev.filter(item => item.seq !== seq));

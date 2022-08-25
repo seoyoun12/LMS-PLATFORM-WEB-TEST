@@ -40,7 +40,6 @@ export function CalendarManagement() {
   const { data, error, mutate } = useCourseClassAdm(businessType.TYPE_ALL, '2022-08');
 
   useEffect(() => {
-    console.log('useEffect Triggered');
     const { page } = router.query;
     // setPage(!isNaN(Number(page)) ? Number(page) : 0);
   }, [router]);
@@ -70,7 +69,6 @@ export function CalendarManagement() {
       }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
-      console.log(e);
     }
   };
 

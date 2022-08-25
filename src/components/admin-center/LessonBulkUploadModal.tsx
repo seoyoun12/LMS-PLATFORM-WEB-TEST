@@ -74,7 +74,6 @@ export function LessonBulkUploadModal({ open, handleClose }: { open: boolean; ha
 
     try {
       const contentSeq = Number(query.contentSeq);
-      console.log('im lesson.', lessonInput);
       await uploadLessons({ contentSeq, lessonInput });
       snackbar({ variant: 'success', message: '성공적으로 업로드 되었습니다.' });
     } catch (e: any) {

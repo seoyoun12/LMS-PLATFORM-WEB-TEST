@@ -42,7 +42,6 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
     } = e;
 
     if (courseSubCategoryType.BUS === value || courseSubCategoryType.CHARTER_BUS === value) {
-      console.log('??', value === courseSubCategoryType.BUS);
       setValue('carNumber', null);
       return setHideCarNumber(true);
     }
@@ -74,7 +73,6 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
   };
 
   // const onChangeCompanyName = (e: any) => {
-  //   // console.log(e, e, e, e, e, e, e);
   //   setValue('businessName', e.target.value);
   // };
 

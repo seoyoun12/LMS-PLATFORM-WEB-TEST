@@ -23,7 +23,6 @@ export function BannerManagement() {
   const dialog = useDialog();
   const snackbar = useSnackbar();
   const { data, error, mutate } = useBannerListAdm();
-  console.log('bannerList', data);
 
   const onRemoveBanner = async (bannerSeq: number) => {
     try {

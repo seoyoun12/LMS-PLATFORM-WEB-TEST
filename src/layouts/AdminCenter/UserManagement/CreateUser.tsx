@@ -32,7 +32,6 @@ export function CreateUser() {
     setError,
     formState: { errors },
   } = useForm<SignupParams>({ defaultValues });
-  console.log(watch());
 
   const createSubmit: SubmitHandler<SignupParams> = async ({ ...rest }) => {
     for (const [key, value] of Object.entries(rest)) {

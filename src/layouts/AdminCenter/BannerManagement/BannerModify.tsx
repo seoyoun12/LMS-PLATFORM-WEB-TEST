@@ -67,7 +67,6 @@ export function BannerModify() {
     (async function () {
       try {
         const { data } = await getSingleBannerAdm(Number(bannerId));
-        console.log(data);
         setValue('title', data.title);
         setValue('content', data.content);
         setValue('startDate', dateFormat(data.startDate, 'yyyy-mm-dd'));
@@ -77,7 +76,6 @@ export function BannerModify() {
 
         setFileName(data.s3Files[0]?.name || null);
         setFileSeq(data.s3Files[0].seq);
-        console.log(watch());
       } catch (e: any) {
         snackbar({ variant: 'error', message: e.data.message });
       }
@@ -85,7 +83,6 @@ export function BannerModify() {
   }, []);
 
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...rest }, e) => {
-    console.log('onSubmit triggered', files, rest, e);
     try {
       const { data }: { data: BannerRes } = await modifyBannerAdm(Number(bannerId), rest);
       if (watch().files.length !== 0) {
@@ -94,7 +91,6 @@ export function BannerModify() {
       }
       snackbar({ variant: 'success', message: '성공적으로 완료되었습니다.' });
       router.push(`/admin-center/banner`);
-      console.log(data);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
     }

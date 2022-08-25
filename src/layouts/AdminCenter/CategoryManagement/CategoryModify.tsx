@@ -18,7 +18,6 @@ export function CategoryModify() {
   const categorySeq = router.query;
   const { data, error } = useCategoryBoard(Number(categorySeq.categorySeq));
 
-  console.log('categorySeq : ', categorySeq);
 
   const handleSubmit = async ({
     files,

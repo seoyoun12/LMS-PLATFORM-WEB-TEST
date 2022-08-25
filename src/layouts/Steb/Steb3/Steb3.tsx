@@ -96,7 +96,6 @@ export function Steb3() {
     studyStartDate: string;
     studyEndDate: string;
   }>();
-  console.log(enrollInfo, enrollList);
 
   const getData = async (seq: number) => {
     setLoading(true);
@@ -120,7 +119,6 @@ export function Steb3() {
       setLoading(false);
     } catch (e: any) {
       // snackbar({ variant: 'error', message: e });
-      console.log(e);
       setLoading(false);
     }
   };

@@ -30,12 +30,13 @@ const LinkList = [
     href: '/category',
     imgPath: '/assets/images/unsu.png',
     onClickCard: async () => {
+      if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type')) return  localStorage.setItem('site_course_type',courseType.TYPE_TRANS_WORKER);
       if (typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_TRANS_WORKER) return;
       if (localStorage.getItem('site_course_type') !== courseType.TYPE_TRANS_WORKER) {
         if (!!localStorage.getItem('ACCESS_TOKEN')) {
           await logout();
+          localStorage.setItem('site_course_type', courseType.TYPE_TRANS_WORKER);
         } else {
-          return;
         }
       }
       localStorage.setItem('site_course_type', courseType.TYPE_TRANS_WORKER);
@@ -50,12 +51,13 @@ const LinkList = [
     href: '/category',
     imgPath: '/assets/images/lowFloor.png',
     onClickCard: async () => {
-      if (typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_LOW_FLOOR_BUS) return;
+      if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type')) return  localStorage.setItem('site_course_type',courseType.TYPE_LOW_FLOOR_BUS);
+        if (typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_LOW_FLOOR_BUS) return;
       if (localStorage.getItem('site_course_type') !== courseType.TYPE_LOW_FLOOR_BUS) {
         if (!!localStorage.getItem('ACCESS_TOKEN')) {
-          await logout();
+        await logout();
+          localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
         } else {
-          return;
         }
       }
       localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
@@ -70,6 +72,7 @@ const LinkList = [
     href: 'traffic/category',
     imgPath: '/assets/images/domin.png',
     onClickCard: async () => {
+            if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type')) return  localStorage.setItem('site_course_type',courseType.TYPE_PROVINCIAL);
       if (typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL) return;
       if (localStorage.getItem('site_course_type') !== courseType.TYPE_PROVINCIAL) {
         if (!!localStorage.getItem('ACCESS_TOKEN')) {
@@ -231,10 +234,14 @@ const LogoBox = styled(Box)`
 `;
 
 const SubTitle = styled(Box)`
-  font-weight: bold;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
+  padding: 0.5rem 2.5rem;
   width: fit-content;
   margin: auto;
+  margin-top:8px;
+  background: #144aaa;
+  color:white;
+  border-radius: 4px;
 `;
 
 // Category Grid

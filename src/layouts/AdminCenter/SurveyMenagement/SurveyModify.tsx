@@ -92,7 +92,6 @@ export function SurveyModify() {
       return window.alert('적어도 하나의 문항 , 첫번째 문항이 필요합니다!');
     } else {
       const randomSeq = Math.floor(Math.random() * 1000);
-      console.log(watch(), type, 'AddQuestion Test', randomSeq);
       if (!watch().surveyMultipleChoice.item1) {
         setQuestions(prev => [
           ...prev,
@@ -124,7 +123,6 @@ export function SurveyModify() {
         surveyMultipleChoice: item.surveyMultipleChoice,
       };
     });
-    console.log(arr, 'arr');
     try {
       const dialogConfirmed = await dialog({
         title: '콘텐츠 수정하기',
@@ -137,7 +135,6 @@ export function SurveyModify() {
           title,
           surveyQuestionList: arr,
         };
-        console.log('data: ', data);
         await modifySurvey(Number(surveySeq), data);
         snackbar({ variant: 'success', message: '수정 완료했습니다.' });
         router.push(`/admin-center/survey`);

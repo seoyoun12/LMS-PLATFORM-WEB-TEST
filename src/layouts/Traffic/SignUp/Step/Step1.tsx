@@ -18,7 +18,6 @@ export function Step1({ handleStep, setResName }: Props) {
   const uuidRef = useRef(uuid());
   const popUpRef = useRef<Window>(null);
   const [popUpState, setPopUpState] = useState<Window>(null);
-  console.log(uuidRef);
 
   const onClickPop = () => {
     const popUp = document.open(`https://api.bonobono.dev/api/v1/nice?uuid=` + uuidRef.current, '_parant', 'popup=yes');

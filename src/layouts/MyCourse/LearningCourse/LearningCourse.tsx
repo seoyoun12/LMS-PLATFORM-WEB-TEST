@@ -9,7 +9,6 @@ import { NotFound } from '@components/ui/NotFound';
 export function LearningCourse() {
   const router = useRouter();
   const { user, error } = useMyUser();
-  console.log(user);
   if (!user) return <Spinner />;
   return (
     <LearningCourseWrap>

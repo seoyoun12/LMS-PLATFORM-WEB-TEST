@@ -26,7 +26,6 @@ const myInfoList = [
 export function Me() {
   const router = useRouter();
   const { user, error } = useMyUser();
-  console.log(user);
   const [value, setValue] = React.useState(myInfoList[0].value);
 
   if (error) return <div>error</div>;

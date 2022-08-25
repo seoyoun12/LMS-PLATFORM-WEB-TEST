@@ -8,7 +8,6 @@ import styled from 'styled-components';
 export function CategoryBoardLookList() {
   const [target, loadedItem, loading] = useInfiniteScrollQna(`/qna`);
 
-  console.log(loadedItem);
   return (
     <LkContainer>
       {loadedItem && loadedItem.length > 0 ? (

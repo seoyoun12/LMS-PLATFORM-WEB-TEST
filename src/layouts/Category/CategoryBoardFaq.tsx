@@ -7,7 +7,6 @@ import { NotFound } from '@components/ui/NotFound';
 export function CategoryBoardFaq() {
   const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_FAQ');
 
-  console.log(loadedItem);
   return (
     <Container>
       {loadedItem && loadedItem.length > 0 ? (

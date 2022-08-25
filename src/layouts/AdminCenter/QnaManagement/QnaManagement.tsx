@@ -44,7 +44,6 @@ export function QnaManagement() {
   const [page, setPage] = useState(0);
   const [seq, setSeq] = useState<number | null>(null);
   const { data, error, mutate } = qnaAdmList({ page });
-  console.log(data);
   // 답변
   const onClickAnswerQna = async (seq: number) => {
     router.push(`/admin-center/qna/qna-answer/${seq}`);

@@ -106,7 +106,6 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
     setIsFileDelete(true);
   };
 
-  console.log('course 체크 : ', course);
 
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...course }, event) => {
     event?.preventDefault();
@@ -120,7 +119,6 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
       courseType,
       // content1: markdownContent,
     };
-    console.log('뭐지 잘 되는거임?', courseInput);
     setLoading(true);
     onHandleSubmit({ courseInput, files, isFileDelete, setLoading });
   };

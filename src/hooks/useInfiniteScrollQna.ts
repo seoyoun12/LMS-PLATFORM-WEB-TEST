@@ -16,8 +16,6 @@ export function useInfiniteScrollQna(url: string) {
   const snackbar = useSnackbar();
 
   const onIntersection = async (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
-    // console.log('intersection', entries ,observer);
-    console.log("entries[0].intersectionRatio : ", entries[0].intersectionRatio)
     if (entries[0].intersectionRatio <= holdValue) return;
     // if (entries[0].intersectionRatio <= 0) return;
     if (loading.current === true) return

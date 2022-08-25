@@ -31,8 +31,6 @@ export function Step2({ handleStep, resName }: Props) {
     const confirmPassword = data.get('password-confirm') as string;
     const email = data.get('email') as string;
     const phone = data.get('phone') as string;
-    console.log(phone);
-    console.log(resName);
 
     if (nameErr || usernameErr || passwordErr || emailErr || phoneErr) return;
     if (password !== confirmPassword) return window.alert('비밀번호확인이 일치하지 않습니다!');

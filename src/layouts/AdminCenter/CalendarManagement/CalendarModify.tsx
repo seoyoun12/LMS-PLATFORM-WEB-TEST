@@ -76,9 +76,7 @@ export function CalendarModify() {
   useEffect(() => {
     (async function () {
       try {
-        console.log('successGet data', courseClassSeq);
         const { data } = await getDetailCourseClass(Number(courseClassSeq));
-        console.log('successGet data', data);
         setValue('year', data.year);
         setValue('step', data.step);
         setValue('limitPeopleYn', data.limitPeopleYn);
@@ -99,7 +97,6 @@ export function CalendarModify() {
   }, []);
 
   const onSubmit: SubmitHandler<FormType> = async e => {
-    console.log('dsdasda', e, limitPeopleCheck);
     const { step, year, limitPeople, courseClassSeq, ...rest } = e;
 
     // if (!courseSeq) return window.alert('과정을 등록해야합니다!');
@@ -125,7 +122,6 @@ export function CalendarModify() {
       router.push('/admin-center/calendar');
     } catch (e: any) {
       // snackbar({ variant: 'error', message: e });
-      console.log(e);
       window.alert(e.data.message);
       setLoading(false);
     }

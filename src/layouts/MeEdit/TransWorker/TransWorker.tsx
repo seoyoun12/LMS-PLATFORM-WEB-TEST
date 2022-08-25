@@ -163,9 +163,10 @@ export function TransWorker({ type, locationList }: Props) {
   useEffect(() => {
     (async function () {
       const { data } = await getTransport();
-      console.log(data);
-      setValue('fileSeq', data.s3Files[0].seq);
-      setValue('filePath', data.s3Files[0].path);
+      if(data.s3Files.length > 0){
+        setValue('fileSeq', data.s3Files[0].seq);
+        setValue('filePath', data.s3Files[0].path);
+      }
       setVehicleNumber(data.carNumber);
       setCompany(data.company);
       setPhone(isStringInPhone(data.phone) ? data.phone.slice(0, 3) : '');
@@ -219,10 +220,8 @@ export function TransWorker({ type, locationList }: Props) {
         const { data }: { data: UserTransportUpdateResponseDto } = await modifTransWorker(postData);
         if (watch().files.length > 0) {
           if (watch().fileSeq) {
-            console.log('delete', watch(), fileName);
             await deleteFile({ fileType: BbsType.TYPE_USER_PROFILE, fileTypeId: data.userSeq, fileSeqList: [watch().fileSeq] });
           }
-          console.log('handler', watch(), fileName);
           await fileHandler(watch().files, data.userSeq);
         }
       } catch (e: any) {

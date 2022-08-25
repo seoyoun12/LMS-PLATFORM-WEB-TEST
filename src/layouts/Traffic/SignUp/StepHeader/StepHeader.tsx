@@ -5,7 +5,6 @@ import Filter2Icon from '@mui/icons-material/Filter2';
 import Filter3Icon from '@mui/icons-material/Filter3';
 
 export function StepHeader({ value, title, headers }: { value: number; title: string; headers: { title: string; value: number }[] }) {
-  console.log(headers, value);
   return (
     <StebHeaderWrap>
       <Box

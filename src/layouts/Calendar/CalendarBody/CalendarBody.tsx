@@ -145,7 +145,6 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
           }: { event: { _def: { extendedProps: Partial<ClickedPlanInfo> }; start: Date | null; end: Date | null } } = e;
           if (!e.event._def.extendedProps.prevSchedule) return window.alert('마감된 교육입니다!');
           if (!e.event._def.extendedProps.isReceive) return window.alert('신청기간이 아닙니다!');
-          console.log(e.event._def.extendedProps, '운수운수');
           setModalInfo({
             seq: extendedProps.seq as number,
             step: extendedProps.step as number,
@@ -192,7 +191,6 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
                   }
                   setLoading(false);
                 } catch (e: any) {
-                  console.log(e);
                   setLoading(false);
                 }
                 router.push('/stebMove/steb2');

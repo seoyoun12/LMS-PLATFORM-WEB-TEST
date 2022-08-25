@@ -47,7 +47,6 @@ const MeCertificate: NextPage = () => {
         AxiosResponse<UserMyinfoCertificatesConfirmResponseDto>
       >(`/user/myinfo/certificates/confirm/${item.courseUserSeq}`);
       mutate();
-      console.log(data);
       setSelectedCertificate(data);
     } catch (e) {
       alert(e.data.message);

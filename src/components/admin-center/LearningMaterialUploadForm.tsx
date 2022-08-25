@@ -81,7 +81,6 @@ export function LearningMaterialUploadForm({
       reset({ ...learningMaterial });
       setFileName(learningMaterial.s3Files[0]?.name || null);
       // setSubType(false);
-      // console.log('learningMaterial  : ', learningMaterial);
       if (learningMaterial.materialSubType === null) {
         setSubType(false);
         if (learningMaterial.materialType === 'TYPE_VIDEO') {
@@ -153,8 +152,6 @@ export function LearningMaterialUploadForm({
       ...learningMaterial,
       content: markdownContent,
     };
-    console.log('learningMaterialInput : ', learningMaterialInput);
-    console.log('files : ', files);
     onHandleSubmit({ learningMaterialInput, files });
   };
 

@@ -11,13 +11,11 @@ export function DropdownItemV2({ className }: { className?: string }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(Boolean(event.currentTarget));
     if (anchorEl !== event.currentTarget) {
       setAnchorEl(event.currentTarget);
     }
   };
   // const handleLeave = (event: React.MouseEvent<HTMLButtonElement>) => {
-  //   console.log(event.currentTarget);
   //   setAnchorEl(null);
   // };
   const handleClose = () => {

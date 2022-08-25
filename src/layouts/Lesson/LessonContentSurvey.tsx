@@ -1,13 +1,14 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { Container } from "@mui/material";
+import { SurveyResponseDto } from "@common/api/Api";
 
 export interface Props {
 	courseUserSeq: number;
-	surveySeq: number;
+	survey: SurveyResponseDto;
 }
 
-export default function Survey(props: Props) {
+export default function LessonContentSurvey(props: Props) {
 
 	return (
 		<SurveyContainer>

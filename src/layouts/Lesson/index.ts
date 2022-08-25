@@ -1,2 +1,2 @@
-export { default as Lesson } from './Lesson';
-export type { Props as LessonProps } from "./Lesson";
+export { default as Lesson, LESSON_CONTENT_TYPES } from "./Lesson";
+export type { LessonContentType, LessonProps } from "./Lesson";

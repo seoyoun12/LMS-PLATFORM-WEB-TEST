@@ -2,57 +2,65 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Box, Container, Typography } from "@mui/material";
 import { Spinner } from "@components/ui";
-import type { CourseDetailClientResponseDto, CourseModuleFindResponseDto } from "@common/api/Api";
+import { CourseDetailClientResponseDto, CourseModuleFindResponseDto, SurveyResponseDto } from "@common/api/Api";
 import ApiClient from "@common/api/ApiClient";
 import LessonSidebar from "./LessonSidebar";
-import LessonContent from "./LessonContent";
+import LessonContentVideo from "./LessonContentVideo";
+import LessonContentSurvey from "./LessonContentSurvey";
 
-export interface Props {
+export const LESSON_CONTENT_TYPES = Object.freeze(["LESSON", "SURVEY"] as const);
+export type LessonContentType = typeof LESSON_CONTENT_TYPES[number];
+
+export interface LessonProps {
   courseUserSeq: number;
-  lessonSeq: number;
+  contentType: LessonContentType;
+  contentSeq: number;
 }
 
-export default function Lesson(props: Props) {
+export default function Lesson(props: LessonProps) {
 
   // 스테이트.
 
-  const [lessonSeq, setLessonSeq] = React.useState<number>(props.lessonSeq);
-
   const [loading, setLoading] = React.useState<boolean>(true);
   const [course, setCourse] = React.useState<CourseDetailClientResponseDto | null>(null);
-  const [modules, setModules] = React.useState<CourseModuleFindResponseDto[] | null>(null);
+  const [courseModules, setCourseModules] = React.useState<CourseModuleFindResponseDto[] | null>(null);
+  const [moduleSurvey, setModuleSurvey] = React.useState<SurveyResponseDto | null>(null);
 
   // 이펙트.
 
   React.useEffect(() => {
 
-    const courseUserSeq = Number(props.courseUserSeq);
-    const lessonSeq = Number(props.lessonSeq);
-
-    setLessonSeq(lessonSeq);
     setLoading(true);
 
     ApiClient.course
-      .findCourseUsingGet(courseUserSeq)
-      .then((res) => {
+      .findCourseUsingGet(props.courseUserSeq)
+      .then(async (res) => {
 
-        const data = res.data.data;
-        setCourse(data);
+        const course = res.data.data;
+        setCourse(course);
 
-        ApiClient.courseModule
-          .clientFindAllCourseModulesUsingGet({ courseSeq: data.seq })
-          .then((res) =>  setModules(res.data.data))
-          .catch(() => setModules(null))
-          .finally(() => setLoading(false));
+        return ApiClient.courseModule
+          .clientFindAllCourseModulesUsingGet({ courseSeq: course.seq })
+          .then(async(res) => {
+            
+            const courseModules = res.data.data;
+            setCourseModules(courseModules);
+
+            switch (props.contentType) {
+
+              case "SURVEY": return ApiClient.survey
+                .findSurveyUsingGet(course.courseUserSeq, props.contentSeq)
+                .then((res) => setModuleSurvey(res.data.data))
+                .catch(() => setModuleSurvey(null));
+    
+            }
+            
+          })
+          .catch(() => setCourseModules(null));
 
       })
-      .catch(() => {
-
-        setCourse(null);
-        setModules(null);
-        setLoading(false);
-        
-      });
+      .catch(() => setCourse(null))
+      .finally(() => setLoading(false));
 
   }, [props]);
 
@@ -64,33 +72,70 @@ export default function Lesson(props: Props) {
       <Spinner /> :
       (
         <CourseErrorContainer>
-          <Typography>강의를 불러올 수 없습니다.</Typography>
+          <Typography>강의를 찾을 수 없습니다.</Typography>
         </CourseErrorContainer>
       );
 
   }
 
-  // 변수.
+  // 컴포넌트.
 
-  const lessonIndex = course.lessons.findIndex((lesson) => lesson.seq === lessonSeq);
-  const lesson = lessonIndex >= 0 ? course.lessons[lessonIndex] : null;
-  const courseProgress = lesson && course.courseProgressResponseDtoList.find((v) => v.lessonSeq === lesson.seq) || null;
+  let Content: React.ReactElement;
+
+  switch (props.contentType) {
+
+    case "LESSON": {
+      
+        const lessonIndex = course.lessons.findIndex((lesson) => lesson.seq === props.contentSeq);
+        const lesson = lessonIndex >= 0 ? course.lessons[lessonIndex] : null;
+        const courseProgress = lesson && course.courseProgressResponseDtoList.find((v) => v.lessonSeq === lesson.seq) || null;
+
+        if (lesson === null || courseProgress === null) {
+
+          return (
+            <CourseErrorContainer>
+              <Typography>강좌 찾을 수 없습니다.</Typography>
+            </CourseErrorContainer>
+          );
+
+        }
+
+        Content = (
+          <LessonContentVideo
+            courseUserSeq={course.courseUserSeq}
+            courseProgress={courseProgress}
+            lesson={lesson}
+          />
+        );
+
+        break;
+
+    }
+    case "SURVEY": {
+
+      Content = (
+        <LessonContentSurvey
+          courseUserSeq={course.courseUserSeq}
+          survey={moduleSurvey}
+        />
+      )
+      break;
+
+    }
+
+  }
 
   // 렌더링.
 
   return (
-    <LessonContainer maxWidth={false}>
-      <LessonContent
-        courseUserSeq={course.courseUserSeq}
-        courseProgress={courseProgress}
-        lesson={lesson}
-      />
+    <LessonContainer maxWidth="xl">
+      {Content}
       <LessonSidebar
         courseUserSeq={course.courseUserSeq}
         courseProgresses={course.courseProgressResponseDtoList}
+        courseModules={courseModules}
         lessons={course.lessons}
-        lessonSeq={lessonSeq}
-        modules={modules}
+        lessonSeq={props.contentType === "LESSON" ? props.contentSeq : null}
       />
     </LessonContainer>
   );
@@ -111,6 +156,6 @@ const LessonContainer = styled(Container)`
   display: flex;
   flex: 1 1 auto;
   position: relative;
-  max-width: 1920px;
+  /* max-width: 1920px; */
   align-items: stretch;
 `;

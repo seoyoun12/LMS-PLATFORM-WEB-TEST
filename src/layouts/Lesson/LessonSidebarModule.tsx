@@ -1,42 +1,40 @@
 import React from "react";
 import styled from "@emotion/styled";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import type { CourseModuleFindResponseDto } from "@common/api/Api";
 import Image from "next/image";
-import Link from "next/link";
+import type { CourseModuleFindResponseDto } from "@common/api/Api";
+import { LESSON_CONTENT_TYPES } from "./Lesson";
 
 interface Props {
-	module: CourseModuleFindResponseDto;
 	courseUserSeq: number;
+	courseModule: CourseModuleFindResponseDto;
+	onSelect: (url: string) => void;
 }
 
 export default function LessonSidebarModule(props: Props) {
 
-	switch (props.module.moduleType) {
+	switch (props.courseModule.moduleType) {
 
 		case "COURSE_MODULE_PROGRESS_RATE": return (
 			<ModuleContainer>
 				<ModuleContainerLeft>
-					<ModuleTitle>{props.module.moduleName}</ModuleTitle>
+					<ModuleTitle>{props.courseModule.moduleName}</ModuleTitle>
 				</ModuleContainerLeft>
 				<ModuleContainerRight>
-					<CheckCircleIcon sx={{ color: props.module.submitYn === "Y" ? "#256aef" : "text.secondary" }} />
+					<CheckCircleIcon sx={{ color: props.courseModule.submitYn === "Y" ? "#256aef" : "text.secondary" }} />
 				</ModuleContainerRight>
 			</ModuleContainer>
 		);
 		case "COURSE_MODULE_SURVEY": return (
 			<ModuleContainer>
-				
 				<ModuleContainerLeft>
 					<Image src="/assets/images/iconModuleSurvey.png" width={15} height={15} alt="설문아이콘"/>
-					<ModuleTitle style={{ marginLeft: "0.5rem" }}>
-						<Link href={`/course/${props.courseUserSeq}/survey/${props.module.surveySeq}`}>
-							{props.module.moduleName}
-						</Link>
+					<ModuleTitle style={{ marginLeft: "0.5rem" }} onClick={() => props.onSelect(`/course/${props.courseUserSeq}/${LESSON_CONTENT_TYPES[1].toLocaleLowerCase()}/${props.courseModule.surveySeq}`)}>
+						{props.courseModule.moduleName}
 					</ModuleTitle>
 				</ModuleContainerLeft>
 				<ModuleContainerRight>
-					<CheckCircleIcon sx={{ color: props.module.submitYn === "Y" ? "#256aef" : "text.secondary" }} />
+					<CheckCircleIcon sx={{ color: props.courseModule.submitYn === "Y" ? "#256aef" : "text.secondary" }} />
 				</ModuleContainerRight>
 			</ModuleContainer>
 		);
@@ -44,10 +42,10 @@ export default function LessonSidebarModule(props: Props) {
 			<ModuleContainer>
 				<ModuleContainerLeft>
 					<Image src="/assets/images/iconModuleTest.png" width={13} height={15} alt="시험아이콘"/>
-					<ModuleTitle style={{ marginLeft: "0.5rem" }}>{props.module.moduleName}</ModuleTitle>
+					<ModuleTitle style={{ marginLeft: "0.5rem" }}>{props.courseModule.moduleName}</ModuleTitle>
 				</ModuleContainerLeft>
 				<ModuleContainerRight>
-					<CheckCircleIcon sx={{ color: props.module.submitYn === "Y" ? "#256aef" : "text.secondary" }} />
+					<CheckCircleIcon sx={{ color: props.courseModule.submitYn === "Y" ? "#256aef" : "text.secondary" }} />
 				</ModuleContainerRight>
 			</ModuleContainer>
 		);
@@ -73,5 +71,5 @@ const ModuleContainerRight = styled.div`
 `;
 
 const ModuleTitle = styled.span`
-	& a { color: inherit }
+	cursor: pointer;
 `;

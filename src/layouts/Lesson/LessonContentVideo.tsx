@@ -13,7 +13,7 @@ interface Props {
   lesson: LessonDetailClientResponseDto | null;
 }
 
-export default function LessonContent(props: Props) {
+export default function LessonContentVideo(props: Props) {
 
   // 스테이트.
 

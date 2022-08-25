@@ -111,7 +111,8 @@ export function VideoPlayer(props: Props) {
     <>
       <Script
         src={CDN_URL}
-        onReady={() => setScriptLoaded(true)}
+        onLoad={() => window.ncplayer && setScriptLoaded(true)}
+        onReady={() => window.ncplayer && setScriptLoaded(true)}
       />
       <Player id={initialPlayerId.current} ref={playerElement}></Player>
     </>

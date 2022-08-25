@@ -35,11 +35,12 @@ export function Steb2() {
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo); //전역에 교육정보 저장
   const [confirm, setConfirm] = useState(false);
   const [isIndividualCheck, setIsIndividualCheck] = useState(false);
+  const [hideCarNumber, setHideCarNumber] = useState(false);
   const [loading, setLoading] = useState(false);
   const confirmRef = useRef<boolean>();
 
   const { register, setValue, watch } = useForm<UserTransSaveInputDataType>({
-    defaultValues: { firstIdentityNumber: '', secondIdentityNumber: '' },
+    defaultValues: { firstIdentityNumber: '', secondIdentityNumber: '', smsYn: YN.YES },
   });
 
   useEffect(() => {
@@ -165,9 +166,23 @@ export function Steb2() {
       {isDesktop && <StebHeader value={2} />}
       <Steb2BodyContainer>
         <EduOverview setValue={setValue} />
-        <CompanyInfo isIndividual={isIndividual} setIsIndividual={setIsIndividual} register={register} watch={watch} />
+        <CompanyInfo
+          isIndividual={isIndividual}
+          setIsIndividual={setIsIndividual}
+          register={register}
+          watch={watch}
+          setValue={setValue}
+          setHideCarNumber={setHideCarNumber}
+        />
         <StudentList registerType={registerType} setRegisterType={setRegisterType} />
-        <StudentInfo register={register} setValue={setValue} registerType={registerType} setRegisterType={setRegisterType} watch={watch} />
+        <StudentInfo
+          register={register}
+          setValue={setValue}
+          registerType={registerType}
+          setRegisterType={setRegisterType}
+          watch={watch}
+          hideCarNumber={hideCarNumber}
+        />
         <IndividualSummary isIndividualCheck={isIndividualCheck} setIsIndividualCheck={setIsIndividualCheck} />
         <ConfirmButtonsWrap>
           <Button variant="contained" onClick={onClickEnroll} disabled={loading} fullWidth sx={{ mb: 2 }}>

@@ -26,20 +26,14 @@ export function EnrollHistory() {
   };
   if (!data) return <Spinner />;
   return (
-    <Container>
+    <Box>
+      <MyCourseContainer>
+        <MyCourseTitle>온라인 교육 신청내역</MyCourseTitle>
+        <MyCourseSubTitle>온라인 교육 신청내역을 확인하실 수 있습니다.</MyCourseSubTitle>
+      </MyCourseContainer>
       <EnrollHistoryWrap>
-        <Typography variant="h5" fontWeight="bold">
-          온라인 교육 신청내역
-        </Typography>
-        <Typography>온라인 교육 신청내역을 확인하실 수 있습니다.</Typography>
         {data.length <= 0 && <NotFound content="신청한 과정이 존재하지 않습니다!" />}
-        <Grid
-          container
-          rowSpacing={4}
-          columnSpacing={4}
-          columns={{ xs: 1, sm: 2, md: 4, lg: 4 }}
-          mt={1}
-        >
+        <Grid container rowSpacing={4} columnSpacing={4} columns={{ xs: 1, sm: 2, md: 4, lg: 4 }} mt={1}>
           {data.length > 0 &&
             data.map(item => (
               <Grid item xs={1} sm={1} md={1} lg={1} key={item.seq}>
@@ -50,17 +44,13 @@ export function EnrollHistory() {
                       title: item.courseTitle,
                       courseUserSeq: item.seq,
                       regType:
-                        item.regType === RegisterType.TYPE_INDIVIDUAL
-                          ? RegisterType.TYPE_INDIVIDUAL
-                          : RegisterType.TYPE_ORGANIZATION,
+                        item.regType === RegisterType.TYPE_INDIVIDUAL ? RegisterType.TYPE_INDIVIDUAL : RegisterType.TYPE_ORGANIZATION,
                     });
                   }}
                 >
                   <EnrollHistoryCard
                     title={item.courseTitle}
-                    content1={
-                      item.regType === RegisterType.TYPE_INDIVIDUAL ? '개인' : '단체'
-                    }
+                    content1={item.regType === RegisterType.TYPE_INDIVIDUAL ? '개인' : '단체'}
                     seq={item.seq}
                     item={item}
                   />
@@ -75,17 +65,39 @@ export function EnrollHistory() {
           handleClose={handleClose}
           courseTitle={modalData.title}
           courseUserSeq={modalData.courseUserSeq}
-          regType={
-            modalData.regType === RegisterType.TYPE_INDIVIDUAL
-              ? RegisterType.TYPE_INDIVIDUAL
-              : RegisterType.TYPE_ORGANIZATION
-          }
+          regType={modalData.regType === RegisterType.TYPE_INDIVIDUAL ? RegisterType.TYPE_INDIVIDUAL : RegisterType.TYPE_ORGANIZATION}
         />
       )}
-    </Container>
+    </Box>
   );
 }
 
-const EnrollHistoryWrap = styled(Box)`
+const EnrollHistoryWrap = styled(Container)`
   margin-top: 4rem;
+`;
+
+const MyCourseContainer = styled(Box)`
+  width: 100%;
+  height: 262px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 42px;
+  color: white;
+  background-image: url('/assets/images/currentStudy.png');
+`;
+const MyCourseTitle = styled(Box)`
+  font-size: 48px;
+  font-weight: 500;
+`;
+const MyCourseSubTitle = styled(Box)`
+  font-size: 17px;
+  font-weight: 500;
+`;
+const CourseContainer = styled(Box)`
+  max-width: 1200px;
+  padding-top: 2.5rem;
+  padding-bottom: 3rem;
+  margin: auto;
 `;

@@ -122,7 +122,7 @@ export function EduOverview({
         <TableContainer>
           <Table sx={{ borderTop: '3px solid #000' }}>
             <TableCustomRow>
-              <TableLeftCell>교육과정</TableLeftCell>
+              <TableLeftCell>온라인과정</TableLeftCell>
               <TableCell>
                 <FormControl fullWidth>
                   {/* <InputLabel id="student">선택</InputLabel> */}
@@ -140,12 +140,15 @@ export function EduOverview({
                       // });
                     }}
                     label="student"
+                    disabled
                   >
-                    {courseCategory.map(item => (
+                    {/*0번째는 보수일반 */}
+                    <MenuItem value={courseCategory[0].type}>보수일반</MenuItem>
+                    {/* {courseCategory.map(item => (
                       <MenuItem key={item.type} value={item.type}>
                         {item.ko}
                       </MenuItem>
-                    ))}
+                    ))} */}
                   </Select>
                 </FormControl>
               </TableCell>
@@ -173,15 +176,19 @@ export function EduOverview({
                       // });
                     }}
                     label="student"
+                    disabled
                   >
-                    {courseBusinessTypeList.map(item => {
+                    <MenuItem value={courseBusinessTypeList[1].enType}>
+                      여객 / 화물
+                    </MenuItem>
+                    {/* {courseBusinessTypeList.map(item => {
                       if (item.enType === businessType.TYPE_ALL) return;
                       return (
                         <MenuItem key={item.enType} value={item.enType}>
                           {item.type}
                         </MenuItem>
                       );
-                    })}
+                    })} */}
                   </Select>
                 </FormControl>
               </TableCell>
@@ -207,6 +214,7 @@ export function EduOverview({
                       // });
                     }}
                     label="student"
+                    disabled
                   >
                     {stepsRes.map(item => {
                       return (

@@ -158,6 +158,7 @@ const MainPage: NextPage = () => {
                   return (
                     <MainCategoryCard sx={{ borderTop: `7px solid ${color}` }}>
                       <Box
+                        sx={{ cursor: 'pointer' }}
                         onClick={async () => {
                           // setUserPageType(pageType);
                           await onClickCard();

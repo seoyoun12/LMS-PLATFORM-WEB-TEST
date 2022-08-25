@@ -12,25 +12,71 @@ import {
   TableContainer,
   Table,
   Grid,
+  SelectChangeEvent,
 } from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import React, { useState } from 'react';
 import { userBusinessTypeOne, userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
-import { FieldValues, UseFormRegister, UseFormWatch } from 'react-hook-form';
-import { UserTransSaveInputDataType } from '@common/api/courseClass';
+import { FieldValues, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
+import { courseSubCategoryType, UserTransSaveInputDataType } from '@common/api/courseClass';
 
 interface Props {
   isIndividual: boolean;
   setIsIndividual: React.Dispatch<React.SetStateAction<boolean>>;
   register: UseFormRegister<UserTransSaveInputDataType>;
   watch: UseFormWatch<UserTransSaveInputDataType>;
+  setValue: UseFormSetValue<UserTransSaveInputDataType>;
+  setHideCarNumber: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function CompanyInfo({ register, watch }: Props) {
+export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Props) {
   // const [businessType, setBusinessType] = useState<string | null>(null);
   // const [businessSubType, setBusinessSubType] = useState<string | null>(null);
   // const [businessName, setBusinessName] = useState<string | null>(null);
-  const { businessName, businessType, businessSubType } = watch();
+  // const { businessName, businessType, businessSubType } = watch();
+  const [disabledCompany, setDisabledCompany] = useState(false);
+
+  const onChangeBusinessSubType = (e: SelectChangeEvent<unknown>) => {
+    const {
+      target: { value },
+    } = e;
+
+    if (courseSubCategoryType.BUS === value || courseSubCategoryType.CHARTER_BUS === value) {
+      console.log('??', value === courseSubCategoryType.BUS);
+      setValue('carNumber', null);
+      return setHideCarNumber(true);
+    }
+    if (
+      courseSubCategoryType.PRIVATE_TAXI === value ||
+      courseSubCategoryType.GENERAL_CARGO === value ||
+      courseSubCategoryType.INDIVIDUAL_CARGO === value
+    ) {
+      setDisabledCompany(true);
+      setValue('businessName', value);
+      return setValue('businessSubType', value);
+    }
+    setDisabledCompany(false);
+    setHideCarNumber(false);
+    setValue('businessName', '');
+    setValue('businessSubType', value as courseSubCategoryType);
+  };
+
+  const onReturnValueBusinessName = () => {
+    if (
+      courseSubCategoryType.PRIVATE_TAXI === watch().businessSubType ||
+      courseSubCategoryType.GENERAL_CARGO === watch().businessSubType ||
+      courseSubCategoryType.INDIVIDUAL_CARGO === watch().businessSubType
+    ) {
+      return userBusinessTypeTwo.filter(item => item.enType === watch().businessSubType)[0].type;
+    } else {
+      return watch().businessName;
+    }
+  };
+
+  // const onChangeCompanyName = (e: any) => {
+  //   // console.log(e, e, e, e, e, e, e);
+  //   setValue('businessName', e.target.value);
+  // };
 
   return (
     <CompanyInfoWrap>
@@ -72,7 +118,13 @@ export function CompanyInfo({ register, watch }: Props) {
             <TableLeftCell>업종구분</TableLeftCell>
             <TableCell>
               <FormControl fullWidth>
-                <Select labelId="businessSubType" id="businessSubType" placeholder="업종 유형선택" {...register('businessSubType')}>
+                <Select
+                  labelId="businessSubType"
+                  id="businessSubType"
+                  placeholder="업종 유형선택"
+                  {...register('businessSubType')}
+                  onChange={onChangeBusinessSubType}
+                >
                   {userBusinessTypeTwo
                     .filter(filter => filter.category === watch().businessType)
                     .map(item => (
@@ -87,28 +139,34 @@ export function CompanyInfo({ register, watch }: Props) {
           <TableCustomRow>
             <TableLeftCell>회사명</TableLeftCell>
             <TableCell>
-              <TextField placeholder="회사명 또는 차량등록지역" {...register('businessName')} fullWidth />
+              <TextField
+                placeholder="회사명 또는 차량등록지역"
+                {...register('businessName')}
+                value={onReturnValueBusinessName()}
+                disabled={disabledCompany}
+                fullWidth
+              />
             </TableCell>
           </TableCustomRow>
         </Table>
       </TableContainer>
 
-      <SummaryGrid container columns={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2 }} mt={4} mb={4}>
-        <Box display="flex" flexGrow={1}>
-          <Box>※</Box>
-          <Box display="flex" flexDirection="column" ml={1}>
-            <Typography>자동차등록증 상의 회사명(상호)를 반드시 국문으로 입력하시기 바랍니다.</Typography>
-            <ExampleMessege>예시 {'>'} ss물류 → 에스에스물류</ExampleMessege>
-          </Box>
+      {/* <SummaryGrid container columns={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2 }} mt={4} mb={4}> */}
+      <Box display="flex" width="fit-content" margin="auto" mt={4} mb={4}>
+        <Box>※</Box>
+        <Box display="flex" flexDirection="column" ml={1}>
+          <Typography>자동차등록증 상의 회사명(상호)를 반드시 국문으로 입력하시기 바랍니다.</Typography>
+          <ExampleMessege>예시 {'>'} ss물류 → 에스에스물류</ExampleMessege>
         </Box>
-        <Box display="flex" flexGrow={1}>
+      </Box>
+      {/* <Box display="flex" flexGrow={1}>
           <Box>※</Box>
           <Box display="flex" flexDirection="column" ml={1}>
             <Typography>회사명이 없을 경우 차량등록지역을 입력해 주십시오.</Typography>
             <ExampleMessege>예시 {'>'} 공주시</ExampleMessege>
           </Box>
-        </Box>
-      </SummaryGrid>
+        </Box> */}
+      {/* </SummaryGrid> */}
     </CompanyInfoWrap>
   );
 }

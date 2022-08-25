@@ -69,16 +69,16 @@ export function CalendarHeader({ onChangeMonth, date, filterList, onChangeFilter
       </DateWrap>
       <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
         <Typography fontSize="18px">- 해당 일정을 클릭 하시면 자세한 교육내용을 확인하실 수 있습니다.</Typography>
-        <Box>
+        {/* <Box>
           {filterList.map(item => (
             <>
               <Radio value={item.enType} onChange={onChangeFilter} checked={filter === item.enType} />
               <span>{item.type}</span>
             </>
           ))}
-        </Box>
+        </Box> */}
       </Box>
-      <Box display="flex" justifyContent="flex-end" gap="1rem" mt={6}>
+      <Box display="flex" justifyContent="center" gap="1rem" mt={6}>
         {eduLegendList.map(legend => (
           <Box display="flex" alignItems="center">
             <CircleRoundedIcon sx={{ fontSize: '1rem', color: legend.color }} /> <span>{legend.title}</span>

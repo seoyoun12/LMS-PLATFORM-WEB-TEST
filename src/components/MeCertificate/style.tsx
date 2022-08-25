@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import { ButtonBase } from "@mui/material";
+import { Button, ButtonBase } from "@mui/material";
+import { Modal } from "@components/ui";
 
 export const MeCertificateContainer = styled.div``;
 
@@ -95,3 +96,24 @@ export const MeCertificateItemContentSubtitle = styled.p`
 export const MeCertificateItemConfirmButton = styled.p`
   color: #256aef;
 `;
+
+export const PrintModal = styled(Modal)``;
+
+export const PrintModalWrapper = styled.div`
+  width: 80vw;
+  max-width: 520px;
+`;
+
+export const PrintModalImage = styled.img`
+  width: 100%;
+  margin-bottom: 20px;
+`;
+
+export const PrintModalButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const PrintModalButton = styled(Button)``;

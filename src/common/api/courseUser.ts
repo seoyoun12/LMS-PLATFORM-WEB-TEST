@@ -87,3 +87,8 @@ export function delelteCourseUserIndi(courseUserSeq: number) {
 export function delelteCourseUserOrga(courseUserSeq: number) {
   return DELETE(`/course-user/cancel/organization/${courseUserSeq}`);
 }
+
+// 신청안했으면 treu , 중복신청이면 false
+export function getIsExistUser(courseClassSeq: number) {
+  return GET<{ data: boolean }>(`/course-user/exists/${courseClassSeq}`);
+}

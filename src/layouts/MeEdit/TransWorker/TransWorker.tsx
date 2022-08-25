@@ -81,49 +81,49 @@ export const userBusinessTypeTwo = [
   },
   {
     category: 'FREIGHT',
-    type: '개별화물',
-    enType: courseSubCategoryType.INDIVIDUAL_CARGO,
-  },
-  {
-    category: 'FREIGHT',
     type: '용달화물',
     enType: courseSubCategoryType.CONSIGNMENT,
   },
   {
-    category: 'PASSENGER',
-    type: '특별교통수단',
-    enType: courseSubCategoryType.SPECIAL_TRANSPORTATION,
-  },
-  {
-    category: 'PASSENGER',
-    type: '저상버스',
-    enType: courseSubCategoryType.KNEELING_BUS,
-  },
-  {
     category: 'FREIGHT',
-    type: '위험물',
-    enType: courseSubCategoryType.DANGEROUS_GOODS,
+    type: '개별화물',
+    enType: courseSubCategoryType.INDIVIDUAL_CARGO,
   },
-  {
-    category: 'FREIGHT',
-    type: '지정폐기물',
-    enType: courseSubCategoryType.DESIGNATED_WASTE,
-  },
-  {
-    category: 'FREIGHT',
-    type: '유해화학물질',
-    enType: courseSubCategoryType.HAZARDOUS_CHEMICALS,
-  },
-  {
-    category: 'FREIGHT',
-    type: '고압가스(가연성)',
-    enType: courseSubCategoryType.HIGH_PRESSURE_GAS_FLAMMABLE,
-  },
-  {
-    category: 'FREIGHT',
-    type: '고압가스(독성)',
-    enType: courseSubCategoryType.HIGH_PRESSURE_GAS_TOXIC,
-  },
+  // {
+  //   category: 'PASSENGER',
+  //   type: '특별교통수단',
+  //   enType: courseSubCategoryType.SPECIAL_TRANSPORTATION,
+  // },
+  // {
+  //   category: 'PASSENGER',
+  //   type: '저상버스',
+  //   enType: courseSubCategoryType.KNEELING_BUS,
+  // },
+  // {
+  //   category: 'FREIGHT',
+  //   type: '위험물',
+  //   enType: courseSubCategoryType.DANGEROUS_GOODS,
+  // },
+  // {
+  //   category: 'FREIGHT',
+  //   type: '지정폐기물',
+  //   enType: courseSubCategoryType.DESIGNATED_WASTE,
+  // },
+  // {
+  //   category: 'FREIGHT',
+  //   type: '유해화학물질',
+  //   enType: courseSubCategoryType.HAZARDOUS_CHEMICALS,
+  // },
+  // {
+  //   category: 'FREIGHT',
+  //   type: '고압가스(가연성)',
+  //   enType: courseSubCategoryType.HIGH_PRESSURE_GAS_FLAMMABLE,
+  // },
+  // {
+  //   category: 'FREIGHT',
+  //   type: '고압가스(독성)',
+  //   enType: courseSubCategoryType.HIGH_PRESSURE_GAS_TOXIC,
+  // },
 ];
 
 interface FormType {
@@ -219,8 +219,10 @@ export function TransWorker({ type, locationList }: Props) {
         const { data }: { data: UserTransportUpdateResponseDto } = await modifTransWorker(postData);
         if (watch().files.length > 0) {
           if (watch().fileSeq) {
+            console.log('delete', watch(), fileName);
             await deleteFile({ fileType: BbsType.TYPE_USER_PROFILE, fileTypeId: data.userSeq, fileSeqList: [watch().fileSeq] });
           }
+          console.log('handler', watch(), fileName);
           await fileHandler(watch().files, data.userSeq);
         }
       } catch (e: any) {

@@ -78,20 +78,35 @@ export function StudentList({ registerType, setRegisterType }: Props) {
 
   return (
     <StudentListWrap>
+      <Box borderBottom="3px solid #000" mb={4}>
+        <Typography variant="h5" fontWeight="bold" display="flex" alignItems="center">
+          <span>신청구분</span>
+        </Typography>
+      </Box>
       <ReservationType>
         <Button
-          variant="outlined"
-          color={registerType === RegisterType.TYPE_INDIVIDUAL ? 'primary' : 'neutral'}
-          sx={{ color: 'black' }}
+          sx={{
+            color: registerType === RegisterType.TYPE_INDIVIDUAL ? 'white' : '#888888',
+            background: registerType === RegisterType.TYPE_INDIVIDUAL ? '#256aef' : '#f1f1f1',
+            '&.MuiButtonBase-root:hover': {
+              bgcolor: registerType === RegisterType.TYPE_INDIVIDUAL ? '#568dfa' : '#dfdfdf',
+            },
+            fontWeight: 'bold',
+          }}
           onClick={() => setRegisterType(RegisterType.TYPE_INDIVIDUAL)}
           fullWidth
         >
           개인
         </Button>
         <Button
-          variant="outlined"
-          color={registerType === RegisterType.TYPE_ORGANIZATION ? 'primary' : 'neutral'}
-          sx={{ color: 'black' }}
+          sx={{
+            color: registerType === RegisterType.TYPE_ORGANIZATION ? 'white' : '#888888',
+            background: registerType === RegisterType.TYPE_ORGANIZATION ? '#256aef' : '#f1f1f1',
+            '&.MuiButtonBase-root:hover': {
+              bgcolor: registerType === RegisterType.TYPE_ORGANIZATION ? '#568dfa' : '#dfdfdf',
+            },
+            fontWeight: 'bold',
+          }}
           onClick={() => setRegisterType(RegisterType.TYPE_ORGANIZATION)}
           fullWidth
         >

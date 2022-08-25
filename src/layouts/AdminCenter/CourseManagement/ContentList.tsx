@@ -73,25 +73,17 @@ export function ContentList() {
             <TableRow hover>
               <TableCell align="left">{data.content.seq}</TableCell>
               <TableCell align="right">
-                <Link href={`/admin-center/content/modify/${data.content.seq}`}>
-                  {data.content.contentName}
-                </Link>
+                <Link href={`/admin-center/content/modify/${data.content.seq}`}>{data.content.contentName}</Link>
               </TableCell>
               <TableCell align="right">{data.content.contentType}</TableCell>
-              <TableCell align="right">
-                {dateFormat(data.content.createdDtime, 'isoDate')}
-              </TableCell>
+              <TableCell align="right">{dateFormat(data.content.createdDtime, 'isoDate')}</TableCell>
               <TableCell align="right">{data.status}</TableCell>
             </TableRow>
           ) : null}
         </TableBody>
       </Table>
 
-      <ContentConnectModal
-        open={openModal}
-        handleClose={handleCloseModal}
-        courseSeq={Number(courseSeq)}
-      />
+      <ContentConnectModal open={openModal} handleClose={handleCloseModal} courseSeq={Number(courseSeq)} />
     </Container>
   );
 }

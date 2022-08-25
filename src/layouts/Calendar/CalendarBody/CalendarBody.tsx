@@ -15,6 +15,9 @@ import { courseClassEnrollInfo } from '@common/recoil';
 import { useRecoilState } from 'recoil';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { YN } from '@common/constant';
+import { getIsExistUser } from '@common/api/courseUser';
+import { useState } from 'react';
+import { Spinner } from '@components/ui';
 
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -63,6 +66,7 @@ export const courseSubCategory = [
 export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo, calendarRef, filter, schedule }: Props) {
   const router = useRouter();
   const isLogin = useIsLoginStatus();
+  const [loading, setLoading] = useState(false);
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
   const scheduleList = schedule?.map(item => {
     //마감여부
@@ -82,8 +86,10 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
       step: item.step, //기수
       lessonTime: item.course.lessonTime,
       mediaType: '동영상(VOD)',
-      courseCategoryType: courseCategory.filter(categoryItem => categoryItem.type === item.course.courseCategoryType)[0], //eduType
-      courseSubCategoryType: courseSubCategory.filter(sub => sub.type === item.course.courseSubCategoryType)[0], //업종
+      // courseCategoryType: courseCategory.filter(categoryItem => categoryItem.type === item.course.courseCategoryType)[0], //eduType
+      // courseSubCategoryType: courseSubCategory.filter(sub => sub.type === item.course.courseSubCategoryType)[0], //업종
+      courseCategoryType: courseCategoryType.TYPE_SUP_COMMON, //보수일반 고정
+      courseSubCategoryType: courseSubCategoryType.BUS, //업종 버스고정
       eduTypeAndTime: item.course.lessonTime, // eduTime
       currentJoin: item.enrolledPeopleCnt, //현재 수강
       limit: item.limitPeople, //수강 제한
@@ -152,7 +158,7 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
           <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', gap: '1rem', paddingBottom: '2rem' }}>
             <JoinButton
               variant="contained"
-              onClick={() => {
+              onClick={async () => {
                 setEnrollInfo({
                   // courseCategoryType: modalInfo ? modalInfo.courseCategoryType.type : courseCategoryType.TYPE_NONE,
                   // courseBusinessType: FilterType.TYPE_PASSENGER, //서버에서 받아야함
@@ -162,10 +168,25 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
                   window.alert('로그인이 필요한 서비스입니다.');
                   return router.push('/sign-in');
                 }
+
+                try {
+                  setLoading(true);
+                  const { data } = await getIsExistUser(modalInfo.seq);
+                  if (!data) {
+                    window.alert('중복신청입니다!');
+                    return router.push(`/me/enroll-history`);
+                  }
+                  setLoading(false);
+                } catch (e: any) {
+                  console.log(e);
+                  setLoading(false);
+                }
                 router.push('/stebMove/steb2');
+                setLoading(false);
               }}
+              disabled={loading}
             >
-              교육신청
+              {loading ? <Spinner fit={true} /> : '교육신청'}
             </JoinButton>
             <CloseButton variant="contained" onClick={() => setOpenModal(false)}>
               닫기
@@ -192,19 +213,23 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
                   <TableRightCell>{modalInfo.step}</TableRightCell>
                 </TableRow>
                 <TableRow>
-                  <TableLeftCell>교육과정</TableLeftCell>
-                  <TableRightCell>{modalInfo.courseCategoryType ? modalInfo.courseCategoryType.ko : '오류'}</TableRightCell>
-                </TableRow>
-                <TableRow>
-                  <TableLeftCell>운수구분</TableLeftCell>
+                  <TableLeftCell>온라인 교육</TableLeftCell>
                   <TableRightCell>
-                    {courseBusinessTypeList.filter(item => item.enType === modalInfo.courseBusinessType)[0]?.type}
+                    {/* {modalInfo.courseCategoryType ? modalInfo.courseCategoryType.ko : '오류'} */}
+                    보수일반교육
                   </TableRightCell>
                 </TableRow>
                 <TableRow>
+                  <TableLeftCell>교육구분</TableLeftCell>
+                  <TableRightCell>
+                    {/* {courseBusinessTypeList.filter(item => item.enType === modalInfo.courseBusinessType)[0]?.type} */}
+                    여객 / 화물
+                  </TableRightCell>
+                </TableRow>
+                {/* <TableRow>
                   <TableLeftCell>업종구분</TableLeftCell>
                   <TableRightCell>{modalInfo.courseSubCategoryType ? modalInfo.courseSubCategoryType.ko : '오류'}</TableRightCell>
-                </TableRow>
+                </TableRow> */}
                 <TableRow>
                   <TableLeftCell>교육일</TableLeftCell>
                   <TableRightCell>
@@ -250,13 +275,12 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
         >
           [{title}]&nbsp;
         </Box>
-        <Box>
-          {extendedProps.step}기 {extendedProps.courseCategoryType.ko}교육
-        </Box>
+        <Box>{/* {extendedProps.step}기 {extendedProps.courseCategoryType.ko}교육 */}보수일반교육</Box>
       </Box>
       <Box>
-        {courseBusinessTypeList.filter(item => item.enType === extendedProps.course.courseBusinessType)[0]?.type} /{' '}
-        {extendedProps.courseSubCategoryType.ko}
+        {/* {courseBusinessTypeList.filter(item => item.enType === extendedProps.course.courseBusinessType)[0]?.type} /{' '}
+        {extendedProps.courseSubCategoryType.ko} */}
+        여객 / 화물
       </Box>
       <Box>{extendedProps.limitPeople === 0 ? '제한없음' : `${extendedProps.enrolledPeopleCnt} / ${extendedProps.limitPeople}`}</Box>
       {/* <Typography color="black">

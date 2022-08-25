@@ -1,0 +1,1 @@
+export { CarNumberBox } from './StudentInfo';

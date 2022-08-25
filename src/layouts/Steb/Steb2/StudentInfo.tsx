@@ -22,6 +22,7 @@ import { RegisterType, UserTransSaveInputDataType } from '@common/api/courseClas
 import { YN } from '@common/constant';
 import { useMyUser, UserRole } from '@common/api/user';
 import { Phone3Regex, Phone4Regex } from '@utils/inputRegexes';
+import { CarNumberBox } from '@components/ui/Step';
 
 interface Props {
   register: UseFormRegister<UserTransSaveInputDataType>;
@@ -29,15 +30,16 @@ interface Props {
   registerType: RegisterType;
   setRegisterType: React.Dispatch<React.SetStateAction<RegisterType>>;
   watch: UseFormWatch<UserTransSaveInputDataType>;
+  hideCarNumber: boolean;
 }
 
-export function StudentInfo({ register, setValue, registerType, setRegisterType, watch }: Props) {
+export function StudentInfo({ register, setValue, registerType, setRegisterType, watch, hideCarNumber }: Props) {
   const [name, setName] = useState<string>(); //이름
   const [firstIdentityNumber, setFirstIdentityNumber] = useState<string>(); //주민앞
   const [secondIdentityNumber, setSecondidentityNumber] = useState<string>(); //주민뒷
   const [carNumber, setCarNumber] = useState<string | null>(null); //차량번호
   const [carRegisteredRegion, setCarRegisteredRegion] = useState<string | null>(null); //차량등록지
-  const [smsYn, setSmsYn] = useState(false);
+  const [smsYn, setSmsYn] = useState(true);
   const { user, error } = useMyUser();
 
   useEffect(() => {
@@ -69,6 +71,7 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType,
       }
     }
   }, [user, registerType]);
+  console.log('젭ㅂㅇ알', watch().carNumber);
 
   return (
     <StudentInfoWrap>
@@ -114,12 +117,15 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType,
               />
             </TableRightCell>
           </TableCustomRow>
-          <TableCustomRow>
-            <TableLeftCell>차량 번호</TableLeftCell>
-            <TableRightCell>
-              <TextField {...register('carNumber')} fullWidth />
-            </TableRightCell>
-          </TableCustomRow>
+          {hideCarNumber === false && (
+            <TableCustomRow>
+              <TableLeftCell>차량 번호</TableLeftCell>
+              <TableRightCell>
+                <CarNumberBox parantSetValue={setValue} />
+                {/* <TextField {...register('carNumber')} fullWidth /> */}
+              </TableRightCell>
+            </TableCustomRow>
+          )}
           <TableCustomRow>
             <TableLeftCell>차량 등록지</TableLeftCell>
             <TableRightCell>

@@ -2192,14 +2192,38 @@ export interface CourseUserTransDetailsResponseDto {
     | "TYPE_HANDICAPPED"
     | "TYPE_DANGEROUS";
 
+  /**
+   * 과정 클래스 시퀀스
+   * @format int64
+   */
+  courseClassSeq?: number;
+
+  /**
+   * 과정 타입
+   *  * TYPE_TRANS_WORKER: 운수종사자
+   *  * TYPE_LOW_FLOOR_BUS: 저상버스
+   *  * TYPE_PROVINCIAL: 도민교통
+   */
+  courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
+
   /** 교육신청자 정보 - 주민등록번호 */
   identityNumber?: string;
+
+  /** 교육 시간 */
+  learningTime?: string;
 
   /** 교육신청자 정보 - 이름 */
   name?: string;
 
   /** 교육신청자 정보 - 휴대전화 */
   phone?: string;
+
+  /**
+   * 교육 신청일자
+   * @format date-time
+   * @example 2022-08-16
+   */
+  regDate?: string;
 
   /**
    * 업체정보 - 예약구분
@@ -2364,6 +2388,9 @@ export interface CourseUserTransResponseDto {
    * @format int64
    */
   seq?: number;
+
+  /** 과정 썸네일 이미지 S3 경로 */
+  thumbnailPath?: string;
 }
 
 export interface CourseUserTransSaveRequestDto {
@@ -2552,6 +2579,13 @@ export interface CourseUserTransUpdateRequestDto {
     | "GYEONGNAM"
     | "JEJU";
 
+  /**
+   * 변경할 기수에 대한 과정 클래스 시퀀스
+   * @format int64
+   * @example 1
+   */
+  courseClassSeq?: number;
+
   /** 휴대전화 */
   phone?: string;
 }
@@ -2680,12 +2714,6 @@ export interface ExamDetailResponseDto {
 }
 
 export interface ExamExamSubjectiveResultUpdateRequestDto {
-  /**
-   * 선택 답안
-   * @format int32
-   */
-  choice?: number;
-
   /** 평가 의견 */
   feedback?: string;
 
@@ -3402,8 +3430,7 @@ export interface ExamSaveRequestDto {
 }
 
 export interface ExamSubjectiveResult {
-  /** @format int32 */
-  choice?: number;
+  choice?: string;
   courseUser?: CourseUser;
 
   /** @format date-time */
@@ -3426,11 +3453,8 @@ export interface ExamSubjectiveResult {
 }
 
 export interface ExamSubjectiveResultRequestSaveDto {
-  /**
-   * 선택 답안
-   * @format int32
-   */
-  choice?: number;
+  /** 선택 답안 */
+  choice?: string;
 
   /**
    * 유저-과정 시퀀스
@@ -3458,11 +3482,8 @@ export interface ExamSubjectiveResultRequestSaveDto {
 }
 
 export interface ExamSubjectiveResultResponseDto {
-  /**
-   * 선택 답안
-   * @format int32
-   */
-  choice?: number;
+  /** 선택 답안 */
+  choice?: string;
 
   /**
    * 유저-과정 시퀀스
@@ -6824,6 +6845,40 @@ export interface UserInfoUpdateRequestDto {
   smsYn?: string;
 }
 
+export interface UserLearningLogCourseClassDto {
+  /**
+   * 학습기간 및 과정명, 기수
+   * @example [2022.08.23 ~ 2022.08.29] 예제 과정명 / 1기
+   */
+  courseClassElemName?: string;
+
+  /**
+   * 과정 클래스 시퀀스
+   * @format int64
+   */
+  courseClassSeq?: number;
+}
+
+export interface UserLearningLogResponseDto {
+  /** 차시명 */
+  chapterName?: string;
+
+  /** 과정명 */
+  courseName?: string;
+
+  /**
+   * 과정 로그 시퀀스
+   * @format int64
+   */
+  courseUserLogSeq?: number;
+
+  /** 등록일시 */
+  regDate?: string;
+
+  /** 유저 에이전트 */
+  userAgent?: string;
+}
+
 export interface UserLoginHistoryResponseDto {
   /** @format date-time */
   createdDtime?: string;
@@ -6861,10 +6916,11 @@ export interface UserModifyResponseDto {
 
 export interface UserMyinfoCertificatesConfirmResponseDto {
   certImagePath?: string;
-  message?: string;
 
   /** @format int64 */
-  seq?: number;
+  courseUserSeq?: number;
+  fileName?: string;
+  message?: string;
 }
 
 export interface UserMyinfoCertificatesResponseDto {
@@ -7609,6 +7665,54 @@ export interface PageCourseResponseDto {
   totalPages?: number;
 }
 
+export interface PageUserLearningLogResponseDto {
+  content?: UserLearningLogResponseDto[];
+  empty?: boolean;
+  first?: boolean;
+  last?: boolean;
+
+  /** @format int32 */
+  number?: number;
+
+  /** @format int32 */
+  numberOfElements?: number;
+  pageable?: Pageable;
+
+  /** @format int32 */
+  size?: number;
+  sort?: Sort;
+
+  /** @format int64 */
+  totalElements?: number;
+
+  /** @format int32 */
+  totalPages?: number;
+}
+
+export interface PageUserLoginHistoryResponseDto {
+  content?: UserLoginHistoryResponseDto[];
+  empty?: boolean;
+  first?: boolean;
+  last?: boolean;
+
+  /** @format int32 */
+  number?: number;
+
+  /** @format int32 */
+  numberOfElements?: number;
+  pageable?: Pageable;
+
+  /** @format int32 */
+  size?: number;
+  sort?: Sort;
+
+  /** @format int64 */
+  totalElements?: number;
+
+  /** @format int32 */
+  totalPages?: number;
+}
+
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, ResponseType } from "axios";
 
 export type QueryParamsType = Record<string | number, any>;
@@ -7809,7 +7913,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags [관리자] 유저 수강 정보 API
      * @name AdmCancelAllProgressesUsingPut
-     * @summary [관리자] 전체 차시 미이수 처리 API
+     * @summary [관리자] 전체 차시 미이수 처리 API - JWT
      * @request PUT:/adm/course-info/progress/{courseUserSeq}/all-cancel
      */,
     admCancelAllProgressesUsingPut: (courseUserSeq: number, params: RequestParams = {}) =>
@@ -7824,7 +7928,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags [관리자] 유저 수강 정보 API
      * @name AdmCompleteAllProgressesUsingPut
-     * @summary [관리자] 전체 차시 이수 처리 API
+     * @summary [관리자] 전체 차시 이수 처리 API - JWT
      * @request PUT:/adm/course-info/progress/{courseUserSeq}/all-complete
      */,
     admCompleteAllProgressesUsingPut: (courseUserSeq: number, params: RequestParams = {}) =>
@@ -7839,7 +7943,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags [관리자] 유저 수강 정보 API
      * @name AdmCancelProgressUsingPut
-     * @summary [관리자] 특정 차시 미이수 처리 API
+     * @summary [관리자] 특정 차시 미이수 처리 API - JWT
      * @request PUT:/adm/course-info/progress/{courseUserSeq}/{courseProgressSeq}/cancel
      */,
     admCancelProgressUsingPut: (courseProgressSeq: number, courseUserSeq: number, params: RequestParams = {}) =>
@@ -7854,7 +7958,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags [관리자] 유저 수강 정보 API
      * @name AdmCompleteProgressUsingPut
-     * @summary [관리자] 특정 차시 이수 처리 API
+     * @summary [관리자] 특정 차시 이수 처리 API - JWT
      * @request PUT:/adm/course-info/progress/{courseUserSeq}/{courseProgressSeq}/complete
      */,
     admCompleteProgressUsingPut: (courseProgressSeq: number, courseUserSeq: number, params: RequestParams = {}) =>
@@ -7875,6 +7979,64 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     admFindAllCourseInfoUsingGet: (userSeq: number, params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<UserCourseInfoResponseDto>, void>({
         path: `/adm/course-info/${userSeq}`,
+        method: "GET",
+        ...params,
+      })
+    /**
+     * @description 관리자페이지 내 학습로그의 접속이력에서 특정 사용자에 대한 접속 이력을 전체 조회한다. userSeq 를 Path Variable 로 전달받으며, 필터링(날짜 및 날짜 기준 오름차/내림차순)에 필요한 데이터를 RequestParam 으로 전달받는다.
+     *
+     * @tags [관리자] 학습 로그 정보 API
+     * @name AdmFindAllHistoryLogsUsingGet
+     * @summary [관리자] 접속이력 전체 조회 API - JWT, Page
+     * @request GET:/adm/learning-log/history/{userSeq}
+     */,
+    admFindAllHistoryLogsUsingGet: (
+      userSeq: number,
+      query: {
+        elementCnt?: number;
+        filterEndDate?: string;
+        filterStartDate?: string;
+        orderDate?: "TYPE_ASC" | "TYPE_DESC";
+        page: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<PageUserLoginHistoryResponseDto>, void>({
+        path: `/adm/learning-log/history/${userSeq}`,
+        method: "GET",
+        query: query,
+        ...params,
+      })
+    /**
+     * @description 관리자페이지에서 학습로그 내 과정학습란에서 특정 유저에 대한 전체 과정학습로그를 조회한다. Query String 으로 과정 클래스 시퀀스를 보내면 해당하는 데이터만 필터링하여 조회할 수 있다. null 일 경우 전체조회한다.
+     *
+     * @tags [관리자] 학습 로그 정보 API
+     * @name AdmFindAllLearningLogsUsingGet
+     * @summary [관리자] 유저 과정학습 로그 전체조회 - JWT, Page
+     * @request GET:/adm/learning-log/learning/{userSeq}
+     */,
+    admFindAllLearningLogsUsingGet: (
+      userSeq: number,
+      query: { courseClassSeq?: number; elementCnt?: number; page: number },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<PageUserLearningLogResponseDto>, any>({
+        path: `/adm/learning-log/learning/${userSeq}`,
+        method: "GET",
+        query: query,
+        ...params,
+      })
+    /**
+     * @description 관리자 페이지의 학습 로그 내 과정 학습 란에서 userSeq 를 Path Variable 로 전달받아 해당 유저가 수강 중인 과정 클래스에 대한 시퀀스와 이름을 반환한다. 반환되는 과정명은 "[학습기간] 과정명 / 기수" 형태이다.
+     *
+     * @tags [관리자] 학습 로그 정보 API
+     * @name AdmFindAllLearningClassesOfUserUsingGet
+     * @summary [관리자 - 과정학습란] 유저가 수강 중인 과정 클래스 전체 조회 - JWT
+     * @request GET:/adm/learning-log/learning/{userSeq}/courses
+     */,
+    admFindAllLearningClassesOfUserUsingGet: (userSeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<UserLearningLogCourseClassDto[]>, void>({
+        path: `/adm/learning-log/learning/${userSeq}/courses`,
         method: "GET",
         ...params,
       }),
@@ -8728,11 +8890,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/course-user/exists/{courseClassSeq}
      */,
     existsCourseUserUsingGet: (courseClassSeq: number, params: RequestParams = {}) =>
-      this.request<ApiResponseWrapper<InputStream>, void>({
+      this.request<ApiResponseWrapper<boolean>, void>({
         path: `/course-user/exists/${courseClassSeq}`,
         method: "GET",
         ...params,
-      }),
+      })
     /**
      * @description 클라이언트에서 개인에 대한 특정 교육 신청 건에 대한 내용을 조회한다. outYn 이 'Y' 데이터는 조회되지 않는다. 요청자의 JWT 내 유저 시퀀스와 반환될 데이터의 userSeq 가 자기 자신이 아닐 경우 예외를 호출한다.
      *
@@ -8740,7 +8902,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name FindTransCourseUserIndvUsingGet
      * @summary [App] 운수/저상 교육 신청 단건 조회 API (개인) - JWT
      * @request GET:/course-user/find/individual/{courseUserSeq}
-     */
+     */,
     findTransCourseUserIndvUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<CourseUserTransDetailsResponseDto>, void>({
         path: `/course-user/find/individual/${courseUserSeq}`,
@@ -8762,7 +8924,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 개인의 특정 교육 신청 건에 대한 정보를 수정한다. 이름과 주민번호를 제외한 모든 정보를 수정 가능하다. 수정된 개인정보/추가정보는 유저 DB 데이터에 반영된다. 개인이 신청한 courseUserSeq 의 userSeq 와 요청자의 userSeq 를 비교하여 서로 일치하지 않을 경우 예외를 발생시킨다.
+     * @description 개인의 특정 교육 신청 건에 대한 정보를 수정한다. 이름과 주민번호를 제외한 모든 정보를 수정 가능하다. 수정된 개인정보/추가정보는 유저 DB 데이터에 반영된다. 개인이 신청한 courseUserSeq 의 userSeq 와 요청자의 userSeq 를 비교하여 서로 일치하지 않을 경우 예외를 발생시킨다. 과정교육신청내용 수정 시, 기수를 변경할 수 있다. 현재 신청가능한 기수 정보는 "/course-class/step" 엔드포인트를 통해 조회 가능하다. 만일, 수강신청가능기간에 해당되지 않거나, 수강인원이 초과한 경우 예외를 발생시킨다.
      *
      * @tags [App & 관리자] 과정 교육 신청 API
      * @name ModifyTransCourseUserIndvUsingPut
@@ -10984,7 +11146,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: userFIndPasswordRequestDto,
         type: ContentType.Json,
         ...params,
-      }),
+      })
     /**
      * @description Access Token 을 헤더로 전달받아 해당 유저의 로그인 히스토리를 등록한다.
      *
@@ -10992,7 +11154,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name CreateLoginHistoryUsingPost
      * @summary [App] 유저 로그인 히스토리 등록 API - JWT 사용
      * @request POST:/user/login-history
-     */
+     */,
     createLoginHistoryUsingPost: (params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<UserLoginHistoryResponseDto>, any>({
         path: `/user/login-history`,

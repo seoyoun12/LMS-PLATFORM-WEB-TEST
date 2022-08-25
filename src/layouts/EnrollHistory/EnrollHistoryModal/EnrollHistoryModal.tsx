@@ -152,8 +152,8 @@ export function EnrollHistoryModal({
         }
         snackbar({ variant: 'success', message: '성공적으로 수정완료 했습니다.' });
         handleClose();
-        setLoading(false);
       }
+      setLoading(false);
     } catch (e: any) {
       setLoading(false);
       snackbar({ variant: 'error', message: e.data.message });
@@ -190,21 +190,25 @@ export function EnrollHistoryModal({
       title={courseTitle}
       maxWidth="lg"
       action={
-        <Box width="100%" display="flex" justifyContent="center" gap={2}>
+        <Box width="100%" display="flex" justifyContent="flex-end" gap={2}>
           {loading ? (
             <Spinner fit={true} />
           ) : (
             <>
               <Button
                 variant="contained"
-                color="warning"
-                sx={{ width: '100px' }}
+                // color="warning"
+                sx={{
+                  width: '100px',
+                  background: 'red',
+                  '&:hover': { background: '#cc0000' },
+                }}
                 onClick={onClickDelete}
               >
                 신청 취소
               </Button>
               <Button variant="contained" sx={{ width: '100px' }} onClick={onSubmit}>
-                수정
+                기수 변경
               </Button>
             </>
           )}
@@ -216,37 +220,59 @@ export function EnrollHistoryModal({
           <TableBody sx={{ display: 'table', width: '100%' }}>
             <TableRow>
               <TableParantLeftCell sx={{ width: '50%' }}>
-                <TableLeftCell>NO</TableLeftCell>
-                <TableRightCell>{watch().seq}</TableRightCell>
+                <TableLeftCell className="left-cell-border">NO</TableLeftCell>
+                <TableRightCell className="right-cell">{watch().seq}</TableRightCell>
               </TableParantLeftCell>
               <TableParantRightCell sx={{ width: '50%' }}>
-                <TableLeftCell>예약자</TableLeftCell>
-                <TableRightCell>{watch().name}</TableRightCell>
+                <TableLeftCell className="left-cell-border">예약자</TableLeftCell>
+                <TableRightCell className="right-cell">{watch().name}</TableRightCell>
               </TableParantRightCell>
             </TableRow>
             <TableRow>
-              <TableLeftCell>주민등록번호</TableLeftCell>
-              <TableRightCell>
-                {watch().identityNumber?.substring(0, 6)} -{' '}
-                {watch().identityNumber?.substring(6, 13)}
-              </TableRightCell>
-            </TableRow>
-            <TableRow>
-              <TableLeftCell>예약신청일</TableLeftCell>
-              <TableRightCell>{watch().regDate}</TableRightCell>
-            </TableRow>
-            <TableRow>
-              <TableLeftCell>교육일</TableLeftCell>
-              <TableRightCell>{watch().studyDate}</TableRightCell>
+              <TableParantLeftCell>
+                <TableLeftCell className="left-cell-border">주민등록번호</TableLeftCell>
+                <TableRightCell className="right-cell">
+                  {watch().identityNumber?.substring(0, 6)} -{' '}
+                  {watch().identityNumber?.substring(6, 13)}
+                </TableRightCell>
+              </TableParantLeftCell>
+              <TableParantRightCell sx={{ opacity: 0 }}>
+                <TableLeftCell></TableLeftCell>
+                <TableRightCell></TableRightCell>
+              </TableParantRightCell>
             </TableRow>
             <TableRow>
               <TableParantLeftCell>
-                <TableLeftCell>교육시간</TableLeftCell>
-                <TableRightCell>{watch().learningTime}</TableRightCell>
+                <TableLeftCell className="left-cell-border">예약신청일</TableLeftCell>
+                <TableRightCell className="right-cell">{watch().regDate}</TableRightCell>
+              </TableParantLeftCell>
+              <TableParantRightCell sx={{ opacity: 0 }}>
+                <TableLeftCell></TableLeftCell>
+                <TableRightCell></TableRightCell>
+              </TableParantRightCell>
+            </TableRow>
+            <TableRow>
+              <TableParantLeftCell>
+                <TableLeftCell className="left-cell-border">교육일</TableLeftCell>
+                <TableRightCell className="right-cell">
+                  {watch().studyDate}
+                </TableRightCell>
+              </TableParantLeftCell>
+              <TableParantRightCell sx={{ opacity: 0 }}>
+                <TableLeftCell></TableLeftCell>
+                <TableRightCell></TableRightCell>
+              </TableParantRightCell>
+            </TableRow>
+            <TableRow>
+              <TableParantLeftCell>
+                <TableLeftCell className="left-cell-border">교육시간</TableLeftCell>
+                <TableRightCell className="right-cell">
+                  {watch().learningTime}
+                </TableRightCell>
               </TableParantLeftCell>
               <TableParantRightCell>
-                <TableLeftCell>교육장</TableLeftCell>
-                <TableRightCell>동영상(VOD)</TableRightCell>
+                <TableLeftCell className="left-cell-border">교육장</TableLeftCell>
+                <TableRightCell className="right-cell">동영상(VOD)</TableRightCell>
               </TableParantRightCell>
             </TableRow>
             {/* <TableRow>
@@ -263,20 +289,26 @@ export function EnrollHistoryModal({
             </TableRow> */}
             <TableRow>
               <TableParantLeftCell>
-                <TableLeftCell>교육구분</TableLeftCell>
-                <TableRightCell>여객 / 화물</TableRightCell>
+                <TableLeftCell className="left-cell-border">교육구분</TableLeftCell>
+                <TableRightCell className="right-cell">여객 / 화물</TableRightCell>
               </TableParantLeftCell>
               <TableParantLeftCell>
-                <TableLeftCell>온라인과정</TableLeftCell>
-                <TableRightCell>보수일반</TableRightCell>
+                <TableLeftCell className="left-cell-border">온라인과정</TableLeftCell>
+                <TableRightCell className="right-cell">보수일반</TableRightCell>
               </TableParantLeftCell>
             </TableRow>
             <TableRow>
-              <TableLeftCell>기수 / 교육일자</TableLeftCell>
-              <TableRightCell>
+              <TableLeftCell
+                className="left-cell-border"
+                sx={{
+                  width: '20% !important ',
+                }}
+              >
+                기수 / 교육일자
+              </TableLeftCell>
+              <TableRightCell className="right-cell " sx={{ width: '80% !important' }}>
                 <FormControl fullWidth>
                   <Select
-                    labelId="student"
                     id="student"
                     value={stepSeq}
                     onChange={e => {
@@ -285,7 +317,6 @@ export function EnrollHistoryModal({
                       // setValue('courseClassSeq', Number(e.target.value));
                       // setEnrollInfo({ seq: Number(e.target.value) });
                     }}
-                    label="student"
                   >
                     {stepsRes.map(item => {
                       return (
@@ -312,9 +343,19 @@ export function EnrollHistoryModal({
 const TableRow = styled(MuiTableRow)`
   display: flex;
   width: 100%;
+  margin-bottom: 4px;
   td {
-    border-bottom: 0;
     padding: 0;
+    border: 0;
+  }
+  .left-cell-border {
+    border: 1px solid rgb(52, 152, 219) !important;
+    border-radius: 4px;
+    padding: 6px 4px;
+  }
+  .right-cell {
+    padding-left: 18px !important;
+    padding: 6px 4px;
   }
 `;
 
@@ -328,16 +369,18 @@ const TableParantRightCell = styled(TableCell)`
 `;
 
 const TableLeftCell = styled(TableCell)`
-  width: 25%;
+  width: 40%;
   padding: 16px 0;
   font-weight: bold;
-  font-size: 18px;
-  border: 1px solid rgb(52, 152, 219);
+  font-size: 16px;
   background: rgba(52, 152, 219, 0.1);
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 const TableRightCell = styled(TableCell)`
-  width: 75%;
+  width: 60%;
   padding: 16px 0;
   font-size: 18px;
+  overflow-x: auto;
 `;

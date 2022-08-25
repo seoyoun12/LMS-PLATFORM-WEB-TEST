@@ -30,7 +30,7 @@ export function ContentList() {
   const [openModal, setOpenModal] = useState(false);
   const { courseSeq } = router.query;
   // const { course, courseError, mutate } = useCourse(Number(courseSeq));
-  const { courseData: data, error, mutate } = courseDetail(Number(courseSeq));
+  const { data, error, mutate } = courseDetail(Number(courseSeq));
 
   // console.log(' course : ', course);
   // console.log(' data : ', data);
@@ -73,25 +73,17 @@ export function ContentList() {
             <TableRow hover>
               <TableCell align="left">{data.content.seq}</TableCell>
               <TableCell align="right">
-                <Link href={`/admin-center/content/modify/${data.content.seq}`}>
-                  {data.content.contentName}
-                </Link>
+                <Link href={`/admin-center/content/modify/${data.content.seq}`}>{data.content.contentName}</Link>
               </TableCell>
               <TableCell align="right">{data.content.contentType}</TableCell>
-              <TableCell align="right">
-                {dateFormat(data.content.createdDtime, 'isoDate')}
-              </TableCell>
+              <TableCell align="right">{dateFormat(data.content.createdDtime, 'isoDate')}</TableCell>
               <TableCell align="right">{data.status}</TableCell>
             </TableRow>
           ) : null}
         </TableBody>
       </Table>
 
-      <ContentConnectModal
-        open={openModal}
-        handleClose={handleCloseModal}
-        courseSeq={Number(courseSeq)}
-      />
+      <ContentConnectModal open={openModal} handleClose={handleCloseModal} courseSeq={Number(courseSeq)} />
     </Container>
   );
 }

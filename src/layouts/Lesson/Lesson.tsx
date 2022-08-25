@@ -2,18 +2,17 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Box, Container, Typography } from "@mui/material";
 import { Spinner } from "@components/ui";
-import { LessonSidebar } from "./LessonSidebar";
-import { LessonContent } from "./LessonContent";
-import { noticeConfig } from "./Lesson.types";
 import type { CourseDetailClientResponseDto, CourseModuleFindResponseDto } from "@common/api/Api";
 import ApiClient from "@common/api/ApiClient";
+import LessonSidebar from "./LessonSidebar";
+import LessonContent from "./LessonContent";
 
 export interface Props {
   courseUserSeq: number;
   lessonSeq: number;
 }
 
-export function Lesson(props: Props) {
+export default function Lesson(props: Props) {
 
   // 스테이트.
 
@@ -37,12 +36,12 @@ export function Lesson(props: Props) {
       .findCourseUsingGet(courseUserSeq)
       .then((res) => {
 
-        const data = (res.data as any).data;
+        const data = res.data.data;
         setCourse(data);
 
         ApiClient.courseModule
           .clientFindAllCourseModulesUsingGet({ courseSeq: data.seq })
-          .then((res) =>  setModules((res.data as any).data))
+          .then((res) =>  setModules(res.data.data))
           .catch(() => setModules(null))
           .finally(() => setLoading(false));
 
@@ -85,7 +84,6 @@ export function Lesson(props: Props) {
         courseUserSeq={course.courseUserSeq}
         courseProgress={courseProgress}
         lesson={lesson}
-        notice={noticeConfig}
       />
       <LessonSidebar
         courseUserSeq={course.courseUserSeq}

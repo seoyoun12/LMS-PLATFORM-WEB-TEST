@@ -47,7 +47,7 @@ export function Me() {
           <SideBarTitle variant="h6">내 정보</SideBarTitle>
           <SideBarContent>
             {myInfoList.map(item => (
-              <SideBarInfoLink color={grey[900]} href={`/me/${item.value}`}>
+              <SideBarInfoLink color={grey[900]} href={`/me${item.value}`} key={item.value}>
                 <SideBarInfoItem>
                   {item.label}
                   <ArrowForwardIcon />

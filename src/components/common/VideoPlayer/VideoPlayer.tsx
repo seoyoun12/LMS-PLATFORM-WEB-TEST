@@ -111,8 +111,7 @@ export function VideoPlayer(props: Props) {
     <>
       <Script
         src={CDN_URL}
-        strategy="lazyOnload"
-        onLoad={() => setScriptLoaded(true)}
+        onReady={() => setScriptLoaded(true)}
       />
       <Player id={initialPlayerId.current} ref={playerElement}></Player>
     </>
@@ -129,6 +128,10 @@ const Player = styled.div`
   & .webplayer-internal-core-shadow {
     width: 100% !important;
     height: auto !important;
+  }
+
+  & .ncplayer-progress {
+    display: none;
   }
 
 `;

@@ -23,6 +23,7 @@ export default function Lesson(props: LessonProps) {
 
   const [loading, setLoading] = React.useState<boolean>(true);
   const [course, setCourse] = React.useState<CourseDetailClientResponseDto | null>(null);
+  const [courseModule, setCourseModule] = React.useState<CourseModuleFindResponseDto | null>(null);
   const [courseModules, setCourseModules] = React.useState<CourseModuleFindResponseDto[] | null>(null);
   const [moduleSurvey, setModuleSurvey] = React.useState<SurveyResponseDto | null>(null);
 
@@ -45,12 +46,19 @@ export default function Lesson(props: LessonProps) {
             
             const courseModules = res.data.data;
             setCourseModules(courseModules);
+            setCourseModule(null);
 
             switch (props.contentType) {
 
               case "SURVEY": return ApiClient.survey
                 .findSurveyUsingGet(course.courseUserSeq, props.contentSeq)
-                .then((res) => setModuleSurvey(res.data.data))
+                .then((res) => {
+                  
+                  const survey = res.data.data;
+                  setModuleSurvey(survey);
+                  setCourseModule(courseModules.find((module) => module.surveySeq === props.contentSeq));
+                  
+                })
                 .catch(() => setModuleSurvey(null));
     
             }
@@ -90,35 +98,67 @@ export default function Lesson(props: LessonProps) {
         const lesson = lessonIndex >= 0 ? course.lessons[lessonIndex] : null;
         const courseProgress = lesson && course.courseProgressResponseDtoList.find((v) => v.lessonSeq === lesson.seq) || null;
 
-        if (lesson === null || courseProgress === null) {
+        if (loading) {
 
-          return (
+          Content = (
+            <LessonContentEmptyContainer>
+              <Spinner />
+            </LessonContentEmptyContainer>
+          );
+  
+        } else if (lesson === null || courseProgress === null) {
+
+          Content = (
             <CourseErrorContainer>
               <Typography>강좌 찾을 수 없습니다.</Typography>
             </CourseErrorContainer>
           );
 
-        }
+        } else {
 
-        Content = (
-          <LessonContentVideo
-            courseUserSeq={course.courseUserSeq}
-            courseProgress={courseProgress}
-            lesson={lesson}
-          />
-        );
+          Content = (
+            <LessonContentVideo
+              courseUserSeq={course.courseUserSeq}
+              courseProgress={courseProgress}
+              lesson={lesson}
+            />
+          );
+
+        }
 
         break;
 
     }
     case "SURVEY": {
 
-      Content = (
-        <LessonContentSurvey
-          courseUserSeq={course.courseUserSeq}
-          survey={moduleSurvey}
-        />
-      )
+      if (loading) {
+
+        Content = (
+          <LessonContentEmptyContainer>
+            <Spinner />
+          </LessonContentEmptyContainer>
+        );
+
+      } else if (moduleSurvey === null || courseModule === null) {
+
+        Content = (
+          <LessonContentEmptyContainer>
+            <Typography>설문을 찾을 수 없습니다.</Typography>
+          </LessonContentEmptyContainer>
+        );
+
+      } else {
+
+        Content = (
+          <LessonContentSurvey
+            courseUserSeq={course.courseUserSeq}
+            courseModule={courseModule}
+            survey={moduleSurvey}
+          />
+        );
+
+      }
+
       break;
 
     }
@@ -148,14 +188,20 @@ const CourseErrorContainer = styled(Box)`
   justify-content: center;
 `;
 
+const LessonContentEmptyContainer = styled(Box)`
+  display: flex;
+  flex-grow: 1;
+  min-height: 50vh;
+  align-items : center;
+  justify-content: center;
+`;
+
 const LessonContainer = styled(Container)`
   margin: 0 auto;
   margin-top: 2rem;
   margin-bottom: 4rem;
-  padding: 0 50px;
   display: flex;
   flex: 1 1 auto;
   position: relative;
-  /* max-width: 1920px; */
   align-items: stretch;
 `;

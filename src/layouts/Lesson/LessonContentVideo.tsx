@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Box, LinearProgress, Typography } from "@mui/material";
+import { Box, Container, LinearProgress, Typography } from "@mui/material";
 import { VideoPlayer } from "@components/common";
 import type { CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
 import ApiClient from "@common/api/ApiClient";
@@ -220,48 +220,55 @@ export default function LessonContentVideo(props: Props) {
   // 렌더링.
 
   return (
-    <LessonVideoContainer>
-      {props.lesson !== null && props.courseProgress !== null ?
-        (
-          <React.Fragment>
-            <VideoWrapper>
-              <VideoPlayer
-                playlist={props.lesson.s3Files[0]?.path}
-                initialPlayerId={PLAYER_ELEMENT_ID}
-                initialConfig={{ autostart: true }}
-                seconds={props.courseProgress.studyLastTime === props.lesson.totalTime ? props.lesson.totalTime + 1 : props.courseProgress.studyLastTime}
-                onPause={onPause}
-                onPlaying={onPlaying}
-                onSeeking={onSeeking}
-                onSeeked={onSeeked}
-                onTimeChange={onTimeChange}
-              />
-            </VideoWrapper>
-            <ContentInfoContainer>
-              <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "0.25rem" }}>
-                {props.lesson.lessonNm}
-              </Typography>
-              <ContentInfoProgressContainer>
-                <Box>
-                  <Typography variant="h6" fontWeight="bold" color="#ff5600">
-                    {Math.floor(progress * 100)}% 수강 완료
-                  </Typography>
-                </Box>
-                <Box sx={{ width: "100%", mr: 1 }}>
-                  <LinearProgress variant="determinate" value={Math.floor(progress * 100)} />
-                </Box>
-              </ContentInfoProgressContainer>
-            </ContentInfoContainer>
-          </React.Fragment>
-        ) :
-        <LessonVideoNotFount>강의가 존재하지 않습니다.</LessonVideoNotFount>
-      }
-    </LessonVideoContainer>
+    <LessonVideoWrapper>
+      <LessonVideoContainer>
+        {props.lesson !== null && props.courseProgress !== null ?
+          (
+            <React.Fragment>
+              <VideoWrapper>
+                <VideoPlayer
+                  playlist={props.lesson.s3Files[0]?.path}
+                  initialPlayerId={PLAYER_ELEMENT_ID}
+                  initialConfig={{ autostart: true }}
+                  seconds={props.courseProgress.studyLastTime === props.lesson.totalTime ? props.lesson.totalTime + 1 : props.courseProgress.studyLastTime}
+                  onPause={onPause}
+                  onPlaying={onPlaying}
+                  onSeeking={onSeeking}
+                  onSeeked={onSeeked}
+                  onTimeChange={onTimeChange}
+                />
+              </VideoWrapper>
+              <ContentInfoContainer>
+                <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "0.25rem" }}>
+                  {props.lesson.lessonNm}
+                </Typography>
+                <ContentInfoProgressContainer>
+                  <Box>
+                    <Typography variant="h6" fontWeight="bold" color="#ff5600">
+                      {Math.floor(progress * 100)}% 수강 완료
+                    </Typography>
+                  </Box>
+                  <Box sx={{ width: "100%", mr: 1 }}>
+                    <LinearProgress variant="determinate" value={Math.floor(progress * 100)} />
+                  </Box>
+                </ContentInfoProgressContainer>
+              </ContentInfoContainer>
+            </React.Fragment>
+          ) :
+          <LessonVideoNotFount>강의가 존재하지 않습니다.</LessonVideoNotFount>
+        }
+      </LessonVideoContainer>
+    </LessonVideoWrapper>
   );
 
 }
 
-const LessonVideoContainer = styled.div`
+const LessonVideoWrapper = styled.div`
+  width: 100%;
+  max-width: 1000px;
+`;
+
+const LessonVideoContainer = styled(Container)`
   flex: 1;
 `;
 

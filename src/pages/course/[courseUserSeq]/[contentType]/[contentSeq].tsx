@@ -19,7 +19,7 @@ LessonPage.Layout = Layout;
 export const getServerSideProps: GetServerSideProps<LessonProps> = async (context) => {
 
   const courseUserSeq = Number(context.params.courseUserSeq);
-  const contentType: LessonContentType = context.params.contentType.toString().toUpperCase() as any;
+  const contentType = context.params.contentType.toString().toUpperCase() as LessonContentType;
   const contentSeq = Number(context.params.contentSeq);
 
   if (Number.isNaN(courseUserSeq) || LESSON_CONTENT_TYPES.indexOf(contentType) === -1 || Number.isNaN(contentSeq)) {

@@ -69,19 +69,19 @@ export default function LessonSidebar(props: Props) {
               </LessonCheck>
             </TabItem>
           ))}
+          {props.courseModules !== null && props.courseModules.length > 0 && (
+              <LessonModuleContainer>
+                {props.courseModules.map((courseModule) => (
+                  <LessonSidebarModule
+                    key={courseModule.courseModuleSeq}
+                    courseUserSeq={props.courseUserSeq}
+                    courseModule={courseModule}
+                    onSelect={(url) => setSwitchURL(url)}
+                  />
+                ))}
+              </LessonModuleContainer>
+          )}
         </LessonItemContainer>
-        {props.courseModules !== null && props.courseModules.length > 0 && (
-          <LessonModuleContainer>
-            {props.courseModules.map((courseModule) => (
-              <LessonSidebarModule
-                key={courseModule.courseModuleSeq}
-                courseUserSeq={props.courseUserSeq}
-                courseModule={courseModule}
-                onSelect={(url) => setSwitchURL(url)}
-              />
-            ))}
-          </LessonModuleContainer>
-        )}
       </Tab>
       <Dialog
         open={switchURL !== null}
@@ -115,12 +115,11 @@ const StickySideBar = styled.aside`
   position: sticky;
   top: ${headerHeight};
   margin-left: 40px;
-  width: 520px;
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   background-color: #fff;
   z-index: 1;
-  flex-shrink: 0;
   overflow: hidden;
 `;
 

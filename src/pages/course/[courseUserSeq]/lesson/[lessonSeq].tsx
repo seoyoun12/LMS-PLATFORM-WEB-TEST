@@ -1,9 +1,9 @@
 import { Layout } from "@layouts/Layout";
 import Head from "next/head";
-import { Lesson, Props } from "@layouts/Content";
+import { Lesson, LessonProps } from "@layouts/Lesson";
 import { GetServerSideProps } from "next";
 
-export default function LessonPage(props: Props) {
+export default function LessonPage(props: LessonProps) {
   return (
     <>
       <Head>
@@ -16,7 +16,7 @@ export default function LessonPage(props: Props) {
 
 LessonPage.Layout = Layout;
 
-export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
+export const getServerSideProps: GetServerSideProps<LessonProps> = async (context) => {
 
   const courseUserSeq = Number(context.params.courseUserSeq);
   const lessonSeq = Number(context.params.lessonSeq);

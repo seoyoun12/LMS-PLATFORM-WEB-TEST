@@ -2,6 +2,7 @@ import { GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { YN } from '@common/constant';
 import { businessType, courseSubCategoryType } from './courseClass';
+import { S3Files } from 'types/file';
 
 export enum MemberType {
   TYPE_MEMBER = 'TYPE_MEMBER',
@@ -85,8 +86,8 @@ export interface MyInfoCourseRes {
   step: number; //기수
   studyEndDate: string; //교육만료일
   thumbnailImage: string; //썸네일 이미지 S3경로
-  firstLessonSeq:number;
-  recentLessonSeq:number;
+  firstLessonSeq: number;
+  recentLessonSeq: number;
 }
 
 export interface MyUser extends User {
@@ -237,6 +238,7 @@ interface modifTransWorker {
   userBusinessTypeOne: Omit<businessType, 'TYPE_ALL'>; //업종
   userBusinessTypeTwo: courseSubCategoryType; // 구분
   userRegistrationType: string; //지역
+  s3Files: S3Files;
   // userSeq: number;
 }
 
@@ -244,6 +246,6 @@ export function getTransport() {
   return GET<{ data: modifTransWorker }>(`/user/transport`);
 }
 
-export async function modifTransWorker(info: modifTransWorker) {
+export async function modifTransWorker(info: Omit<modifTransWorker, 's3Files'>) {
   return await PUT(`/user/transport`, info);
 }

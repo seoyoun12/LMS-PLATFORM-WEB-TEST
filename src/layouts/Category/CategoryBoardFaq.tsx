@@ -1,5 +1,5 @@
 import { Box, Container, Table, TableCell, TableHead, TableRow } from '@mui/material';
-import { BoardAccordion } from '@components/ui/BoardAccordion';
+import { BoardAccordion, BoardAccordionV2 } from '@components/ui/BoardAccordion';
 import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
 import styled from '@emotion/styled';
 import { NotFound } from '@components/ui/NotFound';
@@ -33,7 +33,9 @@ export function CategoryBoardFaq() {
               </TableRow>
             </TableHead>
           </Table>
-          {loadedItem &&
+          
+          <BoardAccordionV2 loadedItem={loadedItem} />
+          {/* {loadedItem &&
             loadedItem.map(content => {
               const accordionInfo = [
                 {
@@ -46,7 +48,7 @@ export function CategoryBoardFaq() {
               return (
                 <BoardAccordion key={content.seq} boardAccordionList={accordionInfo} />
               );
-            })}
+            })} */}
         </>
       ) : (
         <NotFound content="자주묻는질문이 존재하지 않습니다!" />

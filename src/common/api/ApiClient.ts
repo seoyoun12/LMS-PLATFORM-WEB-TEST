@@ -58,7 +58,7 @@ ApiClient.instance.interceptors.response.use(
             accessToken: `Bearer ${accessToken}`,
             refreshToken: refreshToken
           })
-          .then((res: AxiosResponse<{ accessToken: string }>) => localStore.setItem(ACCESS_TOKEN, res.data.accessToken))
+          .then((res) => localStore.setItem(ACCESS_TOKEN, (res.data as any).accessToken))
           .catch((e: AxiosError<unknown>) => {
 
             if (e.response?.status === STATUS_CODE.REFRESH_TOKEN_EXPIRED) {

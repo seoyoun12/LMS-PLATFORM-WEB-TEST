@@ -192,38 +192,38 @@ export function Drawer({ children }: { children: ReactNode }) {
       ],
       icon: <SourceOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
     },
-    {
-      name: '통계',
-      children: [
-        {
-          name: 'child1',
-          href: '/admin-center/statics',
-          isActive: router.pathname === '',
-        },
-        {
-          name: 'child2',
-          href: '/admin-center/statics',
-          isActive: router.pathname === '',
-        },
-      ],
-      icon: <AnalyticsOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
-    },
-    {
-      name: '설정',
-      children: [
-        {
-          name: 'child1',
-          href: '/admin-center/setting',
-          isActive: router.pathname === '',
-        },
-        {
-          name: 'child2',
-          href: '/admin-center/setting',
-          isActive: router.pathname === '',
-        },
-      ],
-      icon: <SettingsOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
-    },
+    // {
+    //   name: '통계',
+    //   children: [
+    //     {
+    //       name: 'child1',
+    //       href: '/admin-center/statics',
+    //       isActive: router.pathname === '',
+    //     },
+    //     {
+    //       name: 'child2',
+    //       href: '/admin-center/statics',
+    //       isActive: router.pathname === '',
+    //     },
+    //   ],
+    //   icon: <AnalyticsOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    // },
+    // {
+    //   name: '설정',
+    //   children: [
+    //     {
+    //       name: 'child1',
+    //       href: '/admin-center/setting',
+    //       isActive: router.pathname === '',
+    //     },
+    //     {
+    //       name: 'child2',
+    //       href: '/admin-center/setting',
+    //       isActive: router.pathname === '',
+    //     },
+    //   ],
+    //   icon: <SettingsOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    // },
   ];
 
   return (

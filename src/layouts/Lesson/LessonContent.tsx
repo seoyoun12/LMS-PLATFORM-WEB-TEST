@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import { Box, LinearProgress, Typography } from "@mui/material";
 import { VideoPlayer } from "@components/common";
 import type { CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
-import type { Notice } from "./Lesson.types";
 import ApiClient from "@common/api/ApiClient";
 
 const PLAYER_ELEMENT_ID = "lesson-player" as const;
@@ -12,10 +11,9 @@ interface Props {
   courseUserSeq: number;
   courseProgress: CourseProgressResponseDto | null;
   lesson: LessonDetailClientResponseDto | null;
-  notice: Notice[];
 }
 
-export function LessonContent(props: Props) {
+export default function LessonContent(props: Props) {
 
   // 스테이트.
 
@@ -74,17 +72,16 @@ export function LessonContent(props: Props) {
             lessonSeq: lessonSeq,
             studyTime: apiVideoSeconds.current,
           })
-          .then(() => {
-
-            return ApiClient.courseProgress
+          .then(() =>
+            ApiClient.courseProgress
               .updateCourseProgressUsingPut({
                 courseUserSeq: courseUserSeq,
                 courseProgressSeq: courseProgressSeq,
                 lessonSeq: lessonSeq,
                 studyLastTime: currentSecond,
-              });
-  
-          });
+              })
+          )
+          .then(() => ApiClient.courseProgress.updateAllCourseProgressUsingPut(courseUserSeq));
 
       }
 

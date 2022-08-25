@@ -14,4 +14,3 @@ const onLogoutSuccess = () => {
   localStore.removeItem(ACCESS_TOKEN);
   localStore.removeItem(REFRESH_TOKEN);
 };
-

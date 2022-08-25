@@ -129,6 +129,7 @@ export const userBusinessTypeTwo = [
 interface FormType {
   files: File[];
   fileSeq: number;
+  filePath: string;
   urlImage: string;
 }
 const defaultValues = {
@@ -163,6 +164,8 @@ export function TransWorker({ type, locationList }: Props) {
     (async function () {
       const { data } = await getTransport();
       console.log(data);
+      setValue('fileSeq', data.s3Files[0].seq);
+      setValue('filePath', data.s3Files[0].path);
       setVehicleNumber(data.carNumber);
       setCompany(data.company);
       setPhone(isStringInPhone(data.phone) ? data.phone.slice(0, 3) : '');
@@ -173,6 +176,10 @@ export function TransWorker({ type, locationList }: Props) {
       setOccupation2(data.userBusinessTypeTwo);
       setVehicleRegi(data.userRegistrationType);
     })();
+
+    return () => {
+      URL.revokeObjectURL(watch().urlImage);
+    };
   }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -210,9 +217,12 @@ export function TransWorker({ type, locationList }: Props) {
       };
       try {
         const { data }: { data: UserTransportUpdateResponseDto } = await modifTransWorker(postData);
-        if (watch().files.length > 0 || watch().fileSeq)
-          await deleteFile({ fileType: BbsType.TYPE_USER_PROFILE, fileTypeId: data.userSeq, fileSeqList: [watch().fileSeq] });
-        await fileHandler(watch().files, data.userSeq);
+        if (watch().files.length > 0) {
+          if (watch().fileSeq) {
+            await deleteFile({ fileType: BbsType.TYPE_USER_PROFILE, fileTypeId: data.userSeq, fileSeqList: [watch().fileSeq] });
+          }
+          await fileHandler(watch().files, data.userSeq);
+        }
       } catch (e: any) {
         window.alert(e.data.message);
       }
@@ -253,7 +263,11 @@ export function TransWorker({ type, locationList }: Props) {
           <Box sx={{ margin: 'auto' }}>
             <FileUploaderTrans register={register} regName="files" accept=".jpg, .jpge, .png" onFileChange={handleFileChange}>
               <Box sx={{ position: 'relative' }}>
-                <UserProfile src={watch().urlImage || ''} sizes="large" sx={{ marginRight: `0 !important`, position: 'relative' }} />
+                <UserProfile
+                  src={watch().urlImage || watch().filePath}
+                  sizes="large"
+                  sx={{ marginRight: `0 !important`, position: 'relative' }}
+                />
                 <Box
                   sx={{
                     color: 'black',

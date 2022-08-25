@@ -1,5 +1,5 @@
 import { Container, Box, TableCell, Table, TableHead, TableRow } from '@mui/material';
-import { BoardAccordion } from '@components/ui/BoardAccordion';
+import { BoardAccordion, BoardAccordionV2 } from '@components/ui/BoardAccordion';
 import React from 'react';
 import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
 import { Spinner } from '@components/ui';
@@ -34,7 +34,8 @@ export function CategoryBoardNotice() {
               </TableRow>
             </TableHead>
           </Table>
-          {loadedItem.map(content => {
+          <BoardAccordionV2 loadedItem={loadedItem} />
+          {/* {loadedItem.map(content => {
             const accordionInfo = [
               {
                 seq: content.seq,
@@ -43,10 +44,8 @@ export function CategoryBoardNotice() {
                 children: [{ name: content.content }],
               },
             ];
-            return (
-              <BoardAccordion key={content.seq} boardAccordionList={accordionInfo} />
-            );
-          })}
+            return <BoardAccordion key={content.seq}  boardAccordionList={accordionInfo} />;
+          })} */}
         </>
       ) : (
         <NotFound content="공지사항게시글이 존재하지 않습니다!" />

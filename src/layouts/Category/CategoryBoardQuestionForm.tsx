@@ -34,6 +34,7 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { Spinner } from '@components/ui';
+import { Phone3Regex, Phone4Regex } from '@utils/inputRegexes';
 
 const questionTypeList = [
   { type: '회원가입/로그인', enType: 'TYPE_SIGNUP_OR_SIGNIN' },
@@ -84,6 +85,8 @@ export function CategoryBoardQuestionForm({ mode = 'upload', qna, onHandleSubmit
   const [phone01, setPhone01] = useState('010');
   const [phone02, setPhone02] = useState('');
   const [phone03, setPhone03] = useState('');
+  const phone2 = useRef<string>('');
+  const phone3 = useRef<string>('');
 
   // input 숫자
 
@@ -101,11 +104,11 @@ export function CategoryBoardQuestionForm({ mode = 'upload', qna, onHandleSubmit
   const onChangePhoneNum01 = (e: any) => {
     setPhone01(e.target.value);
   };
-  const onChangePhoneNum02 = (e: any) => {
-    setPhone02(e.target.value);
+  const onChangePhoneNum02 = (value: string) => {
+    setPhone02(value);
   };
-  const onChangePhoneNum03 = (e: any) => {
-    setPhone03(e.target.value);
+  const onChangePhoneNum03 = (value: string) => {
+    setPhone03(value);
   };
 
   // select
@@ -116,7 +119,8 @@ export function CategoryBoardQuestionForm({ mode = 'upload', qna, onHandleSubmit
   };
   // console.log("타입 : ", questionType);
 
-  const [smsChecked, setSmsChecked] = useState(true);
+  const [smsChecked, setSmsChecked] = useState(false);
+  const [individualCheck, setIndividualCheck] = useState(false);
 
   const {
     register,
@@ -145,9 +149,10 @@ export function CategoryBoardQuestionForm({ mode = 'upload', qna, onHandleSubmit
     event?.preventDefault();
     const qnaInput = {
       ...qna,
-      phone: phone01 + phone02 + phone03,
+      phone: phone01 + phone2.current + phone3.current,
       type: questionType,
     };
+    if (!individualCheck) return window.alert('개인정보 수집 및 활용에 동의하셔야 합니다!');
     onHandleSubmit({ qnaInput, files, isFileDelete });
   };
 
@@ -175,15 +180,25 @@ export function CategoryBoardQuestionForm({ mode = 'upload', qna, onHandleSubmit
                   </Select>
                   -
                   <TextField
+                    value={phone02}
                     onChange={e => {
-                      if (e.target.value.length > 4) return;
-                      onChangePhoneNum02(e);
+                      phone2.current = e.target.value;
+                      if (e.target.value === '' && Phone4Regex.test(e.target.value)) return (phone2.current = e.target.value);
+                      if (Phone4Regex.test(e.target.value) || e.target.value.length > 4)
+                        return (phone2.current = e.target.value.slice(0, -1));
+                      onChangePhoneNum02(e.target.value);
                     }}
                   />
+                  -
                   <TextField
+                    value={phone03}
                     onChange={e => {
-                      if (e.target.value.length > 4) return;
-                      onChangePhoneNum03(e);
+                      phone3.current = e.target.value;
+                      console.log(e.target.value, phone3.current);
+                      if (e.target.value === '' && Phone4Regex.test(e.target.value)) return (phone3.current = e.target.value);
+                      if (Phone4Regex.test(e.target.value) || e.target.value.length > 4)
+                        return (phone3.current = e.target.value.slice(0, -1));
+                      onChangePhoneNum03(e.target.value);
                     }}
                   />
                 </Box>
@@ -195,7 +210,14 @@ export function CategoryBoardQuestionForm({ mode = 'upload', qna, onHandleSubmit
                       setSmsChecked(checked);
                     }}
                   />{' '}
-                  <Typography>알림신청</Typography>
+                  <Typography
+                    sx={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      setSmsChecked(prev => !prev);
+                    }}
+                  >
+                    알림신청
+                  </Typography>
                 </Box>
               </FormControl>
             </TableCellRight>
@@ -260,12 +282,12 @@ export function CategoryBoardQuestionForm({ mode = 'upload', qna, onHandleSubmit
       <Box display={'flex'} alignItems="center">
         <Checkbox
           required
-          checked={smsChecked}
+          checked={individualCheck}
           onChange={(e, checked) => {
-            setSmsChecked(checked);
+            setIndividualCheck(checked);
           }}
         />{' '}
-        <Box display={'flex'}>
+        <Box display={'flex'} onClick={() => setIndividualCheck(prev => !prev)} sx={{ cursor: 'pointer' }}>
           <Typography>개인정보 수집 및 활용에 동의합니다.</Typography>
           <Typography color={'#2ecc71'}>(필수)</Typography>
         </Box>

@@ -11,6 +11,7 @@ import dateFormat from 'dateformat';
 import styled from '@emotion/styled';
 import { width } from '@mui/system';
 import { format } from 'date-fns';
+import { CategoryBoard } from '@common/api/categoryBoard';
 
 interface BoardAccordionAccordionList {
   seq: number;
@@ -23,15 +24,25 @@ interface BoardAccordionAccordionList {
   }[];
 }
 
-export function BoardAccordion({ boardAccordionList }: { boardAccordionList: BoardAccordionAccordionList[] }) {
+export function BoardAccordionV2({ loadedItem }: { loadedItem: CategoryBoard[] }) {
+  const [value, setValue] = React.useState<number>(null);
+
+  const handleChange = (panel: number) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+    console.log(newExpanded, !!panel, typeof panel, value);
+    setValue(newExpanded ? panel : null);
+  };
+
   return (
     <Wrap>
       {/* {boardAccordionList.map(({ date, name, icon, children }, idx) => ( */}
-      {boardAccordionList.map(({ seq, date, name, icon, children }, index) => (
+      {loadedItem.map(({ seq, createdDtimeYmd, subject, content }, index) => (
         <MuiAccordion
-          key={name}
+          key={seq}
           disableGutters
           elevation={0}
+          expanded={value === seq}
+          onChange={handleChange(seq)}
+          // onClick={() => handleValue(seq)}
           sx={{
             '&:before': {
               display: 'none',
@@ -41,6 +52,7 @@ export function BoardAccordion({ boardAccordionList }: { boardAccordionList: Boa
           <AccordionSummary
             expandIcon={<ExpandMoreIcon sx={{ position: 'absolute', width: '100px' }} />}
             aria-controls="panel1a-content"
+            id="panel1d-header"
             sx={{
               padding: 0,
               '&:hover': {
@@ -48,16 +60,15 @@ export function BoardAccordion({ boardAccordionList }: { boardAccordionList: Boa
               },
             }}
           >
-            {icon}
             <BoardBox>
               <Typography width="10%" textAlign="center">
                 {seq}
               </Typography>
               <Typography width="70%" paddingLeft="1rem">
-                {name}
+                {subject}
               </Typography>
               <Typography width="20%" textAlign="center">
-                {date.toString()}
+                {createdDtimeYmd.toString()}
               </Typography>
             </BoardBox>
           </AccordionSummary>
@@ -65,20 +76,20 @@ export function BoardAccordion({ boardAccordionList }: { boardAccordionList: Boa
             <nav aria-label="secondary mailbox folders">
               <List disablePadding={true}>
                 {/* {children.map(({ name, isActive }, idx) => ( */}
-                {children.map(({ name, isActive }) => (
-                  <BoardContentBox
-                    key={name} // key props error
-                    sx={{
-                      display: 'flex',
-                      width: '100%',
-                      // backgroundColor: `${isActive ? grey[50] : 'inherit'}`,
-                    }}
-                  >
-                    <Box width="10%" />
-                    <BoardContent>{name}</BoardContent>
-                    <Box width="20%" />
-                  </BoardContentBox>
-                ))}
+                {/* {content.map(({ name, isActive }) => ( */}
+                <BoardContentBox
+                  // key={name} // key props error
+                  sx={{
+                    display: 'flex',
+                    width: '100%',
+                    // backgroundColor: `${isActive ? grey[50] : 'inherit'}`,
+                  }}
+                >
+                  <Box width="10%" />
+                  <BoardContent>{content}</BoardContent>
+                  <Box width="20%" />
+                </BoardContentBox>
+                {/* // ))} */}
               </List>
             </nav>
           </BoardAccordionDetails>

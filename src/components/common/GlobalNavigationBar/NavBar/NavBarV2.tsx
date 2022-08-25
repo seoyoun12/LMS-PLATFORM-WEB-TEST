@@ -12,20 +12,42 @@ const showRemoteList = [
   { href: '/category' },
 ];
 
+const IndicatorBox = ({ index, value }: { index: number; value: number }) => {
+  return (
+    <Box sx={{ opacity: index !== value && 0, height: '4px', width: '100%', background: 'rgb(52,152,219)', position: 'relative' }}>
+      <Box
+        sx={{
+          position: 'absolute',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '0px',
+          height: '0px',
+          borderTop: '16px solid rgb(52,152,219)',
+          borderLeft: '14px solid transparent',
+          borderRight: '14px solid transparent',
+        }}
+      ></Box>
+    </Box>
+  );
+};
+
 export function NavBarV2() {
   const router = useRouter();
   const [isShowRemote, setIsShowRemote] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [showIndicatorValue, setShowIndicatorValue] = useState(null);
   // const menuRef = useRef(anchorEl); // current에 안담겨
   // // let open = true;
   const open = Boolean(anchorEl); // let -> const
 
-  const handleHover = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleHover = (e: React.MouseEvent<HTMLDivElement>, showValue: number) => {
     setAnchorEl(e.currentTarget);
+    setShowIndicatorValue(showValue);
   };
   // const handleOut = (e: React.MouseEvent<HTMLDivElement>) => {
   const handleOut = () => {
     setAnchorEl(null);
+    setShowIndicatorValue(null);
   };
 
   useEffect(() => {
@@ -38,28 +60,21 @@ export function NavBarV2() {
     <ContentContainer>
       <HeaderBackground
         className={`dropdown-back  ${open ? '' : 'hidden'}`}
-        onMouseOver={handleHover}
-        onMouseOut={handleOut}
+        // onMouseOver={(e)=>handleHover(e)}
+        // onMouseOut={handleOut}
       ></HeaderBackground>
       <NavContainer>
         <HeaderTitleWrap>
-          {TransHeaderList.map(item => (
-            <HeaderItem
-              key={item.category}
-              onMouseOver={handleHover}
-              onMouseOut={handleOut}
-            >
+          {TransHeaderList.map((item, index) => (
+            <HeaderItem key={item.category} className={'dropdown-box-wrap'} onMouseOver={e => handleHover(e, index)} onMouseOut={handleOut}>
               <Link href={item.href} color={grey[900]}>
                 <Box className="header-title">{item.category}</Box>
               </Link>
+              <IndicatorBox index={index} value={showIndicatorValue} />
               <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
                 <Box className="link-wrap">
                   {item.items.map(menuItem => (
-                    <Link
-                      className="link-items"
-                      href={menuItem.href}
-                      key={menuItem.title}
-                    >
+                    <Link className="link-items" href={menuItem.href} key={menuItem.title}>
                       <MenuItem className="link-item">{menuItem.title}</MenuItem>
                     </Link>
                   ))}
@@ -114,11 +129,13 @@ const ContentContainer = styled.nav`
     background: white;
     width: 100%;
     top: 78px;
-    box-shadow: 2px 10px 12px 1px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 2px 10px 12px 1px rgba(0, 0, 0, 0.1); */
     left: 0;
-    min-height: 250px;
-    border-radius: 0 0 4px 4px;
+    min-height: 200px;
+    /* border-radius: 0 0 4px 4px; */
     transition: min-height 0.2s ease-in-out;
+    border-top: 1px solid #e1e1e1;
+    border-bottom: 1px solid rgb(52, 152, 219);
   }
   .hidden {
     /* display: none; */
@@ -136,13 +153,14 @@ const NavContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    font-weight: bold;
     height: 100%;
   }
 
   .link-wrap {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 4px;
     /* height: 200px; */
   }
   .link-items {
@@ -167,9 +185,22 @@ const NavContainer = styled.div`
     }
   }
 
+  .dropdown-box-wrap {
+    position: relative;
+
+    .dropdown-box {
+      border-left: 1px solid #e1e1e1;
+    }
+    :last-child {
+      .dropdown-box {
+        border-right: 1px solid #e1e1e1;
+      }
+    }
+  }
   .dropdown-box {
     position: relative;
-    height: 200px;
+    margin-top: 16px;
+    height: 160px;
     transition: height 0.2s ease-in-out;
     overflow: hidden;
   }

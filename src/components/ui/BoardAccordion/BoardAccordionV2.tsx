@@ -12,6 +12,8 @@ import styled from '@emotion/styled';
 import { width } from '@mui/system';
 import { format } from 'date-fns';
 import { CategoryBoard } from '@common/api/categoryBoard';
+import { downloadFile } from '@common/api/file';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 interface BoardAccordionAccordionList {
   seq: number;
@@ -27,14 +29,16 @@ interface BoardAccordionAccordionList {
 export function BoardAccordionV2({ loadedItem }: { loadedItem: CategoryBoard[] }) {
   const [value, setValue] = React.useState<number>(null);
 
-  const handleChange = (panel: number) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-    setValue(newExpanded ? panel : null);
-  };
+  const handleChange =
+    (panel: number) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setValue(newExpanded ? panel : null);
+    };
+  console.log(loadedItem.map(item => console.log(item.s3Files)));
 
   return (
     <Wrap>
       {/* {boardAccordionList.map(({ date, name, icon, children }, idx) => ( */}
-      {loadedItem.map(({ seq, createdDtimeYmd, subject, content }, index) => (
+      {loadedItem.map(({ seq, createdDtimeYmd, subject, content, s3Files }, index) => (
         <MuiAccordion
           key={seq}
           disableGutters
@@ -86,9 +90,36 @@ export function BoardAccordionV2({ loadedItem }: { loadedItem: CategoryBoard[] }
                 >
                   <Box width="10%" />
                   <BoardContent>{content}</BoardContent>
+
                   <Box width="20%" />
                 </BoardContentBox>
                 {/* // ))} */}
+                <Box sx={{ margin: '10px 120px' }}>
+                  <Box display="flex" alignItems="center" mt={4}>
+                    {' '}
+                    <FileDownloadIcon />
+                    첨부파일
+                  </Box>
+                  <Box
+                    sx={{ cursor: 'pointer' }}
+                    onClick={async () => {
+                      try {
+                        const datass = await downloadFile(s3Files[0].seq);
+
+                        const url = window.URL.createObjectURL(new Blob([datass]));
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `${s3Files[0].name}`;
+                        a.click();
+                        a.remove();
+                      } catch (e: any) {
+                        console.log(e);
+                      }
+                    }}
+                  >
+                    {s3Files[0]?.name}
+                  </Box>
+                </Box>
               </List>
             </nav>
           </BoardAccordionDetails>

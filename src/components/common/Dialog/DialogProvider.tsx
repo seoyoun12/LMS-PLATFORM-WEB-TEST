@@ -62,7 +62,7 @@ export function DialogProvider({ children }: { children: ReactNode | undefined }
           {config?.title}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id="alert-dialog-description" sx={{}}>
             {config?.description}
           </DialogContentText>
         </DialogContent>

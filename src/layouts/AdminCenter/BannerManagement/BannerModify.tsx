@@ -142,7 +142,7 @@ export function BannerModify() {
           // popperPlacement="right"
           onChange={date => setValue('endDate', date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd'))}
         />
-        <TextField placeholder="페이지 이동 url" {...register('toUrl', { required: '입력해주세요.' })} />
+        {/* <TextField placeholder="페이지 이동 url" {...register('toUrl', { required: '입력해주세요.' })} /> */}
         <FormControl className="form-control">
           <FormLabel focused={false}>상태</FormLabel>
           <Controller

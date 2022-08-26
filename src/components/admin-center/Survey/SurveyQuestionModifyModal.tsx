@@ -138,13 +138,13 @@ export function SurveyQuestionModifyModal({
                   onChange={onChangeType}
                   checked={type === QuestionType.TYPE_MULTIPLE_CHOICE}
                 />
-                <span>멀티플타입</span>
+                <span>객관식</span>
                 <Radio
                   value={QuestionType.TYPE_SUBJECTIVE}
                   onChange={onChangeType}
                   checked={type === QuestionType.TYPE_SUBJECTIVE}
                 />
-                <span>서브젝타입</span>
+                <span>주관식</span>
               </Box>
             </TableCell>
           </TableRow>

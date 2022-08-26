@@ -18,24 +18,28 @@ export function CategoryModify() {
   const categorySeq = router.query;
   const { data, error } = useCategoryBoard(Number(categorySeq.categorySeq));
 
-
   const handleSubmit = async ({
     files,
     categoryBoardInput,
+    setLoading,
   }: {
     files: File[];
     categoryBoardInput: CategoryBoardInput;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   }) => {
     try {
+      setLoading(true);
       if (data?.seq) {
         await modifyCategoryBoard({ seq: data?.seq, categoryBoardInput });
         await fileHandler(files);
         snackbar({ variant: 'success', message: '수정 되었습니다.' });
         router.push(`/admin-center/category`);
+        setLoading(false);
       }
     } catch (e: any) {
       console.error(e);
       snackbar({ variant: 'error', message: '수정에 실패했습니다.' });
+      setLoading(false);
     }
   };
 

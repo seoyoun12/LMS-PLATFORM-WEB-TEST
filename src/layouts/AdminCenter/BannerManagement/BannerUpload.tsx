@@ -145,10 +145,10 @@ export function BannerUpload() {
             )
           }
         />
-        <TextField
+        {/* <TextField
           placeholder="페이지 이동 url"
           {...register('toUrl', { required: '입력해주세요.' })}
-        />
+        /> */}
         <FormControl className="form-control">
           <FormLabel focused={false}>상태</FormLabel>
           <Controller

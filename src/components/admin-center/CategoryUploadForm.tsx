@@ -19,6 +19,7 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Typography,
 } from '@mui/material';
 import { TuiEditor } from '@components/common/TuiEditor';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -30,6 +31,7 @@ import { ProductStatus } from '@common/api/course';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import router from 'next/router';
+import { Spinner } from '@components/ui';
 
 interface Props {
   mode?: 'upload' | 'modify';
@@ -41,12 +43,14 @@ interface Props {
     files,
     categorySeq,
     courseSeq,
+    setLoading,
   }: {
     categoryBoardInput: CategoryBoardInput;
     files?: File[];
     // isFileDelete: boolean;
     categorySeq?: number;
     courseSeq?: number;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   }) => void;
 }
 
@@ -73,6 +77,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
   const [fileName, setFileName] = useState<string | null>(null);
   const dialog = useDialog();
   const snackbar = useSnackbar();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -133,7 +138,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
       content: markdownContent,
     };
     // onHandleSubmit({ categoryBoardInput, files, isFileDelete });
-    onHandleSubmit({ categoryBoardInput, files });
+    onHandleSubmit({ categoryBoardInput, files, setLoading });
   };
 
   return (
@@ -206,6 +211,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
           ref={editorRef}
         />
 
+        <FormLabel sx={{mt:2 , mb:1}} >공지여부</FormLabel>
         <div className="board-uploader">
           <FileUploader
             register={register}
@@ -277,16 +283,27 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
           />
         </FormControl>
 
-        <SubmitBtn variant="contained" type="submit">
-          {mode === 'upload' ? '업로드하기' : '수정하기'}
+        <SubmitBtn variant="contained" type="submit" disabled={loading}>
+          {loading ? (
+            <Spinner fit={true} />
+          ) : mode === 'upload' ? (
+            '업로드하기'
+          ) : (
+            '수정하기'
+          )}
         </SubmitBtn>
-        <DeleteBtn
-          color="warning"
-          variant="contained"
-          onClick={() => onClickRemoveCategory(category.seq)}
-        >
-          삭제
-        </DeleteBtn>
+        {mode === 'upload' ? (
+          ''
+        ) : (
+          <DeleteBtn
+            color="warning"
+            variant="contained"
+            onClick={() => onClickRemoveCategory(category.seq)}
+            disabled={loading}
+          >
+            {loading ? <Spinner fit={loading} /> : '삭제'}
+          </DeleteBtn>
+        )}
       </Box>
     </Container>
   );

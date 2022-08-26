@@ -1,6 +1,12 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { Button, Divider, Drawer as MuiDrawer, MenuItem, Typography } from '@mui/material';
+import {
+  Button,
+  Divider,
+  Drawer as MuiDrawer,
+  MenuItem,
+  Typography,
+} from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -48,11 +54,11 @@ export function Drawer({ children }: { children: ReactNode }) {
           href: '/admin-center/user',
           isActive: router.pathname === '/admin-center/user',
         },
-        {
-          name: '회원 생성',
-          href: '/admin-center/user/create-user',
-          isActive: router.pathname === '/admin-center/user/create-user',
-        },
+        // {
+        //   name: '회원 생성',
+        //   href: '/admin-center/user/create-user',
+        //   isActive: router.pathname === '/admin-center/user/create-user',
+        // },
       ],
       icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
     },
@@ -72,33 +78,33 @@ export function Drawer({ children }: { children: ReactNode }) {
       ],
       icon: <ListAltIcon sx={{ mr: '32px', color: grey[700] }} />,
     },
-    {
-      name: '1대1문의관리',
-      children: [
-        {
-          name: '1대1문의 목록',
-          href: '/admin-center/qna',
-          isActive: router.pathname === '/admin-center/qna',
-        },
-      ],
-      icon: <QuestionAnswerOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
-    },
-    {
-      name: '학습자료관리',
-      children: [
-        {
-          name: '학습자료 목록',
-          href: '/admin-center/learning-material',
-          isActive: router.pathname === '/admin-center/learning-material',
-        },
-        {
-          name: '학습자료 등록',
-          href: '/admin-center/learning-material/upload',
-          isActive: router.pathname === '/admin-center/learning-material/upload',
-        },
-      ],
-      icon: <ChromeReaderModeOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
-    },
+    // {
+    //   name: '1대1문의관리',
+    //   children: [
+    //     {
+    //       name: '1대1문의 목록',
+    //       href: '/admin-center/qna',
+    //       isActive: router.pathname === '/admin-center/qna',
+    //     },
+    //   ],
+    //   icon: <QuestionAnswerOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    // },
+    // {
+    //   name: '학습자료관리',
+    //   children: [
+    //     {
+    //       name: '학습자료 목록',
+    //       href: '/admin-center/learning-material',
+    //       isActive: router.pathname === '/admin-center/learning-material',
+    //     },
+    //     {
+    //       name: '학습자료 등록',
+    //       href: '/admin-center/learning-material/upload',
+    //       isActive: router.pathname === '/admin-center/learning-material/upload',
+    //     },
+    //   ],
+    //   icon: <ChromeReaderModeOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    // },
     {
       name: '과정관리',
       children: [

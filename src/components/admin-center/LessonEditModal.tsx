@@ -98,8 +98,13 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
     }
   };
 
-  const onSubmit: SubmitHandler<FormType> = async ({ files, ...lesson }) => {
+  const onSubmit: SubmitHandler<FormType> = async ({ files, ...lessonWatch }) => {
     setSubmitLoading(true);
+    const lesson = {
+      ...lessonWatch,
+      completeTime: (Number(lessonWatch.min) * 60) + Number(lessonWatch.sec),
+      totalTime: (Number(lessonWatch.min) * 60) + Number(lessonWatch.sec)
+    }
 
     try {
       await modifyLesson({ lessonSeq: lesson.seq, lesson });

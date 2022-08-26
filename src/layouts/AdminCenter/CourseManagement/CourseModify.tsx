@@ -39,25 +39,29 @@ export function CourseModify() {
   const handleSubmit = async ({
     files,
     // isFileDelete,
-    courseInput,
+    courseInput,setLoading
   }: // seq
   {
     files: File[];
     // isFileDelete: boolean;
     courseInput: CourseInput;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     // seq?: number;
   }) => {
+    setLoading(true);
     try {
       if (data?.seq) {
         await courseModify({ seq: data.seq, courseInput });
         await fileHandler(files);
         snackbar({ variant: 'success', message: '성공적으로 수정되었습니다.' });
         router.push('/admin-center/course');
+        setLoading(false);
       }
     } catch (e: any) {
       console.error(e);
       snackbar({ variant: 'error', message: '업로드에 실패했습니다.' });
       // snackbar({ variant: 'error', message: e.data.message });
+      setLoading(false);
     }
   };
 

@@ -31,8 +31,8 @@ import { ProductStatus } from '@common/api/course';
 
 const headRows = [
   { name: '글번호' }, // seq
-  { name: '유저번호' }, // userSeq
-  { name: '유저ID' }, // username
+  // { name: '유저번호' }, // userSeq
+  // { name: '유저ID' }, // username
   { name: '제목' }, // subject
   { name: '본문' }, // content
   { name: '게시판유형' }, // boardType
@@ -128,7 +128,8 @@ export function CategoryManagement() {
 
   return (
     <div>
-      <RadioGroup row>
+      <Typography fontSize={30} fontWeight='bold' >게시판구분</Typography>
+      <RadioGroup row sx={{mb:6}} >
         {tabsConfig.map(({ name, value }: { name: string; value: string }) => (
           <FormControlLabel
             key={name}
@@ -140,7 +141,7 @@ export function CategoryManagement() {
         ))}
       </RadioGroup>
 
-      <Typography variant="h5">게시판 목록</Typography>
+      {/* <Typography variant="h5">게시판 목록</Typography> */}
 
       <Table
         pagination={true}
@@ -163,15 +164,15 @@ export function CategoryManagement() {
           {data?.content.map(category => (
             <TableRow key={category.seq} hover>
               <TableCell align="center">{category.seq}</TableCell>
-              <TableCell align="center">{category.userSeq}</TableCell>
-              <TableCell align="center">{category.username}</TableCell>
+              {/* <TableCell align="center">{category.userSeq}</TableCell> */}
+              {/* <TableCell align="center">{category.username}</TableCell> */}
               <TableCell align="center">
                 <SubjectTypography>{category.subject}</SubjectTypography>
               </TableCell>
               <TableCell align="center">
-                <ContentTypography>{category.content}</ContentTypography>
+                <ContentTypography>{category.content}</ContentTypography> 
               </TableCell>
-              <TableCell align="center">{category.boardType}</TableCell>
+              <TableCell align="center">{tabsConfig.filter((item)=>item.value === category.boardType)[0]?.name} </TableCell>
               <TableCell align="center">
                 {dateFormat(category.createdDtime, 'isoDate')}
               </TableCell>

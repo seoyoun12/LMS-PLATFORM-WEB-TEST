@@ -83,6 +83,12 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
     resetField,
   } = useForm<FormType>({ defaultValues });
 
+  // Select 박스 초깃값 설정.
+  useEffect(()=>{
+    if(course?.courseType)
+    setCourseType(course.courseType)
+  },[])
+
   useEffect(() => {
     if (mode === 'modify' && !!course) {
       reset({ ...course });
@@ -106,7 +112,6 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
     setIsFileDelete(true);
   };
 
-  console.log('course 체크 : ', course);
 
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...course }, event) => {
     event?.preventDefault();
@@ -120,7 +125,6 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
       courseType,
       // content1: markdownContent,
     };
-    console.log('뭐지 잘 되는거임?', courseInput);
     setLoading(true);
     onHandleSubmit({ courseInput, files, isFileDelete, setLoading });
   };
@@ -205,6 +209,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
           </FormControl>
 
           <div className="thumbnail-uploader">
+          <FormLabel sx={{mt:1 , mb:1}} >썸네일 이미지</FormLabel>
             <FileUploader
               register={register}
               regName="files"
@@ -235,7 +240,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             비율로 올려주셔야 합니다.
           </Box>
 
-          <Box>썸네일</Box>
+          <FormLabel sx={{mt:1 , mb:1}} >미리보기</FormLabel>
           <ThumbnailImg>
             {course?.s3Files ? (
               <Image

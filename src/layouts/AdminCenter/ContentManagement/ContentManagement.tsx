@@ -120,14 +120,14 @@ export function ContentManagement() {
                     상세
                   </Button>
                 </Link>
-                <Button
+                {/* <Button
                   variant="text"
                   color="warning"
                   onClick={() => onRemoveCourse(content.seq)}
                   size="small"
                 >
                   삭제
-                </Button>
+                </Button> */}
               </TableCell>
             </TableRow>
           ))}

@@ -32,9 +32,6 @@ export function ContentList() {
   // const { course, courseError, mutate } = useCourse(Number(courseSeq));
   const { data, error, mutate } = courseDetail(Number(courseSeq));
 
-  // console.log(' course : ', course);
-  // console.log(' data : ', data);
-  // console.log(' data.content : ', data.content);
 
   const handleCloseModal = async () => {
     setOpenModal(false);

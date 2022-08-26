@@ -30,7 +30,6 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
   const { data, error, mutate } = useSingleCourseClass(Number(enrollInfo && enrollInfo.seq));
 
   useEffect(() => {
-    console.log(data);
     if (data) {
       setCourseCategoryType(data.course.courseCategoryType as courseCategoryType);
       setCourseBusinessType(data.course.courseBusinessType as businessType); //임시타입
@@ -43,7 +42,6 @@ export function EduOverview({ setValue }: { setValue: UseFormSetValue<UserTransS
     if (!courseCategoryType || !courseBusinessType) return window.alert('기수 가져오기 실패');
     const { data } = await getCourseClassStep(courseType.TYPE_PROVINCIAL, courseCategoryType, courseBusinessType);
     setStepsRes([...data]);
-    console.log(data, stepsRes);
   };
 
   useEffect(() => {

@@ -36,20 +36,25 @@ export function ContentModify() {
 
   const handleSubmit = async ({
     contentInput,
-    contentSeq,
+    setLoading,
+    contentSeq
   }: {
     contentInput: ContentInput;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
     contentSeq?: number;
   }) => {
     try {
+      setLoading(true);
       if (contentSeq) {
         await modifyContent({ contentInput, contentSeq });
         snackbar({ variant: 'success', message: '성공적으로 수정되었습니다.' });
         router.push('/admin-center/content');
-      }
+        setLoading(false);
+    }
     } catch (e: any) {
       console.error(e);
       snackbar({ variant: 'error', message: '업로드에 실패했습니다.' });
+      setLoading(false);
     }
   };
 

@@ -24,7 +24,6 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
   const [swiperPageNumber, setSwiperPageNumber] = useState(0);
   // const { data, error } = useBannerList();
   const { data } = useBannerList();
-  // console.log(data);
 
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);

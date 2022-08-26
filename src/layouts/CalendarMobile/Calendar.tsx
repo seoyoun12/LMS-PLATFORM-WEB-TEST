@@ -156,11 +156,9 @@ export function CalendarMobile() {
     mutate();
   };
 
-  console.log(date.getMonth());
 
   //Month changer
   const onChangeMonth = (type: MonthClickType, value: number) => {
-    console.log('??', value);
     if (type === MonthClickType.BTN_CLICK) {
       const dummyDate = new Date();
       dummyDate.setMonth(date.getMonth() + value);

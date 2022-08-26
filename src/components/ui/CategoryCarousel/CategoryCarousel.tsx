@@ -24,7 +24,6 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
   const [swiperPageNumber, setSwiperPageNumber] = useState(0);
   // const { data, error } = useBannerList();
   const { data } = useBannerList();
-  // console.log(data);
 
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);
@@ -42,7 +41,6 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
     //http://yoonbumtae.com/?p=4367
     // timeLineRef.current!.style.animation = 'none';
     if (!ani) return;
-    // console.log('애니 넘어감?');
     // ani.cancel();
     // ani.play();
     // const test = progressbar?.animate({ width: '100%' }, 4000);
@@ -132,7 +130,6 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
           //   disableOnInteraction: false,
           // }}
           onSlideChange={e => {
-            console.log();
             progress();
           }}
           // onRealIndexChange={progress}

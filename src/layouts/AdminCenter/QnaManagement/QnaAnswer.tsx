@@ -26,8 +26,6 @@ export function QnaAnswer() {
         fileType: BbsType.TYPE_QNA_ANSWER,
         files,
       });
-      console.log('qnaAnswer.seq : ', qnaAnswer.seq);
-      console.log('isFileUpload : ', isFileUpload);
     }
   };
 

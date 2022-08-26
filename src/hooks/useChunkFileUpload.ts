@@ -88,20 +88,16 @@ export const useFileUpload = () => {
         setSpinner(false);
       });
       r.on('fileError', function (file, message) {
-        console.log('fileError', file, message);
         setErrorMessage(
           'It appears the file was larger than 20Mb Please try a different file'
         );
       });
       r.on('error', (message: string, file: ResumableFile) => {
-        console.log('error', file, message);
       });
       r.on('cancel', () => {
-        console.log('CANCEL');
       });
       r.on('fileProgress', function (file: ResumableFile, message: string) {
         const progress = r.progress();
-        console.log(progress);
         showProgressbar(true);
         if (errorMessage == null) {
           setUploadPercentage(round((progress) * 100, 2));

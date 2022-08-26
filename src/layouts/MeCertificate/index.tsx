@@ -47,7 +47,6 @@ const MeCertificate: NextPage = () => {
         AxiosResponse<UserMyinfoCertificatesConfirmResponseDto>
       >(`/user/myinfo/certificates/confirm/${item.courseUserSeq}`);
       mutate();
-      console.log(data);
       setSelectedCertificate(data);
     } catch (e) {
       alert(e.data.message);
@@ -56,15 +55,16 @@ const MeCertificate: NextPage = () => {
   };
 
   const handleClickDownloadCertificate = async () => {
-    if (!selectedCertificate?.seq) {
+    if (!selectedCertificate?.courseUserSeq) {
       return;
     }
 
+    console.log(selectedCertificate);
+
     alert("수료 조건을 충족하여 증명서가 발급됩니다.");
-    const dateNow = new Date();
 
     const data = await POST<string>(
-      `/user/myinfo/certificates/download/${selectedCertificate.seq}`,
+      `/user/myinfo/certificates/download/${selectedCertificate.courseUserSeq}`,
       {},
       {
         responseType: "blob",
@@ -74,13 +74,13 @@ const MeCertificate: NextPage = () => {
     const url = window.URL.createObjectURL(new Blob([data]));
     const a = document.createElement("a");
     a.href = url;
-    a.download = `asd_수료확인서_${format(dateNow, "yyyyMMdd")}.pdf`;
+    a.download = `${selectedCertificate.fileName}.pdf`;
     a.click();
     a.remove();
   };
 
   const handleClickPrintCertificate = () => {
-    if (!selectedCertificate?.seq) {
+    if (!selectedCertificate?.courseUserSeq) {
       return;
     }
 

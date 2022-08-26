@@ -12,7 +12,6 @@ import { EnrollHistoryModal } from './EnrollHistoryModal/EnrollHistoryModal';
 export function EnrollHistory() {
   const router = useRouter();
   const { data, error, mutate } = useCourseUser();
-  console.log(data);
   const [open, setOpen] = useState(false);
   const [modalData, setModalData] = useState<{
     title: string;
@@ -50,7 +49,8 @@ export function EnrollHistory() {
                 >
                   <EnrollHistoryCard
                     title={item.courseTitle}
-                    content1={item.regType === RegisterType.TYPE_INDIVIDUAL ? '개인' : '단체'}
+                    image={item.thumbnailPath}
+                    content1={'자세히보기'}
                     seq={item.seq}
                     item={item}
                   />
@@ -73,7 +73,8 @@ export function EnrollHistory() {
 }
 
 const EnrollHistoryWrap = styled(Container)`
-  margin-top: 4rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 `;
 
 const MyCourseContainer = styled(Box)`

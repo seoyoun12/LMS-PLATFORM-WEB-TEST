@@ -30,7 +30,6 @@ export function Course() {
       snackbar({ variant: 'success', message: '수강 신청이 완료되었습니다.' });
     }
   };
-  console.log(course);
 
   if (courseError) return <div>NOT FOUND</div>;
   if (!course) return <Spinner />;

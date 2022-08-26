@@ -40,11 +40,6 @@ export function SignUp() {
   //   const username = data.get('username') as string;
   //   const password = data.get('password') as string;
 
-  //   console.log({
-  //     name: data.get('name'),
-  //     username: data.get('username'),
-  //     password: data.get('password'),
-  //   });
 
   //   if (!!name && !!username && !!password) {
   //     try {

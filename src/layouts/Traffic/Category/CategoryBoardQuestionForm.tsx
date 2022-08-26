@@ -97,7 +97,6 @@ export function CategoryBoardQuestionForm({
   //     const onlyNumber = value.replace(/[^0-9]/g, '')
   //     setPhoneNum(onlyNumber)
   //   // }
-  //   console.log("setPhoneNum : ", setPhoneNum);
   // }
 
   const onChangePhoneNum01 = (e: any) => {
@@ -118,7 +117,6 @@ export function CategoryBoardQuestionForm({
   const handleSelectChange = (e: any) => {
     setQuestionType(e.target.value);
   };
-  // console.log("타입 : ", questionType);
 
   const [smsChecked, setSmsChecked] = useState(true);
 

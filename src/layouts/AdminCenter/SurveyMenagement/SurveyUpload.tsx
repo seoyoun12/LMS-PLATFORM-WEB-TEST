@@ -78,7 +78,6 @@ export function SurveyUpload() {
       return window.alert('적어도 하나의 문항 , 첫번째 문항이 필요합니다!');
     } else {
       const randomSeq = Math.floor(Math.random() * 1000);
-      console.log(watch(), type, 'AddQuestion Test', randomSeq);
       setQuestions(prev => [
         ...prev,
         { ...watch(), dummySeq: randomSeq, questionType: type },
@@ -101,13 +100,11 @@ export function SurveyUpload() {
         surveyMultipleChoice: item.surveyMultipleChoice,
       };
     });
-    console.log(arr, 'arr');
     try {
       const data: SurveyRequestDto = {
         title,
         surveyQuestionList: arr,
       };
-      console.log('data: ', data);
       await uploadSurvey(data);
       snackbar({ variant: 'success', message: '업로드 완료했습니다.' });
       router.push(`/admin-center/survey`);
@@ -126,7 +123,7 @@ export function SurveyUpload() {
             fontWeight: 700,
           }}
         >
-          설문 업로드
+          설문 등록
         </Typography>
         <Box>
           <TextField
@@ -144,13 +141,13 @@ export function SurveyUpload() {
               onChange={onChangeType}
               checked={type === QuestionType.TYPE_MULTIPLE_CHOICE}
             />
-            <span>멀티플타입</span>
+            <span>객관식</span>
             <Radio
               value={QuestionType.TYPE_SUBJECTIVE}
               onChange={onChangeType}
               checked={type === QuestionType.TYPE_SUBJECTIVE}
             />
-            <span>서브젝타입</span>
+            <span>주관식</span>
           </Box>
 
           {type === QuestionType.TYPE_MULTIPLE_CHOICE && (

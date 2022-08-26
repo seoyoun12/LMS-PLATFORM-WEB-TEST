@@ -59,7 +59,6 @@ export function BannerUpload() {
     setValue,
     watch,
   } = useForm<FormType>({ defaultValues });
-  console.log(watch());
 
   const fileHandler = async (files: File[], bannerSeq: number) => {
     const isFileUpload = files.length > 0;
@@ -73,13 +72,11 @@ export function BannerUpload() {
   };
 
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...rest }, e) => {
-    console.log('onSubmit triggered', files, rest, e);
     try {
       const { data }: { data: BannerRes } = await createBannerAdm(rest);
       await fileHandler(files, data.seq);
       snackbar({ variant: 'success', message: '성공적으로 완료되었습니다.' });
       router.push(`/admin-center/banner`);
-      console.log(data);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
     }
@@ -148,10 +145,10 @@ export function BannerUpload() {
             )
           }
         />
-        <TextField
+        {/* <TextField
           placeholder="페이지 이동 url"
           {...register('toUrl', { required: '입력해주세요.' })}
-        />
+        /> */}
         <FormControl className="form-control">
           <FormLabel focused={false}>상태</FormLabel>
           <Controller

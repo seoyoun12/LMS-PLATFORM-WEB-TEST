@@ -29,7 +29,6 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
 
   useEffect(() => {
     if (user && registerType === RegisterType.TYPE_INDIVIDUAL) {
-      console.log(user);
       const first = user.identityNumber.slice(0, 6);
       const second = user.identityNumber.slice(6, 14);
       setValue('name', user.name);
@@ -50,7 +49,6 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
         window.alert('권한이 없는 유저입니다.');
         setRegisterType(RegisterType.TYPE_INDIVIDUAL);
       } else {
-        console.log('userRoles', user.roles.filter(role => role === UserRole.ROLE_TRANS_MANAGER)[0]);
       }
     }
   }, [user, registerType]);
@@ -111,7 +109,6 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
         placeholder="'-'를 제외한 숫자만 입력해주세요."
         {...register('phone', { maxLength: { value: 12, message: 'phone must be longer than 12 characters' } })}
         // onChange={e => {
-        //   console.log(e.target.value.length);
         //   if (e.target.value.length > 11) return
         //   setValue('phone', e.target.value);
         // }}

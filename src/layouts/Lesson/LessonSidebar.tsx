@@ -11,14 +11,15 @@ import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { useRouter } from "next/router";
+import { LESSON_CONTENT_TYPES } from "./Lesson";
 import LessonSidebarModule from "./LessonSidebarModule";
 
 interface Props {
   courseUserSeq: number;
   courseProgresses: CourseProgressResponseDto[];
-  lessonSeq: number;
+  courseModules: CourseModuleFindResponseDto[] | null;
+  lessonSeq: number | null;
   lessons: LessonDetailClientResponseDto[];
-  modules: CourseModuleFindResponseDto[] | null;
 }
 
 export default function LessonSidebar(props: Props) {
@@ -28,7 +29,7 @@ export default function LessonSidebar(props: Props) {
   // 스테이트.
 
   const [tabMenu, setTabMenu] = useState<TabsConfig["value"]>(tabsConfig[0].value);
-  const [switchLessonSeq, setSwitchLessonSeq] = useState<number | null>(null);
+  const [switchURL, setSwitchURL] = useState<string | null>(null);
 
   // 렌더링.
 
@@ -48,7 +49,7 @@ export default function LessonSidebar(props: Props) {
               className={props.lessonSeq === lesson.seq ? "active" : ""}
               color={grey[900]}
               key={lesson.seq}
-              onClick={() => setSwitchLessonSeq(lesson.seq)}
+              onClick={() => setSwitchURL(`/course/${props.courseUserSeq}/${LESSON_CONTENT_TYPES[0].toLocaleLowerCase()}/${lesson.seq}`)}
             >
               <Box>
                 <LessonTitle variant="body1">{lesson.lessonNm}</LessonTitle>
@@ -68,30 +69,36 @@ export default function LessonSidebar(props: Props) {
               </LessonCheck>
             </TabItem>
           ))}
+          {props.courseModules !== null && props.courseModules.length > 0 && (
+              <LessonModuleContainer>
+                {props.courseModules.map((courseModule) => (
+                  <LessonSidebarModule
+                    key={courseModule.courseModuleSeq}
+                    courseUserSeq={props.courseUserSeq}
+                    courseModule={courseModule}
+                    onSelect={(url) => setSwitchURL(url)}
+                  />
+                ))}
+              </LessonModuleContainer>
+          )}
         </LessonItemContainer>
-        {props.modules !== null && props.modules.length > 0 && (
-          <LessonModuleContainer>
-            {props.modules.map((module) => <LessonSidebarModule key={module.courseModuleSeq} module={module} courseUserSeq={props.courseUserSeq} />)}
-          </LessonModuleContainer>
-        )}
       </Tab>
       <Dialog
-        open={switchLessonSeq !== null}
-        onClose={() => setSwitchLessonSeq(null)}
+        open={switchURL !== null}
+        onClose={() => setSwitchURL(null)}
       >
-        {/* <DialogTitle id="alert-dialog-title">정말 페이지를 이동하시겠습니까?</DialogTitle> */}
         <DialogContent>
           <DialogContentText>
             정말 페이지를 이동하시겠습니까?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setSwitchLessonSeq(null)}>취소</Button>
+          <Button onClick={() => setSwitchURL(null)}>취소</Button>
           <Button
             onClick={() => {
 
-              router.push(`/course/${props.courseUserSeq}/lesson/${switchLessonSeq}`);
-              setSwitchLessonSeq(null);
+              router.push(switchURL);
+              setSwitchURL(null);
 
             }}
           >
@@ -108,12 +115,11 @@ const StickySideBar = styled.aside`
   position: sticky;
   top: ${headerHeight};
   margin-left: 40px;
-  width: 520px;
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   background-color: #fff;
   z-index: 1;
-  flex-shrink: 0;
   overflow: hidden;
 `;
 

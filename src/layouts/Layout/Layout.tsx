@@ -56,13 +56,11 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         if (currentPageNotNeedLogin && !localStorage.getItem('ACCESS_TOKEN')) return;
 
         if (!currentPageNotNeedLogin && !localStorage.getItem('ACCESS_TOKEN')) {
-          console.log(currentPageNotNeedLogin, notNeededLoginPathList, '머양');
           window.alert('로그인이 필요한 서비스입니다.');
           return router.push(localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL ? '/traffic/sign-in' : '/sign-in');
         }
 
         const { data }: { data: MyUser } = await getMyUser();
-        console.log('user Data', data);
         setUserInfo({
           name: data.name,
           role: [...data.roles],
@@ -73,12 +71,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           role: [...data.roles],
           regCategory: data.regCategory,
         });
-        console.log('recoilData', userInfoData);
         setUser(data);
         const allowUserPage = allowUserPahtList.filter(item => router.route.includes(item.href))[0];
         if (allowUserPage) {
-          console.log(allowUserPage, allowUserPahtList);
-          console.log(data.roles.filter(item => allowUserPage.roles.includes(item)));
           if (data.roles.filter(item => allowUserPage.roles.includes(item)).length === 0) {
             window.alert('로그인이 필요합니다!');
             return router.push(localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL ? '/traffic/sign-in' : '/sign-in');

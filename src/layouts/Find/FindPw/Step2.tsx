@@ -32,7 +32,6 @@ export function Step2({ username, handleStepChange }: Props) {
     const data = new FormData(e.currentTarget);
     const password = data.get('password') as string;
     const confirmPass = data.get('confirmPass') as string;
-    console.log(username, password, confirmPass);
     if (passwordErr || !username) return;
     if (!password) return window.alert('비밀번호를 입력하세요!');
     if (!confirmPass) return setConfirmPassErr(true);

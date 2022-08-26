@@ -72,7 +72,6 @@ export function EduOverview({
       });
       // setValue('businessType', data.course.courseCategoryType);
 
-      console.log('get courseClass', data, enrollInfo);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
     }
@@ -83,9 +82,7 @@ export function EduOverview({
   }, [enrollInfo]);
 
   // useEffect(() => {
-  //   console.log(data);
   //   if (data) {
-  //     console.log('singleCourse', data)
   //     setCourseCategoryType(data.course.courseCategoryType);
   //     setCourseBusinessType(data.course.courseBusinessType); //임시타입
   //     setStepSeq(data.seq);
@@ -102,7 +99,6 @@ export function EduOverview({
       courseBusinessType
     );
     setStepsRes([...data]);
-    console.log(data, stepsRes);
   };
 
   useEffect(() => {
@@ -129,7 +125,7 @@ export function EduOverview({
                   <Select
                     labelId="student"
                     id="student"
-                    value={courseCategoryType}
+                    value={courseCategory[0].type}
                     onChange={e => {
                       setCourseCategoryType(
                         courseCategory.filter(cate => cate.type === e.target.value)[0]

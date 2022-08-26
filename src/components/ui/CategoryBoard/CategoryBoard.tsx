@@ -25,7 +25,6 @@ export function CategoryBoard() {
   };
 
   // useLayoutEffect(()=>{
-  //   console.log(router.route.split('/traffic/')[1])
   //   setValue(router.route.split('/traffic/')[1])
   // },[])
 

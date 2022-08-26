@@ -81,7 +81,6 @@ export function CalendarUpload() {
   } = useForm<CourseClassCreate>({ defaultValues });
 
   const onSubmit: SubmitHandler<CourseClassCreate> = async e => {
-    console.log('dsdasda', e, limitPeopleCheck);
     const { step, year, limitPeople, courseSeq } = e;
 
     if (!courseSeq) return window.alert('과정을 등록해야합니다!');
@@ -100,7 +99,6 @@ export function CalendarUpload() {
     } catch (e: any) {
       // snackbar({ variant: 'error', message: e });
       setLoading(false);
-      console.log(e);
     }
   };
 

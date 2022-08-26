@@ -1,6 +1,6 @@
 import { Layout } from "@layouts/Layout";
 import Head from "next/head";
-import { Lesson, LessonProps } from "@layouts/Lesson";
+import { Lesson, LessonProps, LESSON_CONTENT_TYPES, LessonContentType } from "@layouts/Lesson";
 import { GetServerSideProps } from "next";
 
 export default function LessonPage(props: LessonProps) {
@@ -19,9 +19,10 @@ LessonPage.Layout = Layout;
 export const getServerSideProps: GetServerSideProps<LessonProps> = async (context) => {
 
   const courseUserSeq = Number(context.params.courseUserSeq);
-  const lessonSeq = Number(context.params.lessonSeq);
+  const contentType = context.params.contentType.toString().toUpperCase() as LessonContentType;
+  const contentSeq = Number(context.params.contentSeq);
 
-  if (Number.isNaN(courseUserSeq) || Number.isNaN(lessonSeq)) {
+  if (Number.isNaN(courseUserSeq) || LESSON_CONTENT_TYPES.indexOf(contentType) === -1 || Number.isNaN(contentSeq)) {
     return {
       notFound: true,
     };
@@ -30,7 +31,8 @@ export const getServerSideProps: GetServerSideProps<LessonProps> = async (contex
   return {
     props: {
       courseUserSeq: courseUserSeq,
-      lessonSeq: lessonSeq,
+      contentType: contentType,
+      contentSeq: contentSeq,
     }
   };
 

@@ -29,7 +29,7 @@ export function CategoryBoard() {
   // },[])
 
   return (
-    <NoticeWrap>
+    <NoticeWrap className="시발아">
       <Box sx={{ mb: '30px', maxWidth: '1200px', margin: 'auto' }}>
         <Tabs2
           tabsConfig={tabsConfig}
@@ -43,7 +43,9 @@ export function CategoryBoard() {
           scrollable={true}
         />
       </Box>
-      <Box sx={{ borderBottom: '1px solid #2A2A2A', position: 'relative', top: '-1px' }}></Box>
+      <Box
+        sx={{ borderBottom: '1px solid #2A2A2A', position: 'relative', top: '-1px' }}
+      ></Box>
       <NoticeContainer>
         <Box mt={6}>
           {tabsConfig.map(item => {
@@ -71,4 +73,4 @@ const NoticeWrap = styled(Box)`
     font-weight: bold;
   }
 `;
-const NoticeContainer = styled(Container)``;
+const NoticeContainer = styled(Box)``;

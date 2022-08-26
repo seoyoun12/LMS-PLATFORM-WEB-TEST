@@ -27,6 +27,7 @@ import { regCategoryType, useMyUser, UserRole } from '@common/api/user';
 import { useRouter } from 'next/router';
 import { courseType } from '@common/api/courseClass';
 import { logout } from '@common/api';
+import useResponsive from '@hooks/useResponsive';
 
 const LinkList = [
   {
@@ -113,6 +114,7 @@ const MainPage: NextPage = () => {
   const [screenHeight, setScreenHeight] = useState<number>();
   const [userPageType, setUserPageType] = useRecoilState(pageType);
   const isLogin = useIsLoginStatus();
+  const isDesktop = useResponsive(1100);
   const { user, error: userError } = useMyUser();
   const { data, error } = useMainDisplay();
   const wrapRef = React.useRef<HTMLDivElement>();
@@ -134,11 +136,20 @@ const MainPage: NextPage = () => {
     const idTagFirseChildStyle = idTag.childNodes[0] as HTMLElement;
     const mainTag = document.querySelector('main');
 
-    htmlTag.style.height = '100%';
-    bodyTag.style.height = '100%';
-    idTag.style.height = '100%';
-    idTagFirseChildStyle.style.height = '100%';
-    mainTag.style.height = '100%';
+    if (isDesktop) {
+      htmlTag.style.height = '100%';
+      bodyTag.style.height = '100%';
+      idTag.style.height = '100%';
+      idTagFirseChildStyle.style.height = '100%';
+      mainTag.style.height = '100%';
+    }
+    if (!isDesktop) {
+      htmlTag.style.height = '';
+      bodyTag.style.height = '';
+      idTag.style.height = '';
+      idTagFirseChildStyle.style.height = '';
+      mainTag.style.height = '';
+    }
 
     return () => {
       htmlTag.style.height = '';
@@ -147,7 +158,7 @@ const MainPage: NextPage = () => {
       idTagFirseChildStyle.style.height = '';
       mainTag.style.height = '';
     };
-  }, []);
+  }, [isDesktop]);
 
   if (!data) return <Spinner />;
   return (

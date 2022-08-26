@@ -2,9 +2,16 @@ import MuiTabs from '@mui/material/Tabs';
 import MuiTab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { useRouter } from 'next/router';
-import React, { SyntheticEvent, useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import React, {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 import { SxProps } from '@mui/system';
+import useResponsive from '@hooks/useResponsive';
 
 interface Props {
   tabsConfig: {
@@ -18,8 +25,8 @@ interface Props {
   onChange?: (newValue: string) => void;
   value?: string;
   fontSx?: SxProps;
-  scrollable ?: boolean;
-  showIndicator ?: boolean
+  scrollable?: boolean;
+  showIndicator?: boolean;
 }
 
 export function Tabs2({
@@ -31,13 +38,18 @@ export function Tabs2({
   onChange,
   value,
   fontSx,
-  scrollable = false,
+  // scrollable = false,
   showIndicator = true,
   ...props
 }: Props) {
   const router = useRouter();
   const { pathname, query } = router;
-  const [cssValue, setCssValue] = useState<{ variant: string; gap: number }>({ variant: 'standard', gap: 0 });
+  const isMobile = !useResponsive(768);
+  console.log(isMobile, 'ㅋ');
+  const [cssValue, setCssValue] = useState<{ variant: string; gap: number }>({
+    variant: 'standard',
+    gap: 0,
+  });
 
   useEffect(() => {
     if (!router.query.tab && rendering) {
@@ -92,12 +104,18 @@ export function Tabs2({
         onChange={handleChange}
         aria-label="basic tabs example"
         variant={variant}
-        scrollButtons={scrollable} 
-        allowScrollButtonsMobile={scrollable} 
-        TabIndicatorProps={{ style: { display: !showIndicator && 'none', }, }}
+        scrollButtons={isMobile ? true : false}
+        allowScrollButtonsMobile={isMobile ? true : false}
+        TabIndicatorProps={{ style: { display: !showIndicator && 'none' } }}
       >
         {tabsConfig.map(({ value, label }) => (
-          <MuiTab key={value} className="mui-tabs-item" label={label} value={value} sx={fontSx} />
+          <MuiTab
+            key={value}
+            className="mui-tabs-item"
+            label={label}
+            value={value}
+            sx={fontSx}
+          />
         ))}
       </MuiTabs>
     </TabBox>
@@ -110,6 +128,7 @@ const TabBox = styled(Box)<{ variant: string; gap?: number }>`
   }
 
   .mui-tabs-item {
-    margin: ${({ variant, gap }) => (variant === 'fullWidth' && gap ? `0 ${gap}rem` : '0')};
+    margin: ${({ variant, gap }) =>
+      variant === 'fullWidth' && gap ? `0 ${gap}rem` : '0'};
   }
 `;

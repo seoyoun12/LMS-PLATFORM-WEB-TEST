@@ -24,6 +24,7 @@ import ViewComfyAltOutlinedIcon from '@mui/icons-material/ViewComfyAltOutlined';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import ChromeReaderModeOutlinedIcon from '@mui/icons-material/ChromeReaderModeOutlined';
 import DriveFolderUploadOutlinedIcon from '@mui/icons-material/DriveFolderUploadOutlined';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { ReactNode } from 'react';
 import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
@@ -197,6 +198,17 @@ export function Drawer({ children }: { children: ReactNode }) {
         },
       ],
       icon: <SourceOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    },
+    {
+      name: '학습현황',
+      children: [
+        {
+          name: '전체 수강생 학습현황',
+          href: '/admin-center/course-info',
+          isActive: router.pathname === '/admin-center/course-info',
+        }
+      ],
+      icon: <MenuBookIcon sx={{ mr: '32px', color: grey[700] }} />,
     },
     // {
     //   name: '통계',

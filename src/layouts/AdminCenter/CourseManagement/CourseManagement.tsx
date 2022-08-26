@@ -24,8 +24,6 @@ const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' |
   { name: '생성 날짜', align: 'right' },
   { name: '노출 여부', align: 'right' },
   { name: '상태', align: 'right' },
-  { name: '수강생', align: 'right' },
-  { name: '수료생', align: 'right' },
 ];
 
 export function CourseManagement() {
@@ -140,8 +138,6 @@ export function CourseManagement() {
                   color={course.status ? 'secondary' : 'default'}
                 />
               </TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
 
               <TableCell align="right" className={spaceNoWrap}>
                 {/* <Link href={`/admin-center/course/modify/${course.seq}`}> */}

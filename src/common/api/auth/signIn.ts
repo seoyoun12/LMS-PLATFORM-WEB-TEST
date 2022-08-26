@@ -28,7 +28,6 @@ export async function signIn(username: string, password: string, loginType: logi
 
 const onSignInSuccess = (response: SignInResponse) => {
   const { accessToken, refreshToken } = response.data;
-  console.log(response.data);
   localStore.setItem(ACCESS_TOKEN, accessToken);
   localStore.setItem(REFRESH_TOKEN, refreshToken);
 

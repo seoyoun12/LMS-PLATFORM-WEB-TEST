@@ -59,7 +59,6 @@ export function SiteMap() {
     if (userInfoData.role.includes(UserRole.ROLE_ADMIN)) return router.push(item.href);
 
     if (isLogin && !isEqual) {
-      console.log('이퀄', isEqual, userInfoData.regCategory, item.regCategory);
 
       const isConfirm = window.confirm('정말로 이동하시겠습니까? 로그아웃됩니다.');
       try {

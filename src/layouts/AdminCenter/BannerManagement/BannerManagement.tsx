@@ -10,20 +10,19 @@ import Link from 'next/link';
 
 const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify' }[] = [
   { name: 'seq', align: 'left' },
-  { name: '제목', align: 'left' },
-  { name: '이동URL', align: 'left' },
-  { name: '사용여부', align: 'left' },
-  { name: '게시기간 시작일', align: 'left' },
-  { name: '게시기간 종료일', align: 'left' },
-  { name: '파일이름', align: 'left' },
-  { name: '배너 생성일', align: 'left' },
+  { name: '제목', align: 'center' },
+  // { name: '이동URL', align: 'left' },
+  { name: '게시기간 시작일', align: 'center' },
+  { name: '게시기간 종료일', align: 'center' },
+  // { name: '파일이름', align: 'center' },
+  { name: '배너 생성일', align: 'center' },
+  { name: '사용여부', align: 'center' },
 ];
 
 export function BannerManagement() {
   const dialog = useDialog();
   const snackbar = useSnackbar();
   const { data, error, mutate } = useBannerListAdm();
-  console.log('bannerList', data);
 
   const onRemoveBanner = async (bannerSeq: number) => {
     try {
@@ -71,9 +70,13 @@ export function BannerManagement() {
           {data.map(item => (
             <TableRow>
               <TableCell>{item.seq}</TableCell>
-              <TableCell>{item.title}</TableCell>
-              <TableCell>{item.toUrl}</TableCell>
-              <TableCell>
+              <TableCell align='center'>{item.title}</TableCell>
+              {/* <TableCell>{item.toUrl}</TableCell> */}
+              <TableCell align='center' >{dateFormat(item.startDate,'yyyy-mm-dd')}</TableCell>
+              <TableCell align='center' >{dateFormat(item.endDate,'yyyy-mm-dd')}</TableCell>
+              {/* <TableCell align='center' >{item.s3Files[0]?.name || 'No File'}</TableCell> */}
+              <TableCell align='center' >{dateFormat(item.createdDtime, 'yyyy-mm-dd')}</TableCell>
+              <TableCell align='center' >
                 <Chip
                   variant="outlined"
                   size="small"
@@ -81,10 +84,6 @@ export function BannerManagement() {
                   color={item.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
                 />
               </TableCell>
-              <TableCell>{dateFormat(item.startDate,'yyyy-mm-dd')}</TableCell>
-              <TableCell>{dateFormat(item.endDate,'yyyy-mm-dd')}</TableCell>
-              <TableCell>{item.s3Files[0]?.name || 'No File'}</TableCell>
-              <TableCell>{dateFormat(item.createdDtime, 'yyyy-mm-dd')}</TableCell>
               <TableCell style={{ width: 120 }} align="right">
                 <Link href={`/admin-center/banner/modify/${item.seq}`}>
                   <Button variant="text" color="neutral" size="small">

@@ -42,7 +42,6 @@ export function SurveyManagement() {
 
   const { data, error, mutate } = useSurveyAdm({ page });
   // const { data, error, mutate } = courseList({ page });
-  console.log(data);
 
   // pagination
   useEffect(() => {

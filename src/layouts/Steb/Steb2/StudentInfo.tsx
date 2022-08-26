@@ -44,7 +44,6 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType,
 
   useEffect(() => {
     if (user && registerType === RegisterType.TYPE_INDIVIDUAL) {
-      console.log(user);
       //if your admin or safety user that not have identity number
       if (!user?.identityNumber) return;
       const first = user.identityNumber.slice(0, 6);
@@ -67,11 +66,9 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType,
         window.alert('권한이 없는 유저입니다.');
         setRegisterType(RegisterType.TYPE_INDIVIDUAL);
       } else {
-        console.log('Check User Roles', user.roles.filter(role => role === UserRole.ROLE_TRANS_MANAGER)[0]);
       }
     }
   }, [user, registerType]);
-  console.log('젭ㅂㅇ알', watch().carNumber);
 
   return (
     <StudentInfoWrap>
@@ -155,7 +152,6 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType,
                 }}
                 value={watch().firstPhone}
                 // onChange={e => {
-                //   console.log(e.target.value.length);
                 //   if (e.target.value.length > 11) return;
                 //   setValue('phone', e.target.value);
                 // }}

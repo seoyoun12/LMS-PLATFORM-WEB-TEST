@@ -49,7 +49,6 @@ export function Steb2() {
   useEffect(() => {
     setValue('registerType', RegisterType.TYPE_INDIVIDUAL);
   }, []);
-  console.log(watch(), enrollInfo);
 
   const onClickEnroll = async () => {
     //단체 신청시 스택쌓이는 구조. 개인상태에서는 혼자 신청
@@ -66,12 +65,11 @@ export function Steb2() {
       phone: firstPhone + secondPhone + thirdPhone,
     }; //민증번호때문에 구분
 
-    console.log(postData, watch());
-
     try {
       //개인으로 신청
       if (registerType === RegisterType.TYPE_INDIVIDUAL) {
         confirmRef.current = true;
+        console.log(watch(), 'ssss');
         setLoading(true);
         const test = await courseClassIndividualEnroll(postData);
         setEnroll([watch()]);
@@ -138,6 +136,7 @@ export function Steb2() {
     return () => {
       if (confirmRef.current === false) {
         //해당 페이지 접근시 개인, 단체 초기화.
+        console.log('역적놈', confirmRef.current);
         setEnroll([]);
         setEnrollInfo(null);
       }
@@ -147,7 +146,6 @@ export function Steb2() {
 
   // useEffect(() => {
   //   //해당 페이지 접근시 개인, 단체 초기화.
-  //   console.log('초기화');
   //   setEnroll([]);
   //   setEnrollInfo([]);
   // }, []);

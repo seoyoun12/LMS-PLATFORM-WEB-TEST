@@ -92,7 +92,6 @@ export function MobileNav() {
     const isEqual = userInfoData.regCategory.includes(item.regCategory);
 
     if (isLoginStatus && !isEqual) {
-      console.log('이퀄', isEqual, userInfoData.regCategory, item.regCategory);
 
       const isConfirm = window.confirm('정말로 이동하시겠습니까? 로그아웃됩니다.');
       try {

@@ -19,6 +19,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import { Content, ContentInput, ContentType } from '@common/api/content';
 import * as React from 'react';
 import { CustomInputLabel } from '@components/ui/InputLabel';
+import { Spinner } from '@components/ui';
 
 // const contentTypeOptions = [
 //   { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
@@ -41,12 +42,14 @@ export function ContentUploadForm(
   }: {
     mode?: 'upload' | 'modify',
     content?: Content,
-    onHandleSubmit: ({ contentInput, contentSeq }: {
+    onHandleSubmit: ({ contentInput, contentSeq, setLoading }: {
       contentInput: ContentInput,
+      setLoading: React.Dispatch<React.SetStateAction<boolean>>,
       contentSeq?: number
     }) => void,
   }
 ) {
+  const [loading , setLoading ] = React.useState(false)
   const {
     register,
     handleSubmit,
@@ -62,7 +65,7 @@ export function ContentUploadForm(
   }, [ mode, content, reset ]);
 
   const onSubmit: SubmitHandler<ContentInput> = (contentInput: ContentInput) => {
-    onHandleSubmit({ contentInput: contentInput, contentSeq: content?.seq });
+    onHandleSubmit({ contentInput: contentInput, contentSeq: content?.seq , setLoading });
   };
 
   return (
@@ -133,8 +136,11 @@ export function ContentUploadForm(
         <SubmitButton
           variant="contained"
           type="submit"
+          disabled={loading}
         >
-          {mode === 'upload' ? '업로드하기' : '수정하기'}
+          {loading ? <Spinner fit={true} /> : 
+          mode === 'upload' ? '업로드하기' : '수정하기'
+          }
         </SubmitButton>
       </Box>
     </Container>

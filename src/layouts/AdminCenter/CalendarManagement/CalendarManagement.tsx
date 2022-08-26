@@ -10,7 +10,7 @@ import dateFormat from 'dateformat';
 import { businessType } from '@common/api/courseClass';
 import { courseClassRemove, useCourseClassAdm } from '@common/api/adm/courseClass';
 import { Link } from '@components/common';
-import { courseBusinessTypeList } from '@layouts/Calendar/Calendar';
+import { courseBusinessTypeList, eduLegendList } from '@layouts/Calendar/Calendar';
 import { AdminCalendar } from './AdminCalendar';
 
 const headRows: {
@@ -18,18 +18,18 @@ const headRows: {
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
 }[] = [
   { name: 'seq', align: 'left' },
-  { name: '접수여부', align: 'right' },
-  { name: '교육타입/시간', align: 'right' },
+  { name: '연도 / 기수', align: 'center' },
+  { name: '접수여부', align: 'center' },
+  { name: '교육타입 / 교육시간', align: 'center' },
   // { name: '방법', align: 'right' },
-  { name: '화물/여객', align: 'right' },
+  { name: '교육구분', align: 'center' },
   // { name: '??', align: 'right' },
-  { name: '기수', align: 'right' },
-  { name: '교육구분', align: 'right' },
+  // { name: '업종', align: 'center' },
   // { name: '교육대상', align: 'right' },
 
-  { name: '신청인원 / 제한', align: 'right' },
-  { name: '교육기간', align: 'right' },
-  { name: '신청기간', align: 'right' },
+  { name: '신청인원 / 제한', align: 'center' },
+  { name: '교육기간', align: 'center' },
+  { name: '신청기간', align: 'center' },
 ];
 
 export function CalendarManagement() {
@@ -40,7 +40,6 @@ export function CalendarManagement() {
   const { data, error, mutate } = useCourseClassAdm(businessType.TYPE_ALL, '2022-08');
 
   useEffect(() => {
-    console.log('useEffect Triggered');
     const { page } = router.query;
     // setPage(!isNaN(Number(page)) ? Number(page) : 0);
   }, [router]);
@@ -70,7 +69,6 @@ export function CalendarManagement() {
       }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
-      console.log(e);
     }
   };
 
@@ -110,42 +108,32 @@ export function CalendarManagement() {
             return (
               <TableRow key={data.seq} hover>
                 <TableCell>{data.seq}</TableCell>
-                <TableCell align="right">
+                <TableCell align="center">
+                   {data.year} / {data.step}
+                </TableCell>
+                <TableCell align="center">
                   {isReceive ? '접수중' : '마감'}
                   {/* </Link> */}
                 </TableCell>
-                <TableCell align="right">
-                  {data.course.courseCategoryType} /{data.course.lessonTime}
+                {/* courseCategoryType eduLegendList */}
+                <TableCell align="center"> 
+                  {eduLegendList.filter((item)=>item.enType === data.course.courseCategoryType)[0]?.title || '보수일반 교육'}  /{data.course.lessonTime}
                   {/* {dateFormat(data.eduTypeAndTime, 'isoDate')} */}
                 </TableCell>
-                <TableCell align="right">
-                  {courseBusinessTypeList.filter(business => business.enType === data.course.courseBusinessType)[0].type}
-                  {/* <Chip
-                  label={data.displayYn === YN.YES ? '보임' : '숨김'}
-                  variant="outlined"
-                  size="small"
-                  color={data.displayYn === YN.YES ? 'secondary' : 'default'}
-                /> */}
-                </TableCell>
-                <TableCell align="right">
-                  {data.step}
-                  {/* <Chip
-                  label={data.status ? '정상' : '중지'}
-                  variant="outlined"
-                  size="small"
-                  color={data.status ? 'secondary' : 'default'}
-                /> */}
+                <TableCell align="center">
+                  {/* {courseBusinessTypeList.filter(business => business.enType === data.course.courseBusinessType)[0].type} */}
+                  여객 / 화물
                 </TableCell>
                 {/* <TableCell align="right">{'data.className'}</TableCell>
                 <TableCell align="right">{'data.jobType'}</TableCell> */}
-                <TableCell align="right">{data.course.courseSubCategoryType}</TableCell>
-                <TableCell align="right">
+                {/* <TableCell align="center">{data.course.courseSubCategoryType}</TableCell> */}
+                <TableCell align="center">
                   {data.enrolledPeopleCnt} / {data.limitPeople}
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="center">
                   {dateFormat(data.studyStartDate, 'yyyy-mm-dd')} ~ {dateFormat(data.studyEndDate, 'yyyy-mm-dd')}
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="center">
                   {dateFormat(data.requestStartDate, 'yyyy-mm-dd')} ~ {dateFormat(data.requestEndDate, 'yyyy-mm-dd')}
                 </TableCell>
                 <TableCell>

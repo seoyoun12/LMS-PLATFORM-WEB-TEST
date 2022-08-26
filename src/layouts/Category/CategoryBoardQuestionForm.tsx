@@ -98,7 +98,6 @@ export function CategoryBoardQuestionForm({ mode = 'upload', qna, onHandleSubmit
   //     const onlyNumber = value.replace(/[^0-9]/g, '')
   //     setPhoneNum(onlyNumber)
   //   // }
-  //   console.log("setPhoneNum : ", setPhoneNum);
   // }
 
   const onChangePhoneNum01 = (e: any) => {
@@ -117,7 +116,6 @@ export function CategoryBoardQuestionForm({ mode = 'upload', qna, onHandleSubmit
   const handleSelectChange = (e: any) => {
     setQuestionType(e.target.value);
   };
-  // console.log("타입 : ", questionType);
 
   const [smsChecked, setSmsChecked] = useState(false);
   const [individualCheck, setIndividualCheck] = useState(false);
@@ -194,7 +192,6 @@ export function CategoryBoardQuestionForm({ mode = 'upload', qna, onHandleSubmit
                     value={phone03}
                     onChange={e => {
                       phone3.current = e.target.value;
-                      console.log(e.target.value, phone3.current);
                       if (e.target.value === '' && Phone4Regex.test(e.target.value)) return (phone3.current = e.target.value);
                       if (Phone4Regex.test(e.target.value) || e.target.value.length > 4)
                         return (phone3.current = e.target.value.slice(0, -1));

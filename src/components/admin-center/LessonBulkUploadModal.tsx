@@ -5,7 +5,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Box, FormControl, FormHelperText, MenuItem, Select } from '@mui/material';
 import { ErrorMessage } from '@hookform/error-message';
 import { ContentType } from '@common/api/content';
-import { useRef } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import { grey } from '@mui/material/colors';
@@ -13,7 +13,7 @@ import { LessonInput } from '@common/api/lesson';
 import { uploadLessons } from '@common/api/adm/lesson';
 import { CustomInputLabel } from '@components/ui/InputLabel';
 import { read, utils } from 'xlsx';
-import { Modal } from '@components/ui';
+import { Modal, Spinner } from '@components/ui';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useRouter } from 'next/router';
 
@@ -30,14 +30,17 @@ const defaultValues = {
 
 export function LessonBulkUploadModal({ open, handleClose }: { open: boolean; handleClose: (isSubmit: boolean) => void }) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [fileName , setFileName] = useState<string>()
   const {
     handleSubmit,
     formState: { errors },
     control,
+    watch
   } = useForm<{ contentType: ContentType }>({ defaultValues });
   const snackbar = useSnackbar();
   const router = useRouter();
   const { query } = router;
+  const [loading , setLoading ] = useState(false)
 
   // excel sample file
   const onClickDownloadFile = async () => {
@@ -51,9 +54,18 @@ export function LessonBulkUploadModal({ open, handleClose }: { open: boolean; ha
     link.click();
   };
 
+  const onChangeFile =(e: ChangeEvent) =>{
+    // const files = (e.target as HTMLInputElement).files
+    // console.log((e.target as HTMLInputElement).files);
+    // fileInputRef.current = e.target as HTMLInputElement;
+    setFileName((e.target as HTMLInputElement)?.files[0]?.name || '')
+  }
+
   const onSubmit: SubmitHandler<{ contentType: ContentType }> = async ({ contentType }) => {
     const files = fileInputRef.current?.files;
     if (!files?.length) return null;
+
+    setLoading(true);
 
     /* file is an ArrayBuffer */
     const file = await files[0].arrayBuffer();
@@ -74,12 +86,13 @@ export function LessonBulkUploadModal({ open, handleClose }: { open: boolean; ha
 
     try {
       const contentSeq = Number(query.contentSeq);
-      console.log('im lesson.', lessonInput);
       await uploadLessons({ contentSeq, lessonInput });
       snackbar({ variant: 'success', message: '성공적으로 업로드 되었습니다.' });
+      setLoading(false);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
-    }
+      setLoading(false);
+  }
 
     handleClose(true);
   };
@@ -95,6 +108,8 @@ export function LessonBulkUploadModal({ open, handleClose }: { open: boolean; ha
       onCloseModal={() => handleClose(false)}
       onSubmit={handleSubmit(onSubmit)}
       maxWidth="md"
+      actionLoading={loading}
+      actionDisabled={loading}
     >
       <Box component="form">
         <Alert variant="info">
@@ -150,8 +165,9 @@ export function LessonBulkUploadModal({ open, handleClose }: { open: boolean; ha
               엑셀 파일 업로드
             </Typography>
             <label htmlFor="input-file">
-              <input style={{ display: 'none' }} id="input-file" type="file" multiple={true} ref={fileInputRef} />
+              <input style={{ display: 'none' }} accept='.xlsx' id="input-file" type="file" multiple={true} onChange={onChangeFile} ref={fileInputRef} />
             </label>
+            {fileName}
             <Button
               color="neutral"
               variant="outlined"

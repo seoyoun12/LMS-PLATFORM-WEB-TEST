@@ -28,7 +28,6 @@ export function Category() {
   const isDesktop = useResponsive(1024);
   // const [ page, setPage ] = useState(0);
   // const { data, error } = useCourseList({ page });
-  // // console.log(data);
 
   // if (error) return <div>error</div>;
   // if (!data) return <Spinner />;

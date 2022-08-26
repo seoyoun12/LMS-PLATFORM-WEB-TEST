@@ -27,7 +27,6 @@ export function Step1({ handleStepChange, handleIdsChange }: Props) {
     if (phoneErr) return window.alert('올바르지 않은 휴대폰 번호 형식입니다.');
     try {
       const { data } = await findUserId(phone);
-      console.log(data);
       handleIdsChange(data);
       handleStepChange();
     } catch (e: any) {

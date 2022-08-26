@@ -111,8 +111,8 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
       studyEndDate: item.studyEndDate, //studyStartDate
       start: item.requestStartDate, //start: requestStartDate
       end: item.requestEndDate, //start: requestStartDate
-      className:
-        (prevSchedule && eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType) || 'TYPE_NONE',
+      className: item.enableToEnrollYn === YN.YES ? 'TYPE_SUP_COMMON' : 'TYPE_NONE',
+      // item.enableToEnrollYn === YN.YES ? eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType : 'TYPE_NONE', 나중에 필요시 사용
       // className: isReceive
       // ? eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType || 'TYPE_NONE'
       // : 'TYPE_NONE',
@@ -145,7 +145,6 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
           }: { event: { _def: { extendedProps: Partial<ClickedPlanInfo> }; start: Date | null; end: Date | null } } = e;
           if (!e.event._def.extendedProps.prevSchedule) return window.alert('마감된 교육입니다!');
           if (!e.event._def.extendedProps.isReceive) return window.alert('신청기간이 아닙니다!');
-          console.log(e.event._def.extendedProps, '운수운수');
           setModalInfo({
             seq: extendedProps.seq as number,
             step: extendedProps.step as number,
@@ -192,7 +191,6 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
                   }
                   setLoading(false);
                 } catch (e: any) {
-                  console.log(e);
                   setLoading(false);
                 }
                 router.push('/stebMove/steb2');

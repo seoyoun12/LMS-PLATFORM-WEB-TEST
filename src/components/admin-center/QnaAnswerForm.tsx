@@ -43,7 +43,6 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
   const { data } = qnaDetail(Number(qnaSeq));
   // const { data } = qnaDetail(Number(qna.qnaSeq));
 
-  console.log('데이터는 이거다 : ', data);
 
   const {
     register,

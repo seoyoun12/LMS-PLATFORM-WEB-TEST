@@ -44,7 +44,6 @@ export function SignInV2() {
       identify2Err: false,
     },
   });
-  console.log(smsYn, '???');
   const { name, identify1, identify2, usernameErr, identify1Err, identify2Err } = watch();
 
   useEffect(() => {

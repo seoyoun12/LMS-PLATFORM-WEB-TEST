@@ -28,7 +28,6 @@ export function BoardAccordionV2({ loadedItem }: { loadedItem: CategoryBoard[] }
   const [value, setValue] = React.useState<number>(null);
 
   const handleChange = (panel: number) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-    console.log(newExpanded, !!panel, typeof panel, value);
     setValue(newExpanded ? panel : null);
   };
 

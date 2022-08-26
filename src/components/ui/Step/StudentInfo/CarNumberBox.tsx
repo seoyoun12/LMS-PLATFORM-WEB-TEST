@@ -34,7 +34,6 @@ export function CarNumberBox({ parantSetValue }: Props) {
     const carNumber = localName + digit2 + oneWord + digit4;
     if (!lastRegex.test(carNumber)) setErr(true);
     setErr(false);
-    console.log(carNumber, lastRegex.test(carNumber));
     parantSetValue('carNumber', carNumber);
   }, [watch().localName, watch().digit2, watch().digit4, watch().oneWord]);
 

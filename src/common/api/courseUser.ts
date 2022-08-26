@@ -4,6 +4,7 @@ import {
   businessType,
   courseCategoryType,
   courseSubCategoryType,
+  courseType,
   RegisterType,
   userBusinessType,
 } from './courseClass';
@@ -16,6 +17,7 @@ export interface CourseUserResDto {
   regType: RegisterType;
   regUserSeq: number;
   seq: number;
+  thumbnailPath: string;
 }
 
 export function useCourseUser() {
@@ -50,6 +52,10 @@ export interface FindCourseUserRes {
   carNumber: string;
   carRegisteredRegion: userRegistrationType;
   phone: string;
+  regDate: string;
+  learningTime: string;
+  courseType: courseType;
+  courseClassSeq: number;
 }
 
 export function getSingleCourseUser(courseUserSeq: number, regType: RegType) {

@@ -1,8 +1,8 @@
-import { createContext, useContext } from "react";
+import React, { createContext, useContext } from "react";
 
 export interface DialogConfig {
   title: string;
-  description: string;
+  description: string | React.ReactNode;
   variant?: "alert" | "confirm" | "prompt";
   confirmText?: string | "확인";
   cancelText?: string | "취소";

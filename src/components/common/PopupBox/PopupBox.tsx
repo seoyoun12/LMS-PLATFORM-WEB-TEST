@@ -8,7 +8,6 @@ const popup = { seq: 1, img: 'internet Explorer를 제발 쓰지 마세요.' };
 export function PopupBox() {
   const [isClose, setIsClose] = useState(false);
   // useEffect(() => {
-  //   console.log(getCookie('popupNotView'));
   // }, []);
 
   const handleClose = () => {

@@ -42,7 +42,6 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
     } = e;
 
     if (courseSubCategoryType.BUS === value || courseSubCategoryType.CHARTER_BUS === value) {
-      console.log('??', value === courseSubCategoryType.BUS);
       setValue('carNumber', null);
       return setHideCarNumber(true);
     }
@@ -52,7 +51,7 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
       courseSubCategoryType.INDIVIDUAL_CARGO === value
     ) {
       setDisabledCompany(true);
-      setValue('businessName', value);
+      setValue('businessName', userBusinessTypeTwo.filter(item => item.enType === value)[0].type);
       return setValue('businessSubType', value);
     }
     setDisabledCompany(false);
@@ -74,9 +73,9 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
   };
 
   // const onChangeCompanyName = (e: any) => {
-  //   // console.log(e, e, e, e, e, e, e);
   //   setValue('businessName', e.target.value);
   // };
+  console.log(watch());
 
   return (
     <CompanyInfoWrap>

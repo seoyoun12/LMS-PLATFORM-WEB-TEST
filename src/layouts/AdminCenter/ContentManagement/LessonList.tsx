@@ -23,8 +23,8 @@ const headRows = [
   { name: '콘텐츠 유형' },
   { name: '강의명' },
   { name: '학습시간' },
-  { name: '인정시간' },
-  { name: '페이지' },
+  { name: '수료시간' },
+  // { name: '페이지' },
   { name: '상태' },
 ];
 
@@ -131,9 +131,9 @@ export function LessonList() {
                 <TableCell style={{ width: 100 }} align="right">
                   {min}분 {sec}초
                 </TableCell>
-                <TableCell style={{ width: 100 }} align="right">
+                {/* <TableCell style={{ width: 100 }} align="right">
                   {lesson.totalPage}
-                </TableCell>
+                </TableCell> */}
                 <TableCell style={{ width: 10 }} align="right">
                   <Chip
                     label={lesson.status === ProductStatus.APPROVE ? '정상' : '중지'}

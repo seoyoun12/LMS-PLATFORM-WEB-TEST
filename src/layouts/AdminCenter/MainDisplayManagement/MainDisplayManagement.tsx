@@ -1,4 +1,4 @@
-import { mainDisplayModify, mainDisplayModifyDto } from '@common/api/adm/mainDisplay';
+import { mainDisplayModify, mainDisplayModifyDto, MainDisplayType } from '@common/api/adm/mainDisplay';
 import { ProductStatus } from '@common/api/course';
 import { useMainDisplay } from '@common/api/mainDisplay';
 import styled from '@emotion/styled';
@@ -6,6 +6,12 @@ import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { Box, Button, Chip, Container, Switch, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
+
+const mainDisplayList = [
+  {title: '운수종사자' , type:MainDisplayType.EDUCATION_TRANSPORT_WORKER},
+  {title: '저상버스' , type:MainDisplayType.EDUCATION_GROUND_BUS_DRIVER},
+  {title: '도민교통안전교육' , type:MainDisplayType.EDUCATION_PROVINCIAL_TRAFFIC_SAFETY}
+]
 
 const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify' }[] = [
   { name: 'seq', align: 'left' },
@@ -70,7 +76,7 @@ export function MainDisplayManagement() {
           {data?.map(item => (
             <TableRow>
               <TableCell>{item.seq}</TableCell>
-              <TableCell>{item.mainDisplayType}</TableCell>
+              <TableCell>{mainDisplayList.filter((filter)=>filter.type === item.mainDisplayType)[0].title}</TableCell>
               <TableCell>
                 <Chip
                   variant="outlined"

@@ -7,7 +7,6 @@ import { Box, Grid } from '@mui/material';
 
 export function EndCourse() {
   const { user, error } = useMyUser();
-  console.log(user);
   if (!user) return <Spinner />;
   return (
     <EndCourseWrap>

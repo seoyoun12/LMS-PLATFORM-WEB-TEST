@@ -5,7 +5,15 @@ import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
 import cn from 'clsx';
 import { Link } from '@components/common';
-import { Box, Button, Card, CardActions, CardContent, Grid, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  Typography,
+} from '@mui/material';
 import { useState } from 'react';
 import { Container } from '@mui/system';
 import Head from 'next/head';
@@ -28,14 +36,20 @@ const LinkList = [
     textColor: '#0A9A4E',
     color: '#0A9A4E',
     href: '/category',
-    imgPath: '/assets/images/unsu.png',
+    imgPath: '/assets/images/unsu.jpg',
     onClickCard: async () => {
-      if (typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_TRANS_WORKER) return;
+      if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
+        return localStorage.setItem('site_course_type', courseType.TYPE_TRANS_WORKER);
+      if (
+        typeof window !== 'undefined' &&
+        localStorage.getItem('site_course_type') === courseType.TYPE_TRANS_WORKER
+      )
+        return;
       if (localStorage.getItem('site_course_type') !== courseType.TYPE_TRANS_WORKER) {
         if (!!localStorage.getItem('ACCESS_TOKEN')) {
           await logout();
+          localStorage.setItem('site_course_type', courseType.TYPE_TRANS_WORKER);
         } else {
-          return;
         }
       }
       localStorage.setItem('site_course_type', courseType.TYPE_TRANS_WORKER);
@@ -48,14 +62,20 @@ const LinkList = [
     textColor: '#256AEF',
     color: '#256AEF',
     href: '/category',
-    imgPath: '/assets/images/lowFloor.png',
+    imgPath: '/assets/images/lowFloor.jpg',
     onClickCard: async () => {
-      if (typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_LOW_FLOOR_BUS) return;
+      if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
+        return localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
+      if (
+        typeof window !== 'undefined' &&
+        localStorage.getItem('site_course_type') === courseType.TYPE_LOW_FLOOR_BUS
+      )
+        return;
       if (localStorage.getItem('site_course_type') !== courseType.TYPE_LOW_FLOOR_BUS) {
         if (!!localStorage.getItem('ACCESS_TOKEN')) {
           await logout();
+          localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
         } else {
-          return;
         }
       }
       localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
@@ -68,9 +88,15 @@ const LinkList = [
     textColor: '#711D14',
     color: '#FEC901',
     href: 'traffic/category',
-    imgPath: '/assets/images/domin.png',
+    imgPath: '/assets/images/domin.jpg',
     onClickCard: async () => {
-      if (typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL) return;
+      if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
+        return localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
+      if (
+        typeof window !== 'undefined' &&
+        localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
+      )
+        return;
       if (localStorage.getItem('site_course_type') !== courseType.TYPE_PROVINCIAL) {
         if (!!localStorage.getItem('ACCESS_TOKEN')) {
           await logout();
@@ -135,7 +161,13 @@ const MainPage: NextPage = () => {
       <MainContainer>
         <ContentBox>
           <LogoBox>
-            <Image src="/assets/images/cttsLogo.png" height={48} width={320} alt="Your Name" style={{ margin: 'auto' }} />
+            <Image
+              src="/assets/images/cttsLogo.png"
+              height={48}
+              width={320}
+              alt="Your Name"
+              style={{ margin: 'auto' }}
+            />
           </LogoBox>
           {/* <NoticeContainer>
             <NoticeTitle>
@@ -149,10 +181,23 @@ const MainPage: NextPage = () => {
           </NoticeContainer> */}
           <SubTitle>충남 교통안전 온라인교육센터</SubTitle>
           <Box position="relative">
-            <CategoryGrid container={true} spacing={0} columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }} height={'100%'}>
+            <CategoryGrid
+              container={true}
+              spacing={0}
+              columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
+              height={'100%'}
+            >
               {data.map(item => {
                 if (item.status === 1) {
-                  const { href, color, textColor, displayWord, imgPath, pageType, onClickCard } = LinkList.filter(
+                  const {
+                    href,
+                    color,
+                    textColor,
+                    displayWord,
+                    imgPath,
+                    pageType,
+                    onClickCard,
+                  } = LinkList.filter(
                     filter => filter.mainDisplayType === item.mainDisplayType
                   )[0];
                   return (
@@ -166,14 +211,29 @@ const MainPage: NextPage = () => {
                         }}
                       >
                         <Box width="270px" borderRadius="8px 8px 0 0" overflow="hidden">
-                          <Image src={imgPath} width="270" height="184" objectFit="fill" />
+                          <Image
+                            src={imgPath}
+                            width="270"
+                            height="184"
+                            objectFit="fill"
+                          />
                         </Box>
                         <CardInContainer>
                           <Box>
-                            <Typography component="span" fontSize={25} fontWeight="bold" color={textColor}>
+                            <Typography
+                              component="span"
+                              fontSize={25}
+                              fontWeight="bold"
+                              color={textColor}
+                            >
                               {displayWord}
                             </Typography>
-                            <Typography component="span" fontSize={25} fontWeight="bold" color="#000">
+                            <Typography
+                              component="span"
+                              fontSize={25}
+                              fontWeight="bold"
+                              color="#000"
+                            >
                               교육
                             </Typography>
                           </Box>
@@ -231,10 +291,14 @@ const LogoBox = styled(Box)`
 `;
 
 const SubTitle = styled(Box)`
-  font-weight: bold;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
+  padding: 0.5rem 2.5rem;
   width: fit-content;
   margin: auto;
+  margin-top: 8px;
+  background: #144aaa;
+  color: white;
+  border-radius: 4px;
 `;
 
 // Category Grid

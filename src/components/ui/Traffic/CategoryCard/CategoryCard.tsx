@@ -48,7 +48,6 @@ const categoryData = [
 ];
 
 export function CategoryCard() {
-  // console.log("categoryData : ", categoryData);
   return (
     // <ContentContainer className={styles.globalContainer}>
     <Container>

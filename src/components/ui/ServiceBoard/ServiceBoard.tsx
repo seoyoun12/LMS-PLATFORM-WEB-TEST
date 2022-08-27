@@ -49,7 +49,7 @@ export function ServiceBoard() {
   );
 }
 
-const ServiceContainer = styled(Container)`
+const ServiceContainer = styled(Box)`
   margin: auto;
-  width: 1200px;
+  /* width: 1200px; */
 `;

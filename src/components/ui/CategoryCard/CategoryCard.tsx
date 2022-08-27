@@ -51,7 +51,7 @@ const categoryData = [
 
 export function CategoryCard() {
   const isDesktop = useResponsive(1440);
-  const isTablet = !!useResponsive(1028);
+  const isTablet = useResponsive(1028);
   const isMobile = useResponsive(450);
 
   return (
@@ -76,7 +76,7 @@ export function CategoryCard() {
               key={categoryData.id}
               cardcolor={categoryData.color}
             >
-              <GridLink href={categoryData.href} underline="none">
+              <GridLink href={categoryData.href} width="100px  " underline="none">
                 <Box
                   sx={{
                     border: `5px solid ${categoryData.color}`,
@@ -116,7 +116,7 @@ export function CategoryCard() {
 }
 
 const GridWrap = styled(Grid)`
-  margin: auto;
+  /* margin: auto; */
   width: 100%;
   padding-top: 24px;
   padding-bottom: 40px;

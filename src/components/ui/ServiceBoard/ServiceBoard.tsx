@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { Box, Container } from '@mui/material';
 import { Tabs2 } from '../Tabs2';
+import useResponsive from '@hooks/useResponsive';
 
 enum TabValue {
   Notice = 'Notice',
@@ -24,17 +25,19 @@ const tabsConfig = [
 export function ServiceBoard() {
   const router = useRouter();
   const { tab } = router.query;
-
+  // const isMobile = useResponsive(768);
+  // console.log('???', isMobile);
   return (
     <ServiceContainer>
       <Box sx={{ mb: '30px', mt: '30px' }}>
         <Tabs2
           tabsConfig={tabsConfig}
           variant={'fullWidth'}
+          // variant={'scrollable'}
           showBorderBottom={true}
-          gap={3}
+          gap={2}
           fontSx={{ fontWeight: 700, fontSize: '20px' }}
-          scrollable={true}
+          responsiveWidth={768}
         />
       </Box>
       {

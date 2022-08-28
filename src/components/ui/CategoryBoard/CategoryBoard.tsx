@@ -29,7 +29,7 @@ export function CategoryBoard() {
   // },[])
 
   return (
-    <NoticeWrap className="시발아">
+    <NoticeWrap>
       <Box sx={{ mb: '30px', maxWidth: '1200px', margin: 'auto' }}>
         <Tabs2
           tabsConfig={tabsConfig}
@@ -40,7 +40,7 @@ export function CategoryBoard() {
           showBorderBottom={true}
           gap={3}
           fontSx={{ fontSize: '20px' }}
-          scrollable={true}
+          responsiveWidth={768}
         />
       </Box>
       <Box

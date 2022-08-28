@@ -25,9 +25,12 @@ interface Props {
   onChange?: (newValue: string) => void;
   value?: string;
   fontSx?: SxProps;
-  scrollable?: boolean;
+  // scrollable?: boolean;
   showIndicator?: boolean;
+  responsiveWidth?: number;
 }
+
+//variant 속성이 명시되어 있어도 reponseWitdh가 정의되어 있다면 variant: scrollable이 강제됩니다.
 
 export function Tabs2({
   tabsConfig,
@@ -40,16 +43,17 @@ export function Tabs2({
   fontSx,
   // scrollable = false,
   showIndicator = true,
+  responsiveWidth = 1,
   ...props
 }: Props) {
   const router = useRouter();
   const { pathname, query } = router;
-  const isMobile = !useResponsive(768);
-  console.log(isMobile, 'ㅋ');
   const [cssValue, setCssValue] = useState<{ variant: string; gap: number }>({
     variant: 'standard',
     gap: 0,
   });
+  const isMobile = useResponsive(responsiveWidth);
+  console.log('zzz', isMobile, !isMobile ? 'scrollable' : variant);
 
   useEffect(() => {
     if (!router.query.tab && rendering) {
@@ -103,9 +107,9 @@ export function Tabs2({
         value={query.tab || value || tabsConfig[0].value}
         onChange={handleChange}
         aria-label="basic tabs example"
-        variant={variant}
-        scrollButtons={isMobile ? true : false}
-        allowScrollButtonsMobile={isMobile ? true : false}
+        variant={!isMobile ? 'scrollable' : variant}
+        scrollButtons={!isMobile ? true : false}
+        allowScrollButtonsMobile={!isMobile ? true : false}
         TabIndicatorProps={{ style: { display: !showIndicator && 'none' } }}
       >
         {tabsConfig.map(({ value, label }) => (
@@ -114,7 +118,7 @@ export function Tabs2({
             className="mui-tabs-item"
             label={label}
             value={value}
-            sx={fontSx}
+            sx={{ ...fontSx, flexGrow: !isMobile ? '1' : '' }}
           />
         ))}
       </MuiTabs>
@@ -130,5 +134,12 @@ const TabBox = styled(Box)<{ variant: string; gap?: number }>`
   .mui-tabs-item {
     margin: ${({ variant, gap }) =>
       variant === 'fullWidth' && gap ? `0 ${gap}rem` : '0'};
+  }
+
+  .MuiButtonBase-root {
+    @media (max-width: 1024px) {
+      font-size: 16px;
+      padding: 0;
+    }
   }
 `;

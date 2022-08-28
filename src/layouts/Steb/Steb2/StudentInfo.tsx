@@ -29,6 +29,7 @@ import { useMyUser, UserRole } from '@common/api/user';
 import { Phone3Regex, Phone4Regex } from '@utils/inputRegexes';
 import { CarNumberBox } from '@components/ui/Step';
 
+const phoneList = ['010', '032', '02', '031'];
 interface Props {
   register: UseFormRegister<UserTransSaveInputDataType>;
   setValue: UseFormSetValue<UserTransSaveInputDataType>;
@@ -166,7 +167,28 @@ export function StudentInfo({
             <TableLeftCell>휴대 전화</TableLeftCell>
             <TableRightCell>
               <InputsBox>
-                <TextField
+                <FormControl sx={{ minWidth: '130px' }}>
+                  <Select
+                    labelId="phone-type-label"
+                    id="phone-type"
+                    {...register('firstPhone')}
+                    onChange={e => {
+                      if (
+                        !Phone3Regex.test(e.target.value) ||
+                        e.target.value.length > 3
+                      ) {
+                        return;
+                      }
+                      setValue('firstPhone', e.target.value);
+                    }}
+                    value={watch().firstPhone || ''}
+                  >
+                    {phoneList.map(item => (
+                      <MenuItem value={item}>{item}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                {/* <TextField
                   // placeholder="'-'를 제외한 숫자만 11자리 입력해주세요."
                   // {...register('phone', { maxLength: { value: 12, message: 'phone must be longer than 12 characters' } })}
                   {...register('firstPhone')}
@@ -178,27 +200,27 @@ export function StudentInfo({
                   }}
                   value={watch().firstPhone}
                   fullWidth
-                />
+                /> */}
                 -
                 <TextField
-                  {...register('secondPhone')}
+                  // {...register('secondPhone')}
+                  value={watch().secondPhone}
                   onChange={e => {
-                    if (!Phone4Regex.test(e.target.value) || e.target.value.length > 4) {
+                    if (Phone4Regex.test(e.target.value)) {
                       return;
                     }
-                    setValue('secondPhone', e.target.value);
+                    setValue('secondPhone', e.target.value.replace(/[^0-9]/g, ''));
                   }}
-                  value={watch().secondPhone}
                   fullWidth
                 />
                 -
                 <TextField
                   {...register('thirdPhone')}
                   onChange={e => {
-                    if (!Phone4Regex.test(e.target.value) || e.target.value.length > 4) {
+                    if (Phone4Regex.test(e.target.value)) {
                       return;
                     }
-                    setValue('thirdPhone', e.target.value);
+                    setValue('thirdPhone', e.target.value.replace(/[^0-9]/g, ''));
                   }}
                   value={watch().thirdPhone}
                   fullWidth
@@ -276,14 +298,14 @@ const TableCustomRow = styled(TableRow)`
 const TableLeftCell = styled(TableCell)`
   /* background: #e1e1e1; */
   font-size: 20px;
-  text-align: center;
   font-weight: 700;
+  display: flex;
+  align-items: center;
   width: 20%;
 
   @media (max-width: 768px) {
     border-bottom: none;
     width: 100%;
-    text-align: start;
   }
 `;
 const TableRightCell = styled(TableCell)`

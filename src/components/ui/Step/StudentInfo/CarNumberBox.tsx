@@ -1,12 +1,13 @@
 import { UserTransSaveInputDataType } from '@common/api/courseClass';
 import { Box, FormControl, MenuItem, Select, TextField } from '@mui/material';
+import { carNumberRegex } from '@utils/inputRegexes';
 import { useEffect, useState } from 'react';
 import { useForm, UseFormSetValue } from 'react-hook-form';
 
 const regex2 = /^[0-9]{2}/g;
 const regex4 = /^[0-9]{4}/g;
 
-const lastRegex = /(?=.*[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2}[\d]{2}[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{1}[\d]{4})/;
+// const carNumberRegex = /(?=.*[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2}[\d]{2}[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{1}[\d]{4})/;
 
 const localList = [
   { title: '충남', type: 'NAM' },
@@ -31,12 +32,19 @@ export function CarNumberBox({ parantSetValue }: Props) {
   });
   const [err, setErr] = useState(false);
 
-  useEffect(() => {
+  const regFunc = () => {
     const { localName, digit2, oneWord, digit4 } = watch();
     const carNumber = localName + digit2 + oneWord + digit4;
-    if (!lastRegex.test(carNumber)) setErr(true);
+    if (!carNumberRegex.test(carNumber)) {
+      parantSetValue('carNumber', carNumber);
+      return setErr(true);
+    }
     setErr(false);
     parantSetValue('carNumber', carNumber);
+  };
+
+  useEffect(() => {
+    regFunc();
   }, [watch().localName, watch().digit2, watch().digit4, watch().oneWord]);
 
   const Placeholder = ({ children }) => {

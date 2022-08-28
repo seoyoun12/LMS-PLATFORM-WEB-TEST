@@ -23,6 +23,7 @@ import { signUp } from '@common/api';
 import { IndividualSummary } from './IndividualSummary';
 import useResponsive from '@hooks/useResponsive';
 import { Spinner } from '@components/ui';
+import { carNumberRegex, phoneRegex } from '@utils/inputRegexes';
 
 export default function Steb2() {
   const router = useRouter();
@@ -63,10 +64,16 @@ export default function Steb2() {
       thirdPhone,
       ...rest
     } = watch();
+    if (!enrollInfo || !enrollInfo.seq)
+      return window.alert('오류입니다! 교육일정으로 돌아가서 다시 신청해주세요!');
     if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7)
       return window.alert('주민번호를 모두 입력해주세요!');
-    if (!enrollInfo || !enrollInfo.seq) return window.alert('기수를 선택해주세요!');
     // if (!enrollInfo || !enrollInfo.seq) return window.alert('기수를 선택해주세요!');
+    if (!carNumberRegex.test(rest.carNumber))
+      return window.alert('올바른 형식의 차량번호를 입력해주세요!');
+    if (!phoneRegex.test(firstPhone + secondPhone + thirdPhone))
+      return window.alert('올바른 형식의 휴대전화를 입력해주세요!');
+
     if (!isIndividualCheck)
       return window.alert('개인정보 수집 및 이용동의에 체크해주세요!');
 

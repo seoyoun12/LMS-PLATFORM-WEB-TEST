@@ -22,15 +22,9 @@ export function CategoryBoardNotice() {
                   borderBottom: '1px solid #cdcdcd',
                 }}
               >
-                <TableHeaderCell align="center" width="10%">
-                  번호{' '}
-                </TableHeaderCell>
-                <TableHeaderCell align="center" width="70%">
-                  제목{' '}
-                </TableHeaderCell>
-                <TableHeaderCell align="center" width="20%">
-                  등록일{' '}
-                </TableHeaderCell>
+                <TableSeqCell align="center">번호 </TableSeqCell>
+                <TableTitleCell align="center">제목 </TableTitleCell>
+                <TableCreatedCell align="center">등록일 </TableCreatedCell>
               </TableRow>
             </TableHead>
           </Table>
@@ -56,7 +50,29 @@ export function CategoryBoardNotice() {
     </Container>
   );
 }
-const TableHeaderCell = styled(TableCell)`
+const TableHeaderCell = styled(TableCell)``;
+
+const TableSeqCell = styled(TableCell)`
   font-size: 16px;
   font-weight: 400;
+  width: 20%;
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+`;
+const TableTitleCell = styled(TableCell)`
+  font-size: 16px;
+  font-weight: 400;
+  width: 50%;
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+`;
+const TableCreatedCell = styled(TableCell)`
+  font-size: 16px;
+  font-weight: 400;
+  width: 30%;
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;

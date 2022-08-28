@@ -50,21 +50,21 @@ const categoryData = [
 ];
 
 export function CategoryCard() {
-  const isDesktop = useResponsive(1440);
+  // const isDesktop = useResponsive(1440);
   const isTablet = useResponsive(1028);
-  const isMobile = useResponsive(450);
+  // const isMobile = useResponsive(450);
 
   return (
     // <ContentContainer className={styles.globalContainer}>
-    <Box sx={{ background: '#fafafa' }} mt={4}>
+    <CardWrap>
       <Container>
         <GridWrap
           className="GridWraps"
           container={true}
           spacing={0}
           columns={{ xs: 2, sm: 2, md: 2, lg: 4, xl: 4 }}
-          // rowSpacing={1}
-          // columnSpacing={1}
+          columnSpacing={2}
+          rowSpacing={2}
         >
           {categoryData.map(categoryData => (
             <GridItem
@@ -111,13 +111,21 @@ export function CategoryCard() {
           ))}
         </GridWrap>
       </Container>
-    </Box>
+    </CardWrap>
   );
 }
+const CardWrap = styled(Box)`
+  background: #fafafa;
+  padding-top: 48px;
+  @media (max-width: 1024px) {
+    padding-top: 0px;
+  }
+`;
 
 const GridWrap = styled(Grid)`
   /* margin: auto; */
-  width: 100%;
+  /* box-sizing: border-box; */
+  /* width: 100%; */
   padding-top: 24px;
   padding-bottom: 40px;
 `;

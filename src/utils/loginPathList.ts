@@ -14,7 +14,10 @@ export const notNeededLoginPathList: { href: string }[] = [
 ];
 
 export const allowUserPahtList: { href: string; roles: UserRole[] }[] = [
-  { href: '/traffic/stebMove', roles: [UserRole.ROLE_TRAFFIC_SAFETY_MANAGER, UserRole.ROLE_TRAFFIC_SAFETY_USER] },
+  {
+    href: '/traffic/stebMove',
+    roles: [UserRole.ROLE_TRAFFIC_SAFETY_MANAGER, UserRole.ROLE_TRAFFIC_SAFETY_USER],
+  },
   { href: '/stebMove', roles: [UserRole.ROLE_TRANS_MANAGER, UserRole.ROLE_TRANS_USER] },
 ];
 

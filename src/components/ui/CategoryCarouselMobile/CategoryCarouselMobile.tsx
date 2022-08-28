@@ -57,18 +57,29 @@ export const CategoryCarouselMobile = ({ datas: deprecated }: { datas: Array<any
   return (
     <Slider>
       <Swiper
-        pagination={{
-          clickable: true,
-        }}
-        navigation={true}
+        className="mobile-swiper"
+        // pagination={{
+        //   clickable: true,
+        // }}
+        // navigation={true}
         modules={[Pagination, Navigation, Autoplay]}
         loop={true}
-        autoplay={{
-          delay: 4000,
-          disableOnInteraction: false,
-        }}
+        // autoplay={{
+        //   delay: 4000,
+        //   disableOnInteraction: false,
+        // }}
+        // style={{ height: '200px' }}
       >
-        {data.map(item => (
+        <SwiperSlide>
+          <Image
+            src={data[0].s3Files[0].path}
+            alt=""
+            layout="fill"
+            objectFit="cover"
+            style={{ paddingRight: '16px' }}
+          />
+        </SwiperSlide>
+        {/* {data.map(item => (
           <SwiperSlide // key props error
             key={item.seq}
             className="slide-item"
@@ -81,7 +92,8 @@ export const CategoryCarouselMobile = ({ datas: deprecated }: { datas: Array<any
               style={{ paddingRight: '16px' }}
             />
           </SwiperSlide>
-        ))}
+          
+        ))} */}
       </Swiper>
     </Slider>
   );
@@ -96,6 +108,11 @@ const Slider = styled.div`
     )
     0% 0% / 100%; */
   /* margin-bottom: 32px; */
+
+  .mobile-swiper {
+    width: 100%;
+    height: calc((100vw / 16) * 9);
+  }
 
   //공부해야함.
   .slide-item {

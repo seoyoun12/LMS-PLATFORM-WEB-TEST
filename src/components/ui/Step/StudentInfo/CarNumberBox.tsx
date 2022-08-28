@@ -26,7 +26,9 @@ interface FormType {
 }
 
 export function CarNumberBox({ parantSetValue }: Props) {
-  const { watch, setValue, register } = useForm<FormType>({ defaultValues: { localName: '', digit2: '', oneWord: '', digit4: '' } });
+  const { watch, setValue, register } = useForm<FormType>({
+    defaultValues: { localName: '', digit2: '', oneWord: '', digit4: '' },
+  });
   const [err, setErr] = useState(false);
 
   useEffect(() => {
@@ -37,10 +39,20 @@ export function CarNumberBox({ parantSetValue }: Props) {
     parantSetValue('carNumber', carNumber);
   }, [watch().localName, watch().digit2, watch().digit4, watch().oneWord]);
 
+  const Placeholder = ({ children }) => {
+    return <Box color="#bababa">{children}</Box>;
+  };
+
   return (
-    <Box display="flex" width="100%">
+    <Box display="flex" width="100%" gap={1}>
       <FormControl fullWidth>
-        <Select {...register('localName')}>
+        <Select
+          {...register('localName')}
+          displayEmpty
+          renderValue={
+            watch().localName === '' ? () => <Placeholder>지역명</Placeholder> : undefined
+          }
+        >
           {localList.map(item => (
             <MenuItem key={item.type} value={item.title}>
               {item.title}
@@ -56,10 +68,20 @@ export function CarNumberBox({ parantSetValue }: Props) {
           setValue('digit2', e.target.value.replace(/[^0-9]/g, ''));
         }}
         value={watch().digit2}
+        placeholder="차종 번호2자리"
         fullWidth
       />
       <FormControl fullWidth>
-        <Select {...register('oneWord')}>
+        <Select
+          {...register('oneWord')}
+          displayEmpty
+          renderValue={
+            watch().oneWord === ''
+              ? () => <Placeholder>용도기호 한글자</Placeholder>
+              : undefined
+          }
+          placeholder="용도 기호 한글 한글자"
+        >
           {oneWordList.map(item => (
             <MenuItem key={item} value={item}>
               {item}
@@ -75,6 +97,7 @@ export function CarNumberBox({ parantSetValue }: Props) {
           setValue('digit4', e.target.value.replace(/[^0-9]/g, ''));
         }}
         value={watch().digit4}
+        placeholder="일련번호 4자리"
         fullWidth
       />
     </Box>

@@ -71,7 +71,10 @@ export function SignInV2() {
       const res = await signIn(username, password, loginType.TYPE_TRANS_EDU, name);
       if (res.success) {
         setIsLoginState(true);
-        setUsetInfo({ name: res.data.username, role: [...(res.data.roles as unknown as UserRole[])] }); // api가 있었음 필요없을듯
+        setUsetInfo({
+          name: res.data.username,
+          role: [...(res.data.roles as unknown as UserRole[])],
+        }); // api가 있었음 필요없을듯
         snackbar({ variant: 'success', message: '로그인이 완료되었습니다.' });
         router.push('/category');
       }
@@ -109,8 +112,7 @@ export function SignInV2() {
   };
 
   return (
-    <Container
-      component="div"
+    <SignInContainer
       sx={{
         marginBottom: 8,
       }}
@@ -128,7 +130,18 @@ export function SignInV2() {
           {/* <LockOutlinedIcon /> */}
           <Image src={'/assets/images/loginLogo.png'} width={60} height={60} />
         </Avatar>
-        <Typography fontSize="22px">실명인증 후 예약절차를 진행하고 있습니다.</Typography>
+        <Box
+          width="fit-content"
+          fontSize="22px"
+          display="flex"
+          flexWrap="wrap"
+          justifyContent="center"
+        >
+          <Box>실명인증 후&nbsp;</Box>
+          <Box>예약절차를&nbsp;</Box>
+          <Box>진행하고&nbsp;</Box>
+          <Box>있습니다.</Box>
+        </Box>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
@@ -144,7 +157,9 @@ export function SignInV2() {
             error={usernameErr}
             autoFocus
           />
-          <FormHelperText sx={{ color: 'red' }}>{usernameErr && '이름을 입력해 주세요'}</FormHelperText>
+          <FormHelperText sx={{ color: 'red' }}>
+            {usernameErr && '이름을 입력해 주세요'}
+          </FormHelperText>
           {/* <TextField
             margin="normal"
             required
@@ -185,10 +200,16 @@ export function SignInV2() {
             />
           </Box>
           <FormHelperText sx={{ color: 'red' }}>
-            {(identify1Err || identify2Err) && '올바르지 않은 주민등록번호 입니다. 다시 한번 확인해주세요.'}
+            {(identify1Err || identify2Err) &&
+              '올바르지 않은 주민등록번호 입니다. 다시 한번 확인해주세요.'}
           </FormHelperText>
           <IndividualCheckBox>
-            <Box onClick={() => setSmsYn(prev => !prev)} sx={{ cursor: 'pointer' }}>
+            <Box
+              display="flex"
+              alignItems="center"
+              onClick={() => setSmsYn(prev => !prev)}
+              sx={{ cursor: 'pointer' }}
+            >
               <Checkbox
                 checked={smsYn}
                 // inputProps={{ 'aria-label': 'controlled' }}
@@ -196,11 +217,24 @@ export function SignInV2() {
                 //   setSmsYn(checked);
                 // }}
               />
-              <Typography component="span">개인정보 수집 및 이용에 동의합니다.</Typography>
+              <Box display="flex" flexWrap="wrap" justifyContent="center">
+                <Box>개인정보 수집</Box>
+                <Box>및 이용에</Box>
+                <Box>동의합니다.</Box>
+              </Box>
+              {/* <Typography component="span">
+                개인정보 수집 및 이용에 
+              </Typography> */}
             </Box>
             <ViewContentBox onClick={() => setOpen(true)}>내용보기</ViewContentBox>
           </IndividualCheckBox>
-          <Button type="submit" fullWidth variant="contained" disabled={loading} sx={{ mt: 1, mb: 2 }}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            disabled={loading}
+            sx={{ mt: 1, mb: 2 }}
+          >
             {loading ? <Spinner fit={true} /> : '확인'}
           </Button>
           <Modal
@@ -219,7 +253,11 @@ export function SignInV2() {
                   paddingBottom: '1rem',
                 }}
               >
-                <ConfirmButton variant="contained" onClick={() => setOpen(false)} fullWidth>
+                <ConfirmButton
+                  variant="contained"
+                  onClick={() => setOpen(false)}
+                  fullWidth
+                >
                   확인
                 </ConfirmButton>
               </Box>
@@ -231,9 +269,14 @@ export function SignInV2() {
           </Modal>
         </Box>
       </Box>
-    </Container>
+    </SignInContainer>
   );
 }
+const SignInContainer = styled(Container)`
+  @media (max-width: 550px) {
+    padding: 0 8px;
+  }
+`;
 
 const IndividualCheckBox = styled(Box)`
   display: flex;

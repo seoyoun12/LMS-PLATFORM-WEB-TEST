@@ -71,7 +71,6 @@ export function EduOverview({
         studyEndDate: data.studyEndDate,
       });
       // setValue('businessType', data.course.courseCategoryType);
-
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
     }
@@ -119,7 +118,7 @@ export function EduOverview({
           <Table sx={{ borderTop: '3px solid #000' }}>
             <TableCustomRow>
               <TableLeftCell>온라인과정</TableLeftCell>
-              <TableCell>
+              <TableRightCell>
                 <FormControl fullWidth>
                   {/* <InputLabel id="student">선택</InputLabel> */}
                   <Select
@@ -135,7 +134,7 @@ export function EduOverview({
                       // return { ...prev, courseCategoryType: courseCategory.filter(cate => cate.type === e.target.value)[0].type };
                       // });
                     }}
-                    label="student"
+                    // label="student"
                     disabled
                   >
                     {/*0번째는 보수일반 */}
@@ -147,11 +146,11 @@ export function EduOverview({
                     ))} */}
                   </Select>
                 </FormControl>
-              </TableCell>
+              </TableRightCell>
             </TableCustomRow>
             <TableCustomRow>
               <TableLeftCell>운수구분</TableLeftCell>
-              <TableCell>
+              <TableRightCell>
                 <FormControl fullWidth>
                   {/* <InputLabel id="courseBusinessType">선택</InputLabel> */}
                   <Select
@@ -171,7 +170,7 @@ export function EduOverview({
                       // };
                       // });
                     }}
-                    label="student"
+                    // label="student"
                     disabled
                   >
                     <MenuItem value={courseBusinessTypeList[1].enType}>
@@ -187,11 +186,11 @@ export function EduOverview({
                     })} */}
                   </Select>
                 </FormControl>
-              </TableCell>
+              </TableRightCell>
             </TableCustomRow>
             <TableCustomRow>
               <TableLeftCell>기수 / 교육일자</TableLeftCell>
-              <TableCell>
+              <TableRightCell>
                 <FormControl fullWidth>
                   {/* {/* <InputLabel id="student">선택</InputLabel> */}
                   <Select
@@ -209,7 +208,7 @@ export function EduOverview({
                       // };
                       // });
                     }}
-                    label="student"
+                    // label="student"
                     disabled
                   >
                     {stepsRes.map(item => {
@@ -221,7 +220,7 @@ export function EduOverview({
                     })}
                   </Select>
                 </FormControl>
-              </TableCell>
+              </TableRightCell>
             </TableCustomRow>
           </Table>
         </TableContainer>
@@ -233,6 +232,12 @@ export function EduOverview({
 const EduOverviewWrap = styled(Box)``;
 const TableCustomRow = styled(TableRow)`
   border-bottom: 1px solid #d2d2d2;
+
+  width: 100%;
+  display: flex;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 const TableLeftCell = styled(TableCell)`
   /* background: #e1e1e1; */
@@ -240,4 +245,13 @@ const TableLeftCell = styled(TableCell)`
   text-align: center;
   font-weight: 700;
   width: 20%;
+
+  @media (max-width: 768px) {
+    border-bottom: none;
+    width: 100%;
+    text-align: start;
+  }
+`;
+const TableRightCell = styled(TableCell)`
+  flex-grow: 1;
 `;

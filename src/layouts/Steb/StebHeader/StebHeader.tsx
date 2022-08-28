@@ -11,7 +11,7 @@ const headers = [
   { title: '신청완료', value: 3 },
 ];
 
-export function StebHeader({ value }: { value: number }) {
+export default function StebHeader({ value }: { value: number }) {
   return (
     <StebHeaderWrap>
       {headers
@@ -19,7 +19,9 @@ export function StebHeader({ value }: { value: number }) {
         .map(item => (
           <StepHeaderContainer>
             <StepHeaderTitle>{item.title}</StepHeaderTitle>
-            <StepHeaderSubtitle>충남교통연수원은 올바르고 안전한 교통문화정착에 앞장섭니다.</StepHeaderSubtitle>
+            <StepHeaderSubtitle>
+              충남교통연수원은 올바르고 안전한 교통문화정착에 앞장섭니다.
+            </StepHeaderSubtitle>
           </StepHeaderContainer>
         ))}
       <Box display="flex" gap="8rem" width="fit-content" margin={'auto'}>
@@ -29,9 +31,17 @@ export function StebHeader({ value }: { value: number }) {
           {/* <span>교육일정</span> */}
 
           {1 === value ? (
-            <Image src={'/assets/images/lightOnEduScheduleIcon.png'} width={150} height={150} />
+            <Image
+              src={'/assets/images/lightOnEduScheduleIcon.png'}
+              width={150}
+              height={150}
+            />
           ) : (
-            <Image src={'/assets/images/lightOffEduScheduleIcon.png'} width={150} height={150} />
+            <Image
+              src={'/assets/images/lightOffEduScheduleIcon.png'}
+              width={150}
+              height={150}
+            />
           )}
         </StepHeaderProgessIcon>
         {/* <StepHeaderProgessIcon display="flex" flexDirection="column" alignItems={'center'} sx={{ opacity: 2 === value ? 1 : 0.5 }}> */}
@@ -49,9 +59,17 @@ export function StebHeader({ value }: { value: number }) {
           {/* <Filter3Icon fontSize="large" /> */}
           {/* <span>신청완료</span> */}
           {3 === value ? (
-            <Image src={'/assets/images/lightOnJoinCompleteIcon.png'} width={150} height={150} />
+            <Image
+              src={'/assets/images/lightOnJoinCompleteIcon.png'}
+              width={150}
+              height={150}
+            />
           ) : (
-            <Image src={'/assets/images/lightOffJoinCompleteIcon.png'} width={150} height={150} />
+            <Image
+              src={'/assets/images/lightOffJoinCompleteIcon.png'}
+              width={150}
+              height={150}
+            />
           )}
         </StepHeaderProgessIcon>
       </Box>

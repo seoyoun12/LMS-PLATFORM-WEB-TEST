@@ -16,9 +16,9 @@ import { PopupBox } from '@components/common/PopupBox/PopupBox';
 import { courseType } from '@common/api/courseClass';
 import { regCategory } from '@common/recoil/user/atom';
 import { CourseType } from '@common/api/adm/courseClass';
-import useResponsive from '@hooks/useResponsive';
 import MenuIcon from '@mui/icons-material/Menu';
 import dynamic from 'next/dynamic';
+import useResponsive from '@hooks/useResponsive';
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
@@ -41,7 +41,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       try {
         if (router.route === '/') return;
 
-        const currentPageNotNeedLogin = notNeededLoginPathList.some(item => router.route.includes(item.href));
+        const currentPageNotNeedLogin = notNeededLoginPathList.some(item =>
+          router.route.includes(item.href)
+        );
         // if (router.route.includes('stebMove')) {
         //null or undefined check
         const isCourseType = localStorage.getItem('site_course_type');
@@ -57,7 +59,11 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
         if (!currentPageNotNeedLogin && !localStorage.getItem('ACCESS_TOKEN')) {
           window.alert('로그인이 필요한 서비스입니다.');
-          return router.push(localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL ? '/traffic/sign-in' : '/sign-in');
+          return router.push(
+            localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL
+              ? '/traffic/sign-in'
+              : '/sign-in'
+          );
         }
 
         const { data }: { data: MyUser } = await getMyUser();
@@ -72,11 +78,19 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           regCategory: data.regCategory,
         });
         setUser(data);
-        const allowUserPage = allowUserPahtList.filter(item => router.route.includes(item.href))[0];
+        const allowUserPage = allowUserPahtList.filter(item =>
+          router.route.includes(item.href)
+        )[0];
         if (allowUserPage) {
-          if (data.roles.filter(item => allowUserPage.roles.includes(item)).length === 0) {
+          if (
+            data.roles.filter(item => allowUserPage.roles.includes(item)).length === 0
+          ) {
             window.alert('로그인이 필요합니다!');
-            return router.push(localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL ? '/traffic/sign-in' : '/sign-in');
+            return router.push(
+              localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL
+                ? '/traffic/sign-in'
+                : '/sign-in'
+            );
           }
         }
       } catch (e: any) {
@@ -107,14 +121,20 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
     //if you trans user , block access traffic page
     if (isTraffic && user) {
-      const imTrans = user.roles.some(item => item === UserRole.ROLE_TRANS_USER || item === UserRole.ROLE_TRANS_MANAGER);
+      const imTrans = user.roles.some(
+        item => item === UserRole.ROLE_TRANS_USER || item === UserRole.ROLE_TRANS_MANAGER
+      );
       if (!imTrans) return;
       window.alert('잘못된 접근입니다! 로그아웃 후 해당 페이지로 다시 로그인하세요!');
       router.push('/category');
     }
     //if you traffic user , block access trans page
     else if (!isTraffic && user) {
-      const imSafe = user.roles.some(item => item === UserRole.ROLE_TRAFFIC_SAFETY_USER || item === UserRole.ROLE_TRAFFIC_SAFETY_MANAGER);
+      const imSafe = user.roles.some(
+        item =>
+          item === UserRole.ROLE_TRAFFIC_SAFETY_USER ||
+          item === UserRole.ROLE_TRAFFIC_SAFETY_MANAGER
+      );
       if (!imSafe) return;
       window.alert('잘못된 접근입니다! 로그아웃 후 해당 페이지로 다시 로그인하세요!');
       router.push('/traffic/category');
@@ -150,7 +170,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       }
 
       {/* {router.route.includes('/category') && !router.route.includes('/admin') && <PopupBox />} */}
-      {/* category에 넣으면 css 붕괴. 이유 알수없음.(popupBox 넣으면 여러 상관없는 컴포넌트의 css들이 무작위로 지정됨. ex)카드 리스트에 Spinner의 스타일이 지정 ) */}
+      {/* category에 넣으면 css 붕괴. 이유 알수없음.(popupBox 넣으면 여러 상관없는 컴포넌트의 css들이 무작위로 지정됨. ex)카드 리스트에 Spinner의 스타일이 지정 ) 
+      ==> 해결, dynamic 으로 ssr 비활성화. 근데 해결하니까 누가 밑에 작성해주셨네
+      */}
 
       <main className="fit">{children}</main>
       <Footer />
@@ -158,13 +180,14 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const Header = dynamic(() => Promise.resolve(({ isDesktop }: { isDesktop: boolean }) => {
-
-  if (typeof window !== 'undefined' && isDesktop) {
-
-    if (localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL) return <TrafficGlobalNavigationBar />;
-    else return <GlobalNavigationBar />;
-
-  } else return <MobileNav />
-
-}), { ssr: false });
+const Header = dynamic(
+  () =>
+    Promise.resolve(({ isDesktop }: { isDesktop: boolean }) => {
+      if (typeof window !== 'undefined' && isDesktop) {
+        if (localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL)
+          return <TrafficGlobalNavigationBar />;
+        else return <GlobalNavigationBar />;
+      } else return <MobileNav />;
+    }),
+  { ssr: false }
+);

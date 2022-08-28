@@ -53,7 +53,6 @@ export function Tabs2({
     gap: 0,
   });
   const isMobile = useResponsive(responsiveWidth);
-  console.log('zzz', isMobile, !isMobile ? 'scrollable' : variant);
 
   useEffect(() => {
     if (!router.query.tab && rendering) {

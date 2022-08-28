@@ -64,15 +64,11 @@ export function BoardAccordionV2({ loadedItem }: { loadedItem: CategoryBoard[] }
             }}
           >
             <BoardBox>
-              <Typography width="10%" textAlign="center">
-                {seq}
-              </Typography>
-              <Typography width="70%" paddingLeft="1rem">
-                {subject}
-              </Typography>
-              <Typography width="20%" textAlign="center">
+              <BoardSeqBox textAlign="center">{seq}</BoardSeqBox>
+              <BoardSeqTitleBox paddingLeft="1rem">{subject}</BoardSeqTitleBox>
+              <BoardCreatedBox textAlign="center">
                 {createdDtimeYmd.toString()}
-              </Typography>
+              </BoardCreatedBox>
             </BoardBox>
           </AccordionSummary>
           <BoardAccordionDetails>
@@ -135,6 +131,9 @@ const Wrap = styled(Box)`
     right: 0;
     width: 100px;
     height: 24px;
+    @media (max-width: 768px) {
+      bottom: 16px;
+    }
   }
   border-top: 1px solid #cdcdcd;
   border-bottom: 1px solid #cdcdcd;
@@ -154,6 +153,16 @@ const BoardBox = styled(Box)`
     font-size: 1.3rem;
     width: 100%;
   }
+`;
+
+const BoardSeqBox = styled(Box)`
+  width: 20%;
+`;
+const BoardSeqTitleBox = styled(Box)`
+  width: 50%;
+`;
+const BoardCreatedBox = styled(Box)`
+  width: 30%;
 `;
 
 const BoardAccordionDetails = styled(AccordionDetails)`

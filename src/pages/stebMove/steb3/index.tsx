@@ -1,8 +1,13 @@
 import { Layout } from '@layouts/Layout';
-import { Steb3 } from '@layouts/Steb';
+// import { Steb3 } from '@layouts/Steb';
 import { Box } from '@mui/material';
 import styles from '@styles/common.module.scss';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
+
+const Steb3 = dynamic(() => import('@layouts/Steb/Steb3/Steb3'), {
+  ssr: false,
+});
 
 export default function Steb3Page() {
   return (

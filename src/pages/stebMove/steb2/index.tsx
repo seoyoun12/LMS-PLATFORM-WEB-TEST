@@ -1,8 +1,12 @@
 import { Layout } from '@layouts/Layout';
-import { Steb2 } from '@layouts/Steb';
 import { Box } from '@mui/material';
 import styles from '@styles/common.module.scss';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
+
+const Steb2 = dynamic(() => import('@layouts/Steb/Steb2/Steb2'), {
+  ssr: false,
+});
 
 export default function Steb2Page() {
   return (

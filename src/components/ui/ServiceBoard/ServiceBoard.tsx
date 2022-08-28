@@ -4,8 +4,13 @@ import { CategoryBoardNotice } from '@layouts/Category/CategoryBoardNotice';
 import { CategoryBoardQuestion } from '@layouts/Category/CategoryBoardQuestion';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { Box, Container } from '@mui/material';
-import { Tabs2 } from '../Tabs2';
+import { Box } from '@mui/material';
+import dynamic from 'next/dynamic';
+import { CSRTabs2Props } from '@components/ui/Tabs2/CSRTabs2';
+
+const CSRTab2 = dynamic<CSRTabs2Props>(() => import('@components/ui/Tabs2/CSRTabs2'), {
+  ssr: false,
+});
 
 enum TabValue {
   Notice = 'Notice',
@@ -26,8 +31,8 @@ export function ServiceBoard() {
   const { tab } = router.query;
   return (
     <ServiceContainer>
-      <Box sx={{ mb: '30px', mt: '30px' }}>
-        <Tabs2
+      <Box sx={{ maxWidth: 1200, margin: 'auto', mb: '30px', mt: '30px' }}>
+        <CSRTab2
           tabsConfig={tabsConfig}
           variant={'fullWidth'}
           showBorderBottom={true}

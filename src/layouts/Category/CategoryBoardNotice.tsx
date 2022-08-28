@@ -5,9 +5,26 @@ import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
 import { Spinner } from '@components/ui';
 import styled from '@emotion/styled';
 import { NotFound } from '@components/ui/NotFound';
+import { S3Files } from 'types/file';
 
 export function CategoryBoardNotice() {
   const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_NOTICE');
+  const accordianInfo: {
+    seq: number;
+    date: string;
+    name: string;
+    children: {
+      content: string;
+      s3Files: S3Files;
+    };
+  }[] = loadedItem.map(item => {
+    return {
+      seq: item.seq,
+      date: item.createdDtimeYmd.slice(0, -1),
+      name: item.subject,
+      children: { content: item.content, s3Files: item.s3Files },
+    };
+  });
 
   return (
     <Container>
@@ -28,7 +45,7 @@ export function CategoryBoardNotice() {
               </TableRow>
             </TableHead>
           </Table>
-          <BoardAccordionV2 loadedItem={loadedItem} />
+          <BoardAccordionV2 accordianInfo={accordianInfo} />
           {/* {loadedItem.map(content => {
             const accordionInfo = [
               {
@@ -45,7 +62,7 @@ export function CategoryBoardNotice() {
         <NotFound content="공지사항게시글이 존재하지 않습니다!" />
       )}
       <Box ref={target} height="100px">
-        {loading ? <Spinner /> : ''}
+        {loading ? <Spinner fit={true} /> : ''}
       </Box>
     </Container>
   );

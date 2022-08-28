@@ -3,10 +3,26 @@ import { BoardAccordion, BoardAccordionV2 } from '@components/ui/BoardAccordion'
 import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
 import styled from '@emotion/styled';
 import { NotFound } from '@components/ui/NotFound';
+import { S3Files } from 'types/file';
 
 export function CategoryBoardFaq() {
   const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_FAQ');
-
+  const accordianInfo: {
+    seq: number;
+    date: string;
+    name: string;
+    children: {
+      content: string;
+      s3Files: S3Files;
+    };
+  }[] = loadedItem.map(item => {
+    return {
+      seq: item.seq,
+      date: item.createdDtimeYmd.slice(0, -1),
+      name: item.subject,
+      children: { content: item.content, s3Files: item.s3Files },
+    };
+  });
   return (
     <Container>
       {loadedItem && loadedItem.length > 0 ? (
@@ -32,8 +48,8 @@ export function CategoryBoardFaq() {
               </TableRow>
             </TableHead>
           </Table>
-          
-          <BoardAccordionV2 loadedItem={loadedItem} />
+
+          <BoardAccordionV2 accordianInfo={accordianInfo} />
           {/* {loadedItem &&
             loadedItem.map(content => {
               const accordionInfo = [

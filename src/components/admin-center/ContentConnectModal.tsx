@@ -53,6 +53,7 @@ export function ContentConnectModal({ open, handleClose, courseSeq }: Props) {
       await mutate();
       snackbar({ variant: 'success', message: '연결이 완료되었습니다.' });
     } catch (e) {
+      snackbar({ variant: 'error', message: e.data.message });
       console.error(e);
     }
   };

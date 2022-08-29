@@ -36,6 +36,7 @@ const LinkList = [
     displayWord: '운수종사자',
     textColor: '#0A9A4E',
     color: '#0A9A4E',
+    lineColor: '#179b52',
     href: '/category',
     imgPath: '/assets/images/unsu.jpg',
     onClickCard: async () => {
@@ -62,6 +63,7 @@ const LinkList = [
     displayWord: '저상버스',
     textColor: '#256AEF',
     color: '#256AEF',
+    lineColor: '#2a6fe8',
     href: '/category',
     imgPath: '/assets/images/lowFloor.jpg',
     onClickCard: async () => {
@@ -88,6 +90,7 @@ const LinkList = [
     displayWord: '도민교통',
     textColor: '#711D14',
     color: '#FEC901',
+    lineColor: '#57242b',
     href: 'traffic/category',
     imgPath: '/assets/images/domin.jpg',
     onClickCard: async () => {
@@ -180,7 +183,11 @@ const MainPage: NextPage = () => {
               style={{ margin: 'auto' }}
             />
           </LogoBox>
-          {/* <NoticeContainer>
+          <SubTitle>
+            <Box>충남 교통안전&nbsp;</Box>
+            <Box color="#236cef">온라인교육센터</Box>
+          </SubTitle>
+          <NoticeContainer>
             <NoticeTitle>
               <NoticeTitleTypography>{`충남교통연수원 알림판`}</NoticeTitleTypography>
             </NoticeTitle>
@@ -189,8 +196,7 @@ const MainPage: NextPage = () => {
                 {`운수종사자의 경우 첫번째 "운수종사자교육"\n저상버스운전자의 경우 두번째 "저상버스운전자교육"\n도민교통안전교육자의 경우 세번째 "도민교통안전교육"을\n이용해주시기 바랍니다.`}
               </NoticeContentTypography>
             </NoticeContent>
-          </NoticeContainer> */}
-          <SubTitle>충남 교통안전 온라인교육센터</SubTitle>
+          </NoticeContainer>
           <Box position="relative">
             <CategoryGrid
               container={true}
@@ -207,6 +213,7 @@ const MainPage: NextPage = () => {
                     displayWord,
                     imgPath,
                     pageType,
+                    lineColor,
                     onClickCard,
                   } = LinkList.filter(
                     filter => filter.mainDisplayType === item.mainDisplayType
@@ -250,8 +257,14 @@ const MainPage: NextPage = () => {
                           </Box>
                           <Button color="neutral" sx={{ position: 'relative' }}>
                             <Typography fontWeight="bold">바로가기</Typography>
-                            <Box className="button-bot-line" />
-                            <Box className="button-right-line" />
+                            <Box
+                              className="button-bot-line"
+                              borderBottom={`2px solid ${lineColor}`}
+                            />
+                            <Box
+                              className="button-right-line"
+                              borderRight={` 2px solid ${lineColor}`}
+                            />
                           </Button>
                         </CardInContainer>
                       </Box>
@@ -302,14 +315,60 @@ const LogoBox = styled(Box)`
 `;
 
 const SubTitle = styled(Box)`
-  font-size: 1.2rem;
+  font-size: 19px;
+  font-weight: 700;
   padding: 0.5rem 2.5rem;
   width: fit-content;
   margin: auto;
   margin-top: 8px;
-  background: #144aaa;
-  color: white;
+  /* color: white; */
+  background: #f7f7f7;
+  border: 1px solid #236cef;
   border-radius: 4px;
+  display: flex;
+`;
+
+// Notice
+const NoticeContainer = styled(Box)`
+  max-width: 930px;
+  position: relative;
+  height: 25%;
+  margin: auto;
+  margin-top: 40px;
+  border-radius: 1rem;
+  border: 2px solid #d7d7d7;
+  // 알림판 중앙 정렬
+`;
+
+const NoticeTitle = styled(Box)`
+  position: absolute;
+  width: 236px;
+  height: 46px;
+  right: 50%;
+  color: black;
+  background: #f9f9f9;
+  box-sizing: border-box;
+  border-radius: 1rem;
+  border: 1px solid #d7d7d7;
+  padding: 0.5rem 0.25rem;
+  transform: translate(50%, -50%);
+`;
+const NoticeTitleTypography = styled(Typography)`
+  width: 100%;
+  font-size: 1.15rem;
+  font-weight: bold;
+  text-align: center;
+`;
+const NoticeContent = styled(Box)`
+  height: 100%;
+  margin: 2rem;
+  text-align: center;
+  border-radius: 0 30px 30px 0;
+  background-color: white;
+`;
+// line-break
+const NoticeContentTypography = styled(Typography)`
+  white-space: pre-wrap;
 `;
 
 // Category Grid
@@ -351,14 +410,14 @@ const CardInContainer = styled(Box)`
     left: 0;
     top: 2rem;
     width: 100%;
-    border-bottom: 2px solid #dadada;
+    /* border-bottom: 2px solid #dadada; */
   }
   .button-right-line {
     position: absolute;
     right: 9px;
     top: 0.5rem;
     height: 75%;
-    border-right: 2px solid #dadada;
+    /* border-right: 2px solid #dadada; */
     transform: rotate(-40deg);
   }
 `;
@@ -392,46 +451,3 @@ const FooterWord = styled(Box)`
   }
 `;
 export default MainPage;
-
-// // Notice
-// const NoticeContainer = styled(Box)`
-//   max-width: 930px;
-//   position: relative;
-//   height: 25%;
-//   margin: auto;
-//   margin-top: 80px;
-//   border-radius: 1rem;
-//   border: 2px solid #d7d7d7;
-//   // 알림판 중앙 정렬
-// `;
-
-// const NoticeTitle = styled(Box)`
-//   position: absolute;
-//   width: 236px;
-//   height: 46px;
-//   right: 50%;
-//   color: black;
-//   background: #f9f9f9;
-//   box-sizing: border-box;
-//   border-radius: 1rem;
-//   border: 1px solid #d7d7d7;
-//   padding: 0.5rem 0.25rem;
-//   transform: translate(50%, -50%);
-// `;
-// const NoticeTitleTypography = styled(Typography)`
-//   width: 100%;
-//   font-size: 1.15rem;
-//   font-weight: bold;
-//   text-align: center;
-// `;
-// const NoticeContent = styled(Box)`
-//   height: 100%;
-//   margin: 2rem;
-//   text-align: center;
-//   border-radius: 0 30px 30px 0;
-//   background-color: white;
-// `;
-// // line-break
-// const NoticeContentTypography = styled(Typography)`
-//   white-space: pre-wrap;
-// `;

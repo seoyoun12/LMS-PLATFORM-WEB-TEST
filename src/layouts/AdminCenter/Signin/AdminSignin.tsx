@@ -28,13 +28,14 @@ export function AdminSignin() {
         router.push('/admin-center/user');
       } else {
         snackbar({ variant: 'error', message: '일치하지 않는 정보입니다.' });
+        setLoading(false);
         await logout();
       }
       setLoading(false);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
-      await logout();
       setLoading(false);
+      await logout();
     }
   };
 

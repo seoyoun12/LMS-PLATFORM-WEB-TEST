@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Link } from '@components/common';
-import s from './Me.module.scss';
+import s from '../Me.module.scss';
 import { grey } from '@mui/material/colors';
 import { Spinner, Tabs } from '@components/ui';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -19,9 +19,6 @@ import { useMyUser } from '@common/api/user';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { ContentCardV2 } from '@components/ui/ContentCard';
-import useResponsive from '@hooks/useResponsive';
-import { MeDesktop } from './MeDesktop';
-import { MeMobile } from './MeMobile';
 
 const myInfoList = [
   // { label: "내 강의", value: "myCourse" },
@@ -34,18 +31,16 @@ const myInfoList = [
   { label: '온라인 교육 신청내역', value: '/enroll-history' },
 ];
 
-export default function Me() {
+export function MeDesktop() {
   const router = useRouter();
-  const isTablet = !useResponsive();
   const { user, error } = useMyUser();
   const [value, setValue] = React.useState(myInfoList[0].value);
 
   if (error) return <div>error</div>;
   if (!user) return <Spinner />;
   return (
-    <MeContainer className={containerStyle}>
-      {isTablet ? <MeMobile /> : <MeDesktop />}
-      {/* <UserInfoSection>
+    <Container className={containerStyle}>
+      <UserInfoSection>
         <Link href={`/me/edit`} className={s.myInfo}>
           <UserProfile>M</UserProfile>
           <div>
@@ -72,18 +67,18 @@ export default function Me() {
                 </SideBarInfoItem>
               </SideBarInfoLink>
             ))}
-            // {myInfoList.map(({ href, name }) => (
-            //   <Link
-            //     key={name}
-            //     className={s.link}
-            //     underline="hover"
-            //     color={grey[900]}
-            //     href={href}
-            //   >
-            //     <Typography variant="body2">{name}</Typography>
-            //     <ArrowForwardIcon />
-            //   </Link>
-            // ))} 
+            {/* {myInfoList.map(({ href, name }) => (
+              <Link
+                key={name}
+                className={s.link}
+                underline="hover"
+                color={grey[900]}
+                href={href}
+              >
+                <Typography variant="body2">{name}</Typography>
+                <ArrowForwardIcon />
+              </Link>
+            ))} */}
           </SideBarContent>
         </SideBar>
         <LessonListContainer>
@@ -130,12 +125,10 @@ export default function Me() {
             )}
           </Grid>
         </LessonListContainer>
-      </ContentBody> */}
-    </MeContainer>
+      </ContentBody>
+    </Container>
   );
 }
-
-const MeContainer = styled(Container)``;
 
 const UserProfile = styled(Avatar)`
   width: 60px;
@@ -206,5 +199,5 @@ const LessonListContainer = styled(Box)`
 
 const containerStyle = css`
   margin-bottom: 32px;
-  padding: 48px 16px 48px 16px;
+  padding: 72px 0 48px;
 `;

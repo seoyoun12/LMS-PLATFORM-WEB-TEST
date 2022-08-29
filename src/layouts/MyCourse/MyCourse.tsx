@@ -5,6 +5,13 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { LearningCourse } from './LearningCourse';
 import { EndCourse } from './EndCourse';
+import dynamic from 'next/dynamic';
+import { CSRTabs2Props } from '@components/ui/Tabs2/CSRTabs2';
+import useResponsive from '@hooks/useResponsive';
+
+const CSRTab2 = dynamic<CSRTabs2Props>(() => import('@components/ui/Tabs2/CSRTabs2'), {
+  ssr: false,
+});
 
 const studingCourseList = [
   { label: '학습중인 과정', value: 'ing' },
@@ -13,6 +20,7 @@ const studingCourseList = [
 
 export function MyCourse() {
   const router = useRouter();
+  const isDesktop = useResponsive();
   return (
     <MyCoursewrap>
       <MyCourseContainer>
@@ -20,12 +28,12 @@ export function MyCourse() {
         <MyCourseSubTitle>학습중인 과정을 확인할수 있습니다</MyCourseSubTitle>
       </MyCourseContainer>
       <Box boxSizing={'border-box'} borderBottom={'2px solid #e0e0e0'}>
-        <Box sx={{ width: 'fit-content', margin: 'auto', marginTop: '1.5rem' }}>
-          <Tabs2
+        <Box sx={{ margin: 'auto', marginTop: '1.5rem' }}>
+          <CSRTab2
             tabsConfig={studingCourseList}
             fontSx={{ color: 'black', fontSize: '20px' }}
             variant={'fullWidth'}
-            gap={10}
+            gap={isDesktop ? 8 : 2}
             showBorderBottom={false}
           />
         </Box>
@@ -84,7 +92,6 @@ const MyCourseSubTitle = styled(Box)`
 `;
 const CourseContainer = styled(Box)`
   max-width: 1200px;
-  padding-top: 2.5rem;
-  padding-bottom: 3rem;
+  padding: 2.5rem 12px 3rem 12px;
   margin: auto;
 `;

@@ -173,12 +173,6 @@ export function StudentInfo({
                     id="phone-type"
                     {...register('firstPhone')}
                     onChange={e => {
-                      if (
-                        !Phone3Regex.test(e.target.value) ||
-                        e.target.value.length > 3
-                      ) {
-                        return;
-                      }
                       setValue('firstPhone', e.target.value);
                     }}
                     value={watch().firstPhone || ''}

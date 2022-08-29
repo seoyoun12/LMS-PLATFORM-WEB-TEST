@@ -98,6 +98,7 @@ export function CalendarUpload() {
       router.push('/admin-center/calendar');
     } catch (e: any) {
       // snackbar({ variant: 'error', message: e });
+      snackbar({ variant: 'error', message: e.data.message });
       setLoading(false);
     }
   };

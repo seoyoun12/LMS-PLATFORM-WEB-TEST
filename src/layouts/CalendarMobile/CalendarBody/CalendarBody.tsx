@@ -259,7 +259,7 @@ export function CalendarBody({
                 setLoading(false);
               }}
             >
-              교육신청
+              {loading ? <Spinner fit={true} /> : '교육신청'}
             </JoinButton>
             <CloseButton variant="contained" onClick={() => setOpenModal(false)}>
               닫기

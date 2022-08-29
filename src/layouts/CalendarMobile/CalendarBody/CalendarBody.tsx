@@ -5,6 +5,10 @@ import { CustomContentGenerator, EventContentArg } from '@fullcalendar/core';
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
   TableBody,
   TableCell,
   TableContainer,
@@ -29,6 +33,8 @@ import { useRecoilState } from 'recoil';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { Spinner } from '@components/ui';
 import { NotFound } from '@components/ui/NotFound';
+import { useState } from 'react';
+import { getIsExistUser } from '@common/api/courseUser';
 
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -86,6 +92,8 @@ export function CalendarBody({
   const router = useRouter();
   const isLogin = useIsLoginStatus();
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
+  const [loading, setLoading] = useState(false);
+  const [deplecateEnrollOpen, setDeplecateEnrollOpen] = useState(false);
   const scheduleItem = schedule?.map(({ date, day, children }) => {
     return {
       date: date,
@@ -212,6 +220,8 @@ export function CalendarBody({
         open={openModal}
         onCloseModal={() => setOpenModal(false)}
         // title={<Box >교육안내</Box>}
+        fullWidth
+        maxWidth="lg"
         action={
           <Box
             sx={{
@@ -224,7 +234,7 @@ export function CalendarBody({
           >
             <JoinButton
               variant="contained"
-              onClick={() => {
+              onClick={async () => {
                 setEnrollInfo({
                   // courseCategoryType: modalInfo ? modalInfo.courseCategoryType.type : courseCategoryType.TYPE_NONE,
                   // courseBusinessType: FilterType.TYPE_PASSENGER, //서버에서 받아야함
@@ -234,7 +244,19 @@ export function CalendarBody({
                   window.alert('로그인이 필요한 서비스입니다.');
                   return router.push('/sign-in');
                 }
+                try {
+                  setLoading(true);
+                  const { data } = await getIsExistUser(modalInfo.seq);
+                  if (!data) {
+                    setLoading(false);
+                    return setDeplecateEnrollOpen(true);
+                  }
+                  setLoading(false);
+                } catch (e: any) {
+                  setLoading(false);
+                }
                 router.push('/stebMove/steb2');
+                setLoading(false);
               }}
             >
               교육신청
@@ -245,7 +267,7 @@ export function CalendarBody({
           </Box>
         }
       >
-        <TableContainer sx={{ width: '500px', padding: '0 2rem' }}>
+        <TableContainer sx={{ padding: '0 8px' }}>
           <EduGuide>
             <span>교육안내</span>
           </EduGuide>
@@ -303,6 +325,24 @@ export function CalendarBody({
           </TableBody>
         </TableContainer>
       </Modal>
+      <Dialog open={deplecateEnrollOpen} onClose={() => setDeplecateEnrollOpen(false)}>
+        <DialogContent>
+          <DialogContentText>
+            이미 예약하신 신청내역이 있습니다. 신청내역을 확인하시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeplecateEnrollOpen(false)}>취소</Button>
+          <Button
+            onClick={() => {
+              router.push(`/me/enroll-history`);
+              return setDeplecateEnrollOpen(false);
+            }}
+          >
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
     </CalendarWrap>
   );
 }
@@ -370,24 +410,26 @@ const CalendarItemHeader = styled(Box)`
 const EduGuide = styled(Typography)`
   width: fit-content;
   font-weight: 700;
-  font-size: 36px;
+  font-size: 24px;
   margin: auto;
 `;
 
 const EduSummury = styled(Typography)`
   width: fit-content;
   font-weight: 700;
-  font-size: 24px;
+  font-size: 16px;
   border-top: 3px solid #000;
 `;
 
 const TableLeftCell = styled(TableCell)`
-  width: 30%;
+  /* width: 30%; */
   background: #f5f5f5;
   border-right: 1px solid #c4c4c4;
   border-left: 1px solid #c4c4c4;
   border-bottom: 1px solid #c4c4c4;
   font-weight: 400;
+  /* padding: '1rem 0'; */
+  padding: '1px 0px';
 `;
 const TableRightCell = styled(TableCell)`
   border-bottom: 1px solid #c4c4c4;

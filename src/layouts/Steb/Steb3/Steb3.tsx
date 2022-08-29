@@ -13,7 +13,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { StebHeader } from '../StebHeader';
+import StebHeader from '../StebHeader/StebHeader';
 import { useRecoilState } from 'recoil';
 import { courseClassEnrollInfo, courseClassEnrollList, userInfo } from '@common/recoil';
 import CheckIcon from '@mui/icons-material/Check';
@@ -42,7 +42,7 @@ import useResponsive from '@hooks/useResponsive';
 //     businessSubType: 'SPECIAL_TRANSPORTATION',
 //     businessType: 'PASSENGER',
 //     carNumber: '123456',
-//     carRegisteredRegion: 'GONGJU',
+//     carRegisteredRegion: 'CHUNGNAM',
 //     courseClassSeq: 8,
 //     firstIdentityNumber: '123456',
 //     firstPhone: '010',
@@ -58,7 +58,7 @@ import useResponsive from '@hooks/useResponsive';
 //     businessSubType: 'SPECIAL_TRANSPORTATION',
 //     businessType: 'PASSENGER',
 //     carNumber: '123456',
-//     carRegisteredRegion: 'GONGJU',
+//     carRegisteredRegion: 'SEJONG',
 //     courseClassSeq: 8,
 //     firstIdentityNumber: '123456',
 //     firstPhone: '010',
@@ -74,12 +74,12 @@ import useResponsive from '@hooks/useResponsive';
 // const dummyInfo = {
 //   courseCategoryType: courseCategory[0].type,
 //   courseBusinessType: courseBusinessTypeList[0].enType,
-//   step: 12123,
+//   step: 13,
 //   studyStartDate: '2022-08-18',
 //   studyEndDate: '2222-08-18',
 // };
 
-export function Steb3() {
+export default function Steb3() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const isDesktop = useResponsive();
@@ -140,6 +140,7 @@ export function Steb3() {
     };
   }, []);
 
+  // if (loading) return <Spinner />;
   if (loading || !info) return <Spinner />;
   return (
     <Steb3Wrap>
@@ -149,16 +150,18 @@ export function Steb3() {
         <CompleteRegi>
           {/* <CheckIcon sx={{ fontSize: '6rem', color: 'primary.main' }} /> */}
           <CheckedCircle />
-          <Box mt={4}>
-            <Typography component="span" sx={{ fontSize: '38px' }}>
-              교육신청이{' '}
+          <Box mt={4} display="flex" flexWrap="wrap">
+            <Typography component="span" sx={{ fontSize: '38px' }} margin="auto">
+              교육신청이&nbsp;
             </Typography>
-            <Typography component="span" fontWeight="bold" sx={{ fontSize: '38px' }}>
-              완료{' '}
-            </Typography>
-            <Typography component="span" sx={{ fontSize: '38px' }}>
-              되었습니다.
-            </Typography>
+            <Box margin="auto">
+              <Typography component="span" fontWeight="bold" sx={{ fontSize: '38px' }}>
+                완료&nbsp;
+              </Typography>
+              <Typography component="span" sx={{ fontSize: '38px' }}>
+                되었습니다.
+              </Typography>
+            </Box>
           </Box>
         </CompleteRegi>
 
@@ -180,7 +183,7 @@ export function Steb3() {
             <Table sx={{ borderTop: '3px solid #000' }}>
               <TableCustomRow>
                 <TableLeftCell>교육과정</TableLeftCell>
-                <TableCell>
+                <TableRitghCell>
                   <Select
                     disabled
                     value={
@@ -194,11 +197,11 @@ export function Steb3() {
                       <MenuItem value={item.type}>{item.ko}</MenuItem>
                     ))}
                   </Select>
-                </TableCell>
+                </TableRitghCell>
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>운수구분</TableLeftCell>
-                <TableCell>
+                <TableRitghCell>
                   <Select
                     disabled
                     value={
@@ -212,18 +215,18 @@ export function Steb3() {
                       <MenuItem value={item.enType}>{item.type}</MenuItem>
                     ))}
                   </Select>
-                </TableCell>
+                </TableRitghCell>
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>기수 / 교육일자</TableLeftCell>
-                <TableCell>
+                <TableRitghCell>
                   <Select value="dummy" disabled fullWidth>
                     <MenuItem value="dummy">
                       {info?.step}기 / {dateFormat(info.studyStartDate, 'yyyy-mm-dd')} ~{' '}
                       {dateFormat(info?.studyEndDate, 'yyyy-mm-dd')}
                     </MenuItem>
                   </Select>
-                </TableCell>
+                </TableRitghCell>
               </TableCustomRow>
             </Table>
           </TableContainer>
@@ -262,6 +265,7 @@ export function Steb3() {
                     sm={1}
                     md={1}
                     lg={1}
+                    margin="auto"
                   >
                     <StuTableContainer>
                       <StuTableBody sx={{ display: 'table', width: '100%' }}>
@@ -285,7 +289,7 @@ export function Steb3() {
                             {
                               locationList.filter(
                                 regi => regi.en === item.carRegisteredRegion
-                              )[0].ko
+                              )[0]?.ko
                             }
                           </StuTableRightCell>
                         </UserTableRow>
@@ -303,18 +307,18 @@ export function Steb3() {
           </StudentItemListWrap>
         </RegiStudentList>
         <BottomBox>
-          <Box padding="1rem" textAlign="center">
-            <Typography fontWeight={400} fontSize="24px">
+          <Box padding="1rem" textAlign="center" maxWidth="500px" margin="auto">
+            <Typography fontWeight={400}>
               {user.name || 'null'}님의 교육신청이 완료되었습니다.
             </Typography>
-            <Typography fontWeight={400} fontSize="24px">
+            <Typography fontWeight={400}>
               알차고 실속있는 서비스로 찾아뵙겠습니다.
             </Typography>
           </Box>
-          <Box display="flex" gap="0.5rem">
+          <Box display="flex" gap="0.5rem" maxWidth="500px" margin="auto">
             <Button
               variant="contained"
-              sx={{ padding: '0.75rem 1.5rem', fontSize: '20px', fontWeight: 500 }}
+              sx={{ padding: '0.75rem 1.5rem', fontWeight: 500 }}
               color="neutral"
               onClick={() => router.push(`/category`)}
               fullWidth
@@ -325,7 +329,6 @@ export function Steb3() {
               variant="contained"
               sx={{
                 padding: '0.75rem 1.5rem',
-                fontSize: '20px',
                 fontWeight: 500,
                 color: 'white',
                 background: '#191919',
@@ -345,6 +348,9 @@ export function Steb3() {
 const Steb3Wrap = styled(Box)``;
 const Steb3BodyWrap = styled(Container)`
   margin-top: 6rem;
+  margin-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 `;
 const HeaderTypo = styled(Typography)`
   padding-bottom: 1rem;
@@ -362,13 +368,37 @@ const RegiStudentList = styled(Box)``;
 
 const TableCustomRow = styled(TableRow)`
   border-bottom: 2px solid #d2d2d2;
+  width: 100%;
+  display: flex;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 const TableLeftCell = styled(TableCell)`
   /* background: #e1e1e1; */
   width: 20%;
   font-size: 20px;
   font-weight: 700;
+  padding: 12px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    border-bottom: none;
+    width: 100%;
+    justify-content: start;
+  }
 `;
+
+const TableRitghCell = styled(TableCell)`
+  width: 80%;
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 12px 0;
+  }
+`;
+
 const StudentItemListWrap = styled(Box)`
   div:last-child {
     border-bottom: none;
@@ -422,7 +452,32 @@ const BottomBox = styled(Box)`
   margin: auto;
   border: 1px solid #c4c4c4;
   border-radius: 4px;
-  padding: 2rem 20rem;
+  padding: 2rem 0;
+  button {
+    font-size: 20px;
+  }
+  p {
+    font-size: 24px;
+  }
+  @media (max-width: 1024px) {
+    p {
+      font-size: 18px;
+    }
+    button {
+      font-size: 18px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding-left: 4px;
+    padding-right: 4px;
+    p {
+      font-size: 16px;
+    }
+    button {
+      font-size: 14px;
+    }
+  }
 `;
 
 const StuTableBody = styled(TableBody)`
@@ -438,13 +493,26 @@ const StuTableLeftCell = styled(TableCell)`
   background: #f4f4f4;
   font-weight: 400;
   font-size: 18px;
+  padding: 0 4px;
+  line-height: 48px;
+  height: 48px;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 const StuTableRightCell = styled(TableCell)`
   width: 70%;
   font-weight: 400;
   font-size: 18px;
+  padding: 0 4px;
+  line-height: 48px;
+  height: 48px;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;

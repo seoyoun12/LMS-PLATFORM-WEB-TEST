@@ -30,7 +30,8 @@ export function MobileNav() {
   const isLoginStatus = useIsLoginStatus();
   const [userInfoData, setUserInfoData] = useRecoilState(userInfo);
   const [list, setList] = useState(
-    (typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
+    (typeof window !== 'undefined' &&
+    localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
       ? ProvintialHeaderList
       : TransHeaderList
     ).map(item => {
@@ -53,7 +54,8 @@ export function MobileNav() {
     }
 
     setList(
-      (typeof window !== 'undefined' && localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
+      (typeof window !== 'undefined' &&
+      localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
         ? ProvintialHeaderList
         : TransHeaderList
       ).map(item => {
@@ -88,11 +90,15 @@ export function MobileNav() {
     handleClose();
   };
 
-  const onClickSitemap = (item: { name: string; href: string; type: courseType; regCategory: regCategoryType }) => {
+  const onClickSitemap = (item: {
+    name: string;
+    href: string;
+    type: courseType;
+    regCategory: regCategoryType;
+  }) => {
     const isEqual = userInfoData.regCategory.includes(item.regCategory);
 
     if (isLoginStatus && !isEqual) {
-
       const isConfirm = window.confirm('정말로 이동하시겠습니까? 로그아웃됩니다.');
       try {
         if (!isConfirm) return;
@@ -112,13 +118,32 @@ export function MobileNav() {
     <Header>
       {!isHideNavbar && (
         <MobileContentContainer>
-          <Link href="/category" underline="none" height="100%" display="flex" alignItems="center">
-            <Image src="/assets/images/cttsLogo.png" height={40} width={224} alt="Your Name" />
+          <Link
+            href="/"
+            underline="none"
+            height="100%"
+            display="flex"
+            alignItems="center"
+          >
+            <Image
+              src="/assets/images/cttsLogo.png"
+              height={40}
+              width={224}
+              alt="Your Name"
+            />
           </Link>
-          <MenuIcon fontSize="large" sx={{ color: 'black ' }} onClick={() => setOpen(true)} />
+          <MenuIcon
+            fontSize="large"
+            sx={{ color: 'black ' }}
+            onClick={() => setOpen(true)}
+          />
           <Drawer open={open} anchor="right" onClose={handleClose} sx={{ zIndex: 1202 }}>
             <DrawerTopBox>
-              {isLoginStatus ? <Box onClick={onClickLogout}>로그아웃</Box> : <Box onClick={onClickSignin}>로그인</Box>}
+              {isLoginStatus ? (
+                <Box onClick={onClickLogout}>로그아웃</Box>
+              ) : (
+                <Box onClick={onClickSignin}>로그인</Box>
+              )}
               <CloseIcon fontSize="large" onClick={() => handleClose()} />
             </DrawerTopBox>
             {/* <SiteMapTypo>사이트맵 이동하기</SiteMapTypo>

@@ -9,12 +9,17 @@ export const notNeededLoginPathList: { href: string }[] = [
   { href: 'find' },
   { href: 'guide' },
   { href: 'stebMove/steb1' },
+  // { href: 'stebMove/steb2' },
+  // { href: 'stebMove/steb3' },
   // { href: 'me' },
   // { href: 'edit' },
 ];
 
 export const allowUserPahtList: { href: string; roles: UserRole[] }[] = [
-  { href: '/traffic/stebMove', roles: [UserRole.ROLE_TRAFFIC_SAFETY_MANAGER, UserRole.ROLE_TRAFFIC_SAFETY_USER] },
+  {
+    href: '/traffic/stebMove',
+    roles: [UserRole.ROLE_TRAFFIC_SAFETY_MANAGER, UserRole.ROLE_TRAFFIC_SAFETY_USER],
+  },
   { href: '/stebMove', roles: [UserRole.ROLE_TRANS_MANAGER, UserRole.ROLE_TRANS_USER] },
 ];
 

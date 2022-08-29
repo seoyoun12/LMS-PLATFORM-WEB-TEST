@@ -1,12 +1,13 @@
 import { UserTransSaveInputDataType } from '@common/api/courseClass';
 import { Box, FormControl, MenuItem, Select, TextField } from '@mui/material';
+import { carNumberRegex } from '@utils/inputRegexes';
 import { useEffect, useState } from 'react';
 import { useForm, UseFormSetValue } from 'react-hook-form';
 
 const regex2 = /^[0-9]{2}/g;
 const regex4 = /^[0-9]{4}/g;
 
-const lastRegex = /(?=.*[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2}[\d]{2}[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{1}[\d]{4})/;
+// const carNumberRegex = /(?=.*[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2}[\d]{2}[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{1}[\d]{4})/;
 
 const localList = [
   { title: '충남', type: 'NAM' },
@@ -26,21 +27,40 @@ interface FormType {
 }
 
 export function CarNumberBox({ parantSetValue }: Props) {
-  const { watch, setValue, register } = useForm<FormType>({ defaultValues: { localName: '', digit2: '', oneWord: '', digit4: '' } });
+  const { watch, setValue, register } = useForm<FormType>({
+    defaultValues: { localName: '', digit2: '', oneWord: '', digit4: '' },
+  });
   const [err, setErr] = useState(false);
 
-  useEffect(() => {
+  const regFunc = () => {
     const { localName, digit2, oneWord, digit4 } = watch();
     const carNumber = localName + digit2 + oneWord + digit4;
-    if (!lastRegex.test(carNumber)) setErr(true);
+    if (!carNumberRegex.test(carNumber)) {
+      parantSetValue('carNumber', carNumber);
+      return setErr(true);
+    }
     setErr(false);
     parantSetValue('carNumber', carNumber);
+  };
+
+  useEffect(() => {
+    regFunc();
   }, [watch().localName, watch().digit2, watch().digit4, watch().oneWord]);
 
+  const Placeholder = ({ children }) => {
+    return <Box color="#bababa">{children}</Box>;
+  };
+
   return (
-    <Box display="flex" width="100%">
+    <Box display="flex" width="100%" gap={1}>
       <FormControl fullWidth>
-        <Select {...register('localName')}>
+        <Select
+          {...register('localName')}
+          displayEmpty
+          renderValue={
+            watch().localName === '' ? () => <Placeholder>지역명</Placeholder> : undefined
+          }
+        >
           {localList.map(item => (
             <MenuItem key={item.type} value={item.title}>
               {item.title}
@@ -56,10 +76,20 @@ export function CarNumberBox({ parantSetValue }: Props) {
           setValue('digit2', e.target.value.replace(/[^0-9]/g, ''));
         }}
         value={watch().digit2}
+        placeholder="차종 번호2자리"
         fullWidth
       />
       <FormControl fullWidth>
-        <Select {...register('oneWord')}>
+        <Select
+          {...register('oneWord')}
+          displayEmpty
+          renderValue={
+            watch().oneWord === ''
+              ? () => <Placeholder>용도기호 한글자</Placeholder>
+              : undefined
+          }
+          placeholder="용도 기호 한글 한글자"
+        >
           {oneWordList.map(item => (
             <MenuItem key={item} value={item}>
               {item}
@@ -75,6 +105,7 @@ export function CarNumberBox({ parantSetValue }: Props) {
           setValue('digit4', e.target.value.replace(/[^0-9]/g, ''));
         }}
         value={watch().digit4}
+        placeholder="일련번호 4자리"
         fullWidth
       />
     </Box>

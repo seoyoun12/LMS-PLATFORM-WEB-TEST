@@ -6,8 +6,13 @@ import { CategoryBoardNotice } from '@layouts/Category/CategoryBoardNotice';
 import { CategoryBoardFaq } from '@layouts/Category/CategoryBoardFaq';
 import { CategoryBoardQuestion } from '@layouts/Category/CategoryBoardQuestion';
 import { CategoryBoardLook } from '@layouts/Category/CategoryBoardLook';
-import { Tabs2 } from '@components/ui/Tabs2';
 import { useRouter } from 'next/router';
+import { CSRTabs2Props } from '@components/ui/Tabs2/CSRTabs2';
+import dynamic from 'next/dynamic';
+
+const CSRTab2 = dynamic<CSRTabs2Props>(() => import('@components/ui/Tabs2/CSRTabs2'), {
+  ssr: false,
+});
 
 const tabsConfig = [
   { label: '공지사항', value: 'cbNotice', href: <CategoryBoardNotice /> },
@@ -31,7 +36,7 @@ export function CategoryBoard() {
   return (
     <NoticeWrap>
       <Box sx={{ mb: '30px', maxWidth: '1200px', margin: 'auto' }}>
-        <Tabs2
+        <CSRTab2
           tabsConfig={tabsConfig}
           variant={'fullWidth'}
           rendering={false}
@@ -40,10 +45,12 @@ export function CategoryBoard() {
           showBorderBottom={true}
           gap={3}
           fontSx={{ fontSize: '20px' }}
-          scrollable={true}
+          responsiveWidth={768}
         />
       </Box>
-      <Box sx={{ borderBottom: '1px solid #2A2A2A', position: 'relative', top: '-1px' }}></Box>
+      <Box
+        sx={{ borderBottom: '1px solid #2A2A2A', position: 'relative', top: '-1px' }}
+      ></Box>
       <NoticeContainer>
         <Box mt={6}>
           {tabsConfig.map(item => {
@@ -61,8 +68,7 @@ export function CategoryBoard() {
 }
 
 const NoticeWrap = styled(Box)`
-  padding-top: 4rem;
-  padding-bottom: 4rem;
+  padding: 4rem 0;
   margin-bottom: 1rem;
   background: #e6edf3;
 
@@ -71,4 +77,4 @@ const NoticeWrap = styled(Box)`
     font-weight: bold;
   }
 `;
-const NoticeContainer = styled(Container)``;
+const NoticeContainer = styled(Box)``;

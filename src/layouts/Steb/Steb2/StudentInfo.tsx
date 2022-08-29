@@ -17,13 +17,19 @@ import { useEffect, useState } from 'react';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { locationList } from '@layouts/MeEdit/MeEdit';
-import { FieldValues, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
+import {
+  FieldValues,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
 import { RegisterType, UserTransSaveInputDataType } from '@common/api/courseClass';
 import { YN } from '@common/constant';
 import { useMyUser, UserRole } from '@common/api/user';
 import { Phone3Regex, Phone4Regex } from '@utils/inputRegexes';
 import { CarNumberBox } from '@components/ui/Step';
 
+const phoneList = ['010', '032', '02', '031'];
 interface Props {
   register: UseFormRegister<UserTransSaveInputDataType>;
   setValue: UseFormSetValue<UserTransSaveInputDataType>;
@@ -33,7 +39,14 @@ interface Props {
   hideCarNumber: boolean;
 }
 
-export function StudentInfo({ register, setValue, registerType, setRegisterType, watch, hideCarNumber }: Props) {
+export function StudentInfo({
+  register,
+  setValue,
+  registerType,
+  setRegisterType,
+  watch,
+  hideCarNumber,
+}: Props) {
   const [name, setName] = useState<string>(); //이름
   const [firstIdentityNumber, setFirstIdentityNumber] = useState<string>(); //주민앞
   const [secondIdentityNumber, setSecondidentityNumber] = useState<string>(); //주민뒷
@@ -84,34 +97,47 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType,
           <TableCustomRow>
             <TableLeftCell>이름</TableLeftCell>
             <TableRightCell>
-              <TextField disabled={registerType === RegisterType.TYPE_INDIVIDUAL && true} value={name} {...register('name')} fullWidth />
+              <TextField
+                disabled={registerType === RegisterType.TYPE_INDIVIDUAL && true}
+                value={name}
+                {...register('name')}
+                fullWidth
+              />
             </TableRightCell>
           </TableCustomRow>
           <TableCustomRow>
             <TableLeftCell>주민등록번호</TableLeftCell>
             <TableRightCell>
-              <TextField
-                disabled={registerType === RegisterType.TYPE_INDIVIDUAL && true}
-                value={firstIdentityNumber}
-                onChange={e => {
-                  if (e.target.value.length > 6) return;
-                  setFirstIdentityNumber(e.target.value.replace(/[^0-9]/g, ''));
-                  setValue('firstIdentityNumber', e.target.value.replace(/[^0-9]/g, ''));
-                }}
-                fullWidth
-              />
-              <span>-</span>
-              <TextField
-                disabled={registerType === RegisterType.TYPE_INDIVIDUAL && true}
-                type="password"
-                value={secondIdentityNumber}
-                onChange={e => {
-                  if (e.target.value.length > 7) return;
-                  setSecondidentityNumber(e.target.value.replace(/[^0-9]/g, ''));
-                  setValue('secondIdentityNumber', e.target.value.replace(/[^0-9]/g, ''));
-                }}
-                fullWidth
-              />
+              <InputsBox>
+                <TextField
+                  disabled={registerType === RegisterType.TYPE_INDIVIDUAL && true}
+                  value={firstIdentityNumber}
+                  onChange={e => {
+                    if (e.target.value.length > 6) return;
+                    setFirstIdentityNumber(e.target.value.replace(/[^0-9]/g, ''));
+                    setValue(
+                      'firstIdentityNumber',
+                      e.target.value.replace(/[^0-9]/g, '')
+                    );
+                  }}
+                  fullWidth
+                />
+                <span>-</span>
+                <TextField
+                  disabled={registerType === RegisterType.TYPE_INDIVIDUAL && true}
+                  type="password"
+                  value={secondIdentityNumber}
+                  onChange={e => {
+                    if (e.target.value.length > 7) return;
+                    setSecondidentityNumber(e.target.value.replace(/[^0-9]/g, ''));
+                    setValue(
+                      'secondIdentityNumber',
+                      e.target.value.replace(/[^0-9]/g, '')
+                    );
+                  }}
+                  fullWidth
+                />
+              </InputsBox>
             </TableRightCell>
           </TableCustomRow>
           {hideCarNumber === false && (
@@ -140,47 +166,66 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType,
           <TableCustomRow>
             <TableLeftCell>휴대 전화</TableLeftCell>
             <TableRightCell>
-              <TextField
-                // placeholder="'-'를 제외한 숫자만 11자리 입력해주세요."
-                // {...register('phone', { maxLength: { value: 12, message: 'phone must be longer than 12 characters' } })}
-                {...register('firstPhone')}
-                onChange={e => {
-                  if (!Phone3Regex.test(e.target.value) || e.target.value.length > 3) {
-                    return;
-                  }
-                  setValue('firstPhone', e.target.value);
-                }}
-                value={watch().firstPhone}
-                // onChange={e => {
-                //   if (e.target.value.length > 11) return;
-                //   setValue('phone', e.target.value);
-                // }}
-                fullWidth
-              />
-              -
-              <TextField
-                {...register('secondPhone')}
-                onChange={e => {
-                  if (!Phone4Regex.test(e.target.value) || e.target.value.length > 4) {
-                    return;
-                  }
-                  setValue('secondPhone', e.target.value);
-                }}
-                value={watch().secondPhone}
-                fullWidth
-              />
-              -
-              <TextField
-                {...register('thirdPhone')}
-                onChange={e => {
-                  if (!Phone4Regex.test(e.target.value) || e.target.value.length > 4) {
-                    return;
-                  }
-                  setValue('thirdPhone', e.target.value);
-                }}
-                value={watch().thirdPhone}
-                fullWidth
-              />
+              <InputsBox>
+                <FormControl sx={{ minWidth: '130px' }}>
+                  <Select
+                    labelId="phone-type-label"
+                    id="phone-type"
+                    {...register('firstPhone')}
+                    onChange={e => {
+                      if (
+                        !Phone3Regex.test(e.target.value) ||
+                        e.target.value.length > 3
+                      ) {
+                        return;
+                      }
+                      setValue('firstPhone', e.target.value);
+                    }}
+                    value={watch().firstPhone || ''}
+                  >
+                    {phoneList.map(item => (
+                      <MenuItem value={item}>{item}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                {/* <TextField
+                  // placeholder="'-'를 제외한 숫자만 11자리 입력해주세요."
+                  // {...register('phone', { maxLength: { value: 12, message: 'phone must be longer than 12 characters' } })}
+                  {...register('firstPhone')}
+                  onChange={e => {
+                    if (!Phone3Regex.test(e.target.value) || e.target.value.length > 3) {
+                      return;
+                    }
+                    setValue('firstPhone', e.target.value);
+                  }}
+                  value={watch().firstPhone}
+                  fullWidth
+                /> */}
+                -
+                <TextField
+                  // {...register('secondPhone')}
+                  value={watch().secondPhone}
+                  onChange={e => {
+                    if (Phone4Regex.test(e.target.value)) {
+                      return;
+                    }
+                    setValue('secondPhone', e.target.value.replace(/[^0-9]/g, ''));
+                  }}
+                  fullWidth
+                />
+                -
+                <TextField
+                  {...register('thirdPhone')}
+                  onChange={e => {
+                    if (Phone4Regex.test(e.target.value)) {
+                      return;
+                    }
+                    setValue('thirdPhone', e.target.value.replace(/[^0-9]/g, ''));
+                  }}
+                  value={watch().thirdPhone}
+                  fullWidth
+                />
+              </InputsBox>
             </TableRightCell>
           </TableCustomRow>
         </Table>
@@ -215,7 +260,9 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType,
       </Box>
       <Typography>※ 교육접수 완료 시 예약완료 문자가 발송됩니다.</Typography>
       <Typography>※ 신청인 본인의 휴대폰 번호를 입력하셔야 합니다.</Typography>
-      <AccentedWord>※ 휴대혼번호 입력후 SMS 동의시 교육관련 문자메시지를 받으실 수 있습니다.</AccentedWord>
+      <AccentedWord>
+        ※ 휴대혼번호 입력후 SMS 동의시 교육관련 문자메시지를 받으실 수 있습니다.
+      </AccentedWord>
       {/* <Box height="120px">이용약관 입니다.</Box> */}
       {/* <Box display="flex" alignItems="center">
         {isIndividualCheck ? (
@@ -242,16 +289,36 @@ const EssentialWord = styled(Typography)`
 
 const TableCustomRow = styled(TableRow)`
   border-bottom: 1px solid #d2d2d2;
+  width: 100%;
+  display: flex;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 const TableLeftCell = styled(TableCell)`
   /* background: #e1e1e1; */
   font-size: 20px;
-  text-align: center;
   font-weight: 700;
-  width: 20%;
-`;
-const TableRightCell = styled(TableCell)`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  width: 20%;
+
+  @media (max-width: 768px) {
+    border-bottom: none;
+    width: 100%;
+  }
+`;
+const TableRightCell = styled(TableCell)`
+  width: 80%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 12px 0;
+  }
+`;
+
+const InputsBox = styled(Box)`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 `;

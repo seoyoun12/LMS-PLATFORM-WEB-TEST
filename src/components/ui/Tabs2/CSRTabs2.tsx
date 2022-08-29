@@ -13,7 +13,7 @@ import styled from 'styled-components';
 import { SxProps } from '@mui/system';
 import useResponsive from '@hooks/useResponsive';
 
-interface Props {
+export interface CSRTabs2Props {
   tabsConfig: {
     label: string;
     value: string;
@@ -32,7 +32,7 @@ interface Props {
 
 //variant 속성이 명시되어 있어도 reponseWitdh가 정의되어 있다면 variant: scrollable이 강제됩니다.
 
-export function Tabs2({
+export default function CSRTabs2({
   tabsConfig,
   showBorderBottom = true,
   variant = 'standard',
@@ -45,7 +45,7 @@ export function Tabs2({
   showIndicator = true,
   responsiveWidth = 1,
   ...props
-}: Props) {
+}: CSRTabs2Props) {
   const router = useRouter();
   const { pathname, query } = router;
   const [cssValue, setCssValue] = useState<{ variant: string; gap: number }>({

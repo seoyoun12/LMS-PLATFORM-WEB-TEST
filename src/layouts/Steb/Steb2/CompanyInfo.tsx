@@ -16,9 +16,20 @@ import {
 } from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import React, { useState } from 'react';
-import { userBusinessTypeOne, userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
-import { FieldValues, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
-import { courseSubCategoryType, UserTransSaveInputDataType } from '@common/api/courseClass';
+import {
+  userBusinessTypeOne,
+  userBusinessTypeTwo,
+} from '@layouts/MeEdit/TransWorker/TransWorker';
+import {
+  FieldValues,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
+import {
+  courseSubCategoryType,
+  UserTransSaveInputDataType,
+} from '@common/api/courseClass';
 
 interface Props {
   isIndividual: boolean;
@@ -41,7 +52,10 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
       target: { value },
     } = e;
 
-    if (courseSubCategoryType.BUS === value || courseSubCategoryType.CHARTER_BUS === value) {
+    if (
+      courseSubCategoryType.BUS === value ||
+      courseSubCategoryType.CHARTER_BUS === value
+    ) {
       setValue('carNumber', null);
       return setHideCarNumber(true);
     }
@@ -51,7 +65,10 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
       courseSubCategoryType.INDIVIDUAL_CARGO === value
     ) {
       setDisabledCompany(true);
-      setValue('businessName', userBusinessTypeTwo.filter(item => item.enType === value)[0].type);
+      setValue(
+        'businessName',
+        userBusinessTypeTwo.filter(item => item.enType === value)[0].type
+      );
       return setValue('businessSubType', value);
     }
     setDisabledCompany(false);
@@ -66,7 +83,9 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
       courseSubCategoryType.GENERAL_CARGO === watch().businessSubType ||
       courseSubCategoryType.INDIVIDUAL_CARGO === watch().businessSubType
     ) {
-      return userBusinessTypeTwo.filter(item => item.enType === watch().businessSubType)[0].type;
+      return userBusinessTypeTwo.filter(
+        item => item.enType === watch().businessSubType
+      )[0].type;
     } else {
       return watch().businessName;
     }
@@ -101,9 +120,13 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
         <Table sx={{ borderTop: '3px solid #000' }}>
           <TableCustomRow>
             <TableLeftCell>운수구분</TableLeftCell>
-            <TableCell>
+            <TableRightCell>
               <FormControl fullWidth>
-                <Select labelId="businessType" id="businessType" {...register('businessType')}>
+                <Select
+                  labelId="businessType"
+                  id="businessType"
+                  {...register('businessType')}
+                >
                   {userBusinessTypeOne.map(item => (
                     <MenuItem key={item.enType} value={item.enType}>
                       {item.type}
@@ -111,11 +134,11 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
                   ))}
                 </Select>
               </FormControl>
-            </TableCell>
+            </TableRightCell>
           </TableCustomRow>
           <TableCustomRow>
             <TableLeftCell>업종구분</TableLeftCell>
-            <TableCell>
+            <TableRightCell>
               <FormControl fullWidth>
                 <Select
                   labelId="businessSubType"
@@ -133,11 +156,11 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
                     ))}
                 </Select>
               </FormControl>
-            </TableCell>
+            </TableRightCell>
           </TableCustomRow>
           <TableCustomRow>
             <TableLeftCell>회사명</TableLeftCell>
-            <TableCell>
+            <TableRightCell>
               <TextField
                 placeholder="회사명 또는 차량등록지역"
                 {...register('businessName')}
@@ -145,7 +168,7 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
                 disabled={disabledCompany}
                 fullWidth
               />
-            </TableCell>
+            </TableRightCell>
           </TableCustomRow>
         </Table>
       </TableContainer>
@@ -154,7 +177,9 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
       <Box display="flex" width="fit-content" margin="auto" mt={4} mb={4}>
         <Box>※</Box>
         <Box display="flex" flexDirection="column" ml={1}>
-          <Typography>자동차등록증 상의 회사명(상호)를 반드시 국문으로 입력하시기 바랍니다.</Typography>
+          <Typography>
+            자동차등록증 상의 회사명(상호)를 반드시 국문으로 입력하시기 바랍니다.
+          </Typography>
           <ExampleMessege>예시 {'>'} ss물류 → 에스에스물류</ExampleMessege>
         </Box>
       </Box>
@@ -180,6 +205,12 @@ const ExampleMessege = styled(Typography)`
 
 const TableCustomRow = styled(TableRow)`
   border-bottom: 1px solid #d2d2d2;
+
+  width: 100%;
+  display: flex;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 const TableLeftCell = styled(TableCell)`
   /* background: #e1e1e1; */
@@ -187,6 +218,15 @@ const TableLeftCell = styled(TableCell)`
   text-align: center;
   font-weight: 700;
   width: 20%;
+
+  @media (max-width: 768px) {
+    border-bottom: none;
+    width: 100%;
+    text-align: start;
+  }
+`;
+const TableRightCell = styled(TableCell)`
+  flex-grow: 1;
 `;
 
 const SummaryGrid = styled(Grid)``;

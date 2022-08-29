@@ -9,7 +9,7 @@ export default function CategoryPage() {
         <title>Category Page</title>
       </Head>
       <Category />
-    </> 
+    </>
   );
 }
 

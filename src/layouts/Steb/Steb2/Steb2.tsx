@@ -1,5 +1,5 @@
 import { Box, Button, Container, styled } from '@mui/material';
-import { StebHeader } from '../StebHeader';
+import StebHeader from '../StebHeader/StebHeader';
 import { useEffect, useRef, useState } from 'react';
 import { EduOverview } from './EduOverview';
 import { CompanyInfo } from './CompanyInfo';
@@ -23,14 +23,17 @@ import { signUp } from '@common/api';
 import { IndividualSummary } from './IndividualSummary';
 import useResponsive from '@hooks/useResponsive';
 import { Spinner } from '@components/ui';
+import { carNumberRegex, phoneRegex } from '@utils/inputRegexes';
 
-export function Steb2() {
+export default function Steb2() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const isLogin = useIsLoginStatus();
   const isDesktop = useResponsive();
   const [isIndividual, setIsIndividual] = useState(true); //individual or team button
-  const [registerType, setRegisterType] = useState<RegisterType>(RegisterType.TYPE_INDIVIDUAL); //개인신청 단체신청 토글
+  const [registerType, setRegisterType] = useState<RegisterType>(
+    RegisterType.TYPE_INDIVIDUAL
+  ); //개인신청 단체신청 토글
   const [enroll, setEnroll] = useRecoilState(courseClassEnrollList); //전역에 신청자 정보 저장
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo); //전역에 교육정보 저장
   const [confirm, setConfirm] = useState(false);
@@ -52,11 +55,27 @@ export function Steb2() {
 
   const onClickEnroll = async () => {
     //단체 신청시 스택쌓이는 구조. 개인상태에서는 혼자 신청
-    const { seq, firstIdentityNumber, secondIdentityNumber, firstPhone, secondPhone, thirdPhone, ...rest } = watch();
-    if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7) return window.alert('주민번호를 모두 입력해주세요!');
-    if (!enrollInfo || !enrollInfo.seq) return window.alert('기수를 선택해주세요!');
+    const {
+      seq,
+      firstIdentityNumber,
+      secondIdentityNumber,
+      firstPhone,
+      secondPhone,
+      thirdPhone,
+      ...rest
+    } = watch();
+    if (!enrollInfo || !enrollInfo.seq)
+      return window.alert('오류입니다! 교육일정으로 돌아가서 다시 신청해주세요!');
+    if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7)
+      return window.alert('주민번호를 모두 입력해주세요!');
     // if (!enrollInfo || !enrollInfo.seq) return window.alert('기수를 선택해주세요!');
-    if (!isIndividualCheck) return window.alert('개인정보 수집 및 이용동의에 체크해주세요!');
+    if (!carNumberRegex.test(rest.carNumber))
+      return window.alert('올바른 형식의 차량번호를 입력해주세요!');
+    if (!phoneRegex.test(firstPhone + secondPhone + thirdPhone))
+      return window.alert('올바른 형식의 휴대전화를 입력해주세요!');
+
+    if (!isIndividualCheck)
+      return window.alert('개인정보 수집 및 이용동의에 체크해주세요!');
 
     const postData = {
       ...rest,
@@ -181,13 +200,27 @@ export function Steb2() {
           watch={watch}
           hideCarNumber={hideCarNumber}
         />
-        <IndividualSummary isIndividualCheck={isIndividualCheck} setIsIndividualCheck={setIsIndividualCheck} />
+        <IndividualSummary
+          isIndividualCheck={isIndividualCheck}
+          setIsIndividualCheck={setIsIndividualCheck}
+        />
         <ConfirmButtonsWrap>
-          <Button variant="contained" onClick={onClickEnroll} disabled={loading} fullWidth sx={{ mb: 2 }}>
+          <Button
+            variant="contained"
+            onClick={onClickEnroll}
+            disabled={loading}
+            fullWidth
+            sx={{ mb: 2 }}
+          >
             {loading ? <Spinner fit={true} /> : '신청하기'}
           </Button>
           {registerType === RegisterType.TYPE_ORGANIZATION && (
-            <Button variant="contained" onClick={onClickConfirm} disabled={loading} fullWidth>
+            <Button
+              variant="contained"
+              onClick={onClickConfirm}
+              disabled={loading}
+              fullWidth
+            >
               {loading ? <Spinner fit={true} /> : '확인'}
             </Button>
           )}

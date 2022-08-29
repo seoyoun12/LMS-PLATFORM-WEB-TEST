@@ -14,31 +14,34 @@ import { format } from 'date-fns';
 import { CategoryBoard } from '@common/api/categoryBoard';
 import { downloadFile } from '@common/api/file';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { S3Files } from 'types/file';
 
 interface BoardAccordionAccordionList {
   seq: number;
-  date?: string | undefined;
+  date: string;
   name: string;
-  icon?: EmotionJSX.Element;
   children: {
-    name: string;
-    isActive?: boolean;
-  }[];
+    content: string;
+    s3Files: S3Files;
+  };
 }
 
-export function BoardAccordionV2({ loadedItem }: { loadedItem: CategoryBoard[] }) {
+export function BoardAccordionV2({
+  accordianInfo,
+}: {
+  accordianInfo: BoardAccordionAccordionList[];
+}) {
   const [value, setValue] = React.useState<number>(null);
 
   const handleChange =
     (panel: number) => (event: React.SyntheticEvent, newExpanded: boolean) => {
       setValue(newExpanded ? panel : null);
     };
-  console.log(loadedItem.map(item => console.log(item.s3Files)));
 
   return (
     <Wrap>
       {/* {boardAccordionList.map(({ date, name, icon, children }, idx) => ( */}
-      {loadedItem.map(({ seq, createdDtimeYmd, subject, content, s3Files }, index) => (
+      {accordianInfo.map(({ seq, date, name, children: { content, s3Files } }, index) => (
         <MuiAccordion
           key={seq}
           disableGutters
@@ -64,15 +67,9 @@ export function BoardAccordionV2({ loadedItem }: { loadedItem: CategoryBoard[] }
             }}
           >
             <BoardBox>
-              <Typography width="10%" textAlign="center">
-                {seq}
-              </Typography>
-              <Typography width="70%" paddingLeft="1rem">
-                {subject}
-              </Typography>
-              <Typography width="20%" textAlign="center">
-                {createdDtimeYmd.toString()}
-              </Typography>
+              <BoardSeqBox textAlign="center">{seq}</BoardSeqBox>
+              <BoardSeqTitleBox paddingLeft="1rem">{name}</BoardSeqTitleBox>
+              <BoardCreatedBox textAlign="center">{date.toString()}</BoardCreatedBox>
             </BoardBox>
           </AccordionSummary>
           <BoardAccordionDetails>
@@ -104,9 +101,9 @@ export function BoardAccordionV2({ loadedItem }: { loadedItem: CategoryBoard[] }
                     sx={{ cursor: 'pointer' }}
                     onClick={async () => {
                       try {
-                        const datass = await downloadFile(s3Files[0].seq);
+                        const blobData = await downloadFile(s3Files[0].seq);
 
-                        const url = window.URL.createObjectURL(new Blob([datass]));
+                        const url = window.URL.createObjectURL(new Blob([blobData]));
                         const a = document.createElement('a');
                         a.href = url;
                         a.download = `${s3Files[0].name}`;
@@ -135,6 +132,9 @@ const Wrap = styled(Box)`
     right: 0;
     width: 100px;
     height: 24px;
+    @media (max-width: 768px) {
+      bottom: 16px;
+    }
   }
   border-top: 1px solid #cdcdcd;
   border-bottom: 1px solid #cdcdcd;
@@ -154,6 +154,20 @@ const BoardBox = styled(Box)`
     font-size: 1.3rem;
     width: 100%;
   }
+`;
+
+const BoardSeqBox = styled(Box)`
+  width: 20%;
+`;
+const BoardSeqTitleBox = styled(Box)`
+  width: 50%;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+const BoardCreatedBox = styled(Box)`
+  width: 30%;
 `;
 
 const BoardAccordionDetails = styled(AccordionDetails)`

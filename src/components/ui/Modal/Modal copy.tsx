@@ -7,7 +7,6 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Spinner } from '@components/ui';
-import styled from '@emotion/styled';
 
 type ModalProps = {
   open: boolean;
@@ -63,13 +62,7 @@ export function Modal({
   ...dialogProps
 }: ModalProps) {
   return (
-    <DialogBox
-      className="제발"
-      onClose={onCloseModal}
-      aria-labelledby="modal-title"
-      open={open}
-      {...dialogProps}
-    >
+    <Dialog onClose={onCloseModal} aria-labelledby="modal-title" open={open} {...dialogProps} >
       {loading ? (
         <Spinner />
       ) : (
@@ -83,12 +76,7 @@ export function Modal({
               {typeof action !== 'string' ? (
                 action
               ) : (
-                <LoadingButton
-                  autoFocus
-                  onClick={onSubmit}
-                  disabled={actionDisabled}
-                  loading={actionLoading || false}
-                >
+                <LoadingButton autoFocus onClick={onSubmit} disabled={actionDisabled} loading={actionLoading || false}>
                   {action}
                 </LoadingButton>
               )}
@@ -96,22 +84,6 @@ export function Modal({
           ) : null}
         </>
       )}
-    </DialogBox>
+    </Dialog>
   );
 }
-
-const DialogBox = styled(Dialog)`
-  @media (max-width: 500px) {
-    .MuiPaper-root {
-      margin: 0;
-      width: 100%;
-    }
-    .MuiDialog-container {
-      justify-content: none;
-      width: 100%;
-    }
-    .MuiDialogContent-root {
-      padding: 0;
-    }
-  }
-`;

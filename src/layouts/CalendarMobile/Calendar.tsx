@@ -156,12 +156,12 @@ export function CalendarMobile() {
     mutate();
   };
 
-
   //Month changer
   const onChangeMonth = (type: MonthClickType, value: number) => {
     if (type === MonthClickType.BTN_CLICK) {
       const dummyDate = new Date();
-      dummyDate.setMonth(date.getMonth() + value);
+      // dummyDate.setMonth(date.getMonth() + value);
+      dummyDate.setFullYear(date.getFullYear() + value);
       return setDate(dummyDate);
     }
     if (type === MonthClickType.MONTH_CLICK)

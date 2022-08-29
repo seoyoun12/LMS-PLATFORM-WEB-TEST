@@ -6,7 +6,7 @@ import { Box, CardActionArea, Divider } from '@mui/material';
 import styled from '@emotion/styled';
 import { setLineClamp } from '@styles/mixins';
 import { grey } from '@mui/material/colors';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { EnrollHistoryModal } from '../EnrollHistoryModal/EnrollHistoryModal';
 import { CourseUserResponseDto } from '@common/api/Api';
 import { RegisterType } from '@common/api/courseClass';
@@ -31,16 +31,34 @@ export function EnrollHistoryCard({
   title,
   content1,
   content2,
-  image
+  image,
 }: Props) {
+  const divRef = useRef<HTMLDivElement>();
+  const [width, setWidth] = useState<string>(
+    divRef.current && getComputedStyle(divRef.current).getPropertyValue('width')
+  );
+  const handleSetWidth = () => {
+    if (divRef.current)
+      setWidth(getComputedStyle(divRef.current).getPropertyValue('width'));
+    console.log(getComputedStyle(divRef.current).getPropertyValue('width'));
+  };
+
+  useEffect(() => {
+    setWidth(getComputedStyle(divRef.current).getPropertyValue('width'));
+    window.addEventListener('resize', handleSetWidth);
+    return () => {
+      window.removeEventListener('resize', handleSetWidth);
+    };
+  }, []);
   return (
     <Box sx={{ maxWidth, minWidth }}>
       <CardActionArea>
-        <Box borderRadius="4px" overflow="hidden">
+        <Box ref={divRef} borderRadius="4px" overflow="hidden">
           <CardMedia
             component="img"
             height="140"
-            image={image || "https://picsum.photos/276"}
+            image={image || 'https://picsum.photos/276'}
+            sx={{ height: `calc((${width}  / 16) * 9)` }}
             alt="green iguana"
           />
         </Box>

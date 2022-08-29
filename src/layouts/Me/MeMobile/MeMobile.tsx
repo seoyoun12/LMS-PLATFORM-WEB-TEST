@@ -9,7 +9,6 @@ import {
   Typography,
 } from '@mui/material';
 import { Link } from '@components/common';
-import s from './Me.module.scss';
 import { grey } from '@mui/material/colors';
 import { Spinner, Tabs } from '@components/ui';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -19,46 +18,54 @@ import { useMyUser } from '@common/api/user';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { ContentCardV2 } from '@components/ui/ContentCard';
-import useResponsive from '@hooks/useResponsive';
-import { MeDesktop } from './MeDesktop';
-import { MeMobile } from './MeMobile';
+import MobileMeEditIcon from 'public/assets/svgs/MobileMeEditIcon.svg';
+import MobileMeMyCourseIcon from 'public/assets/svgs/MobileMyCourseIcon.svg';
+import MobileCertificateIcon from 'public/assets/svgs/MobileCertificateIcon.svg';
 
 const myInfoList = [
   // { label: "내 강의", value: "myCourse" },
   // { label: "정보 수정", value: "editInfo" },
   // { label: "증명서 발급", value: "certificate" },
 
-  { label: '정보수정', value: '/edit' },
-  { label: '학습현황', value: '/my-course' },
-  { label: '증명서발급', value: '/certificate' },
-  { label: '온라인 교육 신청내역', value: '/enroll-history' },
+  {
+    label: '정보수정',
+    value: '/edit',
+    icon: <MobileMeEditIcon witdh="50px" height="50px" />,
+  },
+  {
+    label: '학습현황',
+    value: '/my-course',
+    icon: <MobileMeMyCourseIcon witdh="50px" height="50px" />,
+  },
+  {
+    label: '증명서발급',
+    value: '/certificate',
+    icon: <MobileCertificateIcon witdh="50px" height="50px" />,
+  },
+  // { label: '온라인 교육 신청내역', value: '/enroll-history' },
 ];
 
-export default function Me() {
+export function MeMobile() {
   const router = useRouter();
-  const isTablet = !useResponsive();
   const { user, error } = useMyUser();
   const [value, setValue] = React.useState(myInfoList[0].value);
 
   if (error) return <div>error</div>;
   if (!user) return <Spinner />;
   return (
-    <MeContainer className={containerStyle}>
-      {isTablet ? <MeMobile /> : <MeDesktop />}
-      {/* <UserInfoSection>
-        <Link href={`/me/edit`} className={s.myInfo}>
-          <UserProfile>M</UserProfile>
-          <div>
-            <Typography fontSize={22}>{user.name}</Typography>
-            <Typography>
-              {user.email ? user.email : <Box color={grey[400]}>이메일이 없습니다.</Box>}
-            </Typography>
-          </div>
-        </Link>
+    <Container className={containerStyle}>
+      <UserInfoSection href={`/me/edit`}>
+        <UserProfile>M</UserProfile>
+        <div>
+          <Typography fontSize={22}>{user.name}</Typography>
+          <Typography>
+            {user.email ? user.email : <Box color={grey[400]}>이메일이 없습니다.</Box>}
+          </Typography>
+        </div>
       </UserInfoSection>
       <ContentBody>
         <SideBar>
-          <SideBarTitle variant="h6">내 정보</SideBarTitle>
+          {/* <SideBarTitle variant="h6">내 정보</SideBarTitle> */}
           <SideBarContent>
             {myInfoList.map(item => (
               <SideBarInfoLink
@@ -67,23 +74,24 @@ export default function Me() {
                 key={item.value}
               >
                 <SideBarInfoItem>
+                  <SideBarIcon>{item.icon}</SideBarIcon>
                   {item.label}
-                  <ArrowForwardIcon />
+                  {/* <ArrowForwardIcon /> */}
                 </SideBarInfoItem>
               </SideBarInfoLink>
             ))}
-            // {myInfoList.map(({ href, name }) => (
-            //   <Link
-            //     key={name}
-            //     className={s.link}
-            //     underline="hover"
-            //     color={grey[900]}
-            //     href={href}
-            //   >
-            //     <Typography variant="body2">{name}</Typography>
-            //     <ArrowForwardIcon />
-            //   </Link>
-            // ))} 
+            {/* {myInfoList.map(({ href, name }) => (
+              <Link
+                key={name}
+                className={s.link}
+                underline="hover"
+                color={grey[900]}
+                href={href}
+              >
+                <Typography variant="body2">{name}</Typography>
+                <ArrowForwardIcon />
+              </Link>
+            ))} */}
           </SideBarContent>
         </SideBar>
         <LessonListContainer>
@@ -99,7 +107,7 @@ export default function Me() {
             container
             rowSpacing={4}
             columnSpacing={2}
-            columns={{ xs: 1, sm: 1, md: 2, lg: 2 }}
+            columns={{ xs: 1, sm: 2, md: 2, lg: 2 }}
           >
             {user.learningCourses ? (
               user.learningCourses.map(res => {
@@ -126,16 +134,14 @@ export default function Me() {
                 );
               })
             ) : (
-              <div>dd</div>
+              <div>학습중인강좌가없습니다</div>
             )}
           </Grid>
         </LessonListContainer>
-      </ContentBody> */}
-    </MeContainer>
+      </ContentBody>
+    </Container>
   );
 }
-
-const MeContainer = styled(Container)``;
 
 const UserProfile = styled(Avatar)`
   width: 60px;
@@ -143,20 +149,19 @@ const UserProfile = styled(Avatar)`
   margin-right: 36px;
 `;
 
-const UserInfoSection = styled(Box)`
+const UserInfoSection = styled(Link)`
   display: flex;
-  flex-direction: column;
   width: 320px;
   margin-bottom: 30px;
 `;
 
 const ContentBody = styled(Box)`
-  display: flex;
+  /* display: flex; */
 `;
 
 const SideBar = styled.aside`
   min-width: 320px;
-  margin-right: 78px;
+  /* margin-right: 78px; */
   .MuiTabs-indicator {
     display: none;
   }
@@ -172,13 +177,15 @@ const SideBarTitle = styled(Typography)`
 
 const SideBarContent = styled.section`
   display: flex;
-  flex-direction: column;
-  margin-bottom: 48px;
+  /* flex-direction: column; */
+  margin-bottom: 24px;
 `;
 
 const SideBarInfoLink = styled(Link)`
+  flex-grow: 1;
+  width: 33.3%;
   :first-child {
-    border-top: 1px solid #e5e5e5;
+    /* border-top: 1px solid #e5e5e5; */
   }
 `;
 
@@ -186,12 +193,36 @@ const SideBarInfoItem = styled(MenuItem)`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   padding: 16px 16px;
-  border-bottom: 1px solid #e5e5e5;
+  /* border-bottom: 1px solid #e5e5e5; */
   font-size: 18px;
   font-weight: 500;
+`;
+
+const SideBarIcon = styled(Box)`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  position: relative;
+  overflow: hidden;
+
+  > svg {
+    /* width: 50px;
+    height: 50px; */
+    /* position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0; */
+    /* transform: translate(-50%, 0); */
+    /* z-index: -1; */
+  }
 `;
 
 const ArrowForwardIcon = styled(ArrowForwardIosIcon)`
@@ -206,5 +237,5 @@ const LessonListContainer = styled(Box)`
 
 const containerStyle = css`
   margin-bottom: 32px;
-  padding: 48px 16px 48px 16px;
+  /* padding: 72px 0 48px; */
 `;

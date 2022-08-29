@@ -35,13 +35,17 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import BackgroundImage from 'public/assets/svgs/service_background.svg';
 import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
+import { Phone4Regex } from '@utils/inputRegexes';
 
 interface Props {
   type: 'transport' | 'lowfloorbus' | 'educator';
   locationList: { ko: string; en: string }[];
 }
-const phoneRegex = /[0-9]$/;
-const phoneList = ['010', '011', '012', '013', '014', '015', '016', '017', '018', '019'];
+const phoneList = [
+  '010',
+  '011',
+  // , '012', '013', '014', '015', '016', '017', '018', '019'
+];
 
 export const userBusinessTypeOne = [
   { type: '여객', enType: 'PASSENGER' },
@@ -150,7 +154,9 @@ export function TransWorker({ type, locationList }: Props) {
   const [phone3, setPhone3, onChangePhone3] = useInput();
   const [smsChecked, setSmsChecked] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
-  const { register, reset, resetField, setValue, watch } = useForm<FormType>({ defaultValues });
+  const { register, reset, resetField, setValue, watch } = useForm<FormType>({
+    defaultValues,
+  });
   const dialog = useDialog();
   const snackbar = useSnackbar();
   const router = useRouter();
@@ -163,7 +169,7 @@ export function TransWorker({ type, locationList }: Props) {
   useEffect(() => {
     (async function () {
       const { data } = await getTransport();
-      if(data.s3Files.length > 0){
+      if (data.s3Files.length > 0) {
         setValue('fileSeq', data.s3Files[0].seq);
         setValue('filePath', data.s3Files[0].path);
       }
@@ -185,7 +191,8 @@ export function TransWorker({ type, locationList }: Props) {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!phone || !phone2 || !phone3) return window.alert('올바른 휴대전화 번호를 입력하세요!');
+    if (!phone || !phone2 || !phone3)
+      return window.alert('올바른 휴대전화 번호를 입력하세요!');
     if (!company) return window.alert('올바른 회사명을 입력하세요!');
     if (!vehicleNumber) return window.alert('올바른 차량번호를 입력하세요!');
     if (!vehicleRegi) return window.alert('올바른 등록지를 입력하세요!');
@@ -216,11 +223,18 @@ export function TransWorker({ type, locationList }: Props) {
         userBusinessTypeTwo: occupation2, // 구분
         userRegistrationType: vehicleRegi, //지역
       };
+
       try {
-        const { data }: { data: UserTransportUpdateResponseDto } = await modifTransWorker(postData);
+        const { data }: { data: UserTransportUpdateResponseDto } = await modifTransWorker(
+          postData
+        );
         if (watch().files.length > 0) {
           if (watch().fileSeq) {
-            await deleteFile({ fileType: BbsType.TYPE_USER_PROFILE, fileTypeId: data.userSeq, fileSeqList: [watch().fileSeq] });
+            await deleteFile({
+              fileType: BbsType.TYPE_USER_PROFILE,
+              fileTypeId: data.userSeq,
+              fileSeqList: [watch().fileSeq],
+            });
           }
           await fileHandler(watch().files, data.userSeq);
         }
@@ -252,6 +266,10 @@ export function TransWorker({ type, locationList }: Props) {
     }
   };
 
+  const Placeholder = ({ children }) => {
+    return <Box color="#bababa">{children}</Box>;
+  };
+
   return (
     <>
       <EditHeaderContainer>
@@ -260,35 +278,49 @@ export function TransWorker({ type, locationList }: Props) {
         <BackgroundImage />
       </EditHeaderContainer>
       <TransAndLowFloorContainer>
-        <Box display="flex" flexDirection={'column'} gap="1rem" component={'form'} mt={10} onSubmit={handleSubmit}>
+        <Box
+          display="flex"
+          flexDirection={'column'}
+          gap="1rem"
+          component={'form'}
+          mt={10}
+          onSubmit={handleSubmit}
+        >
           <Box sx={{ margin: 'auto' }}>
-            <FileUploaderTrans register={register} regName="files" accept=".jpg, .jpge, .png" onFileChange={handleFileChange}>
+            <FileUploaderTrans
+              register={register}
+              regName="files"
+              accept=".jpg, .jpge, .png"
+              onFileChange={handleFileChange}
+            >
               <Box sx={{ position: 'relative' }}>
                 <UserProfile
                   src={watch().urlImage || watch().filePath}
                   sizes="large"
                   sx={{ marginRight: `0 !important`, position: 'relative' }}
                 />
-                <Box
-                  sx={{
-                    color: 'black',
-                    position: 'absolute',
-                    width: '25px',
-                    height: '25px',
-                    bottom: '5px',
-                    right: '5px',
-                    fontSize: '2rem',
-                    background: 'white',
-                    padding: '8px',
-                    boxSizing: 'content-box',
-                    borderRadius: '1.75rem',
-                    boxShadow: '1px 2px 4px 1px #666666',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
+                <UserProfileAddPhotoWrap
+                // sx={{
+                //   color: 'black',
+                //   position: 'absolute',
+                //   width: '25px',
+                //   height: '25px',
+                //   bottom: '5px',
+                //   right: '5px',
+                //   fontSize: '2rem',
+                //   background: 'white',
+                //   padding: '8px',
+                //   boxSizing: 'content-box',
+                //   borderRadius: '1.75rem',
+                //   boxShadow: '1px 2px 4px 1px #666666',
+                //   display: 'flex',
+                //   alignItems: 'center',
+                // }}
                 >
-                  <AddAPhotoOutlinedIcon sx={{ zIndex: 992 }} />
-                </Box>
+                  <AddAPhotoOutlinedIcon
+                    sx={{ zIndex: 992, width: '100%', height: '100%' }}
+                  />
+                </UserProfileAddPhotoWrap>
               </Box>
             </FileUploaderTrans>
           </Box>
@@ -297,10 +329,17 @@ export function TransWorker({ type, locationList }: Props) {
               <TableCustomRow>
                 <TableLeftCell>이름</TableLeftCell>
                 <TableRightCell>
-                  <TextField required fullWidth id="name" name="name" value={user?.name ? user.name : 'Error'} disabled />
+                  <TextField
+                    required
+                    fullWidth
+                    id="name"
+                    name="name"
+                    value={user?.name ? user.name : 'Error'}
+                    disabled
+                  />
                 </TableRightCell>
               </TableCustomRow>
-              <TableCustomRow>
+              {/* <TableCustomRow>
                 <TableLeftCell>업종</TableLeftCell>
                 <TableRightCell>
                   <FormControl fullWidth>
@@ -377,48 +416,64 @@ export function TransWorker({ type, locationList }: Props) {
                     ))}
                   </Select>
                 </TableRightCell>
-              </TableCustomRow>
+              </TableCustomRow> */}
               <TableCustomRow>
                 <TableLeftCell>휴대전화</TableLeftCell>
                 <TableRightCell>
-                  <Box display={'flex'} alignItems="center" gap="1rem">
-                    <FormControl sx={{ minWidth: '130px' }} fullWidth>
-                      <Select labelId="phone-type-label" id="phone-type" onChange={onChangePhone1} value={phone || ''}>
-                        {phoneList.map(item => (
-                          <MenuItem key={item} value={item}>
-                            {item}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    -
-                    <TextField
-                      onChange={e => {
-                        if (e.target.value.length > 4) return;
-                        if (!phoneRegex.test(e.target.value)) return;
-                        onChangePhone2(e);
-                      }}
-                      value={phone2}
-                      fullWidth
-                    />
-                    -
-                    <TextField
-                      onChange={e => {
-                        if (e.target.value.length > 4) return;
-                        if (!phoneRegex.test(e.target.value)) return;
-                        onChangePhone3(e);
-                      }}
-                      value={phone3}
-                      fullWidth
-                    />
-                  </Box>
+                  <FormControl fullWidth>
+                    <Select
+                      labelId="phone-type-label"
+                      id="phone-type"
+                      onChange={onChangePhone1}
+                      displayEmpty
+                      renderValue={
+                        phone === '' ? () => <Placeholder>지역명</Placeholder> : undefined
+                      }
+                      value={phone || ''}
+                    >
+                      {phoneList.map(item => (
+                        <MenuItem key={item} value={item}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  -
+                  <TextField
+                    onChange={e => {
+                      // if (e.target.value.length > 4) return;
+                      // if (!phoneRegex.test(e.target.value)) return;
+
+                      console.log(Phone4Regex.test(e.target.value), e.target.value);
+                      if (Phone4Regex.test(e.target.value)) {
+                        return;
+                      }
+                      setPhone2(e.target.value.replace(/[^0-9]/g, ''));
+                    }}
+                    value={phone2}
+                    placeholder="4자리 입력"
+                    fullWidth
+                  />
+                  -
+                  <TextField
+                    onChange={e => {
+                      // if (e.target.value.length > 4) return;
+                      // if (!phoneRegex.test(e.target.value)) return;
+                      if (Phone4Regex.test(e.target.value)) {
+                        return;
+                      }
+                      setPhone3(e.target.value.replace(/[^0-9]/g, ''));
+                    }}
+                    value={phone3}
+                    placeholder="4자리 입력"
+                    fullWidth
+                  />
                 </TableRightCell>
               </TableCustomRow>
             </TableCustomBody>
           </TableCustomContainer>
 
-          <Box display={'flex'} alignItems="center">
-            <Typography variant="body2">SMS 수신 여부</Typography>
+          <CheckBoxWrap>
             <IOSSwitch
               name="smsYn"
               checked={smsChecked}
@@ -426,10 +481,11 @@ export function TransWorker({ type, locationList }: Props) {
                 setSmsChecked(checked);
               }}
             />
-          </Box>
-          <Button type="submit" fullWidth variant="contained" disabled={loading} sx={{ mt: 3, mb: 2, maxWidth: 650, margin: 'auto' }}>
+            <Typography variant="body2">SMS 수신 여부</Typography>
+          </CheckBoxWrap>
+          <SubmitButton type="submit" fullWidth variant="contained" disabled={loading}>
             {loading ? <Spinner fit={true} /> : '수정하기'}
-          </Button>
+          </SubmitButton>
         </Box>
       </TransAndLowFloorContainer>
     </>
@@ -491,19 +547,82 @@ const UserProfile = styled(Avatar)`
   width: 150px;
   height: 150px;
   margin-right: 36px;
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 100px;
+  }
+`;
+const UserProfileAddPhotoWrap = styled(Box)`
+  color: black;
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  bottom: 5px;
+  right: 5px;
+  font-size: 2rem;
+  background: white;
+  padding: 8px;
+  box-sizing: content-box;
+  border-radius: 1.75rem;
+  box-shadow: 1px 2px 4px 1px #696969;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    width: 20px;
+    height: 20px;
+    bottom: 0px;
+    right: 0px;
+  }
 `;
 
 const TableCustomContainer = styled(TableContainer)`
+  padding: 0 12px 0 12px;
+`;
+const TableCustomBody = styled(TableBody)`
   border-top: 3px solid #000;
 `;
-const TableCustomBody = styled(TableBody)``;
 
-const TableCustomRow = styled(TableRow)``;
+const TableCustomRow = styled(TableRow)`
+  display: flex;
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+`;
 const TableLeftCell = styled(TableCell)`
   font-size: 20px;
   font-weight: 700;
   width: 20%;
+  display: flex;
+  align-items: center;
+  @media (max-width: 600px) {
+    width: 100%;
+    border-bottom: 0;
+  }
 `;
 const TableRightCell = styled(TableCell)`
   width: 80%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+`;
+
+const CheckBoxWrap = styled(Box)`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px 0 12px;
+`;
+
+const SubmitButton = styled(Button)`
+  margin-top: 12px;
+  margin-bottom: 8px;
+  max-width: 650px;
+  margin: auto;
+  @media (max-width: 650px) {
+    max-width: calc(100vw - 72px);
+  }
 `;

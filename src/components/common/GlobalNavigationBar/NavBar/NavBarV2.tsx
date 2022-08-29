@@ -14,7 +14,15 @@ const showRemoteList = [
 
 const IndicatorBox = ({ index, value }: { index: number; value: number }) => {
   return (
-    <Box sx={{ opacity: index !== value && 0, height: '4px', width: '100%', background: 'rgb(52,152,219)', position: 'relative' }}>
+    <Box
+      sx={{
+        opacity: index !== value && 0,
+        height: '4px',
+        width: '100%',
+        background: 'rgb(52,152,219)',
+        position: 'relative',
+      }}
+    >
       <Box
         sx={{
           position: 'absolute',
@@ -65,7 +73,12 @@ export function NavBarV2() {
       <NavContainer>
         <HeaderTitleWrap>
           {TransHeaderList.map((item, index) => (
-            <HeaderItem key={item.category} className={'dropdown-box-wrap'} onMouseOver={e => handleHover(e, index)} onMouseOut={handleOut}>
+            <HeaderItem
+              key={item.category}
+              className={'dropdown-box-wrap'}
+              onMouseOver={e => handleHover(e, index)}
+              onMouseOut={handleOut}
+            >
               <Link href={item.href} color={grey[900]}>
                 <Box className="header-title">{item.category}</Box>
               </Link>
@@ -73,7 +86,11 @@ export function NavBarV2() {
               <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
                 <Box className="link-wrap">
                   {item.items.map(menuItem => (
-                    <Link className="link-items" href={menuItem.href} key={menuItem.title}>
+                    <Link
+                      className="link-items"
+                      href={menuItem.href}
+                      key={menuItem.title}
+                    >
                       <MenuItem className="link-item">{menuItem.title}</MenuItem>
                     </Link>
                   ))}
@@ -260,9 +277,10 @@ export const TransHeaderList = [
     category: '마이페이지',
     href: '/me',
     items: [
-      { title: '정보보기', href: '/me' },
+      { title: '내 정보', href: '/me' },
       { title: '정보수정', href: '/me/edit' },
       { title: '학습현황', href: '/me/my-course' },
+      { title: '온라인 학습 신청내역', href: '/me/enroll-history' },
     ],
   },
   {

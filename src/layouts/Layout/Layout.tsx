@@ -171,7 +171,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
       {/* {router.route.includes('/category') && !router.route.includes('/admin') && <PopupBox />} */}
       {/* category에 넣으면 css 붕괴. 이유 알수없음.(popupBox 넣으면 여러 상관없는 컴포넌트의 css들이 무작위로 지정됨. ex)카드 리스트에 Spinner의 스타일이 지정 ) 
-      ==> 해결, dynamic 으로 ssr 비활성화. 근데 해결하니까 누가 밑에 작성해주셨네
+      ==> 해결, dynamic 으로 ssr 비활성화. 근데 해결하니까 누가 밑에 작성해주셨었네 감사합니다..!
       */}
 
       <main className="fit">{children}</main>

@@ -147,8 +147,10 @@ const ContentContainer = styled.div`
 
 const UplineFootConatainer = styled(Grid)`
   /* box-sizing: border-box;
-
   border: 1px solid black; */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   width: 100%;
   height: 50%;
   /* position: relative;
@@ -184,7 +186,7 @@ const SecondBox = styled(Box)`
 
 const Hrhrhrhrhr = styled.hr`
   opacity: 30%;
-  margin:0;
+  margin: 0;
 `;
 
 // const ContentItem = styled.div`

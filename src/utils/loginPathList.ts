@@ -9,7 +9,8 @@ export const notNeededLoginPathList: { href: string }[] = [
   { href: 'find' },
   { href: 'guide' },
   { href: 'stebMove/steb1' },
-  { href: 'stebMove/steb2' },
+  // { href: 'stebMove/steb2' },
+  // { href: 'stebMove/steb3' },
   // { href: 'me' },
   // { href: 'edit' },
 ];

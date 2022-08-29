@@ -27,8 +27,16 @@ import { css, cx } from '@emotion/css';
 import { ErrorMessage } from '@hookform/error-message';
 import { FileUploader } from '@components/ui/FileUploader';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
-import { courseReg, courseCategory, courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
-import { courseCategoryType, courseType, courseSubCategoryType } from '@common/api/courseClass';
+import {
+  courseReg,
+  courseCategory,
+  courseSubCategory,
+} from '@layouts/Calendar/CalendarBody/CalendarBody';
+import {
+  courseCategoryType,
+  courseType,
+  courseSubCategoryType,
+} from '@common/api/courseClass';
 import Image from 'next/image';
 import { Spinner } from '@components/ui';
 
@@ -68,8 +76,11 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
   const [thumbnail, setThumbnail] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(null); //교육과정
-  const [courseSubCategoryType, setCourseSubCategoryType] = useState<courseSubCategoryType | null>(null); //교육과정
+  const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(
+    null
+  ); //교육과정
+  const [courseSubCategoryType, setCourseSubCategoryType] =
+    useState<courseSubCategoryType | null>(null); //교육과정
   const [courseType, setCourseType] = useState<courseType | null>(null); //교육과정\
   const [fileImage, setFileImage] = useState('');
 
@@ -84,10 +95,9 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
   } = useForm<FormType>({ defaultValues });
 
   // Select 박스 초깃값 설정.
-  useEffect(()=>{
-    if(course?.courseType)
-    setCourseType(course.courseType)
-  },[])
+  useEffect(() => {
+    if (course?.courseType) setCourseType(course.courseType);
+  }, []);
 
   useEffect(() => {
     if (mode === 'modify' && !!course) {
@@ -112,7 +122,6 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
     setIsFileDelete(true);
   };
 
-
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...course }, event) => {
     event?.preventDefault();
     // if (!editorRef.current) return;
@@ -131,7 +140,13 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
 
   return (
     <Container>
-      <Box component="form" encType="multipart/form-data" onSubmit={handleSubmit(onSubmit)} noValidate className={boxStyles}>
+      <Box
+        component="form"
+        encType="multipart/form-data"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        className={boxStyles}
+      >
         <InputContainer>
           <FormControl fullWidth className="courseUploadInputBox">
             <InputLabel>과정분류</InputLabel>
@@ -140,7 +155,9 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               id="courseType"
               // value={courseType}
               onChange={e => {
-                setCourseType(courseReg.filter(cate => cate.type === e.target.value)[0].type);
+                setCourseType(
+                  courseReg.filter(cate => cate.type === e.target.value)[0].type
+                );
               }}
               value={courseType || ''}
               label="과정분류"
@@ -161,7 +178,9 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               id="courseCategory"
               // value={courseCategoryType || ''}
               onChange={e => {
-                setCourseCategoryType(courseCategory.filter(cate => cate.type === e.target.value)[0].type);
+                setCourseCategoryType(
+                  courseCategory.filter(cate => cate.type === e.target.value)[0].type
+                );
               }}
               value={courseCategory[0].type}
               disabled
@@ -183,13 +202,17 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               id="courseSubCategoryType"
               // value={courseSubCategoryType}
               onChange={e => {
-                setCourseSubCategoryType(courseSubCategory.filter(cate => cate.type === e.target.value)[0].type);
+                setCourseSubCategoryType(
+                  courseSubCategory.filter(cate => cate.type === e.target.value)[0].type
+                );
               }}
               disabled
               value={courseSubCategory[0].type}
               label="업종"
             >
-              <MenuItem value={courseSubCategory[0].type}>{courseSubCategory[0].ko}</MenuItem>
+              <MenuItem value={courseSubCategory[0].type}>
+                {courseSubCategory[0].ko}
+              </MenuItem>
               {/* {courseSubCategory.map(item => (
                 <MenuItem key={item.type} value={item.type}>
                   {item.ko}
@@ -205,11 +228,15 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               label="과정명"
               variant="outlined"
             />
-            <ErrorMessage errors={errors} name="courseName" as={<FormHelperText error />} />
+            <ErrorMessage
+              errors={errors}
+              name="courseName"
+              as={<FormHelperText error />}
+            />
           </FormControl>
 
           <div className="thumbnail-uploader">
-          <FormLabel sx={{mt:1 , mb:1}} >썸네일 이미지</FormLabel>
+            <FormLabel sx={{ mt: 1, mb: 1 }}>썸네일 이미지</FormLabel>
             <FileUploader
               register={register}
               regName="files"
@@ -230,22 +257,31 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             </FileUploader>
 
             {fileName ? (
-              <Chip sx={{ mt: '8px' }} icon={<OndemandVideoOutlinedIcon />} label={fileName} onDelete={handleDeleteFile} />
+              <Chip
+                sx={{ mt: '8px' }}
+                icon={<OndemandVideoOutlinedIcon />}
+                label={fileName}
+                onDelete={handleDeleteFile}
+              />
             ) : null}
           </div>
           <Box>
             이미지파일 확장자는
-            <span style={{ color: 'red', fontWeight: 'bold' }}> jpg, jpeg, png, gif, bmp</span>만 사용가능합니다. 이미지 사이즈는
+            <span style={{ color: 'red', fontWeight: 'bold' }}>
+              {' '}
+              jpg, jpeg, png, gif, bmp
+            </span>
+            만 사용가능합니다. 이미지 사이즈는
             <span style={{ color: 'red', fontWeight: 'bold' }}>16:9</span>
             비율로 올려주셔야 합니다.
           </Box>
 
-          <FormLabel sx={{mt:1 , mb:1}} >미리보기</FormLabel>
+          <FormLabel sx={{ mt: 1, mb: 1 }}>미리보기</FormLabel>
           <ThumbnailImg>
             {course?.s3Files ? (
               <Image
                 className="thumbnailImg"
-                src={course.s3Files[0].path} // course.courseFile
+                src={course.s3Files[0]?.path || ''} // course.courseFile
                 layout="fill"
               />
             ) : (
@@ -275,8 +311,16 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             name="status"
             render={({ field }) => (
               <RadioGroup row {...field}>
-                <FormControlLabel value={ProductStatus.APPROVE} control={<Radio />} label="정상" />
-                <FormControlLabel value={ProductStatus.REJECT} control={<Radio />} label="중지" />{' '}
+                <FormControlLabel
+                  value={ProductStatus.APPROVE}
+                  control={<Radio />}
+                  label="정상"
+                />
+                <FormControlLabel
+                  value={ProductStatus.REJECT}
+                  control={<Radio />}
+                  label="중지"
+                />{' '}
               </RadioGroup>
             )}
           />
@@ -298,7 +342,13 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
         </FormControl>
 
         <SubmitBtn variant="contained" type="submit" disabled={loading}>
-          {loading ? <Spinner fit={true} /> : mode === 'upload' ? '업로드하기' : '수정하기'}
+          {loading ? (
+            <Spinner fit={true} />
+          ) : mode === 'upload' ? (
+            '업로드하기'
+          ) : (
+            '수정하기'
+          )}
         </SubmitBtn>
       </Box>
     </Container>

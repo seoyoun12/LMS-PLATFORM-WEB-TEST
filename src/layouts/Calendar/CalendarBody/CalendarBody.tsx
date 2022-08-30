@@ -17,12 +17,24 @@ import {
 } from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import FullCalendar from '@fullcalendar/react';
-import { CalendarEvent, ClickedPlanInfo, courseBusinessTypeList, eduLegendList, FilterType } from '../Calendar';
+import {
+  CalendarEvent,
+  ClickedPlanInfo,
+  courseBusinessTypeList,
+  eduLegendList,
+  FilterType,
+} from '../Calendar';
 import { Modal } from '@components/ui/Modal';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import dateFormat from 'dateformat';
 import { useRouter } from 'next/router';
-import { courseType, courseCategoryType, CourseClassRes, courseSubCategoryType, businessType } from '@common/api/courseClass';
+import {
+  courseType,
+  courseCategoryType,
+  CourseClassRes,
+  courseSubCategoryType,
+  businessType,
+} from '@common/api/courseClass';
 import { courseClassEnrollInfo } from '@common/recoil';
 import { useRecoilState } from 'recoil';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
@@ -75,7 +87,15 @@ export const courseSubCategory = [
   { type: courseSubCategoryType.HIGH_PRESSURE_GAS_TOXIC, ko: '고압가스(독성)' },
 ];
 
-export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo, calendarRef, filter, schedule }: Props) {
+export function CalendarBody({
+  setOpenModal,
+  setModalInfo,
+  openModal,
+  modalInfo,
+  calendarRef,
+  filter,
+  schedule,
+}: Props) {
   const router = useRouter();
   const isLogin = useIsLoginStatus();
   const [loading, setLoading] = useState(false);
@@ -84,7 +104,8 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
 
   const scheduleList = schedule?.map(item => {
     //마감여부
-    const prevSchedule = new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0 ? true : false;
+    const prevSchedule =
+      new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0 ? true : false;
     const isReceive =
       new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0
         ? new Date(item.requestStartDate).getTime() - new Date().getTime() <= 0
@@ -94,7 +115,11 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
 
     return {
       ...item,
-      title: prevSchedule ? (item.enableToEnrollYn === YN.YES ? '접수중' : '준비중') : '마감', //말
+      title: prevSchedule
+        ? item.enableToEnrollYn === YN.YES
+          ? '접수중'
+          : '준비중'
+        : '마감', //말
       isReceive,
       prevSchedule,
       step: item.step, //기수
@@ -128,7 +153,11 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
         // locale="ko"
         // dayCellContent={['😁', '😂', '😁', '😂', '😁', '😂']}
         // dayCellClassNames={date => ['fc-day-header-sun', '월', '화', '수', '목', '금', 'fc-day-header-sat'][date.dow]}
-        dayHeaderClassNames={date => ['fc-day-header-sun', '월', '화', '수', '목', '금', 'fc-day-header-sat'][date.dow]}
+        dayHeaderClassNames={date =>
+          ['fc-day-header-sun', '월', '화', '수', '목', '금', 'fc-day-header-sat'][
+            date.dow
+          ]
+        }
         dayHeaderContent={date => ['일', '월', '화', '수', '목', '금', '토'][date.dow]}
         // showNonCurrentDates={false}
 
@@ -142,16 +171,31 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
               start,
               end,
             },
-          }: { event: { _def: { extendedProps: Partial<ClickedPlanInfo> }; start: Date | null; end: Date | null } } = e;
-          if (!e.event._def.extendedProps.prevSchedule) return window.alert('마감된 교육입니다!');
-          if (!e.event._def.extendedProps.isReceive) return window.alert('신청기간이 아닙니다!');
+          }: {
+            event: {
+              _def: { extendedProps: Partial<ClickedPlanInfo> };
+              start: Date | null;
+              end: Date | null;
+            };
+          } = e;
+          if (!e.event._def.extendedProps.prevSchedule)
+            return window.alert('마감된 교육입니다!');
+          if (!e.event._def.extendedProps.isReceive)
+            return window.alert('신청기간이 아닙니다!');
           setModalInfo({
             seq: extendedProps.seq as number,
             step: extendedProps.step as number,
             lessonTime: extendedProps.lessonTime as number,
-            courseBusinessType: e.event._def.extendedProps.course.courseBusinessType as businessType,
-            courseCategoryType: extendedProps.courseCategoryType as { type: courseCategoryType; ko: string },
-            courseSubCategoryType: extendedProps.courseSubCategoryType as { type: courseSubCategoryType; ko: string },
+            courseBusinessType: e.event._def.extendedProps.course
+              .courseBusinessType as businessType,
+            courseCategoryType: extendedProps.courseCategoryType as {
+              type: courseCategoryType;
+              ko: string;
+            },
+            courseSubCategoryType: extendedProps.courseSubCategoryType as {
+              type: courseSubCategoryType;
+              ko: string;
+            },
             enableToEnrollYn: extendedProps.enableToEnrollYn as YN,
             enrolledPeopleCnt: extendedProps.enrolledPeopleCnt as number,
             limitPeople: extendedProps.limitPeople as number,
@@ -168,7 +212,15 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
         onCloseModal={() => setOpenModal(false)}
         // title={<Box >교육안내</Box>}
         action={
-          <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', gap: '1rem', paddingBottom: '2rem' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              width: '100%',
+              justifyContent: 'center',
+              gap: '1rem',
+              paddingBottom: '2rem',
+            }}
+          >
             <JoinButton
               variant="contained"
               onClick={async () => {
@@ -179,7 +231,10 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
                 });
                 if (!isLogin) {
                   window.alert('로그인이 필요한 서비스입니다.');
-                  return router.push('/sign-in');
+                  return router.push({
+                    pathname: '/sign-in',
+                    query: { redirect: router.asPath },
+                  });
                 }
 
                 try {
@@ -217,7 +272,9 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
           <EduSummury>
             <span>교육개요</span>
           </EduSummury>
-          <TableBody sx={{ display: 'table', width: '100%', borderTop: '1px solid #c4c4c4' }}>
+          <TableBody
+            sx={{ display: 'table', width: '100%', borderTop: '1px solid #c4c4c4' }}
+          >
             {modalInfo && (
               <>
                 <TableRow>
@@ -245,13 +302,16 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
                 <TableRow>
                   <TableLeftCell>교육일</TableLeftCell>
                   <TableRightCell>
-                    {dateFormat(modalInfo.studyStartDate, 'yyyy-mm-dd')} ~ {dateFormat(modalInfo.studyEndDate, 'yyyy-mm-dd')}
+                    {dateFormat(modalInfo.studyStartDate, 'yyyy-mm-dd')} ~{' '}
+                    {dateFormat(modalInfo.studyEndDate, 'yyyy-mm-dd')}
                   </TableRightCell>
                 </TableRow>
                 <TableRow>
                   <TableLeftCell>신청/정원</TableLeftCell>
                   <TableRightCell>
-                    {modalInfo.limitPeople === 0 ? '제한없음' : `${modalInfo.enrolledPeopleCnt} / ${modalInfo.limitPeople}명`}
+                    {modalInfo.limitPeople === 0
+                      ? '제한없음'
+                      : `${modalInfo.enrolledPeopleCnt} / ${modalInfo.limitPeople}명`}
                   </TableRightCell>
                 </TableRow>
                 <TableRow>
@@ -268,7 +328,9 @@ export function CalendarBody({ setOpenModal, setModalInfo, openModal, modalInfo,
 
       <Dialog open={deplecateEnrollOpen} onClose={() => setDeplecateEnrollOpen(false)}>
         <DialogContent>
-          <DialogContentText>이미 예약하신 신청내역이 있습니다. 신청내역을 확인하시겠습니까?</DialogContentText>
+          <DialogContentText>
+            이미 예약하신 신청내역이 있습니다. 신청내역을 확인하시겠습니까?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeplecateEnrollOpen(false)}>취소</Button>
@@ -299,19 +361,31 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
     <Box sx={{ color: 'black', fontSize: '1rem' }}>
       <Box display="flex">
         <Box
-          sx={{ color: extendedProps.prevSchedule && extendedProps.enableToEnrollYn === YN.YES ? '#df280a' : '#7a7a7a' }}
+          sx={{
+            color:
+              extendedProps.prevSchedule && extendedProps.enableToEnrollYn === YN.YES
+                ? '#df280a'
+                : '#7a7a7a',
+          }}
           fontWeight="bold"
         >
           [{title}]&nbsp;
         </Box>
-        <Box>{/* {extendedProps.step}기 {extendedProps.courseCategoryType.ko}교육 */}보수일반교육</Box>
+        <Box>
+          {/* {extendedProps.step}기 {extendedProps.courseCategoryType.ko}교육 */}
+          보수일반교육
+        </Box>
       </Box>
       <Box>
         {/* {courseBusinessTypeList.filter(item => item.enType === extendedProps.course.courseBusinessType)[0]?.type} /{' '}
         {extendedProps.courseSubCategoryType.ko} */}
         여객 / 화물
       </Box>
-      <Box>{extendedProps.limitPeople === 0 ? '제한없음' : `${extendedProps.enrolledPeopleCnt} / ${extendedProps.limitPeople}`}</Box>
+      <Box>
+        {extendedProps.limitPeople === 0
+          ? '제한없음'
+          : `${extendedProps.enrolledPeopleCnt} / ${extendedProps.limitPeople}`}
+      </Box>
       {/* <Typography color="black">
         {courseCategoryType?.ko ? courseCategoryType.ko : 'null'}교육 / {lessonTime ? (lessonTime === 0 ? '종일' : lessonTime) : 'null'}시간
       </Typography> */}

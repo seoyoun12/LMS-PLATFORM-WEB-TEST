@@ -59,11 +59,13 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
         if (!currentPageNotNeedLogin && !localStorage.getItem('ACCESS_TOKEN')) {
           window.alert('로그인이 필요한 서비스입니다.');
-          return router.push(
-            localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL
-              ? '/traffic/sign-in'
-              : '/sign-in'
-          );
+          return router.push({
+            pathname:
+              localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL
+                ? '/traffic/sign-in'
+                : '/sign-in',
+            query: { redirect: router.asPath },
+          });
         }
 
         const { data }: { data: MyUser } = await getMyUser();
@@ -86,11 +88,13 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             data.roles.filter(item => allowUserPage.roles.includes(item)).length === 0
           ) {
             window.alert('로그인이 필요합니다!');
-            return router.push(
-              localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL
-                ? '/traffic/sign-in'
-                : '/sign-in'
-            );
+            return router.push({
+              pathname:
+                localStorage.getItem('site_course_type') === CourseType.TYPE_PROVINCIAL
+                  ? '/traffic/sign-in'
+                  : '/sign-in',
+              query: { redirect: router.asPath },
+            });
           }
         }
       } catch (e: any) {

@@ -5,13 +5,13 @@ import { useEffect, useLayoutEffect } from 'react';
 import { localStore } from '@common/storage';
 
 export function useIsLoginStatus(): boolean {
-  const [ isLogin, setIsLogin ] = useRecoilState(isLoginState);
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
 
   useLayoutEffect(() => {
     const at = localStore.getItem(ACCESS_TOKEN);
     const rt = localStore.getItem(REFRESH_TOKEN);
     setIsLogin(!!at && !!rt);
-  }, [isLogin, setIsLogin]);
+  }, [isLogin, setIsLogin, localStore.getItem(ACCESS_TOKEN)]);
 
   return isLogin;
 }

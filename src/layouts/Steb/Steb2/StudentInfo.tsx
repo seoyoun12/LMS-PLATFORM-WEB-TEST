@@ -54,6 +54,7 @@ export function StudentInfo({
   const [carRegisteredRegion, setCarRegisteredRegion] = useState<string | null>(null); //차량등록지
   const [smsYn, setSmsYn] = useState(true);
   const { user, error } = useMyUser();
+  console.log(user, 'user');
 
   useEffect(() => {
     if (user && registerType === RegisterType.TYPE_INDIVIDUAL) {
@@ -66,6 +67,9 @@ export function StudentInfo({
       setFirstIdentityNumber(first);
       setValue('secondIdentityNumber', second);
       setSecondidentityNumber(second);
+      setValue('firstPhone', user.phone.slice(0, 3));
+      setValue('secondPhone', user.phone.slice(3, 7));
+      setValue('thirdPhone', user.phone.slice(7, 11));
     }
     if (user && registerType === RegisterType.TYPE_ORGANIZATION) {
       // const first = user.identityNumber.slice(0, 6);

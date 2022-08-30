@@ -46,6 +46,12 @@ export function SignInV2() {
   });
   const { name, identify1, identify2, usernameErr, identify1Err, identify2Err } = watch();
 
+  //리다이렉트 라우팅 주소 확인
+  const redirect =
+    String(router.query?.redirect) !== 'undefined'
+      ? String(router.query?.redirect)
+      : '/category';
+
   useEffect(() => {
     if (isLogin) {
       router.push('/category');
@@ -76,7 +82,7 @@ export function SignInV2() {
           role: [...(res.data.roles as unknown as UserRole[])],
         }); // api가 있었음 필요없을듯
         snackbar({ variant: 'success', message: '로그인이 완료되었습니다.' });
-        router.push('/category');
+        router.push(redirect);
       }
       loadingRef.current = false;
       setLoading(false);

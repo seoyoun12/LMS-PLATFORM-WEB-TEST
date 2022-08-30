@@ -2,14 +2,16 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Alert, Box, Button, Snackbar } from "@mui/material";
 import { CourseModuleFindResponseDto, SurveyResponseDto } from "@common/api/Api";
+import { Spinner } from "@components/ui";
 import LessonContentSurveyQuestion from "./LessonContentSuerveyQuestion";
 import ApiClient from "@common/api/ApiClient";
 import { useRouter } from "next/router";
 
 export interface Props {
+  loading?: boolean;
   courseUserSeq: number;
-  courseModule: CourseModuleFindResponseDto;
-  survey: SurveyResponseDto;
+  courseModule: CourseModuleFindResponseDto | null;
+  survey: SurveyResponseDto | null;
 }
 
 export default function LessonContentSurvey(props: Props) {
@@ -33,6 +35,9 @@ export default function LessonContentSurvey(props: Props) {
   }, [props.survey]);
 
   // 렌더링.
+
+  if (props.loading) return <SurveyEmptyContainer><Spinner fit/></SurveyEmptyContainer>
+  if (props.courseModule === null || props.survey === null) return <SurveyEmptyContainer>설문이 존재하지 않습니다.</SurveyEmptyContainer>;
 
   return (
     <SurveyContainer
@@ -110,6 +115,13 @@ export default function LessonContentSurvey(props: Props) {
   );
 
 }
+
+const SurveyEmptyContainer = styled.div`
+  display: flex;
+  aspect-ratio: 16 / 9;
+  align-items : center;
+  justify-content: center;
+`;
 
 const SurveyContainer = styled.form`
   margin: 0 auto;

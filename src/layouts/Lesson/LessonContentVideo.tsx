@@ -236,7 +236,6 @@ export default function LessonContentVideo(props: Props) {
                   onSeeking={onSeeking}
                   onSeeked={onSeeked}
                   onTimeChange={onTimeChange}
-                  onReady={(v) => console.debug(v)}
                 />
               </VideoWrapper>
               <ContentInfoContainer>

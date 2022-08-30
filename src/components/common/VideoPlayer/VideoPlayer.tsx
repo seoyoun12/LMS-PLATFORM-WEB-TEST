@@ -18,6 +18,15 @@ interface Props extends Events {
 
 export function VideoPlayer(props: Props) {
 
+  // 최대한 이 컴포넌트가 다시 렌더링 되지 않도록 해주세요.
+  // 거의 모든 것을 useRef를 사용하여 막아보았지만,
+  // 정말 필요한 것도 있어서 어쩔 수 없이...
+  //
+  // Lesson 컴포넌트 전체를 바꾼 이유 중 하나이기도 해요.
+  // 어찌 낑겨 맞추려고 이렇게까지 한게 좀 웃기네요ㅋㅋㅋ
+  //
+  // 되도록이면 건들이지 말아주세요.
+
   // 스테이트.
 
   const [scriptLoaded, setScriptLoaded] = React.useState<boolean>(false);
@@ -61,6 +70,17 @@ export function VideoPlayer(props: Props) {
         player.current._corePlayer._setDuration(player.current._corePlayer.player.duration);
         player.current._view.$el.__vue__.controlKeydownEvent = () => undefined;
         
+        // 그... 62번줄은 플레이어 방향키로 시간 조절하는 것을 막는 코드에요.
+        // 일단 막아보았지만, 영상이 로드 되기 전에 방향키를 막 누르면 5초정도 이동되긴 해요.
+        // 완전히 막는 방법을 모르겠어요...
+        //
+        // 이게 vue로 제작된 것 같더라고요.
+        // 아마 생성될 때 한번, 그 후에 한번 새로 생기는 것 같네요.
+        // 
+        // 코드를 여기에 넣으면 뒤에 생기는 것을 막을 수 있지만,
+        // 처음 만들어질 때 생성되는 것은 막을 수 없어요.
+        // 어느 함수가 먼저 불러내는지 도무지 못 찾겠네요...
+
       });
 
       eventsPrev.current = [];

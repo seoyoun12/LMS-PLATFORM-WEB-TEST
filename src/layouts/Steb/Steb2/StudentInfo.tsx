@@ -29,7 +29,7 @@ import { useMyUser, UserRole } from '@common/api/user';
 import { Phone3Regex, Phone4Regex } from '@utils/inputRegexes';
 import { CarNumberBox } from '@components/ui/Step';
 
-const phoneList = ['010', '032', '02', '031'];
+const phoneList = ['010', '011', '051'];
 interface Props {
   register: UseFormRegister<UserTransSaveInputDataType>;
   setValue: UseFormSetValue<UserTransSaveInputDataType>;

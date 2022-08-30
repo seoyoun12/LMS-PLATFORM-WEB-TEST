@@ -28,6 +28,7 @@ import {
 } from 'react-hook-form';
 import {
   courseSubCategoryType,
+  userBusinessType,
   UserTransSaveInputDataType,
 } from '@common/api/courseClass';
 
@@ -52,11 +53,15 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
       target: { value },
     } = e;
 
+    console.log('버스', value, watch().businessName);
     if (
       courseSubCategoryType.BUS === value ||
       courseSubCategoryType.CHARTER_BUS === value
     ) {
       setValue('carNumber', null);
+      setValue('businessName', '');
+      console.log('버스임마', value, watch().businessName);
+      setDisabledCompany(false);
       return setHideCarNumber(true);
     }
     if (
@@ -94,7 +99,6 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
   // const onChangeCompanyName = (e: any) => {
   //   setValue('businessName', e.target.value);
   // };
-  console.log(watch());
 
   return (
     <CompanyInfoWrap>
@@ -126,6 +130,11 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
                   labelId="businessType"
                   id="businessType"
                   {...register('businessType')}
+                  onChange={e => {
+                    setValue('businessType', e.target.value as userBusinessType);
+                    setValue('businessSubType', null);
+                    setValue('businessName', null);
+                  }}
                 >
                   {userBusinessTypeOne.map(item => (
                     <MenuItem key={item.enType} value={item.enType}>
@@ -164,7 +173,8 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
               <TextField
                 placeholder="회사명 또는 차량등록지역"
                 {...register('businessName')}
-                value={onReturnValueBusinessName()}
+                // value={onReturnValueBusinessName()}
+                value={watch().businessName}
                 disabled={disabledCompany}
                 fullWidth
               />

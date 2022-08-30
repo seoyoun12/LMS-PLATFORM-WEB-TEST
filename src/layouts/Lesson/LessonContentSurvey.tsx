@@ -8,10 +8,10 @@ import ApiClient from "@common/api/ApiClient";
 import { useRouter } from "next/router";
 
 export interface Props {
-  loading?: boolean;
   courseUserSeq: number;
   courseModule: CourseModuleFindResponseDto | null;
   survey: SurveyResponseDto | null;
+  loading?: boolean;
 }
 
 export default function LessonContentSurvey(props: Props) {

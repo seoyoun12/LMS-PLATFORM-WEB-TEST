@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Box, Container, LinearProgress, Typography } from "@mui/material";
+import { Box, LinearProgress, Typography } from "@mui/material";
 import { VideoPlayer } from "@components/common";
 import { Spinner } from "@components/ui";
 import type { CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
@@ -225,7 +225,7 @@ export default function LessonContentVideo(props: Props) {
   if (props.lesson === null || props.courseProgress === null) return <VideoContentWrapper>강의가 존재하지 않습니다.</VideoContentWrapper>;
 
   return (
-    <React.Fragment>
+    <VideoContainer>
       <VideoContentPlayerWrapper>
         <VideoPlayer
           playlist={props.lesson.s3Files[0]?.path}
@@ -240,24 +240,27 @@ export default function LessonContentVideo(props: Props) {
         />
       </VideoContentPlayerWrapper>
       <ContentInfoContainer>
-        <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "0.25rem" }}>
+        <ContentInfoTitle variant="h6">
           {props.lesson.lessonNm}
-        </Typography>
+        </ContentInfoTitle>
         <ContentInfoProgressContainer>
-          <Box>
-            <Typography variant="h6" fontWeight="bold" color="#ff5600">
-              {Math.floor(progress * 100)}% 수강 완료
-            </Typography>
-          </Box>
+          <Typography fontWeight="bold" color="#ff5600" fontSize="inherit">
+            {Math.floor(progress * 100)}% 수강 완료
+          </Typography>
           <Box sx={{ width: "100%", mr: 1 }}>
             <LinearProgress variant="determinate" value={Math.floor(progress * 100)} />
           </Box>
         </ContentInfoProgressContainer>
       </ContentInfoContainer>
-    </React.Fragment>
+    </VideoContainer>
   );
 
 }
+
+const VideoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const VideoContentWrapper = styled.div`
   display: flex;
@@ -268,10 +271,36 @@ const VideoContentWrapper = styled.div`
 
 const VideoContentPlayerWrapper = styled(VideoContentWrapper)`
   background-color: #000;
+
+  @media (max-width: 1024px) {
+    order: 1;
+  }
 `;
 
 const ContentInfoContainer = styled(Box)`
   margin-top: 10px;
+
+  @media (max-width: 1024px) {
+    margin-top: unset;
+    margin-bottom: 1rem;
+  }
+`;
+
+const ContentInfoTitle = styled(Typography)`
+  display: flex;
+  margin-bottom: 0.25rem;
+  font-weight: 700;
+  align-items: center;
+
+  @media (max-width: 1024px) {
+    margin: 0 -1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    font-size: 1em;
+    font-weight: 400;
+    background: #E9F1FF;
+    justify-content: center;
+  }
 `;
 
 const ContentInfoProgressContainer = styled(Box)``;

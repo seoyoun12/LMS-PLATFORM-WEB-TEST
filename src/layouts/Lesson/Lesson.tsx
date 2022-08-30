@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Box, Container, Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { Spinner } from "@components/ui";
 import { CourseDetailClientResponseDto, CourseModuleFindResponseDto, SurveyResponseDto } from "@common/api/Api";
-import useResponsive from "@hooks/useResponsive";
 import ApiClient from "@common/api/ApiClient";
 import LessonSidebar from "./LessonSidebar";
 import LessonContentVideo from "./LessonContentVideo";
@@ -17,8 +16,6 @@ export interface LessonProps {
 }
 
 export default function Lesson(props: LessonProps) {
-
-  const isDesktop = useResponsive(1024);
 
   // 스테이트.
 
@@ -147,6 +144,22 @@ export default function Lesson(props: LessonProps) {
   );
 }
 
+const LessonContainer = styled(Container)`
+  margin: 0 auto;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+  padding: 0 1rem;
+  display: flex;
+  flex: 1 1 auto;
+  position: relative;
+  align-items: stretch;
+
+  @media (max-width: 1024px) {
+    margin-top: unset;
+    flex-direction: column;
+  }
+`;
+
 const LessonContentWrapper = styled.div`
   margin: 0 auto;
   width: 100%;
@@ -158,15 +171,4 @@ const LessonContentEmptyWrapper = styled(LessonContentWrapper)`
   min-height: 50vh;
   align-items : center;
   justify-content: center;
-`;
-
-const LessonContainer = styled(Container)`
-  margin: 0 auto;
-  margin-top: 2rem;
-  margin-bottom: 4rem;
-  padding: 0 1rem;
-  display: flex;
-  flex: 1 1 auto;
-  position: relative;
-  align-items: stretch;
 `;

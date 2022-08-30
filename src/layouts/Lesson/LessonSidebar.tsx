@@ -51,21 +51,21 @@ export default function LessonSidebar(props: Props) {
               key={lesson.seq}
               onClick={() => setSwitchURL(`/course/${props.courseUserSeq}/${LESSON_CONTENT_TYPES[0].toLocaleLowerCase()}/${lesson.seq}`)}
             >
-              <Box>
-                <LessonTitle variant="body1">{lesson.lessonNm}</LessonTitle>
+              <LessonContent>
+                <LessonTitle variant="body1" fontSize="inherit">{lesson.lessonNm}</LessonTitle>
                 <LessonInfo>
-                  <PlayCircleOutlinedIcon fontSize="small" htmlColor={grey[500]} />
-                  <Typography className="typo" variant="body2" color={grey[500]}>
+                  <PlayCircleOutlinedIcon htmlColor={grey[500]} fontSize="inherit"/>
+                  <Typography className="typo" variant="body2" color={grey[500]} fontSize="inherit">
                     {Math.floor(lesson.totalTime / 60)}:{lesson.totalTime % 60}
                   </Typography>
                 </LessonInfo>
-              </Box>
+              </LessonContent>
               <LessonCheck>
-                {props.lessonSeq === lesson.seq && <PlayCircleIcon sx={{ color: "text.secondary" }} style={{ marginRight: 8 }} />}
-                <Typography className="typo" variant="body2" color={grey[500]} style={{ marginRight: 8 }}>
+                {props.lessonSeq === lesson.seq && <PlayCircleIcon sx={{ color: "text.secondary" }} style={{ marginRight: 8 }} fontSize="inherit"/>}
+                <Typography className="typo" variant="body2" color={grey[500]} style={{ marginRight: 8 }} fontSize="inherit">
                   {lesson.completedYn === "Y" ? "학습 완료" : "미학습"}
                 </Typography>
-                <CheckCircleIcon sx={{ color: lesson.completedYn === "Y" ? "#256aef" : "text.secondary" }} />
+                <CheckCircleIcon sx={{ color: lesson.completedYn === "Y" ? "#256aef" : "text.secondary" }} fontSize="inherit"/>
               </LessonCheck>
             </TabItem>
           ))}
@@ -122,11 +122,22 @@ const StickySideBar = styled.aside`
   background-color: #fff;
   z-index: 1;
   overflow: hidden;
+
+  @media (max-width: 1024px) {
+    margin-left: unset;
+    margin-top: 1rem;
+    min-width: unset;
+    font-size: 0.8rem;
+  }
 `;
 
 const TabMenu = styled(LessonTabMenu)`
   padding-bottom: 30px;
   font-weight: bold;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
 `;
 
 const Tab = styled(Box)`
@@ -148,14 +159,25 @@ const Tab = styled(Box)`
 `;
 
 const TabItem = styled.div`
-  padding: 12px;
-  min-height: 36px;
+  padding: 0.75rem;
+  min-height: 2.5rem;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
-`
+`;
+
+const LessonContent = styled(Box)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 const LessonTitle = styled(Typography)`
+  margin-right: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   .active & {
     font-weight: 700;
   }

@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Image from "next/image";
 import type { CourseModuleFindResponseDto } from "@common/api/Api";
-import { LESSON_CONTENT_TYPES } from "./Lesson";
+import { LESSON_CONTENT_TYPES } from "./Lesson.types";
 
 interface Props {
   courseUserSeq: number;
@@ -21,7 +21,7 @@ export default function LessonSidebarModule(props: Props) {
           <ModuleTitle>{props.courseModule.moduleName}</ModuleTitle>
         </ModuleContainerLeft>
         <ModuleContainerRight>
-          <CheckCircleIcon sx={{ color: props.courseModule.submitYn === "Y" ? "#256aef" : "text.secondary" }} />
+          <CheckCircleIcon sx={{ color: props.courseModule.submitYn === "Y" ? "#256aef" : "text.secondary" }} fontSize="inherit"/>
         </ModuleContainerRight>
       </ModuleContainer>
     );
@@ -34,7 +34,7 @@ export default function LessonSidebarModule(props: Props) {
           </ModuleTitle>
         </ModuleContainerLeft>
         <ModuleContainerRight>
-          <CheckCircleIcon sx={{ color: props.courseModule.submitYn === "Y" ? "#256aef" : "text.secondary" }} />
+          <CheckCircleIcon sx={{ color: props.courseModule.submitYn === "Y" ? "#256aef" : "text.secondary" }} fontSize="inherit"/>
         </ModuleContainerRight>
       </ModuleContainer>
     );
@@ -45,7 +45,7 @@ export default function LessonSidebarModule(props: Props) {
           <ModuleTitle style={{ marginLeft: "0.5rem" }}>{props.courseModule.moduleName}</ModuleTitle>
         </ModuleContainerLeft>
         <ModuleContainerRight>
-          <CheckCircleIcon sx={{ color: props.courseModule.submitYn === "Y" ? "#256aef" : "text.secondary" }} />
+          <CheckCircleIcon sx={{ color: props.courseModule.submitYn === "Y" ? "#256aef" : "text.secondary" }} fontSize="inherit"/>
         </ModuleContainerRight>
       </ModuleContainer>
     );

@@ -175,7 +175,7 @@ export function EnrollHistoryModal({
       if (regType === RegisterType.TYPE_ORGANIZATION) {
         await delelteCourseUserOrga(courseUserSeq);
       }
-      snackbar({ variant: 'success', message: '성공적으로 수정완료 했씁니다.' });
+      snackbar({ variant: 'success', message: '성공적으로 수정완료 했습니다.' });
       handleClose();
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });

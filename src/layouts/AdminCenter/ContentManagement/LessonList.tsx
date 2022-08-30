@@ -18,14 +18,17 @@ import { LessonEditModal } from '@components/admin-center/LessonEditModal';
 import { Spinner } from '@components/ui';
 import { totalSecToMinSec } from 'src/utils/totalSecToMinSec';
 
-const headRows = [
-  { name: '차시' },
-  { name: '콘텐츠 유형' },
-  { name: '강의명' },
-  { name: '학습시간' },
-  { name: '수료시간' },
+const headRows: {
+  name: string;
+  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+}[] = [
+  { name: '차시', align: 'center' },
+  // { name: '콘텐츠 유형', align: 'center' },
+  { name: '강의명', align: 'center' },
+  { name: '학습시간', align: 'center' }, //  (total time)
+  { name: '수료시간', align: 'center' }, //  (complete time)
   // { name: '페이지' },
-  { name: '상태' },
+  { name: '상태', align: 'center' },
 ];
 
 const contentType = {
@@ -103,8 +106,8 @@ export function LessonList() {
         <TableHead>
           <TableRow>
             <TableCell align="left">{headRows[0].name}</TableCell>
-            {headRows.slice(1).map(({ name }: { name: string }) => (
-              <TableCell key={name} align="right">
+            {headRows.slice(1).map(({ name, align }) => (
+              <TableCell key={name} align="center">
                 {name}
               </TableCell>
             ))}
@@ -115,26 +118,37 @@ export function LessonList() {
           {lessonList.map(lesson => {
             const { min, sec } = totalSecToMinSec(lesson.completeTime);
             return (
-              <TableRow key={lesson.seq} hover>
-                <TableCell style={{ width: 60 }} align="left">
+              <TableRow
+                key={lesson.seq}
+                hover
+                onClick={() => modifyLesson(lesson.seq)}
+                sx={{ cursor: 'pointer' }}
+              >
+                <TableCell style={{ width: 100 }} align="left">
                   {lesson.chapter}
                 </TableCell>
-                <TableCell style={{ width: 80 }} align="right">
+                {/* <TableCell style={{ width: 80 }} align="right">
                   {contentType[lesson.contentType]}
-                </TableCell>
-                <TableCell style={{ width: 200 }} align="right">
+                </TableCell> */}
+                <TableCell style={{ width: 600 }} align="left">
                   {lesson.lessonNm}
                 </TableCell>
-                <TableCell style={{ width: 100 }} align="right">
+                <TableCell style={{ width: 150 }} align="center">
                   {lesson.min}분 {lesson.sec}초
                 </TableCell>
-                <TableCell style={{ width: 100 }} align="right">
+                <TableCell style={{ width: 150 }} align="center">
                   {min}분 {sec}초
                 </TableCell>
                 {/* <TableCell style={{ width: 100 }} align="right">
+                  {lesson.totalTime}
+                </TableCell>
+                <TableCell style={{ width: 100 }} align="right">
+                  {lesson.completeTime}
+                </TableCell> */}
+                {/* <TableCell style={{ width: 100 }} align="right">
                   {lesson.totalPage}
                 </TableCell> */}
-                <TableCell style={{ width: 10 }} align="right">
+                <TableCell style={{ width: 10 }} align="center">
                   <Chip
                     label={lesson.status === ProductStatus.APPROVE ? '정상' : '중지'}
                     variant="outlined"
@@ -144,7 +158,7 @@ export function LessonList() {
                     }
                   />
                 </TableCell>
-                <TableCell style={{ width: 135 }} align="right">
+                {/* <TableCell style={{ width: 135 }} align="right">
                   <Button
                     variant="text"
                     color="neutral"
@@ -161,7 +175,7 @@ export function LessonList() {
                   >
                     삭제
                   </Button>
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             );
           })}

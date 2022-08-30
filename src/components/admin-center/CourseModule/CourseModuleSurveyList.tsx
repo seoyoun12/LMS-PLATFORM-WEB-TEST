@@ -22,7 +22,7 @@ const headRows: {
   name: string;
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
 }[] = [
-  { name: 'Seq', align: 'left' },
+  { name: '번호', align: 'left' },
   { name: '설문명', align: 'right' },
   { name: '연동', align: 'right' },
   //   { name: '연결된 과정명', align: 'right' },

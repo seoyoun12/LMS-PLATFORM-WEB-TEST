@@ -211,7 +211,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
           ref={editorRef}
         />
 
-        <FormLabel sx={{mt:2 , mb:1}} >공지여부</FormLabel>
+        <FormLabel sx={{ mt: 2, mb: 1 }}>공지여부</FormLabel>
         <div className="board-uploader">
           <FileUploader
             register={register}
@@ -301,7 +301,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
             onClick={() => onClickRemoveCategory(category.seq)}
             disabled={loading}
           >
-            {loading ? <Spinner fit={loading} /> : '삭제'}
+            {loading ? <Spinner fit={true} /> : '삭제'}
           </DeleteBtn>
         )}
       </Box>

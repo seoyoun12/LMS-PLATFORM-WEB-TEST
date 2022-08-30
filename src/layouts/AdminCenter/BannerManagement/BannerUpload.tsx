@@ -25,6 +25,7 @@ import { ko } from 'date-fns/locale';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { useRouter } from 'next/router';
+import { Spinner } from '@components/ui';
 
 interface FormType {
   title: string;
@@ -33,7 +34,6 @@ interface FormType {
   endDate: string;
   status: ProductStatus;
   toUrl: string;
-
   files: File[];
 }
 
@@ -49,6 +49,7 @@ export function BannerUpload() {
   const router = useRouter();
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -183,7 +184,7 @@ export function BannerUpload() {
           />
         ) : null}
         <Button variant="contained" type="submit">
-          업로드
+          {loading ? <Spinner fit={true} /> : '등록'}
         </Button>
       </Box>
     </BannnerUploadContainer>

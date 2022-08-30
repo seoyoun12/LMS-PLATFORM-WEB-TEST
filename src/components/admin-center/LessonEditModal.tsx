@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import {
   Box,
+  Button,
   Chip,
   FormControl,
   FormControlLabel,
@@ -21,7 +22,7 @@ import styled from '@emotion/styled';
 import { CustomInputLabel } from '@components/ui/InputLabel';
 import { Modal } from '@components/ui';
 import { Lesson } from '@common/api/lesson';
-import { modifyLesson } from '@common/api/adm/lesson';
+import { modifyLesson, removeLesson, useLessonList } from '@common/api/adm/lesson';
 import TextField from '@mui/material/TextField';
 import { ProductStatus } from '@common/api/course';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -30,6 +31,8 @@ import { useFileUpload } from '@hooks/useChunkFileUpload';
 import { FileType } from '@common/api/file';
 import { FileUploader } from '@components/ui/FileUploader';
 import { BbsType, deleteFile } from '@common/api/adm/file';
+import { useDialog } from '@hooks/useDialog';
+import router from 'next/router';
 
 interface Props {
   open: boolean;
@@ -43,9 +46,9 @@ interface FormType extends Lesson {
 }
 
 const contentTypeOptions = [
-  { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
+  // { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
   { value: ContentType.CONTENT_MP4, name: 'mp4' },
-  { value: ContentType.CONTENT_EXTERNAL, name: '외부링크' },
+  // { value: ContentType.CONTENT_EXTERNAL, name: '외부링크' },
 ];
 
 const defaultValues = {
@@ -60,6 +63,9 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const { handleUpload } = useFileUpload();
+  const { contentSeq } = router.query;
+  const { lessonList, lessonListError, mutate } = useLessonList(Number(contentSeq));
+  const dialog = useDialog();
   const {
     register,
     handleSubmit,
@@ -98,13 +104,33 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
     }
   };
 
+  // 삭제
+  const onRemoveLesson = async (lessonId: number) => {
+    try {
+      const dialogConfirmed = await dialog({
+        title: '콘텐츠 삭제하기',
+        description: '정말로 삭제하시겠습니까?',
+        confirmText: '삭제하기',
+        cancelText: '취소',
+      });
+      if (dialogConfirmed) {
+        await removeLesson(lessonId);
+        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
+        handleClose(true);
+        await mutate();
+      }
+    } catch (e: any) {
+      snackbar({ variant: 'error', message: e.data.message });
+    }
+  };
+
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...lessonWatch }) => {
     setSubmitLoading(true);
     const lesson = {
       ...lessonWatch,
-      completeTime: (Number(lessonWatch.min) * 60) + Number(lessonWatch.sec),
-      totalTime: (Number(lessonWatch.min) * 60) + Number(lessonWatch.sec)
-    }
+      completeTime: Number(lessonWatch.min) * 60 + Number(lessonWatch.sec),
+      totalTime: Number(lessonWatch.min) * 60 + Number(lessonWatch.sec),
+    };
 
     try {
       await modifyLesson({ lessonSeq: lesson.seq, lesson });
@@ -172,7 +198,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
             />
           </FormControl>
 
-          <FormControl className="form-control">
+          <FormControl className="form-control" sx={{ display: 'none' }}>
             <CustomInputLabel size="small">콘텐츠 타입</CustomInputLabel>
             <Controller
               rules={{ required: '콘텐츠 유형을 선택해주세요.' }}
@@ -260,6 +286,14 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
               )}
             />
           </FormControl>
+          <Button
+            variant="text"
+            color="warning"
+            onClick={() => onRemoveLesson(lesson.seq)}
+            size="small"
+          >
+            삭제
+          </Button>
         </FormContainer>
       </Box>
     </Modal>

@@ -23,9 +23,10 @@ import dateFormat from 'dateformat';
 import styled from '@emotion/styled';
 import { AnsweredYn, qnaAdmList } from '@common/api/qna';
 import { ProductStatus } from '@common/api/course';
+import { downloadFile } from '@common/api/file';
 
 const headRows = [
-  { name: '글번호' }, // seq
+  { name: '번호' }, // seq
   { name: '유저번호' }, // 유저시퀀스
   { name: '제목' }, // 문의제목
   { name: '본문' }, // 문의내용
@@ -34,7 +35,14 @@ const headRows = [
   { name: '첨부파일' }, // 첨부파일
   { name: '상태' }, // 상태
   { name: '답변여부' }, // 답변여부
-  { name: '답변등록' },
+  // { name: '답변등록' },
+];
+
+const tabsConfig = [
+  { name: '회원가입/로그인', value: 'TYPE_SIGNUP_OR_SIGNIN' },
+  { name: '교육/수료', value: 'TYPE_EDU_OR_COMPLETE' },
+  { name: '홈페이지/앱', value: 'TYPE_WEB_OR_APP ' },
+  { name: '기타', value: 'TYPE_ETC ' },
 ];
 
 export function QnaManagement() {
@@ -86,7 +94,12 @@ export function QnaManagement() {
 
         <TableBody>
           {data?.content.map(qna => (
-            <TableRow key={qna.seq} hover>
+            <TableRow
+              sx={{ cursor: 'pointer' }}
+              key={qna.seq}
+              hover
+              onClick={() => onClickAnswerQna(qna.seq)}
+            >
               <TableCell align="center">{qna.seq}</TableCell>
               <TableCell align="center">{qna.userSeq}</TableCell>
               <TableCell align="center">
@@ -95,7 +108,10 @@ export function QnaManagement() {
               <TableCell align="center">
                 <ContentTypography>{qna.content}</ContentTypography>
               </TableCell>
-              <TableCell align="center">{qna.type}</TableCell>
+              <TableCell align="center">
+                {/* {qna.type} */}
+                {tabsConfig.filter(item => item.value === qna.type)[0]?.name}
+              </TableCell>
               <TableCell align="center">
                 {dateFormat(qna.createdDtime, 'isoDate')}
               </TableCell>
@@ -103,7 +119,28 @@ export function QnaManagement() {
                 {dateFormat(qna.modifiedDtime, 'isoDate')}
               </TableCell> */}
               <TableCell align="center">
-                {qna.s3Files[0] ? qna.s3Files[0].name : '파일없음'}
+                <Button
+                  // onClick={() => onClickDownloadFile(category.s3Files[0].seq)}
+                  // download={category.s3Files[0] ? category.s3Files[0] : null}
+                  // href={category.s3Files[0] ? category.s3Files[0].path : null}
+                  // href=""
+                  onClick={async () => {
+                    try {
+                      const blobData = await downloadFile(qna.s3Files[0].seq);
+
+                      const url = window.URL.createObjectURL(new Blob([blobData]));
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = `${qna.s3Files[0].name}`;
+                      a.click();
+                      a.remove();
+                    } catch (e: any) {
+                      console.log(e);
+                    }
+                  }}
+                >
+                  {qna.s3Files[0] ? qna.s3Files[0].name : '파일없음'}
+                </Button>
               </TableCell>
               <TableCell align="center">
                 <Chip
@@ -127,7 +164,7 @@ export function QnaManagement() {
                   }
                 />
               </TableCell>
-              <TableCell align="center">
+              {/* <TableCell align="center">
                 <Button
                   variant="text"
                   color="warning"
@@ -136,7 +173,7 @@ export function QnaManagement() {
                 >
                   답변
                 </Button>
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>

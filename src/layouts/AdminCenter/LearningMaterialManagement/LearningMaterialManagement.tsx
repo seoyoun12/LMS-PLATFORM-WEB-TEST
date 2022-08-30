@@ -27,7 +27,7 @@ import styled from '@emotion/styled';
 import { ProductStatus } from '@common/api/course';
 
 const headRows = [
-  { name: '글번호' },
+  { name: '번호' },
   { name: '제목' },
   { name: '본문' },
   { name: '타입' },

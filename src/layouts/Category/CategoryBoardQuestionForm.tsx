@@ -15,7 +15,7 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableRow,
+  TableRow as MuiTableRow,
   TextareaAutosize,
   TextField,
   Checkbox,
@@ -35,6 +35,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { Spinner } from '@components/ui';
 import { Phone3Regex, Phone4Regex } from '@utils/inputRegexes';
+import useResponsive from '@hooks/useResponsive';
 
 const questionTypeList = [
   { type: '회원가입/로그인', enType: 'TYPE_SIGNUP_OR_SIGNIN' },
@@ -50,7 +51,7 @@ const emailList = [
   { email: 'daum.net', isHandmade: false },
 ];
 
-const phoneList = ['010', '032', '02', '031'];
+const phoneList = ['010', '011'];
 
 interface Props {
   // memberType: MemberType | undefined;
@@ -78,14 +79,10 @@ const defaultValues = {
   files: [],
 };
 
-export function CategoryBoardQuestionForm({
-  mode = 'upload',
-  qna,
-  onHandleSubmit,
-  loading,
-}: Props) {
+export function CategoryBoardQuestionForm({ mode = 'upload', qna, onHandleSubmit, loading }: Props) {
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
+  const isTablet = !useResponsive();
 
   const [phone01, setPhone01] = useState('010');
   const [phone02, setPhone02] = useState('');
@@ -116,9 +113,7 @@ export function CategoryBoardQuestionForm({
   };
 
   // select
-  const [questionType, setQuestionType] = useState<QnaType>(
-    QnaType.TYPE_SIGNUP_OR_SIGNIN
-  );
+  const [questionType, setQuestionType] = useState<QnaType>(QnaType.TYPE_SIGNUP_OR_SIGNIN);
 
   const handleSelectChange = (e: any) => {
     setQuestionType(e.target.value);
@@ -157,8 +152,7 @@ export function CategoryBoardQuestionForm({
       phone: phone01 + phone02 + phone03,
       type: questionType,
     };
-    if (!individualCheck)
-      return window.alert('개인정보 수집 및 활용에 동의하셔야 합니다!');
+    if (!individualCheck) return window.alert('개인정보 수집 및 활용에 동의하셔야 합니다!');
     onHandleSubmit({ qnaInput, files, isFileDelete });
   };
 
@@ -174,17 +168,12 @@ export function CategoryBoardQuestionForm({
       <TableContainer sx={{ width: '100%' }}>
         <TableBody sx={{ display: 'table', width: '100%' }}>
           <TableRow>
-            <TableCellLeft align="center">전화번호</TableCellLeft>
+            <TableCellLeft align="center">휴대번호</TableCellLeft>
 
             <TableCellRight>
-              <FormControl sx={{ minWidth: '130px', width: '60%' }}>
+              <FormControl sx={{ minWidth: '130px', width: isTablet ? '100%' : '60%' }} fullWidth={isTablet}>
                 <Box display={'flex'} alignItems="center" gap="1rem">
-                  <Select
-                    labelId="phone-type-label"
-                    id="phone-type"
-                    defaultValue={'010'}
-                    onChange={onChangePhoneNum01}
-                  >
+                  <Select labelId="phone-type-label" id="phone-type" defaultValue={'010'} onChange={onChangePhoneNum01}>
                     {phoneList.map(item => (
                       <MenuItem value={item}>{item}</MenuItem>
                     ))}
@@ -203,6 +192,7 @@ export function CategoryBoardQuestionForm({
                       }
                       onChangePhoneNum02(e.target.value.replace(/[^0-9]/g, ''));
                     }}
+                    fullWidth={isTablet}
                   />
                   -
                   <TextField
@@ -219,6 +209,7 @@ export function CategoryBoardQuestionForm({
                       }
                       onChangePhoneNum03(e.target.value.replace(/[^0-9]/g, ''));
                     }}
+                    fullWidth={isTablet}
                   />
                 </Box>
 
@@ -249,9 +240,7 @@ export function CategoryBoardQuestionForm({
               <FormControl sx={{ minWidth: '130px' }}>
                 <InputLabel>문의유형</InputLabel>
                 <Select value={questionType} label="type" onChange={handleSelectChange}>
-                  <MenuItem value={QnaType.TYPE_SIGNUP_OR_SIGNIN}>
-                    회원가입/로그인
-                  </MenuItem>
+                  <MenuItem value={QnaType.TYPE_SIGNUP_OR_SIGNIN}>회원가입/로그인</MenuItem>
                   <MenuItem value={QnaType.TYPE_EDU_OR_COMPLETE}>교육/수료</MenuItem>
                   <MenuItem value={QnaType.TYPE_WEB_OR_APP}>홈페이지/앱</MenuItem>
                   <MenuItem value={QnaType.TYPE_ETC}>기타</MenuItem>
@@ -264,14 +253,7 @@ export function CategoryBoardQuestionForm({
             <TableCellLeft align="center">문의제목</TableCellLeft>
             <TableCellRight>
               <FormControl className="form-control" fullWidth>
-                <TextField
-                  {...register('title')}
-                  fullWidth
-                  type="text"
-                  size="small"
-                  variant="outlined"
-                  label="문의제목"
-                />
+                <TextField {...register('title')} fullWidth type="text" size="small" variant="outlined" label="문의제목" />
               </FormControl>
             </TableCellRight>
           </TableRow>
@@ -293,29 +275,19 @@ export function CategoryBoardQuestionForm({
           <TableRow>
             <TableCellLeft align="center">파일첨부</TableCellLeft>
             <TableCellRight>
-              <FileUploader
-                register={register}
-                regName="files"
-                onFileChange={handleFileChange}
-              >
+              <FileUploader register={register} regName="files" onFileChange={handleFileChange}>
                 {}
               </FileUploader>
               {fileName ? (
-                <Chip
-                  sx={{ mt: '8px' }}
-                  icon={<OndemandVideoOutlinedIcon />}
-                  label={fileName}
-                  onDelete={handleDeleteFile}
-                />
+                <Chip sx={{ mt: '8px' }} icon={<OndemandVideoOutlinedIcon />} label={fileName} onDelete={handleDeleteFile} />
               ) : null}
             </TableCellRight>
           </TableRow>
         </TableBody>
       </TableContainer>
       <Typography sx={{ padding: '1rem', color: grey[500] }}>
-        수집하는 개인 정보[(필수) 문의내용, (선택) 첨부 파일]는 문의 내용 처리 및 고객
-        불만을 해결하기 위해 사용되며, 관련 법령에 따라 3년간 보관 후 삭제됩니다. 동의를
-        거부하실 수 있으며, 동의 거부 시 서비스 이용이 제한 될 수 있습니다.
+        수집하는 개인 정보[(필수) 문의내용, (선택) 첨부 파일]는 문의 내용 처리 및 고객 불만을 해결하기 위해 사용되며, 관련 법령에 따라 3년간
+        보관 후 삭제됩니다. 동의를 거부하실 수 있으며, 동의 거부 시 서비스 이용이 제한 될 수 있습니다.
       </Typography>
       <Box display={'flex'} alignItems="center">
         <Checkbox
@@ -325,36 +297,43 @@ export function CategoryBoardQuestionForm({
             setIndividualCheck(checked);
           }}
         />{' '}
-        <Box
-          display={'flex'}
-          onClick={() => setIndividualCheck(prev => !prev)}
-          sx={{ cursor: 'pointer' }}
-        >
+        <Box display={'flex'} onClick={() => setIndividualCheck(prev => !prev)} sx={{ cursor: 'pointer' }}>
           <Typography>개인정보 수집 및 활용에 동의합니다.</Typography>
           <Typography color={'#2ecc71'}>(필수)</Typography>
         </Box>
       </Box>
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        disabled={loading}
-        sx={{ mt: 3 }}
-      >
+      <Button type="submit" fullWidth variant="contained" disabled={loading} sx={{ mt: 3 }}>
         {loading ? <Spinner fit={true} /> : '등록하기'}
       </Button>
     </Box>
   );
 }
 
+const TableRow = styled(MuiTableRow)`
+  display: flex;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
 const TableCellLeft = styled(TableCell)`
   background: #e0e0e0;
   border-top: 1px solid #b4b4b4;
   border-bottom: 1px solid #b4b4b4;
   width: 20%;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    width: 100%;
+    border-bottom: none;
+    text-align: start;
+  }
 `;
 const TableCellRight = styled(TableCell)`
   border-top: 1px solid #b4b4b4;
   border-bottom: 1px solid #b4b4b4;
   width: 80%;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    width: 100%;
+    border-top: none;
+  }
 `;

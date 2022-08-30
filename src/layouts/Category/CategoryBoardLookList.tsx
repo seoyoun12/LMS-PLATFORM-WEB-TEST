@@ -1,13 +1,16 @@
 import { NotFound } from '@components/ui/NotFound';
 import { QnaAccordion, QnaAccordionV2 } from '@components/ui/QnaAccordion.tsx';
 import { useInfiniteScrollQna } from '@hooks/useInfiniteScrollQna';
+import useResponsive from '@hooks/useResponsive';
 import { Box, Container, Table, TableCell, TableHead, TableRow } from '@mui/material';
 import dateFormat from 'dateformat';
 import styled from 'styled-components';
 
 export function CategoryBoardLookList() {
   const [target, loadedItem, loading] = useInfiniteScrollQna(`/qna`);
+  const isTablet = !useResponsive();
 
+  console.log(loadedItem, 'ㅋㅋ', isTablet);
   return (
     <LkContainer>
       {loadedItem && loadedItem.length > 0 ? (
@@ -21,18 +24,10 @@ export function CategoryBoardLookList() {
                   borderBottom: '1px solid #cdcdcd',
                 }}
               >
-                <TableHeaderCell align="center" width="10%">
-                  번호
-                </TableHeaderCell>
-                <TableHeaderCell align="center" width="55%">
-                  제목
-                </TableHeaderCell>
-                <TableHeaderCell align="center" width="15%">
-                  답변상태
-                </TableHeaderCell>
-                <TableHeaderCell align="center" width="20%">
-                  등록일
-                </TableHeaderCell>
+                <TableSeqCell align="center">번호 </TableSeqCell>
+                <TableTitleCell align="center">제목</TableTitleCell>
+                <TableStatusCell align="center">답변상태 </TableStatusCell>
+                <TableCreatedCell align="center">{isTablet ? '' : '등록일'} </TableCreatedCell>
               </TableRow>
             </TableHead>
           </Table>
@@ -80,4 +75,44 @@ const LkContainer = styled(Container)`
 const TableHeaderCell = styled(TableCell)`
   font-size: 16px;
   font-weight: 400;
+`;
+
+const TableSeqCell = styled(TableCell)`
+  font-size: 16px;
+  font-weight: 400;
+  width: 20%;
+  @media (max-width: 768px) {
+    font-size: 14px;
+    padding: 16px 0;
+  }
+`;
+const TableTitleCell = styled(TableCell)`
+  font-size: 16px;
+  font-weight: 400;
+  width: 35%;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    padding: 16px 0;
+  }
+`;
+const TableStatusCell = styled(TableCell)`
+  font-size: 16px;
+  font-weight: 400;
+  width: 25%;
+  @media (max-width: 768px) {
+    width: 45%;
+    font-size: 14px;
+    padding: 16px 0;
+  }
+`;
+const TableCreatedCell = styled(TableCell)`
+  font-size: 16px;
+  font-weight: 400;
+  width: 20%;
+  @media (max-width: 768px) {
+    width: 0;
+    font-size: 14px;
+    padding: 16px 0;
+  }
 `;

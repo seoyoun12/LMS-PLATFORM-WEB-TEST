@@ -44,6 +44,11 @@ export const MeCertificateContentContainer = styled.div`
   flex-wrap: wrap;
   justify-content: flex-start;
   margin: 62px auto 0 auto;
+
+  @media (max-width: 768px) {
+    padding: 32px 12px;
+    margin: 0;
+  }
 `;
 
 export const MeCertificateItemContainer = styled(ButtonBase)`
@@ -56,6 +61,11 @@ export const MeCertificateItemContainer = styled(ButtonBase)`
 
   &:nth-of-type(4n) {
     margin-right: 0;
+  }
+
+  @media (max-width: 786px) {
+    width: 100%;
+    margin: 0 0 32px 0;
   }
 `;
 

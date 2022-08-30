@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Box, Drawer, Typography } from '@mui/material';
+import { Box, Drawer, MenuItem, Typography } from '@mui/material';
 import Image from 'next/image';
 import { Link } from '@components/common';
 import { useEffect, useState } from 'react';
@@ -13,10 +13,36 @@ import { useRouter } from 'next/router';
 import { SiteMap } from '../SiteMap';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { logout } from '@common/api';
-import { siteMapList } from '../SiteMap/SiteMap';
 import { useRecoilState } from 'recoil';
 import { userInfo } from '@common/recoil';
 import { regCategoryType } from '@common/api/user';
+import UnsuIcon from '/public/assets/svgs/unsuIcon.svg';
+import LowFloorIcon from '/public/assets/svgs/lowFloorIcon.svg';
+import DominIcon from '/public/assets/svgs/dominIcon.svg';
+
+const siteMapMobileList = [
+  {
+    name: '운수종사자 교육',
+    href: '/category',
+    type: courseType.TYPE_TRANS_WORKER,
+    regCategory: regCategoryType.TYPE_TRANS_EDU,
+    icon: <UnsuIcon />,
+  },
+  {
+    name: '저상버스 운전자교육',
+    href: '/category',
+    type: courseType.TYPE_LOW_FLOOR_BUS,
+    regCategory: regCategoryType.TYPE_TRANS_EDU,
+    icon: <LowFloorIcon />,
+  },
+  {
+    name: '도민교통 안전교육',
+    href: '/traffic/category',
+    type: courseType.TYPE_PROVINCIAL,
+    regCategory: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU,
+    icon: <DominIcon />,
+  },
+];
 
 const hideNavList = [
   // { href: '/course/[courseSeq]' },
@@ -25,10 +51,10 @@ const hideNavList = [
 ];
 
 export function MobileNav() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); //헤더바 오픈여부
   const router = useRouter();
   const isLoginStatus = useIsLoginStatus();
-  const [userInfoData, setUserInfoData] = useRecoilState(userInfo);
+  const [userInfoData, setUserInfoData] = useRecoilState(userInfo); //유저데이터. 전역에 저장된 정보
   const [list, setList] = useState(
     (typeof window !== 'undefined' &&
     localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
@@ -43,7 +69,8 @@ export function MobileNav() {
       };
     })
   );
-  const [isHideNavbar, setIsHideNavbar] = useState(false);
+  const [isHideNavbar, setIsHideNavbar] = useState(false); // 특정지역에서는 숨김처리
+  const [categoryValue, setCategoryValue] = useState('');
 
   useEffect(() => {
     if (router.route === '/') {
@@ -71,6 +98,7 @@ export function MobileNav() {
 
   const handleClose = () => {
     setOpen(false);
+    setCategoryValue('');
   };
 
   useEffect(() => {
@@ -88,6 +116,10 @@ export function MobileNav() {
   const onClickLogout = () => {
     logout();
     handleClose();
+  };
+
+  const handleChangeCategory = (name: string) => {
+    setCategoryValue(name);
   };
 
   const onClickSitemap = (item: {
@@ -146,17 +178,46 @@ export function MobileNav() {
               )}
               <CloseIcon fontSize="large" onClick={() => handleClose()} />
             </DrawerTopBox>
-            {/* <SiteMapTypo>사이트맵 이동하기</SiteMapTypo>
+            {/* <SiteMapTypo>사이트맵 이동하기</SiteMapTypo> */}
             <SiteMapWrap>
-              {siteMapList.map(item => (
+              {siteMapMobileList.map(item => (
                 <SiteMapItem key={item.href}>
                   <Link href={item.href} onClick={() => onClickSitemap(item)}>
-                    {item.name}
+                    <SiteMapIconWrap>{item.icon}</SiteMapIconWrap>
+                    <SiteMapName>
+                      {item.name.split(' ').map(item => (
+                        <Box lineHeight={1.2}>{item}</Box>
+                      ))}
+                    </SiteMapName>
                   </Link>
                 </SiteMapItem>
               ))}
-            </SiteMapWrap> */}
-            <Accordion accordionList={list} />
+            </SiteMapWrap>
+            {/* <Accordion accordionList={list} /> */}
+            <Box display="flex" height="100%">
+              <CategoryLeftBox>
+                {list.map(item => (
+                  <CategoryLeftItem
+                    onClick={() => handleChangeCategory(item.name)}
+                    sx={{
+                      background: item.name === categoryValue && '#fff',
+                      color: item.name === categoryValue && '#000',
+                    }}
+                  >
+                    {item.name}
+                  </CategoryLeftItem>
+                ))}
+              </CategoryLeftBox>
+              <CategoryRightBox>
+                {list
+                  .filter(fill => fill.name === categoryValue)[0]
+                  ?.children.map(item => (
+                    <Link href={item.href} sx={{ padding: '12px' }} color="black">
+                      {item.name}
+                    </Link>
+                  ))}
+              </CategoryRightBox>
+            </Box>
           </Drawer>
         </MobileContentContainer>
       )}
@@ -168,6 +229,7 @@ const Header = styled.header`
   width: 100%;
   height: 100%;
 `;
+
 const MobileContentContainer = styled.div`
   display: flex;
   align-items: center;
@@ -202,24 +264,48 @@ const SiteMapTypo = styled(Typography)`
   padding: 8px 8px;
   border-bottom: 1px solid white;
 `;
-
 const SiteMapWrap = styled(Box)`
   display: flex;
-  width: 100%;
-  height: 48px;
+  width: 360px;
 `;
 const SiteMapItem = styled(Box)`
   flex: 1 0 33%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #70c043;
+  padding: 1rem;
 
-  border-right: 1px solid white;
-  :last-child {
+  /* border-right: 1px solid white; */
+  /* :last-child {
     border-right: none;
+  } */
+`;
+const SiteMapIconWrap = styled(Box)``;
+const SiteMapName = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  color: black;
+`;
+
+const CategoryLeftBox = styled(Box)`
+  width: 40%;
+  height: 100%;
+  background: #8b8b8b;
+  padding-top: 16px;
+  font-size: 18px;
+  color: white;
+`;
+const CategoryLeftItem = styled(Box)`
+  border-bottom: 1px solid #ababab;
+  padding: 1rem;
+  :first-child {
+    border-top: 1px solid #ababab;
   }
-  a {
-    color: white;
-  }
+`;
+
+const CategoryRightBox = styled(Box)`
+  width: 60%;
+  display: flex;
+  flex-direction: column;
 `;

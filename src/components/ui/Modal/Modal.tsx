@@ -101,6 +101,30 @@ export function Modal({
 }
 
 const DialogBox = styled(Dialog)`
+  .MuiPaper-root {
+    margin: 0;
+    width: fit-content;
+  }
+  .MuiDialog-container {
+    justify-content: none;
+    width: 100%;
+  }
+  .MuiDialogContent-root {
+    padding: 0;
+  }
+  @media (max-width: 768px) {
+    .MuiPaper-root {
+      margin: 0;
+      width: 100%;
+    }
+    .MuiDialog-container {
+      justify-content: none;
+      width: 100%;
+    }
+    .MuiDialogContent-root {
+      padding: 0;
+    }
+  }
   @media (max-width: 500px) {
     .MuiPaper-root {
       margin: 0;

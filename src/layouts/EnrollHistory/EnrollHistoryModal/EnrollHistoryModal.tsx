@@ -215,66 +215,61 @@ export function EnrollHistoryModal({
         </Box>
       }
     >
-      <Box>
-        <Table sx={{ width: '800px' }}>
+      <ModalWrap>
+        <Table sx={{ width: '100%' }}>
           <TableBody sx={{ display: 'table', width: '100%' }}>
+            <TableDoubleRow>
+              <TableDoubleParantLeftCell sx={{ width: '50%' }}>
+                <TableDoubleLeftCell className="left-cell-border">NO</TableDoubleLeftCell>
+                <TableDoubleRightCell className="right-cell">
+                  {watch().seq}
+                </TableDoubleRightCell>
+              </TableDoubleParantLeftCell>
+              <TableDoubleParantRightCell sx={{ width: '50%' }}>
+                <TableDoubleLeftCell className="left-cell-border">
+                  예약자
+                </TableDoubleLeftCell>
+                <TableDoubleRightCell className="right-cell">
+                  {watch().name}
+                </TableDoubleRightCell>
+              </TableDoubleParantRightCell>
+            </TableDoubleRow>
             <TableRow>
-              <TableParantLeftCell sx={{ width: '50%' }}>
-                <TableLeftCell className="left-cell-border">NO</TableLeftCell>
-                <TableRightCell className="right-cell">{watch().seq}</TableRightCell>
-              </TableParantLeftCell>
-              <TableParantRightCell sx={{ width: '50%' }}>
-                <TableLeftCell className="left-cell-border">예약자</TableLeftCell>
-                <TableRightCell className="right-cell">{watch().name}</TableRightCell>
-              </TableParantRightCell>
+              <TableLeftCell className="left-cell-border large-font">
+                <Box>주민등록</Box>
+                <Box>번호</Box>
+              </TableLeftCell>
+              <TableRightCell className="right-cell">
+                {watch().identityNumber?.substring(0, 6)} -{' '}
+                {watch().identityNumber?.substring(6, 13)}
+              </TableRightCell>
             </TableRow>
             <TableRow>
-              <TableParantLeftCell>
-                <TableLeftCell className="left-cell-border">주민등록번호</TableLeftCell>
-                <TableRightCell className="right-cell">
-                  {watch().identityNumber?.substring(0, 6)} -{' '}
-                  {watch().identityNumber?.substring(6, 13)}
-                </TableRightCell>
-              </TableParantLeftCell>
-              <TableParantRightCell sx={{ opacity: 0 }}>
-                <TableLeftCell></TableLeftCell>
-                <TableRightCell></TableRightCell>
-              </TableParantRightCell>
+              <TableLeftCell className="left-cell-border">예약신청일</TableLeftCell>
+              <TableRightCell className="right-cell">{watch().regDate}</TableRightCell>
             </TableRow>
             <TableRow>
-              <TableParantLeftCell>
-                <TableLeftCell className="left-cell-border">예약신청일</TableLeftCell>
-                <TableRightCell className="right-cell">{watch().regDate}</TableRightCell>
-              </TableParantLeftCell>
-              <TableParantRightCell sx={{ opacity: 0 }}>
-                <TableLeftCell></TableLeftCell>
-                <TableRightCell></TableRightCell>
-              </TableParantRightCell>
+              <TableLeftCell className="left-cell-border">교육일</TableLeftCell>
+              <TableRightCell className="right-cell">{watch().studyDate}</TableRightCell>
             </TableRow>
-            <TableRow>
-              <TableParantLeftCell>
-                <TableLeftCell className="left-cell-border">교육일</TableLeftCell>
-                <TableRightCell className="right-cell">
-                  {watch().studyDate}
-                </TableRightCell>
-              </TableParantLeftCell>
-              <TableParantRightCell sx={{ opacity: 0 }}>
-                <TableLeftCell></TableLeftCell>
-                <TableRightCell></TableRightCell>
-              </TableParantRightCell>
-            </TableRow>
-            <TableRow>
-              <TableParantLeftCell>
-                <TableLeftCell className="left-cell-border">교육시간</TableLeftCell>
-                <TableRightCell className="right-cell">
+            <TableDoubleRow>
+              <TableDoubleParantLeftCell>
+                <TableDoubleLeftCell className="left-cell-border">
+                  교육시간
+                </TableDoubleLeftCell>
+                <TableDoubleRightCell className="right-cell">
                   {watch().learningTime}
-                </TableRightCell>
-              </TableParantLeftCell>
-              <TableParantRightCell>
-                <TableLeftCell className="left-cell-border">교육장</TableLeftCell>
-                <TableRightCell className="right-cell">동영상(VOD)</TableRightCell>
-              </TableParantRightCell>
-            </TableRow>
+                </TableDoubleRightCell>
+              </TableDoubleParantLeftCell>
+              <TableDoubleParantRightCell>
+                <TableDoubleLeftCell className="left-cell-border">
+                  교육장
+                </TableDoubleLeftCell>
+                <TableDoubleRightCell className="right-cell">
+                  동영상(VOD)
+                </TableDoubleRightCell>
+              </TableDoubleParantRightCell>
+            </TableDoubleRow>
             {/* <TableRow>
               <TableLeftCell>회사명</TableLeftCell>
               <TableRightCell>
@@ -287,26 +282,30 @@ export function EnrollHistoryModal({
                 <TextField {...register('carNumber')} fullWidth />
               </TableRightCell>
             </TableRow> */}
+            <TableDoubleRow>
+              <TableDoubleParantLeftCell>
+                <TableDoubleLeftCell className="left-cell-border">
+                  교육구분
+                </TableDoubleLeftCell>
+                <TableDoubleRightCell className="right-cell">
+                  여객 / 화물
+                </TableDoubleRightCell>
+              </TableDoubleParantLeftCell>
+              <TableDoubleParantLeftCell>
+                <TableDoubleLeftCell className="left-cell-border">
+                  온라인과정
+                </TableDoubleLeftCell>
+                <TableDoubleRightCell className="right-cell">
+                  보수일반
+                </TableDoubleRightCell>
+              </TableDoubleParantLeftCell>
+            </TableDoubleRow>
             <TableRow>
-              <TableParantLeftCell>
-                <TableLeftCell className="left-cell-border">교육구분</TableLeftCell>
-                <TableRightCell className="right-cell">여객 / 화물</TableRightCell>
-              </TableParantLeftCell>
-              <TableParantLeftCell>
-                <TableLeftCell className="left-cell-border">온라인과정</TableLeftCell>
-                <TableRightCell className="right-cell">보수일반</TableRightCell>
-              </TableParantLeftCell>
-            </TableRow>
-            <TableRow>
-              <TableLeftCell
-                className="left-cell-border"
-                sx={{
-                  width: '20% !important ',
-                }}
-              >
-                기수 / 교육일자
+              <TableLeftCell className="left-cell-border large-font">
+                <Box>기수 / </Box>
+                <Box>교육일자</Box>
               </TableLeftCell>
-              <TableRightCell className="right-cell " sx={{ width: '80% !important' }}>
+              <TableRightCell className="right-cell ">
                 <FormControl fullWidth>
                   <Select
                     id="student"
@@ -335,15 +334,14 @@ export function EnrollHistoryModal({
             </TableRow>
           </TableBody>
         </Table>
-      </Box>
+      </ModalWrap>
     </Modal>
   );
 }
 
-const TableRow = styled(MuiTableRow)`
-  display: flex;
-  width: 100%;
-  margin-bottom: 4px;
+const ModalWrap = styled(Box)`
+  width: 768px;
+  padding: 0 12px;
   td {
     padding: 0;
     border: 0;
@@ -351,36 +349,102 @@ const TableRow = styled(MuiTableRow)`
   .left-cell-border {
     border: 1px solid rgb(52, 152, 219) !important;
     border-radius: 4px;
-    padding: 6px 4px;
+    /* padding: 6px 4px; */
+
+    padding: 16px 0;
+    font-weight: bold;
+    font-size: 16px;
   }
   .right-cell {
     padding-left: 18px !important;
-    padding: 6px 4px;
+    /* padding: 6px 4px;
+    padding: 16px 0; */
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    .left-cell-border {
+      border: 1px solid rgb(52, 152, 219) !important;
+      border-radius: 4px;
+      /* padding: 6px 4px; */
+      padding: 16px 0;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .right-cell {
+      padding-left: 8px !important;
+      padding: 0;
+      /* padding: 6px 4px; */
+      /* padding: 16px 0; */
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+    }
+    /* .large-font {
+      font-size: 12px;
+    } */
+  }
+  @media (max-width: 460px) {
+    .left-cell-border {
+      border: 1px solid rgb(52, 152, 219) !important;
+      border-radius: 4px;
+      /* padding: 6px 4px; */
+      padding: 16px 0;
+      font-weight: bold;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+    }
+    /* .large-font {
+      font-size: 10px;
+    } */
   }
 `;
 
-const TableParantLeftCell = styled(TableCell)`
+const TableDoubleRow = styled(MuiTableRow)`
+  display: flex;
+  width: 100%;
+  margin-bottom: 4px;
+`;
+const TableDoubleParantLeftCell = styled(TableCell)`
   display: flex;
   width: 50%;
 `;
-const TableParantRightCell = styled(TableCell)`
+const TableDoubleParantRightCell = styled(TableCell)`
   display: flex;
   width: 50%;
 `;
-
-const TableLeftCell = styled(TableCell)`
+const TableDoubleLeftCell = styled(TableCell)`
   width: 40%;
   padding: 16px 0;
-  font-weight: bold;
   font-size: 16px;
   background: rgba(52, 152, 219, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
 `;
-const TableRightCell = styled(TableCell)`
+const TableDoubleRightCell = styled(TableCell)`
   width: 60%;
   padding: 16px 0;
   font-size: 18px;
-  overflow-x: auto;
+`;
+
+const TableRow = styled(MuiTableRow)`
+  display: flex;
+  width: 100%;
+  margin-bottom: 4px;
+`;
+const TableLeftCell = styled(TableCell)`
+  width: 20%;
+  background: rgba(52, 152, 219, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+const TableRightCell = styled(TableCell)`
+  width: 80%;
 `;

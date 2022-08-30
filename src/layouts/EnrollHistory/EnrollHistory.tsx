@@ -32,7 +32,13 @@ export function EnrollHistory() {
       </MyCourseContainer>
       <EnrollHistoryWrap>
         {data.length <= 0 && <NotFound content="신청한 과정이 존재하지 않습니다!" />}
-        <Grid container rowSpacing={4} columnSpacing={4} columns={{ xs: 1, sm: 2, md: 4, lg: 4 }} mt={1}>
+        <Grid
+          container
+          rowSpacing={4}
+          columnSpacing={4}
+          columns={{ xs: 1, sm: 2, md: 4, lg: 4 }}
+          mt={1}
+        >
           {data.length > 0 &&
             data.map(item => (
               <Grid item xs={1} sm={1} md={1} lg={1} key={item.seq}>
@@ -43,7 +49,9 @@ export function EnrollHistory() {
                       title: item.courseTitle,
                       courseUserSeq: item.seq,
                       regType:
-                        item.regType === RegisterType.TYPE_INDIVIDUAL ? RegisterType.TYPE_INDIVIDUAL : RegisterType.TYPE_ORGANIZATION,
+                        item.regType === RegisterType.TYPE_INDIVIDUAL
+                          ? RegisterType.TYPE_INDIVIDUAL
+                          : RegisterType.TYPE_ORGANIZATION,
                     });
                   }}
                 >
@@ -65,7 +73,11 @@ export function EnrollHistory() {
           handleClose={handleClose}
           courseTitle={modalData.title}
           courseUserSeq={modalData.courseUserSeq}
-          regType={modalData.regType === RegisterType.TYPE_INDIVIDUAL ? RegisterType.TYPE_INDIVIDUAL : RegisterType.TYPE_ORGANIZATION}
+          regType={
+            modalData.regType === RegisterType.TYPE_INDIVIDUAL
+              ? RegisterType.TYPE_INDIVIDUAL
+              : RegisterType.TYPE_ORGANIZATION
+          }
         />
       )}
     </Box>
@@ -75,6 +87,7 @@ export function EnrollHistory() {
 const EnrollHistoryWrap = styled(Container)`
   margin-top: 2rem;
   margin-bottom: 2rem;
+  padding: 0 12px;
 `;
 
 const MyCourseContainer = styled(Box)`
@@ -91,10 +104,18 @@ const MyCourseContainer = styled(Box)`
 const MyCourseTitle = styled(Box)`
   font-size: 48px;
   font-weight: 500;
+  @media (max-width: 768px) {
+    font-size: 36px;
+    font-weight: 500;
+  }
 `;
 const MyCourseSubTitle = styled(Box)`
   font-size: 17px;
   font-weight: 500;
+  @media (max-width: 768px) {
+    font-size: 14px;
+    font-weight: 500;
+  }
 `;
 const CourseContainer = styled(Box)`
   max-width: 1200px;

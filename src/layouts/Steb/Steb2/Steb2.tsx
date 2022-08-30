@@ -69,7 +69,7 @@ export default function Steb2() {
     if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7)
       return window.alert('주민번호를 모두 입력해주세요!');
     // if (!enrollInfo || !enrollInfo.seq) return window.alert('기수를 선택해주세요!');
-    if (!carNumberRegex.test(rest.carNumber))
+    if (hideCarNumber && !carNumberRegex.test(rest.carNumber))
       return window.alert('올바른 형식의 차량번호를 입력해주세요!');
     if (!phoneRegex.test(firstPhone + secondPhone + thirdPhone))
       return window.alert('올바른 형식의 휴대전화를 입력해주세요!');
@@ -155,7 +155,6 @@ export default function Steb2() {
     return () => {
       if (confirmRef.current === false) {
         //해당 페이지 접근시 개인, 단체 초기화.
-        console.log('역적놈', confirmRef.current);
         setEnroll([]);
         setEnrollInfo(null);
       }

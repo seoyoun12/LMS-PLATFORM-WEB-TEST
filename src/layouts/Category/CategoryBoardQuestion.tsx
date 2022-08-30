@@ -30,7 +30,13 @@ export function CategoryBoardQuestion() {
     }
   };
 
-  const handleSubmit = async ({ files, qnaInput }: { files: File[]; qnaInput: QnaInput }) => {
+  const handleSubmit = async ({
+    files,
+    qnaInput,
+  }: {
+    files: File[];
+    qnaInput: QnaInput;
+  }) => {
     try {
       setLoading(true);
       const qna = await uploadQna(qnaInput); // 게시판 내용 업로드. 파일보다 먼저
@@ -71,5 +77,5 @@ const NtContainer = styled(Container)`
   width: 100%;
   height: 100%;
   border-radius: 0 0 4px 4px;
-  margin-bottom: 6rem;
+  /* margin-bottom: 6rem; */
 `;

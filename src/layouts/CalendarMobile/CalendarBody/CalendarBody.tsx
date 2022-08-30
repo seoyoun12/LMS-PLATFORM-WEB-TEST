@@ -242,7 +242,10 @@ export function CalendarBody({
                 });
                 if (!isLogin) {
                   window.alert('로그인이 필요한 서비스입니다.');
-                  return router.push('/sign-in');
+                  return router.push({
+                    pathname: '/sign-in',
+                    query: { redirect: router.asPath },
+                  });
                 }
                 try {
                   setLoading(true);

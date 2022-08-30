@@ -1,10 +1,31 @@
 import { FC, useEffect, useState } from 'react';
 import styles from '@styles/common.module.scss';
 import styled from '@emotion/styled';
-import { Grid, Typography } from '@mui/material';
+import { Container, Grid, Typography } from '@mui/material';
 import { Link } from '@components/common';
 import { useRouter } from 'next/router';
 import { Box } from '@mui/system';
+import useResponsive from '@hooks/useResponsive';
+import Logo from '/public/assets/svgs/logo.svg';
+
+const LinkList = [
+  {
+    href: 'https://www.ctti.or.kr/kor/page.do?menuIdx=185&bbscd=0&tcd=0',
+    name: '개인정보처리방침',
+  },
+  {
+    href: 'https://www.ctti.or.kr/kor/page.do?menuIdx=186&bbscd=0&tcd=0',
+    name: '이메일무단수집거부',
+  },
+  {
+    href: 'https://www.ctti.or.kr/kor/page.do?menuIdx=186&bbscd=0&tcd=0',
+    name: '이용약관',
+  },
+  {
+    href: 'https://www.ctti.or.kr/kor/page.do?menuIdx=186&bbscd=0&tcd=0',
+    name: '찾아오시는길',
+  },
+];
 
 interface Props {
   className?: string;
@@ -16,9 +37,10 @@ const hideNavList = [
   { href: '/sign-up' },
 ];
 
-export const Footer: FC<Props> = () => {
+const Footer: FC<Props> = () => {
   const router = useRouter();
   const [isHideFooter, setIsHideFooter] = useState(false);
+  const isTablet = !useResponsive();
 
   useEffect(() => {
     if (router.route === '/') {
@@ -31,7 +53,35 @@ export const Footer: FC<Props> = () => {
 
   if (isHideFooter) return null;
   return (
-    <footer>
+    <FooterWrap>
+      {!isTablet && (
+        <PCLinksFooter>
+          <Container
+            sx={{
+              display: 'flex',
+              height: '100%',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Box width="250px">
+              <Logo />
+            </Box>
+            <Box display="flex" gap={2}>
+              {LinkList.map(item => (
+                <Link
+                  className="uplineFoot"
+                  href={item.href}
+                  color="#000"
+                  fontWeight="bold"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </Box>
+          </Container>
+        </PCLinksFooter>
+      )}
       <Hrhrhrhrhr />
       <div className={styles.globalContainer}>
         <ContentContainer>
@@ -44,30 +94,12 @@ export const Footer: FC<Props> = () => {
           {/* </IntroductionSection> */}
 
           <UplineFootConatainer>
-            <Link
-              className="uplineFoot"
-              href="https://www.ctti.or.kr/kor/page.do?menuIdx=185&bbscd=0&tcd=0"
-            >
-              개인정보처리방침
-            </Link>
-            <Link
-              className="uplineFoot"
-              href="https://www.ctti.or.kr/kor/page.do?menuIdx=186&bbscd=0&tcd=0"
-            >
-              이메일무단수집거부
-            </Link>
-            <Link
-              className="uplineFoot"
-              href="https://www.ctti.or.kr/kor/memberClause.do?menuIdx=182"
-            >
-              이용약관
-            </Link>
-            <Link
-              className="uplineFoot"
-              href="https://www.ctti.or.kr/kor/page.do?menuIdx=130&bbscd=0&tcd=0"
-            >
-              찾아오시는길
-            </Link>
+            {isTablet &&
+              LinkList.map(item => (
+                <Link className="uplineFoot" href={item.href} color="#000">
+                  {item.name}
+                </Link>
+              ))}
           </UplineFootConatainer>
 
           <DownLineFootConatainer>
@@ -87,44 +119,21 @@ export const Footer: FC<Props> = () => {
               </Typography>
             </SecondBox>
           </DownLineFootConatainer>
-
-          {/* <RightFootContainer></RightFootContainer> */}
-
-          {/* <ContentItem className="m-l-auto">
-            <Typography variant="h6" className="desc">충남교통연수원</Typography>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">TEST1</Button>
-            </Link>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">TEST2</Button>
-            </Link>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">TEST3</Button>
-            </Link>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">TEST4</Button>
-            </Link>
-          </ContentItem>
-          <ContentItem>
-            <Typography variant="h6" className="logo">충남교통연수원</Typography>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">TEST5</Button>
-            </Link>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">TEST6</Button>
-            </Link>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">TEST7</Button>
-            </Link>
-            <Link href="/" underline="none">
-              <Button className="align-left" color="neutral">TEST8</Button>
-            </Link>
-          </ContentItem> */}
         </ContentContainer>
       </div>
-    </footer>
+    </FooterWrap>
   );
 };
+
+const FooterWrap = styled.footer``;
+
+const PCLinksFooter = styled(Box)`
+  background: #fbfbfb;
+  border-top: 2px solid #ebebeb;
+  border-bottom: 2px solid #ebebeb;
+  height: 80px;
+  padding: 0 12px;
+`;
 
 const ContentContainer = styled.div`
   display: flex;
@@ -228,3 +237,5 @@ const Hrhrhrhrhr = styled.hr`
 //     margin-top: 20px;
 //   }
 // `;
+
+export default Footer;

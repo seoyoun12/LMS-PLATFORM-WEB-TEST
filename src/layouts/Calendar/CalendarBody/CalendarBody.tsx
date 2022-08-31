@@ -114,7 +114,9 @@ export function CalendarBody({
       new Date(item.requestEndDate.replaceAll('-', '/')).getTime() -
         new Date().getTime() >=
       0
-        ? new Date(item.requestStartDate).getTime() - new Date().getTime() <= 0
+        ? new Date(item.requestStartDate.replaceAll('-', '/')).getTime() -
+            new Date().getTime() <=
+          0
           ? true
           : false
         : false;
@@ -131,10 +133,14 @@ export function CalendarBody({
       step: item.step, //기수
       lessonTime: item.course.lessonTime,
       mediaType: '동영상(VOD)',
-      // courseCategoryType: courseCategory.filter(categoryItem => categoryItem.type === item.course.courseCategoryType)[0], //eduType
-      // courseSubCategoryType: courseSubCategory.filter(sub => sub.type === item.course.courseSubCategoryType)[0], //업종
-      courseCategoryType: courseCategoryType.TYPE_SUP_COMMON, //보수일반 고정
-      courseSubCategoryType: courseSubCategoryType.BUS, //업종 버스고정
+      courseCategoryType: courseCategory.filter(
+        categoryItem => categoryItem.type === item.course.courseCategoryType
+      )[0], //eduType
+      courseSubCategoryType: courseSubCategory.filter(
+        sub => sub.type === item.course.courseSubCategoryType
+      )[0], //업종
+      // courseCategoryType: courseCategoryType.TYPE_SUP_COMMON, //보수일반 고정 2022-08-31 변경,
+      // courseSubCategoryType: courseSubCategoryType.BUS, //업종 버스고정 2022-08-31 변경, 버스(여객) , 개별화물(화물)
       eduTypeAndTime: item.course.lessonTime, // eduTime
       currentJoin: item.enrolledPeopleCnt, //현재 수강
       limit: item.limitPeople, //수강 제한
@@ -149,6 +155,7 @@ export function CalendarBody({
       // : 'TYPE_NONE',
     };
   });
+  console.log('idonknow', scheduleList);
 
   return (
     <CalendarWrap filter={filter}>
@@ -184,6 +191,10 @@ export function CalendarBody({
               end: Date | null;
             };
           } = e;
+          console.log(
+            e.event._def.extendedProps.prevSchedule,
+            e.event._def.extendedProps.isReceive
+          );
           if (!e.event._def.extendedProps.prevSchedule)
             return window.alert('마감된 교육입니다!');
           if (!e.event._def.extendedProps.isReceive)
@@ -297,7 +308,11 @@ export function CalendarBody({
                 <TableRow>
                   <TableLeftCell>교육구분</TableLeftCell>
                   <TableRightCell>
-                    {/* {courseBusinessTypeList.filter(item => item.enType === modalInfo.courseBusinessType)[0]?.type} */}
+                    {
+                      courseBusinessTypeList.filter(
+                        item => item.enType === modalInfo.courseBusinessType
+                      )[0]?.type
+                    }
                     여객 / 화물
                   </TableRightCell>
                 </TableRow>
@@ -383,9 +398,18 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
         </Box>
       </Box>
       <Box>
-        {/* {courseBusinessTypeList.filter(item => item.enType === extendedProps.course.courseBusinessType)[0]?.type} /{' '}
-        {extendedProps.courseSubCategoryType.ko} */}
-        여객 / 화물
+        {/* {
+          courseBusinessTypeList.filter(
+            item => item.enType === extendedProps.course.courseBusinessType
+          )[0]?.type
+        }{' '}/  */}
+        {extendedProps.courseSubCategoryType.type === courseSubCategoryType.BUS
+          ? '여객'
+          : extendedProps.courseSubCategoryType.type ===
+            courseSubCategoryType.INDIVIDUAL_CARGO
+          ? '화물'
+          : 'null'}
+        {/* 여객 / 화물 */}
       </Box>
       <Box>
         {extendedProps.limitPeople === 0

@@ -103,14 +103,17 @@ export function Modal({
 const DialogBox = styled(Dialog)`
   .MuiPaper-root {
     margin: 0;
-    width: fit-content;
+    /* width: fit-content; */
   }
   .MuiDialog-container {
     justify-content: none;
     width: 100%;
   }
-  .MuiDialogContent-root {
-    padding: 0;
+  //온라인 교육 신청쪽 테이블 박살남.
+  @media (max-width: 820px) {
+    .MuiDialogContent-root {
+      padding: 0;
+    }
   }
   @media (max-width: 768px) {
     .MuiPaper-root {

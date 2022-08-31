@@ -80,48 +80,48 @@ export function BoardAccordionV2({
                 {/* {content.map(({ name, isActive }) => ( */}
                 <BoardContentBox
                   // key={name} // key props error
-                  sx={{
-                    display: 'flex',
-                    width: '100%',
-                    // backgroundColor: `${isActive ? grey[50] : 'inherit'}`,
-                  }}
+                  sx={
+                    {
+                      // backgroundColor: `${isActive ? grey[50] : 'inherit'}`,
+                    }
+                  }
                 >
-                  <Box width="10%" />
+                  {/* <Box width="10%" /> */}
                   <BoardContent>
                     <TuiViewer initialValue={content} />
                   </BoardContent>
 
-                  <Box width="20%" />
+                  {/* <Box width="20%" /> */}
+                  <Box>
+                    {s3Files.length > 0 && (
+                      <Box display="flex" alignItems="center" mt={4}>
+                        {' '}
+                        <FileDownloadIcon />
+                        첨부파일
+                      </Box>
+                    )}
+                    <Box
+                      sx={{ cursor: 'pointer', color: '#236cef' }}
+                      onClick={async () => {
+                        try {
+                          const blobData = await downloadFile(s3Files[0].seq);
+
+                          const url = window.URL.createObjectURL(new Blob([blobData]));
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = `${s3Files[0].name}`;
+                          a.click();
+                          a.remove();
+                        } catch (e: any) {
+                          console.log(e);
+                        }
+                      }}
+                    >
+                      {s3Files[0]?.name}
+                    </Box>
+                  </Box>
                 </BoardContentBox>
                 {/* // ))} */}
-                <Box sx={{ margin: '10px 120px' }}>
-                  {s3Files.length > 0 && (
-                    <Box display="flex" alignItems="center" mt={4}>
-                      {' '}
-                      <FileDownloadIcon />
-                      첨부파일
-                    </Box>
-                  )}
-                  <Box
-                    sx={{ cursor: 'pointer', color: '#236cef' }}
-                    onClick={async () => {
-                      try {
-                        const blobData = await downloadFile(s3Files[0].seq);
-
-                        const url = window.URL.createObjectURL(new Blob([blobData]));
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = `${s3Files[0].name}`;
-                        a.click();
-                        a.remove();
-                      } catch (e: any) {
-                        console.log(e);
-                      }
-                    }}
-                  >
-                    {s3Files[0]?.name}
-                  </Box>
-                </Box>
               </List>
             </nav>
           </BoardAccordionDetails>
@@ -181,8 +181,13 @@ const BoardAccordionDetails = styled(AccordionDetails)`
   padding: 2rem 0;
   border-top: 1px solid #cdcdcd;
 `;
-const BoardContentBox = styled(Box)``;
+const BoardContentBox = styled(Box)`
+  padding: 0 80px;
+  @media (max-width: 768px) {
+    padding: 0 16px;
+  }
+`;
 const BoardContent = styled(Box)`
-  width: 70%;
-  white-space: pre-wrap;
+  /* width: 70%;
+  white-space: pre-wrap; */
 `;

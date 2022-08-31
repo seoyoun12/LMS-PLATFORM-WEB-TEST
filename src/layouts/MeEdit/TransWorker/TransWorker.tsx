@@ -193,11 +193,11 @@ export function TransWorker({ type, locationList }: Props) {
     event.preventDefault();
     if (!phone || !phone2 || !phone3)
       return window.alert('올바른 휴대전화 번호를 입력하세요!');
-    if (!company) return window.alert('올바른 회사명을 입력하세요!');
-    if (!vehicleNumber) return window.alert('올바른 차량번호를 입력하세요!');
-    if (!vehicleRegi) return window.alert('올바른 등록지를 입력하세요!');
-    if (!occupation1) return window.alert('업종을 선택해주세요.');
-    if (!occupation2) return window.alert('업종구분을 선택해주세요.');
+    // if (!company) return window.alert('올바른 회사명을 입력하세요!');
+    // if (!vehicleNumber) return window.alert('올바른 차량번호를 입력하세요!');
+    // if (!vehicleRegi) return window.alert('올바른 등록지를 입력하세요!');
+    // if (!occupation1) return window.alert('업종을 선택해주세요.');
+    // if (!occupation2) return window.alert('업종구분을 선택해주세요.');
     const dialogConfirmed = await dialog({
       title: '회원 정보 수정',
       description: '회원 정보를 수정하시겠습니까?',
@@ -214,14 +214,14 @@ export function TransWorker({ type, locationList }: Props) {
       const smsYn = smsChecked ? YN.YES : YN.NO;
       if (!user) return snackbar({ variant: 'error', message: '수정 실패하였습니다.' });
       const postData = {
-        carNumber: vehicleNumber, //차번호
-        company: company, //회사
+        carNumber: '', //차번호
+        company: '', //회사
         name: user.name, //이름
         phone: phone + phone2 + phone3, //폰번
         smsYn: smsYn, // 동의여부
-        userBusinessTypeOne: occupation1, //업종
-        userBusinessTypeTwo: occupation2, // 구분
-        userRegistrationType: vehicleRegi, //지역
+        userBusinessTypeOne: null, //업종
+        userBusinessTypeTwo: null, // 구분
+        userRegistrationType: null, //지역
       };
 
       try {

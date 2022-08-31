@@ -35,8 +35,8 @@ export const MeCertificateHeaderSubtitle = styled.p`
   font-size: 17px;
   font-weight: 500;
   color: #fff;
-  margin: 0 30px;
   word-break: break-word;
+  text-align: center;
 `;
 
 export const MeCertificateContentContainer = styled.div`

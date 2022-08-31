@@ -313,7 +313,7 @@ export function CalendarBody({
                         item => item.enType === modalInfo.courseBusinessType
                       )[0]?.type
                     }
-                    여객 / 화물
+                    {/* 여객 / 화물 */}
                   </TableRightCell>
                 </TableRow>
                 {/* <TableRow>

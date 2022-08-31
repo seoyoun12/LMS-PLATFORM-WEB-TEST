@@ -66,7 +66,7 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
     }
     if (
       courseSubCategoryType.PRIVATE_TAXI === value ||
-      courseSubCategoryType.GENERAL_CARGO === value ||
+      courseSubCategoryType.CONSIGNMENT === value ||
       courseSubCategoryType.INDIVIDUAL_CARGO === value
     ) {
       setDisabledCompany(true);

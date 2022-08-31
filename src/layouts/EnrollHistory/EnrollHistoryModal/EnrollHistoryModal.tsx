@@ -79,6 +79,7 @@ export function EnrollHistoryModal({
             ? RegType.TYPE_INDIVIDUAL
             : RegType.TYPE_ORGANIZATION
         );
+        console.log(data, '하ㅣ하');
         // setValue('businessName', data.userCompanyName);
         // setValue('businessSubType', data.userSubBusinessType);
         // setValue('businessType', data.userBusinessType);
@@ -288,7 +289,7 @@ export function EnrollHistoryModal({
                   교육구분
                 </TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
-                  여객 / 화물
+                  {watch().userBusinessType === 'FREIGHT' ? '화물' : '여객'}
                 </TableDoubleRightCell>
               </TableDoubleParantLeftCell>
               <TableDoubleParantLeftCell>

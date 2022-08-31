@@ -11,7 +11,22 @@ const regex4 = /^[0-9]{4}/g;
 
 const localList = [
   { title: '충남', type: 'NAM' },
-  { title: '세종', type: 'SEJONG' },
+  { title: '천안', type: 'CHEONAN' },
+  { title: '공주', type: 'GONGJU' },
+  { title: '보령', type: 'BORYEONG' },
+  { title: '아산', type: 'ASAN' },
+  { title: '서산', type: 'SEOSAN' },
+  { title: '논산', type: 'NONSAN' },
+  { title: '계룡', type: 'GYERYONG' },
+  { title: '당진', type: 'DANGJIN' },
+  { title: '금산', type: 'GEUMSAN' },
+  { title: '부여', type: 'BUYEO' },
+  { title: '서천', type: 'SEOCHEON' },
+  { title: '청양', type: 'CHEONGYANG' },
+  { title: '홍성', type: 'HONGSEONG' },
+  { title: '예산', type: 'YESAN' },
+  { title: '태안', type: 'TAEAN' },
+  // { title: '세종', type: 'SEJONG' },
 ];
 const oneWordList = ['아', '바', '사', '자', '배'];
 

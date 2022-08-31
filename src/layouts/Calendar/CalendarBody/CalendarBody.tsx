@@ -105,9 +105,15 @@ export function CalendarBody({
   const scheduleList = schedule?.map(item => {
     //마감여부
     const prevSchedule =
-      new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0 ? true : false;
+      new Date(item.requestEndDate.replaceAll('-', '/')).getTime() -
+        new Date().getTime() >=
+      0
+        ? true
+        : false;
     const isReceive =
-      new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0
+      new Date(item.requestEndDate.replaceAll('-', '/')).getTime() -
+        new Date().getTime() >=
+      0
         ? new Date(item.requestStartDate).getTime() - new Date().getTime() <= 0
           ? true
           : false

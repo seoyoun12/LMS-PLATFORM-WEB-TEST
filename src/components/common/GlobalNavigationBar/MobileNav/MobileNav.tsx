@@ -264,7 +264,7 @@ const DrawerTopBox = styled(Box)`
   padding: 0 1rem;
   align-items: center;
   justify-content: space-between;
-  background: #0065af;
+  background: #236cef;
   color: white;
 `;
 

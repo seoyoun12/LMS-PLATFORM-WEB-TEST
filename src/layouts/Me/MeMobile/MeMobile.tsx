@@ -1,5 +1,14 @@
 import * as React from 'react';
-import { Avatar, Box, Button, Container, Grid, MenuItem, tabsClasses, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Grid,
+  MenuItem,
+  tabsClasses,
+  Typography,
+} from '@mui/material';
 import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
 import { Spinner, Tabs } from '@components/ui';
@@ -13,6 +22,7 @@ import { ContentCardV2 } from '@components/ui/ContentCard';
 import MobileMeEditIcon from 'public/assets/svgs/MobileMeEditIcon.svg';
 import MobileMeMyCourseIcon from 'public/assets/svgs/MobileMyCourseIcon.svg';
 import MobileCertificateIcon from 'public/assets/svgs/MobileCertificateIcon.svg';
+import Image from 'next/image';
 
 const myInfoList = [
   // { label: "내 강의", value: "myCourse" },
@@ -47,10 +57,18 @@ export function MeMobile() {
   return (
     <Container className={containerStyle}>
       <UserInfoSection href={`/me/edit`}>
-        <UserProfile>M</UserProfile>
+        <UserProfile>
+          {user && user.s3Files.length > 0 ? (
+            <Image src={user.s3Files[0].path} layout="fill" />
+          ) : (
+            'M'
+          )}
+        </UserProfile>
         <div>
           <Typography fontSize={22}>{user.name}</Typography>
-          <Typography>{user.email ? user.email : <Box color={grey[400]}>이메일이 없습니다.</Box>}</Typography>
+          <Typography>
+            {user.email ? user.email : <Box color={grey[400]}>이메일이 없습니다.</Box>}
+          </Typography>
         </div>
       </UserInfoSection>
       <ContentBody>
@@ -58,7 +76,11 @@ export function MeMobile() {
           {/* <SideBarTitle variant="h6">내 정보</SideBarTitle> */}
           <SideBarContent>
             {myInfoList.map(item => (
-              <SideBarInfoLink color={grey[900]} href={`/me${item.value}`} key={item.value}>
+              <SideBarInfoLink
+                color={grey[900]}
+                href={`/me${item.value}`}
+                key={item.value}
+              >
                 <SideBarInfoItem>
                   <SideBarIcon>{item.icon}</SideBarIcon>
                   {item.label}
@@ -82,7 +104,12 @@ export function MeMobile() {
           <Link href={`/me/enroll-history`}>
             <Button
               variant="contained"
-              sx={{ fontSize: '20px', paddingTop: '12px', paddingBottom: '12px', background: '#256aef' }}
+              sx={{
+                fontSize: '20px',
+                paddingTop: '12px',
+                paddingBottom: '12px',
+                background: '#256aef',
+              }}
               fullWidth
             >
               온라인 교육 신청내역
@@ -90,16 +117,33 @@ export function MeMobile() {
           </Link>
         </SideBar>
         <LessonListContainer>
-          <Typography variant="h6" fontSize={22} fontWeight={700} sx={{ marginBottom: '16px' }} mt={3}>
+          <Typography
+            variant="h6"
+            fontSize={22}
+            fontWeight={700}
+            sx={{ marginBottom: '16px' }}
+            mt={3}
+          >
             내 강의
           </Typography>
-          <Grid container rowSpacing={4} columnSpacing={2} columns={{ xs: 1, sm: 2, md: 2, lg: 2 }}>
+          <Grid
+            container
+            rowSpacing={4}
+            columnSpacing={2}
+            columns={{ xs: 1, sm: 2, md: 2, lg: 2 }}
+          >
             {user.learningCourses ? (
               user.learningCourses.map(res => {
                 return (
                   <Grid item xs={1} sm={1} md={1} lg={1} key={res.courseClassSeq}>
                     <Box
-                      onClick={() => router.push(`/course/${res.courseUserSeq}/lesson/${!res.recentLessonSeq ? 1 : res.recentLessonSeq}`)}
+                      onClick={() =>
+                        router.push(
+                          `/course/${res.courseUserSeq}/lesson/${
+                            !res.recentLessonSeq ? 1 : res.recentLessonSeq
+                          }`
+                        )
+                      }
                     >
                       <ContentCardV2
                         image={res.thumbnailImage}

@@ -123,6 +123,7 @@ export interface User {
   smsYn: string;
   status: number;
   username: string;
+  s3Files: S3Files;
 }
 
 export interface UserInput {
@@ -159,18 +160,38 @@ export async function findUserId(phone: string) {
 export async function existsUserId(username: string) {
   return await POST(`/user/exists-id`, { username });
 }
-export async function changeUserPW({ username, password }: { username: string; password: string }) {
+export async function changeUserPW({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) {
   return await PUT(`/user/change-password`, { username, password });
 }
 
-export async function modifyMyUser({ name, emailYn, smsYn }: { name: string; emailYn: YN; smsYn: YN }) {
+export async function modifyMyUser({
+  name,
+  emailYn,
+  smsYn,
+}: {
+  name: string;
+  emailYn: YN;
+  smsYn: YN;
+}) {
   return await PUT(`/user/myinfo/modify`, {
     emailYn,
     smsYn,
   });
 }
 
-export async function modifyMyUserPassword({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) {
+export async function modifyMyUserPassword({
+  currentPassword,
+  newPassword,
+}: {
+  currentPassword: string;
+  newPassword: string;
+}) {
   return await PUT(`/user/myinfo/modify/password`, {
     currentPw: currentPassword,
     modifiedPw: newPassword,
@@ -178,7 +199,13 @@ export async function modifyMyUserPassword({ currentPassword, newPassword }: { c
 }
 
 // deparcated
-export async function transWorker({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) {
+export async function transWorker({
+  currentPassword,
+  newPassword,
+}: {
+  currentPassword: string;
+  newPassword: string;
+}) {
   return await PUT(`/user/myinfo/modify/password`, {
     currentPw: currentPassword,
     modifiedPw: newPassword,

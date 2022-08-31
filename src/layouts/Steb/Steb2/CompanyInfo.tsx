@@ -233,10 +233,16 @@ const TableLeftCell = styled(TableCell)`
     border-bottom: none;
     width: 100%;
     text-align: start;
+    padding: 12px 0;
+    padding-bottom: 2px;
   }
 `;
 const TableRightCell = styled(TableCell)`
   flex-grow: 1;
+  @media (max-width: 768px) {
+    padding: 12px 0;
+    padding-top: 2px;
+  }
 `;
 
 const SummaryGrid = styled(Grid)``;

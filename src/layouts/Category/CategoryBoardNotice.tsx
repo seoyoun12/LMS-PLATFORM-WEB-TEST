@@ -61,7 +61,7 @@ export function CategoryBoardNotice() {
       ) : (
         <NotFound content="공지사항게시글이 존재하지 않습니다!" />
       )}
-      <Box ref={target} height="100px">
+      <Box ref={target} height="50px">
         {loading ? <Spinner fit={true} /> : ''}
       </Box>
     </Container>

@@ -1,10 +1,27 @@
 import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
-import { BannerRes, getSingleBannerAdm, modifyBannerAdm, useSingleBannerAdm } from '@common/api/banner';
+import {
+  BannerRes,
+  getSingleBannerAdm,
+  modifyBannerAdm,
+  removeBannerAdm,
+  useSingleBannerAdm,
+} from '@common/api/banner';
 import { ProductStatus } from '@common/api/course';
 import { FileUploader } from '@components/ui/FileUploader';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { Box, Button, Chip, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Chip,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
@@ -14,6 +31,8 @@ import { ko } from 'date-fns/locale';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useRouter } from 'next/router';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
+import { useDialog } from '@hooks/useDialog';
+import { Spinner } from '@components/ui';
 
 interface FormType {
   title: string;
@@ -22,7 +41,6 @@ interface FormType {
   endDate: string;
   status: ProductStatus;
   toUrl: string;
-
   files: File[];
 }
 
@@ -40,6 +58,8 @@ export function BannerModify() {
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileSeq, setFileSeq] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const dialog = useDialog();
   const {
     register,
     handleSubmit,
@@ -86,7 +106,12 @@ export function BannerModify() {
     try {
       const { data }: { data: BannerRes } = await modifyBannerAdm(Number(bannerId), rest);
       if (watch().files.length !== 0) {
-        if (fileSeq) await deleteFile({ fileType: BbsType.TYPE_BANNER, fileTypeId: Number(bannerId), fileSeqList: [fileSeq] });
+        if (fileSeq)
+          await deleteFile({
+            fileType: BbsType.TYPE_BANNER,
+            fileTypeId: Number(bannerId),
+            fileSeqList: [fileSeq],
+          });
         await fileHandler(files, data.seq);
       }
       snackbar({ variant: 'success', message: '성공적으로 완료되었습니다.' });
@@ -111,14 +136,40 @@ export function BannerModify() {
     setIsFileDelete(true);
   };
 
+  // 삭제
+  const onRemoveBanner = async (bannerSeq: number) => {
+    try {
+      const dialogConfirmed = await dialog({
+        title: '콘텐츠 삭제하기',
+        description: '정말로 삭제하시겠습니까?',
+        confirmText: '삭제하기',
+        cancelText: '취소',
+      });
+      if (dialogConfirmed) {
+        await removeBannerAdm(bannerSeq);
+        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
+        router.push(`/admin-center/banner`);
+        // mutate();
+      }
+    } catch (e: any) {
+      snackbar({ variant: 'error', message: e.data.message });
+    }
+  };
+
   return (
     <BannnerUploadContainer>
       <Box className="form-box" component="form" onSubmit={handleSubmit(onSubmit)}>
         <Typography variant="h5" fontWeight="bold">
           배너 변경
         </Typography>
-        <TextField placeholder="배너 제목" {...register('title', { required: '배너이름을 입력해주세요.' })} />
-        <TextField placeholder="콘텐츠 내용" {...register('content', { required: '콘텐츠를 입력해주세요.' })} />{' '}
+        <TextField
+          placeholder="배너 제목"
+          {...register('title', { required: '배너이름을 입력해주세요.' })}
+        />
+        <TextField
+          placeholder="콘텐츠 내용"
+          {...register('content', { required: '콘텐츠를 입력해주세요.' })}
+        />{' '}
         <Typography fontWeight="bold">게시 시작날짜</Typography>
         <DatePicker
           locale={ko}
@@ -128,7 +179,12 @@ export function BannerModify() {
           customInput={<TextField InputProps={{ endAdornment: <CalendarMonthIcon /> }} />}
           selected={new Date(watch().startDate)}
           onSelect={() => {}}
-          onChange={date => setValue('startDate', date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd'))}
+          onChange={date =>
+            setValue(
+              'startDate',
+              date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd')
+            )
+          }
         />
         <Typography fontWeight="bold">게시 종료날짜</Typography>
         <DatePicker
@@ -140,7 +196,12 @@ export function BannerModify() {
           selected={new Date(watch().endDate)}
           onSelect={() => {}}
           // popperPlacement="right"
-          onChange={date => setValue('endDate', date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd'))}
+          onChange={date =>
+            setValue(
+              'endDate',
+              date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd')
+            )
+          }
         />
         {/* <TextField placeholder="페이지 이동 url" {...register('toUrl', { required: '입력해주세요.' })} /> */}
         <FormControl className="form-control">
@@ -151,8 +212,16 @@ export function BannerModify() {
             name="status"
             render={({ field }) => (
               <RadioGroup row {...field}>
-                <FormControlLabel value={ProductStatus.APPROVE} control={<Radio />} label="정상" />
-                <FormControlLabel value={ProductStatus.REJECT} control={<Radio />} label="중지" />
+                <FormControlLabel
+                  value={ProductStatus.APPROVE}
+                  control={<Radio />}
+                  label="정상"
+                />
+                <FormControlLabel
+                  value={ProductStatus.REJECT}
+                  control={<Radio />}
+                  label="중지"
+                />
               </RadioGroup>
             )}
           />
@@ -160,10 +229,25 @@ export function BannerModify() {
         <FileUploader register={register} regName="files" onFileChange={handleFileChange}>
           <FileUploader.Label>파일업로드</FileUploader.Label>
         </FileUploader>
-        {fileName ? <Chip sx={{ mt: '8px' }} icon={<OndemandVideoOutlinedIcon />} label={fileName} onDelete={handleDeleteFile} /> : null}
-        <Button variant="contained" type="submit">
+        {fileName ? (
+          <Chip
+            sx={{ mt: '8px' }}
+            icon={<OndemandVideoOutlinedIcon />}
+            label={fileName}
+            onDelete={handleDeleteFile}
+          />
+        ) : null}
+        <SubmitBtn variant="contained" type="submit">
           업로드
-        </Button>
+        </SubmitBtn>
+        <DeleteBtn
+          color="warning"
+          variant="contained"
+          onClick={() => onRemoveBanner(Number(bannerId))}
+          disabled={loading}
+        >
+          {loading ? <Spinner fit={true} /> : '삭제'}
+        </DeleteBtn>
         <Typography fontWeight="bold" sx={{ color: 'red' }}>
           배너 수정시 상태 , 게시종료일자를 모두 업데이트 해야합니다!
         </Typography>
@@ -180,4 +264,13 @@ const BannnerUploadContainer = styled(Box)`
     flex-direction: column;
     gap: 1rem;
   }
+`;
+const SubmitBtn = styled(Button)`
+  /* margin: 30px 30px 30px 0; */
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
+
+const DeleteBtn = styled(Button)`
+  /* background-color: #dd0000; */
 `;

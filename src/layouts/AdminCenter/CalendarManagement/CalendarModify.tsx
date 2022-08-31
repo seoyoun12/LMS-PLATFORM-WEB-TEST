@@ -27,6 +27,7 @@ import { CourseRegiModal } from './CourseRegiModal';
 import {
   courseClassCreate,
   CourseClassCreate,
+  courseClassRemove,
   getDetailCourseClass,
   modifyCourseClass,
 } from '@common/api/adm/courseClass';
@@ -62,6 +63,7 @@ export function CalendarModify() {
   const [courseName, setCourseName] = useState('');
   const [limitPeopleCheck, setLimitPeopleCheck] = useState(false);
   const [loading, setLoading] = useState(false);
+  const snackbar = useSnackbar();
   const {
     register,
     handleSubmit,
@@ -135,6 +137,27 @@ export function CalendarModify() {
     setValue('courseSeq', courseSeq);
     setCourseName(courseName);
     setOpenModal(false);
+  };
+
+  // 삭제
+  const onClickRemoveCalender = async (calendarId: number) => {
+    try {
+      const dialogConfirmed = await dialog({
+        title: '일정 삭제하기',
+        description: '정말로 삭제하시겠습니까?',
+        confirmText: '삭제하기',
+        cancelText: '취소',
+      });
+      if (dialogConfirmed) {
+        await courseClassRemove(calendarId);
+        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
+        router.push(`/admin-center/calendar`);
+        // await mutate([`/course-class/adm`, { params: { businessType: businessType.TYPE_ALL, date: '2022-07' } }]);
+        // await mutate();
+      }
+    } catch (e: any) {
+      snackbar({ variant: 'error', message: e.data.message });
+    }
   };
 
   return (
@@ -309,9 +332,17 @@ export function CalendarModify() {
           </FormControl>
         </Box>
 
-        <Button type="submit" variant="contained" disabled={loading}>
+        <SubmitBtn type="submit" variant="contained" disabled={loading}>
           {loading ? <Spinner fit={true} /> : '수정'}
-        </Button>
+        </SubmitBtn>
+        <DeleteBtn
+          color="warning"
+          variant="contained"
+          onClick={() => onClickRemoveCalender(watch().courseClassSeq)}
+          disabled={loading}
+        >
+          {loading ? <Spinner fit={true} /> : '삭제'}
+        </DeleteBtn>
         <Typography>
           날짜 입력 방식은 YYYY-MM-DD로 해야합니다. ex{')'} 2022-07-22
         </Typography>
@@ -343,4 +374,14 @@ const SearchInput = styled(InputBase)`
 `;
 const ConnectButton = styled(Button)`
   margin-right: 12px;
+`;
+
+const SubmitBtn = styled(Button)`
+  /* margin: 30px 30px 30px 0; */
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
+
+const DeleteBtn = styled(Button)`
+  /* background-color: #dd0000; */
 `;

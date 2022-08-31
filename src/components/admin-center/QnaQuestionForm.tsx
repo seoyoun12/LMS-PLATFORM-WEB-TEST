@@ -1,5 +1,14 @@
+import { downloadFile } from '@common/api/file';
 import { qnaDetail } from '@common/api/qna';
-import { Box, Container, styled, TableBody, TableCell, TableRow } from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  styled,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@mui/material';
 import dateFormat from 'dateformat';
 import { useRouter } from 'next/router';
 
@@ -13,7 +22,7 @@ export function QnaQuestionForm() {
       <TableBody sx={{ display: 'table', width: '100%' }}>
         <TableRow sx={{ textAlign: 'center' }}>
           <TableCell sx={{ background: '#e0e0e0', width: '10%', textAlign: 'center' }}>
-            seq
+            번호
           </TableCell>
           <TableCell sx={{ width: '10%', textAlign: 'center' }}>{data?.seq}</TableCell>
           <TableCell sx={{ background: '#e0e0e0', width: '10%', textAlign: 'center' }}>
@@ -37,8 +46,31 @@ export function QnaQuestionForm() {
           <TableCell sx={{ background: '#e0e0e0', width: '10%', textAlign: 'center' }}>
             첨부파일
           </TableCell>
-          <TableCell sx={{ width: '30%', textAlign: 'center' }}>
+          {/* <TableCell sx={{ width: '30%', textAlign: 'center' }}>
             {data?.s3Files[0] ? data.s3Files[0].name : '파일없음'}
+          </TableCell> */}
+          <TableCell align="center">
+            {data?.s3Files[0] ? (
+              <Button
+                onClick={async () => {
+                  try {
+                    const blobData = await downloadFile(data.s3Files[0].seq);
+                    const url = window.URL.createObjectURL(new Blob([blobData]));
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${data.s3Files[0].name}`;
+                    a.click();
+                    a.remove();
+                  } catch (e: any) {
+                    console.log(e);
+                  }
+                }}
+              >
+                {data?.s3Files[0].name}
+              </Button>
+            ) : (
+              '파일없음'
+            )}
           </TableCell>
         </TableRow>
       </TableBody>

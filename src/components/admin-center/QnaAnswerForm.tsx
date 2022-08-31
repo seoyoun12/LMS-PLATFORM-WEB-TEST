@@ -18,6 +18,7 @@ import { FileUploader } from '@components/ui/FileUploader';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { css } from '@emotion/css';
 import router from 'next/router';
+import { downloadFile } from '@common/api/file';
 
 interface Props {
   qnaSeq?: number;
@@ -42,7 +43,6 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
   const { qnaSeq } = router.query;
   const { data } = qnaDetail(Number(qnaSeq));
   // const { data } = qnaDetail(Number(qna.qnaSeq));
-
 
   const {
     register,
@@ -106,7 +106,27 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
         </TableBody>
         {data.qnaAnswer?.content ? (
           <div>
-            {data.qnaAnswer?.s3Files[0] ? data.qnaAnswer?.s3Files[0].name : '파일없음'}
+            {data.qnaAnswer?.s3Files[0] ? (
+              <Button
+                onClick={async () => {
+                  try {
+                    const blobData = await downloadFile(data.qnaAnswer?.s3Files[0].seq);
+                    const url = window.URL.createObjectURL(new Blob([blobData]));
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${data.qnaAnswer?.s3Files[0].name}`;
+                    a.click();
+                    a.remove();
+                  } catch (e: any) {
+                    console.log(e);
+                  }
+                }}
+              >
+                {data.qnaAnswer?.s3Files[0].name}
+              </Button>
+            ) : (
+              '파일없음'
+            )}
           </div>
         ) : (
           <div className="board-uploader">

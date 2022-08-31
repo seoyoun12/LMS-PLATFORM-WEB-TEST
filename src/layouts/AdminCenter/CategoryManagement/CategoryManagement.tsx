@@ -28,22 +28,27 @@ import dateFormat from 'dateformat';
 import styled from '@emotion/styled';
 import { CatchingPokemonSharp } from '@mui/icons-material';
 import { ProductStatus } from '@common/api/course';
+import { downloadFile } from '@common/api/file';
+import { S3Files } from 'types/file';
 
-const headRows = [
-  { name: '글번호' }, // seq
+const headRows: {
+  name: string;
+  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+}[] = [
+  { name: '번호', align: 'left' }, // seq
   // { name: '유저번호' }, // userSeq
   // { name: '유저ID' }, // username
-  { name: '제목' }, // subject
-  { name: '본문' }, // content
-  { name: '게시판유형' }, // boardType
-  { name: '작성일' }, // createdDtime
-  { name: '수정일' }, // modifiedDtime
-  { name: '공지여부' }, // noticeYn
-  { name: '공개여부' }, // publicYn
-  { name: '상태' }, // status
-  { name: '조회수' }, // hit
-  { name: '첨부파일' }, // s3Files
-  { name: '수정' },
+  { name: '제목', align: 'center' }, // subject
+  { name: '본문', align: 'center' }, // content
+  { name: '게시판유형', align: 'center' }, // boardType
+  { name: '작성일', align: 'center' }, // createdDtime
+  { name: '수정일', align: 'center' }, // modifiedDtime
+  { name: '공지여부', align: 'center' }, // noticeYn
+  { name: '공개여부', align: 'center' }, // publicYn
+  { name: '상태', align: 'center' }, // status
+  { name: '조회수', align: 'center' }, // hit
+  { name: '첨부파일', align: 'center' }, // s3Files
+  // { name: '수정' },
   // { name: '삭제' },
 ];
 
@@ -68,20 +73,28 @@ export function CategoryManagement() {
     page,
   });
 
-
   // for (let i = 0; i < tabsConfig.length; i++) {
   //   if (tabsConfig[i].value === data.content) {
   //   }
   // }
 
   // 다운로드
-  const onClickDownloadFile = async () => {
-    const link = document.createElement('a');
-    link.download = `${data.content[0]?.s3Files[0]}`;
-    // link.href = `${data.content[0]?.s3Files[0].path}`;
-    // link.href = data.content[0]?.s3Files[0]?.path;
-    link.click();
-  };
+  // const onClickDownloadFile = async (seq: number) => {
+  //   try {
+  //     const blobData = await downloadFile(seq);
+  //     const url = window.URL.createObjectURL(new Blob([blobData]));
+  //     const a = document.createElement('a');
+  //     console.log('blobData : ', blobData);
+  //     console.log('seq : ', seq);
+  //     console.log('data : ', data.content);
+  //     a.href = url;
+  //     a.download = `${s3Files[0].name}`;
+  //     a.click();
+  //     a.remove();
+  //   } catch (e: any) {
+  //     console.log(e);
+  //   }
+  // };
 
   // 수정
   const onClickmodifyCategoryBoard = async (seq: number) => {
@@ -128,8 +141,10 @@ export function CategoryManagement() {
 
   return (
     <div>
-      <Typography fontSize={30} fontWeight='bold' >게시판구분</Typography>
-      <RadioGroup row sx={{mb:6}} >
+      <Typography fontSize={30} fontWeight="bold">
+        게시판구분
+      </Typography>
+      <RadioGroup row sx={{ mb: 6 }}>
         {tabsConfig.map(({ name, value }: { name: string; value: string }) => (
           <FormControlLabel
             key={name}
@@ -152,8 +167,9 @@ export function CategoryManagement() {
       >
         <TableHead>
           <TableRow>
-            {headRows.map(({ name }: { name: string }) => (
-              <TableCell key={name} align="center">
+            {/* {headRows.map(({ name, align }: { name: string; align: string }) => ( */}
+            {headRows.map(({ name, align }) => (
+              <TableCell key={name} align={align}>
                 {name}
               </TableCell>
             ))}
@@ -162,17 +178,24 @@ export function CategoryManagement() {
 
         <TableBody>
           {data?.content.map(category => (
-            <TableRow key={category.seq} hover>
-              <TableCell align="center">{category.seq}</TableCell>
+            <TableRow
+              sx={{ cursor: 'pointer' }}
+              key={category.seq}
+              hover
+              onClick={() => onClickmodifyCategoryBoard(category.seq)}
+            >
+              <TableCell align="left">{category.seq}</TableCell>
               {/* <TableCell align="center">{category.userSeq}</TableCell> */}
               {/* <TableCell align="center">{category.username}</TableCell> */}
               <TableCell align="center">
                 <SubjectTypography>{category.subject}</SubjectTypography>
               </TableCell>
               <TableCell align="center">
-                <ContentTypography>{category.content}</ContentTypography> 
+                <ContentTypography>{category.content}</ContentTypography>
               </TableCell>
-              <TableCell align="center">{tabsConfig.filter((item)=>item.value === category.boardType)[0]?.name} </TableCell>
+              <TableCell align="center">
+                {tabsConfig.filter(item => item.value === category.boardType)[0]?.name}
+              </TableCell>
               <TableCell align="center">
                 {dateFormat(category.createdDtime, 'isoDate')}
               </TableCell>
@@ -181,7 +204,7 @@ export function CategoryManagement() {
               </TableCell>
               <TableCell align="center">{category.noticeYn}</TableCell>
               <TableCell align="center">{category.publicYn}</TableCell>
-              <TableCell style={{ width: 10 }} align="right">
+              <TableCell style={{ width: 10 }} align="center">
                 <Chip
                   variant="outlined"
                   size="small"
@@ -192,17 +215,33 @@ export function CategoryManagement() {
                 />
               </TableCell>
               <TableCell align="center">{category.hit}</TableCell>
-              <TableCell align="center">
+              {/* <TableCell align="center">
                 <Button
-                  onClick={onClickDownloadFile}
+                  // onClick={() => onClickDownloadFile(category.s3Files[0].seq)}
                   // download={category.s3Files[0] ? category.s3Files[0] : null}
                   // href={category.s3Files[0] ? category.s3Files[0].path : null}
                   // href=""
+                  onClick={async () => {
+                    try {
+                      const blobData = await downloadFile(category.s3Files[0].seq);
+                      const url = window.URL.createObjectURL(new Blob([blobData]));
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = `${category.s3Files[0].name}`;
+                      a.click();
+                      a.remove();
+                    } catch (e: any) {
+                      console.log(e);
+                    }
+                  }}
                 >
                   {category.s3Files[0] ? category.s3Files[0].name : '파일없음'}
                 </Button>
-              </TableCell>
+              </TableCell> */}
               <TableCell align="center">
+                {category.s3Files[0] ? category.s3Files[0].name : '없음'}
+              </TableCell>
+              {/* <TableCell align="center">
                 <Button
                   variant="text"
                   // color="neutral"
@@ -212,7 +251,7 @@ export function CategoryManagement() {
                 >
                   수정
                 </Button>
-              </TableCell>
+              </TableCell> */}
               {/* <TableCell align="center">
                 <Button
                   variant="text"

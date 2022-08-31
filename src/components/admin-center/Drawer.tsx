@@ -79,17 +79,17 @@ export function Drawer({ children }: { children: ReactNode }) {
       ],
       icon: <ListAltIcon sx={{ mr: '32px', color: grey[700] }} />,
     },
-    // {
-    //   name: '1대1문의관리',
-    //   children: [
-    //     {
-    //       name: '1대1문의 목록',
-    //       href: '/admin-center/qna',
-    //       isActive: router.pathname === '/admin-center/qna',
-    //     },
-    //   ],
-    //   icon: <QuestionAnswerOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
-    // },
+    {
+      name: '1대1문의관리',
+      children: [
+        {
+          name: '1대1문의 목록',
+          href: '/admin-center/qna',
+          isActive: router.pathname === '/admin-center/qna',
+        },
+      ],
+      icon: <QuestionAnswerOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    },
     // {
     //   name: '학습자료관리',
     //   children: [
@@ -206,7 +206,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           name: '전체 수강생 학습현황',
           href: '/admin-center/course-info',
           isActive: router.pathname === '/admin-center/course-info',
-        }
+        },
       ],
       icon: <MenuBookIcon sx={{ mr: '32px', color: grey[700] }} />,
     },

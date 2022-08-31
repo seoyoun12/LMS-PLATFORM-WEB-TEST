@@ -26,7 +26,7 @@ const headRows: {
   name: string;
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
 }[] = [
-  { name: 'seq', align: 'left' },
+  { name: '번호', align: 'left' },
   { name: '과정모듈명', align: 'left' },
   { name: '과정모듈 타입', align: 'left' },
   { name: '상태', align: 'left' },

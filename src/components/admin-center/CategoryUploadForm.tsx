@@ -32,6 +32,7 @@ import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import router from 'next/router';
 import { Spinner } from '@components/ui';
+import { Label } from '@mui/icons-material';
 
 interface Props {
   mode?: 'upload' | 'modify';
@@ -211,7 +212,8 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
           ref={editorRef}
         />
 
-        <FormLabel sx={{mt:2 , mb:1}} >공지여부</FormLabel>
+        <FormLabel sx={{ mt: 2, mb: 1 }}>파일업로드</FormLabel>
+        {/* <div className="board-uploader" style={{ border: '1px solid black' }}> */}
         <div className="board-uploader">
           <FileUploader
             register={register}
@@ -222,7 +224,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
           </FileUploader>
           {fileName ? (
             <Chip
-              sx={{ mt: '8px' }}
+              // sx={{ mt: '8px' }}
               icon={<OndemandVideoOutlinedIcon />}
               label={fileName}
               onDelete={handleDeleteFile}
@@ -301,7 +303,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
             onClick={() => onClickRemoveCategory(category.seq)}
             disabled={loading}
           >
-            {loading ? <Spinner fit={loading} /> : '삭제'}
+            {loading ? <Spinner fit={true} /> : '삭제'}
           </DeleteBtn>
         )}
       </Box>

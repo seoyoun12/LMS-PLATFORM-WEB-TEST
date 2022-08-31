@@ -162,7 +162,27 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   if (error) return <div>error</div>;
   return (
     <Modal
-      action="저장"
+      // action="저장"
+      action={
+        <>
+          <DeleteBtn
+            variant="contained"
+            color="warning"
+            onClick={() => onRemoveLesson(lesson.seq)}
+            size="small"
+          >
+            삭제
+          </DeleteBtn>
+          <SubmitBtn
+            variant="contained"
+            color="secondary"
+            onClick={handleSubmit(onSubmit)}
+            size="small"
+          >
+            저장
+          </SubmitBtn>
+        </>
+      }
       title="강의 업로드"
       maxWidth="sm"
       fullWidth
@@ -287,14 +307,14 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
             />
           </FormControl>
 
-          <DeleteBtn
+          {/* <DeleteBtn
             variant="contained"
             color="warning"
             onClick={() => onRemoveLesson(lesson.seq)}
             size="small"
           >
             삭제
-          </DeleteBtn>
+          </DeleteBtn> */}
         </FormContainer>
       </Box>
     </Modal>

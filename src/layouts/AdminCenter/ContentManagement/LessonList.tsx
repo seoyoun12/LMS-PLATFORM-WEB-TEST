@@ -49,23 +49,24 @@ export function LessonList() {
   const { lessonList, lessonListError, mutate } = useLessonList(Number(contentSeq));
   const { lesson, lessonError } = useLesson(lessonId);
 
-  const onRemoveLesson = async (lessonId: number) => {
-    try {
-      const dialogConfirmed = await dialog({
-        title: '콘텐츠 삭제하기',
-        description: '정말로 삭제하시겠습니까?',
-        confirmText: '삭제하기',
-        cancelText: '취소',
-      });
-      if (dialogConfirmed) {
-        await removeLesson(lessonId);
-        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-        await mutate();
-      }
-    } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
-    }
-  };
+  // 삭제 -> modal 내부로 이동
+  // const onRemoveLesson = async (lessonId: number) => {
+  //   try {
+  //     const dialogConfirmed = await dialog({
+  //       title: '콘텐츠 삭제하기',
+  //       description: '정말로 삭제하시겠습니까?',
+  //       confirmText: '삭제하기',
+  //       cancelText: '취소',
+  //     });
+  //     if (dialogConfirmed) {
+  //       await removeLesson(lessonId);
+  //       snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
+  //       await mutate();
+  //     }
+  //   } catch (e: any) {
+  //     snackbar({ variant: 'error', message: e.data.message });
+  //   }
+  // };
 
   const modifyLesson = (lessonId: number) => {
     setLessonId(lessonId);

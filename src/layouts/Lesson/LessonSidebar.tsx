@@ -1,18 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import { Box } from "@mui/system";
 import { headerHeight } from "@styles/variables";
 import { LessonTabMenu } from "@components/ui/Tabs";
 import { LESSON_TABS, LessonTabs } from "./Lesson.types";
 import { CourseModuleFindResponseDto, CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
-import { grey } from "@mui/material/colors";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Typography } from "@mui/material";
-import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
 import { useRouter } from "next/router";
-import { LESSON_CONTENT_TYPES } from "./Lesson.types";
 import LessonSidebarModule from "./LessonSidebarModule";
+import LessonSidebarItem from "./LessonSidebarItem";
 
 interface Props {
   courseUserSeq: number;
@@ -20,6 +16,8 @@ interface Props {
   courseModules: CourseModuleFindResponseDto[] | null;
   lessonSeq: number | null;
   lessons: LessonDetailClientResponseDto[];
+  onLessonSelect?: (lessonIndex: number) => void;
+  onModuleSelect?: (moduleIndex: number) => void;
 }
 
 export default function LessonSidebar(props: Props) {
@@ -28,8 +26,8 @@ export default function LessonSidebar(props: Props) {
 
   // 스테이트.
 
-  const [tabMenu, setTabMenu] = useState<LessonTabs["value"]>(LESSON_TABS[0].value);
-  const [switchURL, setSwitchURL] = useState<string | null>(null);
+  const [tabMenu, setTabMenu] = React.useState<LessonTabs["value"]>(LESSON_TABS[0].value);
+  const [switchURL, setSwitchURL] = React.useState<string | null>(null);
 
   // 렌더링.
 
@@ -44,42 +42,25 @@ export default function LessonSidebar(props: Props) {
       />
       <Tab hidden={tabMenu !== "curriculum"}>
         <LessonItemContainer>
-          {props.lessons.map((lesson) => (
-            <TabItem
-              className={props.lessonSeq === lesson.seq ? "active" : ""}
-              color={grey[900]}
+          {props.lessons.map((lesson, lessonIndex) => (
+            <LessonSidebarItem
+              active={lesson.seq === props.lessonSeq}
+              lesson={lesson}
               key={lesson.seq}
-              onClick={() => setSwitchURL(`/course/${props.courseUserSeq}/${LESSON_CONTENT_TYPES[0].toLocaleLowerCase()}/${lesson.seq}`)}
-            >
-              <LessonContent>
-                <LessonTitle variant="body1" fontSize="inherit">{lesson.lessonNm}</LessonTitle>
-                <LessonInfo>
-                  <PlayCircleOutlinedIcon htmlColor={grey[500]} fontSize="inherit"/>
-                  <Typography className="typo" variant="body2" color={grey[500]} fontSize="inherit">
-                    {Math.floor(lesson.totalTime / 60)}:{lesson.totalTime % 60}
-                  </Typography>
-                </LessonInfo>
-              </LessonContent>
-              <LessonCheck>
-                {props.lessonSeq === lesson.seq && <PlayCircleIcon sx={{ color: "text.secondary" }} style={{ marginRight: 8 }} fontSize="inherit"/>}
-                <Typography className="typo" variant="body2" color={grey[500]} style={{ marginRight: 8 }} fontSize="inherit">
-                  {lesson.completedYn === "Y" ? "학습 완료" : "미학습"}
-                </Typography>
-                <CheckCircleIcon sx={{ color: lesson.completedYn === "Y" ? "#256aef" : "text.secondary" }} fontSize="inherit"/>
-              </LessonCheck>
-            </TabItem>
+              onClick={() => props.onLessonSelect(lessonIndex)}
+            />
           ))}
           {props.courseModules !== null && props.courseModules.length > 0 && (
-              <LessonModuleContainer>
-                {props.courseModules.map((courseModule) => (
-                  <LessonSidebarModule
-                    key={courseModule.courseModuleSeq}
-                    courseUserSeq={props.courseUserSeq}
-                    courseModule={courseModule}
-                    onSelect={(url) => setSwitchURL(url)}
-                  />
-                ))}
-              </LessonModuleContainer>
+            <LessonModuleContainer>
+              {props.courseModules.map((courseModule, moduleIndex) => (
+                <LessonSidebarModule
+                  key={courseModule.courseModuleSeq}
+                  courseUserSeq={props.courseUserSeq}
+                  courseModule={courseModule}
+                  onSelect={() => props.onModuleSelect(moduleIndex)}
+                />
+              ))}
+            </LessonModuleContainer>
           )}
         </LessonItemContainer>
       </Tab>
@@ -158,47 +139,6 @@ const Tab = styled(Box)`
   }
 `;
 
-const TabItem = styled.div`
-  padding: 0.75rem;
-  min-height: 2.5rem;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const LessonContent = styled(Box)`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const LessonTitle = styled(Typography)`
-  margin-right: 8px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  .active & {
-    font-weight: 700;
-  }
-`;
-
-const LessonInfo = styled.div`
-  display: flex;
-  align-items: center;
-  padding-top: 4px;
-
-  .typo {
-    margin-left: 4px;
-  }
-`;
-
-const LessonCheck = styled(Box)`
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-`;
-
 const LessonItemContainer = styled(Box)`
   flex-grow: 1;
 `;
@@ -208,4 +148,4 @@ const LessonModuleContainer = styled(Box)`
   border-top: 1px solid #272727;
   background: #F7F7F7;
   padding: 1rem;
-`
+`;

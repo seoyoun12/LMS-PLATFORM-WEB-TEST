@@ -20,6 +20,8 @@ export default function Lesson(props: LessonProps) {
   // 스테이트.
 
   const [loading, setLoading] = React.useState<boolean>(true);
+  const [dialog, setDialog] = React.useState<"FIRST" | "NEXT" | null>(null);
+
   const [course, setCourse] = React.useState<CourseDetailClientResponseDto | null>(null);
   const [courseModule, setCourseModule] = React.useState<CourseModuleFindResponseDto | null>(null);
   const [courseModules, setCourseModules] = React.useState<CourseModuleFindResponseDto[] | null>(null);

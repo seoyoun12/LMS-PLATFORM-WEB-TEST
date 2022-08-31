@@ -223,11 +223,7 @@ export function SignInV2() {
                 //   setSmsYn(checked);
                 // }}
               />
-              <Box display="flex" flexWrap="wrap" justifyContent="center">
-                <Box>개인정보 수집</Box>
-                <Box>및 이용에</Box>
-                <Box>동의합니다.</Box>
-              </Box>
+              <Box fontSize="14px">개인정보 수집 및 이용에 동의합니다.</Box>
               {/* <Typography component="span">
                 개인정보 수집 및 이용에 
               </Typography> */}

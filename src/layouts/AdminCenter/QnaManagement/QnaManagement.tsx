@@ -118,7 +118,7 @@ export function QnaManagement() {
               {/* <TableCell align="center">
                 {dateFormat(qna.modifiedDtime, 'isoDate')}
               </TableCell> */}
-              <TableCell align="center">
+              {/* <TableCell align="center">
                 <Button
                   // onClick={() => onClickDownloadFile(category.s3Files[0].seq)}
                   // download={category.s3Files[0] ? category.s3Files[0] : null}
@@ -141,6 +141,9 @@ export function QnaManagement() {
                 >
                   {qna.s3Files[0] ? qna.s3Files[0].name : '파일없음'}
                 </Button>
+              </TableCell> */}
+              <TableCell align="center">
+                {qna.s3Files[0] ? qna.s3Files[0].name : '파일없음'}
               </TableCell>
               <TableCell align="center">
                 <Chip

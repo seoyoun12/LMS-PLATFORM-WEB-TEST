@@ -215,7 +215,7 @@ export function CategoryManagement() {
                 />
               </TableCell>
               <TableCell align="center">{category.hit}</TableCell>
-              <TableCell align="center">
+              {/* <TableCell align="center">
                 <Button
                   // onClick={() => onClickDownloadFile(category.s3Files[0].seq)}
                   // download={category.s3Files[0] ? category.s3Files[0] : null}
@@ -224,7 +224,6 @@ export function CategoryManagement() {
                   onClick={async () => {
                     try {
                       const blobData = await downloadFile(category.s3Files[0].seq);
-
                       const url = window.URL.createObjectURL(new Blob([blobData]));
                       const a = document.createElement('a');
                       a.href = url;
@@ -238,6 +237,9 @@ export function CategoryManagement() {
                 >
                   {category.s3Files[0] ? category.s3Files[0].name : '파일없음'}
                 </Button>
+              </TableCell> */}
+              <TableCell align="center">
+                {category.s3Files[0] ? category.s3Files[0].name : '없음'}
               </TableCell>
               {/* <TableCell align="center">
                 <Button

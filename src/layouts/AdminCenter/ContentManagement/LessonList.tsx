@@ -111,7 +111,6 @@ export function LessonList() {
                 {name}
               </TableCell>
             ))}
-            <TableCell>{}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

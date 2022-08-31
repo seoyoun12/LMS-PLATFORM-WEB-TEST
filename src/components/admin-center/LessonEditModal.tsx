@@ -286,14 +286,15 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
               )}
             />
           </FormControl>
-          <Button
-            variant="text"
+
+          <DeleteBtn
+            variant="contained"
             color="warning"
             onClick={() => onRemoveLesson(lesson.seq)}
             size="small"
           >
             삭제
-          </Button>
+          </DeleteBtn>
         </FormContainer>
       </Box>
     </Modal>
@@ -333,3 +334,11 @@ const InputContainer = styled.div`
     }
   }
 `;
+
+const SubmitBtn = styled(Button)`
+  /* margin: 30px 30px 30px 0; */
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
+
+const DeleteBtn = styled(Button)``;

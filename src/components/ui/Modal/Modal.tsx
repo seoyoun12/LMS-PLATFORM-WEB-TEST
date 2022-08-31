@@ -88,6 +88,7 @@ export function Modal({
                   onClick={onSubmit}
                   disabled={actionDisabled}
                   loading={actionLoading || false}
+                  variant="contained"
                 >
                   {action}
                 </LoadingButton>

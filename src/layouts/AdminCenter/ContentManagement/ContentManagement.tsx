@@ -96,7 +96,6 @@ export function ContentManagement() {
                 {name}
               </TableCell>
             ))}
-            <TableCell>{}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

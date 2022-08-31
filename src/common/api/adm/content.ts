@@ -68,7 +68,7 @@ export async function contentUpload(contentInput: ContentInput) {
 
 // 20220809 contentDetail
 export function contentDetail(seq: number | null) {
-  const { data, error, mutate } = useSWR<SWRResponse<Content>>(seq ? `/course/adm/${seq}` : null, GET);
+  const { data, error, mutate } = useSWR<SWRResponse<Content>>(seq ? `/content/adm/${seq}` : null, GET);
   return {
     data: data?.data,
     error,
@@ -81,10 +81,10 @@ export async function contentModify({ seq, contentInput }: {
   seq: number,
   contentInput: ContentInput
 }) {
-  return await PUT(`/course/adm/${seq}`, contentInput);
+  return await PUT(`/content/adm/${seq}`, contentInput);
 }
 
 // 20220809 contentRemove
 export async function contentRemove(seq: number) {
-  return await DELETE(`/course/adm/${seq}`);
+  return await DELETE(`/content/adm/${seq}`);
 }

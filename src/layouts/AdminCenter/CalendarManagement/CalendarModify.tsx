@@ -331,21 +331,22 @@ export function CalendarModify() {
             />
           </FormControl>
         </Box>
-
-        <SubmitBtn type="submit" variant="contained" disabled={loading}>
-          {loading ? <Spinner fit={true} /> : '수정'}
-        </SubmitBtn>
-        <DeleteBtn
-          color="warning"
-          variant="contained"
-          onClick={() => onClickRemoveCalender(watch().courseClassSeq)}
-          disabled={loading}
-        >
-          {loading ? <Spinner fit={true} /> : '삭제'}
-        </DeleteBtn>
-        <Typography>
+        <Typography sx={{ marginTop: '20px', color: 'red' }}>
           날짜 입력 방식은 YYYY-MM-DD로 해야합니다. ex{')'} 2022-07-22
         </Typography>
+        <ButtonBox>
+          <SubmitBtn type="submit" variant="contained" disabled={loading}>
+            {loading ? <Spinner fit={true} /> : '수정'}
+          </SubmitBtn>
+          <DeleteBtn
+            color="warning"
+            variant="contained"
+            onClick={() => onClickRemoveCalender(watch().courseClassSeq)}
+            disabled={loading}
+          >
+            {loading ? <Spinner fit={true} /> : '삭제'}
+          </DeleteBtn>
+        </ButtonBox>
       </Box>
       <CourseRegiModal
         open={openModal}
@@ -376,12 +377,17 @@ const ConnectButton = styled(Button)`
   margin-right: 12px;
 `;
 
+const ButtonBox = styled(Box)`
+  margin: 120px 0 20px 0;
+`;
+
 const SubmitBtn = styled(Button)`
-  /* margin: 30px 30px 30px 0; */
-  margin-top: 10px;
-  margin-bottom: 10px;
+  width: 15%;
+  float: right;
+  margin: 0 0 0 5px;
 `;
 
 const DeleteBtn = styled(Button)`
-  /* background-color: #dd0000; */
+  width: 15%;
+  float: right;
 `;

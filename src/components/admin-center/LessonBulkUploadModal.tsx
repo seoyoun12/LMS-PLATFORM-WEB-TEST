@@ -85,7 +85,8 @@ export function LessonBulkUploadModal({
       .filter(data => !!data)
       .map(data => {
         const totalTime = data.min * 60 + data.sec;
-        const completeTime = Math.round(totalTime * 0.9);
+        // const completeTime = Math.round(totalTime * 0.9);
+        const completeTime = Math.round(totalTime * 1);
         return {
           contentType,
           totalTime,

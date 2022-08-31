@@ -33,6 +33,7 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import router from 'next/router';
 import { Spinner } from '@components/ui';
 import { Label } from '@mui/icons-material';
+import { flexbox } from '@mui/system';
 
 interface Props {
   mode?: 'upload' | 'modify';
@@ -212,7 +213,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
           ref={editorRef}
         />
 
-        <FormLabel sx={{ mt: 2, mb: 1 }}>파일업로드</FormLabel>
+        <FormLabel sx={{ mt: 2, mb: 1 }}>첨부파일업로드</FormLabel>
         {/* <div className="board-uploader" style={{ border: '1px solid black' }}> */}
         <div className="board-uploader">
           <FileUploader
@@ -284,28 +285,29 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
             )}
           />
         </FormControl>
-
-        <SubmitBtn variant="contained" type="submit" disabled={loading}>
-          {loading ? (
-            <Spinner fit={true} />
-          ) : mode === 'upload' ? (
-            '업로드하기'
+        <ButtonBox>
+          <SubmitBtn variant="contained" type="submit" disabled={loading}>
+            {loading ? (
+              <Spinner fit={true} />
+            ) : mode === 'upload' ? (
+              '업로드하기'
+            ) : (
+              '수정하기'
+            )}
+          </SubmitBtn>
+          {mode === 'upload' ? (
+            ''
           ) : (
-            '수정하기'
+            <DeleteBtn
+              color="warning"
+              variant="contained"
+              onClick={() => onClickRemoveCategory(category.seq)}
+              disabled={loading}
+            >
+              {loading ? <Spinner fit={true} /> : '삭제'}
+            </DeleteBtn>
           )}
-        </SubmitBtn>
-        {mode === 'upload' ? (
-          ''
-        ) : (
-          <DeleteBtn
-            color="warning"
-            variant="contained"
-            onClick={() => onClickRemoveCategory(category.seq)}
-            disabled={loading}
-          >
-            {loading ? <Spinner fit={true} /> : '삭제'}
-          </DeleteBtn>
-        )}
+        </ButtonBox>
       </Box>
     </Container>
   );
@@ -335,14 +337,19 @@ const InputContainer = styled.div`
   }
 `;
 
+const ButtonBox = styled(Box)`
+  margin: 20px 0 20px 0;
+`;
+
 const SubmitBtn = styled(Button)`
-  /* margin: 30px 30px 30px 0; */
-  margin-top: 10px;
-  margin-bottom: 10px;
+  width: 15%;
+  float: right;
+  margin: 0 0 0 5px;
 `;
 
 const DeleteBtn = styled(Button)`
-  /* background-color: #dd0000; */
+  width: 15%;
+  float: right;
 `;
 
 const textField = css`

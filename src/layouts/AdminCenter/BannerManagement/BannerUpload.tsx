@@ -173,7 +173,7 @@ export function BannerUpload() {
           />
         </FormControl>
         <FileUploader register={register} regName="files" onFileChange={handleFileChange}>
-          <FileUploader.Label>파일업로드</FileUploader.Label>
+          <FileUploader.Label>배너 이미지 업로드</FileUploader.Label>
         </FileUploader>
         {fileName ? (
           <Chip
@@ -183,9 +183,11 @@ export function BannerUpload() {
             onDelete={handleDeleteFile}
           />
         ) : null}
-        <Button variant="contained" type="submit">
-          {loading ? <Spinner fit={true} /> : '등록'}
-        </Button>
+        <ButtonBox>
+          <SubmitBtn variant="contained" type="submit">
+            {loading ? <Spinner fit={true} /> : '등록'}
+          </SubmitBtn>
+        </ButtonBox>
       </Box>
     </BannnerUploadContainer>
   );
@@ -199,4 +201,12 @@ const BannnerUploadContainer = styled(Box)`
     flex-direction: column;
     gap: 1rem;
   }
+`;
+const SubmitBtn = styled(Button)`
+  width: 15%;
+  float: right;
+  margin: 0 0 0 5px;
+`;
+const ButtonBox = styled(Box)`
+  margin: 120px 0 20px 0;
 `;

@@ -1,2 +1,2 @@
 export { Tabs } from './Tabs';
-export {LessonTabs} from './LessonTabs'
+export { LessonTabMenu } from './LessonTabMenu'

@@ -116,6 +116,7 @@ export function MobileNav() {
   const onClickLogout = () => {
     logout();
     handleClose();
+    router.push('/');
   };
 
   const handleChangeCategory = (name: string) => {
@@ -129,6 +130,15 @@ export function MobileNav() {
     regCategory: regCategoryType;
   }) => {
     const isEqual = userInfoData.regCategory.includes(item.regCategory);
+
+    console.log('머임', isEqual, item, userInfoData, isLoginStatus);
+
+    //로그인안되었거나 유저데이터가 앙 없거나 이상할때
+    if (!isLoginStatus || userInfoData.regCategory === '' || !userInfoData.regCategory) {
+      logout();
+      localStorage.setItem('site_course_type', item.type);
+      return router.push(item.href);
+    }
 
     if (isLoginStatus && !isEqual) {
       const isConfirm = window.confirm('정말로 이동하시겠습니까? 로그아웃됩니다.');
@@ -182,14 +192,14 @@ export function MobileNav() {
             <SiteMapWrap>
               {siteMapMobileList.map(item => (
                 <SiteMapItem key={item.href}>
-                  <Link href={item.href} onClick={() => onClickSitemap(item)}>
+                  <Box onClick={() => onClickSitemap(item)}>
                     <SiteMapIconWrap>{item.icon}</SiteMapIconWrap>
                     <SiteMapName>
                       {item.name.split(' ').map(item => (
                         <Box lineHeight={1.2}>{item}</Box>
                       ))}
                     </SiteMapName>
-                  </Link>
+                  </Box>
                 </SiteMapItem>
               ))}
             </SiteMapWrap>

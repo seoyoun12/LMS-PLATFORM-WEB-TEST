@@ -33,7 +33,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     } else {
       setUserPageType(pageRegType.TYPE_TRANS_EDU);
     }
-  }, [router]);
+  }, [router, setUserPageType]);
 
   //추후 훅스로 이동
   useLayoutEffect(() => {
@@ -108,7 +108,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         snackbar({ variant: 'error', message: e.data.message });
       }
     })();
-  }, [router]);
+  }, [router, setUserInfo, snackbar]);
 
   useEffect(() => {
     const isTraffic = router.route.includes('/traffic');

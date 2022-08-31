@@ -192,8 +192,13 @@ const MainPage: NextPage = () => {
               <NoticeTitleTypography>{`충남교통연수원 알림판`}</NoticeTitleTypography>
             </NoticeTitle>
             <NoticeContent>
-              <NoticeContentTypography fontWeight="bold">
-                {`운수종사자의 경우 첫번째 "운수종사자교육"\n저상버스운전자의 경우 두번째 "저상버스운전자교육"\n도민교통안전교육자의 경우 세번째 "도민교통안전교육"을\n이용해주시기 바랍니다.`}
+              <NoticeContentTypography>
+                운수종사자의 경우 첫번째 "운수종사자교육"{' '}
+                <span style={{ color: '#236cef', fontSize: '6px' }}>●</span>{' '}
+                저상버스운전자의 경우 두번째 "저상버스운전자교육"{' '}
+                <span style={{ color: '#236cef', fontSize: '6px' }}>●</span>{' '}
+                도민교통안전교육자의 경우 세번째 "도민교통안전교육"을 이용해주시기
+                바랍니다.
               </NoticeContentTypography>
             </NoticeContent>
           </NoticeContainer>
@@ -300,7 +305,7 @@ const WrapMainContainer = styled.div`
 const MainContainer = styled(Box)`
   height: 80%;
   /* min-height: 719px; */
-  padding-top: 150px;
+  padding-top: 110px;
 `;
 const ContentBox = styled(Box)`
   width: 80%;
@@ -320,7 +325,7 @@ const SubTitle = styled(Box)`
   padding: 0.5rem 2.5rem;
   width: fit-content;
   margin: auto;
-  margin-top: 8px;
+  margin-top: 36px;
   /* color: white; */
   background: #f7f7f7;
   border: 1px solid #236cef;
@@ -336,7 +341,7 @@ const NoticeContainer = styled(Box)`
   margin: auto;
   margin-top: 40px;
   border-radius: 1rem;
-  border: 2px solid #d7d7d7;
+  /* border: 2px solid #d7d7d7; */
   // 알림판 중앙 정렬
 `;
 
@@ -368,7 +373,10 @@ const NoticeContent = styled(Box)`
 `;
 // line-break
 const NoticeContentTypography = styled(Typography)`
-  white-space: pre-wrap;
+  padding-top: 30px;
+  word-break: keep-all;
+  font-weight: bold;
+  /* white-space: pre-wrap; */
 `;
 
 // Category Grid
@@ -388,7 +396,7 @@ const MainCategoryCard = styled(Container)`
   justify-content: center;
   align-items: center;
   margin: 0;
-  margin-top: 40px;
+  margin-top: 20px;
   box-shadow: 2px 2px 12px 3px rgba(0, 0, 0, 0.2);
   z-index: 11;
 `;

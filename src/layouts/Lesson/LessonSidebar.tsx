@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { Box } from "@mui/system";
 import { headerHeight } from "@styles/variables";
-import { LessonTabs } from "@components/ui/Tabs";
-import { tabsConfig, TabsConfig } from "./Lesson.types";
+import { LessonTabMenu } from "@components/ui/Tabs";
+import { LESSON_TABS, LessonTabs } from "./Lesson.types";
 import { CourseModuleFindResponseDto, CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
 import { grey } from "@mui/material/colors";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Typography } from "@mui/material";
@@ -11,7 +11,7 @@ import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { useRouter } from "next/router";
-import { LESSON_CONTENT_TYPES } from "./Lesson";
+import { LESSON_CONTENT_TYPES } from "./Lesson.types";
 import LessonSidebarModule from "./LessonSidebarModule";
 
 interface Props {
@@ -28,7 +28,7 @@ export default function LessonSidebar(props: Props) {
 
   // 스테이트.
 
-  const [tabMenu, setTabMenu] = useState<TabsConfig["value"]>(tabsConfig[0].value);
+  const [tabMenu, setTabMenu] = useState<LessonTabs["value"]>(LESSON_TABS[0].value);
   const [switchURL, setSwitchURL] = useState<string | null>(null);
 
   // 렌더링.
@@ -36,7 +36,7 @@ export default function LessonSidebar(props: Props) {
   return (
     <StickySideBar>
       <TabMenu
-        tabsConfig={tabsConfig as unknown as Parameters<typeof TabMenu>[0]["tabsConfig"]}
+        tabsConfig={LESSON_TABS as unknown as Parameters<typeof TabMenu>[0]["tabsConfig"]}
         showBorderBottom={false}
         rerender={false}
         changeMenu={tabMenu}
@@ -51,21 +51,21 @@ export default function LessonSidebar(props: Props) {
               key={lesson.seq}
               onClick={() => setSwitchURL(`/course/${props.courseUserSeq}/${LESSON_CONTENT_TYPES[0].toLocaleLowerCase()}/${lesson.seq}`)}
             >
-              <Box>
-                <LessonTitle variant="body1">{lesson.lessonNm}</LessonTitle>
+              <LessonContent>
+                <LessonTitle variant="body1" fontSize="inherit">{lesson.lessonNm}</LessonTitle>
                 <LessonInfo>
-                  <PlayCircleOutlinedIcon fontSize="small" htmlColor={grey[500]} />
-                  <Typography className="typo" variant="body2" color={grey[500]}>
+                  <PlayCircleOutlinedIcon htmlColor={grey[500]} fontSize="inherit"/>
+                  <Typography className="typo" variant="body2" color={grey[500]} fontSize="inherit">
                     {Math.floor(lesson.totalTime / 60)}:{lesson.totalTime % 60}
                   </Typography>
                 </LessonInfo>
-              </Box>
+              </LessonContent>
               <LessonCheck>
-                {props.lessonSeq === lesson.seq && <PlayCircleIcon sx={{ color: "text.secondary" }} style={{ marginRight: 8 }} />}
-                <Typography className="typo" variant="body2" color={grey[500]} style={{ marginRight: 8 }}>
+                {props.lessonSeq === lesson.seq && <PlayCircleIcon sx={{ color: "text.secondary" }} style={{ marginRight: 8 }} fontSize="inherit"/>}
+                <Typography className="typo" variant="body2" color={grey[500]} style={{ marginRight: 8 }} fontSize="inherit">
                   {lesson.completedYn === "Y" ? "학습 완료" : "미학습"}
                 </Typography>
-                <CheckCircleIcon sx={{ color: lesson.completedYn === "Y" ? "#256aef" : "text.secondary" }} />
+                <CheckCircleIcon sx={{ color: lesson.completedYn === "Y" ? "#256aef" : "text.secondary" }} fontSize="inherit"/>
               </LessonCheck>
             </TabItem>
           ))}
@@ -112,20 +112,32 @@ export default function LessonSidebar(props: Props) {
 }
 
 const StickySideBar = styled.aside`
+  display: flex;
   position: sticky;
   top: ${headerHeight};
-  margin-left: 40px;
-  display: flex;
   flex-grow: 1;
   flex-direction: column;
+  margin-left: 40px;
+  min-width: 25rem;
   background-color: #fff;
   z-index: 1;
   overflow: hidden;
+
+  @media (max-width: 1024px) {
+    margin-left: unset;
+    margin-top: 1rem;
+    min-width: unset;
+    font-size: 0.8rem;
+  }
 `;
 
-const TabMenu = styled(LessonTabs)`
+const TabMenu = styled(LessonTabMenu)`
   padding-bottom: 30px;
   font-weight: bold;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
 `;
 
 const Tab = styled(Box)`
@@ -147,14 +159,25 @@ const Tab = styled(Box)`
 `;
 
 const TabItem = styled.div`
-  padding: 12px;
-  min-height: 36px;
+  padding: 0.75rem;
+  min-height: 2.5rem;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
-`
+`;
+
+const LessonContent = styled(Box)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 const LessonTitle = styled(Typography)`
+  margin-right: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   .active & {
     font-weight: 700;
   }
@@ -173,6 +196,7 @@ const LessonInfo = styled.div`
 const LessonCheck = styled(Box)`
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 `;
 
 const LessonItemContainer = styled(Box)`

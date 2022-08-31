@@ -17,7 +17,7 @@ interface Props {
   changeMenu: string;
 }
 
-export function LessonTabs({ tabsConfig, showBorderBottom = true, rerender = true, onChangeMenu, changeMenu, ...props }: Props) {
+export function LessonTabMenu({ tabsConfig, showBorderBottom = true, rerender = true, onChangeMenu, changeMenu, ...props }: Props) {
   const handleChange = useCallback(
     (event: SyntheticEvent, newValue: string) => {
       onChangeMenu(newValue);

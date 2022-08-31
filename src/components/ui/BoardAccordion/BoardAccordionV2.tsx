@@ -15,6 +15,7 @@ import { CategoryBoard } from '@common/api/categoryBoard';
 import { downloadFile } from '@common/api/file';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { S3Files } from 'types/file';
+import { TuiViewer } from '@components/common/TuiEditor';
 
 interface BoardAccordionAccordionList {
   seq: number;
@@ -86,19 +87,23 @@ export function BoardAccordionV2({
                   }}
                 >
                   <Box width="10%" />
-                  <BoardContent>{content}</BoardContent>
+                  <BoardContent>
+                    <TuiViewer initialValue={content} />
+                  </BoardContent>
 
                   <Box width="20%" />
                 </BoardContentBox>
                 {/* // ))} */}
                 <Box sx={{ margin: '10px 120px' }}>
-                  <Box display="flex" alignItems="center" mt={4}>
-                    {' '}
-                    <FileDownloadIcon />
-                    첨부파일
-                  </Box>
+                  {s3Files.length > 0 && (
+                    <Box display="flex" alignItems="center" mt={4}>
+                      {' '}
+                      <FileDownloadIcon />
+                      첨부파일
+                    </Box>
+                  )}
                   <Box
-                    sx={{ cursor: 'pointer' }}
+                    sx={{ cursor: 'pointer', color: '#236cef' }}
                     onClick={async () => {
                       try {
                         const blobData = await downloadFile(s3Files[0].seq);

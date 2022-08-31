@@ -1,15 +1,13 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Box, Container, Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { Spinner } from "@components/ui";
 import { CourseDetailClientResponseDto, CourseModuleFindResponseDto, SurveyResponseDto } from "@common/api/Api";
 import ApiClient from "@common/api/ApiClient";
 import LessonSidebar from "./LessonSidebar";
 import LessonContentVideo from "./LessonContentVideo";
 import LessonContentSurvey from "./LessonContentSurvey";
-
-export const LESSON_CONTENT_TYPES = Object.freeze(["LESSON", "SURVEY"] as const);
-export type LessonContentType = typeof LESSON_CONTENT_TYPES[number];
+import { LessonContentType } from "./Lesson.types";
 
 export interface LessonProps {
   courseUserSeq: number;
@@ -76,13 +74,14 @@ export default function Lesson(props: LessonProps) {
 
   if (course === null) {
 
-    return loading ?
-      <Spinner /> :
-      (
-        <CourseErrorContainer>
+    return (
+      <LessonContentEmptyWrapper>
+        {loading ?
+          <Spinner fit/> :
           <Typography>강의를 찾을 수 없습니다.</Typography>
-        </CourseErrorContainer>
-      );
+        }
+      </LessonContentEmptyWrapper>
+    );
 
   }
 
@@ -98,78 +97,42 @@ export default function Lesson(props: LessonProps) {
         const lesson = lessonIndex >= 0 ? course.lessons[lessonIndex] : null;
         const courseProgress = lesson && course.courseProgressResponseDtoList.find((v) => v.lessonSeq === lesson.seq) || null;
 
-        if (loading) {
-
-          Content = (
-            <LessonContentEmptyContainer>
-              <Spinner />
-            </LessonContentEmptyContainer>
-          );
-  
-        } else if (lesson === null || courseProgress === null) {
-
-          Content = (
-            <CourseErrorContainer>
-              <Typography>강좌 찾을 수 없습니다.</Typography>
-            </CourseErrorContainer>
-          );
-
-        } else {
-
-          Content = (
-            <LessonContentVideo
-              courseUserSeq={course.courseUserSeq}
-              courseProgress={courseProgress}
-              lesson={lesson}
-            />
-          );
-
-        }
+        Content = (
+          <LessonContentVideo
+            loading={loading}
+            courseUserSeq={course.courseUserSeq}
+            courseProgress={courseProgress}
+            lesson={lesson}
+          />
+        );
 
         break;
 
     }
     case "SURVEY": {
-
-      if (loading) {
-
-        Content = (
-          <LessonContentEmptyContainer>
-            <Spinner />
-          </LessonContentEmptyContainer>
-        );
-
-      } else if (moduleSurvey === null || courseModule === null) {
-
-        Content = (
-          <LessonContentEmptyContainer>
-            <Typography>설문을 찾을 수 없습니다.</Typography>
-          </LessonContentEmptyContainer>
-        );
-
-      } else {
-
-        Content = (
-          <LessonContentSurvey
-            courseUserSeq={course.courseUserSeq}
-            courseModule={courseModule}
-            survey={moduleSurvey}
-          />
-        );
-
-      }
-
+  
+       Content = (
+         <LessonContentSurvey
+           loading={loading}
+           courseUserSeq={course.courseUserSeq}
+           courseModule={courseModule}
+           survey={moduleSurvey}
+         />
+       );
+  
       break;
-
+  
     }
-
+  
   }
 
   // 렌더링.
 
   return (
     <LessonContainer maxWidth="xl">
-      {Content}
+      <LessonContentWrapper>
+        {Content}
+      </LessonContentWrapper>
       <LessonSidebar
         courseUserSeq={course.courseUserSeq}
         courseProgresses={course.courseProgressResponseDtoList}
@@ -181,29 +144,31 @@ export default function Lesson(props: LessonProps) {
   );
 }
 
-const CourseErrorContainer = styled(Box)`
-  display: flex;
-  min-height: 50vh;
-  align-items : center;
-  justify-content: center;
-`;
-
-const LessonContentEmptyContainer = styled(Box)`
-  display: flex;
-  flex-grow: 1;
-  min-height: 50vh;
-  width: 100%;
-  max-width: 1000px;
-  align-items : center;
-  justify-content: center;
-`;
-
 const LessonContainer = styled(Container)`
   margin: 0 auto;
   margin-top: 2rem;
   margin-bottom: 4rem;
+  padding: 0 1rem;
   display: flex;
   flex: 1 1 auto;
   position: relative;
   align-items: stretch;
+
+  @media (max-width: 1024px) {
+    margin-top: unset;
+    flex-direction: column;
+  }
+`;
+
+const LessonContentWrapper = styled.div`
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1000px;
+`;
+
+const LessonContentEmptyWrapper = styled(LessonContentWrapper)`
+  display: flex;
+  min-height: 50vh;
+  align-items : center;
+  justify-content: center;
 `;

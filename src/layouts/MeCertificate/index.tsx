@@ -125,7 +125,7 @@ const MeCertificate: NextPage = () => {
       <MeCertificateHeaderContainer>
         <MeCertificateHeaderTitle>증명서 발급</MeCertificateHeaderTitle>
         <MeCertificateHeaderSubtitle>
-          학습중인 과정의 수료확인 및 증명서 발급을 받을 수 있습니다!
+          수료확인 및 증명서 발급을 받을 수 있습니다!
         </MeCertificateHeaderSubtitle>
         <BackgroundImage />
       </MeCertificateHeaderContainer>

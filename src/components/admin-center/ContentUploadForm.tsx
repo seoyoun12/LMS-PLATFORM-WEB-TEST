@@ -6,7 +6,8 @@ import {
   FormControlLabel,
   FormHelperText,
   FormLabel,
-  MenuItem, Radio,
+  MenuItem,
+  Radio,
   RadioGroup,
   Select,
 } from '@mui/material';
@@ -20,6 +21,10 @@ import { Content, ContentInput, ContentType } from '@common/api/content';
 import * as React from 'react';
 import { CustomInputLabel } from '@components/ui/InputLabel';
 import { Spinner } from '@components/ui';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { useRouter } from 'next/router';
+import { useDialog } from '@hooks/useDialog';
+import { contentRemove } from '@common/api/adm/content';
 
 // const contentTypeOptions = [
 //   { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
@@ -34,49 +39,74 @@ const defaultValues = {
   // contentName: ''
 };
 
-export function ContentUploadForm(
-  {
-    mode = 'upload',
-    content,
-    onHandleSubmit,
+export function ContentUploadForm({
+  mode = 'upload',
+  content,
+  onHandleSubmit,
+}: {
+  mode?: 'upload' | 'modify';
+  content?: Content;
+  onHandleSubmit: ({
+    contentInput,
+    contentSeq,
+    setLoading,
   }: {
-    mode?: 'upload' | 'modify',
-    content?: Content,
-    onHandleSubmit: ({ contentInput, contentSeq, setLoading }: {
-      contentInput: ContentInput,
-      setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-      contentSeq?: number
-    }) => void,
-  }
-) {
-  const [loading , setLoading ] = React.useState(false)
+    contentInput: ContentInput;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    contentSeq?: number;
+  }) => void;
+}) {
+  const [loading, setLoading] = React.useState(false);
+  const snackbar = useSnackbar();
+  const dialog = useDialog();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    reset
+    reset,
   } = useForm<ContentInput>({ defaultValues });
+
+  //
+
+  // console.log('contentInput : ', contentInput);
+  // console.log('contentSeq : ', contentSeq);
+  console.log('content : ', content);
 
   useEffect(() => {
     if (mode === 'modify' && !!content) {
-      reset({...content});
+      reset({ ...content });
     }
-  }, [ mode, content, reset ]);
+  }, [mode, content, reset]);
+
+  const onRemoveContent = async (seq: number) => {
+    try {
+      const dialogConfirmed = await dialog({
+        title: '콘텐츠 삭제하기',
+        description: '정말로 삭제하시겠습니까?',
+        confirmText: '삭제하기',
+        cancelText: '취소',
+      });
+      if (dialogConfirmed) {
+        await contentRemove(content.seq);
+        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
+        router.push(`/admin-center/content`);
+
+        // await mutate([ `/content/adm`, { params: { page } } ]);
+      }
+    } catch (e: any) {
+      snackbar({ variant: 'error', message: e.data.message });
+    }
+  };
 
   const onSubmit: SubmitHandler<ContentInput> = (contentInput: ContentInput) => {
-    onHandleSubmit({ contentInput: contentInput, contentSeq: content?.seq , setLoading });
+    onHandleSubmit({ contentInput: contentInput, contentSeq: content?.seq, setLoading });
   };
 
   return (
     <Container className={styles.globalContainer}>
-      <Box
-        className="form"
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-
-
+      <Box className="form" component="form" onSubmit={handleSubmit(onSubmit)}>
         {/* <FormControl className="form-control" disabled> */}
         {/* <FormControl className="form-control">
           <CustomInputLabel size="small">콘텐츠 타입</CustomInputLabel>
@@ -99,7 +129,6 @@ export function ContentUploadForm(
           <ErrorMessage errors={errors} name="contentType" as={<FormHelperText error />} />
         </FormControl> */}
 
-
         <FormControl className="form-control">
           <TextField
             {...register('contentName', { required: '콘텐츠명을 입력해주세요.' })}
@@ -107,7 +136,11 @@ export function ContentUploadForm(
             label="콘텐츠명"
             variant="outlined"
           />
-          <ErrorMessage errors={errors} name="contentName" as={<FormHelperText error />} />
+          <ErrorMessage
+            errors={errors}
+            name="contentName"
+            as={<FormHelperText error />}
+          />
         </FormControl>
 
         <FormControl className="form-control">
@@ -132,16 +165,29 @@ export function ContentUploadForm(
             )}
           />
         </FormControl>
-
-        <SubmitButton
-          variant="contained"
-          type="submit"
-          disabled={loading}
-        >
-          {loading ? <Spinner fit={true} /> : 
-          mode === 'upload' ? '업로드하기' : '수정하기'
-          }
-        </SubmitButton>
+        <ButtonBox>
+          <SubmitBtn variant="contained" type="submit" disabled={loading}>
+            {loading ? (
+              <Spinner fit={true} />
+            ) : mode === 'upload' ? (
+              '업로드하기'
+            ) : (
+              '수정하기'
+            )}
+          </SubmitBtn>
+          {mode === 'upload' ? (
+            ''
+          ) : (
+            <DeleteBtn
+              color="warning"
+              variant="contained"
+              onClick={() => onRemoveContent(content.seq)}
+              disabled={loading}
+            >
+              {loading ? <Spinner fit={true} /> : '삭제'}
+            </DeleteBtn>
+          )}
+        </ButtonBox>
       </Box>
     </Container>
   );
@@ -160,6 +206,17 @@ const Container = styled.div`
   }
 `;
 
-const SubmitButton = styled(Button)`
-  margin: 30px 30px 30px 0;
+const ButtonBox = styled(Box)`
+  margin: 120px 0 20px 0;
+`;
+
+const SubmitBtn = styled(Button)`
+  width: 15%;
+  float: right;
+  margin: 0 0 0 5px;
+`;
+
+const DeleteBtn = styled(Button)`
+  width: 15%;
+  float: right;
 `;

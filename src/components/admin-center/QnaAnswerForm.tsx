@@ -8,6 +8,7 @@ import {
   Chip,
   Container,
   FormControl,
+  FormLabel,
   styled,
   TableBody,
   TableCell,
@@ -129,35 +130,39 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
             )}
           </div>
         ) : (
-          <div className="board-uploader">
-            <FileUploader
-              register={register}
-              regName="files"
-              onFileChange={handleFileChange}
-            >
-              {}
-            </FileUploader>
-            {fileName ? (
-              <Chip
-                sx={{ mt: '8px' }}
-                icon={<OndemandVideoOutlinedIcon />}
-                label={fileName}
-                onDelete={handleDeleteFile}
-              />
-            ) : null}
-          </div>
+          <>
+            <FormLabel sx={{ mt: 2, mb: 1 }}>첨부파일업로드</FormLabel>
+            <div className="board-uploader">
+              <FileUploader
+                register={register}
+                regName="files"
+                onFileChange={handleFileChange}
+              >
+                {}
+              </FileUploader>
+              {fileName ? (
+                <Chip
+                  sx={{ mt: '8px' }}
+                  icon={<OndemandVideoOutlinedIcon />}
+                  label={fileName}
+                  onDelete={handleDeleteFile}
+                />
+              ) : null}
+            </div>
+          </>
         )}
       </FormControl>
-
-      {data.qnaAnswer?.content ? (
-        <SubmitBtn variant="contained" href="/admin-center/qna">
-          돌아가기
-        </SubmitBtn>
-      ) : (
-        <SubmitBtn variant="contained" type="submit">
-          문의 답변 등록
-        </SubmitBtn>
-      )}
+      <ButtonBox>
+        {data.qnaAnswer?.content ? (
+          <SubmitBtn variant="contained" href="/admin-center/qna">
+            돌아가기
+          </SubmitBtn>
+        ) : (
+          <SubmitBtn variant="contained" type="submit">
+            문의 답변 등록
+          </SubmitBtn>
+        )}
+      </ButtonBox>
     </Box>
   );
 }
@@ -175,10 +180,15 @@ const boxStyles = css`
   flex-direction: column;
   margin-top: 8px;
 `;
-
-const SubmitBtn = styled(Button)`
-  margin: 30px 30px 30px 0;
+const ButtonBox = styled(Box)`
+  margin: 20px 0 20px 0;
 `;
+const SubmitBtn = styled(Button)`
+  width: 15%;
+  float: right;
+  margin: 0 0 0 5px;
+`;
+
 const pt20 = css`
   border: 1px solid #b4b4b4;
 `;

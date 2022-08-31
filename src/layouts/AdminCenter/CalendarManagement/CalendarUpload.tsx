@@ -300,12 +300,14 @@ export function CalendarUpload() {
           </FormControl>
         </Box>
 
-        <Button type="submit" variant="contained" disabled={loading}>
-          {loading ? <Spinner fit={true} /> : '등록'}
-        </Button>
         <Typography>
           날짜 입력 방식은 YYYY-MM-DD로 해야합니다. ex{')'} 2022-07-22
         </Typography>
+        <ButtonBox>
+          <SubmitBtn type="submit" variant="contained" disabled={loading}>
+            {loading ? <Spinner fit={true} /> : '등록'}
+          </SubmitBtn>
+        </ButtonBox>
       </Box>
       <CourseRegiModal
         open={openModal}
@@ -334,4 +336,13 @@ const SearchInput = styled(InputBase)`
 `;
 const ConnectButton = styled(Button)`
   margin-right: 12px;
+`;
+
+const SubmitBtn = styled(Button)`
+  width: 15%;
+  float: right;
+  margin: 0 0 0 5px;
+`;
+const ButtonBox = styled(Box)`
+  margin: 120px 0 20px 0;
 `;

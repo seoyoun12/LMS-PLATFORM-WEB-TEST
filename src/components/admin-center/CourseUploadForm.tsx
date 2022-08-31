@@ -363,28 +363,29 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             )}
           />
         </FormControl>
-
-        <SubmitBtn variant="contained" type="submit" disabled={loading}>
-          {loading ? (
-            <Spinner fit={true} />
-          ) : mode === 'upload' ? (
-            '업로드하기'
+        <ButtonBox>
+          <SubmitBtn variant="contained" type="submit" disabled={loading}>
+            {loading ? (
+              <Spinner fit={true} />
+            ) : mode === 'upload' ? (
+              '업로드하기'
+            ) : (
+              '수정하기'
+            )}
+          </SubmitBtn>
+          {mode === 'upload' ? (
+            ''
           ) : (
-            '수정하기'
+            <DeleteBtn
+              color="warning"
+              variant="contained"
+              onClick={() => onClickRemoveCourse(course.seq)}
+              disabled={loading}
+            >
+              {loading ? <Spinner fit={true} /> : '삭제'}
+            </DeleteBtn>
           )}
-        </SubmitBtn>
-        {mode === 'upload' ? (
-          ''
-        ) : (
-          <DeleteBtn
-            color="warning"
-            variant="contained"
-            onClick={() => onClickRemoveCourse(course.seq)}
-            disabled={loading}
-          >
-            {loading ? <Spinner fit={true} /> : '삭제'}
-          </DeleteBtn>
-        )}
+        </ButtonBox>
       </Box>
     </Container>
   );
@@ -416,20 +417,6 @@ const InputContainer = styled.div`
       margin-bottom: 8px;
     }
   }
-`;
-
-// const SubmitBtn = styled(Button)`
-//   margin: 30px 30px 30px 0;
-// `;
-
-const SubmitBtn = styled(Button)`
-  /* margin: 30px 30px 30px 0; */
-  margin-top: 10px;
-  margin-bottom: 10px;
-`;
-
-const DeleteBtn = styled(Button)`
-  /* background-color: #dd0000; */
 `;
 
 const textField = css`
@@ -469,3 +456,17 @@ function dialog(arg0: {
 function snackbar(arg0: { variant: string; message: string }) {
   throw new Error('Function not implemented.');
 }
+const ButtonBox = styled(Box)`
+  margin: 20px 0 20px 0;
+`;
+
+const SubmitBtn = styled(Button)`
+  width: 15%;
+  float: right;
+  margin: 0 0 0 5px;
+`;
+
+const DeleteBtn = styled(Button)`
+  width: 15%;
+  float: right;
+`;

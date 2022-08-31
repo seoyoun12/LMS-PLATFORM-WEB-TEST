@@ -227,7 +227,7 @@ export function BannerModify() {
           />
         </FormControl>
         <FileUploader register={register} regName="files" onFileChange={handleFileChange}>
-          <FileUploader.Label>파일업로드</FileUploader.Label>
+          <FileUploader.Label>배너 이미지 업로드</FileUploader.Label>
         </FileUploader>
         {fileName ? (
           <Chip
@@ -237,20 +237,22 @@ export function BannerModify() {
             onDelete={handleDeleteFile}
           />
         ) : null}
-        <SubmitBtn variant="contained" type="submit">
-          업로드
-        </SubmitBtn>
-        <DeleteBtn
-          color="warning"
-          variant="contained"
-          onClick={() => onRemoveBanner(Number(bannerId))}
-          disabled={loading}
-        >
-          {loading ? <Spinner fit={true} /> : '삭제'}
-        </DeleteBtn>
         <Typography fontWeight="bold" sx={{ color: 'red' }}>
           배너 수정시 상태 , 게시종료일자를 모두 업데이트 해야합니다!
         </Typography>
+        <ButtonBox>
+          <SubmitBtn variant="contained" type="submit">
+            업로드
+          </SubmitBtn>
+          <DeleteBtn
+            color="warning"
+            variant="contained"
+            onClick={() => onRemoveBanner(Number(bannerId))}
+            disabled={loading}
+          >
+            {loading ? <Spinner fit={true} /> : '삭제'}
+          </DeleteBtn>
+        </ButtonBox>
       </Box>
     </BannnerUploadContainer>
   );
@@ -265,12 +267,18 @@ const BannnerUploadContainer = styled(Box)`
     gap: 1rem;
   }
 `;
+
+const ButtonBox = styled(Box)`
+  margin: 80px 0 20px 0;
+`;
+
 const SubmitBtn = styled(Button)`
-  /* margin: 30px 30px 30px 0; */
-  margin-top: 10px;
-  margin-bottom: 10px;
+  width: 15%;
+  float: right;
+  margin: 0 0 0 5px;
 `;
 
 const DeleteBtn = styled(Button)`
-  /* background-color: #dd0000; */
+  width: 15%;
+  float: right;
 `;

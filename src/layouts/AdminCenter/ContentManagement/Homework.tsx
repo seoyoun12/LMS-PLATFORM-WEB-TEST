@@ -24,7 +24,7 @@ import { HomeworkModal } from '@components/admin-center/HomeworkModal';
 //////////// 2022 07 05 ///////////////////
 
 const headRows = [
-  { name: 'seq' },
+  { name: '번호' },
   { name: '강의명' },
   { name: '등록날짜' },
   { name: '수정일자' },

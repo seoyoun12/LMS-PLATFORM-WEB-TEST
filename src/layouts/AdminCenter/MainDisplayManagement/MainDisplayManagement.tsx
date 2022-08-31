@@ -1,20 +1,42 @@
-import { mainDisplayModify, mainDisplayModifyDto, MainDisplayType } from '@common/api/adm/mainDisplay';
+import {
+  mainDisplayModify,
+  mainDisplayModifyDto,
+  MainDisplayType,
+} from '@common/api/adm/mainDisplay';
 import { ProductStatus } from '@common/api/course';
 import { useMainDisplay } from '@common/api/mainDisplay';
 import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { Box, Button, Chip, Container, Switch, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Chip,
+  Container,
+  Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 
 const mainDisplayList = [
-  {title: '운수종사자' , type:MainDisplayType.EDUCATION_TRANSPORT_WORKER},
-  {title: '저상버스' , type:MainDisplayType.EDUCATION_GROUND_BUS_DRIVER},
-  {title: '도민교통안전교육' , type:MainDisplayType.EDUCATION_PROVINCIAL_TRAFFIC_SAFETY}
-]
+  { title: '운수종사자', type: MainDisplayType.EDUCATION_TRANSPORT_WORKER },
+  { title: '저상버스', type: MainDisplayType.EDUCATION_GROUND_BUS_DRIVER },
+  {
+    title: '도민교통안전교육',
+    type: MainDisplayType.EDUCATION_PROVINCIAL_TRAFFIC_SAFETY,
+  },
+];
 
-const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify' }[] = [
-  { name: 'seq', align: 'left' },
+const headRows: {
+  name: string;
+  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+}[] = [
+  { name: '번호', align: 'left' },
   { name: 'display타입', align: 'left' },
   { name: '상태', align: 'left' },
   { name: '변경', align: 'center' },
@@ -41,7 +63,12 @@ export function MainDisplayManagement() {
         status: checked ? ProductStatus.APPROVE : ProductStatus.REJECT,
       };
       await mainDisplayModify(data);
-      snackbar({ variant: 'success', message: `${dto.seq}번 변경완료 (${ProductStatus.APPROVE === dto.status ? '비활성화' : '활성화'})` });
+      snackbar({
+        variant: 'success',
+        message: `${dto.seq}번 변경완료 (${
+          ProductStatus.APPROVE === dto.status ? '비활성화' : '활성화'
+        })`,
+      });
       mutate();
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -76,7 +103,13 @@ export function MainDisplayManagement() {
           {data?.map(item => (
             <TableRow>
               <TableCell>{item.seq}</TableCell>
-              <TableCell>{mainDisplayList.filter((filter)=>filter.type === item.mainDisplayType)[0].title}</TableCell>
+              <TableCell>
+                {
+                  mainDisplayList.filter(
+                    filter => filter.type === item.mainDisplayType
+                  )[0].title
+                }
+              </TableCell>
               <TableCell>
                 <Chip
                   variant="outlined"

@@ -48,6 +48,11 @@ export default function Steb2() {
 
   useEffect(() => {
     if (enrollInfo) setValue('courseClassSeq', Number(enrollInfo.seq));
+
+    if (!enrollInfo || !enrollInfo.seq) {
+      window.alert('과정정보가 없거나 잘못된 과정입니다! 다시 시도해주세요.');
+      router.push(`/stebMove/steb1`);
+    }
   }, [enrollInfo]);
   useEffect(() => {
     setValue('registerType', RegisterType.TYPE_INDIVIDUAL);

@@ -62,7 +62,7 @@ export function CategoryBoardFaq() {
       ) : (
         <NotFound content="자주묻는질문이 존재하지 않습니다!" />
       )}
-      <Box ref={target} height="100px">
+      <Box ref={target} height="50px">
         {loading ? <div /> : ''}
       </Box>
     </Container>

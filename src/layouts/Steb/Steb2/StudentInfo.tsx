@@ -304,6 +304,8 @@ const TableLeftCell = styled(TableCell)`
   @media (max-width: 768px) {
     border-bottom: none;
     width: 100%;
+    padding: 12px 0;
+    padding-bottom: 2px;
   }
 `;
 const TableRightCell = styled(TableCell)`
@@ -312,6 +314,7 @@ const TableRightCell = styled(TableCell)`
   @media (max-width: 768px) {
     width: 100%;
     padding: 12px 0;
+    padding-top: 2px;
   }
 `;
 

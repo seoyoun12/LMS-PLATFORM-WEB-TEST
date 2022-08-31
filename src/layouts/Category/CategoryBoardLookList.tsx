@@ -27,7 +27,9 @@ export function CategoryBoardLookList() {
                 <TableSeqCell align="center">번호 </TableSeqCell>
                 <TableTitleCell align="center">제목</TableTitleCell>
                 <TableStatusCell align="center">답변상태 </TableStatusCell>
-                <TableCreatedCell align="center">{isTablet ? '' : '등록일'} </TableCreatedCell>
+                <TableCreatedCell align="center">
+                  {isTablet ? '' : '등록일'}{' '}
+                </TableCreatedCell>
               </TableRow>
             </TableHead>
           </Table>
@@ -60,7 +62,7 @@ export function CategoryBoardLookList() {
       ) : (
         <NotFound content="내 질문내역이 존재하지 않습니다" />
       )}
-      <Box ref={target} height="100px">
+      <Box ref={target} height="50px">
         {loading ? <Container /> : ''}
       </Box>
     </LkContainer>

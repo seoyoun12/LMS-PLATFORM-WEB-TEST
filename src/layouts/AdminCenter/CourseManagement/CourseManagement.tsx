@@ -18,20 +18,23 @@ import { Spinner } from '@components/ui';
 import { css } from '@emotion/css';
 import { courseAdmList, courseList, courseRemove } from '@common/api/course';
 
-const headRows: { name: string; align: 'inherit' | 'left' | 'center' | 'right' | 'justify'; }[] = [
-  { name: 'seq', align: 'left' },
-  { name: '과정명', align: 'right' },
-  { name: '생성 날짜', align: 'right' },
-  { name: '노출 여부', align: 'right' },
-  { name: '상태', align: 'right' },
+const headRows: {
+  name: string;
+  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+}[] = [
+  { name: '번호', align: 'left' },
+  { name: '과정명', align: 'center' },
+  { name: '생성 날짜', align: 'center' },
+  { name: '노출 여부', align: 'center' },
+  { name: '상태', align: 'center' },
 ];
 
 export function CourseManagement() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const router = useRouter();
-  const [ page, setPage ] = useState(0);
-  const [ seq, setSeq ] = useState<number | null>(null);
+  const [page, setPage] = useState(0);
+  const [seq, setSeq] = useState<number | null>(null);
 
   const { data, error, mutate } = courseAdmList({ page });
   // const { data, error, mutate } = courseList({ page });
@@ -40,42 +43,42 @@ export function CourseManagement() {
   useEffect(() => {
     const { page } = router.query;
     setPage(!isNaN(Number(page)) ? Number(page) : 0);
-  }, [ router.query ]);
+  }, [router.query]);
 
   const onChangePage = async (page: number) => {
     await router.push({
       pathname: router.pathname,
       query: {
-        page
-      }
+        page,
+      },
     });
   };
 
   // 수정
-  const onClickModifyCourse = async (seq : number) => {
+  const onClickModifyCourse = async (seq: number) => {
     setSeq(seq);
     router.push(`/admin-center/course/modify/${seq}`);
     mutate();
-  }
-
-  // 삭제
-  const onClickRemoveCourse = async (seq: number) => {
-    try {
-      const dialogConfirmed = await dialog({
-        title: '과정 삭제하기',
-        description: '정말로 삭제하시겠습니까?',
-        confirmText: '삭제하기',
-        cancelText: '취소'
-      });
-      if (dialogConfirmed) {
-        await courseRemove(seq);
-        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-        await mutate();
-      }
-    } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
-    }
   };
+
+  // // 삭제
+  // const onClickRemoveCourse = async (seq: number) => {
+  //   try {
+  //     const dialogConfirmed = await dialog({
+  //       title: '과정 삭제하기',
+  //       description: '정말로 삭제하시겠습니까?',
+  //       confirmText: '삭제하기',
+  //       cancelText: '취소',
+  //     });
+  //     if (dialogConfirmed) {
+  //       await courseRemove(seq);
+  //       snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
+  //       await mutate();
+  //     }
+  //   } catch (e: any) {
+  //     snackbar({ variant: 'error', message: e.data.message });
+  //   }
+  // };
 
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
@@ -86,9 +89,11 @@ export function CourseManagement() {
         variant="h5"
         sx={{
           mb: '12px',
-          fontWeight: 700
+          fontWeight: 700,
         }}
-      >과정 목록</Typography>
+      >
+        과정 목록
+      </Typography>
       <Table
         pagination={true}
         totalNum={data.totalElements}
@@ -98,19 +103,24 @@ export function CourseManagement() {
       >
         <TableHead>
           <TableRow>
-            {headRows.map(({ name, align }) =>
-              <TableCell className={spaceNoWrap} key={name} align={align}>{name}</TableCell>
-            )}
+            {headRows.map(({ name, align }) => (
+              <TableCell className={spaceNoWrap} key={name} align={align}>
+                {name}
+              </TableCell>
+            ))}
             <TableCell>{}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.content.map((course) => (
-            <TableRow key={course.seq} hover>
-              <TableCell>
-                {course.seq}
-              </TableCell>
-              <TableCell align="right">
+          {data.content.map(course => (
+            <TableRow
+              sx={{ cursor: 'pointer' }}
+              key={course.seq}
+              hover
+              onClick={() => onClickModifyCourse(course.seq)}
+            >
+              <TableCell align="left">{course.seq}</TableCell>
+              <TableCell align="left">
                 <Link
                   href={`/admin-center/course/modify/${course.seq}`}
                   underline="hover"
@@ -119,10 +129,10 @@ export function CourseManagement() {
                   {course.courseName}
                 </Link>
               </TableCell>
-              <TableCell align="right" className={spaceNoWrap}>
+              <TableCell align="center" className={spaceNoWrap}>
                 {dateFormat(course.createdDtime, 'isoDate')}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 <Chip
                   label={course.displayYn === YN.YES ? '보임' : '숨김'}
                   variant="outlined"
@@ -130,7 +140,7 @@ export function CourseManagement() {
                   color={course.displayYn === YN.YES ? 'secondary' : 'default'}
                 />
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 <Chip
                   label={course.status ? '정상' : '중지'}
                   variant="outlined"
@@ -139,17 +149,15 @@ export function CourseManagement() {
                 />
               </TableCell>
 
-              <TableCell align="right" className={spaceNoWrap}>
-                {/* <Link href={`/admin-center/course/modify/${course.seq}`}> */}
+              {/* <TableCell align="right" className={spaceNoWrap}>
                 <Button
-                  variant="text" 
-                  color="neutral" 
+                  variant="text"
+                  color="neutral"
                   size="small"
                   onClick={() => onClickModifyCourse(course.seq)}
                 >
                   상세
                 </Button>
-                {/* </Link> */}
                 <Button
                   variant="text"
                   color="warning"
@@ -158,7 +166,7 @@ export function CourseManagement() {
                 >
                   삭제
                 </Button>
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>
@@ -170,4 +178,3 @@ export function CourseManagement() {
 const spaceNoWrap = css`
   white-space: nowrap;
 `;
-

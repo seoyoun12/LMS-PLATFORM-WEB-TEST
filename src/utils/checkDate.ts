@@ -6,9 +6,9 @@ export const checkDatePeriod = (
   endDate: string,
   currentData: string
 ) => {
-  const getStartDateTime = new Date(dateFormat(startDate, 'yyyy-mm-dd')).getTime();
-  const getEndDateTime = new Date(dateFormat(endDate, 'yyyy-mm-dd')).getTime();
-  const getCurrentTime = new Date(dateFormat(currentData, 'yyyy-mm-dd')).getTime();
+  const getStartDateTime = new Date(dateFormat(startDate, 'yyyy/mm/dd')).getTime();
+  const getEndDateTime = new Date(dateFormat(endDate, 'yyyy/mm/dd')).getTime();
+  const getCurrentTime = new Date(dateFormat(currentData, 'yyyy/mm/dd')).getTime();
 
   let isBetweenPeriod = false;
 

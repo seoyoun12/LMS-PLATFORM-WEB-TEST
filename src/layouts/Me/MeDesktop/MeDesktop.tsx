@@ -19,6 +19,7 @@ import { useMyUser } from '@common/api/user';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { ContentCardV2 } from '@components/ui/ContentCard';
+import Image from 'next/image';
 
 const myInfoList = [
   // { label: "내 강의", value: "myCourse" },
@@ -42,7 +43,13 @@ export function MeDesktop() {
     <Container className={containerStyle}>
       <UserInfoSection>
         <Link href={`/me/edit`} className={s.myInfo}>
-          <UserProfile>M</UserProfile>
+          <UserProfile>
+            {user && user.s3Files.length > 0 ? (
+              <Image src={user.s3Files[0].path} layout="fill" />
+            ) : (
+              'M'
+            )}
+          </UserProfile>
           <div>
             <Typography fontSize={22}>{user.name}</Typography>
             <Typography>

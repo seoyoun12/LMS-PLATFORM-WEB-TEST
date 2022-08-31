@@ -24,7 +24,7 @@ const headRows: {
   name: string;
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
 }[] = [
-  { name: 'seq', align: 'left' },
+  { name: '번호', align: 'left' },
   { name: '과정명', align: 'right' },
   { name: '생성 날짜', align: 'right' },
   // { name: '노출 여부', align: 'right' },

@@ -103,14 +103,20 @@ export function CalendarBody({
 
         //이전 날짜일경우
         const prevSchedule =
-          new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0
+          new Date(item.requestEndDate.replaceAll('-', '/')).getTime() -
+            new Date().getTime() >=
+          0
             ? true
             : false;
 
         //이후 날짜일 경우.
         const isReceive =
-          new Date(item.requestEndDate).getTime() - new Date().getTime() >= 0
-            ? new Date(item.requestStartDate).getTime() - new Date().getTime() <= 0
+          new Date(item.requestEndDate.replaceAll('-', '/')).getTime() -
+            new Date().getTime() >=
+          0
+            ? new Date(item.requestStartDate.replaceAll('-', '/')).getTime() -
+                new Date().getTime() <=
+              0
               ? true
               : false
             : false;
@@ -167,8 +173,8 @@ export function CalendarBody({
       limitPeople: item.limitPeople,
       studyStartDate: item.studyStartDate,
       studyEndDate: item.studyEndDate,
-      start: dateFormat(item.start, 'yyyy-mm-dd'),
-      end: dateFormat(item.end, 'yyyy-mm-dd'),
+      start: dateFormat(item.start.replaceAll('-', '/'), 'yyyy-mm-dd'),
+      end: dateFormat(item.end.replaceAll('-', '/'), 'yyyy-mm-dd'),
     });
     setOpenModal(true);
   };
@@ -201,8 +207,13 @@ export function CalendarBody({
                     {child.courseCategoryType.ko} 교육
                   </Box>
                   <Box mt={1}>
-                    {dateFormat(child.requestStartDate, 'yyyy-mm-dd')} ~{' '}
-                    {dateFormat(child.requestEndDate, 'yyyy-mm-dd')} [
+                    {dateFormat(
+                      child.requestStartDate.replaceAll('-', '/'),
+                      'yyyy-mm-dd'
+                    )}{' '}
+                    ~{' '}
+                    {dateFormat(child.requestEndDate.replaceAll('-', '/'), 'yyyy-mm-dd')}{' '}
+                    [
                     {child.limitPeople === 0
                       ? '인원제한없음'
                       : `${child.currentJoin}/

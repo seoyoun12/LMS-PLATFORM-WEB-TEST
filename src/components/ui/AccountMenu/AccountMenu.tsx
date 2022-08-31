@@ -19,12 +19,15 @@ import { useRouter } from 'next/router';
 import EditIcon from '@mui/icons-material/Edit';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import FeedIcon from '@mui/icons-material/Feed';
+import { useMyUser } from '@common/api/user';
+import Image from 'next/image';
 
 export function AccountMenu() {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const setIsLoginState = useSetRecoilState(isLoginState);
   const open = Boolean(anchorEl);
+  const { user, error } = useMyUser();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -52,7 +55,13 @@ export function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+            <Avatar sx={{ width: 40, height: 40 }}>
+              {user && user.s3Files.length > 0 ? (
+                <Image src={user.s3Files[0].path} layout="fill" />
+              ) : (
+                'M'
+              )}
+            </Avatar>
           </IconButton>
         </Tooltip>
       </Box>

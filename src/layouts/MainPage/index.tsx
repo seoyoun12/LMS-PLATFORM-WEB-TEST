@@ -188,9 +188,9 @@ const MainPage: NextPage = () => {
             <Box color="#236cef">온라인교육센터</Box>
           </SubTitle>
           <NoticeContainer>
-            <NoticeTitle>
+            {/* <NoticeTitle>
               <NoticeTitleTypography>{`충남교통연수원 알림판`}</NoticeTitleTypography>
-            </NoticeTitle>
+            </NoticeTitle> */}
             <NoticeContent>
               <NoticeContentTypography>
                 운수종사자의 경우 첫번째 "운수종사자교육"{' '}
@@ -373,7 +373,7 @@ const NoticeContent = styled(Box)`
 `;
 // line-break
 const NoticeContentTypography = styled(Typography)`
-  padding-top: 30px;
+  /* padding-top: 30px; */
   word-break: keep-all;
   font-weight: bold;
   /* white-space: pre-wrap; */

@@ -10,7 +10,6 @@ export function LearningCourse() {
   const router = useRouter();
   const { user, error } = useMyUser();
   if (!user) return <Spinner />;
-  console.log('??');
   return (
     <LearningCourseWrap>
       {user.learningCourses.length <= 0 ? (

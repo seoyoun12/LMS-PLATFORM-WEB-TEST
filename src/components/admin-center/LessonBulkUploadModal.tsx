@@ -107,19 +107,18 @@ export function LessonBulkUploadModal({
       });
 
     try {
-      // if (lessonList) {
-      //   await removeLesson(lessonList[0].seq); // 모든 seq 조회 후 삭제 필요
-      // } else {
+      console.log('lessonList : ', lessonList);
+      if (lessonList.length > 0) {
+        await removeLesson(lessonList[0].seq); // 모든 seq 조회 후 삭제 필요
+      }
       const contentSeq = Number(query.contentSeq);
       await uploadLessons({ contentSeq, lessonInput });
       snackbar({ variant: 'success', message: '성공적으로 업로드 되었습니다.' });
       setLoading(false);
-      // }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
       setLoading(false);
     }
-
     handleClose(true);
   };
 

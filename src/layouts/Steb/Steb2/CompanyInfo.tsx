@@ -53,14 +53,12 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
       target: { value },
     } = e;
 
-    console.log('버스', value, watch().businessName);
     if (
       courseSubCategoryType.BUS === value ||
       courseSubCategoryType.CHARTER_BUS === value
     ) {
       setValue('carNumber', null);
       setValue('businessName', '');
-      console.log('버스임마', value, watch().businessName);
       setDisabledCompany(false);
       return setHideCarNumber(true);
     }

@@ -140,7 +140,7 @@ export function CalendarMobile() {
       typeof window !== 'undefined' &&
       (localStorage.getItem('site_course_type') as courseType),
     businessType: filter,
-    date: dateFormat(date, 'yyyy-mm'),
+    date: dateFormat(date, 'yyyy-mm'), //이거는 사파리에서 유효함 풀 포맷으로 변환하면 죽음.
   });
   const [schedule, setSchedule] =
     useState<{ date: Date; day: string; children: CourseClassRes[] }[]>();

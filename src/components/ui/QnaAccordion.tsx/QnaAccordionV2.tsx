@@ -4,7 +4,17 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Box, Chip, List, ListItem, ListItemText, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import {
+  Box,
+  Chip,
+  List,
+  ListItem,
+  ListItemText,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+} from '@mui/material';
 import { grey } from '@mui/material/colors';
 import styled from '@emotion/styled';
 import { AnsweredYn, Qna } from '@common/api/qna';
@@ -35,178 +45,213 @@ interface QnaBoardAccordionList {
 export function QnaAccordionV2({ loadedItem }: { loadedItem: Qna[] }) {
   const isTabled = !useResponsive();
   const [value, setValue] = React.useState<number>(null);
+  console.log(loadedItem, 'sdsd');
 
-  const handleChange = (panel: number) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-    setValue(newExpanded ? panel : null);
-  };
+  const handleChange =
+    (panel: number) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setValue(newExpanded ? panel : null);
+    };
   return (
     <Wrap>
       <TableContainer sx={{ width: '100%' }}>
-        {loadedItem.map(({ seq, title, createdDtimeYmd, answeredYn, ...rest }, idx) => (
-          <MuiAccordion
-            key={title}
-            disableGutters
-            elevation={0}
-            expanded={value === seq}
-            onChange={handleChange(seq)}
-            sx={{
-              overflow: 'hidden', //scroll
-              '&:before': {
-                display: 'none',
-              },
-            }}
-          >
-            <AccordionSummary
-              className="Asdasd"
-              expandIcon={<ExpandMoreIcon sx={{ position: 'absolute', width: '50px' }} />}
-              aria-controls="panel1a-content"
+        {loadedItem.map(
+          ({ seq, title, createdDtimeYmd, createdDtime, answeredYn, ...rest }, idx) => (
+            <MuiAccordion
+              key={title}
+              disableGutters
+              elevation={0}
+              expanded={value === seq}
+              onChange={handleChange(seq)}
               sx={{
-                padding: 0,
-                '&:hover': {
-                  backgroundColor: grey[50],
+                overflow: 'hidden', //scroll
+                '&:before': {
+                  display: 'none',
                 },
               }}
             >
-              <TableBody sx={{ display: 'table', width: '100%' }}>
-                <BoardBox>
-                  <SeqBox className="QnaBoardOne">{seq}</SeqBox>
-                  {/* <Typography className="QnaBoardTwo" width="55%">
+              <AccordionSummary
+                className="Asdasd"
+                expandIcon={
+                  <ExpandMoreIcon sx={{ position: 'absolute', width: '50px' }} />
+                }
+                aria-controls="panel1a-content"
+                sx={{
+                  padding: 0,
+                  '&:hover': {
+                    backgroundColor: grey[50],
+                  },
+                }}
+              >
+                <TableBody sx={{ display: 'table', width: '100%' }}>
+                  <BoardBox>
+                    <SeqBox className="QnaBoardOne">{seq}</SeqBox>
+                    {/* <Typography className="QnaBoardTwo" width="55%">
                     {title}
                   </Typography> */}
-                  <TitleBox className="QnaBoardTwo">{title}</TitleBox>
-                  <StatusBox className="QnaBoardThird">
-                    <Chip
-                      sx={{ width: '80px', marginLeft: '10px', marginBottom: '3px' }}
-                      // variant="outlined"
-                      size="small"
-                      label={answeredYn === AnsweredYn.ANSWEREDY ? '답변 완료' : '답변 대기'}
-                      color={answeredYn === AnsweredYn.ANSWEREDY ? 'secondary' : 'warning'}
-                    />
-                  </StatusBox>
-                  <CreatedBox className="QnaBoardFour">{isTabled ? '' : dateFormat(createdDtimeYmd, 'yyyy-mm-dd')}</CreatedBox>
-                </BoardBox>
-              </TableBody>
-            </AccordionSummary>
-            <BoardAccordionDetails>
-              <nav aria-label="secondary mailbox folders">
-                <List disablePadding={true}>
-                  <ListItem
-                    disablePadding
-                    key={idx} // key props error
-                    // sx={{
-                    //   backgroundColor: `${isActive ? grey[50] : 'inherit'}`,
-                    // }}
-                  >
-                    <TableBody sx={{ display: 'table', width: '100%' }}>
-                      <TableRow>
-                        <TableCellLeft align="center" sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
-                          질문
-                        </TableCellLeft>
-                        <TableCellRight>
-                          <QuestionBoardBox
-                          // display="flex" flexDirection={'column'} width="100%"
-                          >
-                            {/* <ListItemText primary={dateFormat(createdDtimeYmd, 'isoDate')} className="SecondContent" />
-                            <ListItemText primary={rest.content} className="FirstContent" />
-                            <ListItemText primary={rest.s3Files[0] ? rest.s3Files[0].name : '파일없음'} className="ThirdContent" /> */}
-                            <QuestContentBoxWrap>
-                              <QuestContentBox>
-                                <TuiViewer initialValue={rest.content} />
-                              </QuestContentBox>
-                              <Box display="flex" alignItems="center" mt={4}>
-                                {' '}
-                                <FileDownloadIcon />
-                                첨부파일
-                              </Box>
-                              <QuestFileBox
-                                onClick={async () => {
-                                  try {
-                                    const blobData = await downloadFile(rest.s3Files[0].seq);
-
-                                    const url = window.URL.createObjectURL(new Blob([blobData]));
-                                    const a = document.createElement('a');
-                                    a.href = url;
-                                    a.download = `${rest.s3Files[0].name}`;
-                                    a.click();
-                                    a.remove();
-                                  } catch (e: any) {
-                                    console.log(e);
-                                  }
-                                }}
-                                primary={rest.s3Files[0] ? rest.s3Files[0].name : '파일없음'}
-                                className="ThirdContent"
-                              />
-                            </QuestContentBoxWrap>
-                            <QuestCreatedBox primary={dateFormat(createdDtimeYmd, 'isoDate')} className="SecondContent" />
-                          </QuestionBoardBox>
-                        </TableCellRight>
-                      </TableRow>
-
-                      {answeredYn === AnsweredYn.ANSWEREDY ? (
-                        <TableRow sx={{ backgroundColor: 'white' }}>
+                    <TitleBox className="QnaBoardTwo">{title}</TitleBox>
+                    <StatusBox className="QnaBoardThird">
+                      <Chip
+                        sx={{ width: '80px', marginLeft: '10px', marginBottom: '3px' }}
+                        // variant="outlined"
+                        size="small"
+                        label={
+                          answeredYn === AnsweredYn.ANSWEREDY ? '답변 완료' : '답변 대기'
+                        }
+                        color={
+                          answeredYn === AnsweredYn.ANSWEREDY ? 'secondary' : 'warning'
+                        }
+                      />
+                    </StatusBox>
+                    <CreatedBox className="QnaBoardFour">
+                      {isTabled ? '' : createdDtime.split(' ')[0]}
+                    </CreatedBox>
+                  </BoardBox>
+                </TableBody>
+              </AccordionSummary>
+              <BoardAccordionDetails>
+                <nav aria-label="secondary mailbox folders">
+                  <List disablePadding={true}>
+                    <ListItem
+                      disablePadding
+                      key={idx} // key props error
+                      // sx={{
+                      //   backgroundColor: `${isActive ? grey[50] : 'inherit'}`,
+                      // }}
+                    >
+                      <TableBody sx={{ display: 'table', width: '100%' }}>
+                        <TableRow>
                           <TableCellLeft
                             align="center"
-                            sx={{
-                              fontSize: '1.2rem',
-                              fontWeight: 'bold',
-                              backgroundColor: 'white',
-                            }}
+                            sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
                           >
-                            답변
+                            질문
                           </TableCellLeft>
                           <TableCellRight>
-                            <AnswerBoardBox
+                            <QuestionBoardBox
                             // display="flex" flexDirection={'column'} width="100%"
                             >
-                              {/* <ListItemText primary={dateFormat(rest.qnaAnswer?.createdDtime, 'isoDate')} className="FourthContent" />
-                              <ListItemText primary={rest.qnaAnswer?.content} className="FifthContent" />
-                              <ListItemText
-                                primary={rest.s3Files[0] ? rest.qnaAnswer?.s3Files[0].name : '파일없음'}
-                                className="SixthContent"
-                              /> */}
-                              <AnswerContentBoxWrap>
-                                <AnswerContentBox>
-                                  <TuiViewer initialValue={rest.qnaAnswer?.content} />
-                                </AnswerContentBox>
+                              {/* <ListItemText primary={dateFormat(createdDtimeYmd, 'isoDate')} className="SecondContent" />
+                            <ListItemText primary={rest.content} className="FirstContent" />
+                            <ListItemText primary={rest.s3Files[0] ? rest.s3Files[0].name : '파일없음'} className="ThirdContent" /> */}
+                              <QuestContentBoxWrap>
+                                <QuestContentBox>
+                                  <TuiViewer initialValue={rest.content} />
+                                </QuestContentBox>
                                 <Box display="flex" alignItems="center" mt={4}>
                                   {' '}
                                   <FileDownloadIcon />
                                   첨부파일
                                 </Box>
-                                <AnswerFileBox
+                                <QuestFileBox
                                   onClick={async () => {
                                     try {
-                                      const blobData = await downloadFile(rest.qnaAnswer?.s3Files[0].seq);
+                                      const blobData = await downloadFile(
+                                        rest.s3Files[0].seq
+                                      );
 
-                                      const url = window.URL.createObjectURL(new Blob([blobData]));
+                                      const url = window.URL.createObjectURL(
+                                        new Blob([blobData])
+                                      );
                                       const a = document.createElement('a');
                                       a.href = url;
-                                      a.download = `${rest.qnaAnswer?.s3Files[0].name}`;
+                                      a.download = `${rest.s3Files[0].name}`;
                                       a.click();
                                       a.remove();
                                     } catch (e: any) {
                                       console.log(e);
                                     }
                                   }}
-                                  primary={rest.s3Files[0] ? rest.qnaAnswer?.s3Files[0].name : '파일없음'}
-                                  className="SixthContent"
+                                  primary={
+                                    rest.s3Files[0] ? rest.s3Files[0].name : '파일없음'
+                                  }
+                                  className="ThirdContent"
                                 />
-                              </AnswerContentBoxWrap>
-                              <AnswerCreatedBox primary={dateFormat(rest.qnaAnswer?.createdDtime, 'isoDate')} className="FourthContent" />
-                              {/* <AnswerContentBox primary={rest.qnaAnswer?.content} className="FifthContent" /> */}
-                            </AnswerBoardBox>
+                              </QuestContentBoxWrap>
+                              <QuestCreatedBox
+                                primary={dateFormat(createdDtimeYmd, 'isoDate')}
+                                className="SecondContent"
+                              />
+                            </QuestionBoardBox>
                           </TableCellRight>
                         </TableRow>
-                      ) : (
-                        <div></div>
-                      )}
-                    </TableBody>
-                  </ListItem>
-                </List>
-              </nav>
-            </BoardAccordionDetails>
-          </MuiAccordion>
-        ))}
+
+                        {answeredYn === AnsweredYn.ANSWEREDY ? (
+                          <TableRow sx={{ backgroundColor: 'white' }}>
+                            <TableCellLeft
+                              align="center"
+                              sx={{
+                                fontSize: '1.2rem',
+                                fontWeight: 'bold',
+                                backgroundColor: 'white',
+                              }}
+                            >
+                              답변
+                            </TableCellLeft>
+                            <TableCellRight>
+                              <AnswerBoardBox
+                              // display="flex" flexDirection={'column'} width="100%"
+                              >
+                                {/* <ListItemText primary={dateFormat(rest.qnaAnswer?.createdDtime, 'isoDate')} className="FourthContent" />
+                              <ListItemText primary={rest.qnaAnswer?.content} className="FifthContent" />
+                              <ListItemText
+                                primary={rest.s3Files[0] ? rest.qnaAnswer?.s3Files[0].name : '파일없음'}
+                                className="SixthContent"
+                              /> */}
+                                <AnswerContentBoxWrap>
+                                  <AnswerContentBox>
+                                    <TuiViewer initialValue={rest.qnaAnswer?.content} />
+                                  </AnswerContentBox>
+                                  <Box display="flex" alignItems="center" mt={4}>
+                                    {' '}
+                                    <FileDownloadIcon />
+                                    첨부파일
+                                  </Box>
+                                  <AnswerFileBox
+                                    onClick={async () => {
+                                      try {
+                                        const blobData = await downloadFile(
+                                          rest.qnaAnswer?.s3Files[0].seq
+                                        );
+
+                                        const url = window.URL.createObjectURL(
+                                          new Blob([blobData])
+                                        );
+                                        const a = document.createElement('a');
+                                        a.href = url;
+                                        a.download = `${rest.qnaAnswer?.s3Files[0].name}`;
+                                        a.click();
+                                        a.remove();
+                                      } catch (e: any) {
+                                        console.log(e);
+                                      }
+                                    }}
+                                    primary={
+                                      rest.s3Files[0]
+                                        ? rest.qnaAnswer?.s3Files[0].name
+                                        : '파일없음'
+                                    }
+                                    className="SixthContent"
+                                  />
+                                </AnswerContentBoxWrap>
+                                <AnswerCreatedBox
+                                  primary={rest.qnaAnswer?.createdDtime.split(' ')[0]}
+                                  className="FourthContent"
+                                />
+                                {/* <AnswerContentBox primary={rest.qnaAnswer?.content} className="FifthContent" /> */}
+                              </AnswerBoardBox>
+                            </TableCellRight>
+                          </TableRow>
+                        ) : (
+                          <div></div>
+                        )}
+                      </TableBody>
+                    </ListItem>
+                  </List>
+                </nav>
+              </BoardAccordionDetails>
+            </MuiAccordion>
+          )
+        )}
       </TableContainer>
     </Wrap>
   );

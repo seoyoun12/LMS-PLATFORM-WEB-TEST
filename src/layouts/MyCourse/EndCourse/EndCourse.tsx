@@ -10,8 +10,21 @@ export function EndCourse() {
   if (!user) return <Spinner />;
   return (
     <EndCourseWrap>
-    {user.learningCourses.length  <= 0 ? <NotFound content='신청한 과정이 존재하지 않습니다!' /> : user.learningCourses.filter((item)=>new Date(item.studyEndDate.replace('-','.')).getTime() < new Date().getTime()).length <= 0 && <NotFound content='종료된 과정이 존재하지 않습니다!' />}
-      <Grid container rowSpacing={4} columnSpacing={4} columns={{ xs: 1, sm: 2, md: 4, lg: 4 }}>
+      {user.learningCourses.length <= 0 ? (
+        <NotFound content="신청한 과정이 존재하지 않습니다!" />
+      ) : (
+        user.learningCourses.filter(
+          item =>
+            new Date(item.studyEndDate.replaceAll('-', '/')).getTime() <
+            new Date().getTime()
+        ).length <= 0 && <NotFound content="종료된 과정이 존재하지 않습니다!" />
+      )}
+      <Grid
+        container
+        rowSpacing={4}
+        columnSpacing={4}
+        columns={{ xs: 1, sm: 2, md: 4, lg: 4 }}
+      >
         {user.learningCourses
           .filter(fil => fil.progressStatus === progressStatus.TYPE_ENDED)
           .map(item => (
@@ -24,7 +37,12 @@ export function EndCourse() {
                   // router.push(`/course/${res.seq}/lesson/${res.lessons[0].seq}`);
                 }}
               >
-                <ContentCardV2 image={item.thumbnailImage} title={item.courseTitle} content1={`학습 종료된 강의입니다.`} content2={`진도율 ${item.progress}%`} />
+                <ContentCardV2
+                  image={item.thumbnailImage}
+                  title={item.courseTitle}
+                  content1={`학습 종료된 강의입니다.`}
+                  content2={`진도율 ${item.progress}%`}
+                />
               </Box>
             </Grid>
           ))}

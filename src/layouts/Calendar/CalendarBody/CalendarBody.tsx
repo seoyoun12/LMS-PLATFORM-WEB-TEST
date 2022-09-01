@@ -218,8 +218,8 @@ export function CalendarBody({
             limitPeople: extendedProps.limitPeople as number,
             studyStartDate: extendedProps.studyStartDate as string,
             studyEndDate: extendedProps.studyEndDate as string,
-            start: dateFormat(start as Date, 'yyyy-mm-dd'),
-            end: dateFormat(end as Date, 'yyyy-mm-dd'),
+            start: dateFormat(start as Date, 'yyyy/mm/dd'),
+            end: dateFormat(end as Date, 'yyyy/mm/dd'),
           });
           setOpenModal(true);
         }}
@@ -323,8 +323,10 @@ export function CalendarBody({
                 <TableRow>
                   <TableLeftCell>교육일</TableLeftCell>
                   <TableRightCell>
-                    {dateFormat(modalInfo.studyStartDate, 'yyyy-mm-dd')} ~{' '}
-                    {dateFormat(modalInfo.studyEndDate, 'yyyy-mm-dd')}
+                    {/* {dateFormat(modalInfo.studyStartDate, 'yyyy/mm/dd')} ~{' '}
+                    {dateFormat(modalInfo.studyEndDate, 'yyyy/mm/dd')} */}
+                    {modalInfo.studyStartDate.replaceAll('-', '.')} ~{' '}
+                    {modalInfo.studyEndDate}
                   </TableRightCell>
                 </TableRow>
                 <TableRow>

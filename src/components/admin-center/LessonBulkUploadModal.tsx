@@ -96,13 +96,19 @@ export function LessonBulkUploadModal({
       });
 
     try {
+      // 데이터 있는지
+      console.log('lessonInput : ', lessonInput);
+
       const contentSeq = Number(query.contentSeq);
-      await uploadLessons({ contentSeq, lessonInput });
+
+      console.log('contentSeq : ', contentSeq);
+
+      // await uploadLessons({ contentSeq, lessonInput });
       snackbar({ variant: 'success', message: '성공적으로 업로드 되었습니다.' });
-      setLoading(false);
+      // setLoading(false);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
-      setLoading(false);
+      // setLoading(false);
     }
 
     handleClose(true);

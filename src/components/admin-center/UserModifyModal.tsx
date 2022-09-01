@@ -19,41 +19,50 @@ import { useEffect } from 'react';
 import { UserInput } from '@common/api/user';
 import dateFormat from 'dateformat';
 
-export function UserModifyModal({ open, handleClose, userData, error }: {
+export function UserModifyModal({
+  open,
+  handleClose,
+  userData,
+  error,
+}: {
   open: boolean;
   handleClose: (isSubmit: boolean) => void;
   userData: UserInput;
   error?: any;
 }) {
   const snackbar = useSnackbar();
-  const [ submitLoading, setSubmitLoading ] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    reset
+    reset,
   } = useForm<UserInput>();
 
   useEffect(() => {
     reset({ ...userData });
-  }, [ userData, open, reset ]);
+  }, [userData, open, reset]);
 
-  const onSubmit: SubmitHandler<UserInput> = async (userInput) => {
-
+  const onSubmit: SubmitHandler<UserInput> = async userInput => {
     try {
-      const birth = dateFormat(userInput.birth, 'yyyy-mm-dd');
+      console.log('userData : ', userData);
+      console.log('userInput : ', userInput);
+      // const birth = dateFormat(userInput.birth, 'yyyy-mm-dd');
       setSubmitLoading(true);
-      await modifyUser({ ...userInput, birth });
+      await modifyUser({ seq: userInput.seq, userInput });
       setSubmitLoading(false);
-      snackbar({ variant: 'success', message: `${userInput.name} 님이 수정 되었습니다.` });
+      snackbar({
+        variant: 'success',
+        message: `${userInput.name} 님이 수정 되었습니다.`,
+      });
     } catch (e: any) {
-      snackbar(e.message || e.data?.message);
+      // snackbar(e.message || e.data?.message);
+      snackbar({ variant: 'error', message: e.message });
       setSubmitLoading(false);
     }
     handleClose(true);
   };
-
 
   if (error) return <div>error</div>;
 
@@ -72,13 +81,12 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
         <FormContainer>
           <FormControl className="form-control">
             <TextField
-              value={(userData?.seq)}
+              value={userData?.seq}
               type="text"
               size="small"
               variant="outlined"
               label="회원번호"
             />
-
           </FormControl>
           <FormControl className="form-control">
             <TextField
@@ -110,7 +118,7 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
             />
             <ErrorMessage errors={errors} name="birth" as={<FormHelperText error />} />
           </FormControl>
-          <FormControl className="form-control">
+          {/* <FormControl className="form-control">
             <FormLabel focused={false}>성별</FormLabel>
             <Controller
               rules={{ required: true }}
@@ -118,28 +126,13 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
               name="gender"
               render={({ field }) => (
                 <RadioGroup row {...field}>
-                  <FormControlLabel
-                    value={'남성'}
-                    control={<Radio />}
-                    label="남성"
-                  />
-                  {/*  */}
-                  {/* <FormControlLabel
-                    value={'중성'}
-                    control={<Radio />}
-                    label="중성"
-                  /> */}
-                  {/*  */}
-                  <FormControlLabel
-                    value={'여성'}
-                    control={<Radio />}
-                    label="여성"
-                  />
+                  <FormControlLabel value={'남성'} control={<Radio />} label="남성" />
+                  <FormControlLabel value={'여성'} control={<Radio />} label="여성" />
                 </RadioGroup>
               )}
             />
             <ErrorMessage errors={errors} name="gender" as={<FormHelperText error />} />
-          </FormControl>
+          </FormControl> */}
           <FormControl className="form-control">
             <FormLabel focused={false}>문자수신</FormLabel>
             <Controller
@@ -148,16 +141,8 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
               name="smsYn"
               render={({ field }) => (
                 <RadioGroup row {...field}>
-                  <FormControlLabel
-                    value={'Y'}
-                    control={<Radio />}
-                    label="동의"
-                  />
-                  <FormControlLabel
-                    value={'N'}
-                    control={<Radio />}
-                    label="거부"
-                  />
+                  <FormControlLabel value={'Y'} control={<Radio />} label="동의" />
+                  <FormControlLabel value={'N'} control={<Radio />} label="거부" />
                 </RadioGroup>
               )}
             />
@@ -171,16 +156,8 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
               name="emailYn"
               render={({ field }) => (
                 <RadioGroup row {...field}>
-                  <FormControlLabel
-                    value={'Y'}
-                    control={<Radio />}
-                    label="동의"
-                  />
-                  <FormControlLabel
-                    value={'N'}
-                    control={<Radio />}
-                    label="거부"
-                  />
+                  <FormControlLabel value={'Y'} control={<Radio />} label="동의" />
+                  <FormControlLabel value={'N'} control={<Radio />} label="거부" />
                 </RadioGroup>
               )}
             />
@@ -215,5 +192,3 @@ const FormContainer = styled.div`
     margin-left: 2%;
   }
 `;
-
-

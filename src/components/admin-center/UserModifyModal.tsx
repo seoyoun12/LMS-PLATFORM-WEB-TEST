@@ -4,10 +4,12 @@ import {
   FormControlLabel,
   FormHelperText,
   FormLabel,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
 } from '@mui/material';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Modal } from '@components/ui';
 import TextField from '@mui/material/TextField';
 import { modifyUser } from '@common/api/adm/user';
@@ -18,42 +20,70 @@ import { ErrorMessage } from '@hookform/error-message';
 import { useEffect } from 'react';
 import { UserInput } from '@common/api/user';
 import dateFormat from 'dateformat';
+import { Phone4Regex } from '@utils/inputRegexes';
 
-export function UserModifyModal({ open, handleClose, userData, error }: {
+const phoneList = ['010', '011'];
+
+export function UserModifyModal({
+  open,
+  handleClose,
+  userData,
+  error,
+}: {
   open: boolean;
   handleClose: (isSubmit: boolean) => void;
   userData: UserInput;
   error?: any;
 }) {
+  const [phone01, setPhone01] = useState('010');
+  const [phone02, setPhone02] = useState('');
+  const [phone03, setPhone03] = useState('');
+  const phone2 = useRef<string>('');
+  const phone3 = useRef<string>('');
+
+  const onChangePhoneNum01 = (e: any) => {
+    setPhone01(e.target.value);
+  };
+  const onChangePhoneNum02 = (value: string) => {
+    setPhone02(value);
+  };
+  const onChangePhoneNum03 = (value: string) => {
+    setPhone03(value);
+  };
+
   const snackbar = useSnackbar();
-  const [ submitLoading, setSubmitLoading ] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    reset
+    reset,
   } = useForm<UserInput>();
 
   useEffect(() => {
     reset({ ...userData });
-  }, [ userData, open, reset ]);
+  }, [userData, open, reset]);
 
-  const onSubmit: SubmitHandler<UserInput> = async (userInput) => {
-
+  const onSubmit: SubmitHandler<UserInput> = async userInput => {
     try {
-      const birth = dateFormat(userInput.birth, 'yyyy-mm-dd');
+      // console.log('userData : ', userData);
+      // console.log('userInput : ', userInput);
+      // const birth = dateFormat(userInput.birth, 'yyyy-mm-dd');
       setSubmitLoading(true);
-      await modifyUser({ ...userInput, birth });
+      await modifyUser({ seq: userInput.seq, userInput });
       setSubmitLoading(false);
-      snackbar({ variant: 'success', message: `${userInput.name} 님이 수정 되었습니다.` });
+      snackbar({
+        variant: 'success',
+        message: `${userInput.name} 님이 수정 되었습니다.`,
+      });
     } catch (e: any) {
-      snackbar(e.message || e.data?.message);
+      // snackbar(e.message || e.data?.message);
+      snackbar({ variant: 'error', message: e.message });
       setSubmitLoading(false);
     }
     handleClose(true);
   };
-
 
   if (error) return <div>error</div>;
 
@@ -72,13 +102,12 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
         <FormContainer>
           <FormControl className="form-control">
             <TextField
-              value={(userData?.seq)}
+              value={userData?.seq}
               type="text"
               size="small"
               variant="outlined"
               label="회원번호"
             />
-
           </FormControl>
           <FormControl className="form-control">
             <TextField
@@ -90,6 +119,7 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
             />
             <ErrorMessage errors={errors} name="name" as={<FormHelperText error />} />
           </FormControl>
+
           <FormControl className="form-control">
             <TextField
               {...register('phone')}
@@ -100,6 +130,46 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
             />
             <ErrorMessage errors={errors} name="phone" as={<FormHelperText error />} />
           </FormControl>
+
+          {/* <FormControl className="form-control">
+            <Select
+              sx={{ width: '30%' }}
+              labelId="phone-type-label"
+              id="phone-type"
+              defaultValue={'010'}
+              onChange={onChangePhoneNum01}
+            >
+              {phoneList.map(item => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))}
+            </Select>
+            -
+            <TextField
+              sx={{ width: '30%' }}
+              value={phone02}
+              onChange={e => {
+                phone2.current = e.target.value;
+                if (Phone4Regex.test(e.target.value)) {
+                  return;
+                }
+                onChangePhoneNum02(e.target.value.replace(/[^0-9]/g, ''));
+              }}
+            />
+            -
+            <TextField
+              sx={{ width: '30%' }}
+              value={phone03}
+              onChange={e => {
+                phone3.current = e.target.value;
+                console.log(Phone4Regex.test(e.target.value), e.target.value);
+                if (Phone4Regex.test(e.target.value)) {
+                  return;
+                }
+                onChangePhoneNum03(e.target.value.replace(/[^0-9]/g, ''));
+              }}
+            />
+          </FormControl> */}
+
           <FormControl className="form-control">
             <TextField
               {...register('birth')}
@@ -110,7 +180,7 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
             />
             <ErrorMessage errors={errors} name="birth" as={<FormHelperText error />} />
           </FormControl>
-          <FormControl className="form-control">
+          {/* <FormControl className="form-control">
             <FormLabel focused={false}>성별</FormLabel>
             <Controller
               rules={{ required: true }}
@@ -118,28 +188,13 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
               name="gender"
               render={({ field }) => (
                 <RadioGroup row {...field}>
-                  <FormControlLabel
-                    value={'남성'}
-                    control={<Radio />}
-                    label="남성"
-                  />
-                  {/*  */}
-                  {/* <FormControlLabel
-                    value={'중성'}
-                    control={<Radio />}
-                    label="중성"
-                  /> */}
-                  {/*  */}
-                  <FormControlLabel
-                    value={'여성'}
-                    control={<Radio />}
-                    label="여성"
-                  />
+                  <FormControlLabel value={'남성'} control={<Radio />} label="남성" />
+                  <FormControlLabel value={'여성'} control={<Radio />} label="여성" />
                 </RadioGroup>
               )}
             />
             <ErrorMessage errors={errors} name="gender" as={<FormHelperText error />} />
-          </FormControl>
+          </FormControl> */}
           <FormControl className="form-control">
             <FormLabel focused={false}>문자수신</FormLabel>
             <Controller
@@ -148,16 +203,8 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
               name="smsYn"
               render={({ field }) => (
                 <RadioGroup row {...field}>
-                  <FormControlLabel
-                    value={'Y'}
-                    control={<Radio />}
-                    label="동의"
-                  />
-                  <FormControlLabel
-                    value={'N'}
-                    control={<Radio />}
-                    label="거부"
-                  />
+                  <FormControlLabel value={'Y'} control={<Radio />} label="동의" />
+                  <FormControlLabel value={'N'} control={<Radio />} label="거부" />
                 </RadioGroup>
               )}
             />
@@ -171,16 +218,8 @@ export function UserModifyModal({ open, handleClose, userData, error }: {
               name="emailYn"
               render={({ field }) => (
                 <RadioGroup row {...field}>
-                  <FormControlLabel
-                    value={'Y'}
-                    control={<Radio />}
-                    label="동의"
-                  />
-                  <FormControlLabel
-                    value={'N'}
-                    control={<Radio />}
-                    label="거부"
-                  />
+                  <FormControlLabel value={'Y'} control={<Radio />} label="동의" />
+                  <FormControlLabel value={'N'} control={<Radio />} label="거부" />
                 </RadioGroup>
               )}
             />
@@ -215,5 +254,3 @@ const FormContainer = styled.div`
     margin-left: 2%;
   }
 `;
-
-

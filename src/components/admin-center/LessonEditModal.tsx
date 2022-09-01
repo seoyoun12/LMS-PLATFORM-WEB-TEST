@@ -108,7 +108,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   const onRemoveLesson = async (lessonId: number) => {
     try {
       const dialogConfirmed = await dialog({
-        title: '콘텐츠 삭제하기',
+        title: '레슨 삭제하기',
         description: '정말로 삭제하시겠습니까?',
         confirmText: '삭제하기',
         cancelText: '취소',

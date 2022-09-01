@@ -10,7 +10,6 @@ export function CategoryBoardLookList() {
   const [target, loadedItem, loading] = useInfiniteScrollQna(`/qna`);
   const isTablet = !useResponsive();
 
-  console.log(loadedItem, 'ㅋㅋ', isTablet);
   return (
     <LkContainer>
       {loadedItem && loadedItem.length > 0 ? (

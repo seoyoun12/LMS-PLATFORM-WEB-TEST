@@ -19,7 +19,7 @@ import {
   Typography,
 } from '@mui/material';
 import styled from '@emotion/styled';
-import { ProductStatus, CourseRes, CourseInput, courseRemove } from '@common/api/course';
+import { ProductStatus, CourseRes, CourseInput } from '@common/api/course';
 import { YN } from '@common/constant';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { ContentType } from '@common/api/content';
@@ -39,8 +39,6 @@ import {
 } from '@common/api/courseClass';
 import Image from 'next/image';
 import { Spinner } from '@components/ui';
-import { useDialog } from '@hooks/useDialog';
-import router from 'next/router';
 
 interface Props {
   mode?: 'upload' | 'modify';
@@ -77,7 +75,6 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
   const [fileName, setFileName] = useState<string | null>(null);
   const [thumbnail, setThumbnail] = useState('');
   const [loading, setLoading] = useState(false);
-  const dialog = useDialog();
 
   const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(
     null
@@ -123,26 +120,6 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
     resetField('files');
     setFileName(null);
     setIsFileDelete(true);
-  };
-
-  // 삭제
-  const onClickRemoveCourse = async (seq: number) => {
-    try {
-      const dialogConfirmed = await dialog({
-        title: '과정 삭제하기',
-        description: '정말로 삭제하시겠습니까?',
-        confirmText: '삭제하기',
-        cancelText: '취소',
-      });
-      if (dialogConfirmed) {
-        await courseRemove(seq);
-        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-        router.push(`/admin-center/course`);
-        // await mutate();
-      }
-    } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
-    }
   };
 
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...course }, event) => {
@@ -363,29 +340,16 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             )}
           />
         </FormControl>
-        <ButtonBox>
-          <SubmitBtn variant="contained" type="submit" disabled={loading}>
-            {loading ? (
-              <Spinner fit={true} />
-            ) : mode === 'upload' ? (
-              '업로드하기'
-            ) : (
-              '수정하기'
-            )}
-          </SubmitBtn>
-          {mode === 'upload' ? (
-            ''
+
+        <SubmitBtn variant="contained" type="submit" disabled={loading}>
+          {loading ? (
+            <Spinner fit={true} />
+          ) : mode === 'upload' ? (
+            '업로드하기'
           ) : (
-            <DeleteBtn
-              color="warning"
-              variant="contained"
-              onClick={() => onClickRemoveCourse(course.seq)}
-              disabled={loading}
-            >
-              {loading ? <Spinner fit={true} /> : '삭제'}
-            </DeleteBtn>
+            '수정하기'
           )}
-        </ButtonBox>
+        </SubmitBtn>
       </Box>
     </Container>
   );
@@ -419,6 +383,10 @@ const InputContainer = styled.div`
   }
 `;
 
+const SubmitBtn = styled(Button)`
+  margin: 30px 30px 30px 0;
+`;
+
 const textField = css`
   margin-bottom: 20px;
 `;
@@ -443,30 +411,4 @@ const ThumbnailImg = styled.div`
   width: 500px;
   height: calc((500px / 16) * 9);
   margin: auto;
-`;
-function dialog(arg0: {
-  title: string;
-  description: string;
-  confirmText: string;
-  cancelText: string;
-}) {
-  throw new Error('Function not implemented.');
-}
-
-function snackbar(arg0: { variant: string; message: string }) {
-  throw new Error('Function not implemented.');
-}
-const ButtonBox = styled(Box)`
-  margin: 20px 0 20px 0;
-`;
-
-const SubmitBtn = styled(Button)`
-  width: 15%;
-  float: right;
-  margin: 0 0 0 5px;
-`;
-
-const DeleteBtn = styled(Button)`
-  width: 15%;
-  float: right;
 `;

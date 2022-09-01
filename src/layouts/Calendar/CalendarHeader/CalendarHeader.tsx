@@ -67,6 +67,7 @@ export function CalendarHeader({
         <MonthWrap>
           {Months.map(month => (
             <Box
+              key={month.value}
               sx={{ height: '50px', flexGrow: 1, cursor: 'pointer' }}
               className={`header-month-box `}
               onClick={() => handleLeftMonthClick(month.value)}
@@ -111,9 +112,9 @@ export function CalendarHeader({
             onClick={onChangeFilter}
             value={item.enType}
             sx={{
-              background: filter === item.enType ? '#224a94' : '#246aef',
+              background: filter === item.enType ? '#256aef' : '#d8d6d6',
               '&:hover': {
-                backgroundColor: '#143c89',
+                backgroundColor: filter === item.enType ? '#143c89' : '#919191',
               },
             }}
           >
@@ -123,7 +124,7 @@ export function CalendarHeader({
       </FilterWrap>
       <Box display="flex" justifyContent="center" gap="1rem" mt={4}>
         {eduLegendList.map(legend => (
-          <Box display="flex" alignItems="center">
+          <Box key={legend.enType} display="flex" alignItems="center">
             <CircleRoundedIcon sx={{ fontSize: '1rem', color: legend.color }} />{' '}
             <span>{legend.title}</span>
           </Box>

@@ -87,6 +87,7 @@ export function CalendarHeader({
         >
           {Months.map(month => (
             <Tab
+              key={month.value}
               label={month.title}
               className={`header-month ${
                 month.value === date.getMonth() + 1 ? 'active' : ''
@@ -126,9 +127,9 @@ export function CalendarHeader({
             onClick={onChangeFilter}
             value={item.enType}
             sx={{
-              background: filter === item.enType ? '#224a94' : '#246aef',
+              background: filter === item.enType ? '#256aef' : '#d8d6d6',
               '&:hover': {
-                backgroundColor: '#143c89',
+                backgroundColor: filter === item.enType ? '#143c89' : '#919191',
               },
             }}
           >

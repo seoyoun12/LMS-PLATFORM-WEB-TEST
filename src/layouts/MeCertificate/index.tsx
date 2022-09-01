@@ -22,16 +22,15 @@ import {
   UserMyinfoCertificatesConfirmResponseDto,
   UserMyinfoCertificatesResponseDto,
 } from "@common/api/Api";
-import { format } from "date-fns";
 import BackgroundImage from "public/assets/images/certificates_background.svg";
 import { NotFound } from "@components/ui/NotFound";
-import { useRouter } from "next/router";
 import { useState } from "react";
-import axios, { AxiosResponse } from "axios";
-import Image from "next/image";
+import { AxiosResponse } from "axios";
 
 const MeCertificate: NextPage = () => {
   const { certificateList, mutate } = useGetUserMyinfoCertificates();
+
+  console.log(certificateList);
   const [selectedCertificate, setSelectedCertificate] =
     useState<UserMyinfoCertificatesConfirmResponseDto | null>(null);
 
@@ -126,7 +125,7 @@ const MeCertificate: NextPage = () => {
       <MeCertificateHeaderContainer>
         <MeCertificateHeaderTitle>증명서 발급</MeCertificateHeaderTitle>
         <MeCertificateHeaderSubtitle>
-          학습중인 과정의 수료확인 및 증명서 발급을 받을 수 있습니다!
+          수료확인 및 증명서 발급을 받을 수 있습니다!
         </MeCertificateHeaderSubtitle>
         <BackgroundImage />
       </MeCertificateHeaderContainer>
@@ -142,8 +141,8 @@ const MeCertificate: NextPage = () => {
               onClick={() => handleClickCertificatesDownload(item)}
             >
               <MeCertificateItemImageContainer>
-                {item.courseFile && (
-                  <img src={item.courseFile} alt="course thumbnail" />
+                {item.s3Files && item.s3Files.length > 0 && (
+                  <img src={item.s3Files[0].path} alt="course thumbnail" />
                 )}
               </MeCertificateItemImageContainer>
 

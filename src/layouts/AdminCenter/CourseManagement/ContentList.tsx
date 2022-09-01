@@ -32,10 +32,13 @@ export function ContentList() {
   // const { course, courseError, mutate } = useCourse(Number(courseSeq));
   const { data, error, mutate } = courseDetail(Number(courseSeq));
 
-
   const handleCloseModal = async () => {
     setOpenModal(false);
     await mutate();
+  };
+
+  const onClickModifyContent = async (seq: number) => {
+    router.push(`/admin-center/content/modify/${data.content.seq}`);
   };
 
   if (error) return <div>error</div>;
@@ -62,25 +65,37 @@ export function ContentList() {
                 {name}
               </TableCell>
             ))}
-            <TableCell>{}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data.content ? (
-            <TableRow hover>
+            <TableRow
+              sx={{ cursor: 'pointer' }}
+              hover
+              onClick={() => onClickModifyContent(data.content.seq)}
+            >
               <TableCell align="left">{data.content.seq}</TableCell>
               <TableCell align="right">
-                <Link href={`/admin-center/content/modify/${data.content.seq}`}>{data.content.contentName}</Link>
+                {/* <Link href={`/admin-center/content/modify/${data.content.seq}`}>
+                  {data.content.contentName}
+                </Link> */}
+                {data.content.contentName}
               </TableCell>
               <TableCell align="right">{data.content.contentType}</TableCell>
-              <TableCell align="right">{dateFormat(data.content.createdDtime, 'isoDate')}</TableCell>
+              <TableCell align="right">
+                {dateFormat(data.content.createdDtime, 'isoDate')}
+              </TableCell>
               <TableCell align="right">{data.status}</TableCell>
             </TableRow>
           ) : null}
         </TableBody>
       </Table>
 
-      <ContentConnectModal open={openModal} handleClose={handleCloseModal} courseSeq={Number(courseSeq)} />
+      <ContentConnectModal
+        open={openModal}
+        handleClose={handleCloseModal}
+        courseSeq={Number(courseSeq)}
+      />
     </Container>
   );
 }

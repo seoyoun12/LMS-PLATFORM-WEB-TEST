@@ -4,10 +4,12 @@ import {
   FormControlLabel,
   FormHelperText,
   FormLabel,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
 } from '@mui/material';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Modal } from '@components/ui';
 import TextField from '@mui/material/TextField';
 import { modifyUser } from '@common/api/adm/user';
@@ -18,6 +20,9 @@ import { ErrorMessage } from '@hookform/error-message';
 import { useEffect } from 'react';
 import { UserInput } from '@common/api/user';
 import dateFormat from 'dateformat';
+import { Phone4Regex } from '@utils/inputRegexes';
+
+const phoneList = ['010', '011'];
 
 export function UserModifyModal({
   open,
@@ -30,6 +35,22 @@ export function UserModifyModal({
   userData: UserInput;
   error?: any;
 }) {
+  const [phone01, setPhone01] = useState('010');
+  const [phone02, setPhone02] = useState('');
+  const [phone03, setPhone03] = useState('');
+  const phone2 = useRef<string>('');
+  const phone3 = useRef<string>('');
+
+  const onChangePhoneNum01 = (e: any) => {
+    setPhone01(e.target.value);
+  };
+  const onChangePhoneNum02 = (value: string) => {
+    setPhone02(value);
+  };
+  const onChangePhoneNum03 = (value: string) => {
+    setPhone03(value);
+  };
+
   const snackbar = useSnackbar();
   const [submitLoading, setSubmitLoading] = useState(false);
   const {
@@ -46,8 +67,8 @@ export function UserModifyModal({
 
   const onSubmit: SubmitHandler<UserInput> = async userInput => {
     try {
-      console.log('userData : ', userData);
-      console.log('userInput : ', userInput);
+      // console.log('userData : ', userData);
+      // console.log('userInput : ', userInput);
       // const birth = dateFormat(userInput.birth, 'yyyy-mm-dd');
       setSubmitLoading(true);
       await modifyUser({ seq: userInput.seq, userInput });
@@ -98,6 +119,7 @@ export function UserModifyModal({
             />
             <ErrorMessage errors={errors} name="name" as={<FormHelperText error />} />
           </FormControl>
+
           <FormControl className="form-control">
             <TextField
               {...register('phone')}
@@ -108,6 +130,46 @@ export function UserModifyModal({
             />
             <ErrorMessage errors={errors} name="phone" as={<FormHelperText error />} />
           </FormControl>
+
+          {/* <FormControl className="form-control">
+            <Select
+              sx={{ width: '30%' }}
+              labelId="phone-type-label"
+              id="phone-type"
+              defaultValue={'010'}
+              onChange={onChangePhoneNum01}
+            >
+              {phoneList.map(item => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))}
+            </Select>
+            -
+            <TextField
+              sx={{ width: '30%' }}
+              value={phone02}
+              onChange={e => {
+                phone2.current = e.target.value;
+                if (Phone4Regex.test(e.target.value)) {
+                  return;
+                }
+                onChangePhoneNum02(e.target.value.replace(/[^0-9]/g, ''));
+              }}
+            />
+            -
+            <TextField
+              sx={{ width: '30%' }}
+              value={phone03}
+              onChange={e => {
+                phone3.current = e.target.value;
+                console.log(Phone4Regex.test(e.target.value), e.target.value);
+                if (Phone4Regex.test(e.target.value)) {
+                  return;
+                }
+                onChangePhoneNum03(e.target.value.replace(/[^0-9]/g, ''));
+              }}
+            />
+          </FormControl> */}
+
           <FormControl className="form-control">
             <TextField
               {...register('birth')}

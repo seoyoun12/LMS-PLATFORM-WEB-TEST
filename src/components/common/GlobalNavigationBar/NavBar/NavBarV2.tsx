@@ -19,7 +19,7 @@ const IndicatorBox = ({ index, value }: { index: number; value: number }) => {
         opacity: index !== value && 0,
         height: '4px',
         width: '100%',
-        background: 'rgb(52,152,219)',
+        background: '#256bef',
         position: 'relative',
       }}
     >
@@ -30,7 +30,7 @@ const IndicatorBox = ({ index, value }: { index: number; value: number }) => {
           transform: 'translateX(-50%)',
           width: '0px',
           height: '0px',
-          borderTop: '16px solid rgb(52,152,219)',
+          borderTop: '16px solid #256bef',
           borderLeft: '14px solid transparent',
           borderRight: '14px solid transparent',
         }}
@@ -85,15 +85,18 @@ export function NavBarV2() {
               <IndicatorBox index={index} value={showIndicatorValue} />
               <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
                 <Box className="link-wrap">
-                  {item.items.map(menuItem => (
-                    <Link
-                      className="link-items"
-                      href={menuItem.href}
-                      key={menuItem.title}
-                    >
-                      <MenuItem className="link-item">{menuItem.title}</MenuItem>
-                    </Link>
-                  ))}
+                  {item.items.map(menuItem => {
+                    if (menuItem.href === '/me') return;
+                    return (
+                      <Link
+                        className="link-items"
+                        href={menuItem.href}
+                        key={menuItem.title}
+                      >
+                        <MenuItem className="link-item">{menuItem.title}</MenuItem>
+                      </Link>
+                    );
+                  })}
                 </Box>
               </Box>
             </HeaderItem>
@@ -278,8 +281,9 @@ export const TransHeaderList = [
     href: '/me',
     items: [
       { title: '내 정보', href: '/me' },
-      { title: '정보수정', href: '/me/edit' },
+      // { title: '정보수정', href: '/me/edit' },
       { title: '학습현황', href: '/me/my-course' },
+      { title: '증명서발급', href: '/me/certificate' },
       { title: '온라인 학습 신청내역', href: '/me/enroll-history' },
     ],
   },

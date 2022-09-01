@@ -48,9 +48,10 @@ export function ContentCardV2({
         <ImgBox ref={divRef}>
           <CardMedia
             component="img"
-            height="140"
+            // height="140"
             image={image || 'https://picsum.photos/276'}
-            sx={{ height: `calc((${width}  / 16) * 9)` }}
+            // sx={{ height: `calc((${width}  / 16) * 9)` }}
+            sx={{ aspectRatio: '16 / 9' }}
             alt="green iguana"
           />
         </ImgBox>
@@ -75,6 +76,7 @@ const ImgBox = styled(Box)`
   border-radius: 4px;
   overflow: hidden;
   width: 100%;
+  height: 100%;
 `;
 
 const Title = styled(Typography)`

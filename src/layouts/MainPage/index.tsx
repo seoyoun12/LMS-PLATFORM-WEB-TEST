@@ -193,12 +193,39 @@ const MainPage: NextPage = () => {
             </NoticeTitle> */}
             <NoticeContent>
               <NoticeContentTypography>
-                운수종사자의 경우 첫번째 "운수종사자교육"{' '}
+                {/* 운수종사자의 경우 첫번째 "운수종사자교육"{' '}
                 <span style={{ color: '#236cef', fontSize: '6px' }}>●</span>{' '}
                 저상버스운전자의 경우 두번째 "저상버스운전자교육"{' '}
                 <span style={{ color: '#236cef', fontSize: '6px' }}>●</span>{' '}
                 도민교통안전교육자의 경우 세번째 "도민교통안전교육"을 이용해주시기
-                바랍니다.
+                바랍니다. */}
+                <Box display="flex">
+                  <Box>-&nbsp;</Box>
+                  <Box>
+                    본 온라인 과정은{' '}
+                    <span style={{ color: '#fc4719' }}>
+                      차량등록지가 충남 또는 세종시 운수종사자에 해당되는 교육
+                    </span>
+                    으로 타시‧도 차량은 교육을 이수 할 수 없습니다.
+                  </Box>
+                </Box>
+                <Box display="flex">
+                  <Box>-&nbsp;</Box>
+                  <Box>
+                    <span style={{ color: '#fc4719' }}>운전 중 교육을 진행할 경우</span>{' '}
+                    안전을 위해 <span style={{ color: '#fc4719' }}>교육이 중단</span>
+                    됩니다.
+                  </Box>
+                </Box>
+                <Box display="flex">
+                  <Box>-&nbsp;</Box>
+                  <Box display="flex" flexWrap="wrap">
+                    온라인교육은 네트워크 상태에 따라 데이터 요금이 발생할 수 있습니다.
+                    <span>
+                      (<span style={{ color: '#fc4719' }}>Wi-Fi 사용 권장</span>)
+                    </span>
+                  </Box>
+                </Box>
               </NoticeContentTypography>
             </NoticeContent>
           </NoticeContainer>
@@ -233,11 +260,19 @@ const MainPage: NextPage = () => {
                           router.push(href);
                         }}
                       >
-                        <Box width="270px" borderRadius="8px 8px 0 0" overflow="hidden">
+                        <Box
+                          width="270px"
+                          height="150px"
+                          borderRadius="8px 8px 0 0"
+                          overflow="hidden"
+                          className="gg"
+                        >
                           <Image
                             src={imgPath}
-                            width="270"
-                            height="184"
+                            // width="270"
+                            // height="184"
+                            style={{ aspectRatio: '16 / 9', zIndex: -19999 }}
+                            layout="fill"
                             objectFit="fill"
                           />
                         </Box>
@@ -299,6 +334,9 @@ const WrapMainContainer = styled.div`
   }
   .MuiButton-root.MuiButton-textNeutral {
     width: 100%;
+  }
+  .gg {
+    position: relative;
   }
 `;
 // MainContainer
@@ -376,6 +414,7 @@ const NoticeContentTypography = styled(Typography)`
   /* padding-top: 30px; */
   word-break: keep-all;
   font-weight: bold;
+  text-align: start;
   /* white-space: pre-wrap; */
 `;
 

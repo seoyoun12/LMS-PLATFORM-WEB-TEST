@@ -58,7 +58,6 @@ export function EduOverview({
   const snackbar = useSnackbar();
   // const { data, error, mutate } = useSingleCourseClass(Number(enrollInfo && enrollInfo.seq));
 
-  console.log('돈다돌아', courseCategoryType, courseBusinessType);
   const getSingleCourse = async (courseClassSeq: number) => {
     try {
       const { data } = await getSingleCourseClass(courseClassSeq);

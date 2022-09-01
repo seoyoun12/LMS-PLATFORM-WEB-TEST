@@ -131,8 +131,6 @@ export function MobileNav() {
   }) => {
     const isEqual = userInfoData.regCategory.includes(item.regCategory);
 
-    console.log('머임', isEqual, item, userInfoData, isLoginStatus);
-
     //로그인안되었거나 유저데이터가 앙 없거나 이상할때
     if (!isLoginStatus || userInfoData.regCategory === '' || !userInfoData.regCategory) {
       logout();

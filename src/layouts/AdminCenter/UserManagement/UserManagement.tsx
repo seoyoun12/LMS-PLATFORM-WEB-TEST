@@ -23,7 +23,7 @@ const headRows = [
   { name: '회원번호' },
   { name: '아이디' },
   { name: '이름' },
-  { name: '성별' },
+  // { name: '성별' },
   { name: '생년월일' },
   // { name: '계정생성일' },
   { name: '핸드폰번호' },
@@ -51,11 +51,13 @@ export function UserManagement() {
     try {
       const dialogConfirmed = await dialog({
         title: '유저 삭제하기',
-        description: <div>
-                       <div>삭제시 회원의 모든 정보가 영구적으로 삭제됩니다.</div>
-                      <div>정말로 삭제하시겠습니까?</div>
-                      <div style={{color:'red' , fontSize:'14px'}} >*복구가 불가능합니다.*</div>
-                    </div>,
+        description: (
+          <div>
+            <div>삭제시 회원의 모든 정보가 영구적으로 삭제됩니다.</div>
+            <div>정말로 삭제하시겠습니까?</div>
+            <div style={{ color: 'red', fontSize: '14px' }}>*복구가 불가능합니다.*</div>
+          </div>
+        ),
         confirmText: '삭제하기',
         cancelText: '취소',
       });
@@ -124,9 +126,13 @@ export function UserManagement() {
           {data.content.map(user => (
             <TableRow key={user.seq} hover>
               <UserTableCell>{user.seq}</UserTableCell>
-              <UserTableCell>{regCategoryType.TYPE_TRANS_EDU === user.regCategory ? '실명가입' : user.username}</UserTableCell>
+              <UserTableCell>
+                {regCategoryType.TYPE_TRANS_EDU === user.regCategory
+                  ? '실명가입'
+                  : user.username}
+              </UserTableCell>
               <UserTableCell>{user.name}</UserTableCell>
-              <UserTableCell>{user.gender}</UserTableCell>
+              {/* <UserTableCell>{user.gender}</UserTableCell> */}
               <UserTableCell>{dateFormat(user.birth, 'yyyy-mm-dd')}</UserTableCell>
               {/* <UserTableCell>{dateFormat(user.createdDtime, 'isoDate')}</UserTableCell> */}
               <UserTableCell>{user.phone}</UserTableCell>
@@ -136,7 +142,9 @@ export function UserManagement() {
               <UserTableCell>{user.failedYn}</UserTableCell>
               {/* <UserTableCell>{dateFormat(user.modifiedDtime, 'isoDate')}</UserTableCell> */}
               {/* <UserTableCell>{dateFormat(user.lastPwUpdDtime, 'isoDate')}</UserTableCell> */}
-              <UserTableCell>{userConfig.filter((item)=>item.value === user.regCategory)[0].label} </UserTableCell>
+              <UserTableCell>
+                {userConfig.filter(item => item.value === user.regCategory)[0].label}{' '}
+              </UserTableCell>
               <UserTableCell>
                 <Button
                   variant="text"

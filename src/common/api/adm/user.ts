@@ -20,8 +20,15 @@ export function userList({ page, elementCnt }: {
   };
 }
 
-export async function modifyUser(userInput: UserInput) {
-  return await PUT(`/user/adm/${userInput.seq}`, userInput);
+// export async function modifyUser(userInput: UserInput) {
+//   return await PUT(`/user/adm/${userInput.seq}`, userInput);
+// }
+
+export async function modifyUser({ seq, userInput} : {
+  seq: number,
+  userInput: UserInput,
+}) {
+  return await PUT(`/user/adm/${seq}`, userInput);
 }
 
 export async function removeUser(seq: number) {

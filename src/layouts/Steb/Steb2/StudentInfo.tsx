@@ -67,9 +67,11 @@ export function StudentInfo({
       setFirstIdentityNumber(first);
       setValue('secondIdentityNumber', second);
       setSecondidentityNumber(second);
-      setValue('firstPhone', user.phone.slice(0, 3));
-      setValue('secondPhone', user.phone.slice(3, 7));
-      setValue('thirdPhone', user.phone.slice(7, 11));
+      if (user?.phone) {
+        setValue('firstPhone', user.phone.slice(0, 3));
+        setValue('secondPhone', user.phone.slice(3, 7));
+        setValue('thirdPhone', user.phone.slice(7, 11));
+      }
     }
     if (user && registerType === RegisterType.TYPE_ORGANIZATION) {
       // const first = user.identityNumber.slice(0, 6);

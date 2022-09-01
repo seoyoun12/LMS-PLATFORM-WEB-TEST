@@ -28,12 +28,12 @@ export function MyCourse() {
         <MyCourseSubTitle>학습중인 과정을 확인할수 있습니다</MyCourseSubTitle>
       </MyCourseContainer>
       <Box boxSizing={'border-box'} borderBottom={'2px solid #e0e0e0'}>
-        <Box sx={{ margin: 'auto', marginTop: '1.5rem' }}>
+        <Box maxWidth={1200} sx={{ margin: 'auto', marginTop: '1.5rem' }}>
           <CSRTab2
             tabsConfig={studingCourseList}
             fontSx={{ color: 'black', fontSize: '20px' }}
             variant={'fullWidth'}
-            gap={isDesktop ? 8 : 2}
+            gap={isDesktop ? 9 : 2}
             showBorderBottom={false}
           />
         </Box>

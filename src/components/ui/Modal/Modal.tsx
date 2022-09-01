@@ -64,7 +64,6 @@ export function Modal({
 }: ModalProps) {
   return (
     <DialogBox
-      className="제발"
       onClose={onCloseModal}
       aria-labelledby="modal-title"
       open={open}

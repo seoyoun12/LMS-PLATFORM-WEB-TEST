@@ -124,7 +124,11 @@ export function CalendarModify() {
       router.push('/admin-center/calendar');
     } catch (e: any) {
       // snackbar({ variant: 'error', message: e });
-      window.alert(e.data.message);
+      // window.alert(e.data.message);
+      snackbar({ variant: 'error', message: e.data.message });
+      if (e.data?.data.length > 0) {
+        snackbar({ variant: 'error', message: e.data.data[0].message.split('.')[0] });
+      }
       setLoading(false);
     }
   };

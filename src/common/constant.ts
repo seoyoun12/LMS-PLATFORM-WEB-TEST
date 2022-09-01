@@ -8,3 +8,5 @@ export enum YN {
   YES = 'Y',
   NO = 'N',
 }
+
+export const phoneList = ['010', '011', '051'];

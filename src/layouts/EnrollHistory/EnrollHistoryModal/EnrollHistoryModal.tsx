@@ -9,7 +9,10 @@ import {
   delelteCourseUserOrga,
   FindCourseUserRes,
 } from '@common/api/courseUser';
+import { phoneList } from '@common/constant';
 import { Modal, Spinner } from '@components/ui';
+import { EnrollHistoryCarNumberBox } from '@components/ui/EnrollHistory';
+import { CarNumberBox } from '@components/ui/Step';
 import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -30,6 +33,7 @@ import {
   TableRow as MuiTableRow,
   TextField,
 } from '@mui/material';
+import { Phone4Regex } from '@utils/inputRegexes';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -54,6 +58,11 @@ export function EnrollHistoryModal({
   const [phone2, setPhone2] = useState('');
   const [phone3, setPhone3] = useState('');
   const { register, setValue, reset, watch } = useForm<FindCourseUserRes>();
+  const { setValue: setPhone, watch: watchPhone } = useForm<{
+    phone1: string;
+    phone2: string;
+    phone3: string;
+  }>();
   const [getDateLoading, setGetDataLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [stepsRes, setStepsRes] = useState<
@@ -79,18 +88,10 @@ export function EnrollHistoryModal({
             ? RegType.TYPE_INDIVIDUAL
             : RegType.TYPE_ORGANIZATION
         );
-        console.log(data, '하ㅣ하');
-        // setValue('businessName', data.userCompanyName);
-        // setValue('businessSubType', data.userSubBusinessType);
-        // setValue('businessType', data.userBusinessType);
-        // setValue('carNumber', data.carNumber);
-        // setValue('carRegisteredRegion', data.carRegisteredRegion);
-        // setValue('phone', data.phone);
-        // setValue('seq', data.seq);
         reset({ ...data });
-        setPhone1(data.phone.slice(0, 3));
-        setPhone2(data.phone.slice(3, 7));
-        setPhone3(data.phone.slice(7, 11));
+        setPhone('phone1', data.phone.slice(0, 3));
+        setPhone('phone2', data.phone.slice(3, 7));
+        setPhone('phone3', data.phone.slice(7, 11));
         setStepSeq(data.courseClassSeq);
 
         const stepData = await getCourseClassStep(
@@ -118,6 +119,7 @@ export function EnrollHistoryModal({
     })();
   }, []);
 
+  //기수변경
   const onSubmit = async () => {
     // for (let [key, obj] of Object.entries(watch())) {
     //   if (!obj || obj === '') return window.alert('모두 입력해 주세요!');
@@ -126,6 +128,12 @@ export function EnrollHistoryModal({
     //   return window.alert('모두 입력해 주세요!');
     // }
 
+    if (
+      watchPhone().phone1.length !== 3 ||
+      watchPhone().phone2.length !== 4 ||
+      watchPhone().phone3.length !== 4
+    )
+      return window.alert('휴대번호를 올바르게 입력해주세요');
     try {
       setLoading(true);
       const dialogConfirmed = await dialog({
@@ -142,7 +150,7 @@ export function EnrollHistoryModal({
           carNumber: watch().carNumber,
           carRegisteredRegion: watch().carRegisteredRegion,
           courseClassSeq: stepSeq,
-          phone: watch().phone,
+          phone: watchPhone().phone1 + watchPhone().phone2 + watchPhone().phone3,
         };
 
         if (regType === RegisterType.TYPE_INDIVIDUAL) {
@@ -161,6 +169,7 @@ export function EnrollHistoryModal({
     }
   };
 
+  //신청취소
   const onClickDelete = async () => {
     try {
       const dialogConfirmed = await dialog({
@@ -209,7 +218,7 @@ export function EnrollHistoryModal({
                 신청 취소
               </Button>
               <Button variant="contained" sx={{ width: '100px' }} onClick={onSubmit}>
-                기수 변경
+                신청 수정
               </Button>
             </>
           )}
@@ -301,6 +310,86 @@ export function EnrollHistoryModal({
                 </TableDoubleRightCell>
               </TableDoubleParantLeftCell>
             </TableDoubleRow>
+
+            <TableRow>
+              <TableLeftCell className="left-cell-border">회사명</TableLeftCell>
+
+              <TableRightCell className="right-cell">
+                <TextField {...register('userCompanyName')} fullWidth />
+              </TableRightCell>
+            </TableRow>
+            <TableRow>
+              <TableLeftCell className="left-cell-border">차량번호</TableLeftCell>
+
+              <TableRightCell className="right-cell">
+                <EnrollHistoryCarNumberBox
+                  parantSetValue={setValue}
+                  localName={watch().carNumber?.substring(0, 2)}
+                  digit2={watch().carNumber?.substring(2, 4)}
+                  oneWord={watch().carNumber?.substring(4, 5)}
+                  digit4={watch().carNumber?.substring(5, 9)}
+                />
+              </TableRightCell>
+            </TableRow>
+            <TableRow>
+              <TableLeftCell className="left-cell-border">차량등록지</TableLeftCell>
+
+              <TableRightCell className="right-cell">
+                <FormControl fullWidth>
+                  <Select
+                    {...register('carRegisteredRegion')}
+                    value={watch().carRegisteredRegion || ''}
+                  >
+                    {locationList.map(item => (
+                      <MenuItem key={item.en} value={item.en}>
+                        {item.ko}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </TableRightCell>
+            </TableRow>
+            <TableRow>
+              <TableLeftCell className="left-cell-border">휴대번호</TableLeftCell>
+
+              <TableRightCell className="right-cell">
+                <FormControl fullWidth>
+                  <Select
+                    labelId="phone-type-label"
+                    id="phone-type"
+                    onChange={e => {
+                      setPhone('phone1', e.target.value);
+                    }}
+                    value={watchPhone().phone1 || ''}
+                  >
+                    <MenuItem value={''}>선택</MenuItem>
+                    {phoneList.map(item => (
+                      <MenuItem key={item} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                -
+                <TextField
+                  onChange={e => {
+                    if (Phone4Regex.test(e.target.value)) return;
+                    setPhone('phone2', e.target.value.replace(/[^0-9]/g, ''));
+                  }}
+                  value={watchPhone().phone2}
+                  fullWidth
+                />
+                -
+                <TextField
+                  onChange={e => {
+                    if (Phone4Regex.test(e.target.value)) return;
+                    setPhone('phone3', e.target.value.replace(/[^0-9]/g, ''));
+                  }}
+                  value={watchPhone().phone3}
+                  fullWidth
+                />
+              </TableRightCell>
+            </TableRow>
             <TableRow>
               <TableLeftCell className="left-cell-border large-font">
                 <Box>기수 / </Box>
@@ -390,6 +479,7 @@ const ModalWrap = styled(Box)`
     } */
   }
   @media (max-width: 460px) {
+    width: 100%;
     .left-cell-border {
       border: 1px solid rgb(52, 152, 219) !important;
       border-radius: 4px;

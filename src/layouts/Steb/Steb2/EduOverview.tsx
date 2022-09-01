@@ -58,9 +58,11 @@ export function EduOverview({
   const snackbar = useSnackbar();
   // const { data, error, mutate } = useSingleCourseClass(Number(enrollInfo && enrollInfo.seq));
 
+  console.log('돈다돌아', courseCategoryType, courseBusinessType);
   const getSingleCourse = async (courseClassSeq: number) => {
     try {
       const { data } = await getSingleCourseClass(courseClassSeq);
+      console.log('data', data);
 
       setCourseCategoryType(data.course.courseCategoryType as courseCategoryType);
       setCourseBusinessType(data.course.courseBusinessType as businessType); //임시타입
@@ -69,7 +71,7 @@ export function EduOverview({
         step: data.step,
         studyStartDate: data.studyStartDate,
         studyEndDate: data.studyEndDate,
-      });
+      }); //작동안하는듯한 코드확인필요
       // setValue('businessType', data.course.courseCategoryType);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -173,17 +175,17 @@ export function EduOverview({
                     // label="student"
                     disabled
                   >
-                    <MenuItem value={courseBusinessTypeList[1].enType}>
+                    {/* <MenuItem value={courseBusinessTypeList[1].enType}>
                       여객 / 화물
-                    </MenuItem>
-                    {/* {courseBusinessTypeList.map(item => {
+                    </MenuItem> */}
+                    {courseBusinessTypeList.map(item => {
                       if (item.enType === businessType.TYPE_ALL) return;
                       return (
                         <MenuItem key={item.enType} value={item.enType}>
                           {item.type}
                         </MenuItem>
                       );
-                    })} */}
+                    })}
                   </Select>
                 </FormControl>
               </TableRightCell>
@@ -245,6 +247,8 @@ const TableLeftCell = styled(TableCell)`
   text-align: center;
   font-weight: 700;
   width: 20%;
+  display: flex;
+  align-items: center;
 
   @media (max-width: 768px) {
     border-bottom: none;
@@ -256,6 +260,8 @@ const TableLeftCell = styled(TableCell)`
 `;
 const TableRightCell = styled(TableCell)`
   flex-grow: 1;
+  display: flex;
+  align-items: center;
   @media (max-width: 768px) {
     padding: 12px 0;
     padding-top: 2px;

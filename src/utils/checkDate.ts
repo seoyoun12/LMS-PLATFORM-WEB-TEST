@@ -6,9 +6,13 @@ export const checkDatePeriod = (
   endDate: string,
   currentData: string
 ) => {
-  const getStartDateTime = new Date(dateFormat(startDate, 'yyyy/mm/dd')).getTime();
-  const getEndDateTime = new Date(dateFormat(endDate, 'yyyy/mm/dd')).getTime();
-  const getCurrentTime = new Date(dateFormat(currentData, 'yyyy/mm/dd')).getTime();
+  const getStartDateTime = new Date(
+    startDate.replaceAll('-', '/').split(' ')[0]
+  ).getTime();
+  const getEndDateTime = new Date(endDate.replaceAll('-', '/').split(' ')[0]).getTime();
+  const getCurrentTime = new Date(
+    currentData.replaceAll('-', '/').split(' ')[0]
+  ).getTime();
 
   let isBetweenPeriod = false;
 
@@ -39,11 +43,15 @@ export const checkIsDate = (schedule: CourseClassRes[], currentDate: Date) => {
   for (let i = getStartDateOfMonth.getDate(); i <= getEndDateOfMonth.getDate(); i++) {
     const nowDate = new Date();
     nowDate.setDate(i);
+
     const filteringSchedule = schedule.filter(filt =>
       checkDatePeriod(
         filt.requestStartDate,
         filt.requestEndDate,
-        dateFormat(nowDate, 'yyyy-mm-dd')
+        `${nowDate.getFullYear()}-${String(nowDate.getMonth() + 1).padStart(
+          2,
+          '0'
+        )}-${String(nowDate.getDate()).padStart(2, '0')}`
       )
     );
     const scheduleItem = filteringSchedule.map(item => {

@@ -207,13 +207,8 @@ export function CalendarBody({
                     {child.courseCategoryType.ko} 교육
                   </Box>
                   <Box mt={1}>
-                    {dateFormat(
-                      child.requestStartDate.replaceAll('-', '/'),
-                      'yyyy-mm-dd'
-                    )}{' '}
-                    ~{' '}
-                    {dateFormat(child.requestEndDate.replaceAll('-', '/'), 'yyyy-mm-dd')}{' '}
-                    [
+                    {child.requestStartDate.split(' ')[0]} ~{' '}
+                    {child.requestEndDate.split(' ')[0]} [
                     {child.limitPeople === 0
                       ? '인원제한없음'
                       : `${child.currentJoin}/
@@ -316,8 +311,15 @@ export function CalendarBody({
                 <TableRow>
                   <TableLeftCell>교육일</TableLeftCell>
                   <TableRightCell>
-                    {dateFormat(modalInfo.studyStartDate, 'yyyy-mm-dd')} ~{' '}
-                    {dateFormat(modalInfo.studyEndDate, 'yyyy-mm-dd')}
+                    {dateFormat(
+                      modalInfo.studyStartDate.replaceAll('-', '/'),
+                      'yyyy-mm-dd'
+                    )}{' '}
+                    ~{' '}
+                    {dateFormat(
+                      modalInfo.studyEndDate.replaceAll('-', '/'),
+                      'yyyy-mm-dd'
+                    )}
                   </TableRightCell>
                 </TableRow>
                 <TableRow>

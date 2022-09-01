@@ -69,7 +69,6 @@ export function CategoryBoard() {
 
 const NoticeWrap = styled(Box)`
   padding: 4rem 0 0;
-  margin-bottom: 2px;
   background: #e6edf3;
 
   .Mui-selected {

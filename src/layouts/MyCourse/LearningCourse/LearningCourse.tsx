@@ -10,17 +10,37 @@ export function LearningCourse() {
   const router = useRouter();
   const { user, error } = useMyUser();
   if (!user) return <Spinner />;
+  console.log('??');
   return (
     <LearningCourseWrap>
-    {user.learningCourses.length  <= 0 ? <NotFound content='신청한 과정이 존재하지 않습니다!' /> : user.learningCourses.filter((item)=>new Date(item.studyEndDate.replace('-','.')).getTime() > new Date().getTime()).length <= 0 && <NotFound content='학습중인 과정이 존재하지 않습니다!' />}
-      <Grid container rowSpacing={4} columnSpacing={4} columns={{ xs: 1, sm: 2, md: 4, lg: 4 }}>
+      {user.learningCourses.length <= 0 ? (
+        <NotFound content="신청한 과정이 존재하지 않습니다!" />
+      ) : (
+        user.learningCourses.filter(
+          item =>
+            new Date(item.studyEndDate.replaceAll('-', '/')).getTime() >
+            new Date().getTime()
+        ).length <= 0 && <NotFound content="학습중인 과정이 존재하지 않습니다!" />
+      )}
+      <Grid
+        container
+        rowSpacing={4}
+        columnSpacing={4}
+        columns={{ xs: 1, sm: 2, md: 4, lg: 4 }}
+      >
         {user.learningCourses
           .filter(fil => fil.progressStatus === progressStatus.TYPE_PROGRESSING)
           .map(item => (
             <Grid item xs={1} sm={1} md={1} lg={1} key={item.courseClassSeq}>
               <Box
                 // href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}
-                onClick={() => router.push(`/course/${item.courseUserSeq}/lesson/${!item.recentLessonSeq ? 1 : item.recentLessonSeq}`)}
+                onClick={() =>
+                  router.push(
+                    `/course/${item.courseUserSeq}/lesson/${
+                      !item.recentLessonSeq ? 1 : item.recentLessonSeq
+                    }`
+                  )
+                }
               >
                 <ContentCardV2
                   image={item.thumbnailImage}

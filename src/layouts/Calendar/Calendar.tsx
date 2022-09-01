@@ -67,11 +67,23 @@ export enum FilterType {
 
 export const eduLegendList = [
   {
-    title: '보수일반 교육',
+    title: '여객',
     enType: courseCategoryType.TYPE_SUP_COMMON,
     color: '#f0ffdf',
     borderColor: '#d3f2a0',
   },
+  {
+    title: '화물',
+    enType: courseCategoryType.TYPE_CONSTANT,
+    color: '#eed4ba',
+    borderColor: '#036c19',
+  },
+  // {
+  //   title: '보수일반 교육',
+  //   enType: courseCategoryType.TYPE_SUP_COMMON,
+  //   color: '#f0ffdf',
+  //   borderColor: '#d3f2a0',
+  // },
   // {
   //   title: '보수수시 교육',
   //   enType: courseCategoryType.TYPE_SUP_CONSTANT,
@@ -93,24 +105,38 @@ export const eduLegendList = [
   //   color: '#e8c0cf',
   //   borderColor: '#b34caa',
   // },
-  { title: '마감', enType: courseCategoryType.TYPE_NONE, color: '#e0e0e0', borderColor: '#dfdfdf' },
+  {
+    title: '마감',
+    enType: courseCategoryType.TYPE_NONE,
+    color: '#e0e0e0',
+    borderColor: '#dfdfdf',
+  },
 ];
 
 export const courseBusinessTypeList = [
-  { type: '전체', enType: businessType.TYPE_ALL },
+  // { type: '전체', enType: businessType.TYPE_ALL },
   { type: '여객', enType: businessType.TYPE_PASSENGER },
   { type: '화물', enType: businessType.TYPE_CARGO },
 ];
 
-const modalInfoTItle = ['기수', '보수교육', '업종구분', '교육일', '신청/정원', '예약가능시간'];
+const modalInfoTItle = [
+  '기수',
+  '보수교육',
+  '업종구분',
+  '교육일',
+  '신청/정원',
+  '예약가능시간',
+];
 
 export function CNCalendar() {
   const [date, setDate] = useState(new Date());
-  const [filter, setFilter] = useState<businessType>(businessType.TYPE_ALL);
+  const [filter, setFilter] = useState<businessType>(businessType.TYPE_PASSENGER);
   const [openModal, setOpenModal] = useState(false);
   const [modalInfo, setModalInfo] = useState<ClickedPlanInfo>();
   const { data, error, mutate } = useCourseClass({
-    courseType: typeof window !== 'undefined' && (localStorage.getItem('site_course_type') as courseType),
+    courseType:
+      typeof window !== 'undefined' &&
+      (localStorage.getItem('site_course_type') as courseType),
     businessType: filter,
     // businessType: businessType.TYPE_ALL,
     date: dateFormat(date, 'yyyy-mm'),
@@ -130,8 +156,10 @@ export function CNCalendar() {
 
   //Month changer
   const onChangeMonth = (type: MonthClickType, value: number) => {
-    if (type === MonthClickType.BTN_CLICK) return setDate(prev => new Date(prev.setMonth(prev.getMonth() + value)));
-    if (type === MonthClickType.MONTH_CLICK) return setDate(prev => new Date(prev.setMonth(value - 1)));
+    if (type === MonthClickType.BTN_CLICK)
+      return setDate(prev => new Date(prev.setMonth(prev.getMonth() + value)));
+    if (type === MonthClickType.MONTH_CLICK)
+      return setDate(prev => new Date(prev.setMonth(value - 1)));
   };
 
   //fullcalendar changer

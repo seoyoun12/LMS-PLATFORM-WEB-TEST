@@ -10,12 +10,18 @@ import styled from '@emotion/styled';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import { grey } from '@mui/material/colors';
 import { LessonInput } from '@common/api/lesson';
-import { uploadLessons } from '@common/api/adm/lesson';
+import {
+  removeLesson,
+  uploadLessons,
+  useLesson,
+  useLessonList,
+} from '@common/api/adm/lesson';
 import { CustomInputLabel } from '@components/ui/InputLabel';
 import { read, utils } from 'xlsx';
 import { Modal, Spinner } from '@components/ui';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useRouter } from 'next/router';
+import { contentDetail } from '@common/api/adm/content';
 
 interface XlsxData extends LessonInput {
   min: number;
@@ -47,6 +53,11 @@ export function LessonBulkUploadModal({
   const router = useRouter();
   const { query } = router;
   const [loading, setLoading] = useState(false);
+  const { contentSeq } = router.query;
+  const { lessonList, lessonListError, mutate } = useLessonList(Number(contentSeq));
+
+  // console.log('lessonList : ', lessonList);
+  // console.log('contentSeq : ', contentSeq);
 
   // excel sample file
   const onClickDownloadFile = async () => {
@@ -96,25 +107,21 @@ export function LessonBulkUploadModal({
       });
 
     try {
-      // 데이터 있는지
-      console.log('lessonInput : ', lessonInput);
-
+      // if (lessonList) {
+      //   await removeLesson(lessonList[0].seq); // 모든 seq 조회 후 삭제 필요
+      // } else {
       const contentSeq = Number(query.contentSeq);
-
-      console.log('contentSeq : ', contentSeq);
-
-      // await uploadLessons({ contentSeq, lessonInput });
+      await uploadLessons({ contentSeq, lessonInput });
       snackbar({ variant: 'success', message: '성공적으로 업로드 되었습니다.' });
-      // setLoading(false);
+      setLoading(false);
+      // }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
-      // setLoading(false);
+      setLoading(false);
     }
 
     handleClose(true);
   };
-
-  // 파일 업로드 관련 코드 작성 필요. modal쪽 전부 코드수정해야함.
 
   return (
     <Modal

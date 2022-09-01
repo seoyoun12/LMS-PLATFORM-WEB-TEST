@@ -149,10 +149,11 @@ export function CalendarMobile() {
   const calendarRef = useRef<FullCalendar>(null);
 
   //RadioButton Filter changer
-  const onChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value === businessType.TYPE_ALL) setFilter(e.target.value);
-    if (e.target.value === businessType.TYPE_PASSENGER) setFilter(e.target.value);
-    if (e.target.value === businessType.TYPE_CARGO) setFilter(e.target.value);
+  const onChangeFilter = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const value = e.currentTarget.value;
+    if (value === businessType.TYPE_ALL) setFilter(value);
+    if (value === businessType.TYPE_PASSENGER) setFilter(value);
+    if (value === businessType.TYPE_CARGO) setFilter(value);
     mutate();
   };
 

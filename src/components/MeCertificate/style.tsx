@@ -28,13 +28,15 @@ export const MeCertificateHeaderTitle = styled.p`
   font-weight: 500;
   color: #fff;
   line-height: 42px;
+  margin-bottom: 10px;
 `;
 
 export const MeCertificateHeaderSubtitle = styled.p`
   font-size: 17px;
   font-weight: 500;
   color: #fff;
-  line-height: 42px;
+  word-break: break-word;
+  text-align: center;
 `;
 
 export const MeCertificateContentContainer = styled.div`
@@ -44,6 +46,7 @@ export const MeCertificateContentContainer = styled.div`
   flex-wrap: wrap;
   justify-content: flex-start;
   margin: 62px auto 0 auto;
+  padding: 0 32px;
 
   @media (max-width: 768px) {
     padding: 32px 12px;

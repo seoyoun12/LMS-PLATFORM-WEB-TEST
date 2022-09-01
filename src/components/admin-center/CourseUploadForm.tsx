@@ -39,6 +39,10 @@ import {
 } from '@common/api/courseClass';
 import Image from 'next/image';
 import { Spinner } from '@components/ui';
+import { useDialog } from '@hooks/useDialog';
+import router from 'next/router';
+import { courseType as CourseType } from '@common/api/courseClass';
+import { useSnackbar } from '@hooks/useSnackbar';
 
 interface Props {
   mode?: 'upload' | 'modify';
@@ -75,6 +79,8 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
   const [fileName, setFileName] = useState<string | null>(null);
   const [thumbnail, setThumbnail] = useState('');
   const [loading, setLoading] = useState(false);
+  const dialog = useDialog();
+  const snackbar = useSnackbar();
 
   const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(
     null
@@ -91,12 +97,16 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
     control,
     reset,
     watch,
+    setValue,
     resetField,
   } = useForm<FormType>({ defaultValues });
 
   // Select 박스 초깃값 설정.
   useEffect(() => {
-    if (course?.courseType) setCourseType(course.courseType);
+    if (course?.courseType) {
+      setCourseType(course.courseType);
+      setCourseSubCategoryType(course.courseSubCategoryType);
+    }
   }, []);
 
   useEffect(() => {
@@ -130,10 +140,11 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
     const courseInput = {
       ...course,
       courseCategoryType: courseCategory[0].type, //보수일반
-      courseSubCategoryType: courseSubCategory[0].type, //버스(백에서 자동으로 여객으로 인식)
+      // courseSubCategoryType: courseSubCategory[0].type, //버스(백에서 자동으로 여객으로 인식) 2022-08-31 여객(BUS),화물(INDIVIDUAL_CARGO)로 수정
       courseType,
       // content1: markdownContent,
     };
+    console.log(course, courseInput, courseSubCategoryType);
     setLoading(true);
     onHandleSubmit({ courseInput, files, isFileDelete, setLoading });
   };
@@ -162,17 +173,20 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               value={courseType || ''}
               label="과정분류"
             >
-              {courseReg.map(item => (
-                <MenuItem key={item.type} value={item.type}>
-                  {item.ko}
-                </MenuItem>
-              ))}
+              {courseReg.map(item => {
+                if (item.type === CourseType.TYPE_PROVINCIAL) return;
+                return (
+                  <MenuItem key={item.type} value={item.type}>
+                    {item.ko}
+                  </MenuItem>
+                );
+              })}
             </Select>
           </FormControl>
 
           <FormControl fullWidth className="courseUploadInputBox">
             {/* <FormControlLabel></FormControlLabel> */}
-            <InputLabel>교육분류</InputLabel>
+            <InputLabel>교육분류(고정)</InputLabel>
             <Select
               labelId="courseCategory"
               id="courseCategory"
@@ -181,10 +195,14 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
                 setCourseCategoryType(
                   courseCategory.filter(cate => cate.type === e.target.value)[0].type
                 );
+                setValue(
+                  'courseCategoryType',
+                  courseCategory.filter(cate => cate.type === e.target.value)[0].type
+                );
               }}
               value={courseCategory[0].type}
               disabled
-              label="교육분류"
+              label="교육분류(고정)"
             >
               <MenuItem value={courseCategory[0].type}>{courseCategory[0].ko}</MenuItem>
               {courseCategory.map(item => (
@@ -200,19 +218,24 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
             <Select
               labelId="courseSubCategoryType"
               id="courseSubCategoryType"
-              // value={courseSubCategoryType}
+              value={watch().courseSubCategoryType || ''}
               onChange={e => {
-                setCourseSubCategoryType(
+                // setCourseSubCategoryType(
+                //   courseSubCategory.filter(cate => cate.type === e.target.value)[0].type
+                // );
+                setValue(
+                  'courseSubCategoryType',
                   courseSubCategory.filter(cate => cate.type === e.target.value)[0].type
                 );
               }}
-              disabled
-              value={courseSubCategory[0].type}
+              // disabled
+              // value={courseSubCategory[0].type}
               label="업종"
             >
-              <MenuItem value={courseSubCategory[0].type}>
-                {courseSubCategory[0].ko}
-              </MenuItem>
+              {/* 타입은 버스지만 여객으로 백에서 인식합니다 */}
+              <MenuItem value={courseSubCategory[0].type}>여객</MenuItem>
+              {/* 타입은 개별화물이지만 화물로 백에서 인식합니다 */}
+              <MenuItem value={courseSubCategory[6].type}>화물</MenuItem>
               {/* {courseSubCategory.map(item => (
                 <MenuItem key={item.type} value={item.type}>
                   {item.ko}
@@ -241,6 +264,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
               register={register}
               regName="files"
               onFileChange={handleFileChange}
+              accept=".jpg, .jpeg, .png"
               // onFileChange={saveFileImage}
             >
               {/* <ThumbnailImg>

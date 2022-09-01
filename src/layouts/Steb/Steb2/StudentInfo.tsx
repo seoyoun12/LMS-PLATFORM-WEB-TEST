@@ -182,7 +182,9 @@ export function StudentInfo({
                     value={watch().firstPhone || ''}
                   >
                     {phoneList.map(item => (
-                      <MenuItem value={item}>{item}</MenuItem>
+                      <MenuItem key={item} value={item}>
+                        {item}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>

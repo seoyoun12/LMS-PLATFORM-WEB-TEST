@@ -194,7 +194,9 @@ export default function Steb3() {
                     fullWidth
                   >
                     {courseCategory.map(item => (
-                      <MenuItem value={item.type}>{item.ko}</MenuItem>
+                      <MenuItem key={item.type} value={item.type}>
+                        {item.ko}
+                      </MenuItem>
                     ))}
                   </Select>
                 </TableRitghCell>
@@ -212,7 +214,9 @@ export default function Steb3() {
                     fullWidth
                   >
                     {courseBusinessTypeList.map(item => (
-                      <MenuItem value={item.enType}>{item.type}</MenuItem>
+                      <MenuItem key={item.enType} value={item.enType}>
+                        {item.type}
+                      </MenuItem>
                     ))}
                   </Select>
                 </TableRitghCell>
@@ -222,8 +226,8 @@ export default function Steb3() {
                 <TableRitghCell>
                   <Select value="dummy" disabled fullWidth>
                     <MenuItem value="dummy">
-                      {info?.step}기 / {dateFormat(info.studyStartDate, 'yyyy-mm-dd')} ~{' '}
-                      {dateFormat(info?.studyEndDate, 'yyyy-mm-dd')}
+                      {info?.step}기 / {info.studyStartDate.split(' ')[0]} ~{' '}
+                      {info?.studyEndDate.split(' ')[0]}
                     </MenuItem>
                   </Select>
                 </TableRitghCell>

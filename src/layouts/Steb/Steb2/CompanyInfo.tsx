@@ -66,7 +66,7 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
     }
     if (
       courseSubCategoryType.PRIVATE_TAXI === value ||
-      courseSubCategoryType.GENERAL_CARGO === value ||
+      courseSubCategoryType.CONSIGNMENT === value ||
       courseSubCategoryType.INDIVIDUAL_CARGO === value
     ) {
       setDisabledCompany(true);
@@ -228,6 +228,8 @@ const TableLeftCell = styled(TableCell)`
   text-align: center;
   font-weight: 700;
   width: 20%;
+  display: flex;
+  align-items: center;
 
   @media (max-width: 768px) {
     border-bottom: none;
@@ -239,6 +241,8 @@ const TableLeftCell = styled(TableCell)`
 `;
 const TableRightCell = styled(TableCell)`
   flex-grow: 1;
+  display: flex;
+  align-items: center;
   @media (max-width: 768px) {
     padding: 12px 0;
     padding-top: 2px;

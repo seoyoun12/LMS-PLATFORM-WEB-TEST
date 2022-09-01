@@ -103,7 +103,7 @@ export function Modal({
 const DialogBox = styled(Dialog)`
   .MuiPaper-root {
     margin: 0;
-    width: fit-content;
+    /* width: fit-content; */
   }
   .MuiDialog-container {
     justify-content: none;

@@ -35,11 +35,11 @@ export function CourseModify() {
   const { courseSeq, tab } = router.query;
   const { data, error } = courseDetail(Number(courseSeq));
 
-
   const handleSubmit = async ({
     files,
     // isFileDelete,
-    courseInput,setLoading
+    courseInput,
+    setLoading,
   }: // seq
   {
     files: File[];

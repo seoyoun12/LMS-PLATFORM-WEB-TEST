@@ -325,11 +325,11 @@ const SubTitle = styled(Box)`
   padding: 0.5rem 2.5rem;
   width: fit-content;
   margin: auto;
-  margin-top: 36px;
+  margin-top: 70px;
   /* color: white; */
   background: #f7f7f7;
   border: 1px solid #236cef;
-  border-radius: 4px;
+  border-radius: 24px;
   display: flex;
 `;
 
@@ -339,7 +339,7 @@ const NoticeContainer = styled(Box)`
   position: relative;
   height: 25%;
   margin: auto;
-  margin-top: 40px;
+  /* margin-top: 40px; */
   border-radius: 1rem;
   /* border: 2px solid #d7d7d7; */
   // 알림판 중앙 정렬
@@ -396,7 +396,7 @@ const MainCategoryCard = styled(Container)`
   justify-content: center;
   align-items: center;
   margin: 0;
-  margin-top: 20px;
+  margin-top: 60px;
   box-shadow: 2px 2px 12px 3px rgba(0, 0, 0, 0.2);
   z-index: 11;
 `;

@@ -31,7 +31,13 @@ const Months = [
   { title: '12월', value: 12 },
 ];
 
-export function CalendarHeader({ onChangeMonth, date, filterList, onChangeFilter, filter }: Props) {
+export function CalendarHeader({
+  onChangeMonth,
+  date,
+  filterList,
+  onChangeFilter,
+  filter,
+}: Props) {
   const handleLeftBtnClick = () => {
     const clickType = MonthClickType.BTN_CLICK;
     onChangeMonth(clickType, -1);
@@ -48,12 +54,18 @@ export function CalendarHeader({ onChangeMonth, date, filterList, onChangeFilter
   return (
     <CalendarHeaderWrap>
       <TopYearWrap>
-        <ArrowLeftRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleLeftBtnClick} />
+        <ArrowLeftRoundedIcon
+          sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }}
+          onClick={handleLeftBtnClick}
+        />
         <YearWrap>{date.getFullYear()}년</YearWrap>
-        <ArrowRightRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleRightBtnClick} />
+        <ArrowRightRoundedIcon
+          sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }}
+          onClick={handleRightBtnClick}
+        />
       </TopYearWrap>
       <DateWrap>
-        <ArrowLeftRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleLeftBtnClick} />
+        {/* <ArrowLeftRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleLeftBtnClick} /> */}
         <MonthWrap>
           {Months.map(month => (
             <Box
@@ -61,18 +73,31 @@ export function CalendarHeader({ onChangeMonth, date, filterList, onChangeFilter
               className={`header-month-box `}
               onClick={() => handleLeftMonthClick(month.value)}
             >
-              <Typography className={`header-month ${month.value === date.getMonth() + 1 ? 'active' : ''}`}>{month.title}</Typography>
+              <Typography
+                className={`header-month ${
+                  month.value === date.getMonth() + 1 ? 'active' : ''
+                }`}
+              >
+                {month.title}
+              </Typography>
             </Box>
           ))}
         </MonthWrap>
-        <ArrowRightRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleRightBtnClick} />
+        {/* <ArrowRightRoundedIcon sx={{ fontSize: '3rem', color: grey[500], cursor: 'pointer' }} onClick={handleRightBtnClick} /> */}
       </DateWrap>
       <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
-        <Typography fontSize="18px">- 해당 일정을 클릭 하시면 자세한 교육내용을 확인 및 수정페이지로 이동할 수 있습니다.</Typography>
+        <Typography fontSize="18px">
+          - 해당 일정을 클릭 하시면 자세한 교육내용을 확인 및 수정페이지로 이동할 수
+          있습니다.
+        </Typography>
         <Box>
           {filterList.map(item => (
             <>
-              <Radio value={item.enType} onChange={onChangeFilter} checked={filter === item.enType} />
+              <Radio
+                value={item.enType}
+                onChange={onChangeFilter}
+                checked={filter === item.enType}
+              />
               <span>{item.type}</span>
             </>
           ))}
@@ -81,7 +106,8 @@ export function CalendarHeader({ onChangeMonth, date, filterList, onChangeFilter
       <Box display="flex" justifyContent="flex-end" gap="1rem" mt={6}>
         {eduLegendList.map(legend => (
           <Box display="flex" alignItems="center">
-            <CircleRoundedIcon sx={{ fontSize: '1rem', color: legend.color }} /> <span>{legend.title}</span>
+            <CircleRoundedIcon sx={{ fontSize: '1rem', color: legend.color }} />{' '}
+            <span>{legend.title}</span>
           </Box>
         ))}
       </Box>

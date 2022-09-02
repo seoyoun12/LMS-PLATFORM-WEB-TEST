@@ -101,11 +101,14 @@ export function BoardAccordionV2({
                       </Box>
                     )}
                     <Box
-                      sx={{ cursor: 'pointer', color: '#236cef' }}
+                      sx={{
+                        cursor: 'pointer',
+                        color: '#236cef',
+                        display: 'inline-block',
+                      }}
                       onClick={async () => {
                         try {
                           const blobData = await downloadFile(s3Files[0].seq);
-
                           const url = window.URL.createObjectURL(new Blob([blobData]));
                           const a = document.createElement('a');
                           a.href = url;
@@ -180,6 +183,7 @@ const BoardAccordionDetails = styled(AccordionDetails)`
   margin: 0;
   padding: 2rem 0;
   border-top: 1px solid #cdcdcd;
+  background-color: #e0e0e0;
 `;
 const BoardContentBox = styled(Box)`
   padding: 0 80px;

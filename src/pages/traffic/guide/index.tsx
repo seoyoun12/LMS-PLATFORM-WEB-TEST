@@ -6,7 +6,7 @@ export default function GuidePage() {
   return (
     <>
       <Head>
-        <title>Guide Page</title>
+        <title>충남도로교통연수원</title>
       </Head>
       <Guide />
     </>

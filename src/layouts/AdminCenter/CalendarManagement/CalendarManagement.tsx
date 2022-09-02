@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import dateFormat from 'dateformat';
 import { businessType } from '@common/api/courseClass';
 import { courseClassRemove, useCourseClassAdm } from '@common/api/adm/courseClass';
@@ -46,7 +46,15 @@ export function CalendarManagement() {
   const dialog = useDialog();
   const router = useRouter();
   // const [ page, setPage ] = useState(0);
-  const { data, error, mutate } = useCourseClassAdm(businessType.TYPE_ALL, '2022-08');
+  const [manageMentDate, setManagementDate] = useState<Date>(new Date());
+  const { data, error, mutate } = useCourseClassAdm(
+    businessType.TYPE_ALL,
+    dateFormat(manageMentDate, 'yyyy-mm')
+  );
+
+  const handleDate = (date: Date) => {
+    setManagementDate(date);
+  };
 
   useEffect(() => {
     const { page } = router.query;
@@ -194,7 +202,7 @@ export function CalendarManagement() {
           })}
         </TableBody>
       </Table>
-      <AdminCalendar />
+      <AdminCalendar handleDate={handleDate} />
     </CalendarManagementWrap>
   );
 }

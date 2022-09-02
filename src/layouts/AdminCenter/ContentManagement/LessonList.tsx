@@ -49,6 +49,8 @@ export function LessonList() {
   const { lessonList, lessonListError, mutate } = useLessonList(Number(contentSeq));
   const { lesson, lessonError } = useLesson(lessonId);
 
+  // console.log('레슨리스트 :', lessonList);
+
   // 삭제 -> modal 내부로 이동
   // const onRemoveLesson = async (lessonId: number) => {
   //   try {

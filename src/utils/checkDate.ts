@@ -1,17 +1,30 @@
 import { CourseClassRes } from '@common/api/courseClass';
 import dateFormat from 'dateformat';
 
+/**
+ * 날짜를 체크하여 boolean값을 리턴합니다.
+ * @Param startDate: string
+ * @Param endDate: string
+ * @Param currentDate: string
+ * @Param replaceType: string
+ * @Param splitType: string
+ * @return boolean
+ */
 export const checkDatePeriod = (
   startDate: string,
   endDate: string,
-  currentData: string
+  currentDate: string,
+  replaceType: string = '-',
+  splitType: string = ' '
 ) => {
   const getStartDateTime = new Date(
-    startDate.replaceAll('-', '/').split(' ')[0]
+    startDate.replaceAll(replaceType, '/').split(splitType)[0]
   ).getTime();
-  const getEndDateTime = new Date(endDate.replaceAll('-', '/').split(' ')[0]).getTime();
+  const getEndDateTime = new Date(
+    endDate.replaceAll(replaceType, '/').split(splitType)[0]
+  ).getTime();
   const getCurrentTime = new Date(
-    currentData.replaceAll('-', '/').split(' ')[0]
+    currentDate.replaceAll(replaceType, '/').split(splitType)[0]
   ).getTime();
 
   let isBetweenPeriod = false;
@@ -43,11 +56,13 @@ export const checkIsDate = (schedule: CourseClassRes[], currentDate: Date) => {
   for (let i = getStartDateOfMonth.getDate(); i <= getEndDateOfMonth.getDate(); i++) {
     const nowDate = new Date();
     nowDate.setDate(i);
-
+    console.log(schedule);
     const filteringSchedule = schedule.filter(filt =>
       checkDatePeriod(
-        filt.requestStartDate,
-        filt.requestEndDate,
+        // filt.requestStartDate,
+        // filt.requestEndDate,
+        filt.studyStartDate, //학습시작일 (2022-09-02요구사항 변경)
+        filt.studyEndDate, //학습종료일
         `${nowDate.getFullYear()}-${String(nowDate.getMonth() + 1).padStart(
           2,
           '0'

@@ -61,15 +61,19 @@ export function CompanyInfo({
       target: { value },
     } = e;
 
+    //차량번호 비활성화
     if (
       courseSubCategoryType.BUS === value ||
-      courseSubCategoryType.CHARTER_BUS === value
+      courseSubCategoryType.CHARTER_BUS === value ||
+      courseSubCategoryType.CORPORATE_TAXI === value
     ) {
       setValue('carNumber', null);
       setValue('businessName', '');
       setDisabledCompany(false);
       return setHideCarNumber(true);
     }
+
+    //회사명 고정
     if (
       courseSubCategoryType.PRIVATE_TAXI === value ||
       courseSubCategoryType.CONSIGNMENT === value ||

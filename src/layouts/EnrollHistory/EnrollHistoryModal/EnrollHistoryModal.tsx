@@ -1,4 +1,8 @@
-import { getCourseClassStep, RegisterType } from '@common/api/courseClass';
+import {
+  courseSubCategoryType,
+  getCourseClassStep,
+  RegisterType,
+} from '@common/api/courseClass';
 import {
   getSingleCourseUser,
   modifyCourseUserIndi,
@@ -33,9 +37,12 @@ import {
   TableRow as MuiTableRow,
   TextField,
 } from '@mui/material';
+import { checkDatePeriod } from '@utils/checkDate';
 import { Phone4Regex } from '@utils/inputRegexes';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import dateFormat from 'dateformat';
+import { useRouter } from 'next/router';
 
 interface Props {
   open: boolean;
@@ -52,11 +59,9 @@ export function EnrollHistoryModal({
   regType,
   courseTitle,
 }: Props) {
+  const router = useRouter();
   const snackbar = useSnackbar();
   const dialog = useDialog();
-  const [phone1, setPhone1] = useState('');
-  const [phone2, setPhone2] = useState('');
-  const [phone3, setPhone3] = useState('');
   const { register, setValue, reset, watch } = useForm<FindCourseUserRes>();
   const { setValue: setPhone, watch: watchPhone } = useForm<{
     phone1: string;
@@ -76,6 +81,7 @@ export function EnrollHistoryModal({
     }[]
   >([]); //기수 교육시작 교육끝
   const [stepSeq, setStepSeq] = useState<number>();
+  const [isStudyPeriod, setIsStudyPeriod] = useState<boolean>(true);
 
   useEffect(() => {
     (async function () {
@@ -89,6 +95,15 @@ export function EnrollHistoryModal({
             : RegType.TYPE_ORGANIZATION
         );
         reset({ ...data });
+        if (
+          checkDatePeriod(
+            watch().studyStartDate,
+            watch().studyEndDate,
+            dateFormat(new Date(), 'yyyy-mm-dd')
+          )
+        ) {
+          setIsStudyPeriod(true);
+        }
         setPhone('phone1', data.phone.slice(0, 3));
         setPhone('phone2', data.phone.slice(3, 7));
         setPhone('phone3', data.phone.slice(7, 11));
@@ -203,6 +218,15 @@ export function EnrollHistoryModal({
         <Box width="100%" display="flex" justifyContent="flex-end" gap={2}>
           {loading ? (
             <Spinner fit={true} />
+          ) : isStudyPeriod ? (
+            <Button
+              variant="contained"
+              onClick={() =>
+                router.push(`/course/${watch().seq}/lesson/${watch().firstChapterSeq}`)
+              }
+            >
+              학습하기
+            </Button>
           ) : (
             <>
               <Button
@@ -315,22 +339,34 @@ export function EnrollHistoryModal({
               <TableLeftCell className="left-cell-border">회사명</TableLeftCell>
 
               <TableRightCell className="right-cell">
-                <TextField {...register('userCompanyName')} fullWidth />
-              </TableRightCell>
-            </TableRow>
-            <TableRow>
-              <TableLeftCell className="left-cell-border">차량번호</TableLeftCell>
-
-              <TableRightCell className="right-cell">
-                <EnrollHistoryCarNumberBox
-                  parantSetValue={setValue}
-                  localName={watch().carNumber?.substring(0, 2)}
-                  digit2={watch().carNumber?.substring(2, 4)}
-                  oneWord={watch().carNumber?.substring(4, 5)}
-                  digit4={watch().carNumber?.substring(5, 9)}
+                <TextField
+                  {...register('userCompanyName')}
+                  disabled={isStudyPeriod}
+                  fullWidth
                 />
               </TableRightCell>
             </TableRow>
+            {courseSubCategoryType.BUS === watch().userSubBusinessType ||
+            courseSubCategoryType.CHARTER_BUS === watch().userSubBusinessType ||
+            courseSubCategoryType.CORPORATE_TAXI === watch().userSubBusinessType ? (
+              ''
+            ) : (
+              <TableRow>
+                <TableLeftCell className="left-cell-border">차량번호</TableLeftCell>
+
+                <TableRightCell className="right-cell">
+                  <EnrollHistoryCarNumberBox
+                    parantSetValue={setValue}
+                    localName={watch().carNumber?.substring(0, 2)}
+                    digit2={watch().carNumber?.substring(2, 4)}
+                    oneWord={watch().carNumber?.substring(4, 5)}
+                    digit4={watch().carNumber?.substring(5, 9)}
+                    isStudyPeriod={isStudyPeriod}
+                  />
+                </TableRightCell>
+              </TableRow>
+            )}
+
             <TableRow>
               <TableLeftCell className="left-cell-border">차량등록지</TableLeftCell>
 
@@ -339,6 +375,7 @@ export function EnrollHistoryModal({
                   <Select
                     {...register('carRegisteredRegion')}
                     value={watch().carRegisteredRegion || ''}
+                    disabled={isStudyPeriod}
                   >
                     {locationList.map(item => (
                       <MenuItem key={item.en} value={item.en}>
@@ -361,6 +398,7 @@ export function EnrollHistoryModal({
                       setPhone('phone1', e.target.value);
                     }}
                     value={watchPhone().phone1 || ''}
+                    disabled={isStudyPeriod}
                   >
                     <MenuItem value={''}>선택</MenuItem>
                     {phoneList.map(item => (
@@ -377,6 +415,7 @@ export function EnrollHistoryModal({
                     setPhone('phone2', e.target.value.replace(/[^0-9]/g, ''));
                   }}
                   value={watchPhone().phone2}
+                  disabled={isStudyPeriod}
                   fullWidth
                 />
                 -
@@ -386,6 +425,7 @@ export function EnrollHistoryModal({
                     setPhone('phone3', e.target.value.replace(/[^0-9]/g, ''));
                   }}
                   value={watchPhone().phone3}
+                  disabled={isStudyPeriod}
                   fullWidth
                 />
               </TableRightCell>
@@ -406,6 +446,7 @@ export function EnrollHistoryModal({
                       // setValue('courseClassSeq', Number(e.target.value));
                       // setEnrollInfo({ seq: Number(e.target.value) });
                     }}
+                    disabled={isStudyPeriod}
                   >
                     {stepsRes.map(item => {
                       return (

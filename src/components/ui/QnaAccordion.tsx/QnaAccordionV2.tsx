@@ -137,18 +137,28 @@ export function QnaAccordionV2({ loadedItem }: { loadedItem: Qna[] }) {
                                 <QuestContentBox>
                                   <TuiViewer initialValue={rest.content} />
                                 </QuestContentBox>
-                                <Box display="flex" alignItems="center" mt={4}>
-                                  {' '}
-                                  <FileDownloadIcon />
-                                  첨부파일
+                                <Box>
+                                  {rest.s3Files.length > 0 && (
+                                    <Box display="flex" alignItems="center" mt={4}>
+                                      {' '}
+                                      <FileDownloadIcon />
+                                      첨부파일
+                                    </Box>
+                                  )}
+                                  {/* <FileDownloadIcon />
+                                  첨부파일 */}
                                 </Box>
                                 <QuestFileBox
+                                  sx={{
+                                    cursor: 'pointer',
+                                    color: '#236cef',
+                                    display: 'inline-block',
+                                  }}
                                   onClick={async () => {
                                     try {
                                       const blobData = await downloadFile(
                                         rest.s3Files[0].seq
                                       );
-
                                       const url = window.URL.createObjectURL(
                                         new Blob([blobData])
                                       );
@@ -161,11 +171,13 @@ export function QnaAccordionV2({ loadedItem }: { loadedItem: Qna[] }) {
                                       console.log(e);
                                     }
                                   }}
-                                  primary={
-                                    rest.s3Files[0] ? rest.s3Files[0].name : '파일없음'
-                                  }
+                                  // primary={
+                                  //   rest.s3Files[0] ? rest.s3Files[0].name : '파일없음'
+                                  // }
                                   className="ThirdContent"
-                                />
+                                >
+                                  {rest.s3Files[0]?.name}
+                                </QuestFileBox>
                               </QuestContentBoxWrap>
                               <QuestCreatedBox
                                 primary={dateFormat(createdDtimeYmd, 'isoDate')}

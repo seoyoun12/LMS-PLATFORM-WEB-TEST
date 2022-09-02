@@ -14,7 +14,18 @@ export interface MainDisplayRes {
 }
 
 export function useMainDisplay() {
-  const { data, error, mutate } = useSWR<SWRResponse<MainDisplayRes[]>>('/main-display', GET);
+  const { data, error, mutate } = useSWR<SWRResponse<MainDisplayRes[]>>(
+    '/main-display',
+    GET,
+    {
+      onError: (error, key) => {
+        if (error.status === 401) {
+          localStorage.removeItem('REFRESH_TOKEN');
+          localStorage.removeItem('ACCESS_TOKEN');
+        }
+      },
+    }
+  );
   return {
     data: data?.data,
     error,

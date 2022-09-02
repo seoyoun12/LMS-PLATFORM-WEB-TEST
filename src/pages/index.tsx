@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>TITLE</title>
+        <title>충남도로교통연수원</title>
         <meta name="description" content="lms platform service" />
       </Head>
       <MainPage />

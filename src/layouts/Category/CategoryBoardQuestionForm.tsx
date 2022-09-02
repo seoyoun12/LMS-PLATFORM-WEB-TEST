@@ -163,8 +163,9 @@ export function CategoryBoardQuestionForm({
     if (
       qnaInput.title === '' ||
       qnaInput.content === '' ||
-      qnaInput.phone.length < 11 ||
-      qnaInput.type
+      qnaInput.phone.length < 11
+      //  ||
+      // qnaInput.type
     )
       return window.alert('제목, 내용, 휴대번호, 문의유형 모두 입력해주세요!');
     if (!individualCheck)

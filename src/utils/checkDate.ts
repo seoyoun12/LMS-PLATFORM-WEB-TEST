@@ -1,17 +1,30 @@
 import { CourseClassRes } from '@common/api/courseClass';
 import dateFormat from 'dateformat';
 
+/**
+ * 날짜를 체크하여 boolean값을 리턴합니다.
+ * @Param startDate: string
+ * @Param endDate: string
+ * @Param currentDate: string
+ * @Param replaceType: string
+ * @Param splitType: string
+ * @return boolean
+ */
 export const checkDatePeriod = (
   startDate: string,
   endDate: string,
-  currentData: string
+  currentDate: string,
+  replaceType: string = '-',
+  splitType: string = ' '
 ) => {
   const getStartDateTime = new Date(
-    startDate.replaceAll('-', '/').split(' ')[0]
+    startDate.replaceAll(replaceType, '/').split(splitType)[0]
   ).getTime();
-  const getEndDateTime = new Date(endDate.replaceAll('-', '/').split(' ')[0]).getTime();
+  const getEndDateTime = new Date(
+    endDate.replaceAll(replaceType, '/').split(splitType)[0]
+  ).getTime();
   const getCurrentTime = new Date(
-    currentData.replaceAll('-', '/').split(' ')[0]
+    currentDate.replaceAll(replaceType, '/').split(splitType)[0]
   ).getTime();
 
   let isBetweenPeriod = false;

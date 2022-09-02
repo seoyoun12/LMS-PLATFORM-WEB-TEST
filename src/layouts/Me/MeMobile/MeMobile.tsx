@@ -15,7 +15,12 @@ import { Spinner, Tabs } from '@components/ui';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { css } from '@emotion/css';
 import styled from '@emotion/styled';
-import { useMyUser } from '@common/api/user';
+import {
+  LearningStatusRes,
+  ProgressStatus,
+  useLearningStatus,
+  useMyUser,
+} from '@common/api/user';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { ContentCardV2 } from '@components/ui/ContentCard';
@@ -50,7 +55,29 @@ const myInfoList = [
 export function MeMobile() {
   const router = useRouter();
   const { user, error } = useMyUser();
+  const { data, error: leErr, mutate: leMu } = useLearningStatus();
   const [value, setValue] = React.useState(myInfoList[0].value);
+
+  const onClickEnterCourseLesson = (res: LearningStatusRes) => {
+    const isStartStudy =
+      new Date(res.studyStartDate.replaceAll('-', '/').split(' ')[0]).getTime() <
+      new Date().getTime(); //현재시간이 크면 true 아니면 false
+    const isEndedStudy =
+      new Date(res.studyEndDate.replaceAll('-', '/').split(' ')[0]).getTime() <
+      new Date().getTime(); //현재시간이 크면 true 아니면 false
+    if (res.progressStatus === ProgressStatus.TYPE_BEFORE || !isStartStudy)
+      return window.alert('아직 학습이 시작되지 않았습니다!');
+    // if (res.progressStatus === ProgressStatus.TYPE_ENDED || isEndedStudy)
+    //   return window.alert('종료된 학습입니다!');
+
+    // if (res.progressStatus === ProgressStatus.TYPE_PROGRESSING) {
+    router.push(
+      `/course/${res.courseUserSeq}/lesson/${
+        !res.recentLessonSeq ? 1 : res.recentLessonSeq
+      }`
+    );
+    // }
+  };
 
   if (error) return <div>error</div>;
   if (!user) return <Spinner />;
@@ -132,30 +159,28 @@ export function MeMobile() {
             columnSpacing={2}
             columns={{ xs: 1, sm: 2, md: 2, lg: 2 }}
           >
-            {user.learningCourses ? (
-              user.learningCourses.map(res => {
-                return (
-                  <Grid item xs={1} sm={1} md={1} lg={1} key={res.courseClassSeq}>
-                    <Box
-                      onClick={() =>
-                        router.push(
-                          `/course/${res.courseUserSeq}/lesson/${
-                            !res.recentLessonSeq ? 1 : res.recentLessonSeq
-                          }`
-                        )
-                      }
-                    >
-                      <ContentCardV2
-                        image={res.thumbnailImage}
-                        title={res.courseTitle}
-                        content1={'지금 바로 수강하기!'}
-                        content2={`${res.leftDays}일 남음`}
-                        // content2={`현재 진도율 ${res.progress}%`}
-                      />
-                    </Box>
-                  </Grid>
-                );
-              })
+            {data ? (
+              data
+                .filter(
+                  fil =>
+                    fil.progressStatus === ProgressStatus.TYPE_PROGRESSING ||
+                    fil.progressStatus === ProgressStatus.TYPE_BEFORE
+                )
+                .map(res => {
+                  return (
+                    <Grid item xs={1} sm={1} md={1} lg={1} key={res.courseClassSeq}>
+                      <Box onClick={() => onClickEnterCourseLesson(res)}>
+                        <ContentCardV2
+                          image={res.thumbnailImage}
+                          title={res.courseTitle}
+                          content1={'지금 바로 수강하기!'}
+                          content2={`${res.leftDays}일 남음`}
+                          // content2={`현재 진도율 ${res.progress}%`}
+                        />
+                      </Box>
+                    </Grid>
+                  );
+                })
             ) : (
               <div>학습중인강좌가없습니다</div>
             )}

@@ -173,8 +173,10 @@ export function CalendarBody({
       limitPeople: item.limitPeople,
       studyStartDate: item.studyStartDate,
       studyEndDate: item.studyEndDate,
-      start: dateFormat(item.start.replaceAll('-', '/'), 'yyyy-mm-dd'),
-      end: dateFormat(item.end.replaceAll('-', '/'), 'yyyy-mm-dd'),
+      // start: dateFormat(item.start.replaceAll('-', '/'), 'yyyy-mm-dd'), //신청시작일자
+      // end: dateFormat(item.end.replaceAll('-', '/'), 'yyyy-mm-dd'), //싱청종료일자
+      start: dateFormat(item.studyStartDate.replaceAll('-', '/'), 'yyyy-mm-dd'), //학습일자로 바뀜 (2022-09-02) //여기서도 건들고 유틸쪽 checkDate에서 period체크 수정해야함
+      end: dateFormat(item.studyEndDate.replaceAll('-', '/'), 'yyyy-mm-dd'), //학습일자로 바뀜 (2022-09-02) //여기서도 건들고 유틸쪽 checkDate에서 period체크 수정해야함
     });
     setOpenModal(true);
   };

@@ -53,9 +53,12 @@ export interface FindCourseUserRes {
   carRegisteredRegion: userRegistrationType;
   phone: string;
   regDate: string;
+  studyEndDate: string;
+  studyStartDate: string;
   learningTime: string;
   courseType: courseType;
   courseClassSeq: number;
+  firstChapterSeq: number;
 }
 
 export function getSingleCourseUser(courseUserSeq: number, regType: RegType) {

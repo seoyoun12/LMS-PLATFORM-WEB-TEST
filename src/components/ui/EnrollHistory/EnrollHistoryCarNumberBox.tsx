@@ -15,6 +15,7 @@ const oneWordList = ['아', '바', '사', '자', '배'];
 //partial로 통합시도 가능할듯
 interface Props {
   parantSetValue: UseFormSetValue<FindCourseUserRes>;
+  isStudyPeriod: boolean;
   localName?: string;
   digit2?: string;
   oneWord?: string;
@@ -34,6 +35,7 @@ export function EnrollHistoryCarNumberBox({
   digit2,
   oneWord,
   digit4,
+  isStudyPeriod,
 }: Props) {
   const { watch, setValue, register } = useForm<FormType>({
     defaultValues: {
@@ -74,6 +76,7 @@ export function EnrollHistoryCarNumberBox({
             watch().localName === '' ? () => <Placeholder>지역명</Placeholder> : undefined
           }
           value={watch().localName}
+          disabled={isStudyPeriod}
         >
           {localList.map(item => (
             <MenuItem key={item.type} value={item.title}>
@@ -91,6 +94,7 @@ export function EnrollHistoryCarNumberBox({
         }}
         value={watch().digit2}
         placeholder="차종 번호2자리"
+        disabled={isStudyPeriod}
         fullWidth
       />
       <FormControl fullWidth>
@@ -104,6 +108,7 @@ export function EnrollHistoryCarNumberBox({
           }
           value={watch().oneWord}
           placeholder="용도 기호 한글 한글자"
+          disabled={isStudyPeriod}
         >
           {oneWordList.map(item => (
             <MenuItem key={item} value={item}>
@@ -121,6 +126,7 @@ export function EnrollHistoryCarNumberBox({
         }}
         value={watch().digit4}
         placeholder="일련번호 4자리"
+        disabled={isStudyPeriod}
         fullWidth
       />
     </Box>

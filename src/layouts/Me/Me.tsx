@@ -15,7 +15,7 @@ import { Spinner, Tabs } from '@components/ui';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { css } from '@emotion/css';
 import styled from '@emotion/styled';
-import { useMyUser } from '@common/api/user';
+import { useLearningStatus, useMyUser } from '@common/api/user';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { ContentCardV2 } from '@components/ui/ContentCard';

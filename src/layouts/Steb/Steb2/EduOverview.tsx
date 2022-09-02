@@ -21,6 +21,7 @@ import {
   courseType,
   getCourseClassStep,
   getSingleCourseClass,
+  userBusinessType,
   UserTransSaveInputDataType,
   useSingleCourseClass,
 } from '@common/api/courseClass';
@@ -37,8 +38,10 @@ import { useSnackbar } from '@hooks/useSnackbar';
 
 export function EduOverview({
   setValue,
+  setFixedBusinessType,
 }: {
   setValue: UseFormSetValue<UserTransSaveInputDataType>;
+  setFixedBusinessType: React.Dispatch<React.SetStateAction<userBusinessType>>;
 }) {
   const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(
     null
@@ -65,6 +68,11 @@ export function EduOverview({
 
       setCourseCategoryType(data.course.courseCategoryType as courseCategoryType);
       setCourseBusinessType(data.course.courseBusinessType as businessType); //임시타입
+      setFixedBusinessType(
+        data.course.courseBusinessType.split('_')[1] === userBusinessType.PASSENGER
+          ? userBusinessType.PASSENGER
+          : userBusinessType.FREIGHT
+      ); //업체정보 운수구분 고정용(ALL안씀)
       setStepSeq(data.seq);
       setValues({
         step: data.step,

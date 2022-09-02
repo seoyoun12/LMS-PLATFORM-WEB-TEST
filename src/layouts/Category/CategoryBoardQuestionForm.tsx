@@ -159,7 +159,7 @@ export function CategoryBoardQuestionForm({
       phone: phone01 + phone02 + phone03,
       type: questionType,
     };
-    console.log(qnaInput);
+    // console.log(qnaInput);
     if (
       qnaInput.title === '' ||
       qnaInput.content === '' ||

@@ -203,8 +203,14 @@ export function CalendarBody({
                     {child.title}
                   </CalendarItemHeader>
                   <Box mt={1}>
-                    [{child.courseCategoryType.ko}] {child.courseSubCategoryType.ko} -{' '}
-                    {child.courseCategoryType.ko} 교육
+                    [{child.courseCategoryType.ko}]{' '}
+                    {child.courseSubCategoryType.type === courseSubCategoryType.BUS
+                      ? '여객'
+                      : child.courseSubCategoryType.type ===
+                        courseSubCategoryType.INDIVIDUAL_CARGO
+                      ? '화물'
+                      : 'null'}{' '}
+                    - {child.courseCategoryType.ko} 교육
                   </Box>
                   <Box mt={1}>
                     {child.requestStartDate.split(' ')[0]} ~{' '}

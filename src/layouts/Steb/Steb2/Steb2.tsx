@@ -13,6 +13,7 @@ import {
   courseClassIndividualEnroll,
   courseClassOrganizationEnrll,
   RegisterType,
+  userBusinessType,
   UserTransSaveInputDataType,
 } from '@common/api/courseClass';
 import { useRecoilState } from 'recoil';
@@ -39,6 +40,7 @@ export default function Steb2() {
   const [confirm, setConfirm] = useState(false);
   const [isIndividualCheck, setIsIndividualCheck] = useState(false);
   const [hideCarNumber, setHideCarNumber] = useState(false);
+  const [fixedBusinessType, setFixedBusinessType] = useState<userBusinessType>();
   const [loading, setLoading] = useState(false);
   const confirmRef = useRef<boolean>();
 
@@ -187,7 +189,7 @@ export default function Steb2() {
     <Steb2Wrap>
       {isDesktop && <StebHeader value={2} />}
       <Steb2BodyContainer>
-        <EduOverview setValue={setValue} />
+        <EduOverview setValue={setValue} setFixedBusinessType={setFixedBusinessType} />
         <CompanyInfo
           isIndividual={isIndividual}
           setIsIndividual={setIsIndividual}
@@ -195,6 +197,7 @@ export default function Steb2() {
           watch={watch}
           setValue={setValue}
           setHideCarNumber={setHideCarNumber}
+          fixedBusinessType={fixedBusinessType}
         />
         <StudentList registerType={registerType} setRegisterType={setRegisterType} />
         <StudentInfo

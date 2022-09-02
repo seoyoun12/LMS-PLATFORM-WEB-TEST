@@ -1,19 +1,46 @@
-import { progressStatus, useMyUser } from '@common/api/user';
-import { ContentCard, Spinner } from '@components/ui';
+import { LearningStatusRes, ProgressStatus, useLearningStatus } from '@common/api/user';
+import { Spinner } from '@components/ui';
 import { ContentCardV2 } from '@components/ui/ContentCard';
 import { NotFound } from '@components/ui/NotFound';
 import styled from '@emotion/styled';
 import { Box, Grid } from '@mui/material';
+import { useRouter } from 'next/router';
 
 export function EndCourse() {
-  const { user, error } = useMyUser();
-  if (!user) return <Spinner />;
+  const router = useRouter();
+  const { data, error, mutate } = useLearningStatus();
+
+  const onClickEnterCourseLesson = (res: LearningStatusRes) => {
+    console.log(res);
+    const isStartStudy =
+      new Date(res.studyStartDate.replaceAll('-', '/').split(' ')[0]).getTime() <
+      new Date().getTime(); //현재시간이 크면 true 아니면 false
+    const isEndedStudy =
+      new Date(res.studyEndDate.replaceAll('-', '/').split(' ')[0]).getTime() <
+      new Date().getTime(); //현재시간이 크면 true 아니면 false
+    console.log('isStart', isStartStudy);
+    if (res.progressStatus === ProgressStatus.TYPE_BEFORE || !isStartStudy)
+      return window.alert('아직 학습이 시작되지 않았습니다!');
+    // if (res.progressStatus === ProgressStatus.TYPE_ENDED || isEndedStudy)
+    //   return window.alert('종료된 학습입니다!');
+
+    // if (res.progressStatus === ProgressStatus.TYPE_PROGRESSING) {
+    router.push(
+      `/course/${res.courseUserSeq}/lesson/${
+        !res.recentLessonSeq ? 1 : res.recentLessonSeq
+      }`
+    );
+    // }
+  };
+
+  if (!data) return <Spinner />;
+
   return (
     <EndCourseWrap>
-      {user.learningCourses.length <= 0 ? (
+      {data.length <= 0 ? (
         <NotFound content="신청한 과정이 존재하지 않습니다!" />
       ) : (
-        user.learningCourses.filter(
+        data.filter(
           item =>
             new Date(item.studyEndDate.replaceAll('-', '/')).getTime() <
             new Date().getTime()
@@ -25,17 +52,13 @@ export function EndCourse() {
         columnSpacing={4}
         columns={{ xs: 1, sm: 2, md: 4, lg: 4 }}
       >
-        {user.learningCourses
-          .filter(fil => fil.progressStatus === progressStatus.TYPE_ENDED)
+        {data
+          .filter(fil => fil.progressStatus === ProgressStatus.TYPE_ENDED)
           .map(item => (
             <Grid item xs={1} sm={1} md={1} lg={1} key={item.courseClassSeq}>
               <Box
                 // href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}
-                onClick={() => {
-                  return window.alert('학습이 종료되었습니다.');
-
-                  // router.push(`/course/${res.seq}/lesson/${res.lessons[0].seq}`);
-                }}
+                onClick={() => onClickEnterCourseLesson(item)}
               >
                 <ContentCardV2
                   image={item.thumbnailImage}

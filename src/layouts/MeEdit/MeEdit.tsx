@@ -43,7 +43,7 @@ export const locationList = [
   { ko: '예산', en: 'YESAN' },
   { ko: '태안', en: 'TAEAN' },
   // { ko: '충남', en: 'CHUNGNAM' },
-  // { ko: '세종', en: 'SEJONG' },
+  { ko: '세종', en: 'SEJONG' },
   // { ko: '서울', en: 'SEOUL' },
   // { ko: '부산', en: 'BUSAN' },
   // { ko: '대구', en: 'DAEGU' },

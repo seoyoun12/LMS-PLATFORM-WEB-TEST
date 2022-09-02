@@ -1,14 +1,14 @@
 import { Layout } from '@layouts/Layout';
-import SubPage  from '@layouts/SubPage';
+import SubPage from '@layouts/SubPage';
 import Head from 'next/head';
 
 export default function SubHome() {
   return (
     <>
       <Head>
-        <title>SubPage</title>
+        <title>충남도로교통연수원</title>
       </Head>
-      <SubPage/>
+      <SubPage />
     </>
   );
 }

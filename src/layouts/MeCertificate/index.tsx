@@ -131,33 +131,36 @@ const MeCertificate: NextPage = () => {
       </MeCertificateHeaderContainer>
 
       <MeCertificateContentContainer>
-        {certificateList?.data.length <= 0 && (
+        {certificateList?.data.length > 0 ? (
           <NotFound content="신청한 과정이 존재하지 않습니다!" />
+        ) : (
+          <>
+            {certificateList?.data &&
+              certificateList.data.map((item, index) => (
+                <MeCertificateItemContainer
+                  key={index}
+                  onClick={() => handleClickCertificatesDownload(item)}
+                >
+                  <MeCertificateItemImageContainer>
+                    {item.s3Files && item.s3Files.length > 0 && (
+                      <img src={item.s3Files[0].path} alt="course thumbnail" />
+                    )}
+                  </MeCertificateItemImageContainer>
+
+                  <MeCertificateItemContentContainer>
+                    <MeCertificateItemContentTitle>
+                      {item.courseName}
+                    </MeCertificateItemContentTitle>
+                    {/*<MeCertificateItemContentSubtitle>Python</MeCertificateItemContentSubtitle>*/}
+
+                    <MeCertificateItemConfirmButton>
+                      {item.completeYn === "Y" ? "증명서 발급" : "수료 확인"}
+                    </MeCertificateItemConfirmButton>
+                  </MeCertificateItemContentContainer>
+                </MeCertificateItemContainer>
+              ))}
+          </>
         )}
-        {certificateList?.data &&
-          certificateList.data.map((item, index) => (
-            <MeCertificateItemContainer
-              key={index}
-              onClick={() => handleClickCertificatesDownload(item)}
-            >
-              <MeCertificateItemImageContainer>
-                {item.s3Files && item.s3Files.length > 0 && (
-                  <img src={item.s3Files[0].path} alt="course thumbnail" />
-                )}
-              </MeCertificateItemImageContainer>
-
-              <MeCertificateItemContentContainer>
-                <MeCertificateItemContentTitle>
-                  {item.courseName}
-                </MeCertificateItemContentTitle>
-                {/*<MeCertificateItemContentSubtitle>Python</MeCertificateItemContentSubtitle>*/}
-
-                <MeCertificateItemConfirmButton>
-                  {item.completeYn === "Y" ? "증명서 발급" : "수료 확인"}
-                </MeCertificateItemConfirmButton>
-              </MeCertificateItemContentContainer>
-            </MeCertificateItemContainer>
-          ))}
       </MeCertificateContentContainer>
     </MeCertificateContainer>
   );

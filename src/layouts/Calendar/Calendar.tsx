@@ -114,7 +114,7 @@ export const eduLegendList = [
 ];
 
 export const courseBusinessTypeList = [
-  // { type: '전체', enType: businessType.TYPE_ALL },
+  { type: '전체', enType: businessType.TYPE_ALL },
   { type: '여객', enType: businessType.TYPE_PASSENGER },
   { type: '화물', enType: businessType.TYPE_CARGO },
 ];
@@ -130,7 +130,7 @@ const modalInfoTItle = [
 
 export function CNCalendar() {
   const [date, setDate] = useState(new Date());
-  const [filter, setFilter] = useState<businessType>(businessType.TYPE_PASSENGER);
+  const [filter, setFilter] = useState<businessType>(businessType.TYPE_ALL);
   const [openModal, setOpenModal] = useState(false);
   const [modalInfo, setModalInfo] = useState<ClickedPlanInfo>();
   const { data, error, mutate } = useCourseClass({
@@ -147,10 +147,12 @@ export function CNCalendar() {
   const calendarRef = useRef<FullCalendar>(null);
 
   //RadioButton Filter changer
-  const onChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value === businessType.TYPE_ALL) setFilter(e.target.value);
-    if (e.target.value === businessType.TYPE_PASSENGER) setFilter(e.target.value);
-    if (e.target.value === businessType.TYPE_CARGO) setFilter(e.target.value);
+  const onChangeFilter = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const value = e.currentTarget.value;
+    console.log(e);
+    if (value === businessType.TYPE_ALL) setFilter(value);
+    if (value === businessType.TYPE_PASSENGER) setFilter(value);
+    if (value === businessType.TYPE_CARGO) setFilter(value);
     mutate();
   };
 

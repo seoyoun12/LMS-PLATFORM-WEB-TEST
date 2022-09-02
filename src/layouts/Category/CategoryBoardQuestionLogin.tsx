@@ -49,4 +49,6 @@ export function CategoryBoardQuestionLogin() {
   );
 }
 
-const SignInLayoutWrap = styled(Box)``;
+const SignInLayoutWrap = styled(Box)`
+  padding-bottom: 109.5px;
+`;

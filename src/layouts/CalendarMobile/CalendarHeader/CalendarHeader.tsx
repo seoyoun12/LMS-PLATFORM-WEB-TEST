@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Box, Radio, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, Radio, Tab, Tabs, Typography } from '@mui/material';
 import React from 'react';
 import { eduLegendList, FilterType, MonthClickType } from '../Calendar';
 import { grey } from '@mui/material/colors';
@@ -14,7 +14,8 @@ interface Props {
   onChangeMonth: (type: MonthClickType, value: number) => void;
   date: Date;
   filterList: { type: string; enType: string }[];
-  onChangeFilter: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  // onChangeFilter: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeFilter: (e: React.MouseEvent<HTMLButtonElement>) => void;
   filter: string;
 }
 
@@ -86,6 +87,7 @@ export function CalendarHeader({
         >
           {Months.map(month => (
             <Tab
+              key={month.value}
               label={month.title}
               className={`header-month ${
                 month.value === date.getMonth() + 1 ? 'active' : ''
@@ -116,6 +118,25 @@ export function CalendarHeader({
           onClick={handleRightBtnClick}
         /> */}
       </DateWrap>
+
+      <FilterWrap mt={2}>
+        {filterList.map(item => (
+          <FilterButton
+            key={item.enType}
+            variant="contained"
+            onClick={onChangeFilter}
+            value={item.enType}
+            sx={{
+              background: filter === item.enType ? '#256aef' : '#d8d6d6',
+              '&:hover': {
+                backgroundColor: filter === item.enType ? '#143c89' : '#919191',
+              },
+            }}
+          >
+            {item.type}
+          </FilterButton>
+        ))}
+      </FilterWrap>
     </CalendarHeaderWrap>
   );
 }
@@ -168,4 +189,17 @@ const YearWrap = styled(Box)`
 const MonthWrap = styled(Tabs)`
   display: flex;
   flex-grow: 1;
+`;
+
+const FilterWrap = styled(Box)`
+  padding: 12px 0;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  background: #f4f4f4;
+  border-radius: 4px;
+`;
+
+const FilterButton = styled(Button)`
+  width: 140px;
 `;

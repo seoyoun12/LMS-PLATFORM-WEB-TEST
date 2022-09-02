@@ -364,7 +364,7 @@ export function CalendarBody({
 }
 
 const CalendarWrap = styled(Box)<{ filter: string }>`
-  margin-top: 48px;
+  margin-top: 36px;
   .TYPE_SUP_COMMON {
     background: #f0ffdf;
     border: #d3f2a0;

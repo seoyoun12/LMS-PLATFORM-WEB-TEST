@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { Box, BoxProps } from '@mui/material';
+import styled from "@emotion/styled";
+import { Box, BoxProps } from "@mui/material";
 
 interface Props {
   content: string;
@@ -16,6 +16,7 @@ export function NotFound({ content, parantSx, childSx }: Props) {
 }
 
 const NotFoundContainer = styled(Box)`
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

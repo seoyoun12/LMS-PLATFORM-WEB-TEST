@@ -71,10 +71,30 @@ export const eduLegendList = [
     color: '#f0ffdf',
     borderColor: '#d3f2a0',
   },
-  { title: '보수수시 교육', enType: courseCategoryType.TYPE_SUP_CONSTANT, color: '#036c19', borderColor: '#eed4ba' },
-  { title: '수시 교육', enType: courseCategoryType.TYPE_CONSTANT, color: '#036c19', borderColor: '#eed4ba' },
-  { title: '신규 교육', enType: courseCategoryType.TYPE_NEW, color: '#2980b9', borderColor: '#e0e095' },
-  { title: '법령위반자 교육', enType: courseCategoryType.TYPE_ILLEGAL, color: '#4c0c0c', borderColor: '#cce0ed' },
+  {
+    title: '보수수시 교육',
+    enType: courseCategoryType.TYPE_SUP_CONSTANT,
+    color: '#036c19',
+    borderColor: '#eed4ba',
+  },
+  {
+    title: '수시 교육',
+    enType: courseCategoryType.TYPE_CONSTANT,
+    color: '#036c19',
+    borderColor: '#eed4ba',
+  },
+  {
+    title: '신규 교육',
+    enType: courseCategoryType.TYPE_NEW,
+    color: '#2980b9',
+    borderColor: '#e0e095',
+  },
+  {
+    title: '법령위반자 교육',
+    enType: courseCategoryType.TYPE_ILLEGAL,
+    color: '#4c0c0c',
+    borderColor: '#cce0ed',
+  },
   {
     title: '교통약자 교육',
     enType: courseCategoryType.TYPE_HANDICAPPED,
@@ -87,7 +107,12 @@ export const eduLegendList = [
     color: '#b807a9',
     borderColor: '#e8c0cf',
   },
-  { title: '마감', enType: courseCategoryType.TYPE_NONE, color: '#e0e0e0', borderColor: '#dfdfdf' },
+  {
+    title: '마감',
+    enType: courseCategoryType.TYPE_NONE,
+    color: '#e0e0e0',
+    borderColor: '#dfdfdf',
+  },
 ];
 
 export const courseBusinessTypeList = [
@@ -96,9 +121,16 @@ export const courseBusinessTypeList = [
   { type: '화물', enType: businessType.TYPE_CARGO },
 ];
 
-const modalInfoTItle = ['기수', '보수교육', '업종구분', '교육일', '신청/정원', '예약가능시간'];
+const modalInfoTItle = [
+  '기수',
+  '보수교육',
+  '업종구분',
+  '교육일',
+  '신청/정원',
+  '예약가능시간',
+];
 
-export function AdminCalendar() {
+export function AdminCalendar({ handleDate }: { handleDate: (date: Date) => void }) {
   const [date, setDate] = useState(new Date());
   const [filter, setFilter] = useState<businessType>(businessType.TYPE_ALL);
   const [openModal, setOpenModal] = useState(false);
@@ -123,9 +155,20 @@ export function AdminCalendar() {
 
   //Month changer
   const onChangeMonth = (type: MonthClickType, value: number) => {
-    if (type === MonthClickType.BTN_CLICK) return setDate(prev => new Date(prev.setMonth(prev.getMonth() + value)));
-    if (type === MonthClickType.MONTH_CLICK) return setDate(prev => new Date(prev.setMonth(value - 1)));
+    if (type === MonthClickType.BTN_CLICK) {
+      const dummyDate = new Date();
+      // dummyDate.setMonth(date.getMonth() + value);
+      dummyDate.setFullYear(date.getFullYear() + value);
+      console.log(dummyDate.toLocaleDateString());
+      return setDate(dummyDate);
+    }
+    if (type === MonthClickType.MONTH_CLICK)
+      return setDate(prev => new Date(prev.setMonth(value - 1)));
   };
+
+  useEffect(() => {
+    handleDate(date);
+  }, [date]);
 
   //fullcalendar changer
   const changeFCDMonth = (date: Date) => {

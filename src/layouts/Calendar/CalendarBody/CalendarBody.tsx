@@ -144,10 +144,12 @@ export function CalendarBody({
       eduTypeAndTime: item.course.lessonTime, // eduTime
       currentJoin: item.enrolledPeopleCnt, //현재 수강
       limit: item.limitPeople, //수강 제한
-      studyStartDate: item.studyStartDate, //studyStartDate
-      studyEndDate: item.studyEndDate, //studyStartDate
-      start: item.requestStartDate, //start: requestStartDate
-      end: item.requestEndDate, //start: requestStartDate
+      studyStartDate: item.studyStartDate, //studyStartDate 학습시작날짜
+      studyEndDate: item.studyEndDate, //studyStartDate 학습종료날짜
+      // start: item.requestStartDate, //start: requestStartDate 신청시작날짜
+      // end: item.requestEndDate, //start: requestStartDate 신청종료날짜
+      start: item.studyStartDate, //학습시작날짜
+      end: item.studyEndDate, //학습종료날짜
       className: item.enableToEnrollYn === YN.YES ? 'TYPE_SUP_COMMON' : 'TYPE_NONE',
       // item.enableToEnrollYn === YN.YES ? eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType : 'TYPE_NONE', 나중에 필요시 사용
       // className: isReceive
@@ -155,7 +157,6 @@ export function CalendarBody({
       // : 'TYPE_NONE',
     };
   });
-  console.log('idonknow', scheduleList);
 
   return (
     <CalendarWrap filter={filter}>

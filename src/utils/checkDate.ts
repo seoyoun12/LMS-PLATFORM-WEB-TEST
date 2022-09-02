@@ -43,11 +43,13 @@ export const checkIsDate = (schedule: CourseClassRes[], currentDate: Date) => {
   for (let i = getStartDateOfMonth.getDate(); i <= getEndDateOfMonth.getDate(); i++) {
     const nowDate = new Date();
     nowDate.setDate(i);
-
+    console.log(schedule);
     const filteringSchedule = schedule.filter(filt =>
       checkDatePeriod(
-        filt.requestStartDate,
-        filt.requestEndDate,
+        // filt.requestStartDate,
+        // filt.requestEndDate,
+        filt.studyStartDate, //학습시작일 (2022-09-02요구사항 변경)
+        filt.studyEndDate, //학습종료일
         `${nowDate.getFullYear()}-${String(nowDate.getMonth() + 1).padStart(
           2,
           '0'

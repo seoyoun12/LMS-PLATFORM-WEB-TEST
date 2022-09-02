@@ -61,6 +61,36 @@ export function CompanyInfo({
       target: { value },
     } = e;
 
+    //회사명 활성화 + 차량번호 비활성화
+    // if (
+    //   courseSubCategoryType.CHARTER_BUS === value ||
+    //   courseSubCategoryType.SPECIAL_PASSENGER === value ||
+    //   courseSubCategoryType.CORPORATE_TAXI === value
+    // ) {
+    //   setDisabledCompany(false);
+    // }
+
+    if (courseSubCategoryType.CHARTER_BUS === value) {
+      setValue('businessName', '');
+      setDisabledCompany(false);
+      return setHideCarNumber(false);
+    }
+
+    if (courseSubCategoryType.SPECIAL_PASSENGER === value) {
+      setValue('businessName', '');
+      setDisabledCompany(false);
+      return setHideCarNumber(true);
+    }
+
+    if (courseSubCategoryType.PRIVATE_TAXI === value) {
+      setValue(
+        'businessName',
+        userBusinessTypeTwo.filter(item => item.enType === value)[0].type
+      );
+      setDisabledCompany(true);
+      return setHideCarNumber(false);
+    }
+
     //차량번호 비활성화
     if (
       courseSubCategoryType.BUS === value ||
@@ -84,6 +114,7 @@ export function CompanyInfo({
         'businessName',
         userBusinessTypeTwo.filter(item => item.enType === value)[0].type
       );
+      if (courseSubCategoryType.PRIVATE_TAXI === value) setDisabledCompany(false); //개인택시 보이게
       return setValue('businessSubType', value);
     }
     setDisabledCompany(false);

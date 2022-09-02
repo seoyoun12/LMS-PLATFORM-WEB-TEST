@@ -6,7 +6,7 @@ export default function CategoryPage() {
   return (
     <>
       <Head>
-        <title>Category Page</title>
+        <title>충남도로교통연수원</title>
       </Head>
       <Category />
     </>

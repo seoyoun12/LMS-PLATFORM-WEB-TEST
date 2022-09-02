@@ -64,24 +64,26 @@ const LinkList = [
     textColor: '#256AEF',
     color: '#256AEF',
     lineColor: '#2a6fe8',
-    href: '/category',
+    // href: '/category',
+    href: '',
     imgPath: '/assets/images/lowFloor.jpg',
     onClickCard: async () => {
-      if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
-        return localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
-      if (
-        typeof window !== 'undefined' &&
-        localStorage.getItem('site_course_type') === courseType.TYPE_LOW_FLOOR_BUS
-      )
-        return;
-      if (localStorage.getItem('site_course_type') !== courseType.TYPE_LOW_FLOOR_BUS) {
-        if (!!localStorage.getItem('ACCESS_TOKEN')) {
-          await logout();
-          localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
-        } else {
-        }
-      }
-      localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
+      // if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
+      //   return localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
+      // if (
+      //   typeof window !== 'undefined' &&
+      //   localStorage.getItem('site_course_type') === courseType.TYPE_LOW_FLOOR_BUS
+      // )
+      //   return;
+      // if (localStorage.getItem('site_course_type') !== courseType.TYPE_LOW_FLOOR_BUS) {
+      //   if (!!localStorage.getItem('ACCESS_TOKEN')) {
+      //     await logout();
+      //     localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
+      //   } else {
+      //   }
+      // }
+      // localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
+      alert('준비 중 입니다.');
     },
   },
   {
@@ -91,24 +93,26 @@ const LinkList = [
     textColor: '#711D14',
     color: '#FEC901',
     lineColor: '#57242b',
-    href: 'traffic/category',
+    // href: 'traffic/category',
+    href: '',
     imgPath: '/assets/images/domin.jpg',
     onClickCard: async () => {
-      if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
-        return localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
-      if (
-        typeof window !== 'undefined' &&
-        localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
-      )
-        return;
-      if (localStorage.getItem('site_course_type') !== courseType.TYPE_PROVINCIAL) {
-        if (!!localStorage.getItem('ACCESS_TOKEN')) {
-          await logout();
-        } else {
-          return;
-        }
-      }
-      localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
+      // if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
+      //   return localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
+      // if (
+      //   typeof window !== 'undefined' &&
+      //   localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
+      // )
+      //   return;
+      // if (localStorage.getItem('site_course_type') !== courseType.TYPE_PROVINCIAL) {
+      //   if (!!localStorage.getItem('ACCESS_TOKEN')) {
+      //     await logout();
+      //   } else {
+      //     return;
+      //   }
+      // }
+      // localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
+      alert('준비 중 입니다.');
     },
   },
 ];
@@ -170,7 +174,7 @@ const MainPage: NextPage = () => {
       // style={{ height: screenHeight ? screenHeight : '' }}
     >
       <Head>
-        <title>Main Page</title>
+        <title>충남도로교통연수원</title>
       </Head>
       <MainContainer>
         <ContentBox>

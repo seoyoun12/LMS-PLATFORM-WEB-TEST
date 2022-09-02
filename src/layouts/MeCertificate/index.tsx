@@ -131,7 +131,7 @@ const MeCertificate: NextPage = () => {
       </MeCertificateHeaderContainer>
 
       <MeCertificateContentContainer>
-        {certificateList?.data.length > 0 ? (
+        {certificateList?.data.length <= 0 ? (
           <NotFound content="신청한 과정이 존재하지 않습니다!" />
         ) : (
           <>

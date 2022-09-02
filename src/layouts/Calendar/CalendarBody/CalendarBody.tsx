@@ -191,10 +191,10 @@ export function CalendarBody({
               end: Date | null;
             };
           } = e;
-          console.log(
-            e.event._def.extendedProps.prevSchedule,
-            e.event._def.extendedProps.isReceive
-          );
+          // console.log(
+          //   e.event._def.extendedProps.prevSchedule,
+          //   e.event._def.extendedProps.isReceive
+          // );
           if (!e.event._def.extendedProps.prevSchedule)
             return window.alert('마감된 교육입니다!');
           if (!e.event._def.extendedProps.isReceive)
@@ -325,8 +325,8 @@ export function CalendarBody({
                   <TableRightCell>
                     {/* {dateFormat(modalInfo.studyStartDate, 'yyyy/mm/dd')} ~{' '}
                     {dateFormat(modalInfo.studyEndDate, 'yyyy/mm/dd')} */}
-                    {modalInfo.studyStartDate.replaceAll('-', '.')} ~{' '}
-                    {modalInfo.studyEndDate}
+                    {modalInfo.studyStartDate.split(' ')[0]} ~{' '}
+                    {modalInfo.studyEndDate.split(' ')[0]}
                   </TableRightCell>
                 </TableRow>
                 <TableRow>
@@ -340,7 +340,8 @@ export function CalendarBody({
                 <TableRow>
                   <TableLeftCell>예약가능시간</TableLeftCell>
                   <TableRightCell>
-                    {modalInfo.start} ~ {modalInfo.end}
+                    {modalInfo.start.replaceAll('/', '-')} ~{' '}
+                    {modalInfo.end.replaceAll('/', '-')}
                   </TableRightCell>
                 </TableRow>
               </>

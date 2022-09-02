@@ -70,9 +70,10 @@ export enum userSubjectEducationDetailType {
   OLD_MAN = 'OLD_MAN',
 }
 
-export enum progressStatus {
-  TYPE_PROGRESSING = 'TYPE_PROGRESSING',
-  TYPE_ENDED = 'TYPE_ENDED',
+export enum ProgressStatus {
+  TYPE_BEFORE = 'TYPE_BEFORE', //학습시작전
+  TYPE_PROGRESSING = 'TYPE_PROGRESSING', //학습진행중
+  TYPE_ENDED = 'TYPE_ENDED', //학습종료과정
 }
 
 export interface MyInfoCourseRes {
@@ -82,8 +83,9 @@ export interface MyInfoCourseRes {
   courseUserSeq: number; //과정신청 시퀀스
   leftDays: number; //교육만료까지 남은기간
   progress: number; //진도율
-  progressStatus: progressStatus; //학습중인 과정 ,종료과정 구분
+  progressStatus: ProgressStatus; //학습중인 과정 ,종료과정 구분
   step: number; //기수
+  studyStartDate: string; //교육시작일
   studyEndDate: string; //교육만료일
   thumbnailImage: string; //썸네일 이미지 S3경로
   firstLessonSeq: number;
@@ -275,4 +277,32 @@ export function getTransport() {
 
 export async function modifTransWorker(info: Omit<modifTransWorker, 's3Files'>) {
   return await PUT(`/user/transport`, info);
+}
+
+export interface LearningStatusRes {
+  courseUserSeq: number;
+  courseClassSeq: number;
+  courseSeq: number;
+  step: number;
+  courseTitle: string;
+  studyStartDate: string;
+  studyEndDate: string;
+  thumbnailImage: string;
+  leftDays: number;
+  progress: number;
+  firstLessonSeq: number;
+  recentLessonSeq: number;
+  progressStatus: ProgressStatus;
+}
+
+export function useLearningStatus() {
+  const { data, error, mutate } = useSWR<SWRResponse<LearningStatusRes[]>>(
+    `/user/myinfo/learning-status`,
+    GET
+  );
+  return {
+    data: data?.data,
+    error,
+    mutate,
+  };
 }

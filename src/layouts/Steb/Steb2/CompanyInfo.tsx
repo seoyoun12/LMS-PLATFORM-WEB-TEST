@@ -27,6 +27,7 @@ import {
   UseFormWatch,
 } from 'react-hook-form';
 import {
+  businessType,
   courseSubCategoryType,
   userBusinessType,
   UserTransSaveInputDataType,
@@ -39,9 +40,16 @@ interface Props {
   watch: UseFormWatch<UserTransSaveInputDataType>;
   setValue: UseFormSetValue<UserTransSaveInputDataType>;
   setHideCarNumber: React.Dispatch<React.SetStateAction<boolean>>;
+  fixedBusinessType: userBusinessType;
 }
 
-export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Props) {
+export function CompanyInfo({
+  register,
+  watch,
+  setValue,
+  setHideCarNumber,
+  fixedBusinessType,
+}: Props) {
   // const [businessType, setBusinessType] = useState<string | null>(null);
   // const [businessSubType, setBusinessSubType] = useState<string | null>(null);
   // const [businessName, setBusinessName] = useState<string | null>(null);
@@ -134,11 +142,16 @@ export function CompanyInfo({ register, watch, setValue, setHideCarNumber }: Pro
                     setValue('businessName', null);
                   }}
                 >
-                  {userBusinessTypeOne.map(item => (
+                  {userBusinessTypeOne
+                    .filter(item => item.enType === fixedBusinessType)
+                    .map(item => (
+                      <MenuItem value={item.enType}>{item.type}</MenuItem>
+                    ))}
+                  {/* {userBusinessTypeOne.map(item => (
                     <MenuItem key={item.enType} value={item.enType}>
                       {item.type}
                     </MenuItem>
-                  ))}
+                  ))} */}
                 </Select>
               </FormControl>
             </TableRightCell>

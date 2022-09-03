@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { Alert, Box, Button, CircularProgress, Snackbar } from "@mui/material";
 import { CourseModuleFindResponseDto, SurveyResponseDto } from "@common/api/Api";
 import ApiClient from "@common/api/ApiClient";
-import LessonContentSurveyQuestion from "./LessonContentSuerveyQuestion";
+import LessonContentSurveyQuestion from "./LessonContentSurveyQuestion";
 
 export interface Props {
   courseUserSeq: number;
@@ -135,6 +135,11 @@ const SurveyContainer = styled.form`
   width: 100%;
   max-width: 1000px;
   flex-direction: column;
+
+  @media (max-width: 1024px) {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+  }
 `;
 
 const SurveyHeader = styled(Box)`
@@ -147,7 +152,7 @@ const SurveyHeader = styled(Box)`
 
 const SurveyHeaderTitle = styled.span`
   flex-grow: 1;
-  font-size: 1.5rem;
+  font-size: 1.5em;
   font-weight: 700;
 `
 

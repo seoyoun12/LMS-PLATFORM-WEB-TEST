@@ -25,7 +25,7 @@ export default function LessonContentSurveyQuestion(props: Props) {
 					>
 						<RadioGroup name={`question_${props.index}`}>
 							{Array.from({ length: 10 }, (x, i) => props.question.surveyMultipleChoice[`item${i + 1}`]).filter((v) => !!v).map((v: string, i) => (
-								<FormControlLabel key={i} control={<Radio />} label={v} value={i + 1}/>
+								<QuestionFormControlLabel key={i} control={<Radio size="small"/>} label={v} value={i + 1}/>
 							))}
 						</RadioGroup>
 						{props.error && <FormHelperText>하나를 선택해 주세요.</FormHelperText>}
@@ -62,7 +62,7 @@ const QuestionContainer = styled.div`
 `
 
 const QuestionTitle = styled.div`
-	font-size: 1.25rem;
+	font-size: 1.25em;
 	margin-bottom: 1rem;
 `;
 
@@ -70,4 +70,10 @@ const QuestionItemContainer = styled.div``;
 
 const QuestionFormControl = styled(FormControl)`
 	width: 100%;
+`;
+
+const QuestionFormControlLabel = styled(FormControlLabel)`
+	& > span {
+		font-size: 1em;
+	}
 `;

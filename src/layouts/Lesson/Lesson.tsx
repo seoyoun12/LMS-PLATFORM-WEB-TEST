@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Container, Typography } from "@mui/material";
-import { Spinner } from "@components/ui";
+import { CircularProgress, Container, Typography } from "@mui/material";
 import { CourseDetailClientResponseDto, CourseModuleFindResponseDto, SurveyResponseDto } from "@common/api/Api";
 import ApiClient from "@common/api/ApiClient";
 import LessonSidebar from "./LessonSidebar";
@@ -79,7 +78,7 @@ export default function Lesson(props: LessonProps) {
     return (
       <LessonContentEmptyWrapper>
         {loading ?
-          <Spinner fit/> :
+          <CircularProgress size="1.5rem"/> :
           <Typography>강의를 찾을 수 없습니다.</Typography>
         }
       </LessonContentEmptyWrapper>
@@ -141,6 +140,16 @@ export default function Lesson(props: LessonProps) {
         courseModules={courseModules}
         lessons={course.lessons}
         lessonSeq={props.contentType === "LESSON" ? props.contentSeq : null}
+        onLessonSelect={(lessonIndex: number) => {
+
+          console.log(lessonIndex);
+
+        }}
+        onModuleSelect={(moduleIndex: number) => {
+
+          console.log(moduleIndex);
+
+        }}
       />
     </LessonContainer>
   );

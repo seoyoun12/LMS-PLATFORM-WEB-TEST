@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Box, LinearProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, LinearProgress, Typography } from "@mui/material";
 import { VideoPlayer } from "@components/common";
-import { Spinner } from "@components/ui";
 import type { CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
 import ApiClient from "@common/api/ApiClient";
 
@@ -221,7 +220,7 @@ export default function LessonContentVideo(props: Props) {
 
   // 렌더링.
 
-  if (props.loading) return <VideoContentWrapper><Spinner fit/></VideoContentWrapper>;
+  if (props.loading) return <VideoContentWrapper><CircularProgress size="1.5rem"/></VideoContentWrapper>;
   if (props.lesson === null || props.courseProgress === null) return <VideoContentWrapper>강의가 존재하지 않습니다.</VideoContentWrapper>;
 
   return (

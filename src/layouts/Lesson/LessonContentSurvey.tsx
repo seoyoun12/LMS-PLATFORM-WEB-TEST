@@ -1,11 +1,10 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Alert, Box, Button, Snackbar } from "@mui/material";
-import { CourseModuleFindResponseDto, SurveyResponseDto } from "@common/api/Api";
-import { Spinner } from "@components/ui";
-import LessonContentSurveyQuestion from "./LessonContentSuerveyQuestion";
-import ApiClient from "@common/api/ApiClient";
 import { useRouter } from "next/router";
+import { Alert, Box, Button, CircularProgress, Snackbar } from "@mui/material";
+import { CourseModuleFindResponseDto, SurveyResponseDto } from "@common/api/Api";
+import ApiClient from "@common/api/ApiClient";
+import LessonContentSurveyQuestion from "./LessonContentSuerveyQuestion";
 
 export interface Props {
   courseUserSeq: number;
@@ -36,7 +35,7 @@ export default function LessonContentSurvey(props: Props) {
 
   // 렌더링.
 
-  if (props.loading) return <SurveyEmptyContainer><Spinner fit/></SurveyEmptyContainer>
+  if (props.loading) return <SurveyEmptyContainer><CircularProgress size="1.5rem"/></SurveyEmptyContainer>
   if (props.courseModule === null || props.survey === null) return <SurveyEmptyContainer>설문이 존재하지 않습니다.</SurveyEmptyContainer>;
 
   return (

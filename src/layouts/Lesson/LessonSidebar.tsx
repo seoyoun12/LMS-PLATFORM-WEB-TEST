@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { Box } from "@mui/system";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { headerHeight } from "@styles/variables";
-import { LessonTabMenu } from "@components/ui/Tabs";
 import { LESSON_TABS, LessonTabs } from "./Lesson.types";
 import { CourseModuleFindResponseDto, CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Tab } from "@mui/material";
 import { useRouter } from "next/router";
 import LessonSidebarModule from "./LessonSidebarModule";
 import LessonSidebarItem from "./LessonSidebarItem";
@@ -33,60 +33,58 @@ export default function LessonSidebar(props: Props) {
 
   return (
     <StickySideBar>
-      <TabMenu
-        tabsConfig={LESSON_TABS as unknown as Parameters<typeof TabMenu>[0]["tabsConfig"]}
-        showBorderBottom={false}
-        rerender={false}
-        changeMenu={tabMenu}
-        onChangeMenu={(v: unknown) => setTabMenu(Array.isArray(v) ? v[0] : v)}
-      />
-      <Tab hidden={tabMenu !== "curriculum"}>
-        <LessonItemContainer>
-          {props.lessons.map((lesson, lessonIndex) => (
-            <LessonSidebarItem
-              active={lesson.seq === props.lessonSeq}
-              lesson={lesson}
-              key={lesson.seq}
-              onClick={() => props.onLessonSelect(lessonIndex)}
-            />
-          ))}
-          {props.courseModules !== null && props.courseModules.length > 0 && (
-            <LessonModuleContainer>
-              {props.courseModules.map((courseModule, moduleIndex) => (
-                <LessonSidebarModule
-                  key={courseModule.courseModuleSeq}
-                  courseUserSeq={props.courseUserSeq}
-                  courseModule={courseModule}
-                  onSelect={() => props.onModuleSelect(moduleIndex)}
-                />
-              ))}
-            </LessonModuleContainer>
-          )}
-        </LessonItemContainer>
-      </Tab>
-      <Dialog
-        open={switchURL !== null}
-        onClose={() => setSwitchURL(null)}
-      >
-        <DialogContent>
-          <DialogContentText>
-            정말 페이지를 이동하시겠습니까?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setSwitchURL(null)}>취소</Button>
-          <Button
-            onClick={() => {
+      <TabContext value={tabMenu}>
+        <TabMenu onChange={(v: unknown) => setTabMenu(Array.isArray(v) ? v[0] : v)}>
+          {LESSON_TABS.map((tab) => <Tab key={tab.value} label={tab.label} value={tab.value}/>)}
+        </TabMenu>
+        <TabItem value={LESSON_TABS[0].value}>
+          <LessonItemContainer>
+            {props.lessons.map((lesson, lessonIndex) => (
+              <LessonSidebarItem
+                active={lesson.seq === props.lessonSeq}
+                lesson={lesson}
+                key={lesson.seq}
+                onClick={() => props.onLessonSelect(lessonIndex)}
+              />
+            ))}
+            {props.courseModules !== null && props.courseModules.length > 0 && (
+              <LessonModuleContainer>
+                {props.courseModules.map((courseModule, moduleIndex) => (
+                  <LessonSidebarModule
+                    key={courseModule.courseModuleSeq}
+                    courseUserSeq={props.courseUserSeq}
+                    courseModule={courseModule}
+                    onSelect={() => props.onModuleSelect(moduleIndex)}
+                  />
+                ))}
+              </LessonModuleContainer>
+            )}
+          </LessonItemContainer>
+        </TabItem>
+        <Dialog
+          open={switchURL !== null}
+          onClose={() => setSwitchURL(null)}
+        >
+          <DialogContent>
+            <DialogContentText>
+              정말 페이지를 이동하시겠습니까?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setSwitchURL(null)}>취소</Button>
+            <Button
+              onClick={() => {
 
-              router.push(switchURL);
-              setSwitchURL(null);
+                router.push(switchURL);
+                setSwitchURL(null);
 
-            }}
-          >
-            확인
-          </Button>
-        </DialogActions>
-      </Dialog>
+              }}
+            >
+              확인
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </TabContext>
     </StickySideBar>
   );
 
@@ -112,7 +110,7 @@ const StickySideBar = styled.aside`
   }
 `;
 
-const TabMenu = styled(LessonTabMenu)`
+const TabMenu = styled(TabList)`
   padding-bottom: 30px;
   font-weight: bold;
 
@@ -121,10 +119,11 @@ const TabMenu = styled(LessonTabMenu)`
   }
 `;
 
-const Tab = styled(Box)`
+const TabItem = styled(TabPanel)`
   flex-grow: 1;
   overflow-y: auto;
   display: flex;
+  padding: unset;
   flex-direction: column;
 
   .file-list-item {

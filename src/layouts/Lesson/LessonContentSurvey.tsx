@@ -11,6 +11,7 @@ export interface Props {
   courseModule: CourseModuleFindResponseDto | null;
   survey: SurveyResponseDto | null;
   loading?: boolean;
+  onComplete?: () => void;
 }
 
 export default function LessonContentSurvey(props: Props) {
@@ -21,7 +22,7 @@ export default function LessonContentSurvey(props: Props) {
 
   const [loading, setLoading] = React.useState<boolean>(false);
   const [snackbar, setSnackbar] = React.useState<"FAILED" | "SUCCESS" | null>(null);
-  const [errors, setErrors] = React.useState<boolean[]>(new Array(props.survey.surveyQuestionList.length).fill(false));
+  const [errors, setErrors] = React.useState<boolean[]>(new Array(props.survey === null ? 0 : props.survey.surveyQuestionList.length).fill(false));
 
   // 이펙트.
 
@@ -29,7 +30,7 @@ export default function LessonContentSurvey(props: Props) {
 
     setLoading(false);
     setSnackbar(null);
-    setErrors(new Array(props.survey.surveyQuestionList.length).fill(false));
+    setErrors(new Array(props.survey === null ? 0 : props.survey.surveyQuestionList.length).fill(false));
 
   }, [props.survey]);
 
@@ -75,7 +76,12 @@ export default function LessonContentSurvey(props: Props) {
             surveySeq: props.survey.seq,
             answerList: awnserList,
           })
-          .then((res) => setSnackbar(res.data.success ? "SUCCESS" : "FAILED"))
+          .then((res) => {
+            
+            setSnackbar(res.data.success ? "SUCCESS" : "FAILED");
+            res.data.success && props.onComplete();
+            
+          })
           .catch(() => setSnackbar("FAILED"))
           .finally(() => setLoading(false));
 

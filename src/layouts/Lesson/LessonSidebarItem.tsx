@@ -37,7 +37,7 @@ export default function LessonSidebarItem(props: Props) {
       <ItemCheck>
         {props.active && <ItemPlayCircle/>}
         <ItemCheckStatus sx={{ color: completedColor }}>{completed ? "학습 완료" : "미학습"}</ItemCheckStatus>
-        <CheckCircleIcon sx={{ color: completedColor }}/>
+        <ItemCheckCircle sx={{ color: completedColor }}/>
       </ItemCheck>
     </ItemContainer>
   );
@@ -102,5 +102,9 @@ const ItemCheck = styled(Box)`
 
 const ItemCheckStatus = styled(Typography)`
   margin-right: 8px;
+  font-size: inherit;
+`;
+
+const ItemCheckCircle = styled(CheckCircleIcon)`
   font-size: inherit;
 `;

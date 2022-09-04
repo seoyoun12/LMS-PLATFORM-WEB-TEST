@@ -22,7 +22,7 @@ export default function Lesson(props: LessonProps) {
   // 스테이트.
 
   const [loading, setLoading] = React.useState<boolean>(true);
-  const [dialog, setDialog] = React.useState<"FIRST" | "NEXT" | null>("FIRST");
+  const [dialog, setDialog] = React.useState<"FIRST" | "NEXT" | "PROGRESS" | null>("FIRST");
   
   const [course, setCourse] = React.useState<CourseDetailClientResponseDto | null>(null);
   const [coursePlayFirst, setCoursePlayFirst] = React.useState<boolean>(true);
@@ -31,7 +31,6 @@ export default function Lesson(props: LessonProps) {
   const [courseModules, setCourseModules] = React.useState<CourseModuleFindResponseDto[] | null>(null);
   const [courseModulesCompleted, setCourseModulesCompleted] = React.useState<boolean[]>([]);
   const [moduleSurvey, setModuleSurvey] = React.useState<SurveyResponseDto | null>(null);
-
 
   // 이펙트.
   
@@ -139,9 +138,10 @@ export default function Lesson(props: LessonProps) {
             courseUserSeq={course.courseUserSeq}
             courseProgress={courseProgress}
             lesson={lesson}
+            lessonCompleted={!!courseLessonsCompleted[lessonIndex]}
             onComplete={() => {
 
-              const newCourseLessonsCompleted = [...courseModulesCompleted];
+              const newCourseLessonsCompleted = [...courseLessonsCompleted];
               newCourseLessonsCompleted[lessonIndex] = true;
               setCourseLessonsCompleted(newCourseLessonsCompleted);
 
@@ -223,6 +223,20 @@ export default function Lesson(props: LessonProps) {
     </Dialog>
   );
 
+  const DialogProgress = (
+    <Dialog
+      open={dialog === "PROGRESS"}
+      onClose={() => setDialog(null)}
+    >
+      <DialogContent>
+        <DialogContentText>학습을 더 진행해야 이동이 가능합니다.</DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setDialog(null)}>확인</Button>
+      </DialogActions>
+    </Dialog>
+  );
+
   // 렌더링.
 
   return (
@@ -248,6 +262,8 @@ export default function Lesson(props: LessonProps) {
 
           const module = courseModules[moduleIndex];
 
+          if (module.limitProgress !== 0 && course.totalProgress < module.limitProgress) return setDialog("PROGRESS");
+
           switch (module.moduleType) {
 
             case "COURSE_MODULE_PROGRESS_RATE": break;
@@ -260,6 +276,7 @@ export default function Lesson(props: LessonProps) {
       />
       {DialogFirst}
       {DialogNext}
+      {DialogProgress}
     </LessonContainer>
   );
 }

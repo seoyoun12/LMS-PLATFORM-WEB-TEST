@@ -34,8 +34,13 @@ export default function Lesson(props: LessonProps) {
   // 스테이트.
 
   const [loading, setLoading] = React.useState<boolean>(true);
+<<<<<<< HEAD
   const [dialog, setDialog] = React.useState<'FIRST' | 'NEXT' | null>('FIRST');
 
+=======
+  const [dialog, setDialog] = React.useState<"FIRST" | "NEXT" | "PROGRESS" | null>("FIRST");
+  
+>>>>>>> develop
   const [course, setCourse] = React.useState<CourseDetailClientResponseDto | null>(null);
   const [coursePlayFirst, setCoursePlayFirst] = React.useState<boolean>(true);
   const [courseLessonsCompleted, setCourseLessonsCompleted] = React.useState<boolean[]>(
@@ -146,6 +151,7 @@ export default function Lesson(props: LessonProps) {
           course.courseProgressResponseDtoList.find(v => v.lessonSeq === lesson.seq)) ||
         null;
 
+<<<<<<< HEAD
       Content = (
         <LessonContentVideo
           loading={loading}
@@ -160,6 +166,33 @@ export default function Lesson(props: LessonProps) {
           }}
         />
       );
+=======
+    case "LESSON": {
+      
+        const lessonIndex = course.lessons.findIndex((lesson) => lesson.seq === props.contentSeq);
+        const lesson = lessonIndex >= 0 ? course.lessons[lessonIndex] : null;
+        const courseProgress = lesson && course.courseProgressResponseDtoList.find((v) => v.lessonSeq === lesson.seq) || null;
+
+        Content = (
+          <LessonContentVideo
+            loading={loading}
+            coursePlayFirst={coursePlayFirst}
+            courseUserSeq={course.courseUserSeq}
+            courseProgress={courseProgress}
+            lesson={lesson}
+            lessonCompleted={!!courseLessonsCompleted[lessonIndex]}
+            onComplete={() => {
+
+              const newCourseLessonsCompleted = [...courseLessonsCompleted];
+              newCourseLessonsCompleted[lessonIndex] = true;
+              setCourseLessonsCompleted(newCourseLessonsCompleted);
+
+            }}
+          />
+        );
+
+        break;
+>>>>>>> develop
 
       break;
     }
@@ -228,6 +261,20 @@ export default function Lesson(props: LessonProps) {
     </Dialog>
   );
 
+  const DialogProgress = (
+    <Dialog
+      open={dialog === "PROGRESS"}
+      onClose={() => setDialog(null)}
+    >
+      <DialogContent>
+        <DialogContentText>학습을 더 진행해야 이동이 가능합니다.</DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setDialog(null)}>확인</Button>
+      </DialogActions>
+    </Dialog>
+  );
+
   // 렌더링.
 
   return (
@@ -253,6 +300,8 @@ export default function Lesson(props: LessonProps) {
         onModuleSelect={(moduleIndex: number) => {
           const module = courseModules[moduleIndex];
 
+          if (module.limitProgress !== 0 && course.totalProgress < module.limitProgress) return setDialog("PROGRESS");
+
           switch (module.moduleType) {
             case 'COURSE_MODULE_PROGRESS_RATE':
               break;
@@ -270,6 +319,7 @@ export default function Lesson(props: LessonProps) {
       />
       {DialogFirst}
       {DialogNext}
+      {DialogProgress}
     </LessonContainer>
   );
 }

@@ -13,7 +13,7 @@ export default function Steb3Page() {
   return (
     <Box>
       <Head>
-        <title>충남도로교통연수원</title>
+        <title>충남교통연수원</title>
       </Head>
       <Steb3 />
     </Box>

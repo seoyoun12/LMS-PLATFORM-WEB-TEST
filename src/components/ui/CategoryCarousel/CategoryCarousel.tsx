@@ -67,7 +67,9 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
           <Image src={data[swiperPageNumber].s3Files[0].path} layout="fill" />
         </ImgBack>
       </ImgBox>
-      <SliderLayout style={isMobile ? { flexDirection: 'column-reverse' } : { flexDirection: 'row' }}>
+      <SliderLayout
+        style={isMobile ? { flexDirection: 'column-reverse' } : { flexDirection: 'row' }}
+      >
         <Swiper
           className="swiper-z-index"
           modules={[Navigation, Pagination, Controller, Autoplay]}
@@ -99,7 +101,13 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
               )}
             </SwiperSlide>
           ))} */}
-          <Image src={data[0].s3Files[0].path} alt="" layout="fill" objectFit="cover" style={{ paddingRight: '16px' }} />
+          <Image
+            src={data[0].s3Files[0].path}
+            alt=""
+            layout="fill"
+            objectFit="cover"
+            style={{ paddingRight: '16px' }}
+          />
         </Swiper>
 
         <Swiper

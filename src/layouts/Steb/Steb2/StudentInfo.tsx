@@ -23,7 +23,11 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form';
-import { RegisterType, UserTransSaveInputDataType } from '@common/api/courseClass';
+import {
+  courseSubCategoryType,
+  RegisterType,
+  UserTransSaveInputDataType,
+} from '@common/api/courseClass';
 import { YN } from '@common/constant';
 import { useMyUser, UserRole } from '@common/api/user';
 import { Phone3Regex, Phone4Regex } from '@utils/inputRegexes';
@@ -89,6 +93,7 @@ export function StudentInfo({
     }
   }, [user, registerType]);
 
+  console.log(watch());
   return (
     <StudentInfoWrap>
       <Box>
@@ -160,11 +165,22 @@ export function StudentInfo({
             <TableRightCell>
               <FormControl fullWidth>
                 <Select {...register('carRegisteredRegion')}>
-                  {locationList.map(item => (
+                  {/* {locationList.map(item => (
                     <MenuItem key={item.en} value={item.en}>
                       {item.ko}
                     </MenuItem>
-                  ))}
+                  ))} */}
+                  {locationList
+                    .filter(
+                      item =>
+                        watch().businessSubType !== courseSubCategoryType.BUS &&
+                        item.en !== 'CHUNGNAM'
+                    )
+                    .map(item => (
+                      <MenuItem key={item.en} value={item.en}>
+                        {item.ko}
+                      </MenuItem>
+                    ))}
                 </Select>
               </FormControl>
             </TableRightCell>

@@ -16,16 +16,7 @@ export default function LessonSidebarModule(props: Props) {
 
   switch (props.courseModule.moduleType) {
 
-    case "COURSE_MODULE_PROGRESS_RATE": return (
-      <ModuleContainer>
-        <ModuleContainerLeft>
-          <ModuleTitle>{props.courseModule.moduleName}</ModuleTitle>
-        </ModuleContainerLeft>
-        <ModuleContainerRight>
-          <CheckCircleIcon sx={{ color: props.completed ? "#256aef" : "text.secondary" }} fontSize="inherit"/>
-        </ModuleContainerRight>
-      </ModuleContainer>
-    );
+    case "COURSE_MODULE_PROGRESS_RATE": return (<React.Fragment/>);
     case "COURSE_MODULE_SURVEY": return (
       <ModuleContainer>
         <ModuleContainerLeft>

@@ -88,11 +88,11 @@ export function VideoPlayer(props: Props) {
       });
 
       eventsPrev.current = [];
-
+      
       if (props.onReady) props.onReady(player.current);
 
     }
-    
+
     if (player.current !== null) {
 
       for (const item of eventsPrev.current) player.current._detachEvent(item);
@@ -130,7 +130,7 @@ export function VideoPlayer(props: Props) {
         { characterData: true, attributes: false, childList: false, subtree: true },
       );
 
-      player.current._view.$el.__vue__.controlKeydownEvent = !props.showControl ? () => undefined : playerKeydownEvent.current;
+      if (player.current?._view?.$el?.__vue__) player.current._view.$el.__vue__.controlKeydownEvent = !props.showControl ? () => undefined : playerKeydownEvent.current;
 
     }
 

@@ -66,6 +66,13 @@ export default function LessonContentVideo(props: Props) {
           (mode === "CURRENT" && (props.lesson === null || props.courseProgress.courseProgressSeq === null)) ||
           (mode === "PREV" && props.courseUserSeq === prevCourseUserSeq.current && props.lesson.seq === prevLesson.current.seq)
         ) return;
+
+        if (mode === "CURRENT") {
+
+          videoIsFinished.current = true;
+          videoIsFirst.current = true;
+
+        }
   
         const courseUserSeq = mode === "PREV" ? prevCourseUserSeq.current : props.courseUserSeq;
         const courseProgressSeq = mode === "PREV" ? prevCourseProgress.current.courseProgressSeq : props.courseProgress.courseProgressSeq;
@@ -111,21 +118,21 @@ export default function LessonContentVideo(props: Props) {
 
     if (props.lesson === null || props.courseProgress.courseProgressSeq === null) return;
 
+    const courseUserSeq = props.courseUserSeq;
+    const courseProgressSeq = props.courseProgress.courseProgressSeq;
+    const lessonSeq = props.lesson.seq;
+    const currentSecond = videoCurrentSeconds.current;
+
     apiTimer.current = window.setInterval(() => {
 
       apiSeconds.current++;
 
       if (apiSeconds.current >= 5) {
-
-        const courseUserSeq = props.courseUserSeq;
-        const courseProgressSeq = props.courseProgress.courseProgressSeq;
-        const lessonSeq = props.lesson.seq;
-        const currentSecond = videoCurrentSeconds.current;
-
+        
         ApiClient.courseLog
           .createCourseModulesUsingPost1({
-            courseUserSeq: props.courseUserSeq,
-            lessonSeq: props.lesson.seq,
+            courseUserSeq: courseUserSeq,
+            lessonSeq: lessonSeq,
             studyTime: apiVideoSeconds.current,
           })
           .then(() =>
@@ -168,6 +175,7 @@ export default function LessonContentVideo(props: Props) {
           studyTime: 0,
         });
 
+      videoIsFinished.current = false;
       videoIsFirst.current = false;
 
       startTimer();
@@ -210,16 +218,18 @@ export default function LessonContentVideo(props: Props) {
         props.courseProgress.studyTime + videoPlayedSeconds.current >= vidoeDurationSeconds.current ||
         videoCurrentSeconds.current >= vidoeDurationSeconds.current
       )
-    ) {
-      
-      stopTimer("CURRENT");
-      videoIsFinished.current = true;
-
-    }
+    ) stopTimer("CURRENT");
 
     updateProgress();
 
   }, [props.courseProgress.studyTime, stopTimer, updateProgress]);
+
+  const onEnded = React.useCallback(() => {
+
+    videoCurrentSeconds.current = vidoeDurationSeconds.current;
+    stopTimer("CURRENT");
+
+  }, [stopTimer]);
 
   // 이펙트.
 
@@ -272,6 +282,7 @@ export default function LessonContentVideo(props: Props) {
           onSeeking={onSeeking}
           onSeeked={onSeeked}
           onTimeChange={onTimeChange}
+          onEnded={onEnded}
           onReady={(v) => videoPlayer.current = v}
         />
       </VideoContentPlayerWrapper>

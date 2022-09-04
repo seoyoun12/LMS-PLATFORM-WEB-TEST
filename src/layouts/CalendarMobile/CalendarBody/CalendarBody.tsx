@@ -101,6 +101,10 @@ export function CalendarBody({
       children: children.map(item => {
         //마감여부
 
+        //정원이 다 찼을경우
+        const isFullPeople =
+          item.limitPeople !== 0 && item.enrolledPeopleCnt === item.limitPeople;
+
         //이전 날짜일경우
         const prevSchedule =
           new Date(item.requestEndDate.replaceAll('-', '/')).getTime() -
@@ -123,9 +127,16 @@ export function CalendarBody({
 
         return {
           ...item,
-          title: prevSchedule ? (isReceive ? '접수중' : '준비중') : '마감', //말
+          title: prevSchedule
+            ? isReceive
+              ? isFullPeople
+                ? '마감'
+                : '접수중'
+              : '준비중'
+            : '마감', //말
           isReceive,
           prevSchedule,
+          isFullPeople,
           step: item.step, //기수
           lessonTime: item.course.lessonTime,
           mediaType: '동영상(VOD)',
@@ -155,9 +166,12 @@ export function CalendarBody({
   const onClickOpenModal = (
     item: CourseClassRes,
     prevSchedule: boolean,
-    isReceive: boolean
+    isReceive: boolean,
+    isFullPeople: boolean
   ) => {
-    if (!prevSchedule) return window.alert('마감된 교육입니다!');
+    if (!prevSchedule || isFullPeople) return window.alert('마감된 교육입니다!');
+    if (isFullPeople)
+      return window.alert('접수마감된 교육입니다.');
     if (!isReceive) return window.alert('신청기간이 아닙니다!');
     setModalInfo({
       seq: item.seq,
@@ -196,11 +210,22 @@ export function CalendarBody({
               {item.children.map(child => (
                 <CalendarItem
                   onClick={() =>
-                    onClickOpenModal(child, child.prevSchedule, child.isReceive)
+                    onClickOpenModal(
+                      child,
+                      child.prevSchedule,
+                      child.isReceive,
+                      child.isFullPeople
+                    )
                   }
                 >
                   <CalendarItemHeader
-                    sx={{ background: child.isReceive ? '#df280a' : '#7a7a7a' }}
+                    sx={{
+                      background: child.isReceive
+                        ? child.isFullPeople
+                          ? '#7a7a7a'
+                          : '#df280a'
+                        : '#7a7a7a',
+                    }}
                   >
                     {child.title}
                   </CalendarItemHeader>

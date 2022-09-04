@@ -86,8 +86,8 @@ export default function LessonContentVideo(props: Props) {
                 studyLastTime: currentSecond,
               })
           )
-          .then(() => ApiClient.courseProgress.updateAllCourseProgressUsingPut(courseUserSeq))
-          .then((v) => v.data.data.completeYn === "Y" && props.onComplete());
+          .then((v) => v.data.data.completeYn === "Y" && props.onComplete())
+          .then(() => ApiClient.courseProgress.updateAllCourseProgressUsingPut(courseUserSeq));
 
       }
 

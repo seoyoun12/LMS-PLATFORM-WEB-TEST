@@ -30,7 +30,7 @@ export default function LessonSidebarItem(props: Props) {
         <ItemInfo>
           <ItemInfoPlayIcon/>
           <ItemInfoTime variant="body2">
-            {Math.floor(props.lesson.totalTime / 60)}:{props.lesson.totalTime % 60}
+            {Math.floor(props.lesson.totalTime / 60).toString().padStart(2, "0")}:{(props.lesson.totalTime % 60).toString().padStart(2, "0")}
           </ItemInfoTime>
         </ItemInfo>
       </ItemContent>

@@ -11,6 +11,7 @@ import type { LessonDetailClientResponseDto } from "@common/api/Api";
 interface Props {
   lesson: LessonDetailClientResponseDto;
   active?: boolean;
+  completed?: boolean;
   onClick?: () => void;
 }
 
@@ -18,8 +19,7 @@ export default function LessonSidebarItem(props: Props) {
 
   // 변수.
 
-  const completed = props.lesson.completedYn === "Y";
-  const completedColor = completed ? "#256aef" : grey[500];
+  const completedColor = props.completed ? "#256aef" : grey[500];
 
   // 렌더링.
 
@@ -36,7 +36,7 @@ export default function LessonSidebarItem(props: Props) {
       </ItemContent>
       <ItemCheck>
         {props.active && <ItemPlayCircle/>}
-        <ItemCheckStatus sx={{ color: completedColor }}>{completed ? "학습 완료" : "미학습"}</ItemCheckStatus>
+        <ItemCheckStatus sx={{ color: completedColor }}>{props.completed ? "학습 완료" : "미학습"}</ItemCheckStatus>
         <ItemCheckCircle sx={{ color: completedColor }}/>
       </ItemCheck>
     </ItemContainer>

@@ -26,13 +26,12 @@ export default function Lesson(props: LessonProps) {
   
   const [course, setCourse] = React.useState<CourseDetailClientResponseDto | null>(null);
   const [coursePlayFirst, setCoursePlayFirst] = React.useState<boolean>(true);
+  const [courseLessonsCompleted, setCourseLessonsCompleted] = React.useState<boolean[]>([]);
   const [courseModule, setCourseModule] = React.useState<CourseModuleFindResponseDto | null>(null);
   const [courseModules, setCourseModules] = React.useState<CourseModuleFindResponseDto[] | null>(null);
+  const [courseModulesCompleted, setCourseModulesCompleted] = React.useState<boolean[]>([]);
   const [moduleSurvey, setModuleSurvey] = React.useState<SurveyResponseDto | null>(null);
 
-  // 레퍼런스.
-
-  const lessonCompletedIndex = React.useRef<number>(-1);
 
   // 이펙트.
   
@@ -55,10 +54,8 @@ export default function Lesson(props: LessonProps) {
         const course = res.data.data;
         setCourse(course);
 
-        const lastLessonCompletedIndex = course.lessons.findIndex((v) => v.completedYn === "N");
-
-        if (lastLessonCompletedIndex === -1) lessonCompletedIndex.current = course.lessons.length - 1;
-        else lessonCompletedIndex.current = lastLessonCompletedIndex - 1;
+        setCourseLessonsCompleted(course.lessons.map((v) => v.completedYn === "Y"));
+        setCourseModulesCompleted([]);
 
         return ApiClient.courseModule
           .clientFindAllCourseModulesUsingGet({ courseSeq: course.seq })
@@ -67,6 +64,17 @@ export default function Lesson(props: LessonProps) {
             const courseModules = res.data.data;
             setCourseModules(courseModules);
             setCourseModule(null);
+            setCourseModulesCompleted(courseModules.map((cm) => {
+
+              switch (cm.moduleType) {
+
+                case "COURSE_MODULE_PROGRESS_RATE": return cm.submitYn === "Y";
+                case "COURSE_MODULE_TEST": return cm.submitYn === "Y";
+                case "COURSE_MODULE_SURVEY": return course.surveyList.findIndex((v) => v.surveySeq === cm.surveySeq && v.surveyCompletedYn === "Y") !== -1;
+
+              }
+
+            }));
 
             switch (props.contentType) {
 
@@ -79,7 +87,12 @@ export default function Lesson(props: LessonProps) {
                   setCourseModule(courseModules.find((module) => module.surveySeq === props.contentSeq));
 
                 })
-                .catch(() => setModuleSurvey(null));
+                .catch(() => {
+                  
+                  setModuleSurvey(null);
+                  setCourseModule(null);
+                  
+                });
     
             }
             
@@ -126,7 +139,13 @@ export default function Lesson(props: LessonProps) {
             courseUserSeq={course.courseUserSeq}
             courseProgress={courseProgress}
             lesson={lesson}
-            onComplete={() => lessonCompletedIndex.current = lessonIndex}
+            onComplete={() => {
+
+              const newCourseLessonsCompleted = [...courseModulesCompleted];
+              newCourseLessonsCompleted[lessonIndex] = true;
+              setCourseLessonsCompleted(newCourseLessonsCompleted);
+
+            }}
           />
         );
 
@@ -135,14 +154,24 @@ export default function Lesson(props: LessonProps) {
     }
     case "SURVEY": {
 
-       Content = (
-         <LessonContentSurvey
-           loading={loading}
-           courseUserSeq={course.courseUserSeq}
-           courseModule={courseModule}
-           survey={moduleSurvey}
-         />
-       );
+      const moduleIndex = courseModules ? courseModules.findIndex((module) => module.surveySeq === props.contentSeq) : -1;
+
+      Content = (
+        <LessonContentSurvey
+          loading={loading}
+          courseUserSeq={course.courseUserSeq}
+          courseModule={courseModule}
+          survey={moduleSurvey}
+          surveyCompleted={!!courseModulesCompleted[moduleIndex]}
+          onComplete={() => {
+
+            const newCourseModulesCompleted = [...courseModulesCompleted];
+            newCourseModulesCompleted[moduleIndex] = true;
+            setCourseModulesCompleted(newCourseModulesCompleted);
+
+         }}
+        />
+      );
   
       break;
   
@@ -205,11 +234,13 @@ export default function Lesson(props: LessonProps) {
         courseUserSeq={course.courseUserSeq}
         courseProgresses={course.courseProgressResponseDtoList}
         courseModules={courseModules}
+        courseLessonsCompleted={courseLessonsCompleted}
+        courseModulesCompleted={courseModulesCompleted}
         lessons={course.lessons}
         lessonSeq={props.contentType === "LESSON" ? props.contentSeq : null}
         onLessonSelect={(lessonIndex: number) => {
 
-          if (lessonIndex > lessonCompletedIndex.current) return setDialog("NEXT");
+          if (lessonIndex !== 0 && !courseLessonsCompleted[lessonIndex - 1]) return setDialog("NEXT");
           router.push(`/course/${props.courseUserSeq}/${LESSON_CONTENT_TYPES[0].toLowerCase()}/${course.lessons[lessonIndex].seq}`);
 
         }}

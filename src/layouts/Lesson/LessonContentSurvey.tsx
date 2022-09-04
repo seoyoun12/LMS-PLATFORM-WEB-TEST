@@ -10,6 +10,7 @@ export interface Props {
   courseUserSeq: number;
   courseModule: CourseModuleFindResponseDto | null;
   survey: SurveyResponseDto | null;
+  surveyCompleted?: boolean;
   loading?: boolean;
   onComplete?: () => void;
 }
@@ -22,6 +23,7 @@ export default function LessonContentSurvey(props: Props) {
 
   const [loading, setLoading] = React.useState<boolean>(false);
   const [snackbar, setSnackbar] = React.useState<"FAILED" | "SUCCESS" | null>(null);
+  const [snackbarMessage, setSnackbarMessage] = React.useState<string | null>(null);
   const [errors, setErrors] = React.useState<boolean[]>(new Array(props.survey === null ? 0 : props.survey.surveyQuestionList.length).fill(false));
 
   // 이펙트.
@@ -69,7 +71,7 @@ export default function LessonContentSurvey(props: Props) {
           awnser: formData.get(`question_${i}`),
           surveyQuestionSeq: question.seq,
         }));
-
+        
         ApiClient.survey
           .participateSurveyUsingPost({
             courseUserSeq: props.courseUserSeq,
@@ -77,19 +79,25 @@ export default function LessonContentSurvey(props: Props) {
             answerList: awnserList,
           })
           .then((res) => {
-            
+
             setSnackbar(res.data.success ? "SUCCESS" : "FAILED");
+            setSnackbarMessage(res.data.message);
             res.data.success && props.onComplete();
             
           })
-          .catch(() => setSnackbar("FAILED"))
+          .catch((err) => {
+
+            setSnackbar("FAILED");
+            setSnackbarMessage(err.response?.status === 400 ? "이미 제출한 설문입니다." : "전송을 실패하였습니다.");
+            
+          })
           .finally(() => setLoading(false));
 
       }}
     >
       <SurveyHeader>
         <SurveyHeaderTitle>{props.survey.title}</SurveyHeaderTitle>
-        <SurveyHeaderCompletedText>{props.courseModule.submitYn === "Y" ? "완료" : "미완료"}</SurveyHeaderCompletedText>
+        <SurveyHeaderCompletedText>{props.surveyCompleted ? "완료" : "미완료"}</SurveyHeaderCompletedText>
       </SurveyHeader>
       <SurveyContent>
         {props.survey.surveyQuestionList.map((question, index) => (
@@ -113,7 +121,7 @@ export default function LessonContentSurvey(props: Props) {
           sx={{ width: '100%' }}
           onClose={() => snackbar === "SUCCESS" ? router.replace(router.asPath) : setSnackbar(null)}
         >
-          {snackbar === "SUCCESS" ? "전송하였습니다." : "실패하였습니다."}
+          {snackbarMessage}
         </Alert>
       </Snackbar>
     </SurveyContainer>

@@ -8,6 +8,7 @@ import { LESSON_CONTENT_TYPES } from "./Lesson.types";
 interface Props {
   courseUserSeq: number;
   courseModule: CourseModuleFindResponseDto;
+  completed?: boolean;
   onSelect: (url: string) => void;
 }
 
@@ -21,7 +22,7 @@ export default function LessonSidebarModule(props: Props) {
           <ModuleTitle>{props.courseModule.moduleName}</ModuleTitle>
         </ModuleContainerLeft>
         <ModuleContainerRight>
-          <CheckCircleIcon sx={{ color: props.courseModule.submitYn === "Y" ? "#256aef" : "text.secondary" }} fontSize="inherit"/>
+          <CheckCircleIcon sx={{ color: props.completed ? "#256aef" : "text.secondary" }} fontSize="inherit"/>
         </ModuleContainerRight>
       </ModuleContainer>
     );
@@ -34,7 +35,7 @@ export default function LessonSidebarModule(props: Props) {
           </ModuleTitle>
         </ModuleContainerLeft>
         <ModuleContainerRight>
-          <CheckCircleIcon sx={{ color: props.courseModule.submitYn === "Y" ? "#256aef" : "text.secondary" }} fontSize="inherit"/>
+          <CheckCircleIcon sx={{ color: props.completed ? "#256aef" : "text.secondary" }} fontSize="inherit"/>
         </ModuleContainerRight>
       </ModuleContainer>
     );
@@ -45,7 +46,7 @@ export default function LessonSidebarModule(props: Props) {
           <ModuleTitle style={{ marginLeft: "0.5rem" }}>{props.courseModule.moduleName}</ModuleTitle>
         </ModuleContainerLeft>
         <ModuleContainerRight>
-          <CheckCircleIcon sx={{ color: props.courseModule.submitYn === "Y" ? "#256aef" : "text.secondary" }} fontSize="inherit"/>
+          <CheckCircleIcon sx={{ color: props.completed ? "#256aef" : "text.secondary" }} fontSize="inherit"/>
         </ModuleContainerRight>
       </ModuleContainer>
     );

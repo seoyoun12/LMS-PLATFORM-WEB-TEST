@@ -14,6 +14,8 @@ interface Props {
   courseUserSeq: number;
   courseProgresses: CourseProgressResponseDto[];
   courseModules: CourseModuleFindResponseDto[] | null;
+  courseLessonsCompleted: boolean[];
+  courseModulesCompleted: boolean[];
   lessonSeq: number | null;
   lessons: LessonDetailClientResponseDto[];
   onLessonSelect?: (lessonIndex: number) => void;
@@ -42,6 +44,7 @@ export default function LessonSidebar(props: Props) {
             {props.lessons.map((lesson, lessonIndex) => (
               <LessonSidebarItem
                 active={lesson.seq === props.lessonSeq}
+                completed={props.courseLessonsCompleted[lessonIndex]}
                 lesson={lesson}
                 key={lesson.seq}
                 onClick={() => props.onLessonSelect(lessonIndex)}
@@ -54,6 +57,7 @@ export default function LessonSidebar(props: Props) {
                     key={courseModule.courseModuleSeq}
                     courseUserSeq={props.courseUserSeq}
                     courseModule={courseModule}
+                    completed={props.courseModulesCompleted[moduleIndex]}
                     onSelect={() => props.onModuleSelect(moduleIndex)}
                   />
                 ))}

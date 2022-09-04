@@ -68,7 +68,7 @@ export default function LessonContentSurvey(props: Props) {
         }
 
         const awnserList = props.survey.surveyQuestionList.map((question, i) => ({
-          awnser: formData.get(`question_${i}`),
+          answer: formData.get(`question_${i}`).toString(),
           surveyQuestionSeq: question.seq,
         }));
         

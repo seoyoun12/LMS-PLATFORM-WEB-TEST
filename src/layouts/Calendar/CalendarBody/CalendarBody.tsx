@@ -103,13 +103,20 @@ export function CalendarBody({
   const [deplecateEnrollOpen, setDeplecateEnrollOpen] = useState(false);
 
   const scheduleList = schedule?.map(item => {
+    //정원이 다 찼을경우
+    const isFullPeople =
+      item.limitPeople !== 0 && item.enrolledPeopleCnt === item.limitPeople;
+
     //마감여부
+    //이전 날짜일경우
     const prevSchedule =
       new Date(item.requestEndDate.replaceAll('-', '/')).getTime() -
         new Date().getTime() >=
       0
         ? true
         : false;
+
+    //이후 날짜일 경우.
     const isReceive =
       new Date(item.requestEndDate.replaceAll('-', '/')).getTime() -
         new Date().getTime() >=
@@ -125,10 +132,13 @@ export function CalendarBody({
       ...item,
       title: prevSchedule
         ? item.enableToEnrollYn === YN.YES
-          ? '접수중'
+          ? isFullPeople
+            ? '마감'
+            : '접수중'
           : '준비중'
         : '마감', //말
       isReceive,
+      isFullPeople,
       prevSchedule,
       step: item.step, //기수
       lessonTime: item.course.lessonTime,
@@ -150,7 +160,12 @@ export function CalendarBody({
       // end: item.requestEndDate, //start: requestStartDate 신청종료날짜
       start: item.studyStartDate, //학습시작날짜
       end: item.studyEndDate, //학습종료날짜
-      className: item.enableToEnrollYn === YN.YES ? 'TYPE_SUP_COMMON' : 'TYPE_NONE',
+      className:
+        item.enableToEnrollYn === YN.YES
+          ? isFullPeople
+            ? 'TYPE_NONE'
+            : 'TYPE_SUP_COMMON'
+          : 'TYPE_NONE',
       // item.enableToEnrollYn === YN.YES ? eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType : 'TYPE_NONE', 나중에 필요시 사용
       // className: isReceive
       // ? eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType || 'TYPE_NONE'
@@ -198,6 +213,8 @@ export function CalendarBody({
           // );
           if (!e.event._def.extendedProps.prevSchedule)
             return window.alert('마감된 교육입니다!');
+          if (e.event._def.extendedProps.isFullPeople)
+            return window.alert('접수마감된 교육입니다.');
           if (!e.event._def.extendedProps.isReceive)
             return window.alert('신청기간이 아닙니다!');
           setModalInfo({
@@ -389,7 +406,9 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
           sx={{
             color:
               extendedProps.prevSchedule && extendedProps.enableToEnrollYn === YN.YES
-                ? '#df280a'
+                ? extendedProps.isFullPeople
+                  ? '#7a7a7a'
+                  : '#df280a'
                 : '#7a7a7a',
           }}
           fontWeight="bold"

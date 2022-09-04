@@ -27,6 +27,7 @@ class MyDocument extends Document {
       <Html>
         {/* <Head>{redirectIEToEdge()}</Head> */}
         <Head>
+          <title>충남교통연수원</title>
           {/* <style id="jss-server-side">${css}</style> */}
           {redirectIEToEdge()}
         </Head>

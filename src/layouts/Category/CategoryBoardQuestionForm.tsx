@@ -264,7 +264,11 @@ export function CategoryBoardQuestionForm({
             <TableCellRight>
               <FormControl sx={{ minWidth: '130px' }}>
                 <InputLabel>문의유형</InputLabel>
-                <Select value={questionType} label="type" onChange={handleSelectChange}>
+                <Select
+                  value={questionType}
+                  label="문의유형"
+                  onChange={handleSelectChange}
+                >
                   <MenuItem value={QnaType.TYPE_SIGNUP_OR_SIGNIN}>
                     회원가입/로그인
                   </MenuItem>

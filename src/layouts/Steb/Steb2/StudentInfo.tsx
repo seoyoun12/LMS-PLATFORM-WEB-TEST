@@ -169,18 +169,11 @@ export function StudentInfo({
                     required: true,
                   })}
                 >
-                  <>
-                    {userBusinessTypeTwo[0].enType === courseSubCategoryType.BUS ? (
-                      <div>1232</div>
-                    ) : (
-                      <div>111</div>
-                    )}
-                    {locationList.map(item => (
-                      <MenuItem key={item.en} value={item.en}>
-                        {item.ko}
-                      </MenuItem>
-                    ))}
-                  </>
+                  {locationList.map(item => (
+                    <MenuItem key={item.en} value={item.en}>
+                      {item.ko}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </TableRightCell>

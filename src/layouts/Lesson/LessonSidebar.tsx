@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { Box } from "@mui/system";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { headerHeight } from "@styles/variables";
-import { LESSON_TABS, LessonTabs } from "./Lesson.types";
+import { LESSON_TABS, LessonTabs, LESSON_CONTENT_TYPES } from "./Lesson.types";
 import { CourseModuleFindResponseDto, CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Tab } from "@mui/material";
 import { useRouter } from "next/router";
@@ -12,14 +12,13 @@ import LessonSidebarItem from "./LessonSidebarItem";
 
 interface Props {
   courseUserSeq: number;
+  courseTotalProgress: number;
   courseProgresses: CourseProgressResponseDto[];
   courseModules: CourseModuleFindResponseDto[] | null;
   courseLessonsCompleted: boolean[];
   courseModulesCompleted: boolean[];
-  lessonSeq: number | null;
-  lessons: LessonDetailClientResponseDto[];
-  onLessonSelect?: (lessonIndex: number) => void;
-  onModuleSelect?: (moduleIndex: number) => void;
+  courselessons: LessonDetailClientResponseDto[];
+  courseLessonSeq: number | null;
 }
 
 export default function LessonSidebar(props: Props) {
@@ -29,7 +28,33 @@ export default function LessonSidebar(props: Props) {
   // 스테이트.
 
   const [tabMenu, setTabMenu] = React.useState<LessonTabs["value"]>(LESSON_TABS[0].value);
-  const [switchURL, setSwitchURL] = React.useState<string | null>(null);
+  const [dialog, setDialog] = React.useState<'NEXT' | 'PROGRESS' | null>(null);
+
+  // 컴포넌트.
+
+  const DialogNext = (
+    <Dialog open={dialog === 'NEXT'} onClose={() => setDialog(null)}>
+      <DialogContent>
+        <DialogContentText>
+          현재 학습 완료 후 다음 학습으로 이동 가능합니다.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setDialog(null)}>확인</Button>
+      </DialogActions>
+    </Dialog>
+  );
+
+  const DialogProgress = (
+    <Dialog open={dialog === 'PROGRESS'} onClose={() => setDialog(null)}>
+      <DialogContent>
+        <DialogContentText>학습을 더 진행해야 이동이 가능합니다.</DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setDialog(null)}>확인</Button>
+      </DialogActions>
+    </Dialog>
+  );
 
   // 렌더링.
 
@@ -41,13 +66,21 @@ export default function LessonSidebar(props: Props) {
         </TabMenu>
         <TabItem value={LESSON_TABS[0].value}>
           <LessonItemContainer>
-            {props.lessons.map((lesson, lessonIndex) => (
+            {props.courselessons.map((lesson, lessonIndex) => (
               <LessonSidebarItem
-                active={lesson.seq === props.lessonSeq}
+                active={lesson.seq === props.courseLessonSeq}
                 completed={props.courseLessonsCompleted[lessonIndex]}
                 lesson={lesson}
                 key={lesson.seq}
-                onClick={() => props.onLessonSelect(lessonIndex)}
+                onClick={() => {
+                  if (lessonIndex !== 0 && !props.courseLessonsCompleted[lessonIndex - 1])
+                    return setDialog('NEXT');
+                  router.push(
+                    `/course/${props.courseUserSeq}/${LESSON_CONTENT_TYPES[0].toLowerCase()}/${
+                      props.courselessons[lessonIndex].seq
+                    }`
+                  );
+                }}
               />
             ))}
             {props.courseModules !== null && props.courseModules.length > 0 && (
@@ -58,37 +91,35 @@ export default function LessonSidebar(props: Props) {
                     courseUserSeq={props.courseUserSeq}
                     courseModule={courseModule}
                     completed={props.courseModulesCompleted[moduleIndex]}
-                    onSelect={() => props.onModuleSelect(moduleIndex)}
+                    onSelect={() => {
+                      const module = props.courseModules[moduleIndex];
+            
+                      if (module.limitProgress !== 0 && props.courseTotalProgress < module.limitProgress)
+                        return setDialog('PROGRESS');
+            
+                      switch (module.moduleType) {
+                        case 'COURSE_MODULE_PROGRESS_RATE':
+                          break;
+                        case 'COURSE_MODULE_SURVEY':
+                          router.push(
+                            `/course/${
+                              props.courseUserSeq
+                            }/${LESSON_CONTENT_TYPES[1].toLowerCase()}/${module.surveySeq}`
+                          );
+                          break;
+                        case 'COURSE_MODULE_TEST':
+                          break;
+                      }
+                    }}
                   />
                 ))}
               </LessonModuleContainer>
             )}
           </LessonItemContainer>
         </TabItem>
-        <Dialog
-          open={switchURL !== null}
-          onClose={() => setSwitchURL(null)}
-        >
-          <DialogContent>
-            <DialogContentText>
-              정말 페이지를 이동하시겠습니까?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setSwitchURL(null)}>취소</Button>
-            <Button
-              onClick={() => {
-
-                router.push(switchURL);
-                setSwitchURL(null);
-
-              }}
-            >
-              확인
-            </Button>
-          </DialogActions>
-        </Dialog>
       </TabContext>
+      {DialogNext}
+      {DialogProgress}
     </StickySideBar>
   );
 

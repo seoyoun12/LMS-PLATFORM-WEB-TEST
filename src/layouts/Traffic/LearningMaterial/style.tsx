@@ -1,4 +1,7 @@
 import styled from "@emotion/styled";
+import { Tab, Tabs } from "@mui/material";
+
+export const LearningMaterialWrapper = styled.div``;
 
 export const LearningMaterialHeaderContainer = styled.div`
   width: 100%;
@@ -33,4 +36,23 @@ export const LearningMaterialHeaderSubtitle = styled.p`
   color: #fff;
   margin: 0 30px;
   word-break: break-word;
+`;
+
+export const LearningMaterialTabWrapper = styled.div`
+  border-bottom: 1px solid #bfbfbf;
+  margin-bottom: 40px;
+`;
+
+export const LearningMaterialTabs = styled(Tabs)`
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const LearningMaterialTabItem = styled(Tab)`
+  width: 0;
+  flex-grow: 1;
+  color: #000;
 `;

@@ -162,11 +162,11 @@ const SurveyHeaderTitle = styled.span`
   flex-grow: 1;
   font-size: 1.5em;
   font-weight: 700;
-`
+`;
 
 const SurveyHeaderCompletedText = styled.span`
   color: #404040;
-`
+`;
 
 const SurveyContent = styled.div`
   margin-bottom: 2rem;

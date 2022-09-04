@@ -24,8 +24,8 @@ export default function LessonContentSurveyQuestion(props: Props) {
 						disabled={props.loading}
 					>
 						<RadioGroup name={`question_${props.index}`}>
-							{Array.from({ length: 10 }, (x, i) => props.question.surveyMultipleChoice[`item${i + 1}`]).filter((v) => !!v).map((v: string, i) => (
-								<QuestionFormControlLabel key={i} control={<Radio size="small"/>} label={v} value={i + 1}/>
+							{Array.from({ length: 10 }, (x, i) => [props.question.surveyMultipleChoice[`item${i + 1}`], i + 1]).filter((v) => !!v[0]).map((v: [string, number], i) => (
+								<QuestionFormControlLabel key={i} control={<Radio size="small"/>} label={v[0]} value={v[1]}/>
 							))}
 						</RadioGroup>
 						{props.error && <FormHelperText>하나를 선택해 주세요.</FormHelperText>}
@@ -33,7 +33,7 @@ export default function LessonContentSurveyQuestion(props: Props) {
 				</QuestionItemContainer>
 			</QuestionContainer>
 		);
-		case "TYPE_MULTIPLE_CHOICE": return (
+		case "TYPE_SUBJECTIVE": return (
 			<QuestionContainer>
 				<QuestionTitle>{props.index + 1}. {props.question.content}</QuestionTitle>
 				<QuestionItemContainer>

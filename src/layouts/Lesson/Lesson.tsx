@@ -221,7 +221,7 @@ export default function Lesson(props: LessonProps) {
         <Button onClick={() => setDialog(null)}>확인</Button>
       </DialogActions>
     </Dialog>
-  )
+  );
 
   // 렌더링.
 

@@ -23,11 +23,16 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form';
-import { RegisterType, UserTransSaveInputDataType } from '@common/api/courseClass';
+import {
+  courseSubCategoryType,
+  RegisterType,
+  UserTransSaveInputDataType,
+} from '@common/api/courseClass';
 import { YN } from '@common/constant';
 import { useMyUser, UserRole } from '@common/api/user';
 import { Phone3Regex, Phone4Regex } from '@utils/inputRegexes';
 import { CarNumberBox } from '@components/ui/Step';
+import { userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
 
 const phoneList = ['010', '011', '051'];
 interface Props {
@@ -159,12 +164,23 @@ export function StudentInfo({
             <TableLeftCell>차량 등록지</TableLeftCell>
             <TableRightCell>
               <FormControl fullWidth>
-                <Select {...register('carRegisteredRegion')}>
-                  {locationList.map(item => (
-                    <MenuItem key={item.en} value={item.en}>
-                      {item.ko}
-                    </MenuItem>
-                  ))}
+                <Select
+                  {...register('carRegisteredRegion', {
+                    required: true,
+                  })}
+                >
+                  <>
+                    {userBusinessTypeTwo[0].enType === courseSubCategoryType.BUS ? (
+                      <div>1232</div>
+                    ) : (
+                      <div>111</div>
+                    )}
+                    {locationList.map(item => (
+                      <MenuItem key={item.en} value={item.en}>
+                        {item.ko}
+                      </MenuItem>
+                    ))}
+                  </>
                 </Select>
               </FormControl>
             </TableRightCell>

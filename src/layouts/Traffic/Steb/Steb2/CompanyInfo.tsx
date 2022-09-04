@@ -1,8 +1,19 @@
 import styled from '@emotion/styled';
-import { Box, FormControl, Select, Typography, MenuItem, TextField, Button } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  Select,
+  Typography,
+  MenuItem,
+  TextField,
+  Button,
+} from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import React, { useState } from 'react';
-import { userBusinessTypeOne, userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
+import {
+  userBusinessTypeOne,
+  userBusinessTypeTwo,
+} from '@layouts/MeEdit/TransWorker/TransWorker';
 import { FieldValues, UseFormRegister, UseFormWatch } from 'react-hook-form';
 import { UserTransSaveInputDataType } from '@common/api/courseClass';
 
@@ -41,7 +52,11 @@ export function CompanyInfo({ register, watch }: Props) {
       <Box mt={2}>
         <Typography mb={1}>업종구분</Typography>
         <FormControl fullWidth>
-          <Select labelId="businessSubType" id="businessSubType" {...register('businessSubType')}>
+          <Select
+            labelId="businessSubType"
+            id="businessSubType"
+            {...register('businessSubType')}
+          >
             {userBusinessTypeTwo
               .filter(filter => filter.category === watch().businessType)
               .map(item => (
@@ -55,11 +70,17 @@ export function CompanyInfo({ register, watch }: Props) {
       <Typography mt={2} mb={1}>
         회사명
       </Typography>
-      <TextField placeholder="회사명 또는 차량등록지역" {...register('businessName')} fullWidth />
+      <TextField
+        placeholder="회사명 또는 차량등록지역"
+        {...register('businessName')}
+        fullWidth
+      />
       <Box display="flex" mt={2}>
         <Box>※</Box>
         <Box display="flex" flexDirection="column" ml={1}>
-          <Typography>자동차등록증 상의 회사명(상호)를 반드시 국문으로 입력하시기 바랍니다.</Typography>
+          <Typography>
+            자동차등록증 상의 회사명(상호)를 반드시 국문으로 입력하시기 바랍니다.
+          </Typography>
           <ExampleMessege>예시 {'>'} ss물류 → 에스에스물류</ExampleMessege>
         </Box>
       </Box>

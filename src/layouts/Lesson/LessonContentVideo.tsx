@@ -13,6 +13,7 @@ interface Props {
   courseUserSeq: number;
   courseProgress: CourseProgressResponseDto | null;
   lesson: LessonDetailClientResponseDto | null;
+  lessonCompleted?: boolean;
   loading?: boolean;
   onComplete?: () => void;
 }
@@ -86,8 +87,13 @@ export default function LessonContentVideo(props: Props) {
                 studyLastTime: currentSecond,
               })
           )
-          .then((v) => v.data.data.completeYn === "Y" && props.onComplete())
-          .then(() => ApiClient.courseProgress.updateAllCourseProgressUsingPut(courseUserSeq));
+          .then((v) => {
+            
+            return ApiClient.courseProgress
+              .updateAllCourseProgressUsingPut(courseUserSeq)
+              .then(() => v.data.data.completeYn === "Y" && props.onComplete());
+            
+          });
 
       }
 
@@ -242,6 +248,7 @@ export default function LessonContentVideo(props: Props) {
           initialPlayerId={PLAYER_ELEMENT_ID}
           initialConfig={{ autostart: !props.coursePlayFirst }}
           seconds={props.courseProgress.studyLastTime === props.lesson.totalTime ? props.lesson.totalTime + 1 : props.courseProgress.studyLastTime}
+          showControl={props.lessonCompleted}
           onPause={onPause}
           onPlaying={onPlaying}
           onSeeking={onSeeking}

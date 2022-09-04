@@ -12,6 +12,7 @@ interface Props extends Events {
   initialPlayerId: string;
   playlist: Config["playlist"];
   seconds: number;
+  showControl?: boolean;
   onReady?: (player: Ncplayer) => void;
   onTimeChange?: (time: number) => void;
 }
@@ -37,6 +38,7 @@ export function VideoPlayer(props: Props) {
   const player = React.useRef<Ncplayer | null>(null);
   const playerTimeObserver = React.useRef<MutationObserver | null>(null);
   const playerElement = React.useRef(null);
+  const playerKeydownEvent = React.useRef(null);
   
   const needUpdate = React.useRef<boolean>(false);
   const initialConfig = React.useRef<Omit<Config, "playlist">>(props.initialConfig);
@@ -68,9 +70,11 @@ export function VideoPlayer(props: Props) {
       player.current.on("canplay", () => {
         
         player.current._corePlayer._setDuration(player.current._corePlayer.player.duration);
-        player.current._view.$el.__vue__.controlKeydownEvent = () => undefined;
+
+        playerKeydownEvent.current = player.current._view.$el.__vue__.controlKeydownEvent;
+        player.current._view.$el.__vue__.controlKeydownEvent = !props.showControl ? () => undefined : playerKeydownEvent.current;
         
-        // 그... 62번줄은 플레이어 방향키로 시간 조절하는 것을 막는 코드에요.
+        // 위 두 줄은 플레이어 방향키로 시간 조절하는 것을 막는 코드에요.
         // 일단 막아보았지만, 영상이 로드 되기 전에 방향키를 막 누르면 5초정도 이동되긴 해요.
         // 완전히 막는 방법을 모르겠어요...
         //
@@ -126,6 +130,8 @@ export function VideoPlayer(props: Props) {
         { characterData: true, attributes: false, childList: false, subtree: true },
       );
 
+      player.current._view.$el.__vue__.controlKeydownEvent = !props.showControl ? () => undefined : playerKeydownEvent.current;
+
     }
 
   }, [scriptLoaded, playlist, props]);
@@ -139,13 +145,13 @@ export function VideoPlayer(props: Props) {
         onLoad={() => window.ncplayer && setScriptLoaded(true)}
         onReady={() => window.ncplayer && setScriptLoaded(true)}
       />
-      <Player id={initialPlayerId.current} ref={playerElement}></Player>
+      <Player id={initialPlayerId.current} ref={playerElement} showControl={props.showControl}></Player>
     </>
   );
 
 }
 
-const Player = styled.div`
+const Player = styled.div<{ showControl?: boolean }>`
   
   width: 100%;
   aspect-ratio: 16/9;
@@ -157,7 +163,7 @@ const Player = styled.div`
   }
 
   & .ncplayer-progress {
-    display: none;
+    display: ${({ showControl }) => showControl ? "block" : "none"};
   }
 
 `;

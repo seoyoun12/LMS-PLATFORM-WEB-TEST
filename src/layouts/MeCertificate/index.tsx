@@ -26,20 +26,26 @@ import BackgroundImage from "public/assets/images/certificates_background.svg";
 import { NotFound } from "@components/ui/NotFound";
 import { useState } from "react";
 import { AxiosResponse } from "axios";
+import { FetchState } from "types/fetch";
+import { CircularProgress } from "@mui/material";
 
 const MeCertificate: NextPage = () => {
   const { certificateList, mutate } = useGetUserMyinfoCertificates();
-
-  console.log(certificateList);
   const [selectedCertificate, setSelectedCertificate] =
     useState<UserMyinfoCertificatesConfirmResponseDto | null>(null);
+  const [showCertificateFetchState, setShowCertificateFetchState] =
+    useState<FetchState>("READY");
+  const [downloadCertificateFetchState, setDownloadCertificateFetchState] =
+    useState<FetchState>("READY");
 
-  const handleClickCertificatesDownload = async (
+  const handleClickShowCertificates = async (
     item: UserMyinfoCertificatesResponseDto
   ) => {
-    if (!item.courseUserSeq) {
+    if (!item.courseUserSeq || showCertificateFetchState === "FETCHING") {
       return;
     }
+
+    setShowCertificateFetchState("FETCHING");
 
     try {
       const { data } = await GET<
@@ -47,35 +53,44 @@ const MeCertificate: NextPage = () => {
       >(`/user/myinfo/certificates/confirm/${item.courseUserSeq}`);
       mutate();
       setSelectedCertificate(data);
+      setShowCertificateFetchState("SUCCESS");
     } catch (e) {
       alert(e.data.message);
+      setShowCertificateFetchState("FAILURE");
     }
     return;
   };
 
   const handleClickDownloadCertificate = async () => {
-    if (!selectedCertificate?.courseUserSeq) {
+    if (
+      !selectedCertificate?.courseUserSeq ||
+      downloadCertificateFetchState === "FETCHING"
+    ) {
       return;
     }
 
-    console.log(selectedCertificate);
-
+    setDownloadCertificateFetchState("FETCHING");
     alert("수료 조건을 충족하여 증명서가 발급됩니다.");
 
-    const data = await POST<string>(
-      `/user/myinfo/certificates/download/${selectedCertificate.courseUserSeq}`,
-      {},
-      {
-        responseType: "blob",
-      }
-    );
+    try {
+      const data = await POST<string>(
+        `/user/myinfo/certificates/download/${selectedCertificate.courseUserSeq}`,
+        {},
+        {
+          responseType: "blob",
+        }
+      );
 
-    const url = window.URL.createObjectURL(new Blob([data]));
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${selectedCertificate.fileName}.pdf`;
-    a.click();
-    a.remove();
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${selectedCertificate.fileName}.pdf`;
+      a.click();
+      a.remove();
+      setDownloadCertificateFetchState("SUCCESS");
+    } catch (e) {
+      setDownloadCertificateFetchState("FAILURE");
+    }
   };
 
   const handleClickPrintCertificate = () => {
@@ -116,7 +131,11 @@ const MeCertificate: NextPage = () => {
                 프린트
               </PrintModalButton>
               <PrintModalButton onClick={handleClickDownloadCertificate}>
-                저장
+                {downloadCertificateFetchState === "FETCHING" ? (
+                  <CircularProgress />
+                ) : (
+                  "저장"
+                )}
               </PrintModalButton>
             </PrintModalButtonWrapper>
           </PrintModalWrapper>
@@ -139,7 +158,7 @@ const MeCertificate: NextPage = () => {
               certificateList.data.map((item, index) => (
                 <MeCertificateItemContainer
                   key={index}
-                  onClick={() => handleClickCertificatesDownload(item)}
+                  onClick={() => handleClickShowCertificates(item)}
                 >
                   <MeCertificateItemImageContainer>
                     {item.s3Files && item.s3Files.length > 0 && (

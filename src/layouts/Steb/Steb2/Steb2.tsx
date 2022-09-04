@@ -40,7 +40,7 @@ export default function Steb2() {
   const [confirm, setConfirm] = useState(false);
   const [isIndividualCheck, setIsIndividualCheck] = useState(false);
   const [hideCarNumber, setHideCarNumber] = useState(false);
-  const [fixedBusinessType, setFixedBusinessType] = useState<userBusinessType>();
+  const [fixedBusinessType, setFixedBusinessType] = useState<userBusinessType>(); //업체정보 운수구분 고정용(여객-여객,화물-화물)
   const [loading, setLoading] = useState(false);
   const confirmRef = useRef<boolean>();
 

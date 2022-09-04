@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import {
   Button,
@@ -20,7 +19,7 @@ import ApiClient from '@common/api/ApiClient';
 import LessonSidebar from './LessonSidebar';
 import LessonContentVideo from './LessonContentVideo';
 import LessonContentSurvey from './LessonContentSurvey';
-import { LessonContentType, LESSON_CONTENT_TYPES } from './Lesson.types';
+import { LessonContentType } from './Lesson.types';
 
 export interface LessonProps {
   courseUserSeq: number;
@@ -29,14 +28,11 @@ export interface LessonProps {
 }
 
 export default function Lesson(props: LessonProps) {
-  const router = useRouter();
 
   // 스테이트.
 
   const [loading, setLoading] = React.useState<boolean>(true);
-  const [dialog, setDialog] = React.useState<'FIRST' | 'NEXT' | 'PROGRESS' | null>(
-    'FIRST'
-  );
+  const [dialog, setDialog] = React.useState<'FIRST' | null>('FIRST');
 
   const [course, setCourse] = React.useState<CourseDetailClientResponseDto | null>(null);
   const [coursePlayFirst, setCoursePlayFirst] = React.useState<boolean>(true);
@@ -218,30 +214,6 @@ export default function Lesson(props: LessonProps) {
     </Dialog>
   );
 
-  const DialogNext = (
-    <Dialog open={dialog === 'NEXT'} onClose={() => setDialog(null)}>
-      <DialogContent>
-        <DialogContentText>
-          현재 학습 완료 후 다음 학습으로 이동 가능합니다.
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => setDialog(null)}>확인</Button>
-      </DialogActions>
-    </Dialog>
-  );
-
-  const DialogProgress = (
-    <Dialog open={dialog === 'PROGRESS'} onClose={() => setDialog(null)}>
-      <DialogContent>
-        <DialogContentText>학습을 더 진행해야 이동이 가능합니다.</DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => setDialog(null)}>확인</Button>
-      </DialogActions>
-    </Dialog>
-  );
-
   // 렌더링.
 
   return (
@@ -249,45 +221,15 @@ export default function Lesson(props: LessonProps) {
       <LessonContentWrapper>{Content}</LessonContentWrapper>
       <LessonSidebar
         courseUserSeq={course.courseUserSeq}
+        courseTotalProgress={course.totalProgress}
         courseProgresses={course.courseProgressResponseDtoList}
         courseModules={courseModules}
         courseLessonsCompleted={courseLessonsCompleted}
         courseModulesCompleted={courseModulesCompleted}
-        lessons={course.lessons}
-        lessonSeq={props.contentType === 'LESSON' ? props.contentSeq : null}
-        onLessonSelect={(lessonIndex: number) => {
-          if (lessonIndex !== 0 && !courseLessonsCompleted[lessonIndex - 1])
-            return setDialog('NEXT');
-          router.push(
-            `/course/${props.courseUserSeq}/${LESSON_CONTENT_TYPES[0].toLowerCase()}/${
-              course.lessons[lessonIndex].seq
-            }`
-          );
-        }}
-        onModuleSelect={(moduleIndex: number) => {
-          const module = courseModules[moduleIndex];
-
-          if (module.limitProgress !== 0 && course.totalProgress < module.limitProgress)
-            return setDialog('PROGRESS');
-
-          switch (module.moduleType) {
-            case 'COURSE_MODULE_PROGRESS_RATE':
-              break;
-            case 'COURSE_MODULE_SURVEY':
-              router.push(
-                `/course/${
-                  props.courseUserSeq
-                }/${LESSON_CONTENT_TYPES[1].toLowerCase()}/${module.surveySeq}`
-              );
-              break;
-            case 'COURSE_MODULE_TEST':
-              break;
-          }
-        }}
+        courselessons={course.lessons}
+        courseLessonSeq={props.contentType === 'LESSON' ? props.contentSeq : null}
       />
       {DialogFirst}
-      {DialogNext}
-      {DialogProgress}
     </LessonContainer>
   );
 }

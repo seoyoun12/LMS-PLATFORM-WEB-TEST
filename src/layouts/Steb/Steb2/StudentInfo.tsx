@@ -94,6 +94,7 @@ export function StudentInfo({
     }
   }, [user, registerType]);
 
+  console.log(watch());
   return (
     <StudentInfoWrap>
       <Box>
@@ -169,11 +170,22 @@ export function StudentInfo({
                     required: true,
                   })}
                 >
-                  {locationList.map(item => (
+                  {/* {locationList.map(item => (
                     <MenuItem key={item.en} value={item.en}>
                       {item.ko}
                     </MenuItem>
-                  ))}
+                  ))} */}
+                  {locationList
+                    .filter(
+                      item =>
+                        watch().businessSubType !== courseSubCategoryType.BUS &&
+                        item.en !== 'CHUNGNAM'
+                    )
+                    .map(item => (
+                      <MenuItem key={item.en} value={item.en}>
+                        {item.ko}
+                      </MenuItem>
+                    ))}
                 </Select>
               </FormControl>
             </TableRightCell>

@@ -124,8 +124,8 @@ export default function LessonContentVideo(props: Props) {
 
         ApiClient.courseLog
           .createCourseModulesUsingPost1({
-            courseUserSeq: props.courseUserSeq,
-            lessonSeq: props.lesson.seq,
+            courseUserSeq: courseUserSeq,
+            lessonSeq: lessonSeq,
             studyTime: apiVideoSeconds.current,
           })
           .then(() =>

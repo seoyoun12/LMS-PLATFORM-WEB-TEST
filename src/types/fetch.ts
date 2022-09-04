@@ -13,7 +13,9 @@ export interface FetchPaginationResponse<T> {
 }
 
 export interface PaginationResult<T> {
-  map(arg0: (data: any) => import("@emotion/react/jsx-runtime").JSX.Element): import("react").ReactNode;
+  map(
+    arg0: (data: any) => import("@emotion/react/jsx-runtime").JSX.Element
+  ): import("react").ReactNode;
   content: T;
   empty: boolean;
   first: boolean;
@@ -29,7 +31,7 @@ export interface PaginationResult<T> {
     sort: {
       unsorted: boolean;
       sorted: boolean;
-      empty: boolean
+      empty: boolean;
     };
   };
   size: number;
@@ -46,12 +48,14 @@ export enum STATUS_CODE {
   NOT_FOUND = 404,
   AUTHORIZATION_LOCKED = 400,
   ACCESS_TOKEN_EXPIRED = 999,
-  REFRESH_TOKEN_EXPIRED = 998
+  REFRESH_TOKEN_EXPIRED = 998,
 }
 
 export enum FetchingStatus {
-  PENDING = 'pending',
-  LOADING = 'loading',
-  RESOLVED = 'resolved',
-  REJECTED = 'rejected',
+  PENDING = "pending",
+  LOADING = "loading",
+  RESOLVED = "resolved",
+  REJECTED = "rejected",
 }
+
+export type FetchState = "READY" | "FETCHING" | "SUCCESS" | "FAILURE";

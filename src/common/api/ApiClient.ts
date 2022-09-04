@@ -19,8 +19,6 @@ const ApiClient = new Api({
   headers: axiosHeaders,
 });
 
-export default ApiClient;
-
 // 리퀘스트 인터셉터.
 
 ApiClient.instance.interceptors.request.use(
@@ -44,9 +42,7 @@ ApiClient.instance.interceptors.response.use(
   (response: AxiosResponse<unknown>) => response,
   async (err: AxiosError<unknown>) => {
 
-    if (!err.response) return err;
-
-    if (err.response.status === STATUS_CODE.ACCESS_TOKEN_EXPIRED) {
+    if (err.response?.status === STATUS_CODE.ACCESS_TOKEN_EXPIRED) {
 
       const accessToken = localStore.getItem(ACCESS_TOKEN);
       const refreshToken = localStore.getItem(REFRESH_TOKEN);
@@ -73,6 +69,10 @@ ApiClient.instance.interceptors.response.use(
       }
 
     }
+    
+    return Promise.reject(err);
 
   }
 );
+
+export default ApiClient;

@@ -693,6 +693,19 @@ export interface CourseDetailClientResponseDto {
   displayYn?: string;
 
   /**
+   * 학습 상태
+   *  * TYPE_BEFORE: 학습 시작 전인 과정 * TYPE_PROGRESSING: 학습 진행 중인 과정
+   *  * TYPE_ENDED: 학습 종료된 과정
+   */
+  learningStatus?: "TYPE_BEFORE" | "TYPE_PROGRESSING" | "TYPE_ENDED";
+
+  /**
+   * 학습 기간 남은 기한
+   * @format int64
+   */
+  leftDays?: number;
+
+  /**
    * 과정 수료 시간
    * @format int32
    */
@@ -1731,10 +1744,11 @@ export interface CourseUserMyInfoResponseDto {
 
   /**
    * 학습 중인 과정/학습 종료 과정 구분
+   *  * TYPE_BEFORE: 학습 시작 전인 과정
    *  * TYPE_PROGRESSING: 학습 진행 중인 과정
    *  * TYPE_ENDED: 학습 종료된 과정
    */
-  progressStatus?: "TYPE_PROGRESSING" | "TYPE_ENDED";
+  progressStatus?: "TYPE_BEFORE" | "TYPE_PROGRESSING" | "TYPE_ENDED";
 
   /**
    * 유저가 마지막으로 수강한 레슨 시퀀스
@@ -1754,6 +1768,12 @@ export interface CourseUserMyInfoResponseDto {
    * @format date-time
    */
   studyEndDate?: string;
+
+  /**
+   * 교육 시작일
+   * @format date-time
+   */
+  studyStartDate?: string;
 
   /**
    * 썸네일 이미지 S3 경로
@@ -1902,6 +1922,9 @@ export interface CourseUserResponseDto {
 }
 
 export interface CourseUserTransDetailsResponseDto {
+  /** 업체명 */
+  businessName?: string;
+
   /**
    * 교육정보 - 업종구분
    *     TYPE_PASSENGER: 여객    TYPE_CARGO: 화물
@@ -2013,6 +2036,12 @@ export interface CourseUserTransDetailsResponseDto {
    */
   courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
 
+  /**
+   * 첫 번째 차시 시퀀스
+   * @format int64
+   */
+  firstChapterSeq?: number;
+
   /** 교육신청자 정보 - 주민등록번호 */
   identityNumber?: string;
 
@@ -2021,6 +2050,9 @@ export interface CourseUserTransDetailsResponseDto {
 
   /** 교육신청자 정보 - 이름 */
   name?: string;
+
+  /** 퇴교 여부 */
+  outYn?: string;
 
   /** 교육신청자 정보 - 휴대전화 */
   phone?: string;
@@ -2045,6 +2077,15 @@ export interface CourseUserTransDetailsResponseDto {
    */
   seq?: number;
 
+  /** SMS 수신 동의 여부 */
+  smsYn?: string;
+
+  /**
+   * 상태
+   * @format int32
+   */
+  status?: number;
+
   /**
    * 교육정보 - 기수
    * @format int32
@@ -2053,6 +2094,18 @@ export interface CourseUserTransDetailsResponseDto {
 
   /** 교육정보 - 교육일자 (시작 및 종료 일자) */
   studyDate?: string;
+
+  /**
+   * 교육 종료일자
+   * @format date-time
+   */
+  studyEndDate?: string;
+
+  /**
+   * 교육 시작일자
+   * @format date-time
+   */
+  studyStartDate?: string;
 
   /**
    * 업체정보 - 업종
@@ -2395,6 +2448,9 @@ export interface CourseUserTransUpdateRequestDto {
 
   /** 휴대전화 */
   phone?: string;
+
+  /** SMS 수신 동의 여부 */
+  smsYn?: string;
 }
 
 export interface CustomPartETagsDto {
@@ -4784,6 +4840,49 @@ export interface MainDisplayUpdateResponseDto {
   status?: 1 | -1;
 }
 
+export interface MessageAdmSendRequestDto {
+  /** 메세지 내용 */
+  content?: string;
+
+  /**
+   * 메세지 구분 타입
+   *  * TYPE_COMM: 일반 메세지
+   *  * TYPE_AD: 광고 메세지
+   */
+  contentType?: "TYPE_COMM" | "TYPE_AD";
+
+  /**
+   * 예약일시(yyyy-MM-dd HH:mm)
+   * @example 2022-08-23 14:32
+   */
+  reserveTime?: string;
+
+  /** 메세지 제목 - LMS 일때만 해당 */
+  subject?: string;
+
+  /**
+   * 메세지 발송 타입
+   *  * TYPE_SMS: SMS
+   *  * TYPE_LMS: LMS
+   *  * TYPE_MMS: MMS -> 서버 내에서 지원하지 않음. 사용 X
+   */
+  type?: "TYPE_SMS" | "TYPE_LMS" | "TYPE_MMS";
+}
+
+export interface MessageAdmSendResponseDto {
+  /**
+   * 실패 건수
+   * @format int32
+   */
+  failCnt?: number;
+
+  /**
+   * 성공 건수
+   * @format int32
+   */
+  successCnt?: number;
+}
+
 export interface MobileCourseClassResponseDto {
   /** 과정 클래스 리스트 */
   courseClassList?: CourseClassResponseDto[];
@@ -6817,6 +6916,9 @@ export interface UserResponseDto {
   /** 유저 휴대번호 */
   phone?: string;
 
+  /** 유저 프로필 사진 S3 경로 */
+  profileImagePath?: string;
+
   /** 유저 가입 구분 */
   regCategory?: "TYPE_TRANS_EDU" | "TYPE_TRAFFIC_SAFETY_EDU";
 
@@ -7351,6 +7453,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/adm/learning-log/learning/${userSeq}/courses`,
         method: "GET",
         ...params,
+      })
+    /**
+     * @description 관리자페이지에서 메세지를 발송한다. smsYn 이 Y 인 대상자에게만 발송이 가능하다.
+     *
+     * @tags [관리자] 메세지(SMS/LMS/MMS) API
+     * @name AdmSendMessageUsingPost
+     * @summary [관리자] 메세지 발송 API - JWT
+     * @request POST:/adm/message
+     */,
+    admSendMessageUsingPost: (requestDto: MessageAdmSendRequestDto, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<MessageAdmSendResponseDto>, any>({
+        path: `/adm/message`,
+        method: "POST",
+        body: requestDto,
+        type: ContentType.Json,
+        ...params,
       }),
   };
   auth = {
@@ -7613,7 +7731,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   };
   course = {
     /**
-     * @description 검색에 필요한 키워드를 전달받아 현재 등록된 모든 과정에 대한 정보를 elementCnt 개수 만큼 조회한다. <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객/운수" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
+     * @description 검색에 필요한 키워드를 전달받아 현재 등록된 모든 과정에 대한 정보를 elementCnt 개수 만큼 조회한다. <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객" 타입으로, GENERAL_CARGO 를 "화물" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
      *
      * @tags [App & 관리자] 과정 API
      * @name FindCoursesUsingGet
@@ -7631,7 +7749,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 관리자 페이지에서 검색에 필요한 키워드를 전달받아 현재 등록된 모든 과정에 대한 정보를 elementCnt 개수 만큼 조회한다.<br/>이때, status 가 -1인 데이터들도 모두 조회한다. <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객/운수" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
+     * @description 관리자 페이지에서 검색에 필요한 키워드를 전달받아 현재 등록된 모든 과정에 대한 정보를 elementCnt 개수 만큼 조회한다.<br/>이때, status 가 -1인 데이터들도 모두 조회한다. <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객" 타입으로, GENERAL_CARGO 를 "화물" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
      *
      * @tags [App & 관리자] 과정 API
      * @name FindCoursesAdminUsingGet
@@ -7649,7 +7767,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 관리자의 Access Token 을 통해 과정을 생성한다. <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객/운수" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
+     * @description 관리자의 Access Token 을 통해 과정을 생성한다. <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객" 타입으로, GENERAL_CARGO 를 "화물" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
      *
      * @tags [App & 관리자] 과정 API
      * @name CreateCourseUsingPost
@@ -7711,7 +7829,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 과정 시퀀스와 연결할 콘텐츠 시퀀스를 전달받아 해당하는 콘텐츠를 과정에 연결한다. 만일, 해당 과정에 대하여 이미 추가된 클래스가 존재할 경우 수정할 수 없다.
+     * @description 과정 시퀀스와 연결할 콘텐츠 시퀀스를 전달받아 해당하는 콘텐츠를 과정에 연결한다. 만일, 해당 과정에 대하여 이미 추가된 클래스가 존재할 경우 수정할 수 없다. 연결하려고하는 콘텐츠에 레슨 정보가 없을 경우 예외를 발생시킨다.
      *
      * @tags [App & 관리자] 과정 API
      * @name LinkCourseAndContentUsingPost
@@ -7771,7 +7889,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 관리자 페이지에서 특정 과정의 seq 를 Path Variable 로 전달받아 해당 과정에 대한 정보를 조회한다 <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객/운수" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
+     * @description 관리자 페이지에서 특정 과정의 seq 를 Path Variable 로 전달받아 해당 과정에 대한 정보를 조회한다 <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객" 타입으로, GENERAL_CARGO 를 "화물" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
      *
      * @tags [App & 관리자] 과정 API
      * @name AdmFindCourseUsingGet
@@ -7785,7 +7903,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 관리자의 Access Token 을 통해 과정을 생성한다. <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객/운수" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
+     * @description 관리자의 Access Token 을 통해 과정을 생성한다. <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객" 타입으로, GENERAL_CARGO 를 "화물" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
      *
      * @tags [App & 관리자] 과정 API
      * @name UpdateCourseUsingPut
@@ -7815,7 +7933,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 유저의 과정 신청 시퀀스인 courseUserSeq 를 Path Variable 로 전달받아 해당 과정에 대한 정보를 조회한다 이때, 사용자의 학습 진행 상황도 함께 포함하여 DTO 로 반환한다. <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객/운수" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
+     * @description 유저의 과정 신청 시퀀스인 courseUserSeq 를 Path Variable 로 전달받아 해당 과정에 대한 정보를 조회한다 이때, 사용자의 학습 진행 상황도 함께 포함하여 DTO 로 반환한다. 만일, 학습 기간에 해당하지 않는 과정인 경우 예외를 발생시킨다. <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객" 타입으로, GENERAL_CARGO 를 "화물" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
      *
      * @tags [App & 관리자] 과정 API
      * @name FindCourseUsingGet
@@ -7823,7 +7941,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/course/{courseUserSeq}
      */,
     findCourseUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
-      this.request<ApiResponseWrapper<CourseDetailClientResponseDto>, any>({
+      this.request<ApiResponseWrapper<CourseDetailClientResponseDto>, void>({
         path: `/course/${courseUserSeq}`,
         method: "GET",
         ...params,
@@ -8311,7 +8429,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 개인의 특정 교육 신청 건에 대한 정보를 수정한다. 이름과 주민번호를 제외한 모든 정보를 수정 가능하다. 수정된 개인정보/추가정보는 유저 DB 데이터에 반영된다. 개인이 신청한 courseUserSeq 의 userSeq 와 요청자의 userSeq 를 비교하여 서로 일치하지 않을 경우 예외를 발생시킨다. 과정교육신청내용 수정 시, 기수를 변경할 수 있다. 현재 신청가능한 기수 정보는 "/course-class/step" 엔드포인트를 통해 조회 가능하다. 만일, 수강신청가능기간에 해당되지 않거나, 수강인원이 초과한 경우 예외를 발생시킨다.
+     * @description 개인의 특정 교육 신청 건에 대한 정보를 수정한다. 이름과 주민번호를 제외한 모든 정보를 수정 가능하다. 수정된 개인정보/추가정보는 유저 DB 데이터에 반영된다. 개인이 신청한 courseUserSeq 의 userSeq 와 요청자의 userSeq 를 비교하여 서로 일치하지 않을 경우 예외를 발생시킨다. 과정교육신청내용 수정 시, 기수를 변경할 수 있다. 현재 신청가능한 기수 정보는 "/course-class/step" 엔드포인트를 통해 조회 가능하다. 만일, 수강신청가능기간에 해당되지 않거나, 수강인원이 초과한 경우 예외를 발생시킨다. 또한, 이미 신청한 과정에 포함되어있을 경우 예외를 발생시킨다.
      *
      * @tags [App & 관리자] 과정 교육 신청 API
      * @name ModifyTransCourseUserIndvUsingPut
@@ -9648,7 +9766,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 관리자 권한으로 contentSeq 를 PathVar 로, DTO를 Body 로 전달받아 Lesson 을 일괄 생성한다.<br/><b>일괄 생성의 경우, DTO 내의 contentSeq 는 비우거나 삭제해도 무관하다.</b>
+     * @description 관리자 권한으로 contentSeq 를 PathVar 로, DTO를 Body 로 전달받아 Lesson 을 일괄 생성한다.<br/><b>일괄 생성의 경우, DTO 내의 contentSeq 는 비우거나 삭제해도 무관하다.</b> 만일, 운영되고 있는(courseuser 가 존재하는 경우) 과정에 대한 콘텐츠라면 등록이 불가능하다.
      *
      * @tags [관리자] 레슨 API
      * @name CreateLessonUsingPost
@@ -9660,7 +9778,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       lessonSaveRequestDtoList: LessonSaveRequestDto[],
       params: RequestParams = {},
     ) =>
-      this.request<ApiResponseWrapper<LessonResponseDto[]>, any>({
+      this.request<ApiResponseWrapper<LessonResponseDto[]>, void>({
         path: `/lesson/adm/${contentSeq}`,
         method: "POST",
         body: lessonSaveRequestDtoList,

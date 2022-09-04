@@ -1,17 +1,18 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Alert, Box, Button, Snackbar } from "@mui/material";
-import { CourseModuleFindResponseDto, SurveyResponseDto } from "@common/api/Api";
-import { Spinner } from "@components/ui";
-import LessonContentSurveyQuestion from "./LessonContentSuerveyQuestion";
-import ApiClient from "@common/api/ApiClient";
 import { useRouter } from "next/router";
+import { Alert, Box, Button, CircularProgress, Snackbar } from "@mui/material";
+import { CourseModuleFindResponseDto, SurveyResponseDto } from "@common/api/Api";
+import ApiClient from "@common/api/ApiClient";
+import LessonContentSurveyQuestion from "./LessonContentSurveyQuestion";
 
 export interface Props {
   courseUserSeq: number;
   courseModule: CourseModuleFindResponseDto | null;
   survey: SurveyResponseDto | null;
+  surveyCompleted?: boolean;
   loading?: boolean;
+  onComplete?: () => void;
 }
 
 export default function LessonContentSurvey(props: Props) {
@@ -22,7 +23,8 @@ export default function LessonContentSurvey(props: Props) {
 
   const [loading, setLoading] = React.useState<boolean>(false);
   const [snackbar, setSnackbar] = React.useState<"FAILED" | "SUCCESS" | null>(null);
-  const [errors, setErrors] = React.useState<boolean[]>(new Array(props.survey.surveyQuestionList.length).fill(false));
+  const [snackbarMessage, setSnackbarMessage] = React.useState<string | null>(null);
+  const [errors, setErrors] = React.useState<boolean[]>(new Array(props.survey === null ? 0 : props.survey.surveyQuestionList.length).fill(false));
 
   // 이펙트.
 
@@ -30,13 +32,13 @@ export default function LessonContentSurvey(props: Props) {
 
     setLoading(false);
     setSnackbar(null);
-    setErrors(new Array(props.survey.surveyQuestionList.length).fill(false));
+    setErrors(new Array(props.survey === null ? 0 : props.survey.surveyQuestionList.length).fill(false));
 
   }, [props.survey]);
 
   // 렌더링.
 
-  if (props.loading) return <SurveyEmptyContainer><Spinner fit/></SurveyEmptyContainer>
+  if (props.loading) return <SurveyEmptyContainer><CircularProgress size="1.5rem"/></SurveyEmptyContainer>
   if (props.courseModule === null || props.survey === null) return <SurveyEmptyContainer>설문이 존재하지 않습니다.</SurveyEmptyContainer>;
 
   return (
@@ -66,25 +68,36 @@ export default function LessonContentSurvey(props: Props) {
         }
 
         const awnserList = props.survey.surveyQuestionList.map((question, i) => ({
-          awnser: formData.get(`question_${i}`),
+          answer: formData.get(`question_${i}`).toString(),
           surveyQuestionSeq: question.seq,
         }));
-
+        
         ApiClient.survey
           .participateSurveyUsingPost({
             courseUserSeq: props.courseUserSeq,
             surveySeq: props.survey.seq,
             answerList: awnserList,
           })
-          .then((res) => setSnackbar(res.data.success ? "SUCCESS" : "FAILED"))
-          .catch(() => setSnackbar("FAILED"))
+          .then((res) => {
+
+            setSnackbar(res.data.success ? "SUCCESS" : "FAILED");
+            setSnackbarMessage(res.data.message);
+            res.data.success && props.onComplete();
+            
+          })
+          .catch((err) => {
+
+            setSnackbar("FAILED");
+            setSnackbarMessage(err.response?.status === 400 ? "이미 제출한 설문입니다." : "전송을 실패하였습니다.");
+            
+          })
           .finally(() => setLoading(false));
 
       }}
     >
       <SurveyHeader>
         <SurveyHeaderTitle>{props.survey.title}</SurveyHeaderTitle>
-        <SurveyHeaderCompletedText>{props.courseModule.submitYn === "Y" ? "완료" : "미완료"}</SurveyHeaderCompletedText>
+        <SurveyHeaderCompletedText>{props.surveyCompleted ? "완료" : "미완료"}</SurveyHeaderCompletedText>
       </SurveyHeader>
       <SurveyContent>
         {props.survey.surveyQuestionList.map((question, index) => (
@@ -108,7 +121,7 @@ export default function LessonContentSurvey(props: Props) {
           sx={{ width: '100%' }}
           onClose={() => snackbar === "SUCCESS" ? router.replace(router.asPath) : setSnackbar(null)}
         >
-          {snackbar === "SUCCESS" ? "전송하였습니다." : "실패하였습니다."}
+          {snackbarMessage}
         </Alert>
       </Snackbar>
     </SurveyContainer>
@@ -130,6 +143,11 @@ const SurveyContainer = styled.form`
   width: 100%;
   max-width: 1000px;
   flex-direction: column;
+
+  @media (max-width: 1024px) {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+  }
 `;
 
 const SurveyHeader = styled(Box)`
@@ -142,13 +160,13 @@ const SurveyHeader = styled(Box)`
 
 const SurveyHeaderTitle = styled.span`
   flex-grow: 1;
-  font-size: 1.5rem;
+  font-size: 1.5em;
   font-weight: 700;
-`
+`;
 
 const SurveyHeaderCompletedText = styled.span`
   color: #404040;
-`
+`;
 
 const SurveyContent = styled.div`
   margin-bottom: 2rem;

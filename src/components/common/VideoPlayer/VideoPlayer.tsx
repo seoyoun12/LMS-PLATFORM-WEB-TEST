@@ -130,8 +130,6 @@ export function VideoPlayer(props: Props) {
         { characterData: true, attributes: false, childList: false, subtree: true },
       );
 
-      if (player.current?._view?.$el?.__vue__) player.current._view.$el.__vue__.controlKeydownEvent = !props.showControl ? () => undefined : playerKeydownEvent.current;
-
     }
 
   }, [scriptLoaded, playlist, props]);

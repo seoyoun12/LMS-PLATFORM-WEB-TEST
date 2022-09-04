@@ -18,11 +18,11 @@ const LinkList = [
     name: '이메일무단수집거부',
   },
   {
-    href: 'https://www.ctti.or.kr/kor/page.do?menuIdx=186&bbscd=0&tcd=0',
+    href: 'https://www.ctti.or.kr/kor/page.do?menuIdx=339&bbscd=0&tcd=0',
     name: '이용약관',
   },
   {
-    href: 'https://www.ctti.or.kr/kor/page.do?menuIdx=186&bbscd=0&tcd=0',
+    href: 'https://www.ctti.or.kr/kor/page.do?menuIdx=130&bbscd=0&tcd=0',
     name: '찾아오시는길',
   },
 ];
@@ -65,7 +65,9 @@ const Footer: FC<Props> = () => {
             }}
           >
             <Box width="250px">
-              <Logo />
+              <Link href="https://www.ctti.or.kr">
+                <Logo />
+              </Link>
             </Box>
             <Box display="flex" gap={2}>
               {LinkList.map(item => (

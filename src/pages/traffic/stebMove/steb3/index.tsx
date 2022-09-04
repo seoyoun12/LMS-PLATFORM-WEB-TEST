@@ -8,7 +8,7 @@ export default function Steb3Page() {
   return (
     <Container className={styles.globalContainer}>
       <Head>
-        <title>충남도로교통연수원</title>
+        <title>충남교통연수원</title>
       </Head>
       <Steb3 />
     </Container>

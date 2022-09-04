@@ -121,7 +121,6 @@ export default function LessonContentVideo(props: Props) {
     const courseUserSeq = props.courseUserSeq;
     const courseProgressSeq = props.courseProgress.courseProgressSeq;
     const lessonSeq = props.lesson.seq;
-    const currentSecond = videoCurrentSeconds.current;
 
     apiTimer.current = window.setInterval(() => {
 
@@ -141,7 +140,7 @@ export default function LessonContentVideo(props: Props) {
                 courseUserSeq: courseUserSeq,
                 courseProgressSeq: courseProgressSeq,
                 lessonSeq: lessonSeq,
-                studyLastTime: currentSecond,
+                studyLastTime: videoCurrentSeconds.current,
               })
           );
 

@@ -88,7 +88,7 @@ export default function LessonContentVideo(props: Props) {
               })
           )
           .then((v) => {
-            
+
             return ApiClient.courseProgress
               .updateAllCourseProgressUsingPut(courseUserSeq)
               .then(() => v.data.data.completeYn === "Y" && props.onComplete());
@@ -115,14 +115,28 @@ export default function LessonContentVideo(props: Props) {
 
       apiSeconds.current++;
 
-      if (apiSeconds.current >= 300) {
+      if (apiSeconds.current >= 5) {
+
+        const courseUserSeq = props.courseUserSeq;
+        const courseProgressSeq = props.courseProgress.courseProgressSeq;
+        const lessonSeq = props.lesson.seq;
+        const currentSecond = videoCurrentSeconds.current;
 
         ApiClient.courseLog
           .createCourseModulesUsingPost1({
             courseUserSeq: props.courseUserSeq,
             lessonSeq: props.lesson.seq,
             studyTime: apiVideoSeconds.current,
-          });
+          })
+          .then(() =>
+            ApiClient.courseProgress
+              .updateCourseProgressUsingPut({
+                courseUserSeq: courseUserSeq,
+                courseProgressSeq: courseProgressSeq,
+                lessonSeq: lessonSeq,
+                studyLastTime: currentSecond,
+              })
+          );
 
         apiSeconds.current = 0;
         apiVideoSeconds.current = 0;
@@ -216,6 +230,10 @@ export default function LessonContentVideo(props: Props) {
   }, [props.coursePlayFirst]);
 
   React.useEffect(() => {
+
+    if (prevCourseUserSeq.current === null) prevCourseUserSeq.current = props.courseUserSeq;
+    if (prevCourseProgress.current === null) prevCourseProgress.current = props.courseProgress;
+    if (prevLesson.current === null) prevLesson.current = props.lesson;
 
     stopTimer("PREV");
 

@@ -1,18 +1,20 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Box, LinearProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, LinearProgress, Typography } from "@mui/material";
 import { VideoPlayer } from "@components/common";
-import { Spinner } from "@components/ui";
+import { Ncplayer } from "types/ncplayer";
 import type { CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
 import ApiClient from "@common/api/ApiClient";
 
 const PLAYER_ELEMENT_ID = "lesson-player" as const;
 
 interface Props {
+  coursePlayFirst?: boolean;
   courseUserSeq: number;
   courseProgress: CourseProgressResponseDto | null;
   lesson: LessonDetailClientResponseDto | null;
   loading?: boolean;
+  onComplete?: () => void;
 }
 
 export default function LessonContentVideo(props: Props) {
@@ -31,6 +33,7 @@ export default function LessonContentVideo(props: Props) {
   const apiSeconds = React.useRef<number>(0);
   const apiVideoSeconds = React.useRef<number>(0);
 
+  const videoPlayer = React.useRef<Ncplayer | null>(null);
   const vidoeDurationSeconds = React.useRef<number>(0);
   const videoCurrentSeconds = React.useRef<number>(0);
   const videoPlayedSeconds = React.useRef<number>(0);
@@ -83,6 +86,7 @@ export default function LessonContentVideo(props: Props) {
                 studyLastTime: currentSecond,
               })
           )
+          .then((v) => v.data.data.completeYn === "Y" && props.onComplete())
           .then(() => ApiClient.courseProgress.updateAllCourseProgressUsingPut(courseUserSeq));
 
       }
@@ -93,7 +97,7 @@ export default function LessonContentVideo(props: Props) {
     apiSeconds.current = 0;
     apiVideoSeconds.current = 0;
 
-  }, [props.courseProgress.courseProgressSeq, props.courseUserSeq, props.lesson]);
+  }, [props]);
 
   const startTimer = React.useCallback(() => {
 
@@ -201,6 +205,12 @@ export default function LessonContentVideo(props: Props) {
 
   React.useEffect(() => {
 
+    if (!props.coursePlayFirst && videoPlayer.current) videoPlayer.current.play();
+
+  }, [props.coursePlayFirst]);
+
+  React.useEffect(() => {
+
     stopTimer("PREV");
 
     vidoeDurationSeconds.current = props.lesson ? props.lesson.totalTime : 0;
@@ -221,7 +231,7 @@ export default function LessonContentVideo(props: Props) {
 
   // 렌더링.
 
-  if (props.loading) return <VideoContentWrapper><Spinner fit/></VideoContentWrapper>;
+  if (props.loading) return <VideoContentWrapper><CircularProgress size="1.5rem"/></VideoContentWrapper>;
   if (props.lesson === null || props.courseProgress === null) return <VideoContentWrapper>강의가 존재하지 않습니다.</VideoContentWrapper>;
 
   return (
@@ -230,13 +240,14 @@ export default function LessonContentVideo(props: Props) {
         <VideoPlayer
           playlist={props.lesson.s3Files[0]?.path}
           initialPlayerId={PLAYER_ELEMENT_ID}
-          initialConfig={{ autostart: true }}
+          initialConfig={{ autostart: !props.coursePlayFirst }}
           seconds={props.courseProgress.studyLastTime === props.lesson.totalTime ? props.lesson.totalTime + 1 : props.courseProgress.studyLastTime}
           onPause={onPause}
           onPlaying={onPlaying}
           onSeeking={onSeeking}
           onSeeked={onSeeked}
           onTimeChange={onTimeChange}
+          onReady={(v) => videoPlayer.current = v}
         />
       </VideoContentPlayerWrapper>
       <ContentInfoContainer>

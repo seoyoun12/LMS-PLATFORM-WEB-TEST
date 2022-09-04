@@ -8,15 +8,14 @@ interface Props {
 
 export function Spinner({ fit }: Props) {
   return (
-    <Container fit={fit}>
+    <Container style={{ minHeight: fit ? undefined : "50vh" }}>
       <SpinCircle size={fit ? '1.5rem' : '40px'} />
     </Container>
   );
 }
 
-const Container = styled(Box)<{ fit: boolean }>`
+const Container = styled(Box)`
   display: flex;
-  ${({ fit }) => (fit ? '' : 'min-height: 50vh;')}
   align-items: center;
   justify-content: center;
 `;

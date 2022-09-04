@@ -34,7 +34,7 @@ import { Phone3Regex, Phone4Regex } from '@utils/inputRegexes';
 import { CarNumberBox } from '@components/ui/Step';
 import { userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
 
-const phoneList = ['010', '011', '051'];
+const phoneList = ['010', '011'];
 interface Props {
   register: UseFormRegister<UserTransSaveInputDataType>;
   setValue: UseFormSetValue<UserTransSaveInputDataType>;

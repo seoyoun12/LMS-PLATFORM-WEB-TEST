@@ -25,10 +25,17 @@ export function EndCourse() {
     //   return window.alert('종료된 학습입니다!');
 
     // if (res.progressStatus === ProgressStatus.TYPE_PROGRESSING) {
-    router.push(
+    // router.push(
+    //   `/course/${res.courseUserSeq}/lesson/${
+    //     !res.recentLessonSeq ? 1 : res.recentLessonSeq
+    //   }`
+    // );
+    window.open(
       `/course/${res.courseUserSeq}/lesson/${
         !res.recentLessonSeq ? 1 : res.recentLessonSeq
-      }`
+      }`,
+      // '',
+      '_blank'
     );
     // }
   };

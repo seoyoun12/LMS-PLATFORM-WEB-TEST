@@ -146,6 +146,7 @@ export function CNCalendar() {
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const calendarRef = useRef<FullCalendar>(null);
 
+  console.log(data);
   //RadioButton Filter changer
   const onChangeFilter = (e: React.MouseEvent<HTMLButtonElement>) => {
     const value = e.currentTarget.value;

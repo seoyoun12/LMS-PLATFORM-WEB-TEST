@@ -1,5 +1,13 @@
 import styled from '@emotion/styled';
-import { Box, Checkbox, FormControl, MenuItem, Select, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  FormControl,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import { useEffect, useState } from 'react';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -17,7 +25,12 @@ interface Props {
   setRegisterType: React.Dispatch<React.SetStateAction<RegisterType>>;
 }
 
-export function StudentInfo({ register, setValue, registerType, setRegisterType }: Props) {
+export function StudentInfo({
+  register,
+  setValue,
+  registerType,
+  setRegisterType,
+}: Props) {
   const [name, setName] = useState<string>(); //이름
   const [firstIdentityNumber, setFirstIdentityNumber] = useState<string>(); //주민앞
   const [secondIdentityNumber, setSecondidentityNumber] = useState<string>(); //주민뒷
@@ -62,7 +75,12 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
         </Typography>
       </Box>
       <Typography>이름</Typography>
-      <TextField disabled={registerType === RegisterType.TYPE_INDIVIDUAL && true} value={name} {...register('name')} fullWidth />
+      <TextField
+        disabled={registerType === RegisterType.TYPE_INDIVIDUAL && true}
+        value={name}
+        {...register('name')}
+        fullWidth
+      />
       <Box>
         <Typography>주민등록번호</Typography>
         <Box display="flex" alignItems="center">
@@ -107,7 +125,9 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
       <Typography>휴대전화</Typography>
       <TextField
         placeholder="'-'를 제외한 숫자만 입력해주세요."
-        {...register('phone', { maxLength: { value: 12, message: 'phone must be longer than 12 characters' } })}
+        {...register('phone', {
+          maxLength: { value: 12, message: 'phone must be longer than 12 characters' },
+        })}
         // onChange={e => {
         //   if (e.target.value.length > 11) return
         //   setValue('phone', e.target.value);
@@ -135,9 +155,15 @@ export function StudentInfo({ register, setValue, registerType, setRegisterType 
       <Box height="120px">이용약관 입니다.</Box>
       <Box display="flex" alignItems="center">
         {isIndividualCheck ? (
-          <CheckCircleIcon onClick={() => setIsIndividualCheck(false)} sx={{ color: '#3498db' }} />
+          <CheckCircleIcon
+            onClick={() => setIsIndividualCheck(false)}
+            sx={{ color: '#3498db' }}
+          />
         ) : (
-          <CheckCircleOutlineIcon onClick={() => setIsIndividualCheck(true)} sx={{ color: '#b1b1b1' }} />
+          <CheckCircleOutlineIcon
+            onClick={() => setIsIndividualCheck(true)}
+            sx={{ color: '#b1b1b1' }}
+          />
         )}
         <Typography ml={1}>개인정보 수집 및 이용 동의</Typography>
         <EssentialWord>(필수)</EssentialWord>

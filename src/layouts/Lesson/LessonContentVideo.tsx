@@ -161,7 +161,7 @@ export default function LessonContentVideo(props: Props) {
 
     apiTimer.current = timer;
 
-  }, [props.courseProgress.courseProgressSeq, props.courseUserSeq, props.lesson, stopTimer]);
+  }, [props.courseProgress.courseProgressSeq, props.courseUserSeq, props.lesson, router.pathname, stopTimer]);
 
   // 콜백 - 이벤트.
 
@@ -267,6 +267,8 @@ export default function LessonContentVideo(props: Props) {
     prevCourseUserSeq.current = props.courseUserSeq;
     prevCourseProgress.current = props.courseProgress;
     prevLesson.current = props.lesson;
+
+    currentLessonSeq.current = props.lesson.seq;
     
     updateProgress();
 

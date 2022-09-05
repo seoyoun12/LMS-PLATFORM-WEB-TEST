@@ -107,28 +107,35 @@ export function VideoPlayer(props: Props) {
       }
 
       playerTimeObserver.current?.disconnect();
-      playerTimeObserver.current = new MutationObserver((mutationList) => {
+      
+      const currentTimeNode = document.querySelector(`#${props.initialPlayerId} .current`);
+      
+      if (currentTimeNode) {
 
-        mutationList.forEach((mutation) => {
-
-          if (mutation.type !== "characterData") return;
-
-          const timeSplit = mutation.target.textContent.split(":");
-          if (timeSplit.length !== 2 && timeSplit.length !== 3) return;
-
-          const hours = timeSplit.length === 3 ? parseInt(timeSplit[0]) : 0;
-          const minutes = parseInt(timeSplit[timeSplit.length - 2]);
-          const seconds = parseInt(timeSplit[timeSplit.length - 2 + 1]);
-
-          if (!Number.isNaN(hours) && !Number.isNaN(minutes) && !Number.isNaN(seconds)) props.onTimeChange((hours * 60 * 60) + (minutes * 60) + seconds);
-
+        playerTimeObserver.current = new MutationObserver((mutationList) => {
+  
+          mutationList.forEach((mutation) => {
+  
+            if (mutation.type !== "characterData") return;
+  
+            const timeSplit = mutation.target.textContent.split(":");
+            if (timeSplit.length !== 2 && timeSplit.length !== 3) return;
+  
+            const hours = timeSplit.length === 3 ? parseInt(timeSplit[0]) : 0;
+            const minutes = parseInt(timeSplit[timeSplit.length - 2]);
+            const seconds = parseInt(timeSplit[timeSplit.length - 2 + 1]);
+  
+            if (!Number.isNaN(hours) && !Number.isNaN(minutes) && !Number.isNaN(seconds)) props.onTimeChange((hours * 60 * 60) + (minutes * 60) + seconds);
+  
+          });
+  
         });
+        playerTimeObserver.current.observe(
+          currentTimeNode,
+          { characterData: true, attributes: false, childList: false, subtree: true },
+        );
 
-      });
-      playerTimeObserver.current.observe(
-        document.querySelector(`#${props.initialPlayerId} .current`),
-        { characterData: true, attributes: false, childList: false, subtree: true },
-      );
+      }
 
     }
 

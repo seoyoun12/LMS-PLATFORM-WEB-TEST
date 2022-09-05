@@ -267,6 +267,8 @@ export default function LessonContentVideo(props: Props) {
     prevCourseUserSeq.current = props.courseUserSeq;
     prevCourseProgress.current = props.courseProgress;
     prevLesson.current = props.lesson;
+
+    currentLessonSeq.current = props.lesson.seq;
     
     updateProgress();
 

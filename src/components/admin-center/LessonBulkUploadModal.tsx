@@ -107,7 +107,6 @@ export function LessonBulkUploadModal({
       });
 
     try {
-      console.log('lessonList : ', lessonList);
       if (lessonList.length > 0) {
         // await removeLesson(lessonList[0].seq); // 모든 seq 조회 후 삭제 필요
         for (let i = 0; i < lessonList.length; i++) {

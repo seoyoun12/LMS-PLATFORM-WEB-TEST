@@ -20,17 +20,16 @@ const userConfig = [
   { label: '핸드폰가입', value: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU },
 ];
 
-
 const headRows = [
   { name: '실명' },
   { name: '아이디' },
   { name: '과정명' },
   { name: '기수' },
   { name: '학습기간' },
-  {name: '진도율'},
+  { name: '진도율' },
   { name: '수료여부' },
   { name: '상태' },
-//   { name: '수료처리' },
+  //   { name: '수료처리' },
 ];
 
 export function CourseInfo() {
@@ -41,17 +40,18 @@ export function CourseInfo() {
   const { data, error, mutate } = useLearningInfo({ page });
   const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
-  console.log(data);
 
   const onClickRemoveUser = async (userSeq: number) => {
     try {
       const dialogConfirmed = await dialog({
         title: '유저 삭제하기',
-        description: <div>
-                       <div>삭제시 회원의 모든 정보가 영구적으로 삭제됩니다.</div>
-                      <div>정말로 삭제하시겠습니까?</div>
-                      <div style={{color:'red' , fontSize:'14px'}} >*복구가 불가능합니다.*</div>
-                    </div>,
+        description: (
+          <div>
+            <div>삭제시 회원의 모든 정보가 영구적으로 삭제됩니다.</div>
+            <div>정말로 삭제하시겠습니까?</div>
+            <div style={{ color: 'red', fontSize: '14px' }}>*복구가 불가능합니다.*</div>
+          </div>
+        ),
         confirmText: '삭제하기',
         cancelText: '취소',
       });
@@ -117,7 +117,7 @@ export function CourseInfo() {
         </TableHead>
 
         <TableBody>
-          {data.content.map((user) => (
+          {data.content.map(user => (
             <TableRow key={user.username} hover>
               {/* <UserTableCell>{user.seq}</UserTableCell>
               <UserTableCell>{regCategoryType.TYPE_TRANS_EDU === user.regCategory ? '실명가입' : user.username}</UserTableCell> */}

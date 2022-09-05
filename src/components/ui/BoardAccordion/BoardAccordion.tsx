@@ -23,7 +23,11 @@ interface BoardAccordionAccordionList {
   }[];
 }
 
-export function BoardAccordion({ boardAccordionList }: { boardAccordionList: BoardAccordionAccordionList[] }) {
+export function BoardAccordion({
+  boardAccordionList,
+}: {
+  boardAccordionList: BoardAccordionAccordionList[];
+}) {
   return (
     <Wrap>
       {/* {boardAccordionList.map(({ date, name, icon, children }, idx) => ( */}

@@ -68,12 +68,6 @@ export function ContentUploadForm({
     reset,
   } = useForm<ContentInput>({ defaultValues });
 
-  //
-
-  // console.log('contentInput : ', contentInput);
-  // console.log('contentSeq : ', contentSeq);
-  console.log('content : ', content);
-
   useEffect(() => {
     if (mode === 'modify' && !!content) {
       reset({ ...content });

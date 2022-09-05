@@ -59,7 +59,7 @@ export function StudentInfo({
   const [carRegisteredRegion, setCarRegisteredRegion] = useState<string | null>(null); //차량등록지
   const [smsYn, setSmsYn] = useState(true);
   const { user, error } = useMyUser();
-  console.log(user, 'user');
+  // console.log(user, 'user');
 
   useEffect(() => {
     if (user && registerType === RegisterType.TYPE_INDIVIDUAL) {
@@ -94,7 +94,6 @@ export function StudentInfo({
     }
   }, [user, registerType]);
 
-  console.log(watch());
   return (
     <StudentInfoWrap>
       <Box>

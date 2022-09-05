@@ -43,24 +43,15 @@ export function MeDesktop() {
   const { data, error: leErr, mutate: leMu } = useLearningStatus();
   const [value, setValue] = React.useState(myInfoList[0].value);
 
-  // 날짜계산
-  let today = new Date();
-  let year = today.getFullYear();
-  let month = ('0' + (today.getMonth() + 1)).slice(-2);
-  let day = ('0' + today.getDate()).slice(-2);
-  let dateString = year + '-' + month + '-' + day;
-
-  console.log('날짜 : ', dateString);
-
   const onClickEnterCourseLesson = (res: MyInfoCourseRes) => {
-    console.log(res);
+    // console.log(res);
     const isStartStudy =
       new Date(res.studyStartDate.replaceAll('-', '/').split(' ')[0]).getTime() <
       new Date().getTime(); //현재시간이 크면 true 아니면 false
     const isEndedStudy =
       new Date(res.studyEndDate.replaceAll('-', '/').split(' ')[0]).getTime() <
       new Date().getTime(); //현재시간이 크면 true 아니면 false
-    console.log('isStart', isStartStudy);
+    // console.log('isStart', isStartStudy);
     if (res.progressStatus === ProgressStatus.TYPE_BEFORE || !isStartStudy)
       return window.alert('아직 학습이 시작되지 않았습니다!');
     // if (res.progressStatus === ProgressStatus.TYPE_ENDED || isEndedStudy)

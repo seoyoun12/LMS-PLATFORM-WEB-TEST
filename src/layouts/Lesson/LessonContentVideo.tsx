@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { Box, CircularProgress, LinearProgress, Typography } from "@mui/material";
 import { VideoPlayer } from "@components/common";
 import { Ncplayer } from "types/ncplayer";
+import { useRouter } from "next/router";
 import type { CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
 import ApiClient from "@common/api/ApiClient";
 
@@ -20,6 +21,9 @@ interface Props {
 
 export default function LessonContentVideo(props: Props) {
 
+  const router = useRouter();
+  const routerAsPath = router.asPath;
+
   // 스테이트.
 
   const [progress, setProgress] = React.useState<number>(0);
@@ -29,6 +33,8 @@ export default function LessonContentVideo(props: Props) {
   const prevCourseUserSeq = React.useRef<number | null>(null);
   const prevCourseProgress = React.useRef<CourseProgressResponseDto | null>(null);
   const prevLesson = React.useRef<LessonDetailClientResponseDto | null>(null);
+
+  const currentLessonSeq = React.useRef<number | null>(null);
 
   const apiTimer = React.useRef<number | null>(null);
   const apiSeconds = React.useRef<number>(0);
@@ -122,7 +128,9 @@ export default function LessonContentVideo(props: Props) {
     const courseProgressSeq = props.courseProgress.courseProgressSeq;
     const lessonSeq = props.lesson.seq;
 
-    apiTimer.current = window.setInterval(() => {
+    const timer = window.setInterval(() => {
+
+      if (currentLessonSeq.current !== lessonSeq || router.asPath !== routerAsPath) return clearInterval(timer);
 
       apiSeconds.current++;
 
@@ -151,7 +159,9 @@ export default function LessonContentVideo(props: Props) {
 
     }, 1000);
 
-  }, [props.courseProgress.courseProgressSeq, props.courseUserSeq, props.lesson, stopTimer]);
+    apiTimer.current = timer;
+
+  }, [props.courseProgress.courseProgressSeq, props.courseUserSeq, props.lesson, router, routerAsPath, stopTimer]);
 
   // 콜백 - 이벤트.
 
@@ -257,6 +267,8 @@ export default function LessonContentVideo(props: Props) {
     prevCourseUserSeq.current = props.courseUserSeq;
     prevCourseProgress.current = props.courseProgress;
     prevLesson.current = props.lesson;
+
+    currentLessonSeq.current = props.lesson.seq;
     
     updateProgress();
 

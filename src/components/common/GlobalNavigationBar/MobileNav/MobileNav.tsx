@@ -45,7 +45,7 @@ const siteMapMobileList = [
 ];
 
 const hideNavList = [
-  // { href: '/course/[courseSeq]' },
+  { href: '/course' },
   { href: '/admin-center' },
   // { href: '/'}
 ];

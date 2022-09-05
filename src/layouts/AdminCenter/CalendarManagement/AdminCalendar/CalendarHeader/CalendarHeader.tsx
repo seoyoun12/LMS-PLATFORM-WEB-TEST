@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Box, Radio, Typography } from '@mui/material';
+import { Box, Button, Radio, Typography } from '@mui/material';
 import React from 'react';
 import { eduLegendList, FilterType, MonthClickType } from '../Calendar';
 import { grey } from '@mui/material/colors';
@@ -12,7 +12,8 @@ interface Props {
   onChangeMonth: (type: MonthClickType, value: number) => void;
   date: Date;
   filterList: { type: string; enType: string }[];
-  onChangeFilter: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  // onChangeFilter: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeFilter: (e: React.MouseEvent<HTMLButtonElement>) => void;
   filter: string;
 }
 
@@ -90,7 +91,7 @@ export function CalendarHeader({
           - 해당 일정을 클릭 하시면 자세한 교육내용을 확인 및 수정페이지로 이동할 수
           있습니다.
         </Typography>
-        <Box>
+        {/* <Box>
           {filterList.map(item => (
             <>
               <Radio
@@ -101,9 +102,27 @@ export function CalendarHeader({
               <span>{item.type}</span>
             </>
           ))}
-        </Box>
+        </Box> */}
       </Box>
-      <Box display="flex" justifyContent="flex-end" gap="1rem" mt={6}>
+      <FilterWrap>
+        {filterList.map(item => (
+          <FilterButton
+            key={item.enType}
+            variant="contained"
+            onClick={onChangeFilter}
+            value={item.enType}
+            sx={{
+              background: filter === item.enType ? '#256aef' : '#d8d6d6',
+              '&:hover': {
+                backgroundColor: filter === item.enType ? '#143c89' : '#919191',
+              },
+            }}
+          >
+            {item.type}
+          </FilterButton>
+        ))}
+      </FilterWrap>
+      <Box display="flex" justifyContent="center" gap="1rem" mt={4}>
         {eduLegendList.map(legend => (
           <Box display="flex" alignItems="center">
             <CircleRoundedIcon sx={{ fontSize: '1rem', color: legend.color }} />{' '}
@@ -164,4 +183,17 @@ const YearWrap = styled(Box)`
 const MonthWrap = styled(Box)`
   display: flex;
   flex-grow: 1;
+`;
+
+const FilterWrap = styled(Box)`
+  padding: 12px 0;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  background: #f4f4f4;
+  border-radius: 4px;
+`;
+
+const FilterButton = styled(Button)`
+  width: 140px;
 `;

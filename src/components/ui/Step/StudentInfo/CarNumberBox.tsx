@@ -77,6 +77,7 @@ export function CarNumberBox({ parantSetValue }: Props) {
         }}
         value={watch().digit2}
         placeholder="차종 번호2자리"
+        inputProps={{ inputMode: 'numeric' }}
         fullWidth
       />
       <FormControl fullWidth>
@@ -106,6 +107,7 @@ export function CarNumberBox({ parantSetValue }: Props) {
         }}
         value={watch().digit4}
         placeholder="일련번호 4자리"
+        inputProps={{ inputMode: 'numeric' }}
         fullWidth
       />
     </Box>

@@ -59,11 +59,13 @@ export default function LessonContentVideo(props: Props) {
   const updateProgress = React.useCallback(() => {
     const seconds = props.courseProgress.studyTime + videoPlayedSeconds.current;
     setProgress(
-      vidoeDurationSeconds.current > 0 && seconds < vidoeDurationSeconds.current
+      !props.lessonCompleted &&
+        vidoeDurationSeconds.current > 0 &&
+        seconds < vidoeDurationSeconds.current
         ? seconds / vidoeDurationSeconds.current
         : 1
     );
-  }, [props.courseProgress.studyTime]);
+  }, [props.courseProgress.studyTime, props.lessonCompleted]);
 
   // 콜백 - 타이머.
 

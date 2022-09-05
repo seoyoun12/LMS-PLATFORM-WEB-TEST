@@ -149,7 +149,6 @@ export function CNCalendar() {
   //RadioButton Filter changer
   const onChangeFilter = (e: React.MouseEvent<HTMLButtonElement>) => {
     const value = e.currentTarget.value;
-    console.log(e);
     if (value === businessType.TYPE_ALL) setFilter(value);
     if (value === businessType.TYPE_PASSENGER) setFilter(value);
     if (value === businessType.TYPE_CARGO) setFilter(value);

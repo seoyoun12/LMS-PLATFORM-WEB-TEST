@@ -415,6 +415,7 @@ export function EnrollHistoryModal({
                   }}
                   value={watchPhone().phone2}
                   disabled={isStudyPeriod}
+                  inputProps={{ inputMode: 'numeric' }}
                   fullWidth
                 />
                 -
@@ -425,6 +426,7 @@ export function EnrollHistoryModal({
                   }}
                   value={watchPhone().phone3}
                   disabled={isStudyPeriod}
+                  inputProps={{ inputMode: 'numeric' }}
                   fullWidth
                 />
               </TableRightCell>

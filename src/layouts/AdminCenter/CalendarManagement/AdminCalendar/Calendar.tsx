@@ -66,47 +66,59 @@ export enum FilterType {
 
 export const eduLegendList = [
   {
-    title: '보수일반 교육',
+    title: '여객',
     enType: courseCategoryType.TYPE_SUP_COMMON,
     color: '#f0ffdf',
     borderColor: '#d3f2a0',
   },
   {
-    title: '보수수시 교육',
-    enType: courseCategoryType.TYPE_SUP_CONSTANT,
-    color: '#036c19',
-    borderColor: '#eed4ba',
-  },
-  {
-    title: '수시 교육',
+    title: '화물',
     enType: courseCategoryType.TYPE_CONSTANT,
-    color: '#036c19',
-    borderColor: '#eed4ba',
+    color: '#eed4ba',
+    borderColor: '#036c19',
   },
-  {
-    title: '신규 교육',
-    enType: courseCategoryType.TYPE_NEW,
-    color: '#2980b9',
-    borderColor: '#e0e095',
-  },
-  {
-    title: '법령위반자 교육',
-    enType: courseCategoryType.TYPE_ILLEGAL,
-    color: '#4c0c0c',
-    borderColor: '#cce0ed',
-  },
-  {
-    title: '교통약자 교육',
-    enType: courseCategoryType.TYPE_HANDICAPPED,
-    color: '#190b99',
-    borderColor: '#c2c0ea',
-  },
-  {
-    title: '위험물질 운송차량교육',
-    enType: courseCategoryType.TYPE_DANGEROUS,
-    color: '#b807a9',
-    borderColor: '#e8c0cf',
-  },
+  // {
+  //   title: '보수일반 교육',
+  //   enType: courseCategoryType.TYPE_SUP_COMMON,
+  //   color: '#f0ffdf',
+  //   borderColor: '#d3f2a0',
+  // },
+  // {
+  //   title: '보수수시 교육',
+  //   enType: courseCategoryType.TYPE_SUP_CONSTANT,
+  //   color: '#036c19',
+  //   borderColor: '#eed4ba',
+  // },
+  // {
+  //   title: '수시 교육',
+  //   enType: courseCategoryType.TYPE_CONSTANT,
+  //   color: '#036c19',
+  //   borderColor: '#eed4ba',
+  // },
+  // {
+  //   title: '신규 교육',
+  //   enType: courseCategoryType.TYPE_NEW,
+  //   color: '#2980b9',
+  //   borderColor: '#e0e095',
+  // },
+  // {
+  //   title: '법령위반자 교육',
+  //   enType: courseCategoryType.TYPE_ILLEGAL,
+  //   color: '#4c0c0c',
+  //   borderColor: '#cce0ed',
+  // },
+  // {
+  //   title: '교통약자 교육',
+  //   enType: courseCategoryType.TYPE_HANDICAPPED,
+  //   color: '#190b99',
+  //   borderColor: '#c2c0ea',
+  // },
+  // {
+  //   title: '위험물질 운송차량교육',
+  //   enType: courseCategoryType.TYPE_DANGEROUS,
+  //   color: '#b807a9',
+  //   borderColor: '#e8c0cf',
+  // },
   {
     title: '마감',
     enType: courseCategoryType.TYPE_NONE,
@@ -130,7 +142,13 @@ const modalInfoTItle = [
   '예약가능시간',
 ];
 
-export function AdminCalendar({ handleDate }: { handleDate: (date: Date) => void }) {
+export function AdminCalendar({
+  handleDate,
+  handleBusiness,
+}: {
+  handleDate: (date: Date) => void;
+  handleBusiness: (businessType: businessType) => void;
+}) {
   const [date, setDate] = useState(new Date());
   const [filter, setFilter] = useState<businessType>(businessType.TYPE_ALL);
   const [openModal, setOpenModal] = useState(false);
@@ -146,10 +164,11 @@ export function AdminCalendar({ handleDate }: { handleDate: (date: Date) => void
   const calendarRef = useRef<FullCalendar>(null);
 
   //RadioButton Filter changer
-  const onChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value === businessType.TYPE_ALL) setFilter(e.target.value);
-    if (e.target.value === businessType.TYPE_PASSENGER) setFilter(e.target.value);
-    if (e.target.value === businessType.TYPE_CARGO) setFilter(e.target.value);
+  const onChangeFilter = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const value = e.currentTarget.value;
+    if (value === businessType.TYPE_ALL) setFilter(value);
+    if (value === businessType.TYPE_PASSENGER) setFilter(value);
+    if (value === businessType.TYPE_CARGO) setFilter(value);
     mutate();
   };
 
@@ -167,7 +186,8 @@ export function AdminCalendar({ handleDate }: { handleDate: (date: Date) => void
 
   useEffect(() => {
     handleDate(date);
-  }, [date]);
+    handleBusiness(filter);
+  }, [date, filter]);
 
   //fullcalendar changer
   const changeFCDMonth = (date: Date) => {

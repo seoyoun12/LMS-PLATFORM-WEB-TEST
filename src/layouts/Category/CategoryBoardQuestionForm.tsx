@@ -217,6 +217,7 @@ export function CategoryBoardQuestionForm({
                       }
                       onChangePhoneNum02(e.target.value.replace(/[^0-9]/g, ''));
                     }}
+                    inputProps={{ inputMode: 'numeric' }}
                     fullWidth={isTablet}
                   />
                   -
@@ -234,6 +235,7 @@ export function CategoryBoardQuestionForm({
                       }
                       onChangePhoneNum03(e.target.value.replace(/[^0-9]/g, ''));
                     }}
+                    inputProps={{ inputMode: 'numeric' }}
                     fullWidth={isTablet}
                   />
                 </Box>
@@ -386,11 +388,12 @@ const TableCellLeft = styled(TableCell)`
   border-top: 1px solid #b4b4b4;
   border-bottom: 1px solid #b4b4b4;
   width: 20%;
+  font-size: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
   @media (max-width: 768px) {
-    flex-direction: column;
+    /* flex-direction: column; */
     width: 100%;
     border-bottom: none;
     text-align: start;

@@ -28,11 +28,8 @@ export default function LessonContentVideo(props: Props) {
 
   // 스테이트.
 
-  // 프로그레스바?
   const [progress, setProgress] = React.useState<number>(0);
-  if (props.lessonCompleted) {
-    setProgress(1);
-  }
+
   // 레퍼런스.
 
   const prevCourseUserSeq = React.useRef<number | null>(null);

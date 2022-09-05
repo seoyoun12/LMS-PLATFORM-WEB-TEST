@@ -28,7 +28,6 @@ export interface LessonProps {
 }
 
 export default function Lesson(props: LessonProps) {
-
   // 스테이트.
 
   const [loading, setLoading] = React.useState<boolean>(true);

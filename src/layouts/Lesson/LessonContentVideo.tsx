@@ -126,11 +126,11 @@ export default function LessonContentVideo(props: Props) {
     const courseUserSeq = props.courseUserSeq;
     const courseProgressSeq = props.courseProgress.courseProgressSeq;
     const lessonSeq = props.lesson.seq;
-    const pathname = router.pathname;
+    const asPath = router.asPath;
 
     const timer = window.setInterval(() => {
 
-      if (currentLessonSeq.current !== lessonSeq || router.pathname !== pathname) return clearInterval(timer);
+      if (currentLessonSeq.current !== lessonSeq || router.asPath !== asPath) return clearInterval(timer);
 
       apiSeconds.current++;
 
@@ -161,7 +161,7 @@ export default function LessonContentVideo(props: Props) {
 
     apiTimer.current = timer;
 
-  }, [props.courseProgress.courseProgressSeq, props.courseUserSeq, props.lesson, router.pathname, stopTimer]);
+  }, [props.courseProgress.courseProgressSeq, props.courseUserSeq, props.lesson, router.asPath, stopTimer]);
 
   // 콜백 - 이벤트.
 
@@ -267,8 +267,6 @@ export default function LessonContentVideo(props: Props) {
     prevCourseUserSeq.current = props.courseUserSeq;
     prevCourseProgress.current = props.courseProgress;
     prevLesson.current = props.lesson;
-
-    currentLessonSeq.current = props.lesson.seq;
     
     updateProgress();
 

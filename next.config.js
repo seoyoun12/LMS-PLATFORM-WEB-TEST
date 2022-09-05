@@ -15,7 +15,11 @@ const nextConfig = {
     includePaths: [path.join(__dirname, 'styles')],
   },
   images: {
-    domains: ['picsum.photos', 'dnkwhodfjmev10929056.cdn.ntruss.com','cn-lms-storage.cdn.gov-ntruss.com'],
+    domains: [
+      'picsum.photos',
+      'dnkwhodfjmev10929056.cdn.ntruss.com',
+      'cn-lms-storage.cdn.gov-ntruss.com',
+    ],
   },
   experimental: {
     forceSwcTransforms: true,
@@ -23,6 +27,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  generateEtags: false,
   webpack: config => {
     config.module.rules.push({
       test: /\.svg$/,

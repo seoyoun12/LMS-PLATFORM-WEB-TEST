@@ -11,7 +11,7 @@ import StebHeader from '../StebHeader/StebHeader';
 
 export default function Steb1() {
   const isDesktop = useResponsive();
-  console.log(isDesktop);
+  // console.log(isDesktop);
   return (
     <Steb1Wrap>
       {isDesktop && <StebHeader value={1} />}

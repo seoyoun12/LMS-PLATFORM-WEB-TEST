@@ -444,7 +444,7 @@ export function TransWorker({ type, locationList }: Props) {
                       // if (e.target.value.length > 4) return;
                       // if (!phoneRegex.test(e.target.value)) return;
 
-                      console.log(Phone4Regex.test(e.target.value), e.target.value);
+                      // console.log(Phone4Regex.test(e.target.value), e.target.value);
                       if (Phone4Regex.test(e.target.value)) {
                         return;
                       }

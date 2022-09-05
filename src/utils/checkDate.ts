@@ -56,7 +56,7 @@ export const checkIsDate = (schedule: CourseClassRes[], currentDate: Date) => {
   for (let i = getStartDateOfMonth.getDate(); i <= getEndDateOfMonth.getDate(); i++) {
     const nowDate = new Date();
     nowDate.setDate(i);
-    console.log(schedule);
+    // console.log(schedule);
     const filteringSchedule = schedule.filter(filt =>
       checkDatePeriod(
         // filt.requestStartDate,

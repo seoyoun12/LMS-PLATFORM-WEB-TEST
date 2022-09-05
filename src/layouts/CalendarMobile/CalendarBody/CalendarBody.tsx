@@ -170,8 +170,7 @@ export function CalendarBody({
     isFullPeople: boolean
   ) => {
     if (!prevSchedule || isFullPeople) return window.alert('마감된 교육입니다!');
-    if (isFullPeople)
-      return window.alert('접수마감된 교육입니다.');
+    if (isFullPeople) return window.alert('접수마감된 교육입니다.');
     if (!isReceive) return window.alert('신청기간이 아닙니다!');
     setModalInfo({
       seq: item.seq,
@@ -218,7 +217,7 @@ export function CalendarBody({
                     )
                   }
                 >
-                  <CalendarItemHeader
+                  {/* <CalendarItemHeader
                     sx={{
                       background: child.isReceive
                         ? child.isFullPeople
@@ -228,7 +227,7 @@ export function CalendarBody({
                     }}
                   >
                     {child.title}
-                  </CalendarItemHeader>
+                  </CalendarItemHeader> */}
                   <Box mt={1}>
                     [{child.courseCategoryType.ko}]{' '}
                     {child.courseSubCategoryType.type === courseSubCategoryType.BUS

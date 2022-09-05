@@ -413,7 +413,7 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
           }}
           fontWeight="bold"
         >
-          [{title}]&nbsp;
+          {/* [{title}]&nbsp; */}
         </Box>
         <Box>
           {/* {extendedProps.step}기 {extendedProps.courseCategoryType.ko}교육 */}

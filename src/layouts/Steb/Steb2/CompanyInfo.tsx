@@ -72,12 +72,14 @@ export function CompanyInfo({
 
     if (courseSubCategoryType.CHARTER_BUS === value) {
       setValue('businessName', '');
+      setValue('businessSubType', value as courseSubCategoryType);
       setDisabledCompany(false);
       return setHideCarNumber(false);
     }
 
     if (courseSubCategoryType.SPECIAL_PASSENGER === value) {
       setValue('businessName', '');
+      setValue('businessSubType', value as courseSubCategoryType);
       setDisabledCompany(false);
       return setHideCarNumber(true);
     }
@@ -87,6 +89,7 @@ export function CompanyInfo({
         'businessName',
         userBusinessTypeTwo.filter(item => item.enType === value)[0].type
       );
+      setValue('businessSubType', value as courseSubCategoryType);
       setDisabledCompany(true);
       return setHideCarNumber(false);
     }
@@ -99,6 +102,7 @@ export function CompanyInfo({
     ) {
       setValue('carNumber', null);
       setValue('businessName', '');
+      setValue('businessSubType', value as courseSubCategoryType);
       setDisabledCompany(false);
       return setHideCarNumber(true);
     }

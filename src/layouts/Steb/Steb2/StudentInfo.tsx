@@ -94,6 +94,16 @@ export function StudentInfo({
     }
   }, [user, registerType]);
 
+  console.log(
+    locationList.filter(item =>
+      watch().businessSubType === courseSubCategoryType.BUS
+        ? true
+        : item.en !== 'CHUNGNAM'
+    ),
+    'zzz',
+    watch().businessSubType
+  );
+
   console.log(watch());
   return (
     <StudentInfoWrap>
@@ -176,10 +186,10 @@ export function StudentInfo({
                     </MenuItem>
                   ))} */}
                   {locationList
-                    .filter(
-                      item =>
-                        watch().businessSubType !== courseSubCategoryType.BUS &&
-                        item.en !== 'CHUNGNAM'
+                    .filter(item =>
+                      watch().businessSubType === courseSubCategoryType.BUS
+                        ? true
+                        : item.en !== 'CHUNGNAM'
                     )
                     .map(item => (
                       <MenuItem key={item.en} value={item.en}>

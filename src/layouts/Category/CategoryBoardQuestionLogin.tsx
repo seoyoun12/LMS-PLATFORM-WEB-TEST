@@ -12,7 +12,7 @@ interface Props {
 // export function CategoryBoardQuestionLogin({setIsOpneQues,setMemberType}:Props){
 export function CategoryBoardQuestionLogin() {
   const router = useRouter();
-  console.log(router.asPath);
+  // console.log(router.asPath);
 
   return (
     <SignInLayoutWrap>

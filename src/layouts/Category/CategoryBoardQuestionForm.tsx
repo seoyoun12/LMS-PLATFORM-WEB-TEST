@@ -228,7 +228,7 @@ export function CategoryBoardQuestionForm({
                       // if (Phone4Regex.test(e.target.value) || e.target.value.length > 4)
                       //   return (phone3.current = e.target.value.slice(0, -1));
 
-                      console.log(Phone4Regex.test(e.target.value), e.target.value);
+                      // console.log(Phone4Regex.test(e.target.value), e.target.value);
                       if (Phone4Regex.test(e.target.value)) {
                         return;
                       }

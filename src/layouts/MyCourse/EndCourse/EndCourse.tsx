@@ -11,14 +11,14 @@ export function EndCourse() {
   const { data, error, mutate } = useLearningStatus();
 
   const onClickEnterCourseLesson = (res: LearningStatusRes) => {
-    console.log(res);
+    // console.log(res);
     const isStartStudy =
       new Date(res.studyStartDate.replaceAll('-', '/').split(' ')[0]).getTime() <
       new Date().getTime(); //현재시간이 크면 true 아니면 false
     const isEndedStudy =
       new Date(res.studyEndDate.replaceAll('-', '/').split(' ')[0]).getTime() <
       new Date().getTime(); //현재시간이 크면 true 아니면 false
-    console.log('isStart', isStartStudy);
+    // console.log('isStart', isStartStudy);
     if (res.progressStatus === ProgressStatus.TYPE_BEFORE || !isStartStudy)
       return window.alert('아직 학습이 시작되지 않았습니다!');
     // if (res.progressStatus === ProgressStatus.TYPE_ENDED || isEndedStudy)

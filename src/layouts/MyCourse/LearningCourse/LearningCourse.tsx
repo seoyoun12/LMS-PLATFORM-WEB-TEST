@@ -8,7 +8,7 @@ import {
 import { Spinner } from '@components/ui';
 import { ContentCardV2 } from '@components/ui/ContentCard';
 import styled from '@emotion/styled';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Link } from '@mui/material';
 import { NotFound } from '@components/ui/NotFound';
 
 export function LearningCourse() {
@@ -28,10 +28,17 @@ export function LearningCourse() {
     //   return window.alert('종료된 학습입니다!');
 
     if (res.progressStatus === ProgressStatus.TYPE_PROGRESSING) {
-      router.push(
+      // router.push(
+      //   `/course/${res.courseUserSeq}/lesson/${
+      //     !res.recentLessonSeq ? 1 : res.recentLessonSeq
+      //   }`
+      // );
+      window.open(
         `/course/${res.courseUserSeq}/lesson/${
           !res.recentLessonSeq ? 1 : res.recentLessonSeq
-        }`
+        }`,
+        // '',
+        '_blank'
       );
     }
   };
@@ -62,17 +69,19 @@ export function LearningCourse() {
           )
           .map(item => (
             <Grid item xs={1} sm={1} md={1} lg={1} key={item.courseClassSeq}>
-              <Box
-                // href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}
-                onClick={() => onClickEnterCourseLesson(item)}
-              >
-                <ContentCardV2
-                  image={item.thumbnailImage}
-                  title={item.courseTitle}
-                  // content1={`${item.leftDays === 0 ? '오늘마감 입니다!' : item.leftDays}`}
-                  content2={`현재 진도율 ${item.progress}%`}
-                />
-              </Box>
+              <Link target="_blank">
+                <Box
+                  // href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}
+                  onClick={() => onClickEnterCourseLesson(item)}
+                >
+                  <ContentCardV2
+                    image={item.thumbnailImage}
+                    title={item.courseTitle}
+                    // content1={`${item.leftDays === 0 ? '오늘마감 입니다!' : item.leftDays}`}
+                    content2={`현재 진도율 ${item.progress}%`}
+                  />
+                </Box>
+              </Link>
             </Grid>
           ))}
       </Grid>

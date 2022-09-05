@@ -233,6 +233,7 @@ export function StudentInfo({
                     }
                     setValue('secondPhone', e.target.value.replace(/[^0-9]/g, ''));
                   }}
+                  inputProps={{ inputMode: 'numeric' }}
                   fullWidth
                 />
                 -
@@ -245,6 +246,7 @@ export function StudentInfo({
                     setValue('thirdPhone', e.target.value.replace(/[^0-9]/g, ''));
                   }}
                   value={watch().thirdPhone}
+                  inputProps={{ inputMode: 'numeric' }}
                   fullWidth
                 />
               </InputsBox>

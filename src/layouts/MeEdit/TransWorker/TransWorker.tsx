@@ -452,6 +452,7 @@ export function TransWorker({ type, locationList }: Props) {
                     }}
                     value={phone2}
                     placeholder="4자리 입력"
+                    inputProps={{ inputMode: 'numeric' }}
                     fullWidth
                   />
                   -
@@ -466,6 +467,7 @@ export function TransWorker({ type, locationList }: Props) {
                     }}
                     value={phone3}
                     placeholder="4자리 입력"
+                    inputProps={{ inputMode: 'numeric' }}
                     fullWidth
                   />
                 </TableRightCell>

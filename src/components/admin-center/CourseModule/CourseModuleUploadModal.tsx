@@ -4,6 +4,7 @@ import {
   SubmitHandler,
   useForm,
   UseFormRegister,
+  UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form';
 import {
@@ -39,6 +40,7 @@ import { YN } from '@common/constant';
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { CourseModuleSurveyList } from './CourseModuleSurveyList';
 import { useDialog } from '@hooks/useDialog';
+import { Max100Regex } from '@utils/inputRegexes';
 
 export const moduleTypeArr = [
   { title: '진도율', type: CourseModuleType.COURSE_MODULE_PROGRESS_RATE },
@@ -52,7 +54,8 @@ const inputByType: {
     name: string;
     element: (
       register: UseFormRegister<CourseModuleSaveReqDto>,
-      watch: UseFormWatch<CourseModuleSaveReqDto>
+      watch: UseFormWatch<CourseModuleSaveReqDto>,
+      setValue: UseFormSetValue<CourseModuleSaveReqDto>
     ) => EmotionJSX.Element;
   }[];
 }[] = [
@@ -61,7 +64,7 @@ const inputByType: {
     children: [
       {
         name: '최소 진도율',
-        element: (register, watch) => (
+        element: (register, watch, setValue) => (
           <FormControl className="form-control">
             <TextField {...register('limitProgress')} />
           </FormControl>
@@ -74,7 +77,7 @@ const inputByType: {
     children: [
       {
         name: '최소점수',
-        element: (register, watch) => (
+        element: (register, watch, setValue) => (
           <FormControl className="form-control">
             <TextField {...register('limitScore')} />
           </FormControl>
@@ -87,21 +90,37 @@ const inputByType: {
     children: [
       {
         name: '제출필수여부',
-        element: (register, watch) => (
-          <FormControl sx={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Typography>필수 제출</Typography>
-            <Radio
-              {...register('submitYn')}
-              value={YN.YES}
-              checked={watch().submitYn === YN.YES}
+        element: (register, watch, setValue) => (
+          <>
+            <FormControl sx={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Typography>필수 제출</Typography>
+              <Radio
+                {...register('submitYn')}
+                value={YN.YES}
+                checked={watch().submitYn === YN.YES}
+              />
+              <Typography>필요 없음</Typography>
+              <Radio
+                {...register('submitYn')}
+                value={YN.NO}
+                checked={watch().submitYn === YN.NO}
+              />
+            </FormControl>
+            <Box>최소 진도율(최대 100까지 설정하셔야합니다.)</Box>
+            <TextField
+              type="number"
+              {...register('limitProgress')}
+              onChange={e => {
+                // console.log(e.target.value);
+                // if (e.target.value === '') return setValue('limitProgress', 0);
+                // console.log(e.target.value, '나누구야');
+                // if (!Max100Regex.test(e.target.value)) return;
+                setValue('limitProgress', Number(e.target.value));
+              }}
+              value={watch().limitProgress}
+              inputProps={{ inputMode: 'numeric' }}
             />
-            <Typography>필요 없음</Typography>
-            <Radio
-              {...register('submitYn')}
-              value={YN.NO}
-              checked={watch().submitYn === YN.NO}
-            />
-          </FormControl>
+          </>
         ),
       },
     ],
@@ -167,6 +186,7 @@ export function CourseModuleUploadModal({
       }
     })();
   }, []);
+  console.log(watch());
 
   const onChangeSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSurveySeq(Number(e.target.value));
@@ -186,7 +206,7 @@ export function CourseModuleUploadModal({
     } = watch();
     let inputParams: CourseModuleSaveReqDto = {
       examSeq,
-      limitProgress,
+      limitProgress: Number(limitProgress),
       limitScore,
       moduleName,
       moduleType,
@@ -210,6 +230,10 @@ export function CourseModuleUploadModal({
       if (!inputParams.examSeq || !inputParams.limitScore)
         return window.alert('모두 입력해주세요! 시험');
     }
+
+    console.log(inputParams, typeof watch().limitProgress);
+
+    return;
 
     try {
       setLoading(true);
@@ -295,7 +319,6 @@ export function CourseModuleUploadModal({
               as={<FormHelperText error />}
             />
           </FormControl>
-
           <FormControl className="form-control">
             <Typography>모듈 타입</Typography>
             <Select
@@ -328,9 +351,18 @@ export function CourseModuleUploadModal({
             ?.children.map(child => (
               <Box width="100%">
                 <Typography>{child.name}</Typography>
-                <Box>{child.element(register, watch)}</Box>
+                <Box>{child.element(register, watch, setValue)}</Box>
               </Box>
             ))}
+
+          {/* {watch().moduleType === CourseModuleType.COURSE_MODULE_SURVEY ? (
+            <Box>
+              <Box>최소 진도율</Box>
+              <Box></Box>
+            </Box>
+          ) : (
+            '안뇽'
+          )} */}
 
           <FormControl className="form-control">
             <FormLabel focused={false}>상태</FormLabel>

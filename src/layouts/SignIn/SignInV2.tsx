@@ -189,6 +189,7 @@ export function SignInV2() {
               value={identify1}
               error={identify1Err}
               autoComplete="current-identify1"
+              inputProps={{ inputMode: 'numeric' }}
             />
             -
             <TextField
@@ -203,6 +204,7 @@ export function SignInV2() {
               value={identify2}
               error={identify2Err}
               autoComplete="current-identify2"
+              inputProps={{ inputMode: 'numeric' }}
             />
           </Box>
           <FormHelperText sx={{ color: 'red' }}>

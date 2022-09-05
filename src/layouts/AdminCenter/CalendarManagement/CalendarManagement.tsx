@@ -47,13 +47,21 @@ export function CalendarManagement() {
   const router = useRouter();
   // const [ page, setPage ] = useState(0);
   const [manageMentDate, setManagementDate] = useState<Date>(new Date());
+  const [manageBusinessType, setManageBusinessType] = useState<businessType>(
+    businessType.TYPE_ALL
+  );
   const { data, error, mutate } = useCourseClassAdm(
-    businessType.TYPE_ALL,
+    manageBusinessType,
     dateFormat(manageMentDate, 'yyyy-mm')
   );
+  console.log('asd', manageBusinessType);
 
   const handleDate = (date: Date) => {
     setManagementDate(date);
+  };
+
+  const handleBusiness = (businessType: businessType) => {
+    setManageBusinessType(businessType);
   };
 
   useEffect(() => {
@@ -148,15 +156,19 @@ export function CalendarManagement() {
                 </TableCell>
                 {/* courseCategoryType eduLegendList */}
                 <TableCell align="center">
-                  {eduLegendList.filter(
+                  {/* {eduLegendList.filter(
                     item => item.enType === data.course.courseCategoryType
-                  )[0]?.title || '보수일반 교육'}{' '}
-                  /{data.course.lessonTime}
+                  )[0]?.title || '보수일반 교육'}{' '} */}
+                  보수일반 /{data.course.lessonTime}
                   {/* {dateFormat(data.eduTypeAndTime, 'isoDate')} */}
                 </TableCell>
                 <TableCell align="center">
-                  {/* {courseBusinessTypeList.filter(business => business.enType === data.course.courseBusinessType)[0].type} */}
-                  여객 / 화물
+                  {
+                    courseBusinessTypeList.filter(
+                      business => business.enType === data.course.courseBusinessType
+                    )[0].type
+                  }
+                  {/* 여객 / 화물 */}
                 </TableCell>
                 {/* <TableCell align="right">{'data.className'}</TableCell>
                 <TableCell align="right">{'data.jobType'}</TableCell> */}
@@ -202,7 +214,7 @@ export function CalendarManagement() {
           })}
         </TableBody>
       </Table>
-      <AdminCalendar handleDate={handleDate} />
+      <AdminCalendar handleDate={handleDate} handleBusiness={handleBusiness} />
     </CalendarManagementWrap>
   );
 }

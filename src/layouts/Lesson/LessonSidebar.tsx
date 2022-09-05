@@ -1,14 +1,25 @@
-import React from "react";
-import styled from "@emotion/styled";
-import { Box } from "@mui/system";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { headerHeight } from "@styles/variables";
-import { LESSON_TABS, LessonTabs, LESSON_CONTENT_TYPES } from "./Lesson.types";
-import { CourseModuleFindResponseDto, CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Tab } from "@mui/material";
-import { useRouter } from "next/router";
-import LessonSidebarModule from "./LessonSidebarModule";
-import LessonSidebarItem from "./LessonSidebarItem";
+import React from 'react';
+import styled from '@emotion/styled';
+import { Box } from '@mui/system';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { headerHeight } from '@styles/variables';
+import { LESSON_TABS, LessonTabs, LESSON_CONTENT_TYPES } from './Lesson.types';
+import {
+  CourseModuleFindResponseDto,
+  CourseProgressResponseDto,
+  LessonDetailClientResponseDto,
+} from '@common/api/Api';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Tab,
+} from '@mui/material';
+import { useRouter } from 'next/router';
+import LessonSidebarModule from './LessonSidebarModule';
+import LessonSidebarItem from './LessonSidebarItem';
 
 interface Props {
   courseUserSeq: number;
@@ -22,12 +33,11 @@ interface Props {
 }
 
 export default function LessonSidebar(props: Props) {
-
   const router = useRouter();
 
   // 스테이트.
 
-  const [tabMenu, setTabMenu] = React.useState<LessonTabs["value"]>(LESSON_TABS[0].value);
+  const [tabMenu, setTabMenu] = React.useState<LessonTabs['value']>(LESSON_TABS[0].value);
   const [dialog, setDialog] = React.useState<'NEXT' | 'PROGRESS' | null>(null);
 
   // 컴포넌트.
@@ -48,7 +58,9 @@ export default function LessonSidebar(props: Props) {
   const DialogProgress = (
     <Dialog open={dialog === 'PROGRESS'} onClose={() => setDialog(null)}>
       <DialogContent>
-        <DialogContentText>학습을 더 진행해야 이동이 가능합니다.</DialogContentText>
+        <DialogContentText>
+          모든 차시가 종료(학습완료)가 된 후 만족도 조사를 참여하실 수 있습니다.{' '}
+        </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setDialog(null)}>확인</Button>
@@ -62,7 +74,9 @@ export default function LessonSidebar(props: Props) {
     <StickySideBar>
       <TabContext value={tabMenu}>
         <TabMenu onChange={(v: unknown) => setTabMenu(Array.isArray(v) ? v[0] : v)}>
-          {LESSON_TABS.map((tab) => <Tab key={tab.value} label={tab.label} value={tab.value}/>)}
+          {LESSON_TABS.map(tab => (
+            <Tab key={tab.value} label={tab.label} value={tab.value} />
+          ))}
         </TabMenu>
         <TabItem value={LESSON_TABS[0].value}>
           <LessonItemContainer>
@@ -76,7 +90,9 @@ export default function LessonSidebar(props: Props) {
                   if (lessonIndex !== 0 && !props.courseLessonsCompleted[lessonIndex - 1])
                     return setDialog('NEXT');
                   router.push(
-                    `/course/${props.courseUserSeq}/${LESSON_CONTENT_TYPES[0].toLowerCase()}/${
+                    `/course/${
+                      props.courseUserSeq
+                    }/${LESSON_CONTENT_TYPES[0].toLowerCase()}/${
                       props.courselessons[lessonIndex].seq
                     }`
                   );
@@ -93,10 +109,13 @@ export default function LessonSidebar(props: Props) {
                     completed={props.courseModulesCompleted[moduleIndex]}
                     onSelect={() => {
                       const module = props.courseModules[moduleIndex];
-            
-                      if (module.limitProgress !== 0 && props.courseTotalProgress < module.limitProgress)
+
+                      if (
+                        module.limitProgress !== 0 &&
+                        props.courseTotalProgress < module.limitProgress
+                      )
                         return setDialog('PROGRESS');
-            
+
                       switch (module.moduleType) {
                         case 'COURSE_MODULE_PROGRESS_RATE':
                           break;
@@ -104,7 +123,9 @@ export default function LessonSidebar(props: Props) {
                           router.push(
                             `/course/${
                               props.courseUserSeq
-                            }/${LESSON_CONTENT_TYPES[1].toLowerCase()}/${module.surveySeq}`
+                            }/${LESSON_CONTENT_TYPES[1].toLowerCase()}/${
+                              module.surveySeq
+                            }`
                           );
                           break;
                         case 'COURSE_MODULE_TEST':
@@ -122,7 +143,6 @@ export default function LessonSidebar(props: Props) {
       {DialogProgress}
     </StickySideBar>
   );
-
 }
 
 const StickySideBar = styled.aside`
@@ -166,7 +186,7 @@ const TabItem = styled(TabPanel)`
     margin: 0 1rem;
     margin-bottom: 1rem;
   }
-  
+
   .file-list-title {
     font-weight: bold;
     margin-bottom: 1rem;
@@ -180,6 +200,6 @@ const LessonItemContainer = styled(Box)`
 const LessonModuleContainer = styled(Box)`
   margin-top: 2rem;
   border-top: 1px solid #272727;
-  background: #F7F7F7;
+  background: #f7f7f7;
   padding: 1rem;
 `;

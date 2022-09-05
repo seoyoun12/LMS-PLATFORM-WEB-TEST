@@ -35,6 +35,7 @@ const hideNavList = [
   { href: '/admin-center' },
   // { href: '' } // 메인에서 제거
   { href: '/sign-up' },
+  { href: '/course' },
 ];
 
 const Footer: FC<Props> = () => {

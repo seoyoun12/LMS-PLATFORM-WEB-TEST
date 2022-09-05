@@ -5,7 +5,7 @@ import { AppBar } from '@mui/material';
 import * as React from 'react';
 
 const hideNavList = [
-  // { href: '/course/[courseSeq]' },
+  { href: '/course' },
   { href: '/admin-center' },
   // { href: '/'}
 ];
@@ -28,10 +28,10 @@ export function GlobalNavigationBar() {
     <AppBar
       position="sticky"
       sx={{
-        zIndex: (theme) => theme.zIndex.drawer + 1,
+        zIndex: theme => theme.zIndex.drawer + 1,
         backgroundColor: '#FFFFFF',
         borderColor: '#E5E5E5',
-        boxShadow: 'rgb(0 0 0 / 12%) 0 1px 0 0'
+        boxShadow: 'rgb(0 0 0 / 12%) 0 1px 0 0',
       }}
     >
       <HeaderBar />

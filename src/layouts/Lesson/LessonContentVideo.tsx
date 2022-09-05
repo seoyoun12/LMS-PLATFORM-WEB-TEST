@@ -22,6 +22,7 @@ interface Props {
 export default function LessonContentVideo(props: Props) {
 
   const router = useRouter();
+  const routerAsPath = router.asPath;
 
   // 스테이트.
 
@@ -126,11 +127,10 @@ export default function LessonContentVideo(props: Props) {
     const courseUserSeq = props.courseUserSeq;
     const courseProgressSeq = props.courseProgress.courseProgressSeq;
     const lessonSeq = props.lesson.seq;
-    const asPath = router.asPath;
 
     const timer = window.setInterval(() => {
 
-      if (currentLessonSeq.current !== lessonSeq || router.asPath !== asPath) return clearInterval(timer);
+      if (currentLessonSeq.current !== lessonSeq || router.asPath !== routerAsPath) return clearInterval(timer);
 
       apiSeconds.current++;
 
@@ -161,7 +161,7 @@ export default function LessonContentVideo(props: Props) {
 
     apiTimer.current = timer;
 
-  }, [props.courseProgress.courseProgressSeq, props.courseUserSeq, props.lesson, router.asPath, stopTimer]);
+  }, [props.courseProgress.courseProgressSeq, props.courseUserSeq, props.lesson, router, routerAsPath, stopTimer]);
 
   // 콜백 - 이벤트.
 

@@ -87,6 +87,7 @@ export default function LessonSidebar(props: Props) {
                 lesson={lesson}
                 key={lesson.seq}
                 onClick={() => {
+                  if (lesson.seq === props.courseLessonSeq) return;
                   if (lessonIndex !== 0 && !props.courseLessonsCompleted[lessonIndex - 1])
                     return setDialog('NEXT');
                   router.push(

@@ -94,16 +94,6 @@ export function StudentInfo({
     }
   }, [user, registerType]);
 
-  console.log(
-    locationList.filter(item =>
-      watch().businessSubType === courseSubCategoryType.BUS
-        ? true
-        : item.en !== 'CHUNGNAM'
-    ),
-    'zzz',
-    watch().businessSubType
-  );
-
   console.log(watch());
   return (
     <StudentInfoWrap>

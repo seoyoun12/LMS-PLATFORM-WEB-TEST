@@ -145,7 +145,13 @@ export async function getMyUser(): Promise<{ data: MyUser }> {
 }
 
 export function useMyUser() {
-  const { data, error } = useSWR<SWRResponse<MyUser>>(`/user/myinfo`, GET);
+  const { data, error } = useSWR<SWRResponse<MyUser>>(`/user/myinfo`, GET, {
+    revalidateOnFocus: false,
+    onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+      if (error.status === 401) return;
+      if (retryCount > 4) return;
+    },
+  });
   return {
     user: data?.data,
     error,

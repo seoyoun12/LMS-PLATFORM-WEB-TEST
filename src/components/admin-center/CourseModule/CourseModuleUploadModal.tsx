@@ -230,11 +230,6 @@ export function CourseModuleUploadModal({
       if (!inputParams.examSeq || !inputParams.limitScore)
         return window.alert('모두 입력해주세요! 시험');
     }
-
-    console.log(inputParams, typeof watch().limitProgress);
-
-    return;
-
     try {
       setLoading(true);
       if (isModify) {

@@ -16,3 +16,5 @@ export const Phone4Regex = /[0-9]{5}/;
 
 export const carNumberRegex =
   /(?=.*[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2}[\d]{2}[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{1}[\d]{4})/;
+
+export const Max100Regex = /^[0-9]{1}$|^[1-9]{1}[0-9]{1}$|^100$/;

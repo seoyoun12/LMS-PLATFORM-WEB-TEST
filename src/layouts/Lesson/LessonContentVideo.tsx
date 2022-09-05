@@ -1,13 +1,16 @@
-import React from "react";
-import styled from "@emotion/styled";
-import { Box, CircularProgress, LinearProgress, Typography } from "@mui/material";
-import { VideoPlayer } from "@components/common";
-import { Ncplayer } from "types/ncplayer";
-import { useRouter } from "next/router";
-import type { CourseProgressResponseDto, LessonDetailClientResponseDto } from "@common/api/Api";
-import ApiClient from "@common/api/ApiClient";
+import React from 'react';
+import styled from '@emotion/styled';
+import { Box, CircularProgress, LinearProgress, Typography } from '@mui/material';
+import { VideoPlayer } from '@components/common';
+import { Ncplayer } from 'types/ncplayer';
+import { useRouter } from 'next/router';
+import type {
+  CourseProgressResponseDto,
+  LessonDetailClientResponseDto,
+} from '@common/api/Api';
+import ApiClient from '@common/api/ApiClient';
 
-const PLAYER_ELEMENT_ID = "lesson-player" as const;
+const PLAYER_ELEMENT_ID = 'lesson-player' as const;
 
 interface Props {
   coursePlayFirst?: boolean;
@@ -20,14 +23,16 @@ interface Props {
 }
 
 export default function LessonContentVideo(props: Props) {
-
   const router = useRouter();
   const routerAsPath = router.asPath;
 
   // 스테이트.
 
+  // 프로그레스바?
   const [progress, setProgress] = React.useState<number>(0);
-
+  if (props.lessonCompleted) {
+    setProgress(1);
+  }
   // 레퍼런스.
 
   const prevCourseUserSeq = React.useRef<number | null>(null);
@@ -52,75 +57,77 @@ export default function LessonContentVideo(props: Props) {
   // 콜백
 
   const updateProgress = React.useCallback(() => {
-
     const seconds = props.courseProgress.studyTime + videoPlayedSeconds.current;
-    setProgress(vidoeDurationSeconds.current > 0 && seconds < vidoeDurationSeconds.current ? seconds / vidoeDurationSeconds.current : 1);
-
+    setProgress(
+      vidoeDurationSeconds.current > 0 && seconds < vidoeDurationSeconds.current
+        ? seconds / vidoeDurationSeconds.current
+        : 1
+    );
   }, [props.courseProgress.studyTime]);
 
   // 콜백 - 타이머.
 
-  const stopTimer = React.useCallback(async (mode: "PREV" | "CURRENT" | "RESET") => {
+  const stopTimer = React.useCallback(
+    async (mode: 'PREV' | 'CURRENT' | 'RESET') => {
+      if (apiTimer.current !== null) {
+        window.clearInterval(apiTimer.current);
 
-    if (apiTimer.current !== null) {
+        if (mode !== 'RESET') {
+          if (
+            (mode === 'CURRENT' &&
+              (props.lesson === null ||
+                props.courseProgress.courseProgressSeq === null)) ||
+            (mode === 'PREV' &&
+              props.courseUserSeq === prevCourseUserSeq.current &&
+              props.lesson.seq === prevLesson.current.seq)
+          )
+            return;
 
-      window.clearInterval(apiTimer.current);
+          if (mode === 'CURRENT') {
+            videoIsFinished.current = true;
+            videoIsFirst.current = true;
+          }
 
-      if (mode !== "RESET") {
+          const courseUserSeq =
+            mode === 'PREV' ? prevCourseUserSeq.current : props.courseUserSeq;
+          const courseProgressSeq =
+            mode === 'PREV'
+              ? prevCourseProgress.current.courseProgressSeq
+              : props.courseProgress.courseProgressSeq;
+          const lessonSeq = mode === 'PREV' ? prevLesson.current.seq : props.lesson.seq;
+          const currentSecond = videoCurrentSeconds.current;
 
-        if (
-          (mode === "CURRENT" && (props.lesson === null || props.courseProgress.courseProgressSeq === null)) ||
-          (mode === "PREV" && props.courseUserSeq === prevCourseUserSeq.current && props.lesson.seq === prevLesson.current.seq)
-        ) return;
-
-        if (mode === "CURRENT") {
-
-          videoIsFinished.current = true;
-          videoIsFirst.current = true;
-
-        }
-  
-        const courseUserSeq = mode === "PREV" ? prevCourseUserSeq.current : props.courseUserSeq;
-        const courseProgressSeq = mode === "PREV" ? prevCourseProgress.current.courseProgressSeq : props.courseProgress.courseProgressSeq;
-        const lessonSeq = mode === "PREV" ? prevLesson.current.seq : props.lesson.seq;
-        const currentSecond = videoCurrentSeconds.current;
-
-        await ApiClient.courseLog
-          .createCourseModulesUsingPost1({
-            courseUserSeq: courseUserSeq,
-            lessonSeq: lessonSeq,
-            studyTime: apiVideoSeconds.current,
-          })
-          .then(() =>
-            ApiClient.courseProgress
-              .updateCourseProgressUsingPut({
+          await ApiClient.courseLog
+            .createCourseModulesUsingPost1({
+              courseUserSeq: courseUserSeq,
+              lessonSeq: lessonSeq,
+              studyTime: apiVideoSeconds.current,
+            })
+            .then(() =>
+              ApiClient.courseProgress.updateCourseProgressUsingPut({
                 courseUserSeq: courseUserSeq,
                 courseProgressSeq: courseProgressSeq,
                 lessonSeq: lessonSeq,
                 studyLastTime: currentSecond,
               })
-          )
-          .then((v) => {
-
-            return ApiClient.courseProgress
-              .updateAllCourseProgressUsingPut(courseUserSeq)
-              .then(() => v.data.data.completeYn === "Y" && props.onComplete());
-            
-          });
-
+            )
+            .then(v => {
+              return ApiClient.courseProgress
+                .updateAllCourseProgressUsingPut(courseUserSeq)
+                .then(() => v.data.data.completeYn === 'Y' && props.onComplete());
+            });
+        }
       }
 
-    }
-
-    apiTimer.current = null;
-    apiSeconds.current = 0;
-    apiVideoSeconds.current = 0;
-
-  }, [props]);
+      apiTimer.current = null;
+      apiSeconds.current = 0;
+      apiVideoSeconds.current = 0;
+    },
+    [props]
+  );
 
   const startTimer = React.useCallback(() => {
-
-    stopTimer("RESET");
+    stopTimer('RESET');
 
     if (props.lesson === null || props.courseProgress.courseProgressSeq === null) return;
 
@@ -129,13 +136,12 @@ export default function LessonContentVideo(props: Props) {
     const lessonSeq = props.lesson.seq;
 
     const timer = window.setInterval(() => {
-
-      if (currentLessonSeq.current !== lessonSeq || router.asPath !== routerAsPath) return clearInterval(timer);
+      if (currentLessonSeq.current !== lessonSeq || router.asPath !== routerAsPath)
+        return clearInterval(timer);
 
       apiSeconds.current++;
 
       if (apiSeconds.current >= 5) {
-        
         ApiClient.courseLog
           .createCourseModulesUsingPost1({
             courseUserSeq: courseUserSeq,
@@ -143,118 +149,115 @@ export default function LessonContentVideo(props: Props) {
             studyTime: apiVideoSeconds.current,
           })
           .then(() =>
-            ApiClient.courseProgress
-              .updateCourseProgressUsingPut({
-                courseUserSeq: courseUserSeq,
-                courseProgressSeq: courseProgressSeq,
-                lessonSeq: lessonSeq,
-                studyLastTime: videoCurrentSeconds.current,
-              })
+            ApiClient.courseProgress.updateCourseProgressUsingPut({
+              courseUserSeq: courseUserSeq,
+              courseProgressSeq: courseProgressSeq,
+              lessonSeq: lessonSeq,
+              studyLastTime: videoCurrentSeconds.current,
+            })
           );
 
         apiSeconds.current = 0;
         apiVideoSeconds.current = 0;
-
       }
-
     }, 1000);
 
     apiTimer.current = timer;
-
-  }, [props.courseProgress.courseProgressSeq, props.courseUserSeq, props.lesson, router, routerAsPath, stopTimer]);
+  }, [
+    props.courseProgress.courseProgressSeq,
+    props.courseUserSeq,
+    props.lesson,
+    router,
+    routerAsPath,
+    stopTimer,
+  ]);
 
   // 콜백 - 이벤트.
 
   const onPause = React.useCallback(() => {
-
     videoIsPaused.current = true;
-
   }, []);
 
   const onPlaying = React.useCallback(() => {
-
     if (props.lesson === null || props.courseProgress.courseProgressSeq === null) return;
 
     if (videoIsFirst.current) {
-
-      ApiClient.courseLog
-        .createCourseModulesUsingPost1({
-          courseUserSeq: props.courseUserSeq,
-          lessonSeq: props.lesson.seq,
-          studyTime: 0,
-        });
+      ApiClient.courseLog.createCourseModulesUsingPost1({
+        courseUserSeq: props.courseUserSeq,
+        lessonSeq: props.lesson.seq,
+        studyTime: 0,
+      });
 
       videoIsFinished.current = false;
       videoIsFirst.current = false;
 
       startTimer();
-
     }
 
     videoIsPaused.current = false;
-
-  }, [props.courseProgress.courseProgressSeq, props.courseUserSeq, props.lesson, startTimer]);
+  }, [
+    props.courseProgress.courseProgressSeq,
+    props.courseUserSeq,
+    props.lesson,
+    startTimer,
+  ]);
 
   const onSeeking = React.useCallback(() => {
-
     videoIsSeeking.current = true;
-
   }, []);
 
   const onSeeked = React.useCallback(() => {
-
     videoIsSeeking.current = false;
-
   }, []);
 
-  const onTimeChange = React.useCallback((time: number) => {
-
-    if (time === videoCurrentSeconds.current) return;
-    if (time !== videoCurrentSeconds.current + 1 || videoIsPaused.current || videoIsSeeking.current) {
+  const onTimeChange = React.useCallback(
+    (time: number) => {
+      if (time === videoCurrentSeconds.current) return;
+      if (
+        time !== videoCurrentSeconds.current + 1 ||
+        videoIsPaused.current ||
+        videoIsSeeking.current
+      ) {
+        videoCurrentSeconds.current = time;
+        return;
+      }
 
       videoCurrentSeconds.current = time;
-      return;
+      videoPlayedSeconds.current++;
+      apiVideoSeconds.current++;
 
-    }
-
-    videoCurrentSeconds.current = time;
-    videoPlayedSeconds.current++;
-    apiVideoSeconds.current++;
-
-    if (
-      !videoIsFinished.current &&
-      (
-        props.courseProgress.studyTime + videoPlayedSeconds.current >= vidoeDurationSeconds.current ||
-        videoCurrentSeconds.current >= vidoeDurationSeconds.current
+      if (
+        !videoIsFinished.current &&
+        (props.courseProgress.studyTime + videoPlayedSeconds.current >=
+          vidoeDurationSeconds.current ||
+          videoCurrentSeconds.current >= vidoeDurationSeconds.current)
       )
-    ) stopTimer("CURRENT");
+        stopTimer('CURRENT');
 
-    updateProgress();
-
-  }, [props.courseProgress.studyTime, stopTimer, updateProgress]);
+      updateProgress();
+    },
+    [props.courseProgress.studyTime, stopTimer, updateProgress]
+  );
 
   const onEnded = React.useCallback(() => {
-
     videoCurrentSeconds.current = vidoeDurationSeconds.current;
-    stopTimer("CURRENT");
-
+    stopTimer('CURRENT');
   }, [stopTimer]);
 
   // 이펙트.
 
   React.useEffect(() => {
-
     if (!props.coursePlayFirst && videoPlayer.current) videoPlayer.current.play();
-
   }, [props.coursePlayFirst]);
 
   React.useEffect(() => {
-
-    if (prevCourseUserSeq.current === null) prevCourseUserSeq.current = props.courseUserSeq;
-    if (prevCourseProgress.current === null) prevCourseProgress.current = props.courseProgress;
+    if (prevCourseUserSeq.current === null)
+      prevCourseUserSeq.current = props.courseUserSeq;
+    if (prevCourseProgress.current === null)
+      prevCourseProgress.current = props.courseProgress;
     if (prevLesson.current === null) prevLesson.current = props.lesson;
 
-    stopTimer("PREV");
+    stopTimer('PREV');
 
     vidoeDurationSeconds.current = props.lesson ? props.lesson.totalTime : 0;
     videoCurrentSeconds.current = props.lesson ? props.courseProgress.studyLastTime : 0;
@@ -269,15 +272,26 @@ export default function LessonContentVideo(props: Props) {
     prevLesson.current = props.lesson;
 
     currentLessonSeq.current = props.lesson.seq;
-    
-    updateProgress();
 
-  }, [props.lesson, props.courseProgress, props.courseUserSeq, stopTimer, updateProgress]);
+    updateProgress();
+  }, [
+    props.lesson,
+    props.courseProgress,
+    props.courseUserSeq,
+    stopTimer,
+    updateProgress,
+  ]);
 
   // 렌더링.
 
-  if (props.loading) return <VideoContentWrapper><CircularProgress size="1.5rem"/></VideoContentWrapper>;
-  if (props.lesson === null || props.courseProgress === null) return <VideoContentWrapper>강의가 존재하지 않습니다.</VideoContentWrapper>;
+  if (props.loading)
+    return (
+      <VideoContentWrapper>
+        <CircularProgress size="1.5rem" />
+      </VideoContentWrapper>
+    );
+  if (props.lesson === null || props.courseProgress === null)
+    return <VideoContentWrapper>강의가 존재하지 않습니다.</VideoContentWrapper>;
 
   return (
     <VideoContainer>
@@ -286,7 +300,11 @@ export default function LessonContentVideo(props: Props) {
           playlist={props.lesson.s3Files[0]?.path}
           initialPlayerId={PLAYER_ELEMENT_ID}
           initialConfig={{ autostart: !props.coursePlayFirst }}
-          seconds={props.courseProgress.studyLastTime === props.lesson.totalTime ? props.lesson.totalTime + 1 : props.courseProgress.studyLastTime}
+          seconds={
+            props.courseProgress.studyLastTime === props.lesson.totalTime
+              ? props.lesson.totalTime + 1
+              : props.courseProgress.studyLastTime
+          }
           showControl={props.lessonCompleted}
           onPause={onPause}
           onPlaying={onPlaying}
@@ -294,25 +312,22 @@ export default function LessonContentVideo(props: Props) {
           onSeeked={onSeeked}
           onTimeChange={onTimeChange}
           onEnded={onEnded}
-          onReady={(v) => videoPlayer.current = v}
+          onReady={v => (videoPlayer.current = v)}
         />
       </VideoContentPlayerWrapper>
       <ContentInfoContainer>
-        <ContentInfoTitle variant="h6">
-          {props.lesson.lessonNm}
-        </ContentInfoTitle>
+        <ContentInfoTitle variant="h6">{props.lesson.lessonNm}</ContentInfoTitle>
         <ContentInfoProgressContainer>
           <Typography fontWeight="bold" color="#ff5600" fontSize="inherit">
             {Math.floor(progress * 100)}% 수강 완료
           </Typography>
-          <Box sx={{ width: "100%", mr: 1 }}>
+          <Box sx={{ width: '100%', mr: 1 }}>
             <LinearProgress variant="determinate" value={Math.floor(progress * 100)} />
           </Box>
         </ContentInfoProgressContainer>
       </ContentInfoContainer>
     </VideoContainer>
   );
-
 }
 
 const VideoContainer = styled.div`
@@ -323,7 +338,7 @@ const VideoContainer = styled.div`
 const VideoContentWrapper = styled.div`
   display: flex;
   aspect-ratio: 16 / 9;
-  align-items : center;
+  align-items: center;
   justify-content: center;
 `;
 
@@ -356,7 +371,7 @@ const ContentInfoTitle = styled(Typography)`
     padding: 1rem;
     font-size: 1em;
     font-weight: 400;
-    background: #E9F1FF;
+    background: #e9f1ff;
     justify-content: center;
   }
 `;

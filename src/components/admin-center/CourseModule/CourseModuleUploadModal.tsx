@@ -111,11 +111,12 @@ const inputByType: {
               type="number"
               {...register('limitProgress')}
               onChange={e => {
-                // console.log(e.target.value);
+                const numberValue = Number(e.target.value);
+                // console.log(numberValue, 'xx');
                 // if (e.target.value === '') return setValue('limitProgress', 0);
-                // console.log(e.target.value, '나누구야');
                 // if (!Max100Regex.test(e.target.value)) return;
-                setValue('limitProgress', Number(e.target.value));
+                if (numberValue > 100) return setValue('limitProgress', 100);
+                setValue('limitProgress', numberValue);
               }}
               value={watch().limitProgress}
               inputProps={{ inputMode: 'numeric' }}

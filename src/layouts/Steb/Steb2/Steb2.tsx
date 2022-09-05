@@ -96,7 +96,7 @@ export default function Steb2() {
       //개인으로 신청
       if (registerType === RegisterType.TYPE_INDIVIDUAL) {
         confirmRef.current = true;
-        console.log(watch(), 'ssss');
+        // console.log(watch(), 'ssss');
         setLoading(true);
         const test = await courseClassIndividualEnroll(postData);
         setEnroll([watch()]);

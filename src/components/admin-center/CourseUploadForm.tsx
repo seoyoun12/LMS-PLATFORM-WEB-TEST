@@ -163,7 +163,6 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
       courseType,
       // content1: markdownContent,
     };
-    console.log(course, courseInput, courseSubCategoryType);
     setLoading(true);
     onHandleSubmit({ courseInput, files, isFileDelete, setLoading });
   };

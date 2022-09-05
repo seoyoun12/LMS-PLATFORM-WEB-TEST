@@ -64,7 +64,7 @@ export function EduOverview({
   const getSingleCourse = async (courseClassSeq: number) => {
     try {
       const { data } = await getSingleCourseClass(courseClassSeq);
-      console.log('data', data);
+      // console.log('data', data);
 
       setCourseCategoryType(data.course.courseCategoryType as courseCategoryType);
       setCourseBusinessType(data.course.courseBusinessType as businessType); //임시타입

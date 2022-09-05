@@ -20,7 +20,8 @@ export function HeaderBar() {
     <Header className={styles.globalContainer}>
       <ContentContainer>
         <Link
-          href="/"
+          href="//service?tab=Notice"
+          target="_blank"
           underline="none"
           height="100%"
           flexBasis={224}

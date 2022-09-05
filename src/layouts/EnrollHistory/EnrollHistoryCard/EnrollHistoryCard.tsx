@@ -40,7 +40,7 @@ export function EnrollHistoryCard({
   const handleSetWidth = () => {
     if (divRef.current)
       setWidth(getComputedStyle(divRef.current).getPropertyValue('width'));
-    console.log(getComputedStyle(divRef.current).getPropertyValue('width'));
+    // console.log(getComputedStyle(divRef.current).getPropertyValue('width'));
   };
 
   useEffect(() => {

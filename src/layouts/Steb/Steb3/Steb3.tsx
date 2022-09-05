@@ -97,7 +97,7 @@ export default function Steb3() {
     studyEndDate: string;
   }>();
 
-  console.log(enrollInfo, 'enrollinfo', enrollList, info);
+  // console.log(enrollInfo, 'enrollinfo', enrollList, info);
 
   const getData = async (seq: number) => {
     setLoading(true);

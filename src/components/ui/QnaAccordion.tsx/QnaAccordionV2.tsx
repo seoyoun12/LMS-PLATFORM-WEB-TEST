@@ -45,7 +45,6 @@ interface QnaBoardAccordionList {
 export function QnaAccordionV2({ loadedItem }: { loadedItem: Qna[] }) {
   const isTabled = !useResponsive();
   const [value, setValue] = React.useState<number>(null);
-  console.log(loadedItem, 'sdsd');
 
   const handleChange =
     (panel: number) => (event: React.SyntheticEvent, newExpanded: boolean) => {

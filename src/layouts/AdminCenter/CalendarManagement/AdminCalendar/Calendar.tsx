@@ -159,7 +159,6 @@ export function AdminCalendar({ handleDate }: { handleDate: (date: Date) => void
       const dummyDate = new Date();
       // dummyDate.setMonth(date.getMonth() + value);
       dummyDate.setFullYear(date.getFullYear() + value);
-      console.log(dummyDate.toLocaleDateString());
       return setDate(dummyDate);
     }
     if (type === MonthClickType.MONTH_CLICK)

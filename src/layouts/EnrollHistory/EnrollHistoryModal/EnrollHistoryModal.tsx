@@ -95,14 +95,13 @@ export function EnrollHistoryModal({
             : RegType.TYPE_ORGANIZATION
         );
         reset({ ...data });
-        // setIsStudyPeriod(
-        //   checkDatePeriod(
-        //     watch().studyStartDate,
-        //     watch().studyEndDate,
-        //     dateFormat(new Date(), 'yyyy-mm-dd')
-        //   )
-        // );
-        setIsStudyPeriod(false);
+        setIsStudyPeriod(
+          checkDatePeriod(
+            watch().studyStartDate,
+            watch().studyEndDate,
+            dateFormat(new Date(), 'yyyy-mm-dd')
+          )
+        );
         setPhone('phone1', data.phone.slice(0, 3));
         setPhone('phone2', data.phone.slice(3, 7));
         setPhone('phone3', data.phone.slice(7, 11));

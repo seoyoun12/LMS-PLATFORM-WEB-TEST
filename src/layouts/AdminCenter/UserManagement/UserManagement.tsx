@@ -29,11 +29,11 @@ const userConfig = [
   { label: '핸드폰가입', value: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU },
 ];
 
-const radioConfig = [
-  // { name: '전체', value: '' }, // Type이 required
-  { name: '저상/운수', value: registerType.TYPE_TRANS_EDU },
-  { name: '도민', value: registerType.TYPE_TRAFFIC_SAFETY_EDU },
-];
+// const radioConfig = [
+//   // { name: '전체', value: '' }, // Type이 required
+//   { name: '저상/운수', value: registerType.TYPE_TRANS_EDU },
+//   { name: '도민', value: registerType.TYPE_TRAFFIC_SAFETY_EDU },
+// ];
 
 const headRows = [
   { name: '회원번호' },
@@ -63,9 +63,9 @@ export function UserManagement() {
   const [typeValue, setTypeValue] = useState(regCategoryType.TYPE_TRANS_EDU);
   const { data, error, mutate } = userList({
     page,
-    registerType: typeValue,
+    // registerType: typeValue,
     // regCategoryType.TYPE_TRANS_EDU && regCategoryType.TYPE_TRAFFIC_SAFETY_EDU,
-    // regCategoryType.TYPE_TRANS_EDU,
+    registerType: regCategoryType.TYPE_TRANS_EDU,
   });
   const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
@@ -130,7 +130,7 @@ export function UserManagement() {
     // <div>
     // <Box className={styles.globalContainer}>
     <Box>
-      <Typography fontSize={30} fontWeight="bold">
+      {/* <Typography fontSize={30} fontWeight="bold">
         회원구분
       </Typography>
       <RadioGroup row sx={{ mb: 6 }}>
@@ -143,7 +143,7 @@ export function UserManagement() {
             onClick={() => setTypeValue(value)}
           />
         ))}
-      </RadioGroup>
+      </RadioGroup> */}
       <UserTypo variant="h5">회원 목록</UserTypo>
       <Table
         pagination={true}

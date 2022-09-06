@@ -33,4 +33,4 @@ export { SurveyModify } from './SurveyMenagement/SurveyModify';
 export { QnaManagement } from './QnaManagement/QnaManagement';
 export { QnaAnswer } from './QnaManagement/QnaAnswer';
 
-export {CourseInfo} from './CourseInfo/CourseInfo'
+export { CourseInfo } from './CourseInfo/CourseInfo';

@@ -1,15 +1,25 @@
 import styled from '@emotion/styled';
+import { useDialog } from '@hooks/useDialog';
 import { Box, Button, Container } from '@mui/material';
 import Image from 'next/image';
 
 export default function LessonHeader() {
-  const onCloseWindow = () => {
+  const dialog = useDialog();
+  const onCloseWindow = async () => {
+    const isConfirm = await dialog({
+      title: '학습종료하기',
+      description: '정말로 학습을 종료하시겠습니까?',
+      variant: 'confirm',
+      confirmText: '확인',
+      cancelText: '취소',
+    });
+    if (!isConfirm) return;
     window.close();
   };
 
   return (
     <HeaderWrap>
-      <HeaderContainer>
+      <HeaderContainer maxWidth="xl">
         <Box className="lesson-header-img">
           <Image
             src="/assets/images/cttsLogo.png"
@@ -34,7 +44,7 @@ const HeaderContainer = styled(Container)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 8px;
+  padding: 12px 1rem;
   .lesson-header-img {
     position: relative;
     display: flex;

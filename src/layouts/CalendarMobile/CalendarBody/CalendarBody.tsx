@@ -124,19 +124,42 @@ export function CalendarBody({
               ? true
               : false
             : false;
+        //오늘이 교육의 마지막날짜일경우
+        const TodayDate = new Date();
+        //마지막 교육일의 이전날짜
+        const prevDate = new Date(
+          new Date(item.studyEndDate.replaceAll('-', '/')).getTime()
+        );
+        //마지막 교육일의 다음날짜
+        const nextDate = new Date(
+          new Date(item.studyEndDate.replaceAll('-', '/')).getTime()
+        );
+        prevDate.setHours(0);
+        prevDate.setMinutes(0);
+        prevDate.setSeconds(0);
+        nextDate.setHours(24);
+        nextDate.setMinutes(0);
+        nextDate.setSeconds(0);
+        const isTodayEduEnd =
+          prevDate.getTime() < TodayDate.getTime() &&
+          TodayDate.getTime() < nextDate.getTime();
 
         return {
           ...item,
           title: prevSchedule
             ? isReceive
               ? isFullPeople
-                ? '마감'
+                ? '접수마감'
+                : //오늘이 교육의 마지막날일경우
+                isTodayEduEnd
+                ? '접수마감'
                 : '접수중'
               : '준비중'
-            : '마감', //말
+            : '교육종료', //말
           isReceive,
           prevSchedule,
           isFullPeople,
+          isTodayEduEnd,
           step: item.step, //기수
           lessonTime: item.course.lessonTime,
           mediaType: '동영상(VOD)',
@@ -167,11 +190,13 @@ export function CalendarBody({
     item: CourseClassRes,
     prevSchedule: boolean,
     isReceive: boolean,
-    isFullPeople: boolean
+    isFullPeople: boolean,
+    isTodayEduEnd: boolean
   ) => {
     if (!prevSchedule || isFullPeople) return window.alert('마감된 교육입니다!');
     if (isFullPeople) return window.alert('접수마감된 교육입니다.');
     if (!isReceive) return window.alert('신청기간이 아닙니다!');
+    if (isTodayEduEnd) return window.alert('접수마감 되었습니다!');
     setModalInfo({
       seq: item.seq,
       step: item.step,
@@ -213,11 +238,12 @@ export function CalendarBody({
                       child,
                       child.prevSchedule,
                       child.isReceive,
-                      child.isFullPeople
+                      child.isFullPeople,
+                      child.isTodayEduEnd
                     )
                   }
                 >
-                  {/* <CalendarItemHeader
+                  <CalendarItemHeader
                     sx={{
                       background: child.isReceive
                         ? child.isFullPeople
@@ -227,7 +253,7 @@ export function CalendarBody({
                     }}
                   >
                     {child.title}
-                  </CalendarItemHeader> */}
+                  </CalendarItemHeader>
                   <Box mt={1}>
                     [{child.courseCategoryType.ko}]{' '}
                     {child.courseSubCategoryType.type === courseSubCategoryType.BUS

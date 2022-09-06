@@ -28,6 +28,7 @@ class MyDocument extends Document {
         {/* <Head>{redirectIEToEdge()}</Head> */}
         <Head>
           <title>충남교통연수원</title>
+          <link rel="shortcut icon" href="/favicon.ico" />
           {/* <style id="jss-server-side">${css}</style> */}
           {redirectIEToEdge()}
         </Head>

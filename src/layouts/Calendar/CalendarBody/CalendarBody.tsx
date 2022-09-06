@@ -108,13 +108,16 @@ export function CalendarBody({
       item.limitPeople !== 0 && item.enrolledPeopleCnt === item.limitPeople;
 
     //마감여부
-    //이전 날짜일경우
+    //이전 날짜일경우(마지막 날짜보다 현재날짜가 작을경우 true)
     const prevSchedule =
       new Date(item.requestEndDate.replaceAll('-', '/')).getTime() -
         new Date().getTime() >=
       0
         ? true
         : false;
+
+    //이후 날짜일경우
+    const nextSchedule = new Date().getTime() > new Date(item.eduEnd).getTime();
 
     //이후 날짜일 경우.
     const isReceive =
@@ -128,18 +131,44 @@ export function CalendarBody({
           : false
         : false;
 
+    //오늘이 교육의 마지막날짜일경우
+    const TodayDate = new Date();
+    //마지막 교육일의 이전날짜
+    const prevDate = new Date(new Date(item.studyEndDate.replaceAll('-', '/')).getTime());
+    //마지막 교육일의 다음날짜
+    const nextDate = new Date(new Date(item.studyEndDate.replaceAll('-', '/')).getTime());
+    prevDate.setHours(0);
+    prevDate.setMinutes(0);
+    prevDate.setSeconds(0);
+    nextDate.setHours(24);
+    nextDate.setMinutes(0);
+    nextDate.setSeconds(0);
+    const isTodayEduEnd =
+      prevDate.getTime() < TodayDate.getTime() &&
+      TodayDate.getTime() < nextDate.getTime();
+    // 오늘이 교육날짜 이후라면(해당내용은 위에 정의되어있음. 하기의 코드와 같이 짧게 리팩토링 필요)
+    const isAfterEndEdu = nextDate.getTime() < TodayDate.getTime();
+
+    //아래 삼항연산자는 리팩토링 필요가 있음.
     return {
       ...item,
+      //신청지난 스케쥴
       title: prevSchedule
-        ? item.enableToEnrollYn === YN.YES
-          ? isFullPeople
-            ? '마감'
+        ? //수강가능기간 여부(지난 스케쥴 여부도 있음)
+          item.enableToEnrollYn === YN.YES
+          ? //정원이 찼는지 여부
+            isFullPeople
+            ? '접수마감'
+            : //오늘이 교육의 마지막날일경우
+            isTodayEduEnd
+            ? '접수마감'
             : '접수중'
           : '준비중'
-        : '마감', //말
+        : '교육종료', //말
       isReceive,
       isFullPeople,
       prevSchedule,
+      isTodayEduEnd,
       step: item.step, //기수
       lessonTime: item.course.lessonTime,
       mediaType: '동영상(VOD)',
@@ -217,6 +246,8 @@ export function CalendarBody({
             return window.alert('접수마감된 교육입니다.');
           if (!e.event._def.extendedProps.isReceive)
             return window.alert('신청기간이 아닙니다!');
+          if (e.event._def.extendedProps.isTodayEduEnd)
+            return window.alert('접수마감 되었습니다!');
           setModalInfo({
             seq: extendedProps.seq as number,
             step: extendedProps.step as number,
@@ -413,7 +444,7 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
           }}
           fontWeight="bold"
         >
-          {/* [{title}]&nbsp; */}
+          [{title}]&nbsp;
         </Box>
         <Box>
           {/* {extendedProps.step}기 {extendedProps.courseCategoryType.ko}교육 */}

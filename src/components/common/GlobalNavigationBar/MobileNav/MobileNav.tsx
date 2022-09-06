@@ -241,7 +241,7 @@ const Header = styled.header`
 const MobileContentContainer = styled.div`
   display: flex;
   align-items: center;
-  width: calc(100% - 48px);
+  width: calc(100% - 32px);
   margin: auto;
   height: 72px;
   justify-content: space-between;

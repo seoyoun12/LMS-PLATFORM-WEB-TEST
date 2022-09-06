@@ -11,6 +11,9 @@ export function LearningStatus() {
   const { courseUserSeq } = router.query;
   const { data, error } = detailCourseInfo(Number(courseUserSeq));
 
+  // 평가여부, 제출자 및 첨삭IP 제외
+  // 총점 Row 제외
+
   return (
     <LearningStatusBox>
       <TableHeadFull colSpan={4} sx={{ display: 'table', width: '100%' }}>
@@ -26,8 +29,8 @@ export function LearningStatus() {
           <TableLineCell>2</TableLineCell>
           <TableLineCell>2</TableLineCell>
           <TableLineCell>2</TableLineCell>
-          <TableLineCell>2</TableLineCell>
-          <TableLineCell>2</TableLineCell>
+          {/* <TableLineCell>2</TableLineCell> */}
+          {/* <TableLineCell>2</TableLineCell> */}
         </TableRow>
       </TableBody>
 
@@ -41,8 +44,8 @@ export function LearningStatus() {
           <TableLineCell>2</TableLineCell>
           <TableLineCell>2</TableLineCell>
           <TableLineCell>2</TableLineCell>
-          <TableLineCell>2</TableLineCell>
-          <TableLineCell>2</TableLineCell>
+          {/* <TableLineCell>2</TableLineCell>
+          <TableLineCell>2</TableLineCell> */}
         </TableRow>
       </TableBody>
 
@@ -56,8 +59,8 @@ export function LearningStatus() {
           <TableLineCell>2</TableLineCell>
           <TableLineCell>2</TableLineCell>
           <TableLineCell>2</TableLineCell>
-          <TableLineCell>2</TableLineCell>
-          <TableLineCell>2</TableLineCell>
+          {/* <TableLineCell>2</TableLineCell>
+          <TableLineCell>2</TableLineCell> */}
         </TableRow>
       </TableBody>
 
@@ -71,8 +74,8 @@ export function LearningStatus() {
           <TableLineCell>2</TableLineCell>
           <TableLineCell>2</TableLineCell>
           <TableLineCell>2</TableLineCell>
-          <TableLineCell>2</TableLineCell>
-          <TableLineCell>2</TableLineCell>
+          {/* <TableLineCell>2</TableLineCell>
+          <TableLineCell>2</TableLineCell> */}
         </TableRow>
       </TableBody>
     </LearningStatusBox>

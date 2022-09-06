@@ -11,6 +11,8 @@ export function ProgressStatus() {
   const { courseUserSeq } = router.query;
   const { data, error } = detailCourseInfo(Number(courseUserSeq));
 
+  // 인정시간 필요없음
+
   return (
     <ProgressStatusBox>
       <TableHeadFull colSpan={4} sx={{ display: 'table', width: '100%' }}>

@@ -73,11 +73,19 @@ export default function Steb2() {
     } = watch();
     if (!enrollInfo || !enrollInfo.seq)
       return window.alert('오류입니다! 교육일정으로 돌아가서 다시 신청해주세요!');
+    if (String(rest.businessType) === '' || !rest.businessType)
+      return window.alert('운수구분을 선택해주세요!');
+    if (String(rest.businessSubType) === '' || !rest.businessSubType)
+      return window.alert('업종구분을 선택해주세요!');
+    if (rest.businessName === '' || !rest.businessName)
+      return window.alert('회사명을 입력해주세요!');
     if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7)
       return window.alert('주민번호를 모두 입력해주세요!');
     // if (!enrollInfo || !enrollInfo.seq) return window.alert('기수를 선택해주세요!');
     if (!hideCarNumber && !carNumberRegex.test(rest.carNumber))
       return window.alert('올바른 형식의 차량번호를 입력해주세요!');
+    if (rest.carRegisteredRegion === '' || !rest.carRegisteredRegion)
+      return window.alert('차량등록지를 선택해주세요!');
 
     if (!phoneRegex.test(firstPhone + secondPhone + thirdPhone))
       return window.alert('올바른 형식의 휴대전화를 입력해주세요!');

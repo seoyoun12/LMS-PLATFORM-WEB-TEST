@@ -21,6 +21,7 @@ import LessonContentVideo from './LessonContentVideo';
 import LessonContentSurvey from './LessonContentSurvey';
 import { LessonContentType, LESSON_CONTENT_TYPES } from './Lesson.types';
 import { useRouter } from 'next/router';
+import LessonHeader from './LessonHeader';
 
 export interface LessonProps {
   courseUserSeq: number;
@@ -258,21 +259,24 @@ export default function Lesson(props: LessonProps) {
   // 렌더링.
 
   return (
-    <LessonContainer maxWidth="xl">
-      <LessonContentWrapper>{Content}</LessonContentWrapper>
-      <LessonSidebar
-        courseUserSeq={course.courseUserSeq}
-        courseTotalProgress={courseTotalProgress}
-        courseProgresses={course.courseProgressResponseDtoList}
-        courseModules={courseModules}
-        courseLessonsCompleted={courseLessonsCompleted}
-        courseModulesCompleted={courseModulesCompleted}
-        courselessons={course.lessons}
-        courseLessonSeq={props.contentType === 'LESSON' ? props.contentSeq : null}
-      />
-      {DialogFirst}
-      {DialogNext}
-    </LessonContainer>
+    <>
+      <LessonHeader />
+      <LessonContainer maxWidth="xl">
+        <LessonContentWrapper>{Content}</LessonContentWrapper>
+        <LessonSidebar
+          courseUserSeq={course.courseUserSeq}
+          courseTotalProgress={courseTotalProgress}
+          courseProgresses={course.courseProgressResponseDtoList}
+          courseModules={courseModules}
+          courseLessonsCompleted={courseLessonsCompleted}
+          courseModulesCompleted={courseModulesCompleted}
+          courselessons={course.lessons}
+          courseLessonSeq={props.contentType === 'LESSON' ? props.contentSeq : null}
+          />
+        {DialogFirst}
+        {DialogNext}
+      </LessonContainer>
+    </>
   );
 }
 

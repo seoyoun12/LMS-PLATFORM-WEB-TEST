@@ -102,7 +102,6 @@ export function EnrollHistoryModal({
             dateFormat(new Date(), 'yyyy-mm-dd')
           )
         );
-        // setIsStudyPeriod(false);
         setPhone('phone1', data.phone.slice(0, 3));
         setPhone('phone2', data.phone.slice(3, 7));
         setPhone('phone3', data.phone.slice(7, 11));

@@ -54,7 +54,6 @@ export function categoryBoardList({
 }) {
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<CategoryBoard[]>>>(
     [
-      // `/post/adm`, {
       `/post/adm`,
       {
         params: { page, elementCnt, boardType },

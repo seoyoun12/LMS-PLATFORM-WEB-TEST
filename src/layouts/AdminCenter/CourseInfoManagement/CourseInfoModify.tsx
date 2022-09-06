@@ -14,5 +14,5 @@ export function CourseInfoModify() {
   console.log('courseUserSeq:', courseUserSeq);
   console.log('data:', data);
 
-  return <div>고양시는 고양고양</div>;
+  return <div>추가작업 진행중입니다.</div>;
 }

@@ -1,12 +1,12 @@
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { PaginationResult } from 'types/fetch';
-import { regCategoryType, User, UserInput } from '@common/api/user';
+import { registerType, User, UserInput } from '@common/api/user';
 
 export function userList({ page, elementCnt, registerType }: {
   page: number,
   elementCnt?: number,
-  registerType: regCategoryType
+  registerType: registerType
 }) {
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<User[]>>>([
     `/user/adm`, {

@@ -29,11 +29,11 @@ const userConfig = [
   { label: '핸드폰가입', value: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU },
 ];
 
-// const radioConfig = [
-//   // { name: '전체', value: '' }, // Type이 required
-//   { name: '저상/운수', value: registerType.TYPE_TRANS_EDU },
-//   { name: '도민', value: registerType.TYPE_TRAFFIC_SAFETY_EDU },
-// ];
+const radioConfig = [
+  // { name: '전체', value: '' }, // Type이 required
+  { name: '저상/운수', value: registerType.TYPE_TRANS_EDU },
+  { name: '관리자', value: registerType.TYPE_TRAFFIC_SAFETY_EDU }, // 차후 도민
+];
 
 const headRows = [
   { name: '회원번호' },
@@ -41,7 +41,6 @@ const headRows = [
   { name: '이름' },
   // { name: '성별' },
   { name: '생년월일' },
-
   // { name: '계정생성일' },
   { name: '핸드폰번호' },
   { name: '문자수신동의' },
@@ -60,12 +59,12 @@ export function UserManagement() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const [page, setPage] = useState(0);
-  const [typeValue, setTypeValue] = useState(regCategoryType.TYPE_TRANS_EDU);
+  const [typeValue, setTypeValue] = useState(registerType.TYPE_TRANS_EDU);
   const { data, error, mutate } = userList({
     page,
-    // registerType: typeValue,
+    registerType: typeValue,
     // regCategoryType.TYPE_TRANS_EDU && regCategoryType.TYPE_TRAFFIC_SAFETY_EDU,
-    registerType: regCategoryType.TYPE_TRANS_EDU,
+    // registerType: regCategoryType.TYPE_TRANS_EDU,
   });
   const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
@@ -130,11 +129,11 @@ export function UserManagement() {
     // <div>
     // <Box className={styles.globalContainer}>
     <Box>
-      {/* <Typography fontSize={30} fontWeight="bold">
+      <Typography fontSize={30} fontWeight="bold">
         회원구분
       </Typography>
       <RadioGroup row sx={{ mb: 6 }}>
-        {radioConfig.map(({ name, value }: { name: string; value: string }) => (
+        {radioConfig.map(({ name, value }) => (
           <FormControlLabel
             key={name}
             label={name}
@@ -143,7 +142,7 @@ export function UserManagement() {
             onClick={() => setTypeValue(value)}
           />
         ))}
-      </RadioGroup> */}
+      </RadioGroup>
       <UserTypo variant="h5">회원 목록</UserTypo>
       <Table
         pagination={true}

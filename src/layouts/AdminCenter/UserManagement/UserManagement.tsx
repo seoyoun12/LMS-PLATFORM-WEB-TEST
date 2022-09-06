@@ -25,6 +25,8 @@ const headRows = [
   { name: '이름' },
   // { name: '성별' },
   { name: '생년월일' },
+  { name: '생년월일' },
+
   // { name: '계정생성일' },
   { name: '핸드폰번호' },
   { name: '문자수신동의' },
@@ -43,9 +45,15 @@ export function UserManagement() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const [page, setPage] = useState(0);
-  const { data, error, mutate } = userList({ page });
+  const { data, error, mutate } = userList({
+    page,
+    registerType: regCategoryType.TYPE_TRANS_EDU,
+  });
   const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
+
+  const date = new Date();
+  const year = date.getFullYear();
 
   const onClickRemoveUser = async (userSeq: number) => {
     try {
@@ -132,16 +140,20 @@ export function UserManagement() {
                   : user.username}
               </UserTableCell>
               <UserTableCell>{user.name}</UserTableCell>
-              {/* <UserTableCell>{user.gender}</UserTableCell> */}
+              <UserTableCell>
+                {Number(user.birth.split('-', 1)) < 1000
+                  ? Number(user.birth.slice(0, 2)) + Number(2000) > year
+                    ? 19 + user.birth
+                    : 20 + user.birth
+                  : user.birth}
+              </UserTableCell>
+              <UserTableCell>{user.birth}</UserTableCell>
               <UserTableCell>{dateFormat(user.birth, 'yyyy-mm-dd')}</UserTableCell>
-              {/* <UserTableCell>{dateFormat(user.createdDtime, 'isoDate')}</UserTableCell> */}
               <UserTableCell>{user.phone}</UserTableCell>
               <UserTableCell>{user.smsYn}</UserTableCell>
               <UserTableCell>{user.emailYn}</UserTableCell>
               <UserTableCell>{user.loginFailedCount}</UserTableCell>
               <UserTableCell>{user.failedYn}</UserTableCell>
-              {/* <UserTableCell>{dateFormat(user.modifiedDtime, 'isoDate')}</UserTableCell> */}
-              {/* <UserTableCell>{dateFormat(user.lastPwUpdDtime, 'isoDate')}</UserTableCell> */}
               <UserTableCell>
                 {userConfig.filter(item => item.value === user.regCategory)[0].label}{' '}
               </UserTableCell>

@@ -294,6 +294,7 @@ export interface LearningStatusRes {
   studyStartDate: string;
   studyEndDate: string;
   thumbnailImage: string;
+  startLeftDays: number;
   leftDays: number;
   progress: number;
   firstLessonSeq: number;

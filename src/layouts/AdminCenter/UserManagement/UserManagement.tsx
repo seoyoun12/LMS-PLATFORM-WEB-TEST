@@ -45,7 +45,10 @@ export function UserManagement() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const [page, setPage] = useState(0);
-  const { data, error, mutate } = userList({ page });
+  const { data, error, mutate } = userList({
+    page,
+    registerType: regCategoryType.TYPE_TRANS_EDU,
+  });
   const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
   const date = new Date();

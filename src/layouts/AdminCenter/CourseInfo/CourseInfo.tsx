@@ -41,6 +41,8 @@ export function CourseInfo() {
   const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
 
+  console.log('학습현황 : ', data);
+
   const onClickRemoveUser = async (userSeq: number) => {
     try {
       const dialogConfirmed = await dialog({
@@ -70,6 +72,7 @@ export function CourseInfo() {
     setopenUserModifyModal(true);
   };
 
+  // Pagination
   useEffect(() => {
     const { page } = router.query;
     setPage(!isNaN(Number(page)) ? Number(page) : 0);
@@ -101,8 +104,8 @@ export function CourseInfo() {
       <UserTypo variant="h5">전체 수강생 학습현황</UserTypo>
       <Table
         pagination={true}
-        totalNum={data.totalElements}
-        page={data.number}
+        totalNum={data?.totalElements}
+        page={data?.number}
         onChangePage={onChangePage}
         size="small"
       >

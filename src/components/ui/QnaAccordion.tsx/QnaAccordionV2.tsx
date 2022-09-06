@@ -87,7 +87,7 @@ export function QnaAccordionV2({ loadedItem }: { loadedItem: Qna[] }) {
                     {/* <Typography className="QnaBoardTwo" width="55%">
                     {title}
                   </Typography> */}
-                    <TitleBox className="QnaBoardTwo">{title}</TitleBox>
+                    <TitleBox className="QnaBoardTwo">{title.slice(0, 16)}</TitleBox>
                     <StatusBox className="QnaBoardThird">
                       <Chip
                         sx={{ width: '80px', marginLeft: '10px', marginBottom: '3px' }}

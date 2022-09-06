@@ -69,7 +69,7 @@ export function BoardAccordionV2({
           >
             <BoardBox>
               <BoardSeqBox textAlign="center">{seq}</BoardSeqBox>
-              <BoardSeqTitleBox paddingLeft="1rem">{name}</BoardSeqTitleBox>
+              <BoardSeqTitleBox paddingLeft="1rem">{name.slice(0, 16)}</BoardSeqTitleBox>
               <BoardCreatedBox textAlign="center">{date.toString()}</BoardCreatedBox>
             </BoardBox>
           </AccordionSummary>

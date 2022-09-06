@@ -47,6 +47,10 @@ export function UserManagement() {
   const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
 
+  console.log('페이지 : ', page);
+  console.log('데이터 : ', data);
+  console.log('총페이지 : ', data?.totalPages);
+
   const onClickRemoveUser = async (userSeq: number) => {
     try {
       const dialogConfirmed = await dialog({

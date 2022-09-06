@@ -19,7 +19,7 @@ interface Props {
   lesson: LessonDetailClientResponseDto | null;
   lessonCompleted?: boolean;
   loading?: boolean;
-  onComplete?: () => void;
+  onComplete?: () => Promise<boolean>;
 }
 
 export default function LessonContentVideo(props: Props) {
@@ -109,14 +109,19 @@ export default function LessonContentVideo(props: Props) {
                 lessonSeq: lessonSeq,
                 studyLastTime: currentSecond,
               })
-            )
-            .then(v => {
-              return ApiClient.courseProgress
-                .updateAllCourseProgressUsingPut(courseUserSeq)
-                .then(() => v.data.data.completeYn === 'Y' && props.onComplete());
-            });
-        }
+          )
+          .then((v) => {
+
+            return ApiClient.courseProgress
+              .updateAllCourseProgressUsingPut(courseUserSeq)
+              .then(() => v.data.data.completeYn === "Y" && props.onComplete())
+              .then((b) => b && videoPlayer.current.pause());
+            
+          });
+
       }
+
+    }
 
       apiTimer.current = null;
       apiSeconds.current = 0;

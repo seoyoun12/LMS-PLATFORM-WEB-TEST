@@ -19,7 +19,8 @@ import ApiClient from '@common/api/ApiClient';
 import LessonSidebar from './LessonSidebar';
 import LessonContentVideo from './LessonContentVideo';
 import LessonContentSurvey from './LessonContentSurvey';
-import { LessonContentType } from './Lesson.types';
+import { LessonContentType, LESSON_CONTENT_TYPES } from './Lesson.types';
+import { useRouter } from 'next/router';
 
 export interface LessonProps {
   courseUserSeq: number;
@@ -28,12 +29,16 @@ export interface LessonProps {
 }
 
 export default function Lesson(props: LessonProps) {
+
+  const router = useRouter();
+
   // 스테이트.
 
   const [loading, setLoading] = React.useState<boolean>(true);
-  const [dialog, setDialog] = React.useState<'FIRST' | null>('FIRST');
+  const [dialog, setDialog] = React.useState<'FIRST' | "NEXT" | null>('FIRST');
 
   const [course, setCourse] = React.useState<CourseDetailClientResponseDto | null>(null);
+  const [courseTotalProgress, setCourseTotalProgress] = React.useState<number | null>(null);
   const [coursePlayFirst, setCoursePlayFirst] = React.useState<boolean>(true);
   const [courseLessonsCompleted, setCourseLessonsCompleted] = React.useState<boolean[]>(
     []
@@ -63,8 +68,9 @@ export default function Lesson(props: LessonProps) {
       .findCourseUsingGet(props.courseUserSeq)
       .then(async res => {
         const course = res.data.data;
-        setCourse(course);
 
+        setCourse(course);
+        setCourseTotalProgress(course.totalProgress);
         setCourseLessonsCompleted(course.lessons.map(v => v.completedYn === 'Y'));
         setCourseModulesCompleted([]);
 
@@ -130,7 +136,9 @@ export default function Lesson(props: LessonProps) {
 
   // 컴포넌트.
 
-  let Content: React.ReactElement;
+  let Content: React.ReactElement = <React.Fragment/>;
+  let DialogFirst: React.ReactElement = <React.Fragment/>;
+  let DialogNext: React.ReactElement = <React.Fragment/>;
 
   switch (props.contentType) {
     case 'LESSON': {
@@ -151,12 +159,74 @@ export default function Lesson(props: LessonProps) {
           courseProgress={courseProgress}
           lesson={lesson}
           lessonCompleted={!!courseLessonsCompleted[lessonIndex]}
-          onComplete={() => {
-            const newCourseLessonsCompleted = [...courseLessonsCompleted];
-            newCourseLessonsCompleted[lessonIndex] = true;
-            setCourseLessonsCompleted(newCourseLessonsCompleted);
-          }}
+          onComplete={() => 
+            ApiClient.course
+            .findCourseUsingGet(course.courseUserSeq)
+            .then((res) => {
+              const course = res.data.data;
+              
+              const newCourseLessonsCompleted = [...courseLessonsCompleted];
+              newCourseLessonsCompleted[lessonIndex] = true;
+
+              setCourseLessonsCompleted(newCourseLessonsCompleted);
+              setCourseTotalProgress(course.totalProgress);
+
+              if (course.lessons[lessonIndex + 1]) setDialog("NEXT");
+
+              return true;
+            })
+          }
         />
+      );
+
+      DialogFirst = (
+        <Dialog
+          open={dialog === 'FIRST'}
+          onClose={() => {
+            setDialog(null);
+            setCoursePlayFirst(false);
+          }}
+        >
+          <DialogContent>
+            <DialogContentText>
+              운전 중 교육 진행 시, 안전을 위해 교육이 중단 됩니다.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                setDialog(null);
+                setCoursePlayFirst(false);
+              }}
+            >
+              확인
+            </Button>
+          </DialogActions>
+        </Dialog>
+      );
+
+      DialogNext = (
+        <Dialog
+          open={dialog === 'NEXT' && lessonIndex >= 0}
+          onClose={() => setDialog(null)}
+        >
+          <DialogContent>
+            <DialogContentText>
+              {lessonIndex + 1}차시 수강이 완료되었습니다. 다음 차시를 시청 하시겠습니까?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                setDialog(null);
+                router.push(`/course/${course.courseUserSeq}/${LESSON_CONTENT_TYPES[0].toLowerCase()}/${course.lessons[lessonIndex + 1].seq}`);
+              }}
+            >
+              예
+            </Button>
+            <Button onClick={() => setDialog(null)}>아니요</Button>
+          </DialogActions>
+        </Dialog>
       );
 
       break;
@@ -185,34 +255,6 @@ export default function Lesson(props: LessonProps) {
     }
   }
 
-  // 컴포넌트.
-
-  const DialogFirst = (
-    <Dialog
-      open={dialog === 'FIRST' && props.contentType === 'LESSON'}
-      onClose={() => {
-        setDialog(null);
-        setCoursePlayFirst(false);
-      }}
-    >
-      <DialogContent>
-        <DialogContentText>
-          운전 중 교육 진행 시, 안전을 위해 교육이 중단 됩니다.
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button
-          onClick={() => {
-            setDialog(null);
-            setCoursePlayFirst(false);
-          }}
-        >
-          확인
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-
   // 렌더링.
 
   return (
@@ -220,7 +262,7 @@ export default function Lesson(props: LessonProps) {
       <LessonContentWrapper>{Content}</LessonContentWrapper>
       <LessonSidebar
         courseUserSeq={course.courseUserSeq}
-        courseTotalProgress={course.totalProgress}
+        courseTotalProgress={courseTotalProgress}
         courseProgresses={course.courseProgressResponseDtoList}
         courseModules={courseModules}
         courseLessonsCompleted={courseLessonsCompleted}
@@ -229,6 +271,7 @@ export default function Lesson(props: LessonProps) {
         courseLessonSeq={props.contentType === 'LESSON' ? props.contentSeq : null}
       />
       {DialogFirst}
+      {DialogNext}
     </LessonContainer>
   );
 }

@@ -1,6 +1,6 @@
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
-import { FetchPaginationResponse } from 'types/fetch';
+import { FetchPaginationResponse, PaginationResult } from 'types/fetch';
 import { CourseInput, CourseRes } from '@common/api/course';
 import { CourseDetailClientResponseDto, CourseModuleFindResponseDto, Pageable , } from '../Api';
 import { YN } from '@common/constant';
@@ -22,11 +22,20 @@ interface LearningInfoRes {
   displayTotalProgress:string;
 }
 
-export function useLearningInfo({page}:{page:number}){
-  const {data , error , mutate} = useSWR<FetchPaginationResponse<LearningInfoRes[]>>([`/course/adm/learning-info/` ,
-  {
-    params: { page },
-  },] , GET)
+export function useLearningInfo({
+  page
+}:{
+  page:number
+}){
+  const {data , error , mutate} = useSWR<SWRResponse<PaginationResult<LearningInfoRes[]>>>(
+    [
+      `/course/adm/learning-info/` ,
+      {
+        params: { page },
+      },
+  ],
+  GET
+);
   return {
     data:data?.data,
     error,

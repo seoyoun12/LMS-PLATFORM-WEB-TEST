@@ -107,6 +107,11 @@ export enum regCategoryType {
   TYPE_TRAFFIC_SAFETY_EDU = 'TYPE_TRAFFIC_SAFETY_EDU',
 }
 
+export enum registerType {
+  TYPE_TRANS_EDU = 'TYPE_TRANS_EDU',
+  TYPE_TRAFFIC_SAFETY_EDU = 'TYPE_TRAFFIC_SAFETY_EDU',
+}
+
 export interface User {
   birth: string;
   createdDtime: string;
@@ -138,6 +143,7 @@ export interface UserInput {
   birth?: string;
   password?: string;
 }
+
 
 export async function getMyUser(): Promise<{ data: MyUser }> {
   //안쓰는 친구

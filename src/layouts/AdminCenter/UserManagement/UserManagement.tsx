@@ -1,4 +1,14 @@
-import { Container, TableBody, TableHead, Typography, Button, Box } from '@mui/material';
+import {
+  Container,
+  TableBody,
+  TableHead,
+  Typography,
+  Button,
+  Box,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from '@mui/material';
 import styles from '@styles/common.module.scss';
 import { Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
@@ -12,11 +22,17 @@ import dateFormat from 'dateformat';
 import { UserModifyModal } from '@components/admin-center/UserModifyModal';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
-import { regCategoryType } from '@common/api/user';
+import { regCategoryType, registerType } from '@common/api/user';
 
 const userConfig = [
   { label: '실명가입', value: regCategoryType.TYPE_TRANS_EDU },
   { label: '핸드폰가입', value: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU },
+];
+
+const radioConfig = [
+  // { name: '전체', value: '' }, // Type이 required
+  { name: '저상/운수', value: registerType.TYPE_TRANS_EDU },
+  { name: '도민', value: registerType.TYPE_TRAFFIC_SAFETY_EDU },
 ];
 
 const headRows = [
@@ -24,7 +40,6 @@ const headRows = [
   { name: '아이디' },
   { name: '이름' },
   // { name: '성별' },
-  { name: '생년월일' },
   { name: '생년월일' },
 
   // { name: '계정생성일' },
@@ -45,9 +60,12 @@ export function UserManagement() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const [page, setPage] = useState(0);
+  const [typeValue, setTypeValue] = useState(regCategoryType.TYPE_TRANS_EDU);
   const { data, error, mutate } = userList({
     page,
-    registerType: regCategoryType.TYPE_TRANS_EDU,
+    registerType: typeValue,
+    // regCategoryType.TYPE_TRANS_EDU && regCategoryType.TYPE_TRAFFIC_SAFETY_EDU,
+    // regCategoryType.TYPE_TRANS_EDU,
   });
   const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
@@ -112,6 +130,20 @@ export function UserManagement() {
     // <div>
     // <Box className={styles.globalContainer}>
     <Box>
+      <Typography fontSize={30} fontWeight="bold">
+        회원구분
+      </Typography>
+      <RadioGroup row sx={{ mb: 6 }}>
+        {radioConfig.map(({ name, value }: { name: string; value: string }) => (
+          <FormControlLabel
+            key={name}
+            label={name}
+            value={value}
+            control={<Radio checked={typeValue == value} />}
+            onClick={() => setTypeValue(value)}
+          />
+        ))}
+      </RadioGroup>
       <UserTypo variant="h5">회원 목록</UserTypo>
       <Table
         pagination={true}
@@ -141,14 +173,12 @@ export function UserManagement() {
               </UserTableCell>
               <UserTableCell>{user.name}</UserTableCell>
               <UserTableCell>
-                {Number(user.birth.split('-', 1)) < 1000
-                  ? Number(user.birth.slice(0, 2)) + Number(2000) > year
+                {Number(user.birth?.split('-', 1)) < 1000
+                  ? Number(user.birth?.slice(0, 2)) + Number(2000) > year
                     ? 19 + user.birth
                     : 20 + user.birth
                   : user.birth}
               </UserTableCell>
-              <UserTableCell>{user.birth}</UserTableCell>
-              <UserTableCell>{dateFormat(user.birth, 'yyyy-mm-dd')}</UserTableCell>
               <UserTableCell>{user.phone}</UserTableCell>
               <UserTableCell>{user.smsYn}</UserTableCell>
               <UserTableCell>{user.emailYn}</UserTableCell>

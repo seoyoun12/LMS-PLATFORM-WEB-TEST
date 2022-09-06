@@ -155,11 +155,18 @@ export function MeDesktop() {
                         <ContentCardV2
                           image={res.thumbnailImage}
                           title={res.courseTitle}
-                          content1={'지금 바로 수강하기!'}
+                          content1={
+                            res.progress > 0
+                              ? `지금 바로 학습하기!`
+                              : res.startLeftDays <= 0
+                              ? `지금 바로 학습하기!`
+                              : `교육시작까지 ${res.startLeftDays}일 남음`
+                          }
                           content2={
-                            res.startLeftDays < 0
-                              ? `지금바로 학습하기!(${startDate} ~ ${endDate})`
-                              : `${res.startLeftDays}일 남음(${startDate} ~ ${endDate})`
+                            res.startLeftDays <= 0
+                              ? `현재 진도율${res.progress}% / 교육종료일까지 ${res.leftDays}일 남았습니다.`
+                              : `${startDate} ~ ${endDate}`
+                            // `${res.startLeftDays}일 남음(${startDate} ~ ${endDate})`
                           }
                           // content2={`현재 진도율 ${res.progress}%`}
                         />

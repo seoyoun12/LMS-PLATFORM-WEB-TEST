@@ -67,43 +67,57 @@ export function LearningCourse() {
               fil.progressStatus === ProgressStatus.TYPE_PROGRESSING ||
               fil.progressStatus === ProgressStatus.TYPE_BEFORE
           )
-          .map(item => {
-            const startDate = item.studyStartDate.slice(0, 10);
-            const endDate = item.studyEndDate.slice(0, 10);
+          .map(res => {
+            const startDate = res.studyStartDate.slice(0, 10);
+            const endDate = res.studyEndDate.slice(0, 10);
 
             return (
-              <Grid item xs={1} sm={1} md={1} lg={1} key={item.courseClassSeq}>
-                <Link target="_blank">
-                  <Box
-                    // href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}
-                    onClick={() => onClickEnterCourseLesson(item)}
-                  >
-                    <ContentCardV2
-                      image={item.thumbnailImage}
-                      title={item.courseTitle}
-                      // content1={`${item.leftDays === 0 ? '오늘마감 입니다!' : item.leftDays}`} 토나온다 진짜
-                      // content1={
-                      //   item.progress > 0
-                      //     ? `현재 진도율 ${item.progress}% / 교육종료일까지 ${item.leftDays}일 남았습니다.(${startDate}~${endDate})`
-                      //     : item.startLeftDays < 0
-                      //     ? `지금바로 학습하기!(${startDate}~${endDate})`
-                      //     : `${item.startLeftDays}일 남음(${startDate}~${endDate})`
-                      // }
-                      content1={
-                        item.progress > 0
-                          ? `현재 진도율 ${item.progress}%`
-                          : item.startLeftDays < 0
-                          ? `지금바로 학습하기!(${startDate} ~ ${endDate})`
-                          : `${item.startLeftDays}일 남음(${startDate} ~ ${endDate})`
-                      }
-                      content2={
-                        item.startLeftDays < 0
-                          ? `교육종료일까지 ${item.leftDays}일 남았습니다.(${startDate} ~ ${endDate})`
-                          : ``
-                      }
-                    />
-                  </Box>
-                </Link>
+              <Grid item xs={1} sm={1} md={1} lg={1} key={res.courseClassSeq}>
+                {/* <Link target="_blank"> */}
+                <Box
+                  // href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}
+                  onClick={() => onClickEnterCourseLesson(res)}
+                >
+                  <ContentCardV2
+                    image={res.thumbnailImage}
+                    title={res.courseTitle}
+                    // content1={`${item.leftDays === 0 ? '오늘마감 입니다!' : item.leftDays}`} 토나온다 진짜
+                    // content1={
+                    //   item.progress > 0
+                    //     ? `현재 진도율 ${item.progress}% / 교육종료일까지 ${item.leftDays}일 남았습니다.(${startDate}~${endDate})`
+                    //     : item.startLeftDays < 0
+                    //     ? `지금바로 학습하기!(${startDate}~${endDate})`
+                    //     : `${item.startLeftDays}일 남음(${startDate}~${endDate})`
+                    // }
+
+                    // content1={
+                    //   res.progress > 0
+                    //     ? `현재 진도율 ${res.progress}%`
+                    //     : res.startLeftDays < 0
+                    //     ? `지금바로 학습하기!(${startDate} ~ ${endDate})`
+                    //     : `${res.startLeftDays}일 남음(${startDate} ~ ${endDate})`
+                    // }
+                    content1={
+                      res.progress > 0
+                        ? `지금 바로 학습하기!`
+                        : res.startLeftDays <= 0
+                        ? `지금 바로 학습하기!`
+                        : `교육시작까지 ${res.startLeftDays}일 남음`
+                    }
+                    content2={
+                      // res.startLeftDays <= 0
+                      //   ? `현재 진도율${res.progress}% / 교육종료일까지 ${res.leftDays}일 남았습니다.`
+                      //   : res.startLeftDays <= 0
+                      //   ? `${startDate} ~ ${endDate}`
+                      //   : `${startDate} ~ ${endDate}`
+
+                      res.startLeftDays <= 0
+                        ? `현재 진도율${res.progress}% / 교육종료일까지 ${res.leftDays}일 남았습니다.`
+                        : `${startDate} ~ ${endDate}`
+                    }
+                  />
+                </Box>
+                {/* </Link> */}
               </Grid>
             );
           })}

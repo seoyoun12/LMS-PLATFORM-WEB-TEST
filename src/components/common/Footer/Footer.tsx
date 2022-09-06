@@ -106,6 +106,11 @@ const Footer: FC<Props> = () => {
           </UplineFootConatainer>
 
           <DownLineFootConatainer>
+            <span>
+              <a href={`https://www.ctti.or.kr/`} target="_blank">
+                충청남도교통연수원 바로가기
+              </a>
+            </span>
             <Typography className="boldTypo">
               [32589] 충청남도 공주시 연수원길 83 (금흥동 110-2)
             </Typography>

@@ -60,11 +60,17 @@ export function ContentCardV2({
           {title}
         </Title>
         {/* </CardContent> */}
-        {/* <Typography>{content1}</Typography> */}
-        <Divider sx={{ borderBottom: `1px solid #D4D4D4` }} />
-        {/* <CardContent> */}
         <Typography>{content1}</Typography>
-        <Typography mt={1} mb={2} color="primary.main">
+        {/* <Typography>{content1}</Typography> */}
+        <Divider
+          sx={{
+            borderBottom: `1px solid #D4D4D4`,
+            marginTop: '6px',
+            marginBottom: '4px',
+          }}
+        />
+        {/* <CardContent> */}
+        <Typography mb={2} color="primary.main">
           {content2}
         </Typography>
         {/* </CardContent> */}

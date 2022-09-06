@@ -12,10 +12,10 @@ import dateFormat from 'dateformat';
 import { UserModifyModal } from '@components/admin-center/UserModifyModal';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
-import { regCategoryType } from '@common/api/user';
 import { useLearningInfo } from '@common/api/adm/learningInfo';
 
 const headRows = [
+  { name: '번호' },
   { name: '이름' },
   { name: '아이디' },
   { name: '과정명' },
@@ -27,14 +27,10 @@ const headRows = [
   //   { name: '수료처리' },
 ];
 
-export function CourseInfo() {
+export function CourseInfoManagement() {
   const router = useRouter();
   const [page, setPage] = useState(0);
   const { data, error, mutate } = useLearningInfo({ page });
-
-  console.log('페이지 : ', page);
-  console.log('데이터 : ', data);
-  console.log('총페이지 : ', data?.totalPages);
 
   // Pagination
   useEffect(() => {
@@ -49,6 +45,12 @@ export function CourseInfo() {
         page,
       },
     });
+  };
+
+  // 수정
+  const onClickmodifyCourseInfo = async (seq: number) => {
+    router.push(`/admin-center/course-info/modify/${seq}`);
+    mutate();
   };
 
   if (error) return <div>Error</div>;
@@ -76,7 +78,13 @@ export function CourseInfo() {
 
         <TableBody>
           {data.content.map(user => (
-            <TableRow key={user.username} hover>
+            <TableRow
+              sx={{ cursor: 'pointer' }}
+              key={user.username}
+              hover
+              onClick={() => onClickmodifyCourseInfo(user.courseUserSeq)}
+            >
+              <UserTableCell>{user.courseUserSeq}</UserTableCell>
               <UserTableCell>{user.name}</UserTableCell>
               <UserTableCell>{user.username || '실명계정'}</UserTableCell>
               <UserTableCell>{user.courseName}</UserTableCell>

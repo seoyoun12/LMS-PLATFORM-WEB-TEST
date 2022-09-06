@@ -2,7 +2,7 @@ import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { FetchPaginationResponse, PaginationResult } from 'types/fetch';
 import { CourseInput, CourseRes } from '@common/api/course';
-import { CourseDetailClientResponseDto, CourseModuleFindResponseDto, Pageable , } from '../Api';
+import { CourseDetailClientResponseDto, CourseModuleFindResponseDto, CourseUserMyInfoResponseDto, Pageable, UserCourseInfoDetailCourseInfoDto, UserCourseInfoDetailLearningStatusDto, UserCourseInfoDetailProgressStatusDto , } from '../Api';
 import { YN } from '@common/constant';
 
 
@@ -20,6 +20,12 @@ interface LearningInfoRes {
   username: string ; //아이디
   yearAndStep: string;//기수
   displayTotalProgress:string;
+}
+
+interface DetailCourse {
+  courseInfo? : UserCourseInfoDetailCourseInfoDto;
+  learningStatusList? : UserCourseInfoDetailLearningStatusDto;
+  progressStatusList?: UserCourseInfoDetailProgressStatusDto;
 }
 
 export function useLearningInfo({
@@ -40,6 +46,30 @@ export function useLearningInfo({
 );
   return {
     data:data?.data,
+    error,
+    mutate
+  }
+}
+
+// export function detailCourseInfo({
+//   courseUserSeq
+// } : {
+//   courseUserSeq: number;
+// }) {
+//   const { data, error, mutate } = useSWR<SWRResponse<DetailCourse>>(
+//     courseUserSeq ? [`/user/adm/course-info/detail/${courseUserSeq}`] : null, GET);
+//   return {
+//     data: data?.data,
+//     error,
+//     mutate
+//   }
+// }
+
+export function detailCourseInfo(courseUserSeq: number) {
+  const { data, error, mutate } = useSWR<SWRResponse<DetailCourse>>(
+    courseUserSeq ? [`/user/adm/course-info/detail/${courseUserSeq}`] : null, GET);
+  return {
+    data: data?.data,
     error,
     mutate
   }

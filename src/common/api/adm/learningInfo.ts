@@ -23,15 +23,17 @@ interface LearningInfoRes {
 }
 
 export function useLearningInfo({
-  page
+  page,
+  elementCnt,
 }:{
-  page:number
+  page:number;
+  elementCnt?: number;
 }){
   const {data , error , mutate} = useSWR<SWRResponse<PaginationResult<LearningInfoRes[]>>>(
     [
-      `/course/adm/learning-info/` ,
+      `/course/adm/learning-info/`,
       {
-        params: { page },
+        params: { page, elementCnt },
       },
   ],
   GET

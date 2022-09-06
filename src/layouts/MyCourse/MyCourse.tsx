@@ -92,6 +92,6 @@ const MyCourseSubTitle = styled(Box)`
 `;
 const CourseContainer = styled(Box)`
   max-width: 1200px;
-  padding: 2.5rem 12px 3rem 12px;
+  padding: 2.5rem 16px 3rem 16px;
   margin: auto;
 `;

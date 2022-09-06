@@ -87,7 +87,7 @@ export function EnrollHistory() {
 const EnrollHistoryWrap = styled(Container)`
   margin-top: 2rem;
   margin-bottom: 2rem;
-  padding: 0 12px;
+  padding: 0 16px;
 `;
 
 const MyCourseContainer = styled(Box)`

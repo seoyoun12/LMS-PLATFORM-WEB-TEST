@@ -1,9 +1,7 @@
-import { AdminCenterLayout, CourseInfo, CourseManagement } from '@layouts/AdminCenter';
+import { AdminCenterLayout, CourseInfoManagement } from '@layouts/AdminCenter';
 
-export default function CourseInfoPage() {
-  return (
-    <CourseInfo />
-  );
+export default function CourseInfoManagementPage() {
+  return <CourseInfoManagement />;
 }
 
-CourseInfoPage.Layout = AdminCenterLayout;
+CourseInfoManagementPage.Layout = AdminCenterLayout;

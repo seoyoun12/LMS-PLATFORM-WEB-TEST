@@ -116,6 +116,7 @@ export function CategoryCard() {
 }
 const CardWrap = styled(Box)`
   background: #fafafa;
+  padding: 0 8px;
   padding-top: 48px;
   @media (max-width: 1024px) {
     padding-top: 0px;

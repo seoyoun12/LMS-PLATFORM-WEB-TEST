@@ -174,14 +174,20 @@ export function MeMobile() {
                     fil.progressStatus === ProgressStatus.TYPE_BEFORE
                 )
                 .map(res => {
+                  const startDate = res.studyStartDate.slice(0, 10);
+                  const endDate = res.studyEndDate.slice(0, 10);
                   return (
                     <Grid item xs={1} sm={1} md={1} lg={1} key={res.courseClassSeq}>
                       <Box onClick={() => onClickEnterCourseLesson(res)}>
                         <ContentCardV2
                           image={res.thumbnailImage}
                           title={res.courseTitle}
-                          content1={'지금 바로 수강하기!'}
-                          content2={`${res.leftDays}일 남음`}
+                          // content1={'지금 바로 수강하기!'}
+                          content2={
+                            res.startLeftDays < 0
+                              ? `지금바로 학습하기!(${startDate} ~ ${endDate})`
+                              : `${res.startLeftDays}일 남음(${startDate} ~ ${endDate})`
+                          }
                           // content2={`현재 진도율 ${res.progress}%`}
                         />
                       </Box>

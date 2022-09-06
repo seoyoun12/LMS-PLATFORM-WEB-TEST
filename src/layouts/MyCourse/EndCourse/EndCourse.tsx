@@ -61,21 +61,25 @@ export function EndCourse() {
       >
         {data
           .filter(fil => fil.progressStatus === ProgressStatus.TYPE_ENDED)
-          .map(item => (
-            <Grid item xs={1} sm={1} md={1} lg={1} key={item.courseClassSeq}>
-              <Box
-                // href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}
-                onClick={() => onClickEnterCourseLesson(item)}
-              >
-                <ContentCardV2
-                  image={item.thumbnailImage}
-                  title={item.courseTitle}
-                  content1={`학습 종료된 강의입니다.`}
-                  content2={`진도율 ${item.progress}%`}
-                />
-              </Box>
-            </Grid>
-          ))}
+          .map(item => {
+            const startDate = item.studyStartDate.slice(0, 10);
+            const endDate = item.studyEndDate.slice(0, 10);
+            return (
+              <Grid item xs={1} sm={1} md={1} lg={1} key={item.courseClassSeq}>
+                <Box
+                  // href={`/course/${res.seq}/lesson/${res.lessons[0].seq}`}
+                  onClick={() => onClickEnterCourseLesson(item)}
+                >
+                  <ContentCardV2
+                    image={item.thumbnailImage}
+                    title={item.courseTitle}
+                    content1={`학습 종료된 강의입니다.`}
+                    content2={`진도율 ${item.progress}% / ${startDate} ~ ${endDate}`}
+                  />
+                </Box>
+              </Grid>
+            );
+          })}
       </Grid>
     </EndCourseWrap>
   );

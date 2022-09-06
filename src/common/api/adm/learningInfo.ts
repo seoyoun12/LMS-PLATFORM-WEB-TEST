@@ -67,7 +67,7 @@ export function useLearningInfo({
 
 export function detailCourseInfo(courseUserSeq: number) {
   const { data, error, mutate } = useSWR<SWRResponse<DetailCourse>>(
-    courseUserSeq ? [`/user/adm/course-info/detail/${courseUserSeq}`] : null, GET);
+    courseUserSeq ? `/user/adm/course-info/detail/${courseUserSeq}` : null, GET);
   return {
     data: data?.data,
     error,

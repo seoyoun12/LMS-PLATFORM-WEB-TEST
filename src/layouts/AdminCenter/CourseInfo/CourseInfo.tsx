@@ -32,10 +32,6 @@ export function CourseInfo() {
   const [page, setPage] = useState(0);
   const { data, error, mutate } = useLearningInfo({ page });
 
-  console.log('페이지 : ', page);
-  console.log('데이터 : ', data);
-  console.log('총페이지 : ', data?.totalPages);
-
   // Pagination
   useEffect(() => {
     const { page } = router.query;

@@ -1,9 +1,7 @@
-import { LearningMaterialLayout } from "@layouts/Traffic/LearningMaterial";
-
 export default function EducationLayout() {
   return (
-    <LearningMaterialLayout>
+    <div>
       <p>Education</p>
-    </LearningMaterialLayout>
+    </div>
   );
 }

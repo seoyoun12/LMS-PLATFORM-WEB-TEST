@@ -56,3 +56,5 @@ export const LearningMaterialTabItem = styled(Tab)`
   flex-grow: 1;
   color: #000;
 `;
+
+export const LearningMaterialContentWrapper = styled.div``;

@@ -241,7 +241,7 @@ export function CalendarBody({
           //   e.event._def.extendedProps.isReceive
           // );
           if (!e.event._def.extendedProps.prevSchedule)
-            return window.alert('마감된 교육입니다!');
+            return window.alert('종료된 교육입니다!');
           if (e.event._def.extendedProps.isFullPeople)
             return window.alert('접수마감된 교육입니다.');
           if (!e.event._def.extendedProps.isReceive)

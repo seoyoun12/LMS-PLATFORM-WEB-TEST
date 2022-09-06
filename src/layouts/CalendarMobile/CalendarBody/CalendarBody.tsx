@@ -193,7 +193,7 @@ export function CalendarBody({
     isFullPeople: boolean,
     isTodayEduEnd: boolean
   ) => {
-    if (!prevSchedule || isFullPeople) return window.alert('마감된 교육입니다!');
+    if (!prevSchedule || isFullPeople) return window.alert('종료된 교육입니다!');
     if (isFullPeople) return window.alert('접수마감된 교육입니다.');
     if (!isReceive) return window.alert('신청기간이 아닙니다!');
     if (isTodayEduEnd) return window.alert('접수마감 되었습니다!');

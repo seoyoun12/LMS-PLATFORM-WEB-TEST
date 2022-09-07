@@ -55,7 +55,7 @@ export function CourseInfoManagement() {
 
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
-
+  // user/adm/course-info/detail/{courseUserSeq}
   return (
     <Box>
       <UserTypo variant="h5">전체 수강생 학습현황</UserTypo>

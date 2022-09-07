@@ -18,19 +18,14 @@ interface TablePaginationActionsProps {
   count: number;
   page: number;
   rowsPerPage: number;
-  onPageChange: (
-    event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number,
-  ) => void;
+  onPageChange: (event: React.MouseEvent<HTMLButtonElement>, newPage: number) => void;
 }
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
-  const handleFirstPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
+  const handleFirstPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     onPageChange(event, 0);
   };
 
@@ -80,33 +75,31 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   );
 }
 
-export function Table(
-  {
-    pagination = false,
-    totalNum = 0,
-    page = 0,
-    children,
-    onChangePage,
-    ...restProps
-  }: {
-    pagination?: boolean,
-    totalNum?: number,
-    page?: number,
-    onChangePage?: (page: number) => void,
-    children: ReactNode,
-  } & TableProps
-) {
-  const [ rowsPerPage, setRowsPerPage ] = React.useState(10);
+export function Table({
+  pagination = false,
+  totalNum = 0,
+  page = 0,
+  children,
+  onChangePage,
+  ...restProps
+}: {
+  pagination?: boolean;
+  totalNum?: number;
+  page?: number;
+  onChangePage?: (page: number) => void;
+  children: ReactNode;
+} & TableProps) {
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const handleChangePage = useCallback((
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => {
-    onChangePage && onChangePage(newPage);
-  }, [ onChangePage ]);
+  const handleChangePage = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+      onChangePage && onChangePage(newPage);
+    },
+    [onChangePage]
+  );
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
@@ -116,7 +109,7 @@ export function Table(
       component={Paper}
       sx={{
         width: '100%',
-        overflow: 'scroll'
+        overflow: 'scroll',
       }}
     >
       <MuiTable
@@ -127,19 +120,18 @@ export function Table(
         {...restProps}
       >
         {children}
-        {
-          pagination &&
+        {pagination && (
           <TableFooter>
             <TableRow>
               <TablePagination
-                rowsPerPageOptions={[ 10, 25, { label: 'All', value: -1 } ]}
+                rowsPerPageOptions={[10, 25, { label: 'All', value: -1 }]}
                 colSpan={3}
                 count={totalNum}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 sx={{
                   overflow: 'unset',
-                  justifyContent: 'start'
+                  justifyContent: 'start',
                 }}
                 SelectProps={{
                   inputProps: {
@@ -153,7 +145,7 @@ export function Table(
               />
             </TableRow>
           </TableFooter>
-        }
+        )}
       </MuiTable>
     </TableContainer>
   );

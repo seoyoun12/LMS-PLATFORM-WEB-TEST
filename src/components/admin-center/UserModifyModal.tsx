@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -12,7 +13,7 @@ import {
 import { useRef, useState } from 'react';
 import { Modal } from '@components/ui';
 import TextField from '@mui/material/TextField';
-import { modifyUser } from '@common/api/adm/user';
+import { modifyUser, removeUser } from '@common/api/adm/user';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useSnackbar } from '@hooks/useSnackbar';
 import styled from '@emotion/styled';
@@ -21,6 +22,7 @@ import { useEffect } from 'react';
 import { UserInput } from '@common/api/user';
 import dateFormat from 'dateformat';
 import { Phone4Regex } from '@utils/inputRegexes';
+import { useDialog } from '@hooks/useDialog';
 
 const phoneList = ['010', '011'];
 
@@ -50,7 +52,7 @@ export function UserModifyModal({
   const onChangePhoneNum03 = (value: string) => {
     setPhone03(value);
   };
-
+  const dialog = useDialog();
   const snackbar = useSnackbar();
   const [submitLoading, setSubmitLoading] = useState(false);
   const {
@@ -61,9 +63,35 @@ export function UserModifyModal({
     reset,
   } = useForm<UserInput>();
 
+  // console.log('유저번호는 :', userData?.seq);
+
   useEffect(() => {
     reset({ ...userData });
   }, [userData, open, reset]);
+
+  const onClickRemoveUser = async (userSeq: number) => {
+    try {
+      const dialogConfirmed = await dialog({
+        title: '유저 삭제하기',
+        description: (
+          <div>
+            <div>삭제시 회원의 모든 정보가 영구적으로 삭제됩니다.</div>
+            <div>정말로 삭제하시겠습니까?</div>
+            <div style={{ color: 'red', fontSize: '14px' }}>*복구가 불가능합니다.*</div>
+          </div>
+        ),
+        confirmText: '삭제하기',
+        cancelText: '취소',
+      });
+      if (dialogConfirmed) {
+        await removeUser(userData?.seq);
+        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
+        // await mutate();
+      }
+    } catch (e: any) {
+      snackbar({ variant: 'error', message: e.data.message });
+    }
+  };
 
   const onSubmit: SubmitHandler<UserInput> = async userInput => {
     try {
@@ -89,7 +117,26 @@ export function UserModifyModal({
 
   return (
     <Modal
-      action="수정"
+      action={
+        <>
+          <DeleteBtn
+            variant="contained"
+            color="warning"
+            onClick={() => onClickRemoveUser(userData.seq)}
+            size="small"
+          >
+            삭제
+          </DeleteBtn>
+          <SubmitBtn
+            variant="contained"
+            color="secondary"
+            onClick={handleSubmit(onSubmit)}
+            size="small"
+          >
+            저장
+          </SubmitBtn>
+        </>
+      }
       title="유저 수정"
       maxWidth="sm"
       fullWidth
@@ -254,3 +301,10 @@ const FormContainer = styled.div`
     margin-left: 2%;
   }
 `;
+const SubmitBtn = styled(Button)`
+  /* margin: 30px 30px 30px 0; */
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
+
+const DeleteBtn = styled(Button)``;

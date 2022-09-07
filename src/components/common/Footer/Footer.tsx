@@ -66,9 +66,9 @@ const Footer: FC<Props> = () => {
             }}
           >
             <Box width="250px">
-              <Link href="https://www.ctti.or.kr">
-                <Logo />
-              </Link>
+              {/* <Link href="https://www.ctti.or.kr"> */}
+              <Logo />
+              {/* </Link> */}
             </Box>
             <Box display="flex" gap={2}>
               {LinkList.map(item => (

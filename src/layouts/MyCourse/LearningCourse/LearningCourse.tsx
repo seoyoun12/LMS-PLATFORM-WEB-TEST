@@ -10,8 +10,10 @@ import { ContentCardV2 } from '@components/ui/ContentCard';
 import styled from '@emotion/styled';
 import { Box, Grid, Link } from '@mui/material';
 import { NotFound } from '@components/ui/NotFound';
+import { useSnackbar } from '@hooks/useSnackbar';
 
 export function LearningCourse() {
+  const snackbar = useSnackbar();
   const router = useRouter();
   const { data, error, mutate } = useLearningStatus();
 
@@ -23,9 +25,9 @@ export function LearningCourse() {
       new Date(res.studyEndDate.replaceAll('-', '/').split(' ')[0]).getTime() <
       new Date().getTime(); //현재시간이 크면 true 아니면 false
     if (res.progressStatus === ProgressStatus.TYPE_BEFORE || !isStartStudy)
-      return window.alert('아직 학습이 시작되지 않았습니다!');
-    // if (res.progressStatus === ProgressStatus.TYPE_ENDED || isEndedStudy)
-    //   return window.alert('종료된 학습입니다!');
+      return snackbar({ variant: 'error', message: '아직 학습이 시작되지 않았습니다!' });
+    if (res.progressStatus === ProgressStatus.TYPE_ENDED || isEndedStudy)
+      return snackbar({ variant: 'error', message: '종료된 학습입니다!' });
 
     if (res.progressStatus === ProgressStatus.TYPE_PROGRESSING) {
       // router.push(

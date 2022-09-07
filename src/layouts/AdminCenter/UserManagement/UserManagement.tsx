@@ -8,6 +8,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Chip,
 } from '@mui/material';
 import styles from '@styles/common.module.scss';
 import { Table } from '@components/ui';
@@ -23,6 +24,7 @@ import { UserModifyModal } from '@components/admin-center/UserModifyModal';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { regCategoryType, registerType } from '@common/api/user';
+import { ProductStatus } from '@common/api/course';
 
 const userConfig = [
   { label: '실명가입', value: regCategoryType.TYPE_TRANS_EDU },
@@ -36,14 +38,14 @@ const radioConfig = [
 ];
 
 const headRows = [
-  { name: 'No' },
-  { name: '아이디' },
-  { name: '이름' },
-  { name: '생년월일' },
-  { name: '핸드폰번호' },
-  { name: '가입구분' },
-  { name: '가입날짜' },
-  { name: '상태' },
+  { name: 'No', width: '6.5%' },
+  { name: '아이디', width: '19%' },
+  { name: '이름', width: '9.5%' },
+  { name: '생년월일', width: '19%' },
+  { name: '핸드폰번호', width: '19%' },
+  { name: '가입구분', width: '9.5%' },
+  { name: '가입날짜', width: '19%' },
+  // { name: '상태', width: '8.5%' },
 ];
 
 export function UserManagement() {
@@ -135,7 +137,9 @@ export function UserManagement() {
           />
         ))}
       </RadioGroup>
+
       <UserTypo variant="h5">회원 목록</UserTypo>
+
       <Table
         pagination={true}
         totalNum={data.totalElements}
@@ -145,8 +149,8 @@ export function UserManagement() {
       >
         <TableHead>
           <UserTableRow>
-            {headRows.map(({ name }: { name: string }) => (
-              <UserTitleTableCell key={name} align="center">
+            {headRows.map(({ name, width }: { name: string; width: string }) => (
+              <UserTitleTableCell key={name} align="center" width={width}>
                 {name}
               </UserTitleTableCell>
             ))}
@@ -184,7 +188,14 @@ export function UserManagement() {
                 {userConfig.filter(item => item.value === user.regCategory)[0].label}{' '}
               </UserTableCell>
               <UserTableCell>{user.createdDtime.slice(0, 10)}</UserTableCell>
-              <UserTableCell>{user.status}</UserTableCell>
+              {/* <UserTableCell>
+                <Chip
+                  variant="outlined"
+                  size="small"
+                  label={user.status === ProductStatus.APPROVE ? '정상' : '중지'}
+                  color={user.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
+                />
+              </UserTableCell> */}
 
               {/* <UserTableCell>
                 <Button
@@ -252,6 +263,5 @@ const UserTableCell = styled(TableCell)`
   &:first-child {
     /* border-right: 1px solid #e0e0e0; */
     background: #f5f5f5;
-    width: 4%;
   }
 `;

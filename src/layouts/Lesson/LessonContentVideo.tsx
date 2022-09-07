@@ -114,8 +114,7 @@ export default function LessonContentVideo(props: Props) {
 
             return ApiClient.courseProgress
               .updateAllCourseProgressUsingPut(courseUserSeq)
-              .then(() => v.data.data.completeYn === "Y" && props.onComplete(isEnd))
-              .then((b) => b && videoPlayer.current.pause());
+              .then(() => v.data.data.completeYn === "Y" && props.onComplete(isEnd));
             
           });
 
@@ -192,7 +191,6 @@ export default function LessonContentVideo(props: Props) {
         studyTime: 0,
       });
 
-      videoIsFinished.current = false;
       videoIsFirst.current = false;
 
       startTimer();
@@ -231,20 +229,28 @@ export default function LessonContentVideo(props: Props) {
       apiVideoSeconds.current++;
 
       if (
+        !props.lessonCompleted &&
         !videoIsFinished.current &&
-        (props.courseProgress.studyTime + videoPlayedSeconds.current >=
-          vidoeDurationSeconds.current ||
-          videoCurrentSeconds.current >= vidoeDurationSeconds.current)
-      )
+        (
+          props.courseProgress.studyTime + videoPlayedSeconds.current > vidoeDurationSeconds.current ||
+          videoCurrentSeconds.current > vidoeDurationSeconds.current
+        )
+      ) {
+
+        videoIsFinished.current = true;
         stopTimer('CURRENT');
+
+      }
 
       updateProgress();
     },
-    [props.courseProgress.studyTime, stopTimer, updateProgress]
+    [props.courseProgress.studyTime, props.lessonCompleted, stopTimer, updateProgress]
   );
 
   const onEnded = React.useCallback(() => {
     videoCurrentSeconds.current = vidoeDurationSeconds.current;
+    videoIsFinished.current = true;
+    videoIsFirst.current = true;
     stopTimer('CURRENT', true);
   }, [stopTimer]);
 

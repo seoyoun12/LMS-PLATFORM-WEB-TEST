@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { Alert, Box, Button, CircularProgress, Snackbar } from '@mui/material';
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText } from '@mui/material';
 import { CourseModuleFindResponseDto, SurveyResponseDto } from '@common/api/Api';
 import ApiClient from '@common/api/ApiClient';
 import LessonContentSurveyQuestion from './LessonContentSurveyQuestion';
@@ -20,9 +20,10 @@ export default function LessonContentSurvey(props: Props) {
 
   // 스테이트.
 
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [snackbar, setSnackbar] = React.useState<'FAILED' | 'SUCCESS' | null>(null);
-  const [snackbarMessage, setSnackbarMessage] = React.useState<string | null>(null);
+  const [loadingData, setLoadingData] = React.useState<boolean>(false);
+  const [loadingForm, setLoadingForm] = React.useState<boolean>(false);
+  const [dialog, setDialog] = React.useState<'FAILED' | 'SUCCESS' | null>(null);
+  const [dialogMessage, setDialogMessage] = React.useState<string | null>(null);
   const [errors, setErrors] = React.useState<boolean[]>(
     new Array(props.survey === null ? 0 : props.survey.surveyQuestionList.length).fill(
       false
@@ -32,8 +33,9 @@ export default function LessonContentSurvey(props: Props) {
   // 이펙트.
 
   React.useEffect(() => {
-    setLoading(false);
-    setSnackbar(null);
+    setLoadingData(false);
+    setLoadingForm(false);
+    setDialog(null);
     setErrors(
       new Array(props.survey === null ? 0 : props.survey.surveyQuestionList.length).fill(
         false
@@ -58,6 +60,14 @@ export default function LessonContentSurvey(props: Props) {
       onSubmit={e => {
         e.preventDefault();
 
+        if (props.surveyCompleted) {
+
+          setDialog('FAILED');
+          setDialogMessage('이미 제출한 설문입니다.');
+          return;
+
+        }
+
         const formData = new FormData(e.target as HTMLFormElement);
 
         let hasError = false;
@@ -78,6 +88,8 @@ export default function LessonContentSurvey(props: Props) {
           surveyQuestionSeq: question.seq,
         }));
 
+        setLoadingForm(true);
+
         ApiClient.survey
           .participateSurveyUsingPost({
             courseUserSeq: props.courseUserSeq,
@@ -85,21 +97,28 @@ export default function LessonContentSurvey(props: Props) {
             answerList: awnserList,
           })
           .then(res => {
-            setSnackbar(res.data.success ? 'SUCCESS' : 'FAILED');
-            setSnackbarMessage(res.data.message);
+            setDialog(res.data.success ? 'SUCCESS' : 'FAILED');
+            setDialogMessage(res.data.message);
             res.data.success && props.onComplete();
           })
           .catch(err => {
-            setSnackbar('FAILED');
-            setSnackbarMessage(
+            setDialog('FAILED');
+            setDialogMessage(
               err.response?.status === 400
                 ? '이미 제출한 설문입니다.'
                 : '전송을 실패하였습니다.'
             );
           })
-          .finally(() => setLoading(false));
+          .finally(() => setLoadingForm(false));
       }}
     >
+      {loadingForm && (
+        <FormLoading>
+          <SurveyEmptyContainer>
+            <CircularProgress size="1.5rem" />
+          </SurveyEmptyContainer>
+        </FormLoading>
+      )}
       <SurveyHeader>
         <SurveyHeaderTitle>{props.survey.title}</SurveyHeaderTitle>
         <SurveyHeaderCompletedText>
@@ -113,30 +132,24 @@ export default function LessonContentSurvey(props: Props) {
             index={index}
             question={question}
             error={errors[index]}
-            loading={loading}
+            loading={loadingData}
           />
         ))}
       </SurveyContent>
-      <SurveySubmitButton variant="contained" type="submit">
-        제출하기
-      </SurveySubmitButton>
-      <Snackbar
-        open={snackbar !== null}
-        autoHideDuration={2000}
-        onClose={() =>
-          snackbar === 'SUCCESS' ? router.replace(router.asPath) : setSnackbar(null)
-        }
+      <SurveySubmitButton variant="contained" type="submit">제출하기</SurveySubmitButton>
+      <Dialog
+        open={dialog !== null}
+        onClose={() => dialog === 'SUCCESS' ? router.replace(router.asPath) : setDialog(null)}
       >
-        <Alert
-          severity={snackbar === 'SUCCESS' ? 'success' : 'error'}
-          sx={{ width: '100%' }}
-          onClose={() =>
-            snackbar === 'SUCCESS' ? router.replace(router.asPath) : setSnackbar(null)
-          }
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+        <DialogContent>
+          <DialogContentText>
+            {dialogMessage}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => dialog === 'SUCCESS' ? router.replace(router.asPath) : setDialog(null)}>확인</Button>
+        </DialogActions>
+      </Dialog>
     </SurveyContainer>
   );
 }
@@ -186,4 +199,11 @@ const SurveyContent = styled.div`
 
 const SurveySubmitButton = styled(Button)`
   display: block;
+`;
+
+const FormLoading = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #fff2;
 `;

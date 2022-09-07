@@ -19,7 +19,7 @@ interface Props {
   lesson: LessonDetailClientResponseDto | null;
   lessonCompleted?: boolean;
   loading?: boolean;
-  onComplete?: () => Promise<boolean>;
+  onComplete?: (isEnd: boolean) => Promise<boolean>;
 }
 
 export default function LessonContentVideo(props: Props) {
@@ -67,7 +67,7 @@ export default function LessonContentVideo(props: Props) {
   // 콜백 - 타이머.
 
   const stopTimer = React.useCallback(
-    async (mode: 'PREV' | 'CURRENT' | 'RESET') => {
+    async (mode: 'PREV' | 'CURRENT' | 'RESET', isEnd = false) => {
       if (apiTimer.current !== null) {
         window.clearInterval(apiTimer.current);
 
@@ -114,7 +114,7 @@ export default function LessonContentVideo(props: Props) {
 
             return ApiClient.courseProgress
               .updateAllCourseProgressUsingPut(courseUserSeq)
-              .then(() => v.data.data.completeYn === "Y" && props.onComplete())
+              .then(() => v.data.data.completeYn === "Y" && props.onComplete(isEnd))
               .then((b) => b && videoPlayer.current.pause());
             
           });
@@ -140,7 +140,7 @@ export default function LessonContentVideo(props: Props) {
     const lessonSeq = props.lesson.seq;
 
     const timer = window.setInterval(() => {
-      if (currentLessonSeq.current !== lessonSeq || router.asPath !== routerAsPath)
+      if (currentLessonSeq.current !== lessonSeq || router.asPath !== routerAsPath || apiTimer.current !== timer)
         return clearInterval(timer);
 
       apiSeconds.current++;
@@ -245,7 +245,7 @@ export default function LessonContentVideo(props: Props) {
 
   const onEnded = React.useCallback(() => {
     videoCurrentSeconds.current = vidoeDurationSeconds.current;
-    stopTimer('CURRENT');
+    stopTimer('CURRENT', true);
   }, [stopTimer]);
 
   // 이펙트.

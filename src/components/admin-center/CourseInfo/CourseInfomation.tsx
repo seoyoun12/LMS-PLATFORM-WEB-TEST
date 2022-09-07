@@ -4,12 +4,17 @@ import { Box, Tab, TableBody, TableCell, TableHead, TableRow } from '@mui/materi
 import { useRouter } from 'next/router';
 import { css } from '@emotion/css';
 import styled from '@emotion/styled';
+import { UserCourseInfoDetailCourseInfoDto } from '@common/api/Api';
 
-export function CourseInfomation() {
+interface Props {
+  courseInfo: UserCourseInfoDetailCourseInfoDto;
+}
+
+export function CourseInfomation({ courseInfo }: Props) {
   const router = useRouter();
   const snackbar = useSnackbar();
   const { courseUserSeq } = router.query;
-  const { data, error } = detailCourseInfo(Number(courseUserSeq));
+  // const { data, error } = detailCourseInfo(Number(courseUserSeq));
 
   return (
     <CourseInfomationBox>
@@ -18,28 +23,28 @@ export function CourseInfomation() {
       </TableHeadFull>
       <TableBody className={pt20} sx={{ display: 'table', width: '100%' }}>
         <TableRow>
-          <TableLeftCell>1</TableLeftCell>
-          <TableRightCell>2</TableRightCell>
-          <TableLeftCell>1</TableLeftCell>
-          <TableRightCell>2</TableRightCell>
+          <TableLeftCell>과정명</TableLeftCell>
+          <TableRightCell>{courseInfo?.courseName}</TableRightCell>
+          <TableLeftCell>년도 / 차수</TableLeftCell>
+          <TableRightCell>{courseInfo?.yearAndStep}</TableRightCell>
         </TableRow>
         <TableRow>
-          <TableLeftCell>1</TableLeftCell>
-          <TableRightCell>2</TableRightCell>
-          <TableLeftCell>1</TableLeftCell>
-          <TableRightCell>2</TableRightCell>
+          <TableLeftCell>회원명</TableLeftCell>
+          <TableRightCell>{courseInfo?.name}</TableRightCell>
+          <TableLeftCell>회원아이디</TableLeftCell>
+          <TableRightCell>{courseInfo?.username}</TableRightCell>
         </TableRow>
         <TableRow>
-          <TableLeftCell>1</TableLeftCell>
-          <TableRightCell>2</TableRightCell>
-          <TableLeftCell>1</TableLeftCell>
-          <TableRightCell>2</TableRightCell>
+          <TableLeftCell>학습기간</TableLeftCell>
+          <TableRightCell>{courseInfo?.studyDate}</TableRightCell>
+          <TableLeftCell>등록일</TableLeftCell>
+          <TableRightCell>{courseInfo?.regDate}</TableRightCell>
         </TableRow>
         <TableRow>
-          <TableLeftCell>1</TableLeftCell>
-          <TableRightCell>2</TableRightCell>
-          <TableLeftCell>1</TableLeftCell>
-          <TableRightCell>2</TableRightCell>
+          <TableLeftCell>상태</TableLeftCell>
+          <TableRightCell>{courseInfo?.classLearningStatus}</TableRightCell>
+          <TableLeftCell>수료여부</TableLeftCell>
+          <TableRightCell>{courseInfo?.completeYn}</TableRightCell>
         </TableRow>
       </TableBody>
     </CourseInfomationBox>

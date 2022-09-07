@@ -44,9 +44,9 @@ export const MeCertificateContentContainer = styled.div`
   max-width: 1200px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: center;
   margin: 62px auto 0 auto;
-  padding: 0 32px;
+  padding: 0;
 
   @media (max-width: 768px) {
     padding: 32px 12px;

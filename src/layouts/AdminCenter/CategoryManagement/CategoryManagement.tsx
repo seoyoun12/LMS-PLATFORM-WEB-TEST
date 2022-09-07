@@ -7,6 +7,7 @@ import {
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
+  Box,
   Button,
   Chip,
   Container,
@@ -34,22 +35,17 @@ import { S3Files } from 'types/file';
 const headRows: {
   name: string;
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  width: string;
 }[] = [
-  { name: '번호', align: 'left' }, // seq
-  // { name: '유저번호' }, // userSeq
-  // { name: '유저ID' }, // username
-  { name: '제목', align: 'center' }, // subject
-  { name: '본문', align: 'center' }, // content
-  { name: '게시판유형', align: 'center' }, // boardType
-  { name: '작성일', align: 'center' }, // createdDtime
-  { name: '수정일', align: 'center' }, // modifiedDtime
-  { name: '공지여부', align: 'center' }, // noticeYn
-  { name: '공개여부', align: 'center' }, // publicYn
-  { name: '상태', align: 'center' }, // status
-  { name: '조회수', align: 'center' }, // hit
-  { name: '첨부파일', align: 'center' }, // s3Files
-  // { name: '수정' },
-  // { name: '삭제' },
+  { name: 'No', align: 'center', width: '10%' }, // seq
+  { name: '게시판유형', align: 'center', width: '10%' }, // boardType
+  { name: '제목', align: 'center', width: '10%' }, // subject
+  { name: '작성일', align: 'center', width: '10%' }, // createdDtime
+  { name: '수정일', align: 'center', width: '10%' }, // modifiedDtime
+  { name: '조회수', align: 'center', width: '10%' }, // hit
+  { name: '공지여부', align: 'center', width: '10%' }, // noticeYn
+  { name: '공개여부', align: 'center', width: '10%' }, // publicYn
+  { name: '상태', align: 'center', width: '10%' }, // status
 ];
 
 const tabsConfig = [
@@ -140,7 +136,7 @@ export function CategoryManagement() {
   if (!data) return <Spinner />;
 
   return (
-    <div>
+    <Box>
       <Typography fontSize={30} fontWeight="bold">
         게시판구분
       </Typography>
@@ -156,7 +152,7 @@ export function CategoryManagement() {
         ))}
       </RadioGroup>
 
-      {/* <Typography variant="h5">게시판 목록</Typography> */}
+      <CategoryTypography variant="h5">게시판 목록</CategoryTypography>
 
       <Table
         pagination={true}
@@ -166,14 +162,23 @@ export function CategoryManagement() {
         size="small"
       >
         <TableHead>
-          <TableRow>
-            {/* {headRows.map(({ name, align }: { name: string; align: string }) => ( */}
-            {headRows.map(({ name, align }) => (
-              <TableCell key={name} align={align}>
-                {name}
-              </TableCell>
-            ))}
-          </TableRow>
+          <CategoryTableRow>
+            {headRows.map(
+              ({
+                name,
+                align,
+                width,
+              }: {
+                name: string;
+                align: string;
+                width: string;
+              }) => (
+                <CategoryTitleTableCell key={name} align="center" width={width}>
+                  {name}
+                </CategoryTitleTableCell>
+              )
+            )}
+          </CategoryTableRow>
         </TableHead>
 
         <TableBody>
@@ -184,27 +189,25 @@ export function CategoryManagement() {
               hover
               onClick={() => onClickmodifyCategoryBoard(category.seq)}
             >
-              <TableCell align="left">{category.seq}</TableCell>
-              {/* <TableCell align="center">{category.userSeq}</TableCell> */}
-              {/* <TableCell align="center">{category.username}</TableCell> */}
-              <TableCell align="center">
-                <SubjectTypography>{category.subject}</SubjectTypography>
-              </TableCell>
-              <TableCell align="center">
-                <ContentTypography>{category.content}</ContentTypography>
-              </TableCell>
-              <TableCell align="center">
+              <CategoryTableCell>{category.seq}</CategoryTableCell>
+              <CategoryTableCell>
                 {tabsConfig.filter(item => item.value === category.boardType)[0]?.name}
-              </TableCell>
-              <TableCell align="center">
+              </CategoryTableCell>
+              <CategoryTableCell>
+                <SubjectTypography>{category.subject}</SubjectTypography>
+              </CategoryTableCell>
+              <CategoryTableCell>
                 {dateFormat(category.createdDtime, 'isoDate')}
-              </TableCell>
-              <TableCell align="center">
+              </CategoryTableCell>
+
+              <CategoryTableCell>
                 {dateFormat(category.modifiedDtime, 'isoDate')}
-              </TableCell>
-              <TableCell align="center">{category.noticeYn}</TableCell>
-              <TableCell align="center">{category.publicYn}</TableCell>
-              <TableCell style={{ width: 10 }} align="center">
+              </CategoryTableCell>
+              <CategoryTableCell>{category.hit}</CategoryTableCell>
+
+              <CategoryTableCell>{category.noticeYn}</CategoryTableCell>
+              <CategoryTableCell>{category.publicYn}</CategoryTableCell>
+              <CategoryTableCell>
                 <Chip
                   variant="outlined"
                   size="small"
@@ -213,8 +216,7 @@ export function CategoryManagement() {
                     category.status === ProductStatus.APPROVE ? 'secondary' : 'default'
                   }
                 />
-              </TableCell>
-              <TableCell align="center">{category.hit}</TableCell>
+              </CategoryTableCell>
               {/* <TableCell align="center">
                 <Button
                   // onClick={() => onClickDownloadFile(category.s3Files[0].seq)}
@@ -238,9 +240,9 @@ export function CategoryManagement() {
                   {category.s3Files[0] ? category.s3Files[0].name : '파일없음'}
                 </Button>
               </TableCell> */}
-              <TableCell align="center">
+              {/* <TableCell align="center">
                 {category.s3Files[0] ? category.s3Files[0].name : '없음'}
-              </TableCell>
+              </TableCell> */}
               {/* <TableCell align="center">
                 <Button
                   variant="text"
@@ -266,15 +268,24 @@ export function CategoryManagement() {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </Box>
   );
 }
+
+const CategoryTypography = styled(Typography)`
+  margin-bottom: 12px;
+  font-weight: 700;
+`;
+
+const CategoryTableRow = styled(TableRow)`
+  white-space: nowrap;
+`;
 
 const SubjectTypography = styled(Typography)`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  width: 150px;
+  /* width: 150px; */
 `;
 
 const ContentTypography = styled(Typography)`
@@ -282,4 +293,26 @@ const ContentTypography = styled(Typography)`
   overflow: hidden;
   white-space: nowrap;
   width: 255px;
+`;
+
+const CategoryTitleTableCell = styled(TableCell)`
+  font-weight: bold;
+  background: #f5f5f5;
+  border-right: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-right: 1px solid #f0f0f0;
+  }
+`;
+const CategoryTableCell = styled(TableCell)`
+  white-space: nowrap;
+  text-align: center;
+  padding-top: 10px;
+  margin: 0;
+  border-right: 1px solid #f0f0f0;
+
+  &:first-child {
+    /* border-right: 1px solid #e0e0e0; */
+    background: #f5f5f5;
+  }
 `;

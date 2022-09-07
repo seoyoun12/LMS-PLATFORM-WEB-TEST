@@ -318,6 +318,7 @@ export default function Lesson(props: LessonProps) {
           />
         {DialogFirst}
         {DialogNext}
+        {DialogSurvey}
       </LessonContainer>
     </>
   );

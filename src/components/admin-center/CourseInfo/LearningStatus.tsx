@@ -23,50 +23,52 @@ export function LearningStatus({ learningStatusList }: Props) {
   //   learningStatusList?.map(item => item.elementName)
   // );
 
+  // 반영비율
   // 평가여부, 제출자 및 첨삭IP 제외
   // 총점 Row 제외
+  // 이수기준에서 설문제출이 필수or필수X 체크
 
   return (
     <LearningStatusBox>
       <TableHeadFull colSpan={4} sx={{ display: 'table', width: '100%' }}>
         학습현황
       </TableHeadFull>
-      <TableBody className={pt20} sx={{ display: 'table', width: '100%' }}>
+      <TableBody sx={{ display: 'table', width: '100%' }}>
         <TableRow>
           <TableLeftCell>항목</TableLeftCell>
-          <TableLineCell>반영비율</TableLineCell>
-          <TableLineCell>이수(과락)기준</TableLineCell>
-          <TableLineCell>성적</TableLineCell>
-          <TableLineCell>제출일</TableLineCell>
-          <TableLineCell>제출여부</TableLineCell>
-          <TableLineCell>상태</TableLineCell>
+          <TableLeftCell>이수(과락)기준</TableLeftCell>
+          <TableLeftCell>성적</TableLeftCell>
+          <TableLeftCell>제출일</TableLeftCell>
+          <TableLeftCell>제출여부</TableLeftCell>
+          {/* <TableLeftCell>상태</TableLeftCell> */}
         </TableRow>
       </TableBody>
 
-      <TableBody className={pt20} sx={{ display: 'table', width: '100%' }}>
+      <TableBody sx={{ display: 'table', width: '100%' }}>
         {learningStatusList?.map(item => (
           <TableRow key={item.elementName}>
-            <TableLeftCell>{item.elementName}</TableLeftCell>
-            <TableLineCell>2</TableLineCell>
-            <TableLineCell>{item.threshold}</TableLineCell>
-            <TableLineCell>{item.point}</TableLineCell>
-            <TableLineCell>{item.submitDate}</TableLineCell>
-            <TableLineCell>{item.submitYn}</TableLineCell>
-            <TableLineCell>{item.learningStatus}</TableLineCell>
+            <TableLeftCell>{item.elementName ? item.elementName : '-'}</TableLeftCell>
+            <TableLineCell>
+              {item.threshold === 'Y'
+                ? '제출필요'
+                : typeof Number(item.threshold.slice(0, 1)) === 'number'
+                ? item.threshold
+                : '제출불필요'}
+            </TableLineCell>
+            {/* <TableLineCell>{Number(item.threshold.slice(0, 1))}</TableLineCell> */}
+            <TableLineCell>{item.point ? item.point : '-'}</TableLineCell>
+            <TableLineCell>{item.submitDate ? item.submitDate : '-'}</TableLineCell>
+            <TableLineCell>
+              {item.submitYn
+                ? item.submitYn === 'Y'
+                  ? '제출완료'
+                  : item.submitYn === 'N'
+                  ? '제출미완료'
+                  : ''
+                : '-'}
+            </TableLineCell>
           </TableRow>
         ))}
-      </TableBody>
-
-      <TableBody className={pt20} sx={{ display: 'table', width: '100%' }}>
-        <TableRow>
-          <TableLeftCell>1</TableLeftCell>
-          <TableLineCell>2</TableLineCell>
-          <TableLineCell>2</TableLineCell>
-          <TableLineCell>2</TableLineCell>
-          <TableLineCell>2</TableLineCell>
-          <TableLineCell>2</TableLineCell>
-          <TableLineCell>2</TableLineCell>
-        </TableRow>
       </TableBody>
     </LearningStatusBox>
   );
@@ -79,35 +81,25 @@ const LearningStatusBox = styled(Box)`
 const TableHeadFull = styled(TableCell)`
   width: 100%;
   background: #f5f5f5;
-  border-top: 1px solid #c4c4c4;
-  border-right: 1px solid #c4c4c4;
-  border-left: 1px solid #c4c4c4;
-  /* border-bottom: 1px solid #c4c4c4; */
-  font-weight: 400;
+  border: 1px solid #c4c4c4;
 `;
 
 const TableLeftCell = styled(TableCell)`
-  width: 10%;
   background: #f5f5f5;
-  /* border-top: 1px solid #c4c4c4; */
+  text-align: center;
   border-right: 1px solid #c4c4c4;
-  /* border-left: 1px solid #c4c4c4; */
   border-bottom: 1px solid #c4c4c4;
-  font-weight: 400;
+  width: 15%;
+
+  &:first-child {
+    border-left: 1px solid #c4c4c4;
+    width: 10%;
+  }
 `;
 
 const TableLineCell = styled(TableCell)`
-  border-left: 1px solid #c4c4c4;
-  width: 10%;
-`;
-
-const TableRightCell = styled(TableCell)`
-  width: 40%;
-  /* border-top: 1px solid #c4c4c4; */
-  border-bottom: 1px solid #c4c4c4;
+  text-align: center;
   border-right: 1px solid #c4c4c4;
-  font-weight: 400;
-`;
-const pt20 = css`
-  border: 1px solid #b4b4b4;
+  border-bottom: 1px solid #c4c4c4;
+  width: 15%;
 `;

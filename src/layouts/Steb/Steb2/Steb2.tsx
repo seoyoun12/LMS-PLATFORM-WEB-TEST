@@ -19,7 +19,6 @@ import {
 import { useRecoilState } from 'recoil';
 import { courseClassEnrollInfo, courseClassEnrollList } from '@common/recoil';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { signUp } from '@common/api';
 import { IndividualSummary } from './IndividualSummary';
 import useResponsive from '@hooks/useResponsive';
@@ -29,7 +28,6 @@ import { carNumberRegex, phoneRegex } from '@utils/inputRegexes';
 export default function Steb2() {
   const router = useRouter();
   const snackbar = useSnackbar();
-  const isLogin = useIsLoginStatus();
   const isDesktop = useResponsive();
   const [isIndividual, setIsIndividual] = useState(true); //individual or team button
   const [registerType, setRegisterType] = useState<RegisterType>(
@@ -43,11 +41,13 @@ export default function Steb2() {
   const [fixedBusinessType, setFixedBusinessType] = useState<userBusinessType>(); //업체정보 운수구분 고정용(여객-여객,화물-화물)
   const [loading, setLoading] = useState(false);
   const confirmRef = useRef<boolean>();
+  const [CheckElementList, setCheckElementList] = useState<NodeListOf<Element>>();
 
   const { register, setValue, watch } = useForm<UserTransSaveInputDataType>({
     defaultValues: { firstIdentityNumber: '', secondIdentityNumber: '', smsYn: YN.YES },
   });
 
+  //리코일 체크후 courseClassSeq값이 없으면 step1으로 이동시키는 이펙트
   useEffect(() => {
     if (enrollInfo) setValue('courseClassSeq', Number(enrollInfo.seq));
 
@@ -56,9 +56,21 @@ export default function Steb2() {
       router.push(`/stebMove/steb1`);
     }
   }, [enrollInfo]);
+
+  //useForm의 첫 타입설정 이펙트
   useEffect(() => {
     setValue('registerType', RegisterType.TYPE_INDIVIDUAL);
   }, []);
+
+  // 스크롤을 위한 이펙트
+  useEffect(() => {
+    const scrollBoxList = document.querySelectorAll('.scroll-to-box');
+    setCheckElementList(scrollBoxList);
+  }, []);
+
+  const scrollElement = (indexNumber: number) => {
+    CheckElementList[indexNumber].scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
 
   const onClickEnroll = async () => {
     //단체 신청시 스택쌓이는 구조. 개인상태에서는 혼자 신청
@@ -71,27 +83,65 @@ export default function Steb2() {
       thirdPhone,
       ...rest
     } = watch();
+
     if (!enrollInfo || !enrollInfo.seq)
       return window.alert('오류입니다! 교육일정으로 돌아가서 다시 신청해주세요!');
-    if (String(rest.businessType) === '' || !rest.businessType)
-      return window.alert('운수구분을 선택해주세요!');
-    if (String(rest.businessSubType) === '' || !rest.businessSubType)
-      return window.alert('업종구분을 선택해주세요!');
-    if (rest.businessName === '' || !rest.businessName)
-      return window.alert('회사명을 입력해주세요!');
-    if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7)
-      return window.alert('주민번호를 모두 입력해주세요!');
-    // if (!enrollInfo || !enrollInfo.seq) return window.alert('기수를 선택해주세요!');
-    if (!hideCarNumber && !carNumberRegex.test(rest.carNumber))
-      return window.alert('올바른 형식의 차량번호를 입력해주세요!');
-    if (rest.carRegisteredRegion === '' || !rest.carRegisteredRegion)
-      return window.alert('차량등록지를 선택해주세요!');
+    if (String(rest.businessType) === '' || !rest.businessType) {
+      scrollElement(0);
+      return snackbar({ variant: 'error', message: '운수구분을 선택해주세요!' });
+    }
+    if (String(rest.businessSubType) === '' || !rest.businessSubType) {
+      scrollElement(1);
+      return snackbar({ variant: 'error', message: '업종구분을 선택해주세요!' });
+    }
+    if (rest.businessName === '' || !rest.businessName) {
+      scrollElement(2);
+      return snackbar({ variant: 'error', message: '회사명을 입력해주세요!' });
+    }
+    if (rest.name === '' || !rest.name) {
+      scrollElement(3);
+      return snackbar({
+        variant: 'error',
+        message: '이름을 입력해주세요!(관리자일경우 일반회원으로 시도해주세요)',
+      });
+    }
 
-    if (!phoneRegex.test(firstPhone + secondPhone + thirdPhone))
-      return window.alert('올바른 형식의 휴대전화를 입력해주세요!');
+    if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7) {
+      scrollElement(4);
+      return snackbar({
+        variant: 'error',
+        message: '주민번호를 모두 입력해주세요!(관리자일경우 일반회원으로 시도해주세요)',
+      });
+    }
+    if (!hideCarNumber && !carNumberRegex.test(rest.carNumber)) {
+      scrollElement(5);
+      return snackbar({
+        variant: 'error',
+        message: '올바른 형식의 차량번호를 입력해주세요!',
+      });
+    }
+    if (rest.carRegisteredRegion === '' || !rest.carRegisteredRegion) {
+      scrollElement(6);
+      return snackbar({ variant: 'error', message: '차량등록지를 선택해주세요!' });
+    }
 
-    if (!isIndividualCheck)
-      return window.alert('개인정보 수집 및 이용동의에 체크해주세요!');
+    if (!phoneRegex.test(firstPhone + secondPhone + thirdPhone)) {
+      scrollElement(7);
+      return snackbar({
+        variant: 'error',
+        message: '올바른 형식의 휴대전화를 입력해주세요!',
+      });
+      // return window.alert('올바른 형식의 휴대전화를 입력해주세요!');
+    }
+
+    if (!isIndividualCheck) {
+      scrollElement(8);
+      return snackbar({
+        variant: 'error',
+        message: '개인정보 수집 및 이용동의에 체크해주세요!',
+      });
+      // return window.alert('개인정보 수집 및 이용동의에 체크해주세요!');
+    }
 
     const postData = {
       ...rest,

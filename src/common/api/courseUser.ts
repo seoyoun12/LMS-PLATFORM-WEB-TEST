@@ -99,5 +99,7 @@ export function delelteCourseUserOrga(courseUserSeq: number) {
 
 // 신청안했으면 treu , 중복신청이면 false
 export function getIsExistUser(courseClassSeq: number) {
-  return GET<{ data: boolean }>(`/course-user/exists/${courseClassSeq}`);
+  return GET<{
+    data: { available: boolean; duplicated: boolean; message: string | null };
+  }>(`/course-user/exists/${courseClassSeq}`);
 }

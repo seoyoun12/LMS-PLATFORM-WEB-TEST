@@ -26,8 +26,13 @@ export function IndividualSummary({ setIsIndividualCheck, isIndividualCheck }: P
         mt={2}
         mb={2}
         sx={{ cursor: 'pointer' }}
+        className="scroll-to-box"
       >
-        {isIndividualCheck ? <RadioButtonCheckedIcon sx={{ color: '#3498db' }} /> : <RadioButtonUncheckedIcon sx={{ color: '#b1b1b1' }} />}
+        {isIndividualCheck ? (
+          <RadioButtonCheckedIcon sx={{ color: '#3498db' }} />
+        ) : (
+          <RadioButtonUncheckedIcon sx={{ color: '#b1b1b1' }} />
+        )}
         <Typography ml={1}>개인정보 수집 및 이용 동의합니다</Typography>
         <EssentialWord ml={0.5}>(필수)</EssentialWord>
       </Box>

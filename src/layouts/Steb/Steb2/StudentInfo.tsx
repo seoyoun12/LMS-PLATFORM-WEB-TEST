@@ -107,7 +107,7 @@ export function StudentInfo({
         <Table sx={{ borderTop: '3px solid #000' }}>
           <TableCustomRow>
             <TableLeftCell>이름</TableLeftCell>
-            <TableRightCell>
+            <TableRightCell className="scroll-to-box">
               <TextField
                 disabled={registerType === RegisterType.TYPE_INDIVIDUAL && true}
                 value={name}
@@ -118,7 +118,7 @@ export function StudentInfo({
           </TableCustomRow>
           <TableCustomRow>
             <TableLeftCell>주민등록번호</TableLeftCell>
-            <TableRightCell>
+            <TableRightCell className="scroll-to-box">
               <InputsBox>
                 <TextField
                   disabled={registerType === RegisterType.TYPE_INDIVIDUAL && true}
@@ -154,7 +154,7 @@ export function StudentInfo({
           {hideCarNumber === false && (
             <TableCustomRow>
               <TableLeftCell>차량 번호</TableLeftCell>
-              <TableRightCell>
+              <TableRightCell className="scroll-to-box">
                 <CarNumberBox parantSetValue={setValue} />
                 {/* <TextField {...register('carNumber')} fullWidth /> */}
               </TableRightCell>
@@ -162,7 +162,7 @@ export function StudentInfo({
           )}
           <TableCustomRow>
             <TableLeftCell>차량 등록지</TableLeftCell>
-            <TableRightCell>
+            <TableRightCell className="scroll-to-box">
               <FormControl fullWidth>
                 <Select
                   {...register('carRegisteredRegion', {
@@ -191,7 +191,7 @@ export function StudentInfo({
           </TableCustomRow>
           <TableCustomRow>
             <TableLeftCell>휴대 전화</TableLeftCell>
-            <TableRightCell>
+            <TableRightCell className="scroll-to-box">
               <InputsBox>
                 <FormControl sx={{ minWidth: '130px' }}>
                   <Select

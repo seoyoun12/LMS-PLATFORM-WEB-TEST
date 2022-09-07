@@ -15,15 +15,12 @@ export function CourseInfoModify() {
   // const { data, error } = detailCourseInfo({ courseUserSeq: Number(courseUserSeq) }); // 비구조화할당?
   const { data, error } = detailCourseInfo(Number(courseUserSeq));
 
-  console.log('라우터 : ', router);
-  console.log('라우터쿼리 : ', router.query);
-  console.log('courseUserSeq:', courseUserSeq);
-  console.log('data:', data);
+  console.log('데이터 : ', data);
 
   return (
     <Box>
-      <CourseInfomation />
-      <LearningStatus />
+      <CourseInfomation courseInfo={data?.courseInfo} />
+      <LearningStatus learningStatusList={data?.learningStatusList} />
       <ProgressStatus />
     </Box>
   );

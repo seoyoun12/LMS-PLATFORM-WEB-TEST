@@ -24,8 +24,8 @@ interface LearningInfoRes {
 
 interface DetailCourse {
   courseInfo? : UserCourseInfoDetailCourseInfoDto;
-  learningStatusList? : UserCourseInfoDetailLearningStatusDto;
-  progressStatusList?: UserCourseInfoDetailProgressStatusDto;
+  learningStatusList? : UserCourseInfoDetailLearningStatusDto[];
+  progressStatusList?: UserCourseInfoDetailProgressStatusDto[];
 }
 
 export function useLearningInfo({

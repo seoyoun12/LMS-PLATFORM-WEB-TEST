@@ -5,34 +5,46 @@ import CalendarIcon from '/public/assets/svgs/calendarIcon.svg';
 import PromiseIcon from '/public/assets/svgs/promiseIcon.svg';
 import StudyIcon from '/public/assets/svgs/studyIcon.svg';
 import CertificateIcon from '/public/assets/svgs/certificateIcon.svg';
+import Image from 'next/image';
+import { courseType } from '@common/api/courseClass';
+import useResponsive from '@hooks/useResponsive';
 
 const categoryData = [
   {
     id: 1,
     title: '도민교통',
     href: 'stebMove/steb2',
-    icon: <CalendarIcon />,
-    color: '#fff',
+    // icon: <CalendarIcon />,
+    icon: 'assets/images/calendarTransIcon.png',
+    // color: '#fff',
+    color: '#F4DB83',
     // color: '#ffede9',
-    btnText: '확인하기',
+    // btnText: '확인하기',
+    btnText: '예약하기',
   },
   {
     id: 2,
     title: '도민교통',
     href: 'stebMove/steb2',
-    icon: <PromiseIcon />,
-    color: '#fff',
+    // icon: <PromiseIcon />,
+    icon: 'assets/images/promiseTransIcon.png',
+    // color: '#fff',
+    color: '#84B9EE',
     // color: '#fff6e7',
-    btnText: '예약하기',
+    // btnText: '예약하기',
+    btnText: '내역확인',
   },
   {
     id: 3,
     title: '도민교통',
     title2: '학습하기',
     href: '/traffic/3',
-    icon: <StudyIcon />,
-    color: '#fff',
+    // icon: <StudyIcon />,
+    icon: 'assets/images/studyTransIcon.png',
+    // color: '#fff',
+    color: '#F1C3C1',
     // color: '#fffde2',
+    // btnText: '학습하기',
     btnText: '학습하기',
   },
   {
@@ -40,65 +52,103 @@ const categoryData = [
     title: '도민교통',
     title2: '수료확인',
     href: '/traffic/4',
-    icon: <CertificateIcon />,
-    color: '#fff',
+    // icon: <CertificateIcon />,
+    icon: 'assets/images/certificateTransIcon.png',
+    // color: '#fff',
+    color: '#BDB8F3',
     // color: '#f8ffe2',
+    // btnText: '수료확인',
     btnText: '수료확인',
   },
 ];
 
 export function CategoryCard() {
+  const isTablet = useResponsive(1028);
   return (
     // <ContentContainer className={styles.globalContainer}>
-    <Container>
-      <GridWrap
-        container
-        spacing={0}
-        columns={{ xs: 1, sm: 2, md: 2, lg: 4, xl: 4 }}
-        mt={6}
-        mb={10}
-        rowSpacing={6}
-      >
-        {categoryData.map(categoryData => (
-          <GridItem
-            item
-            xs={1}
-            sm={1}
-            md={1}
-            lg={1}
-            key={categoryData.id}
-            cardcolor={categoryData.color}
-          >
-            <GridLink href={categoryData.href} underline="none">
-              {/* <div className='categoryIcon'/> */}
-              <Box display="flex" alignItems="center" justifyContent="center">
-                {categoryData.icon}
-              </Box>
-              <Box mt={2}>
-                <GridTitleTypography fontWeight={500} fontSize="18px">
-                  {categoryData.title}
-                </GridTitleTypography>
-                <GridTitleTypography fontWeight={700} fontSize="24px">
-                  {categoryData.btnText}
-                </GridTitleTypography>
-
-                {/* <Button>{categoryData.btnText}</Button> */}
-              </Box>
-            </GridLink>
-          </GridItem>
-        ))}
-      </GridWrap>
-    </Container>
+    <CardWrap>
+      <Container>
+        <GridWrap
+          className="GridWraps"
+          container={true}
+          spacing={0}
+          columns={{ xs: 2, sm: 2, md: 2, lg: 4, xl: 4 }}
+          columnSpacing={2}
+          rowSpacing={2}
+        >
+          {categoryData.map(categoryData => (
+            <GridItem
+              item
+              xs={1}
+              sm={1}
+              md={1}
+              lg={1}
+              key={categoryData.id}
+              cardcolor={categoryData.color}
+            >
+              <GridLink href={categoryData.href} width="100px  " underline="none">
+                <Box
+                  sx={{
+                    border: `5px solid ${categoryData.color}`,
+                    // width: 'fit-content',
+                    margin: 'auto',
+                    padding: `${!isTablet ? '8px  32px' : ' 32px 58px'}`,
+                    borderRadius: '12px',
+                    background: 'white',
+                  }}
+                >
+                  <Box display="flex" alignItems="center" justifyContent="center">
+                    {/* {categoryData.icon} */}
+                    <Image src={'/' + categoryData.icon} width={100} height={100} />
+                  </Box>
+                  <Box mt={2}>
+                    {/* <div className='categoryIcon'/> */}
+                    <GridTitleTypography fontWeight={500} fontSize="18px">
+                      {categoryData.title}
+                    </GridTitleTypography>
+                    <GridTitleTypography fontWeight={700} fontSize="24px">
+                      {categoryData.btnText}
+                    </GridTitleTypography>
+                  </Box>
+                </Box>
+              </GridLink>
+            </GridItem>
+          ))}
+        </GridWrap>
+      </Container>
+    </CardWrap>
   );
 }
 
-const GridWrap = styled(Grid)``;
+const CardWrap = styled(Box)`
+  background: #fafafa;
+  padding: 0 8px;
+  padding-top: 48px;
+  @media (max-width: 1024px) {
+    padding-top: 0px;
+  }
+`;
 
-const GridItem = styled(Grid)<{ cardcolor: string }>`
+const GridWrap = styled(Grid)`
+  /* margin: auto; */
+  /* box-sizing: border-box; */
+  /* width: 100%; */
+  padding-top: 24px;
+  padding-bottom: 40px;
+`;
+
+const GridContainer = styled(Container)<{ cardcolor: string }>`
   /* display: flex; */
+  width: 200px;
+  height: 200px;
   border-radius: 20px;
   /* background-color: rgb(255, 0, 0, 0.1); */
   background-color: ${({ cardcolor }) => cardcolor};
+
+  .categoryIcon {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const ContentContainer = styled.div`
@@ -122,7 +172,52 @@ const GridTitleTypography = styled(Typography)`
   }
 `;
 
+const GridItem = styled(Grid)<{ cardcolor: string }>`
+  /* display: flex; */
+  border-radius: 20px;
+  /* background-color: rgb(255, 0, 0, 0.1); */
+  // background-color: ${({ cardcolor }) => cardcolor};
+  // border: 5px solid ${({ cardcolor }) => cardcolor};
+`;
 const GridLink = styled(Link)`
   text-align: center;
   color: black;
 `;
+
+// const GridWrap = styled(Grid)`
+//   padding-top: 24px;
+//   padding-bottom: 40px;
+// `;
+
+// const GridItem = styled(Grid)<{ cardcolor: string }>`
+//   /* display: flex; */
+//   border-radius: 20px;
+//   /* background-color: rgb(255, 0, 0, 0.1); */
+//   background-color: ${({ cardcolor }) => cardcolor};
+// `;
+
+// const ContentContainer = styled.div`
+//   padding: 35px 0px 0 20px !important;
+// `;
+
+// const GridTitleTypography = styled(Typography)`
+//   position: relative;
+//   top: 35%;
+//   text-align: center;
+//   /* border: 1px solid black; */
+
+//   .cardTitle1 {
+//     font-size: 3rem;
+//     color: red;
+//   }
+
+//   .cardTitle2 {
+//     font-size: 3rem;
+//     color: red;
+//   }
+// `;
+
+// const GridLink = styled(Link)`
+//   text-align: center;
+//   color: black;
+// `;

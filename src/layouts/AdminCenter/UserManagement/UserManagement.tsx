@@ -36,22 +36,14 @@ const radioConfig = [
 ];
 
 const headRows = [
-  { name: '회원번호' },
+  { name: 'No' },
   { name: '아이디' },
   { name: '이름' },
-  // { name: '성별' },
   { name: '생년월일' },
-  // { name: '계정생성일' },
   { name: '핸드폰번호' },
-  { name: '문자수신동의' },
-  { name: '메일수신동의' },
-  { name: '로그인실패횟수' },
-  { name: '로그인잠김여부' },
-  // { name: '유저수정일' },
-  // { name: '암호변경일' },
   { name: '가입구분' },
-  { name: '수정' },
-  { name: '삭제' },
+  { name: '가입날짜' },
+  { name: '상태' },
 ];
 
 export function UserManagement() {
@@ -163,7 +155,12 @@ export function UserManagement() {
 
         <TableBody>
           {data.content.map(user => (
-            <TableRow key={user.seq} hover>
+            <TableRow
+              key={user.seq}
+              hover
+              onClick={() => onClickModifyUser(user.seq)}
+              sx={{ cursor: 'pointer' }}
+            >
               <UserTableCell>{user.seq}</UserTableCell>
               <UserTableCell>
                 {regCategoryType.TYPE_TRANS_EDU === user.regCategory
@@ -179,14 +176,17 @@ export function UserManagement() {
                   : user.birth}
               </UserTableCell>
               <UserTableCell>{user.phone}</UserTableCell>
-              <UserTableCell>{user.smsYn}</UserTableCell>
-              <UserTableCell>{user.emailYn}</UserTableCell>
-              <UserTableCell>{user.loginFailedCount}</UserTableCell>
-              <UserTableCell>{user.failedYn}</UserTableCell>
+              {/* <UserTableCell>{user.smsYn}</UserTableCell> */}
+              {/* <UserTableCell>{user.emailYn}</UserTableCell> */}
+              {/* <UserTableCell>{user.loginFailedCount}</UserTableCell> */}
+              {/* <UserTableCell>{user.failedYn}</UserTableCell> */}
               <UserTableCell>
                 {userConfig.filter(item => item.value === user.regCategory)[0].label}{' '}
               </UserTableCell>
-              <UserTableCell>
+              <UserTableCell>{user.createdDtime.slice(0, 10)}</UserTableCell>
+              <UserTableCell>{user.status}</UserTableCell>
+
+              {/* <UserTableCell>
                 <Button
                   variant="text"
                   color="neutral"
@@ -195,9 +195,9 @@ export function UserManagement() {
                 >
                   수정
                 </Button>
-              </UserTableCell>
+              </UserTableCell> */}
 
-              <UserTableCell>
+              {/* <UserTableCell>
                 <Button
                   variant="text"
                   color="warning"
@@ -206,7 +206,7 @@ export function UserManagement() {
                 >
                   삭제
                 </Button>
-              </UserTableCell>
+              </UserTableCell> */}
             </TableRow>
           ))}
         </TableBody>
@@ -233,9 +233,13 @@ const UserTableRow = styled(TableRow)`
 `;
 
 const UserTitleTableCell = styled(TableCell)`
-  height: 1px;
-  position: relative;
   font-weight: bold;
+  background: #f5f5f5;
+  border-right: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-right: 1px solid #f0f0f0;
+  }
 `;
 
 const UserTableCell = styled(TableCell)`
@@ -243,4 +247,11 @@ const UserTableCell = styled(TableCell)`
   text-align: center;
   padding-top: 10px;
   margin: 0;
+  border-right: 1px solid #f0f0f0;
+
+  &:first-child {
+    /* border-right: 1px solid #e0e0e0; */
+    background: #f5f5f5;
+    width: 4%;
+  }
 `;

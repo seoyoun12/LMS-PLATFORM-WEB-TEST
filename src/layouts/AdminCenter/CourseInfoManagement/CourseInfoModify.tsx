@@ -7,21 +7,28 @@ import styled from '@emotion/styled';
 import { CourseInfomation } from '@components/admin-center/CourseInfo/CourseInfomation';
 import { LearningStatus } from '@components/admin-center/CourseInfo/LearningStatus';
 import { ProgressStatus } from '@components/admin-center/CourseInfo/ProgressStatus';
+import { Spinner } from '@components/ui';
 
 export function CourseInfoModify() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const { courseUserSeq } = router.query; // const {courseUserSeq} = router.query; {} 차이?
   // const { data, error } = detailCourseInfo({ courseUserSeq: Number(courseUserSeq) }); // 비구조화할당?
-  const { data, error } = detailCourseInfo(Number(courseUserSeq));
+  const { data, error, mutate } = detailCourseInfo(Number(courseUserSeq));
 
   console.log('데이터 : ', data);
+
+  const onMutate = () => {
+    mutate();
+  };
+
+  if (!data) return <Spinner />;
 
   return (
     <Box>
       <CourseInfomation courseInfo={data?.courseInfo} />
       <LearningStatus learningStatusList={data?.learningStatusList} />
-      <ProgressStatus />
+      <ProgressStatus progressList={data.progressStatusList} onMutate={onMutate} />
     </Box>
   );
 }

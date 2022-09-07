@@ -42,6 +42,7 @@ import { YN } from '@common/constant';
 import { getIsExistUser } from '@common/api/courseUser';
 import { useState } from 'react';
 import { Spinner } from '@components/ui';
+import { CheckBeforeEnrollDialog } from '@components/ui/Calendar';
 
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -100,7 +101,13 @@ export function CalendarBody({
   const isLogin = useIsLoginStatus();
   const [loading, setLoading] = useState(false);
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
-  const [deplecateEnrollOpen, setDeplecateEnrollOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState('');
+  const [dialogDuplicatedType, setDialogDuplicatedType] = useState(true);
+
+  const onCloseDialog = () => {
+    setDialogOpen(false);
+  };
 
   const scheduleList = schedule?.map(item => {
     //정원이 다 찼을경우
@@ -306,13 +313,16 @@ export function CalendarBody({
                 try {
                   setLoading(true);
                   const { data } = await getIsExistUser(modalInfo.seq);
-                  if (!data) {
+                  if (!data.available) {
                     setLoading(false);
-                    return setDeplecateEnrollOpen(true);
+                    setDialogMessage(data.message);
+                    setDialogDuplicatedType(data.duplicated);
+                    return setDialogOpen(true);
                   }
                   setLoading(false);
                 } catch (e: any) {
                   setLoading(false);
+                  return window.alert('오류입니다! 관리자에게 문의해주세요.');
                 }
                 router.push('/stebMove/steb2');
                 setLoading(false);
@@ -398,25 +408,16 @@ export function CalendarBody({
           </TableBody>
         </TableContainer>
       </Modal>
-
-      <Dialog open={deplecateEnrollOpen} onClose={() => setDeplecateEnrollOpen(false)}>
-        <DialogContent>
-          <DialogContentText>
-            이미 예약하신 신청내역이 있습니다. 신청내역을 확인하시겠습니까?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeplecateEnrollOpen(false)}>취소</Button>
-          <Button
-            onClick={() => {
-              router.push(`/me/enroll-history`);
-              return setDeplecateEnrollOpen(false);
-            }}
-          >
-            확인
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <CheckBeforeEnrollDialog
+        open={dialogOpen}
+        onClose={onCloseDialog}
+        message={dialogMessage}
+        duplicated={dialogDuplicatedType}
+        confirmAction={() => {
+          router.push(`/me/enroll-history`);
+          return setDialogOpen(false);
+        }}
+      />
     </CalendarWrap>
   );
 }

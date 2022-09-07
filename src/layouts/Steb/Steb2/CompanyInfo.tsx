@@ -169,7 +169,7 @@ export function CompanyInfo({
         <Table sx={{ borderTop: '3px solid #000' }}>
           <TableCustomRow>
             <TableLeftCell>운수구분</TableLeftCell>
-            <TableRightCell>
+            <TableRightCell className="scroll-to-box" id="businessType">
               <FormControl fullWidth>
                 <Select
                   labelId="businessType"
@@ -197,7 +197,7 @@ export function CompanyInfo({
           </TableCustomRow>
           <TableCustomRow>
             <TableLeftCell>업종구분</TableLeftCell>
-            <TableRightCell>
+            <TableRightCell className="scroll-to-box" id="businessSubType">
               <FormControl fullWidth>
                 <Select
                   labelId="businessSubType"
@@ -219,7 +219,7 @@ export function CompanyInfo({
           </TableCustomRow>
           <TableCustomRow>
             <TableLeftCell>회사명</TableLeftCell>
-            <TableRightCell>
+            <TableRightCell className="scroll-to-box">
               <TextField
                 placeholder="회사명 또는 차량등록지역"
                 {...register('businessName')}

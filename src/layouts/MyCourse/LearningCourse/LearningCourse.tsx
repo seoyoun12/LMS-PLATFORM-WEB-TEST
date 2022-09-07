@@ -24,8 +24,8 @@ export function LearningCourse() {
       new Date().getTime(); //현재시간이 크면 true 아니면 false
     if (res.progressStatus === ProgressStatus.TYPE_BEFORE || !isStartStudy)
       return window.alert('아직 학습이 시작되지 않았습니다!');
-    // if (res.progressStatus === ProgressStatus.TYPE_ENDED || isEndedStudy)
-    //   return window.alert('종료된 학습입니다!');
+    if (res.progressStatus === ProgressStatus.TYPE_ENDED || isEndedStudy)
+      return window.alert('종료된 학습입니다!');
 
     if (res.progressStatus === ProgressStatus.TYPE_PROGRESSING) {
       // router.push(

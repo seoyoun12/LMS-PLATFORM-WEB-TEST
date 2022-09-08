@@ -1,6 +1,6 @@
 import { removeCourse, useCourseList } from '@common/api/adm/course';
 import { Table } from '@components/ui';
-import { Button, Chip, TableBody, TableHead, Typography } from '@mui/material';
+import { Box, Button, Chip, TableBody, TableHead, Typography } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { useEffect, useState } from 'react';
@@ -17,16 +17,26 @@ import { YN } from '@common/constant';
 import { Spinner } from '@components/ui';
 import { css } from '@emotion/css';
 import { courseAdmList, courseList, courseRemove } from '@common/api/course';
+import {
+  courseReg,
+  courseCategory,
+  courseSubCategory,
+} from '@layouts/Calendar/CalendarBody/CalendarBody';
+import { CollectionsBookmark } from '@mui/icons-material';
 
 const headRows: {
   name: string;
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  width: string;
 }[] = [
-  { name: '번호', align: 'left' },
-  { name: '과정명', align: 'center' },
-  { name: '생성 날짜', align: 'center' },
-  { name: '노출 여부', align: 'center' },
-  { name: '상태', align: 'center' },
+  { name: 'No', align: 'center', width: '6.5%' },
+  { name: '과정분류', align: 'center', width: '8.5%' },
+  { name: '교육분류', align: 'center', width: '8.5%' },
+  { name: '업종', align: 'center', width: '8.5%' },
+  { name: '과정명', align: 'center', width: '17%' },
+  { name: '생성날짜', align: 'center', width: '17%' },
+  { name: '노출여부', align: 'center', width: '8.5%' },
+  { name: '상태', align: 'center', width: '8.5%' },
 ];
 
 export function CourseManagement() {
@@ -38,6 +48,14 @@ export function CourseManagement() {
 
   const { data, error, mutate } = courseAdmList({ page });
   // const { data, error, mutate } = courseList({ page });
+
+  console.log('데이터 :', data);
+  console.log('courseReg :', courseReg);
+
+  console.log(
+    'asd : ',
+    courseReg.filter(item => item.type === data?.content[0].courseType)
+  );
 
   // pagination
   useEffect(() => {
@@ -82,9 +100,12 @@ export function CourseManagement() {
 
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
-
+  console.log(
+    'asd : ',
+    courseReg.filter(item => item.type === data?.content[0].courseType)
+  );
   return (
-    <Container className={styles.globalContainer}>
+    <Box>
       <Typography
         variant="h5"
         sx={{
@@ -103,12 +124,11 @@ export function CourseManagement() {
       >
         <TableHead>
           <TableRow>
-            {headRows.map(({ name, align }) => (
-              <TableCell className={spaceNoWrap} key={name} align={align}>
+            {headRows.map(({ name, align, width }) => (
+              <TableCell key={name} align={align} width={width}>
                 {name}
               </TableCell>
             ))}
-            <TableCell>{}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -119,17 +139,27 @@ export function CourseManagement() {
               hover
               onClick={() => onClickModifyCourse(course.seq)}
             >
-              <TableCell align="left">{course.seq}</TableCell>
-              <TableCell align="left">
-                <Link
-                  href={`/admin-center/course/modify/${course.seq}`}
-                  underline="hover"
-                  color={grey[900]}
-                >
-                  {course.courseName}
-                </Link>
+              <TableCell align="center">{course.seq}</TableCell>
+              {/* <TableCell align="center">{course.courseType}</TableCell> */}
+              <TableCell align="center">
+                {courseReg.filter(item => item.type === course.courseType)[0].ko}
               </TableCell>
-              <TableCell align="center" className={spaceNoWrap}>
+              <TableCell align="center">
+                {
+                  courseCategory.filter(
+                    item => item.type === course.courseCategoryType
+                  )[0].ko
+                }
+              </TableCell>
+              <TableCell align="center">
+                {
+                  courseSubCategory.filter(
+                    item => item.type === course.courseSubCategoryType
+                  )[0].ko
+                }
+              </TableCell>
+              <TableCell align="center">{course.courseName}</TableCell>
+              <TableCell align="center">
                 {dateFormat(course.createdDtime, 'isoDate')}
               </TableCell>
               <TableCell align="center">
@@ -171,10 +201,6 @@ export function CourseManagement() {
           ))}
         </TableBody>
       </Table>
-    </Container>
+    </Box>
   );
 }
-
-const spaceNoWrap = css`
-  white-space: nowrap;
-`;

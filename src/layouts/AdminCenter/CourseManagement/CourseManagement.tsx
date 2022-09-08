@@ -23,6 +23,7 @@ import {
   courseSubCategory,
 } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { CollectionsBookmark } from '@mui/icons-material';
+import styled from '@emotion/styled';
 
 const headRows: {
   name: string;
@@ -33,10 +34,10 @@ const headRows: {
   { name: '과정분류', align: 'center', width: '8.5%' },
   { name: '교육분류', align: 'center', width: '8.5%' },
   { name: '업종', align: 'center', width: '8.5%' },
-  { name: '과정명', align: 'center', width: '17%' },
-  { name: '생성날짜', align: 'center', width: '17%' },
-  { name: '노출여부', align: 'center', width: '8.5%' },
-  { name: '상태', align: 'center', width: '8.5%' },
+  { name: '과정명', align: 'center', width: '25%' },
+  { name: '생성날짜', align: 'center', width: '15%' },
+  { name: '노출여부', align: 'center', width: '5.5%' },
+  { name: '상태', align: 'center', width: '5.5%' },
 ];
 
 export function CourseManagement() {
@@ -125,12 +126,13 @@ export function CourseManagement() {
         <TableHead>
           <TableRow>
             {headRows.map(({ name, align, width }) => (
-              <TableCell key={name} align={align} width={width}>
+              <CourseTitleTableCell key={name} align={align} width={width}>
                 {name}
-              </TableCell>
+              </CourseTitleTableCell>
             ))}
           </TableRow>
         </TableHead>
+
         <TableBody>
           {data.content.map(course => (
             <TableRow
@@ -139,45 +141,45 @@ export function CourseManagement() {
               hover
               onClick={() => onClickModifyCourse(course.seq)}
             >
-              <TableCell align="center">{course.seq}</TableCell>
+              <CourseTableCell align="center">{course.seq}</CourseTableCell>
               {/* <TableCell align="center">{course.courseType}</TableCell> */}
-              <TableCell align="center">
-                {courseReg.filter(item => item.type === course.courseType)[0].ko}
-              </TableCell>
-              <TableCell align="center">
+              <CourseTableCell align="center">
+                {courseReg.filter(item => item.type === course.courseType)[0]?.ko}
+              </CourseTableCell>
+              <CourseTableCell align="center">
                 {
                   courseCategory.filter(
                     item => item.type === course.courseCategoryType
-                  )[0].ko
+                  )[0]?.ko
                 }
-              </TableCell>
-              <TableCell align="center">
+              </CourseTableCell>
+              <CourseTableCell align="center">
                 {
                   courseSubCategory.filter(
                     item => item.type === course.courseSubCategoryType
-                  )[0].ko
+                  )[0]?.ko
                 }
-              </TableCell>
-              <TableCell align="center">{course.courseName}</TableCell>
-              <TableCell align="center">
+              </CourseTableCell>
+              <CourseTableCell align="center">{course.courseName}</CourseTableCell>
+              <CourseTableCell align="center">
                 {dateFormat(course.createdDtime, 'isoDate')}
-              </TableCell>
-              <TableCell align="center">
+              </CourseTableCell>
+              <CourseTableCell align="center">
                 <Chip
                   label={course.displayYn === YN.YES ? '보임' : '숨김'}
                   variant="outlined"
                   size="small"
                   color={course.displayYn === YN.YES ? 'secondary' : 'default'}
                 />
-              </TableCell>
-              <TableCell align="center">
+              </CourseTableCell>
+              <CourseTableCell align="center">
                 <Chip
                   label={course.status ? '정상' : '중지'}
                   variant="outlined"
                   size="small"
                   color={course.status ? 'secondary' : 'default'}
                 />
-              </TableCell>
+              </CourseTableCell>
 
               {/* <TableCell align="right" className={spaceNoWrap}>
                 <Button
@@ -204,3 +206,26 @@ export function CourseManagement() {
     </Box>
   );
 }
+
+const CourseTitleTableCell = styled(TableCell)`
+  font-weight: bold;
+  background: #f5f5f5;
+  border-right: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-right: 1px solid #f0f0f0;
+  }
+`;
+
+const CourseTableCell = styled(TableCell)`
+  white-space: nowrap;
+  text-align: center;
+  padding-top: 10px;
+  margin: 0;
+  border-right: 1px solid #f0f0f0;
+
+  &:first-child {
+    /* border-right: 1px solid #e0e0e0; */
+    background: #f5f5f5;
+  }
+`;

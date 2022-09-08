@@ -12,6 +12,7 @@ import {
   UserCourseInfoDetailProgressStatusDto,
 } from '../Api';
 import { YN } from '@common/constant';
+import { CourseType } from './courseClass';
 
 interface LearningInfoRes {
   courseClassSeq: number; //과정클래스시퀀스
@@ -33,21 +34,34 @@ interface DetailCourse {
   learningStatusList?: UserCourseInfoDetailLearningStatusDto[];
   progressStatusList?: UserCourseInfoDetailProgressStatusDto[];
 }
+export enum CompleteType {
+  TYPE_INCOMPLETE = 'TYPE_INCOMPLETE',
+  TYPE_COMPLETE = 'TYPE_COMPLETE',
+}
+export enum StatusType {
+  TYPE_NORMAL = 'TYPE_NORMAL',
+  TYPE_OUT = 'TYPE_OUT',
+}
 
-export function useLearningInfo({
-  page,
-  elementCnt,
-}: {
-  page: number;
+export interface CourseLearningInfoRequestDto {
+  completeType?: CompleteType | string;
+  courseClassSeq?: number;
+  courseSeq?: number;
+  courseType?: CourseType;
   elementCnt?: number;
-}) {
+  nameOrUsername?: string;
+  page: number;
+  statusType?: StatusType;
+}
+
+export function useLearningInfo({ page, ...rest }: CourseLearningInfoRequestDto) {
   const { data, error, mutate } = useSWR<
     SWRResponse<PaginationResult<LearningInfoRes[]>>
   >(
     [
       `/course/adm/learning-info/`,
       {
-        params: { page, elementCnt },
+        params: { page, ...rest },
       },
     ],
     GET

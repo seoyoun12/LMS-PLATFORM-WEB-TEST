@@ -28,7 +28,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);
   const paginationRef = useRef(null);
-  const progressbar = document.querySelector('.timeline-current');
+  // const progressbar = document.querySelector('.timeline-current');
   const timeLineRef = useRef<HTMLDivElement>();
   const ani = timeLineRef.current?.animate({ width: '100%' }, 4000);
 

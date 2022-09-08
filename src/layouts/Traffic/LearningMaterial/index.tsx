@@ -15,27 +15,32 @@ import EducationLayout from "@layouts/Traffic/LearningMaterial/Education";
 import LearningGuideLayout from "@layouts/Traffic/LearningMaterial/LearningGuide";
 import ReferenceLayout from "@layouts/Traffic/LearningMaterial/Reference";
 import VideoLayout from "@layouts/Traffic/LearningMaterial/Video";
+import { getMaterialType } from "@layouts/Traffic/LearningMaterial/util";
 
-type TabType = "education" | "learning_guide" | "reference" | "video";
+export type MaterialTabType =
+  | "education"
+  | "learning_guide"
+  | "reference"
+  | "video";
 
 export function LearningMaterialLayout() {
   const router = useRouter();
-  const { type } = router.query as Record<"type", TabType>;
+  const { type } = router.query as Record<"type", MaterialTabType>;
 
-  const handleClickTab = (tabValue: TabType) => {
+  const handleClickTab = (tabValue: MaterialTabType) => {
     router.push(`/traffic/learning-material/${tabValue}`);
   };
 
   const contentRender = useCallback(() => {
     switch (type) {
       case "education":
-        return <EducationLayout />;
+        return <EducationLayout materialType={getMaterialType(type)} />;
       case "learning_guide":
-        return <LearningGuideLayout />;
+        return <LearningGuideLayout materialType={getMaterialType(type)} />;
       case "reference":
-        return <ReferenceLayout />;
+        return <ReferenceLayout materialType={getMaterialType(type)} />;
       case "video":
-        return <VideoLayout />;
+        return <VideoLayout materialType={getMaterialType(type)} />;
       default:
         return <></>;
     }

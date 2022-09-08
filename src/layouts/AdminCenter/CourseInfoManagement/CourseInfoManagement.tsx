@@ -90,6 +90,9 @@ export function CourseInfoManagement() {
     setNotFound(false);
     if (isReload) {
       setPage(0);
+      setCourseType(CourseType.TYPE_TRANS_WORKER);
+      setCompleteType('');
+      setStatusType(StatusType.TYPE_NORMAL);
       return setNameOrUsername('');
     }
     if (searchInputRef.current) {

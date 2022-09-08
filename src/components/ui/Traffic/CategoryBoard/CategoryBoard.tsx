@@ -8,6 +8,12 @@ import { CategoryBoardQuestion } from '@layouts/Traffic/Category/CategoryBoardQu
 import { CategoryBoardLook } from '@layouts/Traffic/Category/CategoryBoardLook';
 import { Tabs2 } from '@components/ui/Tabs2';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
+import { CSRTabs2Props } from '@components/ui/Tabs2/CSRTabs2';
+
+const CSRTab2 = dynamic<CSRTabs2Props>(() => import('@components/ui/Tabs2/CSRTabs2'), {
+  ssr: false,
+});
 
 const tabsConfig = [
   { label: '공지사항', value: 'cbNotice', href: <CategoryBoardNotice /> },
@@ -31,7 +37,7 @@ export function CategoryBoard() {
   return (
     <NoticeWrap>
       <Box sx={{ mb: '30px', maxWidth: '1200px', margin: 'auto' }}>
-        <Tabs2
+        <CSRTab2
           tabsConfig={tabsConfig}
           variant={'fullWidth'}
           rendering={false}
@@ -39,7 +45,8 @@ export function CategoryBoard() {
           value={value}
           showBorderBottom={true}
           gap={3}
-          fontSx={{ fontWeight: 700, fontSize: '20px' }}
+          fontSx={{ fontSize: '20px' }}
+          responsiveWidth={768}
         />
       </Box>
       <Box
@@ -61,7 +68,14 @@ export function CategoryBoard() {
   );
 }
 const NoticeWrap = styled(Box)`
-  padding-top: 4rem;
+  /* padding-top: 4rem;
+  background: #e6edf3; */
+  padding: 4rem 0 0;
   background: #e6edf3;
+
+  .Mui-selected {
+    color: black !important;
+    font-weight: bold;
+  }
 `;
 const NoticeContainer = styled(Container)``;

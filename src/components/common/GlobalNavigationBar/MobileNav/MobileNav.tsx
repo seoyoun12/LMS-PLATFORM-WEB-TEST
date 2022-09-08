@@ -19,6 +19,7 @@ import { regCategoryType } from '@common/api/user';
 import UnsuIcon from '/public/assets/svgs/unsuIcon.svg';
 import LowFloorIcon from '/public/assets/svgs/lowFloorIcon.svg';
 import DominIcon from '/public/assets/svgs/dominIcon.svg';
+import { MainDisplayType, useMainDisplay } from '@common/api/mainDisplay';
 
 const siteMapMobileList = [
   {
@@ -55,6 +56,8 @@ export function MobileNav() {
   const router = useRouter();
   const isLoginStatus = useIsLoginStatus();
   const [userInfoData, setUserInfoData] = useRecoilState(userInfo); //유저데이터. 전역에 저장된 정보
+  const { data, error } = useMainDisplay();
+  console.log(data);
   const [list, setList] = useState(
     (typeof window !== 'undefined' &&
     localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
@@ -71,6 +74,11 @@ export function MobileNav() {
   );
   const [isHideNavbar, setIsHideNavbar] = useState(false); // 특정지역에서는 숨김처리
   const [categoryValue, setCategoryValue] = useState('');
+  const [siteMapMobileListState, setSiteMapMobileListState] = useState(
+    data?.map((item, idx) => {
+      return { ...item, ...siteMapMobileList[idx] };
+    })
+  );
 
   useEffect(() => {
     if (router.route === '/') {
@@ -105,6 +113,14 @@ export function MobileNav() {
     handleClose();
   }, [router]);
 
+  useEffect(() => {
+    setSiteMapMobileListState(
+      data?.map((item, idx) => {
+        return { ...item, ...siteMapMobileList[idx] };
+      })
+    );
+  }, [data]);
+
   const onClickSignin = () => {
     if (localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL) {
       router.push('/traffic/sign-in');
@@ -128,8 +144,11 @@ export function MobileNav() {
     href: string;
     type: courseType;
     regCategory: regCategoryType;
+    mainDisplayType: MainDisplayType;
   }) => {
     const isEqual = userInfoData.regCategory.includes(item.regCategory);
+    if (item.mainDisplayType === 'EDUCATION_GROUND_BUS_DRIVER')
+      return window.alert('준비중 입니다.');
 
     //로그인안되었거나 유저데이터가 앙 없거나 이상할때
     if (!isLoginStatus || userInfoData.regCategory === '' || !userInfoData.regCategory) {
@@ -188,18 +207,21 @@ export function MobileNav() {
             </DrawerTopBox>
             {/* <SiteMapTypo>사이트맵 이동하기</SiteMapTypo> */}
             <SiteMapWrap>
-              {siteMapMobileList.map(item => (
-                <SiteMapItem key={item.href}>
-                  <Box onClick={() => onClickSitemap(item)}>
-                    <SiteMapIconWrap>{item.icon}</SiteMapIconWrap>
-                    <SiteMapName>
-                      {item.name.split(' ').map(item => (
-                        <Box lineHeight={1.2}>{item}</Box>
-                      ))}
-                    </SiteMapName>
-                  </Box>
-                </SiteMapItem>
-              ))}
+              {siteMapMobileListState?.map(item => {
+                if (item.status === -1) return;
+                return (
+                  <SiteMapItem key={item.href}>
+                    <Box onClick={() => onClickSitemap(item)}>
+                      <SiteMapIconWrap>{item.icon}</SiteMapIconWrap>
+                      <SiteMapName>
+                        {item.name.split(' ').map(item => (
+                          <Box lineHeight={1.2}>{item}</Box>
+                        ))}
+                      </SiteMapName>
+                    </Box>
+                  </SiteMapItem>
+                );
+              })}
             </SiteMapWrap>
             {/* <Accordion accordionList={list} /> */}
             <Box display="flex" height="100%">
@@ -288,7 +310,9 @@ const SiteMapItem = styled(Box)`
     border-right: none;
   } */
 `;
-const SiteMapIconWrap = styled(Box)``;
+const SiteMapIconWrap = styled(Box)`
+  width: 90px;
+`;
 const SiteMapName = styled(Box)`
   display: flex;
   flex-direction: column;

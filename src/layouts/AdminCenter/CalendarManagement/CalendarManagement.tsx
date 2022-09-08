@@ -116,6 +116,7 @@ export function CalendarManagement() {
       >
         일정 목록
       </Typography>
+      <AdminCalendar handleDate={handleDate} handleBusiness={handleBusiness} />
       <Table
         pagination={true}
         // totalNum={data.totalElements}
@@ -214,7 +215,6 @@ export function CalendarManagement() {
           })}
         </TableBody>
       </Table>
-      <AdminCalendar handleDate={handleDate} handleBusiness={handleBusiness} />
     </CalendarManagementWrap>
   );
 }

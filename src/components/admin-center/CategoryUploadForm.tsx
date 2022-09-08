@@ -263,7 +263,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
           />
         </FormControl>
 
-        <FormControl className={pt20}>
+        {/* <FormControl className={pt20}>
           <FormLabel focused={false}>상태</FormLabel>
           <Controller
             rules={{ required: true }}
@@ -284,7 +284,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
               </RadioGroup>
             )}
           />
-        </FormControl>
+        </FormControl> */}
         <ButtonBox>
           <SubmitBtn variant="contained" type="submit" disabled={loading}>
             {loading ? (

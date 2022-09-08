@@ -102,12 +102,14 @@ export function QnaManagement() {
             >
               <TableCell align="center">{qna.seq}</TableCell>
               <TableCell align="center">{qna.userSeq}</TableCell>
-              <TableCell align="center">
+              {/* <TableCell align="center">
                 <SubjectTypography>{qna.title}</SubjectTypography>
-              </TableCell>
-              <TableCell align="center">
+              </TableCell> */}
+              <TableCell align="center">{qna.title}</TableCell>
+              {/* <TableCell align="center">
                 <ContentTypography>{qna.content}</ContentTypography>
-              </TableCell>
+              </TableCell> */}
+              <TableCell align="center">{qna.content}</TableCell>
               <TableCell align="center">
                 {/* {qna.type} */}
                 {tabsConfig.filter(item => item.value === qna.type)[0]?.name}

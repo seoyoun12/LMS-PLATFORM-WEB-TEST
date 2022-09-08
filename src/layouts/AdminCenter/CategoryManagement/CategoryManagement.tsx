@@ -37,16 +37,30 @@ const headRows: {
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
   width: string;
 }[] = [
-  { name: 'No', align: 'center', width: '10%' }, // seq
-  { name: '게시판유형', align: 'center', width: '10%' }, // boardType
-  { name: '제목', align: 'center', width: '10%' }, // subject
-  { name: '작성일', align: 'center', width: '10%' }, // createdDtime
-  { name: '수정일', align: 'center', width: '10%' }, // modifiedDtime
-  { name: '조회수', align: 'center', width: '10%' }, // hit
-  { name: '공지여부', align: 'center', width: '10%' }, // noticeYn
-  { name: '공개여부', align: 'center', width: '10%' }, // publicYn
-  { name: '상태', align: 'center', width: '10%' }, // status
+  { name: 'No', align: 'center', width: '6.5%' }, // seq
+  { name: '게시판유형', align: 'center', width: '8.5%' }, // boardType
+  { name: '제목', align: 'center', width: '27%' }, // subject
+  { name: '작성일', align: 'center', width: '12%' }, // createdDtime
+  { name: '수정일', align: 'center', width: '12%' }, // modifiedDtime
+  { name: '조회수', align: 'center', width: '8.5%' }, // hit
+  { name: '공지여부', align: 'center', width: '8.5%' }, // noticeYn
+  { name: '공개여부', align: 'center', width: '8.5%' }, // publicYn
+  { name: '상태', align: 'center', width: '8.5%' }, // status
 ];
+
+// const headRows2: [
+//   { name: 'No'; align: 'center'; width: '6.5%' }, // seq
+//   { name: '게시판유형'; align: 'center'; width: '8.5%' }, // boardType
+//   { name: '제목'; align: 'center'; width: '27%' }, // subject
+//   { name: '작성일'; align: 'center'; width: '12%' }, // createdDtime
+//   { name: '수정일'; align: 'center'; width: '12%' }, // modifiedDtime
+//   { name: '조회수'; align: 'center'; width: '8.5%' }, // hit
+//   { name: '공지여부'; align: 'center'; width: '8.5%' }, // noticeYn
+//   { name: '공개여부'; align: 'center'; width: '8.5%' }, // publicYn
+//   { name: '상태'; align: 'center'; width: '8.5%' } // status
+// ];
+
+// console.log(headRows2);
 
 const tabsConfig = [
   // { name: '전체', value: '' }, // board Type이 required
@@ -189,25 +203,28 @@ export function CategoryManagement() {
               hover
               onClick={() => onClickmodifyCategoryBoard(category.seq)}
             >
-              <CategoryTableCell>{category.seq}</CategoryTableCell>
-              <CategoryTableCell>
+              <CategoryTableCell align="center">{category.seq}</CategoryTableCell>
+              <CategoryTableCell align="center">
                 {tabsConfig.filter(item => item.value === category.boardType)[0]?.name}
               </CategoryTableCell>
-              <CategoryTableCell>
-                <SubjectTypography>{category.subject}</SubjectTypography>
+              <CategoryTableCell align="center">
+                <SubjectBox>{category.subject}</SubjectBox>
               </CategoryTableCell>
-              <CategoryTableCell>
+              {/* <CategoryTableCell>{category.subject}</CategoryTableCell> */}
+              <CategoryTableCell align="center">
                 {dateFormat(category.createdDtime, 'isoDate')}
               </CategoryTableCell>
-
-              <CategoryTableCell>
+              <CategoryTableCell align="center">
                 {dateFormat(category.modifiedDtime, 'isoDate')}
               </CategoryTableCell>
-              <CategoryTableCell>{category.hit}</CategoryTableCell>
-
-              <CategoryTableCell>{category.noticeYn}</CategoryTableCell>
-              <CategoryTableCell>{category.publicYn}</CategoryTableCell>
-              <CategoryTableCell>
+              <CategoryTableCell align="center">{category.hit}</CategoryTableCell>
+              <CategoryTableCell align="center">
+                {category.noticeYn === 'Y' ? '공지중' : '비공지'}
+              </CategoryTableCell>
+              <CategoryTableCell align="center">
+                {category.publicYn === 'Y' ? '공개중' : '비공개'}
+              </CategoryTableCell>
+              <CategoryTableCell align="center">
                 <Chip
                   variant="outlined"
                   size="small"
@@ -281,11 +298,18 @@ const CategoryTableRow = styled(TableRow)`
   white-space: nowrap;
 `;
 
-const SubjectTypography = styled(Typography)`
+// const SubjectTypography = styled(Typography)`
+//   text-overflow: ellipsis;
+//   overflow: hidden;
+//   white-space: nowrap;
+//   width: 400px; // 부모 넓이 그대로는 못가나?
+// `;
+
+const SubjectBox = styled(Box)`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  /* width: 150px; */
+  width: 400px; // 부모 넓이 그대로는 못가나?
 `;
 
 const ContentTypography = styled(Typography)`
@@ -306,7 +330,6 @@ const CategoryTitleTableCell = styled(TableCell)`
 `;
 const CategoryTableCell = styled(TableCell)`
   white-space: nowrap;
-  text-align: center;
   padding-top: 10px;
   margin: 0;
   border-right: 1px solid #f0f0f0;

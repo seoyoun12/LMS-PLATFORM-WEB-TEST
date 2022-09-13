@@ -143,10 +143,10 @@ export function SignInV2() {
           flexWrap="wrap"
           justifyContent="center"
         >
-          <Box>실명인증 후&nbsp;</Box>
-          <Box>예약절차를&nbsp;</Box>
-          <Box>진행하고&nbsp;</Box>
-          <Box>있습니다.</Box>
+          <Box>실명인증이&nbsp;</Box>
+          <Box>필요합니다.</Box>
+          {/* <Box>진행하고&nbsp;</Box>
+          <Box>있습니다.</Box> */}
         </Box>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField

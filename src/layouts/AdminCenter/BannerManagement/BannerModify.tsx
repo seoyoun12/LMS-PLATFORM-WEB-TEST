@@ -21,8 +21,9 @@ import {
   RadioGroup,
   TextField,
   Typography,
+  TextareaAutosize,
 } from '@mui/material';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -33,6 +34,9 @@ import { useRouter } from 'next/router';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { useDialog } from '@hooks/useDialog';
 import { Spinner } from '@components/ui';
+// import { TuiViewer } from '@components/common/TuiEditor';
+// import { Editor as EditorType } from '@toast-ui/react-editor';
+// import TuiEditorColorSyntax from '@components/common/TuiEditor/TuiEditorColorSyntax';
 
 interface FormType {
   title: string;
@@ -55,6 +59,8 @@ export function BannerModify() {
   const snackbar = useSnackbar();
   const router = useRouter();
   const { bannerId } = router.query;
+  // const editorRef = useRef<EditorType>(null);
+  // const viewerHeaderRef = useRef<EditorType>(null);
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileSeq, setFileSeq] = useState<number | null>(null);
@@ -86,6 +92,7 @@ export function BannerModify() {
   useEffect(() => {
     (async function () {
       try {
+        console.log('한번');
         const { data } = await getSingleBannerAdm(Number(bannerId));
         setValue('title', data.title);
         setValue('content', data.content);
@@ -95,14 +102,20 @@ export function BannerModify() {
         setValue('status', data.status);
 
         setFileName(data.s3Files[0]?.name || null);
-        setFileSeq(data.s3Files[0].seq);
+        setFileSeq(data.s3Files[0]?.seq);
       } catch (e: any) {
-        snackbar({ variant: 'error', message: e.data.message });
+        snackbar({ variant: 'error', message: e.data?.message });
       }
     })();
   }, []);
 
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...rest }, e) => {
+    if (rest.content.includes('script') || rest.title.includes('script'))
+      return snackbar({
+        variant: 'error',
+        message:
+          '"script"단어가 포함되어있어 수정이 불가능합니다. 해당 단어를 제거해주세요',
+      });
     try {
       const { data }: { data: BannerRes } = await modifyBannerAdm(Number(bannerId), rest);
       if (watch().files.length !== 0) {
@@ -156,20 +169,109 @@ export function BannerModify() {
     }
   };
 
+  //마크다운 에디터 상태값 업데이터
+  // const onChangeEditorContent = (
+  //   target:
+  //     | 'title'
+  //     | 'content'
+  //     | 'startDate'
+  //     | 'endDate'
+  //     | 'status'
+  //     | 'toUrl'
+  //     | 'files'
+  //     | `files.${number}`
+  // ) => {
+  //   console.log(editorRef, viewerHeaderRef);
+  //   if (!editorRef.current || !viewerHeaderRef.current) return;
+  //   const markdownContent = editorRef.current.getInstance().getMarkdown();
+  //   setValue(target, markdownContent);
+  //   if(target === 'title')
+  //   viewerHeaderRef.current.getInstance().setMarkdown(markdownContent);
+  // };
+
   return (
     <BannnerUploadContainer>
       <Box className="form-box" component="form" onSubmit={handleSubmit(onSubmit)}>
         <Typography variant="h5" fontWeight="bold">
           배너 변경
         </Typography>
-        <TextField
+        {/* <TextField
           placeholder="배너 제목"
           {...register('title', { required: '배너이름을 입력해주세요.' })}
-        />
-        <TextField
+        /> */}
+        <Box display="flex" justifyContent="space-between">
+          <Box display="flex" flexDirection="column" gap="4px">
+            {/* <Box width={450} height={70}>
+              <TuiEditorColorSyntax
+                initialValue={watch().title || ' '}
+                previewStyle="vertical"
+                initialEditType="wysiwyg"
+                useCommandShortcut={true}
+                onChange={() => onChangeEditorContent('title')}
+                hideModeSwitch
+                ref={editorRef}
+              />
+            </Box> */}
+            <TextareaAutosize
+              placeholder="배너제목"
+              style={{ width: '450px', minHeight: '70px', fontSize: '24px' }}
+              {...register('title', { required: '콘텐츠를 입력해주세요.' })}
+              spellCheck={false}
+            />
+
+            <TextareaAutosize
+              placeholder="콘텐츠 내용"
+              style={{ width: '450px', minHeight: '260px' }}
+              {...register('content', { required: '콘텐츠를 입력해주세요.' })}
+              spellCheck={false}
+            />
+          </Box>
+
+          <SlideInfo>
+            <Box fontSize="24px" fontWeight="bold">
+              {/* <TuiViewer initialValue={watch().title} ref={viewerHeaderRef} /> */}
+              {watch()
+                .title?.split('\n')
+                .map((item, idx) => {
+                  if (idx > 8) return;
+                  return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
+                })}
+            </Box>
+            <Box>
+              {/* <TuiViewer initialValue={watch().content} /> */}
+              {watch()
+                .content?.split('\n')
+                .map((item, idx) => {
+                  if (idx > 8) return;
+                  return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
+                })}
+            </Box>
+          </SlideInfo>
+        </Box>
+        <Typography fontWeight="bold" color="red" fontSize="14px">
+          콘텐츠 내용은 해당 입력박스의 가로 혹은 세로넓이를 넘어가면 안됩니다!(넘어가면
+          맨 아래의 내용은 잘립니다.)
+        </Typography>
+        <Typography fontWeight="bold" fontSize="14px">
+          {`<span style='color:색상' >텍스트</span>`}으로 색을 입힐수
+          있습니다.(ex)color:red , color:blue , color:#c4c4c4 .... )
+        </Typography>
+        <Typography fontWeight="bold" fontSize="14px">
+          {`<a href="사이트 주소" style='color:색상' >링크을 넣을 텍스트</a>`}으로 링크를
+          줄수 있습니다.
+        </Typography>
+        <Typography fontWeight="bold" fontSize="14px">
+          {`<span style='color:색상' >텍스트</span>`}으로 색을 입힐수
+          있습니다.(ex)color:red , color:blue , color:#c4c4c4 .... )
+        </Typography>
+        <Typography fontWeight="bold" color="red" fontSize="14px">
+          현재 제목은 2개이상의 색상을 입히려고 하면 오류가 발생합니다. 하나만 넣어주세요.
+        </Typography>
+
+        {/* <TextField
           placeholder="콘텐츠 내용"
           {...register('content', { required: '콘텐츠를 입력해주세요.' })}
-        />{' '}
+        />{' '} */}
         <Typography fontWeight="bold">게시 시작날짜</Typography>
         <DatePicker
           locale={ko}
@@ -242,7 +344,7 @@ export function BannerModify() {
         </Typography>
         <ButtonBox>
           <SubmitBtn variant="contained" type="submit">
-            업로드
+            수정
           </SubmitBtn>
           <DeleteBtn
             color="warning"
@@ -266,6 +368,9 @@ const BannnerUploadContainer = styled(Box)`
     flex-direction: column;
     gap: 1rem;
   }
+  textarea {
+    resize: none;
+  }
 `;
 
 const ButtonBox = styled(Box)`
@@ -281,4 +386,23 @@ const SubmitBtn = styled(Button)`
 const DeleteBtn = styled(Button)`
   width: 15%;
   float: right;
+`;
+
+const SlideInfo = styled.div`
+  color: #fff;
+  background: #9b9b9b;
+  width: 450px;
+  height: 330px;
+
+  h1 {
+    font-size: 34px;
+    font-weight: 900;
+    word-break: keep-all;
+    padding: 16px 0 8px 0;
+  }
+
+  p {
+    font-size: 16px;
+    padding: 8px 0;
+  }
 `;

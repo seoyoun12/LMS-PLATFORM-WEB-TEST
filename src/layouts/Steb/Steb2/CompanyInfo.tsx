@@ -280,13 +280,15 @@ const TableLeftCell = styled(TableCell)`
   width: 20%;
   display: flex;
   align-items: center;
+  /* background: #dce1ff; */
 
   @media (max-width: 768px) {
     border-bottom: none;
     width: 100%;
     text-align: start;
     padding: 12px 0;
-    padding-bottom: 2px;
+    margin-top: 2px;
+    /* padding-bottom: 2px; */
   }
 `;
 const TableRightCell = styled(TableCell)`

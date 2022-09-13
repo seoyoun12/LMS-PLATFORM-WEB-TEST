@@ -28,6 +28,7 @@ const siteMapMobileList = [
     type: courseType.TYPE_TRANS_WORKER,
     regCategory: regCategoryType.TYPE_TRANS_EDU,
     icon: <UnsuIcon />,
+    bgColor: '#0A9A4E',
   },
   {
     name: '저상버스 운전자교육',
@@ -35,6 +36,7 @@ const siteMapMobileList = [
     type: courseType.TYPE_LOW_FLOOR_BUS,
     regCategory: regCategoryType.TYPE_TRANS_EDU,
     icon: <LowFloorIcon />,
+    bgColor: '#236cef',
   },
   {
     name: '도민교통 안전교육',
@@ -42,6 +44,7 @@ const siteMapMobileList = [
     type: courseType.TYPE_PROVINCIAL,
     regCategory: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU,
     icon: <DominIcon />,
+    bgColor: '#FEC901',
   },
 ];
 
@@ -57,7 +60,6 @@ export function MobileNav() {
   const isLoginStatus = useIsLoginStatus();
   const [userInfoData, setUserInfoData] = useRecoilState(userInfo); //유저데이터. 전역에 저장된 정보
   const { data, error } = useMainDisplay();
-  console.log(data);
   const [list, setList] = useState(
     (typeof window !== 'undefined' &&
     localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
@@ -79,6 +81,7 @@ export function MobileNav() {
       return { ...item, ...siteMapMobileList[idx] };
     })
   );
+  const [topBoxBgColor, setTopBoxBgColor] = useState<string>('#236cef');
 
   useEffect(() => {
     if (router.route === '/') {
@@ -109,6 +112,7 @@ export function MobileNav() {
     setCategoryValue('');
   };
 
+  //페이지 이동시 close
   useEffect(() => {
     handleClose();
   }, [router]);
@@ -120,6 +124,16 @@ export function MobileNav() {
       })
     );
   }, [data]);
+
+  useEffect(() => {
+    if (window) {
+      console.log('윈도우!', window);
+      const bgColor = siteMapMobileList.filter(
+        item => item.type === localStorage.getItem('site_course_type')
+      )[0].bgColor;
+      setTopBoxBgColor(bgColor);
+    }
+  }, []);
 
   const onClickSignin = () => {
     if (localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL) {
@@ -197,7 +211,7 @@ export function MobileNav() {
             onClick={() => setOpen(true)}
           />
           <Drawer open={open} anchor="right" onClose={handleClose} sx={{ zIndex: 1202 }}>
-            <DrawerTopBox>
+            <DrawerTopBox topBoxBgColor={topBoxBgColor}>
               {isLoginStatus ? (
                 <Box onClick={onClickLogout}>로그아웃</Box>
               ) : (
@@ -277,14 +291,14 @@ const MobileContentContainer = styled.div`
   }
 `;
 
-const DrawerTopBox = styled(Box)`
+const DrawerTopBox = styled(Box)<{ topBoxBgColor: string }>`
   display: flex;
   width: 360px;
   height: 64px;
   padding: 0 1rem;
   align-items: center;
   justify-content: space-between;
-  background: #236cef;
+  background: ${({ topBoxBgColor }) => topBoxBgColor};
   color: white;
 `;
 

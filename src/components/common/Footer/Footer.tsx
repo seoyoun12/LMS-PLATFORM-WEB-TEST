@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { Box } from '@mui/system';
 import useResponsive from '@hooks/useResponsive';
 import Logo from '/public/assets/svgs/logo.svg';
+import HomeIcon from '@mui/icons-material/Home';
 
 const LinkList = [
   {
@@ -107,7 +108,12 @@ const Footer: FC<Props> = () => {
 
           <DownLineFootConatainer>
             <span>
-              <a href={`https://www.ctti.or.kr/`} target="_blank">
+              <a
+                href={`https://www.ctti.or.kr/`}
+                target="_blank"
+                className="move-chungnam"
+              >
+                <HomeIcon />
                 충청남도교통연수원 바로가기
               </a>
             </span>
@@ -191,6 +197,22 @@ const DownLineFootConatainer = styled.div`
   height: 50%;
   /* float: left;
   position: relative; */
+  .move-chungnam {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* width: 100%; */
+    // margin: 'auto',
+  }
+  @media (max-width: 1200px) {
+    .move-chungnam {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* width: 100%; */
+      // margin: 'auto',
+    }
+  }
 `;
 
 const FirstBox = styled(Box)`

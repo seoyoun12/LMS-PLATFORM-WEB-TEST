@@ -301,6 +301,12 @@ const Steb2Wrap = styled(Box)``;
 const Steb2BodyContainer = styled(Container)`
   padding: 0 1rem;
   margin-top: 6rem;
+  .MuiTextField-root {
+    background: #eeefff;
+  }
+  .MuiSelect-select {
+    background: #eeefff;
+  }
 `;
 
 const ConfirmButtonsWrap = styled(Box)`

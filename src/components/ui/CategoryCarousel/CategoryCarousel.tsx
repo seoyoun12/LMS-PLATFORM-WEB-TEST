@@ -158,6 +158,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   padding: '32px 0',
+                  marginLeft: '4px',
                 }
           }
         >
@@ -173,10 +174,18 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
           ))} */}
           <SwiperSlide key={data[0].seq}>
             <SlideInfo>
-              <Typography variant="h1" className="bold-700">
-                {data[0].title}
-              </Typography>
-              <Typography variant="inherit">{data[0].content}</Typography>
+              <Box fontSize="24px" fontWeight="bold">
+                {data[0].title.split('\n').map((item, idx) => {
+                  if (idx > 1) return;
+                  return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
+                })}
+              </Box>
+              <Box>
+                {data[0].content.split('\n').map((item, idx) => {
+                  if (idx > 8) return;
+                  return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
+                })}
+              </Box>
             </SlideInfo>
           </SwiperSlide>
 
@@ -226,6 +235,9 @@ const Slider = styled.div`
   // margin-bottom: 32px;
   .swiper-z-index {
     z-index: 111;
+  }
+  .red {
+    color: red;
   }
 `;
 const ImgBox = styled(Box)`

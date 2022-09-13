@@ -13,10 +13,11 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
+  TextareaAutosize,
   TextField,
   Typography,
 } from '@mui/material';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -26,6 +27,8 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { useRouter } from 'next/router';
 import { Spinner } from '@components/ui';
+// import { TuiEditor } from '@components/common/TuiEditor';
+// import { Editor as EditorType } from '@toast-ui/react-editor';
 
 interface FormType {
   title: string;
@@ -47,6 +50,7 @@ const defaultValues = {
 export function BannerUpload() {
   const snackbar = useSnackbar();
   const router = useRouter();
+  // const editorRef = useRef<EditorType>(null);
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -73,6 +77,12 @@ export function BannerUpload() {
   };
 
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...rest }, e) => {
+    if (rest.content.includes('script') || rest.title.includes('script'))
+      return snackbar({
+        variant: 'error',
+        message:
+          '"script"단어가 포함되어있어 수정이 불가능합니다. 해당 단어를 제거해주세요',
+      });
     try {
       const { data }: { data: BannerRes } = await createBannerAdm(rest);
       await fileHandler(files, data.seq);
@@ -100,20 +110,95 @@ export function BannerUpload() {
     snackbar({ variant: 'success', message: 'img delete successful' });
   };
 
+  // const onChangeEditorContent = (
+  //   target:
+  //     | 'title'
+  //     | 'content'
+  //     | 'startDate'
+  //     | 'endDate'
+  //     | 'status'
+  //     | 'toUrl'
+  //     | 'files'
+  //     | `files.${number}`
+  // ) => {
+  //   if (!editorRef.current) return;
+  //   const markdownContent = editorRef.current.getInstance().getMarkdown();
+  //   setValue(target, markdownContent);
+  // };
+
   return (
     <BannnerUploadContainer>
       <Box className="form-box" component="form" onSubmit={handleSubmit(onSubmit)}>
         <Typography variant="h5" fontWeight="bold">
           배너 등록
         </Typography>
-        <TextField
+        <Box display="flex" justifyContent="space-between">
+          <Box display="flex" flexDirection="column" gap="4px">
+            {/* <Box width={450} height={70}>
+              <TuiEditor
+                // initialValue={( watch().content) || ' '}
+                previewStyle="vertical"
+                initialEditType="wysiwyg"
+                useCommandShortcut={true}
+                onChange={onChangeEditorContent}
+                ref={editorRef}
+              />
+            </Box> */}
+            <TextareaAutosize
+              placeholder="배너제목"
+              style={{ width: '450px', minHeight: '70px', fontSize: '24px' }}
+              {...register('title', { required: '콘텐츠를 입력해주세요.' })}
+              spellCheck={false}
+            />
+
+            <TextareaAutosize
+              placeholder="콘텐츠 내용"
+              style={{ width: '450px', minHeight: '260px' }}
+              {...register('content', { required: '콘텐츠를 입력해주세요.' })}
+              spellCheck={false}
+            />
+          </Box>
+
+          <SlideInfo>
+            <Box fontSize="24px" fontWeight="bold">
+              {/* {editorRef.current?.getInstance().getMarkdown()} */}
+              {watch()
+                .title?.split('\n')
+                .map((item, idx) => {
+                  if (idx > 1) return;
+                  return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
+                })}
+            </Box>
+            <Box>
+              {watch()
+                .content?.split('\n')
+                .map((item, idx) => {
+                  if (idx > 8) return;
+                  return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
+                })}
+            </Box>
+          </SlideInfo>
+        </Box>
+        <Typography fontWeight="bold" color="red" fontSize="14px">
+          콘텐츠 내용은 해당 입력박스의 가로 혹은 세로넓이를 넘어가면 안됩니다!(넘어가면
+          맨 아래의 내용은 잘립니다.)
+        </Typography>
+        <Typography fontWeight="bold" fontSize="14px">
+          {`<span style='color:색상' >텍스트</span>`}으로 색을 입힐수
+          있습니다.(ex)color:red , color:blue , color:#c4c4c4 .... )
+        </Typography>
+        <Typography fontWeight="bold" fontSize="14px">
+          {`<a href="사이트 주소" style='color:색상' >링크을 넣을 텍스트</a>`}으로 링크를
+          줄수 있습니다.
+        </Typography>
+        {/* <TextField
           placeholder="배너 제목"
           {...register('title', { required: '배너이름을 입력해주세요.' })}
         />
         <TextField
           placeholder="콘텐츠 내용"
           {...register('content', { required: '콘텐츠를 입력해주세요.' })}
-        />
+        /> */}
         {/*mui의 textarea나 tui의 폼을 사용 */}
         <Typography fontWeight="bold">게시 시작날짜</Typography>
         <DatePicker
@@ -201,6 +286,9 @@ const BannnerUploadContainer = styled(Box)`
     flex-direction: column;
     gap: 1rem;
   }
+  textarea {
+    resize: none;
+  }
 `;
 const SubmitBtn = styled(Button)`
   width: 15%;
@@ -209,4 +297,23 @@ const SubmitBtn = styled(Button)`
 `;
 const ButtonBox = styled(Box)`
   margin: 120px 0 20px 0;
+`;
+
+const SlideInfo = styled.div`
+  color: #fff;
+  background: #9b9b9b;
+  width: 450px;
+  height: 330px;
+
+  h1 {
+    font-size: 34px;
+    font-weight: 900;
+    word-break: keep-all;
+    padding: 16px 0 8px 0;
+  }
+
+  p {
+    font-size: 16px;
+    padding: 8px 0;
+  }
 `;

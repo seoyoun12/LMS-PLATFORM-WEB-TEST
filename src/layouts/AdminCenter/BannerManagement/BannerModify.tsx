@@ -92,7 +92,6 @@ export function BannerModify() {
   useEffect(() => {
     (async function () {
       try {
-        console.log('한번');
         const { data } = await getSingleBannerAdm(Number(bannerId));
         setValue('title', data.title);
         setValue('content', data.content);
@@ -181,7 +180,6 @@ export function BannerModify() {
   //     | 'files'
   //     | `files.${number}`
   // ) => {
-  //   console.log(editorRef, viewerHeaderRef);
   //   if (!editorRef.current || !viewerHeaderRef.current) return;
   //   const markdownContent = editorRef.current.getInstance().getMarkdown();
   //   setValue(target, markdownContent);
@@ -214,7 +212,7 @@ export function BannerModify() {
             </Box> */}
             <TextareaAutosize
               placeholder="배너제목"
-              style={{ width: '450px', minHeight: '70px', fontSize: '24px' }}
+              style={{ width: '450px', minHeight: '70px' }}
               {...register('title', { required: '콘텐츠를 입력해주세요.' })}
               spellCheck={false}
             />
@@ -233,7 +231,7 @@ export function BannerModify() {
               {watch()
                 .title?.split('\n')
                 .map((item, idx) => {
-                  if (idx > 8) return;
+                  if (idx > 1) return;
                   return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
                 })}
             </Box>
@@ -259,10 +257,6 @@ export function BannerModify() {
         <Typography fontWeight="bold" fontSize="14px">
           {`<a href="사이트 주소" style='color:색상' >링크을 넣을 텍스트</a>`}으로 링크를
           줄수 있습니다.
-        </Typography>
-        <Typography fontWeight="bold" fontSize="14px">
-          {`<span style='color:색상' >텍스트</span>`}으로 색을 입힐수
-          있습니다.(ex)color:red , color:blue , color:#c4c4c4 .... )
         </Typography>
         <Typography fontWeight="bold" color="red" fontSize="14px">
           현재 제목은 2개이상의 색상을 입히려고 하면 오류가 발생합니다. 하나만 넣어주세요.

@@ -1,5 +1,6 @@
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
+  Backdrop,
   Box,
   Button,
   TableBody as MuiTableBody,
@@ -107,7 +108,8 @@ export function ProgressStatus({ progressList, onMutate }: Props) {
             onClick={onClickForcedProcessCompleteAll}
             disabled={allLoading}
           >
-            {allLoading ? <Spinner fit={true} /> : '전체 이수처리'}
+            {/* {allLoading ? <Spinner fit={true} /> : '전체 이수처리'} */}
+            전체 이수처리
           </Button>
           <Button
             variant="contained"
@@ -116,7 +118,8 @@ export function ProgressStatus({ progressList, onMutate }: Props) {
             disabled={allLoading}
             sx={{ marginLeft: '4px' }}
           >
-            {allLoading ? <Spinner fit={true} /> : '전체 미이수처리'}
+            {/* {allLoading ? <Spinner fit={true} /> : '전체 미이수처리'} */}
+            전체 미이수처리
           </Button>
         </TableTopHeadCell>
         <TableTopHeadCell
@@ -144,6 +147,9 @@ export function ProgressStatus({ progressList, onMutate }: Props) {
           />
         ))}
       </TableBody>
+      <Backdrop open={allLoading}>
+        <Spinner />
+      </Backdrop>
     </ProgressStatusBox>
   );
 }

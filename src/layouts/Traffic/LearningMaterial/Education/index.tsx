@@ -20,6 +20,7 @@ import {
   TableWrapper,
 } from "@layouts/Traffic/LearningMaterial/style";
 import ArrowDown from "public/assets/images/ic_arrow_down.svg";
+import { format } from "date-fns";
 
 interface EducationLayoutProps {
   materialType: MaterialType;
@@ -29,7 +30,8 @@ export default function EducationLayout({
   materialType,
 }: EducationLayoutProps) {
   const [tabType, setTabType] = useState<MaterialSubType | "">("");
-  const { data, mutate } = useGetLearningMaterial(materialType, tabType);
+  const { data } = useGetLearningMaterial(materialType, tabType);
+  console.log(data);
 
   const [selectedPost, setSelectedPost] = useState<number | null>(null);
 
@@ -96,30 +98,34 @@ export default function EducationLayout({
         </TableHeader>
       </TableWrapper>
 
-      {new Array(5).fill(null).map((_, index) => (
-        <EducationItemWrapper
-          open={selectedPost === index}
-          key={index}
-          onClick={() => handleClickPost(index)}
-        >
-          <EducationItemHeaderWrapper>
-            <TableItem width="10%">{index}</TableItem>
-            <TableItem width="65%" textAlign="left">
-              이것은 연령별 교수학습 지도안 제목입니다.이것은 연령별 교수학습
-              지도안 제목입니다.이것은 연령별 교수학습 지도안 제목입니다.
-            </TableItem>
-            <TableItem width="25%">
-              <EducationItemHeaderDateWrapper open={selectedPost === index}>
-                <EducationItemHeaderDateText>
-                  2022. 05. 23
-                </EducationItemHeaderDateText>
-                <ArrowDown />
-              </EducationItemHeaderDateWrapper>
-            </TableItem>
-          </EducationItemHeaderWrapper>
-          <EducationItemContentWrapper>asdasd</EducationItemContentWrapper>
-        </EducationItemWrapper>
-      ))}
+      {data &&
+        data.data.map((value) => (
+          <EducationItemWrapper
+            open={selectedPost === value.seq}
+            key={value.seq}
+            onClick={() => handleClickPost(value.seq)}
+          >
+            <EducationItemHeaderWrapper>
+              <TableItem width="10%">{value.seq}</TableItem>
+              <TableItem width="65%" textAlign="left">
+                {value.title}
+              </TableItem>
+              <TableItem width="25%">
+                <EducationItemHeaderDateWrapper
+                  open={selectedPost === value.seq}
+                >
+                  <EducationItemHeaderDateText>
+                    {format(new Date(value.createdDtime), "yyyy. MM. dd")}
+                  </EducationItemHeaderDateText>
+                  <ArrowDown />
+                </EducationItemHeaderDateWrapper>
+              </TableItem>
+            </EducationItemHeaderWrapper>
+            <EducationItemContentWrapper>
+              {value.content}
+            </EducationItemContentWrapper>
+          </EducationItemWrapper>
+        ))}
     </EducationWrapper>
   );
 }

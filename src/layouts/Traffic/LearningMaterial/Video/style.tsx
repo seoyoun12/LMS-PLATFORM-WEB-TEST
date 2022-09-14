@@ -44,4 +44,9 @@ export const VideoItemHeaderDateText = styled.p`
 export const VideoItemContentWrapper = styled.div`
   padding: 14px 10%;
   background-color: #fbfbfb;
+
+  > iframe {
+    width: 100%;
+    height: 500px;
+  }
 `;

@@ -93,26 +93,26 @@ const LinkList = [
     textColor: '#711D14',
     color: '#FEC901',
     lineColor: '#57242b',
-    // href: 'traffic/category',
-    href: '',
+    href: 'traffic/category',
+    // href: '',
     imgPath: '/assets/images/domin.jpg',
     onClickCard: async () => {
-      // if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
-      //   return localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
-      // if (
-      //   typeof window !== 'undefined' &&
-      //   localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
-      // )
-      //   return;
-      // if (localStorage.getItem('site_course_type') !== courseType.TYPE_PROVINCIAL) {
-      //   if (!!localStorage.getItem('ACCESS_TOKEN')) {
-      //     await logout();
-      //   } else {
-      //     return;
-      //   }
-      // }
-      // localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
-      alert('준비 중 입니다.');
+      if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
+        return localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
+      if (
+        typeof window !== 'undefined' &&
+        localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
+      )
+        return;
+      if (localStorage.getItem('site_course_type') !== courseType.TYPE_PROVINCIAL) {
+        if (!!localStorage.getItem('ACCESS_TOKEN')) {
+          await logout();
+        } else {
+          return;
+        }
+      }
+      localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
+      // alert('준비 중 입니다.');
     },
   },
 ];

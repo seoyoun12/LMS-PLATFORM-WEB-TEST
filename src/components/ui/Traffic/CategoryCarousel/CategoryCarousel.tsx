@@ -173,10 +173,18 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
           ))} */}
           <SwiperSlide key={data[0].seq}>
             <SlideInfo>
-              <Typography variant="h1" className="bold-700">
-                {data[0].title}
-              </Typography>
-              <Typography variant="inherit">{data[0].content}</Typography>
+              <Box fontSize="24px" fontWeight="bold">
+                {data[0].title.split('\n').map((item, idx) => {
+                  if (idx > 1) return;
+                  return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
+                })}
+              </Box>
+              <Box>
+                {data[0].content.split('\n').map((item, idx) => {
+                  if (idx > 8) return;
+                  return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
+                })}
+              </Box>
             </SlideInfo>
           </SwiperSlide>
 

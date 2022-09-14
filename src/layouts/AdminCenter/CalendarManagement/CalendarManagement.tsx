@@ -7,6 +7,7 @@ import {
   Box,
   Button,
   Container,
+  Radio,
   TableBody,
   TableCell,
   TableHead,
@@ -17,7 +18,11 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import dateFormat from 'dateformat';
 import { businessType } from '@common/api/courseClass';
-import { courseClassRemove, useCourseClassAdm } from '@common/api/adm/courseClass';
+import {
+  courseClassRemove,
+  CourseType,
+  useCourseClassAdm,
+} from '@common/api/adm/courseClass';
 import { Link } from '@components/common';
 import { courseBusinessTypeList, eduLegendList } from '@layouts/Calendar/Calendar';
 import { AdminCalendar } from './AdminCalendar';
@@ -47,14 +52,15 @@ export function CalendarManagement() {
   const router = useRouter();
   // const [ page, setPage ] = useState(0);
   const [manageMentDate, setManagementDate] = useState<Date>(new Date());
+  const [courseType, setCourseType] = useState<CourseType>(CourseType.TYPE_TRANS_WORKER); //운수저상도민 타입
   const [manageBusinessType, setManageBusinessType] = useState<businessType>(
     businessType.TYPE_ALL
   );
   const { data, error, mutate } = useCourseClassAdm(
     manageBusinessType,
-    dateFormat(manageMentDate, 'yyyy-mm')
+    dateFormat(manageMentDate, 'yyyy-mm'),
+    courseType
   );
-  console.log('asd', manageBusinessType);
 
   const handleDate = (date: Date) => {
     setManagementDate(date);
@@ -62,6 +68,14 @@ export function CalendarManagement() {
 
   const handleBusiness = (businessType: businessType) => {
     setManageBusinessType(businessType);
+  };
+
+  const handleCourseType = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // const value = e.currentTarget.value; 무슨차이일까?
+    const value = e.target.value;
+    if (value === CourseType.TYPE_TRANS_WORKER) setCourseType(value);
+    if (value === CourseType.TYPE_LOW_FLOOR_BUS) setCourseType(value);
+    if (value === CourseType.TYPE_PROVINCIAL) setCourseType(value);
   };
 
   useEffect(() => {
@@ -116,7 +130,35 @@ export function CalendarManagement() {
       >
         일정 목록
       </Typography>
-      <AdminCalendar handleDate={handleDate} handleBusiness={handleBusiness} />
+
+      <Box>
+        <Box>과정타입</Box>
+        <Radio
+          value={CourseType.TYPE_TRANS_WORKER}
+          onChange={handleCourseType}
+          checked={courseType === CourseType.TYPE_TRANS_WORKER}
+        />
+        <span>운수종사자</span>
+        <Radio
+          value={CourseType.TYPE_LOW_FLOOR_BUS}
+          onChange={handleCourseType}
+          checked={courseType === CourseType.TYPE_LOW_FLOOR_BUS}
+        />
+        <span>저상버스</span>
+        <Radio
+          value={CourseType.TYPE_PROVINCIAL}
+          onChange={handleCourseType}
+          checked={courseType === CourseType.TYPE_PROVINCIAL}
+        />
+        <span>도민교통</span>
+      </Box>
+
+      <AdminCalendar
+        handleDate={handleDate}
+        handleBusiness={handleBusiness}
+        courseType={courseType}
+      />
+
       <Table
         pagination={true}
         // totalNum={data.totalElements}

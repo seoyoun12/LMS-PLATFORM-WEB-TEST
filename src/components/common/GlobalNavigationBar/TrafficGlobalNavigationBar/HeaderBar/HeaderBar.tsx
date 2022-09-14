@@ -27,7 +27,7 @@ export function HeaderBar() {
     <Header className={styles.globalContainer}>
       <ContentContainer>
         <Link
-          href="/traffic/category"
+          href="/"
           underline="none"
           height="100%"
           flexBasis={224}
@@ -96,12 +96,13 @@ export function HeaderBar() {
                   role === UserRole.ROLE_TRANS_MANAGER ||
                   role === UserRole.ROLE_TRAFFIC_SAFETY_MANAGER
               ) ? (
-                <Link href="/admin-center/dashboard" underline="none">
-                  <Button className="align-left" color="neutral" size="large">
-                    관리 센터
-                  </Button>
-                </Link>
-              ) : null}
+                <></>
+              ) : // <Link href="/admin-center/dashboard" underline="none">
+              //   <Button className="align-left" color="neutral" size="large">
+              //     관리 센터
+              //   </Button>
+              // </Link>
+              null}
               <AccountMenu />
             </Stack>
           )}

@@ -51,7 +51,10 @@ export function SignInV2() {
       const res = await signIn(username, password, loginType.TYPE_TRAFFIC_SAFETY_EDU);
       if (res.success) {
         setIsLoginState(true);
-        setUsetInfo({ name: res.data.username, role: [...res.data.roles as unknown as UserRole[]] }); // api가 있었음 필요없을듯
+        setUsetInfo({
+          name: res.data.username,
+          role: [...(res.data.roles as unknown as UserRole[])],
+        }); // api가 있었음 필요없을듯
         snackbar({ variant: 'success', message: '로그인이 완료되었습니다.' });
         router.push('/traffic/category');
       }
@@ -87,7 +90,7 @@ export function SignInV2() {
         {/* <Typography component="h1" variant="h5">
           로그인엊머엉
         </Typography> */}
-        <Typography fontSize="1rem">로그인 후 예약절차를 진행하고 있습니다.</Typography>
+        <Typography fontSize="1rem">로그인 후 서비스를 이용하실수 있습니다.</Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             placeholder="아이디를 입력해주세요"
@@ -111,7 +114,13 @@ export function SignInV2() {
             id="password"
             autoComplete="current-password"
           />
-          <Button type="submit" fullWidth variant="contained" disabled={loading} sx={{ mt: 3, mb: 2 }}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            disabled={loading}
+            sx={{ mt: 3, mb: 2 }}
+          >
             {loading ? <Spinner fit={true} /> : '로그인'}
           </Button>
           <Grid container>

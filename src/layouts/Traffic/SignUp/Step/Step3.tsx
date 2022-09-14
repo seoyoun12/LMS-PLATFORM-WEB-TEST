@@ -6,9 +6,10 @@ import { useRouter } from 'next/router';
 
 interface Props {
   handleStep: (moveNumber: number) => void;
+  resName: string;
 }
 
-export function Step3({ handleStep }: Props) {
+export function Step3({ handleStep, resName }: Props) {
   const router = useRouter();
   return (
     <Step3Wrap>
@@ -31,12 +32,17 @@ export function Step3({ handleStep }: Props) {
           </Box>
         </ContentBoxes>
         <Box mt={4} />
-        <ContentBoxes>홍길동님의 회원가입을 축하합니다.</ContentBoxes>
+        <ContentBoxes>{String(resName)}님의 회원가입을 축하합니다.</ContentBoxes>
         <ContentBoxes>알차고 실속있는 서비스로 찾아뵙겠습니다.</ContentBoxes>
         <Box margin="auto" maxWidth="450px" mt={4} borderBottom="2px solid #888888" />
         <ContentBoxes borderBottom="2px solid #888888"></ContentBoxes>
         <Box display="flex" gap="1rem" maxWidth="400px" margin="auto" mt={2}>
-          <Button fullWidth variant="contained" color="neutral" onClick={() => router.push(`/traffic/category`)}>
+          <Button
+            fullWidth
+            variant="contained"
+            color="neutral"
+            onClick={() => router.push(`/traffic/category`)}
+          >
             홈으로
           </Button>
           <Button

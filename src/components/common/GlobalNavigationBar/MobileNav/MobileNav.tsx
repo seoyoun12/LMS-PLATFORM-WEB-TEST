@@ -127,7 +127,6 @@ export function MobileNav() {
 
   useEffect(() => {
     if (window) {
-      console.log('윈도우!', window);
       const bgColor = siteMapMobileList.filter(
         item => item.type === localStorage.getItem('site_course_type')
       )[0].bgColor;

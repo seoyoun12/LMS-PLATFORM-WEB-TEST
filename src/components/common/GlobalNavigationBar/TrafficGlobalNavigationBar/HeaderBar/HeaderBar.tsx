@@ -30,14 +30,14 @@ export function HeaderBar() {
           href="/"
           underline="none"
           height="100%"
-          flexBasis={224}
+          flexBasis={230}
           display="flex"
           alignItems="center"
         >
           <Image
-            src="/assets/images/cttsLogo.png"
+            src="/assets/images/onlineCenterLogo.png"
             height={40}
-            width={224}
+            width={230}
             alt="Your Name"
           />
         </Link>

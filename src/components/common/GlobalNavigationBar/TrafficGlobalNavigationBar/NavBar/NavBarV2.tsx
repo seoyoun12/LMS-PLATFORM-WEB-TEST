@@ -139,7 +139,7 @@ const ContentContainer = styled.nav`
   flex-basis: 820px;
   color: black;
   /* padding-bottom: 12px; */
-  padding: 0 20px;
+  padding: 0 10px;
 
   .bold-600 {
     font-weight: 600;

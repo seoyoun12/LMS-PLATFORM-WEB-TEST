@@ -198,7 +198,7 @@ export function MobileNav() {
             alignItems="center"
           >
             <Image
-              src="/assets/images/cttsLogo.png"
+              src="/assets/images/onlineCenterLogo.png"
               height={40}
               width={224}
               alt="Your Name"

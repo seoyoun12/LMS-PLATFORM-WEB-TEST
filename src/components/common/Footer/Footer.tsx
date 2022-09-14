@@ -8,6 +8,7 @@ import { Box } from '@mui/system';
 import useResponsive from '@hooks/useResponsive';
 import Logo from '/public/assets/svgs/logo.svg';
 import HomeIcon from '@mui/icons-material/Home';
+import Image from 'next/image';
 
 const LinkList = [
   {
@@ -66,9 +67,15 @@ const Footer: FC<Props> = () => {
               alignItems: 'center',
             }}
           >
-            <Box width="250px">
+            <Box width="260px">
               {/* <Link href="https://www.ctti.or.kr"> */}
-              <Logo />
+              {/* <Logo /> */}
+              <Image
+                src="/assets/images/onlineCenterLogo.png"
+                height={46}
+                width={260}
+                alt="Your Name"
+              />
               {/* </Link> */}
             </Box>
             <Box display="flex" gap={2}>

@@ -180,7 +180,7 @@ const MainPage: NextPage = () => {
         <ContentBox>
           <LogoBox>
             <Image
-              src="/assets/images/cttsLogo.png"
+              src="/assets/images/onlineCenterLogo.png"
               height={48}
               width={320}
               alt="Your Name"

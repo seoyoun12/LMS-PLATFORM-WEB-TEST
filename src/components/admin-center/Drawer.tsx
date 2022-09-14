@@ -210,22 +210,23 @@ export function Drawer({ children }: { children: ReactNode }) {
       ],
       icon: <MenuBookIcon sx={{ mr: '32px', color: grey[700] }} />,
     },
-    // {
-    //   name: '통계',
-    //   children: [
-    //     {
-    //       name: 'child1',
-    //       href: '/admin-center/statics',
-    //       isActive: router.pathname === '',
-    //     },
-    //     {
-    //       name: 'child2',
-    //       href: '/admin-center/statics',
-    //       isActive: router.pathname === '',
-    //     },
-    //   ],
-    //   icon: <AnalyticsOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
-    // },
+    {
+      name: '통계',
+      children: [
+        {
+          name: '설문통계',
+          // href: '/admin-center/statics-survey',
+          href: '/admin-center/statics/survey',
+          isActive: router.pathname === '',
+        },
+        // {
+        //   name: 'child2',
+        //   href: '/admin-center/statics',
+        //   isActive: router.pathname === '',
+        // },
+      ],
+      icon: <AnalyticsOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+    },
     // {
     //   name: '설정',
     //   children: [

@@ -20,7 +20,11 @@ export function Step1({ handleStep, setResName }: Props) {
   const [popUpState, setPopUpState] = useState<Window>(null);
 
   const onClickPop = () => {
-    const popUp = document.open(`https://api.bonobono.dev/api/v1/nice?uuid=` + uuidRef.current, '_parant', 'popup=yes');
+    const popUp = document.open(
+      `https://api.bonobono.dev/api/v1/nice?uuid=` + uuidRef.current,
+      '_parant',
+      'popup=yes'
+    );
     setPopUpState(popUp);
   };
 
@@ -33,7 +37,7 @@ export function Step1({ handleStep, setResName }: Props) {
             setResName(data.name);
             handleStep(2);
           } catch (e: any) {
-            snackbar({ variant: 'error', message: e.data.message });
+            snackbar({ variant: 'error', message: '인증실패 혹은 취소하셨습니다.' });
           }
           clearInterval(interval);
         }
@@ -47,7 +51,9 @@ export function Step1({ handleStep, setResName }: Props) {
         <TitleTypo>본인인증</TitleTypo>
 
         <SpaceBox mt={2} />
-        <ContentBoxes>회원가입을 위한 본인확인 단계입니다. 인증수단을 미리 준비해주세요</ContentBoxes>
+        <ContentBoxes>
+          회원가입을 위한 본인확인 단계입니다. 인증수단을 미리 준비해주세요
+        </ContentBoxes>
 
         <SpaceBox mt={6} />
         <ContentBoxes fontSize="1.25rem" fontWeight="bold">
@@ -79,9 +85,14 @@ export function Step1({ handleStep, setResName }: Props) {
         <SpaceBox mt={2} />
 
         <ContentBoxes component="li">본인인증은 휴대폰으로 가능합니다.</ContentBoxes>
-        <ContentBoxes component="li">본인인증 절차가 정상적으로 이루어지지 않을 경우 휴대폰 본인인증은 한국모바일인증(주)</ContentBoxes>
+        <ContentBoxes component="li">
+          본인인증 절차가 정상적으로 이루어지지 않을 경우 휴대폰 본인인증은
+          한국모바일인증(주)
+        </ContentBoxes>
         <ContentBoxes>☎ 02-2033-8500으로 문의하시기 바랍니다.</ContentBoxes>
-        <ContentBoxes component="li">회원가입에 대한 다른 궁금한 사항은 고객센터로 문의하여 주시기 바랍니다.</ContentBoxes>
+        <ContentBoxes component="li">
+          회원가입에 대한 다른 궁금한 사항은 고객센터로 문의하여 주시기 바랍니다.
+        </ContentBoxes>
       </StepMain>
     </Step1Wrap>
   );

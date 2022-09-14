@@ -108,7 +108,7 @@ const LinkList = [
         if (!!localStorage.getItem('ACCESS_TOKEN')) {
           await logout();
         } else {
-          return;
+          return localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
         }
       }
       localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);

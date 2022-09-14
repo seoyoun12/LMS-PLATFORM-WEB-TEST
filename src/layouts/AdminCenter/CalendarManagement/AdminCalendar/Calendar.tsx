@@ -15,7 +15,7 @@ import {
   useCourseClass,
 } from '@common/api/courseClass';
 import { Spinner } from '@components/ui';
-import { useCourseClassAdm } from '@common/api/adm/courseClass';
+import { CourseType, useCourseClassAdm } from '@common/api/adm/courseClass';
 
 export interface ClickedPlanInfo {
   seq: number;
@@ -145,18 +145,21 @@ const modalInfoTItle = [
 export function AdminCalendar({
   handleDate,
   handleBusiness,
+  courseType,
 }: {
   handleDate: (date: Date) => void;
   handleBusiness: (businessType: businessType) => void;
+  courseType: CourseType;
 }) {
   const [date, setDate] = useState(new Date());
-  const [filter, setFilter] = useState<businessType>(businessType.TYPE_ALL);
+  const [filter, setFilter] = useState<businessType>(businessType.TYPE_ALL); //여객 화물 타입
   const [openModal, setOpenModal] = useState(false);
   const [modalInfo, setModalInfo] = useState<ClickedPlanInfo>();
   const { data, error, mutate } = useCourseClassAdm(
     // courseType: typeof window !== 'undefined' && (localStorage.getItem('site_course_type') as courseType),
     filter,
-    dateFormat(date, 'yyyy-mm')
+    dateFormat(date, 'yyyy-mm'),
+    courseType
   );
   const [schedule, setSchedule] = useState<CourseClassRes[]>();
 

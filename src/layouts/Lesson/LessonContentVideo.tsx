@@ -19,7 +19,7 @@ interface Props {
   lesson: LessonDetailClientResponseDto | null;
   lessonCompleted?: boolean;
   loading?: boolean;
-  onComplete?: () => Promise<boolean>;
+  onComplete?: (isEnd: boolean) => Promise<boolean>;
 }
 
 export default function LessonContentVideo(props: Props) {
@@ -67,7 +67,7 @@ export default function LessonContentVideo(props: Props) {
   // 콜백 - 타이머.
 
   const stopTimer = React.useCallback(
-    async (mode: 'PREV' | 'CURRENT' | 'RESET') => {
+    async (mode: 'PREV' | 'CURRENT' | 'RESET', isEnd = false) => {
       if (apiTimer.current !== null) {
         window.clearInterval(apiTimer.current);
 
@@ -114,8 +114,7 @@ export default function LessonContentVideo(props: Props) {
 
             return ApiClient.courseProgress
               .updateAllCourseProgressUsingPut(courseUserSeq)
-              .then(() => v.data.data.completeYn === "Y" && props.onComplete())
-              .then((b) => b && videoPlayer.current.pause());
+              .then(() => v.data.data.completeYn === "Y" && props.onComplete(isEnd));
             
           });
 
@@ -140,7 +139,7 @@ export default function LessonContentVideo(props: Props) {
     const lessonSeq = props.lesson.seq;
 
     const timer = window.setInterval(() => {
-      if (currentLessonSeq.current !== lessonSeq || router.asPath !== routerAsPath)
+      if (currentLessonSeq.current !== lessonSeq || router.asPath !== routerAsPath || apiTimer.current !== timer)
         return clearInterval(timer);
 
       apiSeconds.current++;
@@ -192,7 +191,6 @@ export default function LessonContentVideo(props: Props) {
         studyTime: 0,
       });
 
-      videoIsFinished.current = false;
       videoIsFirst.current = false;
 
       startTimer();
@@ -231,21 +229,29 @@ export default function LessonContentVideo(props: Props) {
       apiVideoSeconds.current++;
 
       if (
+        !props.lessonCompleted &&
         !videoIsFinished.current &&
-        (props.courseProgress.studyTime + videoPlayedSeconds.current >=
-          vidoeDurationSeconds.current ||
-          videoCurrentSeconds.current >= vidoeDurationSeconds.current)
-      )
+        (
+          props.courseProgress.studyTime + videoPlayedSeconds.current > vidoeDurationSeconds.current ||
+          videoCurrentSeconds.current > vidoeDurationSeconds.current
+        )
+      ) {
+
+        videoIsFinished.current = true;
         stopTimer('CURRENT');
+
+      }
 
       updateProgress();
     },
-    [props.courseProgress.studyTime, stopTimer, updateProgress]
+    [props.courseProgress.studyTime, props.lessonCompleted, stopTimer, updateProgress]
   );
 
   const onEnded = React.useCallback(() => {
     videoCurrentSeconds.current = vidoeDurationSeconds.current;
-    stopTimer('CURRENT');
+    videoIsFinished.current = true;
+    videoIsFirst.current = true;
+    stopTimer('CURRENT', true);
   }, [stopTimer]);
 
   // 이펙트.

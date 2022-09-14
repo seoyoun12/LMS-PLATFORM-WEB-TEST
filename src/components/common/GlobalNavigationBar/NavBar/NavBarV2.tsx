@@ -137,7 +137,7 @@ const ContentContainer = styled.nav`
   flex-basis: 850px;
   color: black;
   /* padding-bottom: 12px; */
-  padding: 0 20px;
+  padding: 0 10px;
 
   .bold-600 {
     font-weight: 600;
@@ -282,7 +282,7 @@ export const TransHeaderList = [
     items: [
       { title: '내 정보', href: '/me' },
       // { title: '정보수정', href: '/me/edit' },
-      { title: '학습현황', href: '/me/my-course' },
+      { title: '학습현황', href: '/me/my-course?tab=ing' },
       { title: '증명서발급', href: '/me/certificate' },
       { title: '온라인 학습 신청내역', href: '/me/enroll-history' },
     ],

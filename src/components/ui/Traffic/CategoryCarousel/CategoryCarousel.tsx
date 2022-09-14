@@ -28,14 +28,21 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);
   const paginationRef = useRef(null);
+  // const progressbar = document.querySelector('.timeline-current');
+  const timeLineRef = useRef<HTMLDivElement>();
+  const ani = timeLineRef.current?.animate({ width: '100%' }, 4000);
 
   const chkPages = (num: number) => {
+    ani.cancel();
     return num < 10 ? '0' + num : num;
   };
 
   const progress = () => {
-    const progressbar = document.querySelector('.timeline-current');
-    progressbar?.animate({ width: '100%' }, 4000);
+    //http://yoonbumtae.com/?p=4367
+    // timeLineRef.current!.style.animation = 'none';
+    if (!ani) return;
+    // ani.cancel();
+    // ani.play();
     // const test = progressbar?.animate({ width: '100%' }, 4000);
     // test?.cancel();
     // test?.play();
@@ -83,29 +90,24 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
             top: '32px',
           }}
         >
-          {data.map(item => (
+          {/* {data.map(item => (
             <SwiperSlide // key props error
               key={item.seq}
             >
               {isMobile ? (
-                <Image
-                  width="100%"
-                  height="192px"
-                  src={item.s3Files[0].path}
-                  alt=""
-                  style={{ paddingRight: '16px', objectFit: 'cover' }}
-                />
+                <Image width="100%" height="192px" src={item.s3Files[0].path} alt="" style={{ paddingRight: '16px', objectFit: 'cover' }} />
               ) : (
-                <Image
-                  src={item.s3Files[0]?.path}
-                  alt=""
-                  layout="fill"
-                  objectFit="cover"
-                  style={{ paddingRight: '16px' }}
-                />
+                <Image src={item.s3Files[0]?.path} alt="" layout="fill" objectFit="cover" style={{ paddingRight: '16px' }} />
               )}
             </SwiperSlide>
-          ))}
+          ))} */}
+          <Image
+            src={data[0].s3Files[0].path}
+            alt=""
+            layout="fill"
+            objectFit="cover"
+            style={{ paddingRight: '16px' }}
+          />
         </Swiper>
 
         <Swiper
@@ -113,28 +115,28 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
           modules={[Navigation, Pagination, Controller, Autoplay]}
           spaceBetween={300}
           slidesPerView={1}
-          loop={true}
+          // loop={true}
           navigation={{
             prevEl: navigationPrevRef.current,
             nextEl: navigationNextRef.current,
           }}
-          pagination={{
-            type: 'custom',
-            el: paginationRef.current,
-            renderCustom: function (swiper, current, total) {
-              setSwiperPageNumber(current - 1);
-              return `
-                <span>${chkPages(current)}</span>
-                <span style="font-size: 12px; margin: 0 4px">|</span>
-                <span>${chkPages(total)}</span>
-              `;
-            },
-          }}
+          // pagination={{
+          //   type: 'custom',
+          //   el: paginationRef.current,
+          //   renderCustom: function (swiper, current, total) {
+          //     setSwiperPageNumber(current - 1);
+          //     return `
+          //       <span>${chkPages(current)}</span>
+          //       <span style="font-size: 12px; margin: 0 4px">|</span>
+          //       <span>${chkPages(total)}</span>
+          //     `;
+          //   },
+          // }}
           resizeObserver={false}
-          autoplay={{
-            delay: 4000,
-            disableOnInteraction: false,
-          }}
+          // autoplay={{
+          //   delay: 4000,
+          //   disableOnInteraction: false,
+          // }}
           onSlideChange={e => {
             progress();
           }}
@@ -159,7 +161,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
                 }
           }
         >
-          {data.map(item => (
+          {/* {data.map(item => (
             <SwiperSlide key={item.seq}>
               <SlideInfo>
                 <Typography variant="h1" className="bold-700">
@@ -168,9 +170,25 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
                 <Typography variant="inherit">{item.content}</Typography>
               </SlideInfo>
             </SwiperSlide>
-          ))}
+          ))} */}
+          <SwiperSlide key={data[0].seq}>
+            <SlideInfo>
+              <Box fontSize="24px" fontWeight="bold">
+                {data[0].title.split('\n').map((item, idx) => {
+                  if (idx > 1) return;
+                  return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
+                })}
+              </Box>
+              <Box>
+                {data[0].content.split('\n').map((item, idx) => {
+                  if (idx > 8) return;
+                  return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
+                })}
+              </Box>
+            </SlideInfo>
+          </SwiperSlide>
 
-          {!isMobile ? (
+          {/* {!isMobile ? (
             <div className="" style={{ display: 'flex', alignItems: 'center' }}>
               <div
                 ref={paginationRef}
@@ -183,7 +201,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
               />
               <Timeline>
                 <div className="timeline-bg">
-                  <div className="timeline-current"></div>
+                  <div ref={timeLineRef} className="timeline-current"></div>
                 </div>
               </Timeline>
               <>
@@ -197,7 +215,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
             </div>
           ) : (
             ``
-          )}
+          )} */}
         </Swiper>
       </SliderLayout>
     </Slider>

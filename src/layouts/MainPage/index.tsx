@@ -180,7 +180,7 @@ const MainPage: NextPage = () => {
         <ContentBox>
           <LogoBox>
             <Image
-              src="/assets/images/cttsLogo.png"
+              src="/assets/images/onlineCenterLogo.png"
               height={48}
               width={320}
               alt="Your Name"
@@ -347,7 +347,7 @@ const WrapMainContainer = styled.div`
 const MainContainer = styled(Box)`
   height: 80%;
   /* min-height: 719px; */
-  padding-top: 110px;
+  padding-top: 80px;
 `;
 const ContentBox = styled(Box)`
   width: 80%;
@@ -367,7 +367,7 @@ const SubTitle = styled(Box)`
   padding: 0.5rem 2.5rem;
   width: fit-content;
   margin: auto;
-  margin-top: 70px;
+  margin-top: 30px;
   /* color: white; */
   background: #f7f7f7;
   border: 1px solid #236cef;
@@ -381,9 +381,9 @@ const NoticeContainer = styled(Box)`
   position: relative;
   height: 25%;
   margin: auto;
-  /* margin-top: 40px; */
+  margin-top: 40px;
   border-radius: 1rem;
-  /* border: 2px solid #d7d7d7; */
+  border: 2px solid #d7d7d7;
   // 알림판 중앙 정렬
 `;
 

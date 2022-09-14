@@ -36,7 +36,7 @@ export default function Lesson(props: LessonProps) {
   // 스테이트.
 
   const [loading, setLoading] = React.useState<boolean>(true);
-  const [dialog, setDialog] = React.useState<'FIRST' | "NEXT" | null>('FIRST');
+  const [dialog, setDialog] = React.useState<'FIRST' | "NEXT" | "SURVEY" | null>('FIRST');
 
   const [course, setCourse] = React.useState<CourseDetailClientResponseDto | null>(null);
   const [courseTotalProgress, setCourseTotalProgress] = React.useState<number | null>(null);
@@ -53,6 +53,7 @@ export default function Lesson(props: LessonProps) {
     []
   );
   const [moduleSurvey, setModuleSurvey] = React.useState<SurveyResponseDto | null>(null);
+  const [moduleSurveyTodo, setModuleSurveyTodo] = React.useState<CourseModuleFindResponseDto | null>(null);
 
   // 이펙트.
 
@@ -121,6 +122,17 @@ export default function Lesson(props: LessonProps) {
       .finally(() => setLoading(false));
   }, [props]);
 
+  React.useEffect(() => {
+
+    if (!courseModules) return;
+
+    const surveyTodo = courseModules.find((v, i) => v.moduleType === "COURSE_MODULE_SURVEY" && !courseModulesCompleted[i]) || null;
+    setModuleSurveyTodo(surveyTodo);
+
+    if (course.totalProgress >= 100 && surveyTodo) setDialog("SURVEY");
+
+  }, [course, courseModules, courseModulesCompleted]);
+
   // 렌더 - 에러.
 
   if (course === null) {
@@ -140,6 +152,7 @@ export default function Lesson(props: LessonProps) {
   let Content: React.ReactElement = <React.Fragment/>;
   let DialogFirst: React.ReactElement = <React.Fragment/>;
   let DialogNext: React.ReactElement = <React.Fragment/>;
+  let DialogSurvey: React.ReactElement = <React.Fragment/>;
 
   switch (props.contentType) {
     case 'LESSON': {
@@ -160,7 +173,7 @@ export default function Lesson(props: LessonProps) {
           courseProgress={courseProgress}
           lesson={lesson}
           lessonCompleted={!!courseLessonsCompleted[lessonIndex]}
-          onComplete={() => 
+          onComplete={(isEnd) => 
             ApiClient.course
             .findCourseUsingGet(course.courseUserSeq)
             .then((res) => {
@@ -171,8 +184,8 @@ export default function Lesson(props: LessonProps) {
 
               setCourseLessonsCompleted(newCourseLessonsCompleted);
               setCourseTotalProgress(course.totalProgress);
-
-              if (course.lessons[lessonIndex + 1]) setDialog("NEXT");
+              
+              if (course.lessons[lessonIndex + 1] && isEnd) setDialog("NEXT");
 
               return true;
             })
@@ -256,6 +269,36 @@ export default function Lesson(props: LessonProps) {
     }
   }
 
+  if (moduleSurveyTodo && !(props.contentType === "SURVEY" && moduleSurveyTodo.surveySeq === props.contentSeq)) {
+
+    DialogSurvey = (
+      <Dialog
+        open={dialog === 'SURVEY'}
+        onClose={() => {
+          setDialog(null);
+          router.push(`/course/${course.courseUserSeq}/${LESSON_CONTENT_TYPES[1].toLowerCase()}/${moduleSurveyTodo.surveySeq}`);
+        }}
+      >
+        <DialogContent>
+          <DialogContentText>
+            운수종사자 보수교육 온라인과정을 수료하셨습니다. 다음 만족도 조사 설문에 참여해 주시시기 바랍니다.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setDialog(null);
+              router.push(`/course/${course.courseUserSeq}/${LESSON_CONTENT_TYPES[1].toLowerCase()}/${moduleSurveyTodo.surveySeq}`);
+            }}
+          >
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+    
+  }
+
   // 렌더링.
 
   return (
@@ -275,6 +318,7 @@ export default function Lesson(props: LessonProps) {
           />
         {DialogFirst}
         {DialogNext}
+        {DialogSurvey}
       </LessonContainer>
     </>
   );

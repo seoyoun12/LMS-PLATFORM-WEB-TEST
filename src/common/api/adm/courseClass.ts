@@ -10,9 +10,13 @@ export enum CourseType {
 }
 
 //admin 조회
-export function useCourseClassAdm(businessType: businessType, date: string) {
+export function useCourseClassAdm(
+  businessType: businessType,
+  date: string,
+  courseType?: CourseType
+) {
   const { data, error, mutate } = useSWR<SWRResponse<CourseClassRes[]>>(
-    [`/course-class/adm`, { params: { businessType, date } }],
+    [`/course-class/adm`, { params: { businessType, date, courseType } }],
     GET
   );
   return {

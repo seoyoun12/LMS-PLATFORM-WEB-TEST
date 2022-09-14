@@ -7,6 +7,7 @@ import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded
 import ArrowLeftRoundedIcon from '@mui/icons-material/ArrowLeftRounded';
 import ArrowRightRoundedIcon from '@mui/icons-material/ArrowRightRounded';
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
+import { CourseType } from '@common/api/adm/courseClass';
 
 interface Props {
   onChangeMonth: (type: MonthClickType, value: number) => void;

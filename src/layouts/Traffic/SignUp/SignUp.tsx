@@ -40,7 +40,6 @@ export function SignUp() {
   //   const username = data.get('username') as string;
   //   const password = data.get('password') as string;
 
-
   //   if (!!name && !!username && !!password) {
   //     try {
   //       return signUp({ name, password, username, emailYn: YN.NO, smsYn: YN.NO });
@@ -55,7 +54,7 @@ export function SignUp() {
       <StepHeader value={stepNumber} title={'충남교통연수원'} headers={headers} />
       {stepNumber === 1 && <Step1 handleStep={handleStep} setResName={setResName} />}
       {stepNumber === 2 && <Step2 handleStep={handleStep} resName={resName} />}
-      {stepNumber === 3 && <Step3 handleStep={handleStep} />}
+      {stepNumber === 3 && <Step3 handleStep={handleStep} resName={resName} />}
     </SignUpWrap>
   );
 }

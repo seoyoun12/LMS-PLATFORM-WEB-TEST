@@ -4,12 +4,20 @@ import Filter1Icon from '@mui/icons-material/Filter1';
 import Filter2Icon from '@mui/icons-material/Filter2';
 import Filter3Icon from '@mui/icons-material/Filter3';
 
-export function StepHeader({ value, title, headers }: { value: number; title: string; headers: { title: string; value: number }[] }) {
+export function StepHeader({
+  value,
+  title,
+  headers,
+}: {
+  value: number;
+  title: string;
+  headers: { title: string; value: number }[];
+}) {
   return (
     <StebHeaderWrap>
       <Box
         sx={{
-          background: '#3498db',
+          background: '#256aef',
           color: 'white',
           textAlign: 'center',
           paddingTop: '6rem',

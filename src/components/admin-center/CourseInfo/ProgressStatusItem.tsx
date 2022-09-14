@@ -23,7 +23,6 @@ export function ProgressStatusItem({ courseUserSeq, item, onMutate, allLoading }
 
   //강제수강처리(100%)
   const onClickForcedProgressY = async (courseProcessSeq: number) => {
-    setLoading(true);
     try {
       const dialogConfirmed = await dialog({
         title: '강의 이수처리',
@@ -33,6 +32,7 @@ export function ProgressStatusItem({ courseUserSeq, item, onMutate, allLoading }
       });
 
       if (!dialogConfirmed) return;
+      setLoading(true);
       await modifyCompleteCourseInfo(Number(courseUserSeq), courseProcessSeq);
       setLoading(false);
       onMutate();
@@ -43,7 +43,6 @@ export function ProgressStatusItem({ courseUserSeq, item, onMutate, allLoading }
   };
 
   const onClickForcedProgressN = async (courseProcessSeq: number) => {
-    setLoading(true);
     try {
       const dialogConfirmed = await dialog({
         title: '강의 미이수처리',
@@ -53,6 +52,7 @@ export function ProgressStatusItem({ courseUserSeq, item, onMutate, allLoading }
       });
 
       if (!dialogConfirmed) return;
+      setLoading(true);
       await modifyCancelCourseInfo(Number(courseUserSeq), courseProcessSeq);
       setLoading(false);
       onMutate();
@@ -78,18 +78,22 @@ export function ProgressStatusItem({ courseUserSeq, item, onMutate, allLoading }
           <Button
             variant="contained"
             disabled={loading || allLoading}
+            // disabled={loading}
             color="error"
             onClick={() => onClickForcedProgressN(item.courseProgressSeq)}
           >
-            {loading || allLoading ? <Spinner fit={true} /> : '진도삭제'}
+            {/* {loading || allLoading ? <Spinner fit={true} /> : '진도삭제'} */}
+            {loading ? <Spinner fit={true} /> : '진도삭제'}
           </Button>
         ) : (
           <Button
             variant="contained"
             disabled={loading || allLoading}
+            // disabled={loading}
             onClick={() => onClickForcedProgressY(item.courseProgressSeq)}
           >
-            {loading || allLoading ? <Spinner fit={true} /> : '수료처리'}
+            {/* {loading  ? <Spinner fit={true} /> : '수료처리'} */}
+            {loading ? <Spinner fit={true} /> : '수료처리'}
           </Button>
         )}
       </TableprocessBtnCell>

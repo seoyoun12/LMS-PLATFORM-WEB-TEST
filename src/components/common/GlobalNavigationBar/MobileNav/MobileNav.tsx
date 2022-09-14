@@ -19,6 +19,7 @@ import { regCategoryType } from '@common/api/user';
 import UnsuIcon from '/public/assets/svgs/unsuIcon.svg';
 import LowFloorIcon from '/public/assets/svgs/lowFloorIcon.svg';
 import DominIcon from '/public/assets/svgs/dominIcon.svg';
+import { MainDisplayType, useMainDisplay } from '@common/api/mainDisplay';
 
 const siteMapMobileList = [
   {
@@ -27,6 +28,7 @@ const siteMapMobileList = [
     type: courseType.TYPE_TRANS_WORKER,
     regCategory: regCategoryType.TYPE_TRANS_EDU,
     icon: <UnsuIcon />,
+    bgColor: '#0A9A4E',
   },
   {
     name: '저상버스 운전자교육',
@@ -34,6 +36,7 @@ const siteMapMobileList = [
     type: courseType.TYPE_LOW_FLOOR_BUS,
     regCategory: regCategoryType.TYPE_TRANS_EDU,
     icon: <LowFloorIcon />,
+    bgColor: '#236cef',
   },
   {
     name: '도민교통 안전교육',
@@ -41,6 +44,7 @@ const siteMapMobileList = [
     type: courseType.TYPE_PROVINCIAL,
     regCategory: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU,
     icon: <DominIcon />,
+    bgColor: '#FEC901',
   },
 ];
 
@@ -55,6 +59,7 @@ export function MobileNav() {
   const router = useRouter();
   const isLoginStatus = useIsLoginStatus();
   const [userInfoData, setUserInfoData] = useRecoilState(userInfo); //유저데이터. 전역에 저장된 정보
+  const { data, error } = useMainDisplay();
   const [list, setList] = useState(
     (typeof window !== 'undefined' &&
     localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
@@ -71,6 +76,12 @@ export function MobileNav() {
   );
   const [isHideNavbar, setIsHideNavbar] = useState(false); // 특정지역에서는 숨김처리
   const [categoryValue, setCategoryValue] = useState('');
+  const [siteMapMobileListState, setSiteMapMobileListState] = useState(
+    data?.map((item, idx) => {
+      return { ...item, ...siteMapMobileList[idx] };
+    })
+  );
+  const [topBoxBgColor, setTopBoxBgColor] = useState<string>('#236cef');
 
   useEffect(() => {
     if (router.route === '/') {
@@ -101,9 +112,27 @@ export function MobileNav() {
     setCategoryValue('');
   };
 
+  //페이지 이동시 close
   useEffect(() => {
     handleClose();
   }, [router]);
+
+  useEffect(() => {
+    setSiteMapMobileListState(
+      data?.map((item, idx) => {
+        return { ...item, ...siteMapMobileList[idx] };
+      })
+    );
+  }, [data]);
+
+  useEffect(() => {
+    if (window) {
+      const bgColor = siteMapMobileList.filter(
+        item => item.type === localStorage.getItem('site_course_type')
+      )[0].bgColor;
+      setTopBoxBgColor(bgColor);
+    }
+  }, []);
 
   const onClickSignin = () => {
     if (localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL) {
@@ -128,8 +157,11 @@ export function MobileNav() {
     href: string;
     type: courseType;
     regCategory: regCategoryType;
+    mainDisplayType: MainDisplayType;
   }) => {
     const isEqual = userInfoData.regCategory.includes(item.regCategory);
+    if (item.mainDisplayType === 'EDUCATION_GROUND_BUS_DRIVER')
+      return window.alert('준비중 입니다.');
 
     //로그인안되었거나 유저데이터가 앙 없거나 이상할때
     if (!isLoginStatus || userInfoData.regCategory === '' || !userInfoData.regCategory) {
@@ -166,7 +198,7 @@ export function MobileNav() {
             alignItems="center"
           >
             <Image
-              src="/assets/images/cttsLogo.png"
+              src="/assets/images/onlineCenterLogo.png"
               height={40}
               width={224}
               alt="Your Name"
@@ -178,7 +210,7 @@ export function MobileNav() {
             onClick={() => setOpen(true)}
           />
           <Drawer open={open} anchor="right" onClose={handleClose} sx={{ zIndex: 1202 }}>
-            <DrawerTopBox>
+            <DrawerTopBox topBoxBgColor={topBoxBgColor}>
               {isLoginStatus ? (
                 <Box onClick={onClickLogout}>로그아웃</Box>
               ) : (
@@ -188,18 +220,21 @@ export function MobileNav() {
             </DrawerTopBox>
             {/* <SiteMapTypo>사이트맵 이동하기</SiteMapTypo> */}
             <SiteMapWrap>
-              {siteMapMobileList.map(item => (
-                <SiteMapItem key={item.href}>
-                  <Box onClick={() => onClickSitemap(item)}>
-                    <SiteMapIconWrap>{item.icon}</SiteMapIconWrap>
-                    <SiteMapName>
-                      {item.name.split(' ').map(item => (
-                        <Box lineHeight={1.2}>{item}</Box>
-                      ))}
-                    </SiteMapName>
-                  </Box>
-                </SiteMapItem>
-              ))}
+              {siteMapMobileListState?.map(item => {
+                if (item.status === -1) return;
+                return (
+                  <SiteMapItem key={item.href}>
+                    <Box onClick={() => onClickSitemap(item)}>
+                      <SiteMapIconWrap>{item.icon}</SiteMapIconWrap>
+                      <SiteMapName>
+                        {item.name.split(' ').map(item => (
+                          <Box lineHeight={1.2}>{item}</Box>
+                        ))}
+                      </SiteMapName>
+                    </Box>
+                  </SiteMapItem>
+                );
+              })}
             </SiteMapWrap>
             {/* <Accordion accordionList={list} /> */}
             <Box display="flex" height="100%">
@@ -255,14 +290,14 @@ const MobileContentContainer = styled.div`
   }
 `;
 
-const DrawerTopBox = styled(Box)`
+const DrawerTopBox = styled(Box)<{ topBoxBgColor: string }>`
   display: flex;
   width: 360px;
   height: 64px;
   padding: 0 1rem;
   align-items: center;
   justify-content: space-between;
-  background: #236cef;
+  background: ${({ topBoxBgColor }) => topBoxBgColor};
   color: white;
 `;
 
@@ -288,7 +323,9 @@ const SiteMapItem = styled(Box)`
     border-right: none;
   } */
 `;
-const SiteMapIconWrap = styled(Box)``;
+const SiteMapIconWrap = styled(Box)`
+  width: 90px;
+`;
 const SiteMapName = styled(Box)`
   display: flex;
   flex-direction: column;

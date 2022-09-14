@@ -148,13 +148,13 @@ export function UserManagement() {
         size="small"
       >
         <TableHead>
-          <UserTableRow>
+          <TableRow>
             {headRows.map(({ name, width }: { name: string; width: string }) => (
               <UserTitleTableCell key={name} align="center" width={width}>
                 {name}
               </UserTitleTableCell>
             ))}
-          </UserTableRow>
+          </TableRow>
         </TableHead>
 
         <TableBody>
@@ -237,10 +237,6 @@ export function UserManagement() {
 const UserTypo = styled(Typography)`
   margin-bottom: 12px;
   font-weight: 700;
-`;
-
-const UserTableRow = styled(TableRow)`
-  white-space: nowrap;
 `;
 
 const UserTitleTableCell = styled(TableCell)`

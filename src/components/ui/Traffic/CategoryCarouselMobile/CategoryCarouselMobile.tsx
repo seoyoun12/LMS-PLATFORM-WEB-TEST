@@ -9,8 +9,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import { useBannerList } from '@common/api/banner';
-import { Spinner } from '../Spinner';
 import useResponsive from '@hooks/useResponsive';
+import { Spinner } from '@components/ui/Spinner';
 
 interface Datas {
   id: number;

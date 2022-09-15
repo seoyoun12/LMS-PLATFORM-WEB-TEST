@@ -180,8 +180,7 @@ export function BannerUpload() {
           </SlideInfo>
         </Box>
         <Typography fontWeight="bold" color="red" fontSize="14px">
-          콘텐츠 내용은 해당 입력박스의 가로 혹은 세로넓이를 넘어가면 안됩니다!(넘어가면
-          맨 아래의 내용은 잘립니다.)
+          콘텐츠 내용은 해당 출력박스의 일정크기를 넘어가면 맨 아래내용은 잘립니다.
         </Typography>
         <Typography fontWeight="bold" fontSize="14px">
           {`<span style='color:색상' >텍스트</span>`}으로 색을 입힐수

@@ -1,0 +1,1 @@
+export { CategoryCarouselMobile } from './CategoryCarouselMobile';

@@ -7,7 +7,11 @@ import { useRecoilState } from 'recoil';
 import { pageType, userInfo } from '@common/recoil';
 import { pageRegType } from '@common/recoil/pageType/atom';
 import { useRouter } from 'next/router';
-import { allowUserPahtList, notNeededLoginPathList } from '@utils/loginPathList';
+import {
+  allowCommonPahtLis,
+  allowUserPahtList,
+  notNeededLoginPathList,
+} from '@utils/loginPathList';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { getMyUser, MyUser, UserRole } from '@common/api/user';
 import { MobileNav, SiteMap } from '@components/common/GlobalNavigationBar';
@@ -112,6 +116,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const isTraffic = router.route.includes('/traffic');
+    const isCommon = allowCommonPahtLis.some(item => router.route.includes(item.href));
 
     //have a local useState(user) when logout
     if (!localStorage.getItem('ACCESS_TOKEN') && user) {
@@ -125,6 +130,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
     //if you trans user , block access traffic page
     if (isTraffic && user) {
+      if (isCommon) return; //공통으로사용하는 주소일경우 접근허용
       const imTrans = user.roles.some(
         item => item === UserRole.ROLE_TRANS_USER || item === UserRole.ROLE_TRANS_MANAGER
       );
@@ -134,6 +140,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     }
     //if you traffic user , block access trans page
     else if (!isTraffic && user) {
+      if (isCommon) return; //공통으로사용하는 주소일경우 접근허용
       const imSafe = user.roles.some(
         item =>
           item === UserRole.ROLE_TRAFFIC_SAFETY_USER ||

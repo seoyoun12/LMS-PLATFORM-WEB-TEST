@@ -15,6 +15,11 @@ export const notNeededLoginPathList: { href: string }[] = [
   // { href: 'edit' },
 ];
 
+/**
+ * 운수저상도민 공통으로 사용하는 주소
+ */
+export const allowCommonPahtLis: { href: string }[] = [{ href: 'me' }];
+
 export const allowUserPahtList: { href: string; roles: UserRole[] }[] = [
   {
     href: '/traffic/stebMove',

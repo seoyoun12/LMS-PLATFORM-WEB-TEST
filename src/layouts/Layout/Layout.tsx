@@ -130,6 +130,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
     //if you trans user , block access traffic page
     if (isTraffic && user) {
+      if (router.route === '/') return; // 루트주소로 갈경우 접근허용
       if (isCommon) return; //공통으로사용하는 주소일경우 접근허용
       const imTrans = user.roles.some(
         item => item === UserRole.ROLE_TRANS_USER || item === UserRole.ROLE_TRANS_MANAGER
@@ -140,6 +141,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     }
     //if you traffic user , block access trans page
     else if (!isTraffic && user) {
+      if (router.route === '/') return; // 루트주소로 갈경우 접근허용
       if (isCommon) return; //공통으로사용하는 주소일경우 접근허용
       const imSafe = user.roles.some(
         item =>

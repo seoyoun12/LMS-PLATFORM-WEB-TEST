@@ -24,6 +24,8 @@ import {
 } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { CollectionsBookmark } from '@mui/icons-material';
 import styled from '@emotion/styled';
+import { ManagementSearchHeadRow } from '@components/admin-center/ManagementSearchHeadRow';
+import { NotFound } from '@components/ui/NotFound';
 
 const headRows: {
   name: string;
@@ -46,17 +48,12 @@ export function CourseManagement() {
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [seq, setSeq] = useState<number | null>(null);
+  const [notFound, setNotFound] = useState(false);
+  const [searchTitle, setSearchTitle] = useState<string>(''); //이름 혹은 아이디
+  const searchInputRef = React.useRef<HTMLInputElement | null>(null);
 
-  const { data, error, mutate } = courseAdmList({ page });
+  const { data, error, mutate } = courseAdmList({ page, courseTitle: searchTitle });
   // const { data, error, mutate } = courseList({ page });
-
-  console.log('데이터 :', data);
-  console.log('courseReg :', courseReg);
-
-  console.log(
-    'asd : ',
-    courseReg.filter(item => item.type === data?.content[0].courseType)
-  );
 
   // pagination
   useEffect(() => {
@@ -80,6 +77,24 @@ export function CourseManagement() {
     mutate();
   };
 
+  const handleSearch = async (e: React.FormEvent, isReload = false) => {
+    e.preventDefault();
+    setNotFound(false);
+    if (isReload) {
+      setPage(0);
+      return setSearchTitle('');
+    }
+    if (searchInputRef.current) {
+      setSearchTitle(searchInputRef.current.value);
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      data.content.length === 0 && setNotFound(true);
+    }
+  }, [data]);
+
   // // 삭제
   // const onClickRemoveCourse = async (seq: number) => {
   //   try {
@@ -101,10 +116,10 @@ export function CourseManagement() {
 
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
-  console.log(
-    'asd : ',
-    courseReg.filter(item => item.type === data?.content[0].courseType)
-  );
+  // console.log(
+  //   'asd : ',
+  //   courseReg.filter(item => item.type === data?.content[0].courseType)
+  // );
   return (
     <Box>
       <Typography
@@ -116,72 +131,81 @@ export function CourseManagement() {
       >
         과정 목록
       </Typography>
-      <Table
-        pagination={true}
-        totalNum={data.totalElements}
-        page={data.number}
-        onChangePage={onChangePage}
-        size="small"
-      >
-        <TableHead>
-          <TableRow>
-            {headRows.map(({ name, align, width }) => (
-              <CourseTitleTableCell key={name} align={align} width={width}>
-                {name}
-              </CourseTitleTableCell>
-            ))}
-          </TableRow>
-        </TableHead>
+      <ManagementSearchHeadRow
+        ref={searchInputRef}
+        search={searchTitle}
+        placeholder="과정검색"
+        handleSearch={handleSearch}
+      />
+      {notFound ? (
+        <NotFound content="과정이 존재하지 않습니다!" />
+      ) : (
+        <Table
+          pagination={true}
+          totalNum={data.totalElements}
+          page={data.number}
+          onChangePage={onChangePage}
+          size="small"
+        >
+          <TableHead>
+            <TableRow>
+              {headRows.map(({ name, align, width }) => (
+                <CourseTitleTableCell key={name} align={align} width={width}>
+                  {name}
+                </CourseTitleTableCell>
+              ))}
+            </TableRow>
+          </TableHead>
 
-        <TableBody>
-          {data.content.map(course => (
-            <TableRow
-              sx={{ cursor: 'pointer' }}
-              key={course.seq}
-              hover
-              onClick={() => onClickModifyCourse(course.seq)}
-            >
-              <CourseTableCell align="center">{course.seq}</CourseTableCell>
-              {/* <TableCell align="center">{course.courseType}</TableCell> */}
-              <CourseTableCell align="center">
-                {courseReg.filter(item => item.type === course.courseType)[0]?.ko}
-              </CourseTableCell>
-              <CourseTableCell align="center">
-                {
-                  courseCategory.filter(
-                    item => item.type === course.courseCategoryType
-                  )[0]?.ko
-                }
-              </CourseTableCell>
-              <CourseTableCell align="center">
-                {
-                  courseSubCategory.filter(
-                    item => item.type === course.courseSubCategoryType
-                  )[0]?.ko
-                }
-              </CourseTableCell>
-              <CourseTableCell align="center">{course.courseName}</CourseTableCell>
-              <CourseTableCell align="center">
-                {dateFormat(course.createdDtime, 'isoDate')}
-              </CourseTableCell>
-              <CourseTableCell align="center">
-                <Chip
-                  label={course.displayYn === YN.YES ? '보임' : '숨김'}
-                  variant="outlined"
-                  size="small"
-                  color={course.displayYn === YN.YES ? 'secondary' : 'default'}
-                />
-              </CourseTableCell>
-              <CourseTableCell align="center">
-                <Chip
-                  label={course.status ? '정상' : '중지'}
-                  variant="outlined"
-                  size="small"
-                  color={course.status ? 'secondary' : 'default'}
-                />
-              </CourseTableCell>
+          <TableBody>
+            {data.content.map(course => (
+              <TableRow
+                sx={{ cursor: 'pointer' }}
+                key={course.seq}
+                hover
+                onClick={() => onClickModifyCourse(course.seq)}
+              >
+                <CourseTableCell align="center">{course.seq}</CourseTableCell>
+                {/* <TableCell align="center">{course.courseType}</TableCell> */}
+                <CourseTableCell align="center">
+                  {courseReg.filter(item => item.type === course.courseType)[0]?.ko}
+                </CourseTableCell>
+                <CourseTableCell align="center">
+                  {
+                    courseCategory.filter(
+                      item => item.type === course.courseCategoryType
+                    )[0]?.ko
+                  }
+                </CourseTableCell>
+                <CourseTableCell align="center">
+                  {
+                    courseSubCategory.filter(
+                      item => item.type === course.courseSubCategoryType
+                    )[0]?.ko
+                  }
+                </CourseTableCell>
+                <CourseTableCell align="center">{course.courseName}</CourseTableCell>
+                <CourseTableCell align="center">
+                  {dateFormat(course.createdDtime, 'isoDate')}
+                </CourseTableCell>
+                <CourseTableCell align="center">
+                  <Chip
+                    label={course.displayYn === YN.YES ? '보임' : '숨김'}
+                    variant="outlined"
+                    size="small"
+                    color={course.displayYn === YN.YES ? 'secondary' : 'default'}
+                  />
+                </CourseTableCell>
+                <CourseTableCell align="center">
+                  <Chip
+                    label={course.status ? '정상' : '중지'}
+                    variant="outlined"
+                    size="small"
+                    color={course.status ? 'secondary' : 'default'}
+                  />
+                </CourseTableCell>
 
-              {/* <TableCell align="right" className={spaceNoWrap}>
+                {/* <TableCell align="right" className={spaceNoWrap}>
                 <Button
                   variant="text"
                   color="neutral"
@@ -199,10 +223,11 @@ export function CourseManagement() {
                   삭제
                 </Button>
               </TableCell> */}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </Box>
   );
 }

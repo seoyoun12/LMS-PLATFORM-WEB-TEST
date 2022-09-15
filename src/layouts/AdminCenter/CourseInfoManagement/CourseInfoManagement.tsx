@@ -42,7 +42,7 @@ export function CourseInfoManagement() {
   const router = useRouter();
   const [notFound, setNotFound] = useState(false);
   const [page, setPage] = useState(0);
-  const [nameOrUsername, setNameOrUsername] = useState<string | null>(null); //이름 혹은 아이디
+  const [nameOrUsername, setNameOrUsername] = useState<string>(''); //이름 혹은 아이디
   const [courseType, setCourseType] = useState<CourseType>(CourseType.TYPE_TRANS_WORKER); //과정타입
   const [completeType, setCompleteType] = useState<CompleteType | null>(null); //수료타입
   const [statusType, setStatusType] = useState<StatusType | null>(null); //상태타입
@@ -133,6 +133,7 @@ export function CourseInfoManagement() {
       <UserTypo variant="h5">전체 수강생 학습현황</UserTypo>
       <ManagementHeadRows
         ref={searchInputRef}
+        search={nameOrUsername}
         courseType={courseType}
         completeType={completeType}
         statusType={statusType}

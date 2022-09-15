@@ -721,6 +721,12 @@ export interface CourseDetailClientResponseDto {
   modifiedDtime?: string;
 
   /**
+   * 도민교통 메인 사용 여부 - 도민 과정 등록만 해당
+   * @example N
+   */
+  provincialUseYn?: "Y" | "N";
+
+  /**
    * 유저가 완료한 차시 (참고용)
    * @format int32
    * @example 0
@@ -842,6 +848,12 @@ export interface CourseDetailResponseDto {
    * @format date-time
    */
   modifiedDtime?: string;
+
+  /**
+   * 도민교통 메인 사용 여부 - 도민 과정 등록만 해당
+   * @example N
+   */
+  provincialUseYn?: "Y" | "N";
 
   /** s3 파일 */
   s3Files?: FileResponseDto[];
@@ -1548,6 +1560,12 @@ export interface CourseResponseDto {
    */
   modifiedDtime?: string;
 
+  /**
+   * 도민교통 메인 사용 여부 - 도민 과정 등록만 해당
+   * @example N
+   */
+  provincialUseYn?: "Y" | "N";
+
   /** s3 파일 */
   s3Files?: FileResponseDto[];
 
@@ -1623,6 +1641,7 @@ export interface CourseSaveRequestDto {
   /**
    * 과정분류 운수종사자 / 저상버스 * TYPE_TRANS_WOKER: 운수종사자
    *  * TYPE_LOW_FLOOR_BUS: 저상버스
+   * TYPE_PROVINCIAL: 도민교통
    */
   courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
 
@@ -1634,6 +1653,12 @@ export interface CourseSaveRequestDto {
    * @format int32
    */
   lessonTime?: number;
+
+  /**
+   * 도민교통 메인 사용 여부 - 도민 과정 등록만 해당
+   * @example N
+   */
+  provincialUseYn?: "Y" | "N";
 
   /**
    * 사용 여부
@@ -1710,6 +1735,12 @@ export interface CourseUpdateRequestDto {
    * @format int32
    */
   lessonTime?: number;
+
+  /**
+   * 도민교통 메인 사용 여부 - 도민 과정 등록만 해당
+   * @example N
+   */
+  provincialUseYn?: "Y" | "N";
 
   /** S3 파일 */
   s3Files?: FileRequestDto[];
@@ -1877,6 +1908,145 @@ export interface CourseUserMyInfoResponseDto {
    * @example https://...
    */
   thumbnailImage?: string;
+}
+
+export interface CourseUserProvincialSaveRequestDto {
+  /**
+   * 만 3세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age3?: number;
+
+  /**
+   * 만 4세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age4?: number;
+
+  /**
+   * 만 5세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age5?: number;
+
+  /** 소속 */
+  businessName?: string;
+
+  /**
+   * 교육대상자 세부 타입
+   *  * TYPE_KINDERGARTEN: 유치원
+   *  * TYPE_ELEMENTARY: 초등학교
+   *  * TYPE_MIDDLE: 중학교
+   *  * TYPE_HIGH: 고등학교
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  candidateDetailType?:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
+
+  /**
+   * 교육대상자
+   *  * TYPE_CHILDREN: 어린이
+   *  * TYPE_TEENAGER: 청소년
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  candidateType?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_SELF_DRIVER" | "TYPE_ELDERLY";
+
+  /**
+   * 노인 인원 수 - 세부타입: 노인
+   * @format int32
+   */
+  elderly?: number;
+
+  /**
+   * 1학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade1?: number;
+
+  /**
+   * 2학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade2?: number;
+
+  /**
+   * 3학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade3?: number;
+
+  /**
+   * 4학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade4?: number;
+
+  /**
+   * 5학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade5?: number;
+
+  /**
+   * 6학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade6?: number;
+
+  /** 지역 */
+  province?:
+    | "CHEONAN"
+    | "GONGJU"
+    | "BORYEONG"
+    | "ASAN"
+    | "SEOSAN"
+    | "NONSAN"
+    | "GYERYONG"
+    | "DANGJIN"
+    | "GEUMSAN"
+    | "BUYEO"
+    | "SEOCHEON"
+    | "CHEONGYANG"
+    | "HONGSEONG"
+    | "YESAN"
+    | "TAEAN"
+    | "CHUNGNAM"
+    | "SEJONG"
+    | "SEOUL"
+    | "BUSAN"
+    | "DAEGU"
+    | "INCHEON"
+    | "GWANGJU"
+    | "DAEJEON"
+    | "ULSAN"
+    | "GYEONGGI"
+    | "GANGWON"
+    | "CHUNGBUK"
+    | "JEONBUK"
+    | "JEONNAM"
+    | "GYEONGBUK"
+    | "GYEONGNAM"
+    | "JEJU";
+
+  /**
+   * 자가 운전자 인원 수 - 세부타입: 자가운전자
+   * @format int32
+   */
+  selfDriver?: number;
+
+  /**
+   * 교육 시작 희망 일자
+   * @format date
+   * @example yyyy-MM-dd
+   */
+  studyStartDate?: string;
 }
 
 export interface CourseUserResponseDto {
@@ -7982,7 +8152,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 관리자의 Access Token 을 통해 과정을 생성한다. <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객" 타입으로, GENERAL_CARGO 를 "화물" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
+     * @description 관리자의 Access Token 을 통해 과정을 생성한다. <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객" 타입으로, GENERAL_CARGO 를 "화물" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b> 도민 교통 타입의 과정 생성 시, subCategoryType 은 null 로 지정한다. provincialYn 는 모든 도민 과정 중 단 한개만 Y 로 존재하며, 도민 과정 신청 시, provincialYn 이 Y 인 과정으로 신청된다.
      *
      * @tags [App & 관리자] 과정 API
      * @name CreateCourseUsingPost
@@ -8605,6 +8775,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     enrollTransOrganUsingPost: (requestDto: CourseUserTransSaveRequestDto, params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<CourseResponseDto>, void>({
         path: `/course-user/enroll/organization`,
+        method: "POST",
+        body: requestDto,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 클라이언트에서 도민유저가 교육을 신청한다. 신청하려고하는 대상자가 도민 타입이 아닐 경우 예외를 발생시킨다. 신청되는 과정은 관리자페이지의 도민 과정의 provincialUseYn 이 Y 인 과정이며, 만일 해당하는 과정이 없을 경우 예외를 발생시킨다. 신청 시, courseClass 에 해당 유저만을 위한 데이터가 새로 생성된다. 새로 신청되는 과정 클래스는 신청일 기준 30일 간의 학습기간을 갖는다.
+     *
+     * @tags [App & 관리자] 과정 교육 신청 API
+     * @name EnrollProvincialUsingPost
+     * @summary [App] 도민교통 수강신청 API
+     * @request POST:/course-user/enroll/provincial
+     */,
+    enrollProvincialUsingPost: (requestDto: CourseUserProvincialSaveRequestDto, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<InputStream>, any>({
+        path: `/course-user/enroll/provincial`,
         method: "POST",
         body: requestDto,
         type: ContentType.Json,

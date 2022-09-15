@@ -10,13 +10,17 @@ export const courseClassTrafficInfo = atom<CourseClassTraffic | null>({
 export interface PeopleCounts {
   [prop: string]: { [prop: string]: number };
 }
-
 export interface CourseClassTraffic {
-  locate: string; //지엮
-  division: string; // 소속
-  date: string; //신청날짜
-  student: string;
-  category: string;
+  // locate: string; //지엮
+  // division: string; // 소속
+  // date: string; //신청날짜
+  // student: string;
+  // category: string;
+  province?: string; //지엮
+  businessName?: string; // 소속
+  studyStartDate?: string; //신청날짜
+  candidateType?: string;
+  candidateDetailType?: string;
 
   peopleCounts: PeopleCounts;
   // firstGrade: number;

@@ -1,12 +1,31 @@
-import { Box, Button, Container, styled, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  styled,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import { StebHeader } from '../StebHeader';
 import { useRecoilState } from 'recoil';
-import { courseClassEnrollInfo, courseClassEnrollList, courseClassTrafficInfo } from '@common/recoil';
+import {
+  courseClassEnrollInfo,
+  courseClassEnrollList,
+  courseClassTrafficInfo,
+} from '@common/recoil';
 import CheckIcon from '@mui/icons-material/Check';
 import { locationList } from '@layouts/MeEdit/MeEdit';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import { useRouter } from 'next/router';
-import { businessType, getSingleCourseClass, useSingleCourseClass } from '@common/api/courseClass';
+import {
+  businessType,
+  getSingleCourseClass,
+  useSingleCourseClass,
+} from '@common/api/courseClass';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useSnackbar } from '@hooks/useSnackbar';
 import dateFormat from 'dateformat';
@@ -20,7 +39,6 @@ export function Steb3() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const [trafficInfo, setTrafficInfo] = useRecoilState(courseClassTrafficInfo);
-
   return (
     <Steb3Wrap>
       <StebHeader value={3} />
@@ -42,35 +60,56 @@ export function Steb3() {
         </CompleteRegi>
 
         <RegiType>
-          <Typography variant="h5" fontWeight="bold" display="flex" alignItems="center" mt={4} mb={2}>
-            <HorizontalRuleRoundedIcon sx={{ transform: 'scale(1,2)', color: '#3498db' }} />
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            display="flex"
+            alignItems="center"
+            mt={4}
+            mb={2}
+          >
+            <HorizontalRuleRoundedIcon
+              sx={{ transform: 'scale(1,2)', color: '#3498db' }}
+            />
             <span>신청교육</span>
           </Typography>
           <TableContainer>
             <Table sx={{ borderTop: '4px solid #3498db' }}>
               <TableCustomRow>
                 <TableLeftCell>지역</TableLeftCell>
-                <TableCell>{String(locationList.filter(fil => fil.en === trafficInfo?.locate)[0]?.ko)}</TableCell>
+                <TableCell>
+                  {String(
+                    locationList.filter(fil => fil.en === trafficInfo?.province)[0]?.ko
+                  )}
+                </TableCell>
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>소속</TableLeftCell>
-                <TableCell>{trafficInfo?.division}</TableCell>
+                <TableCell>{trafficInfo?.businessName}</TableCell>
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>신청기간</TableLeftCell>
-                <TableCell>{trafficInfo?.date}</TableCell>
+                <TableCell>{trafficInfo?.studyStartDate}</TableCell>
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>교육대상자</TableLeftCell>
-                <TableCell>{String(studentList.filter(item => item.enType === trafficInfo?.student)[0]?.type)}</TableCell>
+                <TableCell>
+                  {String(
+                    studentList.filter(
+                      item => item.enType === trafficInfo?.candidateType
+                    )[0]?.type
+                  )}
+                </TableCell>
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>교육 세부구분</TableLeftCell>
                 <TableCell>
                   {String(
                     studentList
-                      .filter(item => item.enType === trafficInfo?.student)[0]
-                      ?.category.filter(fil => fil.enType === trafficInfo?.category)[0].type
+                      .filter(item => item.enType === trafficInfo?.candidateType)[0]
+                      ?.category.filter(
+                        fil => fil.enType === trafficInfo?.candidateDetailType
+                      )[0].type
                   )}
                 </TableCell>
               </TableCustomRow>
@@ -79,7 +118,10 @@ export function Steb3() {
         </RegiType>
 
         <StudentList>
-          <Step3StudentList students={trafficInfo?.peopleCounts} trafficInfo={trafficInfo} />
+          <Step3StudentList
+            students={trafficInfo?.peopleCounts}
+            trafficInfo={trafficInfo}
+          />
         </StudentList>
         <BottomBox>
           <Box padding="2rem" borderBottom="2px solid #888888" mb={2} textAlign="center">
@@ -87,10 +129,19 @@ export function Steb3() {
             <Typography>알차고 실속있는 서비스로 찾아뵙겠습니다.</Typography>
           </Box>
           <Box display="flex" gap="0.5rem">
-            <Button variant="contained" color="neutral" onClick={() => router.push(`/traffic/category`)} fullWidth>
+            <Button
+              variant="contained"
+              color="neutral"
+              onClick={() => router.push(`/traffic/category`)}
+              fullWidth
+            >
               홈으로
             </Button>
-            <Button variant="contained" onClick={() => router.push(`/traffic/me`)} fullWidth>
+            <Button
+              variant="contained"
+              onClick={() => router.push(`/traffic/me`)}
+              fullWidth
+            >
               마이페이지로 이동
             </Button>
           </Box>

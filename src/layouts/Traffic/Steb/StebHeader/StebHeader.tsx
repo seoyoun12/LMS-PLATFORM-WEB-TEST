@@ -16,7 +16,7 @@ export function StebHeader({ value }: { value: number }) {
         .map(item => (
           <Box
             sx={{
-              background: '#3498db',
+              background: '#246aef',
               color: 'white',
               textAlign: 'center',
               paddingTop: '6rem',
@@ -27,13 +27,25 @@ export function StebHeader({ value }: { value: number }) {
             <Typography variant="h4" fontWeight="bold">
               {item.title}
             </Typography>
-            <Typography>충남교통연수원은 올바르고 안전한 교통문화정착에 앞장섭니다.</Typography>
+            <Typography>
+              충남교통연수원은 올바르고 안전한 교통문화정착에 앞장섭니다.
+            </Typography>
             <Box display="flex" gap="8rem" width="fit-content" margin={'auto'} mt={4}>
-              <Box display="flex" flexDirection="column" alignItems={'center'} sx={{ opacity: 1 === value ? 1 : 0.5 }}>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems={'center'}
+                sx={{ opacity: 1 === value ? 1 : 0.5 }}
+              >
                 <Filter1Icon fontSize="large" />
                 <span>교육신청</span>
               </Box>
-              <Box display="flex" flexDirection="column" alignItems={'center'} sx={{ opacity: 2 === value ? 1 : 0.5 }}>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems={'center'}
+                sx={{ opacity: 2 === value ? 1 : 0.5 }}
+              >
                 <Filter2Icon fontSize="large" />
                 <span>신청완료</span>
               </Box>
@@ -48,4 +60,4 @@ export function StebHeader({ value }: { value: number }) {
   );
 }
 
-const StebHeaderWrap = styled(Container)``;
+const StebHeaderWrap = styled(Box)``;

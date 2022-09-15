@@ -145,12 +145,6 @@ export function CalendarManagement() {
           checked={courseType === CourseType.TYPE_LOW_FLOOR_BUS}
         />
         <span>저상버스</span>
-        <Radio
-          value={CourseType.TYPE_PROVINCIAL}
-          onChange={handleCourseType}
-          checked={courseType === CourseType.TYPE_PROVINCIAL}
-        />
-        <span>도민교통</span>
       </Box>
 
       <AdminCalendar

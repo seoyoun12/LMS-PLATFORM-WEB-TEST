@@ -71,7 +71,7 @@ const Footer: FC<Props> = () => {
               {/* <Link href="https://www.ctti.or.kr"> */}
               {/* <Logo /> */}
               <Image
-                src="/assets/images/onlineCenterLogo.png"
+                src="/assets/images/greyCttiLogo.png"
                 height={46}
                 width={260}
                 alt="Your Name"

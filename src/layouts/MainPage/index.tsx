@@ -180,7 +180,7 @@ const MainPage: NextPage = () => {
         <ContentBox>
           <LogoBox>
             <Image
-              src="/assets/images/onlineCenterLogo.png"
+              src="/assets/images/cttiLogo.png"
               height={48}
               width={320}
               alt="Your Name"
@@ -197,13 +197,7 @@ const MainPage: NextPage = () => {
             </NoticeTitle> */}
             <NoticeContent>
               <NoticeContentTypography>
-                {/* 운수종사자의 경우 첫번째 "운수종사자교육"{' '}
-                <span style={{ color: '#236cef', fontSize: '6px' }}>●</span>{' '}
-                저상버스운전자의 경우 두번째 "저상버스운전자교육"{' '}
-                <span style={{ color: '#236cef', fontSize: '6px' }}>●</span>{' '}
-                도민교통안전교육자의 경우 세번째 "도민교통안전교육"을 이용해주시기
-                바랍니다. */}
-                <Box display="flex">
+                {/* <Box display="flex">
                   <Box>-&nbsp;</Box>
                   <Box>
                     본 온라인 과정은{' '}
@@ -229,7 +223,27 @@ const MainPage: NextPage = () => {
                       (<span style={{ color: '#fc4719' }}>Wi-Fi 사용 권장</span>)
                     </span>
                   </Box>
-                </Box>
+                </Box> */}
+                <ul>
+                  <li>
+                    본 온라인 과정은{' '}
+                    <span style={{ color: '#c92f2f' }}>
+                      차량등록지가 충남 또는 세종시 운수종사자에 해당되는 교육
+                    </span>
+                    으로 타시‧도 차량은 교육을 이수 할 수 없습니다.
+                  </li>
+                  <li>
+                    <span style={{ color: '#c92f2f' }}>운전 중 교육을 진행할 경우</span>{' '}
+                    안전을 위해 <span style={{ color: '#c92f2f' }}>교육이 중단</span>
+                    됩니다.
+                  </li>
+                  <li>
+                    온라인교육은 네트워크 상태에 따라 데이터 요금이 발생할 수 있습니다.
+                    <span>
+                      (<span style={{ color: '#c92f2f' }}>Wi-Fi 사용 권장</span>)
+                    </span>
+                  </li>
+                </ul>
               </NoticeContentTypography>
             </NoticeContent>
           </NoticeContainer>
@@ -260,6 +274,8 @@ const MainPage: NextPage = () => {
                         sx={{ cursor: 'pointer' }}
                         onClick={async () => {
                           // setUserPageType(pageType);
+                          if (displayWord === '도민교통')
+                            return window.alert('준비중 입니다.');
                           await onClickCard();
                           router.push(href);
                         }}
@@ -320,7 +336,13 @@ const MainPage: NextPage = () => {
           </Box>
         </ContentBox>
       </MainContainer>
-      <FooterContainer sx={{ color: 'black' }}>
+      <FooterContainer
+        onClick={async () => {
+          await LinkList[2].onClickCard();
+          router.push(LinkList[2].href);
+        }}
+        sx={{ color: 'black' }}
+      >
         <FooterWord>CTTI</FooterWord>
       </FooterContainer>
     </WrapMainContainer>
@@ -420,6 +442,9 @@ const NoticeContentTypography = styled(Typography)`
   font-weight: bold;
   text-align: start;
   /* white-space: pre-wrap; */
+  li {
+    list-style: disc;
+  }
 `;
 
 // Category Grid

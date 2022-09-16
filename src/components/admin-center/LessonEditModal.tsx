@@ -63,7 +63,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
-  const { handleUpload , handleProgressStatus } = useFileUpload();
+  const { handleUpload , handleProgressStatus , uploadPercentage} = useFileUpload();
   const { contentSeq } = router.query;
   const { lessonList, lessonListError, mutate } = useLessonList(Number(contentSeq));
   const dialog = useDialog();
@@ -139,8 +139,8 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
       const isTrue = await handleProgressStatus()
       if(isTrue) return snackbar({variant:'error',message:'업로드실패'})
       setSubmitLoading(false);
+      handleClose(true);
       snackbar({ variant: 'success', message: '업로드 완료되었습니다.' });
-    handleClose(true);
     } catch (e: any) {
       snackbar(e.message || e.data?.message);
       setSubmitLoading(false);
@@ -193,7 +193,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
       loading={!lesson}
       open={open}
       actionLoading={submitLoading}
-      onCloseModal={() => handleClose(false)}
+      onCloseModal={() => handleClose(true)}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Box component="form">
@@ -321,8 +321,14 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
           </DeleteBtn> */}
         </FormContainer>
       </Box>
-      <Backdrop open={submitLoading} sx={{zIndex:9999}} >
+      <Backdrop open={submitLoading} sx={{zIndex:9999 ,display:'flex' , flexDirection:'column' }} >
         <Spinner />
+        <Box sx={{position:'relative' , width:'400px' , height:'25px',borderRadius:'8px' , background:'white'}} >
+
+        <Box sx={{ width:`${uploadPercentage}%`, height:'25px' , background:'#256def', borderRadius:'8px' ,transition:'width 0.2s ease-in'}}  />
+        <Box color={uploadPercentage < 50 ? 'black' : 'white'} fontWeight='bold' 
+        sx={{position:'absolute' , top:'50%', left:'50%', transform:'translate(-50%,-50%)' ,transition:'color 0.2s ease-in' }}>{uploadPercentage}%</Box>
+        </Box>
       </Backdrop>
     </Modal>
   );

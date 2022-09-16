@@ -14,11 +14,12 @@ export function useLessonList(contentSeq: number) {
 }
 
 export function useLesson(lessonSeq: number | null) {
-  const { data, error } = useSWR<SWRResponse<Lesson>>(lessonSeq ? `/lesson/adm/detail/${lessonSeq}` : null, GET);
+  const { data, error , mutate } = useSWR<SWRResponse<Lesson>>(lessonSeq ? `/lesson/adm/detail/${lessonSeq}` : null, GET);
 
   return {
     lesson: data?.data,
     lessonError: error,
+    lessonMutate: mutate
   };
 }
 

@@ -32,6 +32,7 @@ import { useRouter } from 'next/router';
 import { Accordion } from '@components/ui';
 import { logout } from '@common/api';
 import Logo from 'public/assets/svgs/logo.svg';
+import Image from 'next/image';
 
 const drawerWidth = 240;
 
@@ -269,7 +270,11 @@ export function Drawer({ children }: { children: ReactNode }) {
         >
           <List>
             <Box display="flex" gap="8px" flexDirection="column" padding="1rem">
-              <Logo />
+              {/* <Logo /> */}
+              <Image 
+            src="/assets/images/ctsoecLogo.png"
+            height={40}
+            width={230} />
               <Typography fontWeight="bold" fontSize="18px" textAlign="center">
                 학습관리센터
               </Typography>

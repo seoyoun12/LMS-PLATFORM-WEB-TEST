@@ -88,6 +88,7 @@ export const useFileUpload = () => {
 
         setSpinner(false);
         spinnerRef.current = false;
+        setUploadPercentage(0);
       });
       r.on('fileError', function (file, message) {
         setErrorMessage(
@@ -130,6 +131,7 @@ export const useFileUpload = () => {
   return {
     handleUpload,
     handleProgressStatus,
+    uploadPercentage
   };
 };
 

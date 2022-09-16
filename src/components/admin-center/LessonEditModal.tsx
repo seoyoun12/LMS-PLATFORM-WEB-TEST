@@ -322,9 +322,8 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
         </FormContainer>
       </Box>
       <Backdrop open={submitLoading} sx={{zIndex:9999 ,display:'flex' , flexDirection:'column' }} >
-        <Spinner />
-        <Box sx={{position:'relative' , width:'400px' , height:'25px',borderRadius:'8px' , background:'white'}} >
-
+        <Spinner fit={true}  />
+        <Box sx={{position:'relative' , width:'400px' , height:'25px',borderRadius:'8px' , background:'white'}} mt={5} >
         <Box sx={{ width:`${uploadPercentage}%`, height:'25px' , background:'#256def', borderRadius:'8px' ,transition:'width 0.2s ease-in'}}  />
         <Box color={uploadPercentage < 50 ? 'black' : 'white'} fontWeight='bold' 
         sx={{position:'absolute' , top:'50%', left:'50%', transform:'translate(-50%,-50%)' ,transition:'color 0.2s ease-in' }}>{uploadPercentage}%</Box>

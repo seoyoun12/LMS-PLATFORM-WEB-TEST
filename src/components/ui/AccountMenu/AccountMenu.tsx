@@ -46,15 +46,24 @@ export function AccountMenu() {
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        <Tooltip title="Account settings">
+        <Tooltip title="내 정보">
           <IconButton
             onClick={handleClick}
             size="small"
-            sx={{ ml: 2 }}
+            sx={{
+              ml: 2,
+              ':hover': {
+                background: '#fff',
+              },
+            }}
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
+            <Box color="black" fontSize="14px" mr={2}>
+              <Box>{user?.name}님 </Box>
+              <Box>환영합니다!</Box>
+            </Box>
             <Avatar sx={{ width: 40, height: 40 }}>
               {user && user.s3Files.length > 0 ? (
                 <Image src={user.s3Files[0].path} layout="fill" />

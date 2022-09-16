@@ -93,6 +93,10 @@ export function HeaderBar() {
                   // </Link>
                   null}
               <AccountMenu />
+              {/* <Box color="black" fontSize="14px" ml={2}>
+                <Box>{user.name}님 </Box>
+                <Box>환영합니다!</Box>
+              </Box> */}
             </Stack>
           )}
         </RightSection>

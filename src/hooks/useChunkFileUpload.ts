@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import Resumable from 'resumablejs';
 import { axiosHeaders, axiosSetting } from '@common/httpClient';
 import { localStore } from '@common/storage';
@@ -32,8 +32,9 @@ const round = (number: number, decimalPlaces: number) => {
 export const useFileUpload = () => {
   const [ uploadPercentage, setUploadPercentage ] = useState(0);
   const [ progressbar, showProgressbar ] = useState<any>(false);
-  const [ spinner, setSpinner ] = useState<any>(false);
+  const [ spinner, setSpinner ] = useState<boolean>(null);
   const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
+  const spinnerRef = useRef<boolean>(null)
 
   const handleUpload = useCallback(async (
     {
@@ -86,6 +87,8 @@ export const useFileUpload = () => {
         await completeFileUpload(requestInput);
 
         setSpinner(false);
+        spinnerRef.current = false;
+        setUploadPercentage(0);
       });
       r.on('fileError', function (file, message) {
         setErrorMessage(
@@ -99,6 +102,8 @@ export const useFileUpload = () => {
       r.on('fileProgress', function (file: ResumableFile, message: string) {
         const progress = r.progress();
         showProgressbar(true);
+        setSpinner(true)
+        spinnerRef.current = true;
         if (errorMessage == null) {
           setUploadPercentage(round((progress) * 100, 2));
         } else {
@@ -109,8 +114,24 @@ export const useFileUpload = () => {
     }
   }, [ errorMessage ]);
 
+  const handleProgressStatus = () => {
+    return new Promise<boolean>((resolve , reject) => {
+      let timer = setTimeout(function recall() {
+      if(spinnerRef.current === false){
+          resolve(spinnerRef.current)
+          return clearTimeout(timer)
+        }
+        clearTimeout(timer)
+        timer = setTimeout(recall , 1000)
+      } , 1000)
+          
+    })
+  }
+
   return {
-    handleUpload
+    handleUpload,
+    handleProgressStatus,
+    uploadPercentage
   };
 };
 

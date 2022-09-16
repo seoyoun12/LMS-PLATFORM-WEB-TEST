@@ -2,6 +2,7 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import {
+  Backdrop,
   Box,
   Button,
   Chip,
@@ -20,7 +21,7 @@ import { ContentType } from '@common/api/content';
 import { ChangeEvent, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { CustomInputLabel } from '@components/ui/InputLabel';
-import { Modal } from '@components/ui';
+import { Modal, Spinner } from '@components/ui';
 import { Lesson } from '@common/api/lesson';
 import { modifyLesson, removeLesson, useLessonList } from '@common/api/adm/lesson';
 import TextField from '@mui/material/TextField';
@@ -62,7 +63,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
-  const { handleUpload } = useFileUpload();
+  const { handleUpload , handleProgressStatus , uploadPercentage} = useFileUpload();
   const { contentSeq } = router.query;
   const { lessonList, lessonListError, mutate } = useLessonList(Number(contentSeq));
   const dialog = useDialog();
@@ -135,14 +136,17 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
     try {
       await modifyLesson({ lessonSeq: lesson.seq, lesson });
       await fileHandler(files, lesson);
+      const isTrue = await handleProgressStatus()
+      if(isTrue) return snackbar({variant:'error',message:'업로드실패'})
       setSubmitLoading(false);
-      snackbar({ variant: 'success', message: '업로드 되었습니다.' });
+      handleClose(true);
+      snackbar({ variant: 'success', message: '업로드 완료되었습니다.' });
     } catch (e: any) {
       snackbar(e.message || e.data?.message);
       setSubmitLoading(false);
     }
-    handleClose(true);
   };
+  
 
   const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();
@@ -189,7 +193,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
       loading={!lesson}
       open={open}
       actionLoading={submitLoading}
-      onCloseModal={() => handleClose(false)}
+      onCloseModal={() => handleClose(true)}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Box component="form">
@@ -317,6 +321,14 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
           </DeleteBtn> */}
         </FormContainer>
       </Box>
+      <Backdrop open={submitLoading} sx={{zIndex:9999 ,display:'flex' , flexDirection:'column' }} >
+        <Spinner fit={true}  />
+        <Box sx={{position:'relative' , width:'400px' , height:'25px',borderRadius:'8px' , background:'white'}} mt={5} >
+        <Box sx={{ width:`${uploadPercentage}%`, height:'25px' , background:'#256def', borderRadius:'8px' ,transition:'width 0.2s ease-in'}}  />
+        <Box color={uploadPercentage < 50 ? 'black' : 'white'} fontWeight='bold' 
+        sx={{position:'absolute' , top:'50%', left:'50%', transform:'translate(-50%,-50%)' ,transition:'color 0.2s ease-in' }}>{uploadPercentage}%</Box>
+        </Box>
+      </Backdrop>
     </Modal>
   );
 }

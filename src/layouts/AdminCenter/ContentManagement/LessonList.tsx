@@ -47,7 +47,7 @@ export function LessonList() {
   const [lessonId, setLessonId] = useState<number | null>(null);
   const { contentSeq } = router.query;
   const { lessonList, lessonListError, mutate } = useLessonList(Number(contentSeq));
-  const { lesson, lessonError } = useLesson(lessonId);
+  const { lesson, lessonError, lessonMutate } = useLesson(lessonId);
 
   // console.log('레슨리스트 :', lessonList);
 
@@ -78,6 +78,7 @@ export function LessonList() {
   const handleModalClose = async (isSubmit: boolean) => {
     if (isSubmit) {
       await mutate();
+      lessonMutate()
     }
 
     if (openUploadModal) {

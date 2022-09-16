@@ -1,6 +1,7 @@
 import { CategoryBoard } from '@components/ui/Traffic/CategoryBoard';
 import { CategoryCard } from '@components/ui/Traffic/CategoryCard';
 import { CategoryCarousel } from '@components/ui/Traffic/CategoryCarousel';
+import { CategoryCarouselMobile } from '@components/ui/Traffic/CategoryCarouselMobile';
 import useResponsive from '@hooks/useResponsive';
 
 const bannerData = [
@@ -23,7 +24,11 @@ export function Category() {
 
   return (
     <div>
-      <CategoryCarousel datas={bannerData} />
+      {isDesktop ? (
+        <CategoryCarousel datas={bannerData} />
+      ) : (
+        <CategoryCarouselMobile datas={bannerData} />
+      )}
 
       <CategoryCard />
 

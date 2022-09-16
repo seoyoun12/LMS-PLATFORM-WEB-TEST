@@ -64,7 +64,11 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
       <ImgBox width="100%" height="100%">
         <ImgOpacity></ImgOpacity>
         <ImgBack>
-          <Image src={data[swiperPageNumber].s3Files[0].path} layout="fill" />
+          {data.length > 0 && data[swiperPageNumber].s3Files.length > 0 ? (
+            <Image src={data[swiperPageNumber].s3Files[0].path} layout="fill" />
+          ) : (
+            <Box width="100%" height="100%" sx={{ background: '#e9e9e9' }} />
+          )}
         </ImgBack>
       </ImgBox>
       <SliderLayout
@@ -101,13 +105,20 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
               )}
             </SwiperSlide>
           ))} */}
-          <Image
-            src={data[0].s3Files[0].path}
-            alt=""
-            layout="fill"
-            objectFit="cover"
-            style={{ paddingRight: '16px' }}
-          />
+
+          <SwiperSlide>
+            {data.length > 0 && data[0].s3Files.length > 0 ? (
+              <Image
+                src={data[0].s3Files[0].path}
+                alt=""
+                layout="fill"
+                objectFit="cover"
+                style={{ paddingRight: '16px' }}
+              />
+            ) : (
+              <Box width="100%" height="100%" sx={{ background: '#d6d6d6' }} />
+            )}
+          </SwiperSlide>
         </Swiper>
 
         <Swiper
@@ -171,19 +182,21 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
               </SlideInfo>
             </SwiperSlide>
           ))} */}
-          <SwiperSlide key={data[0].seq}>
+          <SwiperSlide>
             <SlideInfo>
               <Box fontSize="24px" fontWeight="bold">
-                {data[0].title.split('\n').map((item, idx) => {
-                  if (idx > 1) return;
-                  return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
-                })}
+                {data.length > 0 &&
+                  data[0].title.split('\n').map((item, idx) => {
+                    if (idx > 1) return;
+                    return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
+                  })}
               </Box>
               <Box>
-                {data[0].content.split('\n').map((item, idx) => {
-                  if (idx > 8) return;
-                  return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
-                })}
+                {data.length > 0 &&
+                  data[0].content.split('\n').map((item, idx) => {
+                    if (idx > 8) return;
+                    return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
+                  })}
               </Box>
             </SlideInfo>
           </SwiperSlide>

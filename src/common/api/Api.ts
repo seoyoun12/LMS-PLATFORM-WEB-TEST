@@ -632,7 +632,7 @@ export interface CourseDetailClientResponseDto {
 
   /**
    * 연결된 학습 진행사항
-   * 해당 유저-과정이 듣고있는 과정 차씨의 학습 진행사항들(차씨들의 진도율)
+   * 해당 유저-과정이 듣고있는 과정 차시의 학습 진행사항들(차시들의 진도율)
    */
   courseProgressResponseDtoList?: CourseProgressResponseDto[];
 
@@ -719,6 +719,12 @@ export interface CourseDetailClientResponseDto {
    * @format date-time
    */
   modifiedDtime?: string;
+
+  /**
+   * 도민교통 메인 사용 여부 - 도민 과정 등록만 해당
+   * @example N
+   */
+  provincialUseYn?: "Y" | "N";
 
   /**
    * 유저가 완료한 차시 (참고용)
@@ -843,6 +849,12 @@ export interface CourseDetailResponseDto {
    */
   modifiedDtime?: string;
 
+  /**
+   * 도민교통 메인 사용 여부 - 도민 과정 등록만 해당
+   * @example N
+   */
+  provincialUseYn?: "Y" | "N";
+
   /** s3 파일 */
   s3Files?: FileResponseDto[];
 
@@ -860,6 +872,60 @@ export interface CourseDetailResponseDto {
 }
 
 export interface CourseLearningInfoCoursesResponseDto {
+  /**
+   * 업종 구분
+   * *   버스(여객) - BUS
+   *     전세버스 - CHARTER_BUS
+   *     특수여객 - SPECIAL_PASSENGER
+   *     법인택시 - CORPORATE_TAXI
+   *     일반화물 - GENERAL_CARGO
+   *     개인택시 - PRIVATE_TAXI
+   *     개별화물(화물) - INDIVIDUAL_CARGO
+   *     용달화물 - CONSIGNMENT
+   *     특별교통수단 - SPECIAL_TRANSPORTATION
+   *     저상버스 - KNEELING_BUS
+   *     위험물 - DANGEROUS_GOODS
+   *     지정폐기물 - DESIGNATED_WASTE
+   *     유해화학물질 - HAZARDOUS_CHEMICALS
+   *     고압가스(가연성) - HIGH_PRESSURE_GAS_FLAMMABLE
+   *     고압가스(독성) - HIGH_PRESSURE_GAS_TOXIC
+   */
+  businessSubType?:
+    | "BUS"
+    | "CHARTER_BUS"
+    | "SPECIAL_PASSENGER"
+    | "CORPORATE_TAXI"
+    | "GENERAL_CARGO"
+    | "PRIVATE_TAXI"
+    | "INDIVIDUAL_CARGO"
+    | "CONSIGNMENT"
+    | "SPECIAL_TRANSPORTATION"
+    | "KNEELING_BUS"
+    | "DANGEROUS_GOODS"
+    | "DESIGNATED_WASTE"
+    | "HAZARDOUS_CHEMICALS"
+    | "HIGH_PRESSURE_GAS_FLAMMABLE"
+    | "HIGH_PRESSURE_GAS_TOXIC";
+
+  /**
+   * 교육 분류
+   *  * TYPE_SUP_COMMON -> 보수일반
+   *  * TYPE_SUP_CONSTANT -> 보수 수시
+   *  * TYPE_CONSTANT -> 수시
+   *  * TYPE_NEW -> 신규
+   *  * TYPE_ILLEGAL -> 법령위반자
+   *  * TYPE_HANDICAPPED -> 교통약자 이동편의 증진
+   *  * TYPE_DANGEROUS -> 위험물진 운송차량 운전자
+   */
+  categoryType?:
+    | "TYPE_SUP_COMMON"
+    | "TYPE_SUP_CONSTANT"
+    | "TYPE_CONSTANT"
+    | "TYPE_NEW"
+    | "TYPE_ILLEGAL"
+    | "TYPE_HANDICAPPED"
+    | "TYPE_DANGEROUS";
+
   /** 과정명 */
   courseName?: string;
 
@@ -868,6 +934,17 @@ export interface CourseLearningInfoCoursesResponseDto {
    * @format int64
    */
   courseSeq?: number;
+
+  /**
+   * 과정 타입
+   *  * TYPE_TRANS_WORKER: 운수종사자
+   *  * TYPE_LOW_FLOOR_BUS: 저상버스
+   *  * TYPE_PROVINCIAL: 도민교통
+   */
+  courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
+
+  /** 출력용 과정명 */
+  displayCourseName?: string;
 }
 
 export interface CourseLearningInfoResponseDto {
@@ -879,6 +956,20 @@ export interface CourseLearningInfoResponseDto {
 
   /** 과정명 */
   courseName?: string;
+
+  /**
+   * 과정 시퀀스
+   * @format int64
+   */
+  courseSeq?: number;
+
+  /**
+   * 과정 타입
+   *  * TYPE_TRANS_WORKER: 운수종사자
+   *  * TYPE_LOW_FLOOR_BUS: 저상버스
+   *  * TYPE_PROVINCIAL: 도민교통
+   */
+  courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
 
   /**
    * 과정 유저 시퀀스
@@ -1469,6 +1560,12 @@ export interface CourseResponseDto {
    */
   modifiedDtime?: string;
 
+  /**
+   * 도민교통 메인 사용 여부 - 도민 과정 등록만 해당
+   * @example N
+   */
+  provincialUseYn?: "Y" | "N";
+
   /** s3 파일 */
   s3Files?: FileResponseDto[];
 
@@ -1544,6 +1641,7 @@ export interface CourseSaveRequestDto {
   /**
    * 과정분류 운수종사자 / 저상버스 * TYPE_TRANS_WOKER: 운수종사자
    *  * TYPE_LOW_FLOOR_BUS: 저상버스
+   * TYPE_PROVINCIAL: 도민교통
    */
   courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
 
@@ -1555,6 +1653,12 @@ export interface CourseSaveRequestDto {
    * @format int32
    */
   lessonTime?: number;
+
+  /**
+   * 도민교통 메인 사용 여부 - 도민 과정 등록만 해당
+   * @example N
+   */
+  provincialUseYn?: "Y" | "N";
 
   /**
    * 사용 여부
@@ -1632,6 +1736,12 @@ export interface CourseUpdateRequestDto {
    */
   lessonTime?: number;
 
+  /**
+   * 도민교통 메인 사용 여부 - 도민 과정 등록만 해당
+   * @example N
+   */
+  provincialUseYn?: "Y" | "N";
+
   /** S3 파일 */
   s3Files?: FileRequestDto[];
 
@@ -1640,6 +1750,17 @@ export interface CourseUpdateRequestDto {
    * @format int32
    */
   status?: 1 | -1;
+}
+
+export interface CourseUserExistsResponseDto {
+  /** 수강가능여부 */
+  available?: boolean;
+
+  /** 중복 신청 여부 */
+  duplicated?: boolean;
+
+  /** 수강불가 시 메세지 */
+  message?: string;
 }
 
 export interface CourseUserLogRequestDto {
@@ -1757,6 +1878,13 @@ export interface CourseUserMyInfoResponseDto {
   recentLessonSeq?: number;
 
   /**
+   * 교육 시작까지 남은 기한
+   * @format int64
+   * @example 3
+   */
+  startLeftDays?: number;
+
+  /**
    * 기수
    * @format int32
    * @example 1
@@ -1780,6 +1908,145 @@ export interface CourseUserMyInfoResponseDto {
    * @example https://...
    */
   thumbnailImage?: string;
+}
+
+export interface CourseUserProvincialSaveRequestDto {
+  /**
+   * 만 3세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age3?: number;
+
+  /**
+   * 만 4세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age4?: number;
+
+  /**
+   * 만 5세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age5?: number;
+
+  /** 소속 */
+  businessName?: string;
+
+  /**
+   * 교육대상자 세부 타입
+   *  * TYPE_KINDERGARTEN: 유치원
+   *  * TYPE_ELEMENTARY: 초등학교
+   *  * TYPE_MIDDLE: 중학교
+   *  * TYPE_HIGH: 고등학교
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  candidateDetailType?:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
+
+  /**
+   * 교육대상자
+   *  * TYPE_CHILDREN: 어린이
+   *  * TYPE_TEENAGER: 청소년
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  candidateType?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_SELF_DRIVER" | "TYPE_ELDERLY";
+
+  /**
+   * 노인 인원 수 - 세부타입: 노인
+   * @format int32
+   */
+  elderly?: number;
+
+  /**
+   * 1학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade1?: number;
+
+  /**
+   * 2학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade2?: number;
+
+  /**
+   * 3학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade3?: number;
+
+  /**
+   * 4학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade4?: number;
+
+  /**
+   * 5학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade5?: number;
+
+  /**
+   * 6학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade6?: number;
+
+  /** 지역 */
+  province?:
+    | "CHEONAN"
+    | "GONGJU"
+    | "BORYEONG"
+    | "ASAN"
+    | "SEOSAN"
+    | "NONSAN"
+    | "GYERYONG"
+    | "DANGJIN"
+    | "GEUMSAN"
+    | "BUYEO"
+    | "SEOCHEON"
+    | "CHEONGYANG"
+    | "HONGSEONG"
+    | "YESAN"
+    | "TAEAN"
+    | "CHUNGNAM"
+    | "SEJONG"
+    | "SEOUL"
+    | "BUSAN"
+    | "DAEGU"
+    | "INCHEON"
+    | "GWANGJU"
+    | "DAEJEON"
+    | "ULSAN"
+    | "GYEONGGI"
+    | "GANGWON"
+    | "CHUNGBUK"
+    | "JEONBUK"
+    | "JEONNAM"
+    | "GYEONGBUK"
+    | "GYEONGNAM"
+    | "JEJU";
+
+  /**
+   * 자가 운전자 인원 수 - 세부타입: 자가운전자
+   * @format int32
+   */
+  selfDriver?: number;
+
+  /**
+   * 교육 시작 희망 일자
+   * @format date
+   * @example yyyy-MM-dd
+   */
+  studyStartDate?: string;
 }
 
 export interface CourseUserResponseDto {
@@ -5760,6 +6027,107 @@ export interface SpecificQuestionInExamTabResponseDto {
   status?: number;
 }
 
+export interface StatisticsSurveyObjDto {
+  /** 문항 1 */
+  item1?: StatisticsSurveyObjElementDto;
+
+  /** 문항 10 */
+  item10?: StatisticsSurveyObjElementDto;
+
+  /** 문항 2 */
+  item2?: StatisticsSurveyObjElementDto;
+
+  /** 문항 3 */
+  item3?: StatisticsSurveyObjElementDto;
+
+  /** 문항 4 */
+  item4?: StatisticsSurveyObjElementDto;
+
+  /** 문항 5 */
+  item5?: StatisticsSurveyObjElementDto;
+
+  /** 문항 6 */
+  item6?: StatisticsSurveyObjElementDto;
+
+  /** 문항 7 */
+  item7?: StatisticsSurveyObjElementDto;
+
+  /** 문항 8 */
+  item8?: StatisticsSurveyObjElementDto;
+
+  /** 문항 9 */
+  item9?: StatisticsSurveyObjElementDto;
+
+  /** 문항명 */
+  surveyQuestionName?: string;
+
+  /**
+   * 문항 시퀀스
+   * @format int64
+   */
+  surveyQuestionSeq?: number;
+}
+
+export interface StatisticsSurveyObjElementDto {
+  /**
+   * 객관식 질문 응답 개수
+   * @format int32
+   */
+  objAnsweredCnt?: number;
+
+  /** 객관식 질문명 */
+  objName?: string;
+}
+
+export interface StatisticsSurveyResponseDto {
+  /**
+   * 객관식 개수
+   * @format int32
+   */
+  objCnt?: number;
+
+  /** 객관식 응답 결과 */
+  objResult?: StatisticsSurveyObjDto[];
+
+  /**
+   * 설문 참여자 수
+   * @format int32
+   */
+  participantCnt?: number;
+
+  /**
+   * 주관식 개수
+   * @format int32
+   */
+  subjCnt?: number;
+
+  /** 주관식 응답 결과 */
+  subjResult?: StatisticsSurveySubjDto[];
+
+  /** 설문지명 */
+  surveyName?: string;
+
+  /**
+   * 설문 시퀀스
+   * @format int64
+   */
+  surveySeq?: number;
+}
+
+export interface StatisticsSurveySubjDto {
+  /** 주관식 응답 리스트 */
+  answerList?: string[];
+
+  /** 문항명 */
+  surveyQuestionName?: string;
+
+  /**
+   * 문항 시퀀스
+   * @format int64
+   */
+  surveyQuestionSeq?: number;
+}
+
 export interface SurveyMultipleChoiceRequestDto {
   /** 문항 1 */
   item1?: string;
@@ -5907,6 +6275,9 @@ export interface SurveyQuestionRequestDto {
 }
 
 export interface SurveyQuestionResponseDto {
+  /** 제출 설문에 대한 사용자 응답 */
+  answered?: string;
+
   /**
    * 질문 내용
    * @example 나는 이번 교육을 통해 ~를 잘 이해했다.
@@ -7469,6 +7840,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: requestDto,
         type: ContentType.Json,
         ...params,
+      })
+    /**
+     * @description 관리자페이지에서 특정 설문 시퀀스를 PathVariable 로 전달받아 해당하는 설문 통계를 조회한다.
+     *
+     * @tags [관리자] 통계 API
+     * @name AdmFindSurveyStatisticsUsingGet
+     * @summary [관리자] 특정 설문 통계 조회 - JWT
+     * @request GET:/adm/statistics/survey/{surveySeq}
+     */,
+    admFindSurveyStatisticsUsingGet: (surveySeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<StatisticsSurveyResponseDto>, void>({
+        path: `/adm/statistics/survey/${surveySeq}`,
+        method: "GET",
+        ...params,
       }),
   };
   auth = {
@@ -7767,7 +8152,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 관리자의 Access Token 을 통해 과정을 생성한다. <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객" 타입으로, GENERAL_CARGO 를 "화물" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
+     * @description 관리자의 Access Token 을 통해 과정을 생성한다. <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객" 타입으로, GENERAL_CARGO 를 "화물" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b> 도민 교통 타입의 과정 생성 시, subCategoryType 은 null 로 지정한다. provincialYn 는 모든 도민 과정 중 단 한개만 Y 로 존재하며, 도민 과정 신청 시, provincialYn 이 Y 인 과정으로 신청된다.
      *
      * @tags [App & 관리자] 과정 API
      * @name CreateCourseUsingPost
@@ -7783,7 +8168,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 개설된 과정 클래스에 대한 모든 수강 인원을 조회한다. 수강 중인 과정명, 연도 및 기수, 실명, 수료 여부, 회원 아이디, 유저 시퀀스, 과정 클래스 시퀀스, 과정 유저 시퀀스, 학습기간, 신청일, 상태, 수료 여부 등을 반환한다.
+     * @description 개설된 과정 클래스에 대한 모든 수강 인원을 조회한다. 수강 중인 과정명, 연도 및 기수, 실명, 수료 여부, 회원 아이디, 유저 시퀀스, 과정 클래스 시퀀스, 과정 유저 시퀀스, 학습기간, 신청일, 상태, 수료 여부 등을 반환한다. 이름, 아이디, 과정 시퀀스, 클래스 시퀀스, 수료 여부, 상태에 대한 파라미터를 받아 필터링을 수행한다. 필터에 대한 데이터가 null 일 경우 전체 검색으로 동작한다.
      *
      * @tags [관리자] 학습 현황 API
      * @name AdmFindAllCourseLearningUsersUsingGet
@@ -7791,7 +8176,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/course/adm/learning-info/
      */,
     admFindAllCourseLearningUsersUsingGet: (
-      query: { courseClassSeq?: number; courseSeq?: number; elementCnt?: number; page: number },
+      query?: {
+        completeType?: "TYPE_INCOMPLETE" | "TYPE_COMPLETE";
+        courseClassSeq?: number;
+        courseSeq?: number;
+        courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
+        elementCnt?: number;
+        nameOrUsername?: string;
+        page?: number;
+        statusType?: "TYPE_NORMAL" | "TYPE_OUT";
+      },
       params: RequestParams = {},
     ) =>
       this.request<ApiResponseWrapper<PageCourseLearningInfoResponseDto>, any>({
@@ -8300,7 +8694,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags [App & 관리자] 과정 진도율 API - * 관리자 통계 로직 등은 추후 논의
      * @name UpdateAllCourseProgressUsingPut
-     * @summary [App & 관리자] 과정 진도율 전체 수정 API - JWT 사용
+     * @summary [App & 관리자] 과정 진도율 전체 수정 API - JWT 사용 - Deprecated
      * @request PUT:/course-progress/{courseUserSeq}
      */,
     updateAllCourseProgressUsingPut: (courseUserSeq: number, params: RequestParams = {}) =>
@@ -8387,6 +8781,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
+     * @description 클라이언트에서 도민유저가 교육을 신청한다. 신청하려고하는 대상자가 도민 타입이 아닐 경우 예외를 발생시킨다. 신청되는 과정은 관리자페이지의 도민 과정의 provincialUseYn 이 Y 인 과정이며, 만일 해당하는 과정이 없을 경우 예외를 발생시킨다. 신청 시, courseClass 에 해당 유저만을 위한 데이터가 새로 생성된다. 새로 신청되는 과정 클래스는 신청일 기준 30일 간의 학습기간을 갖는다.
+     *
+     * @tags [App & 관리자] 과정 교육 신청 API
+     * @name EnrollProvincialUsingPost
+     * @summary [App] 도민교통 수강신청 API
+     * @request POST:/course-user/enroll/provincial
+     */,
+    enrollProvincialUsingPost: (requestDto: CourseUserProvincialSaveRequestDto, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<InputStream>, any>({
+        path: `/course-user/enroll/provincial`,
+        method: "POST",
+        body: requestDto,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
      * @description 해당 과정-유저가 존재하는지에 대한 체크 여부 존재 하지않으면 true 반환 존재하면 false 반환
      *
      * @tags [App & 관리자] 과정 교육 신청 API
@@ -8395,7 +8805,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/course-user/exists/{courseClassSeq}
      */,
     existsCourseUserUsingGet: (courseClassSeq: number, params: RequestParams = {}) =>
-      this.request<ApiResponseWrapper<boolean>, void>({
+      this.request<ApiResponseWrapper<CourseUserExistsResponseDto>, void>({
         path: `/course-user/exists/${courseClassSeq}`,
         method: "GET",
         ...params,
@@ -10401,7 +10811,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 클라이언트 단에서 현재 유저가 수강중인 과정 신청 시퀀스를 전달받아 특정 설문을 조회한다. 설문 조회 시, 요청자의 유저 시퀀스에 대하여 현재 과정에 대한 전체 진도율이 최소 진도율을 충족하는지 체크한다. 그렇지 않을 경우, 예외를 발생시킨다.
+     * @description 클라이언트 단에서 현재 유저가 수강중인 과정 신청 시퀀스를 전달받아 특정 설문을 조회한다. 설문 조회 시, 요청자의 유저 시퀀스에 대하여 현재 과정에 대한 전체 진도율이 최소 진도율을 충족하는지 체크한다. 그렇지 않을 경우, 예외를 발생시킨다. 완료된 설문일 경우, 각 설문 문항(surveyQuestionList 내 각 요소)에 유저가 응답한 항목 프로퍼티를 담아서 보내준다.
      *
      * @tags [App & 관리자] 설문 API
      * @name FindSurveyUsingGet
@@ -10513,14 +10923,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 관리자 페이지에서 전체 유저 리스트를 조회한다. 이때, 페이징을 위한 인자를 Request Param 으로 전달받는다.
+     * @description 관리자 페이지에서 전체 유저 리스트를 조회한다. 이때, 페이징과 필터링을 위한 인자를 Request Param 으로 전달받는다.
      *
      * @tags [관리자 & App] 유저 API
      * @name AdmFindUsersUsingGet
-     * @summary [관리자] 전체 유저 API - JWT | Pagination
+     * @summary [관리자] 전체 유저 API - JWT | Pagination, Filter
      * @request GET:/user/adm
      */,
-    admFindUsersUsingGet: (query: { elementCnt?: number; page: number }, params: RequestParams = {}) =>
+    admFindUsersUsingGet: (
+      query: {
+        elementCnt?: number;
+        keyword?: string;
+        page: number;
+        registerType: "TYPE_TRANS_EDU" | "TYPE_TRAFFIC_SAFETY_EDU";
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<ApiResponseWrapper<UserResponseDto[]>, any>({
         path: `/user/adm`,
         method: "GET",

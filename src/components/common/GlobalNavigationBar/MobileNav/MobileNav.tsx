@@ -199,7 +199,7 @@ export function MobileNav() {
             alignItems="center"
           >
             <Image
-              src="/assets/images/onlineCenterLogo.png"
+              src="/assets/images/ctsoecLogo.png"
               height={40}
               width={224}
               alt="Your Name"

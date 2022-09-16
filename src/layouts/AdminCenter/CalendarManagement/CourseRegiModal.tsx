@@ -31,7 +31,7 @@ export function CourseRegiModal({ open, handleClose, handleGetCourseSeq }: Props
   const [keyword, setKeyword] = useState<string | null>(null);
   const [page, setPage] = useState(0);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
-  const { data, error } = useCourseList({ page: 0, courseTitle: keyword });
+  const { data, error } = useCourseList({ page, courseTitle: keyword });
 
   const handleSearch = async (event: FormEvent, isReload = false) => {
     event.preventDefault();
@@ -51,13 +51,23 @@ export function CourseRegiModal({ open, handleClose, handleGetCourseSeq }: Props
   return (
     <Modal open={open} onCloseModal={handleClose} title="과정콘텐츠">
       <SearchContainer onSubmit={handleSearch}>
-        <SearchInput inputRef={searchInputRef} placeholder="콘텐츠 검색" size="small" type="search" />
+        <SearchInput
+          inputRef={searchInputRef}
+          placeholder="콘텐츠 검색"
+          size="small"
+          type="search"
+        />
         <IconButton type="submit">
           <SearchIcon />
         </IconButton>
       </SearchContainer>
       {data ? (
-        <Table pagination={true} totalNum={data.totalElements} page={data.number} onChangePage={onChangePage}>
+        <Table
+          pagination={true}
+          totalNum={data.totalElements}
+          page={data.number}
+          onChangePage={onChangePage}
+        >
           <TableHead>
             <TableCell>seq</TableCell>
             <TableCell>과정명</TableCell>

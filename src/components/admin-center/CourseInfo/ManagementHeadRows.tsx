@@ -9,6 +9,7 @@ import { CompleteType, StatusType } from '@common/api/adm/learningInfo';
 
 interface Props {
   //   searchInputRef: React.MutableRefObject<HTMLInputElement>;
+  search: string;
   courseType: CourseType;
   completeType: CompleteType | null;
   statusType: StatusType | null;
@@ -20,6 +21,7 @@ interface Props {
 
 export const ManagementHeadRows = React.forwardRef(function (
   {
+    search,
     courseType,
     completeType,
     statusType,
@@ -96,7 +98,7 @@ export const ManagementHeadRows = React.forwardRef(function (
       <SearchContainer onSubmit={handleSearch}>
         <SearchInput
           inputRef={searchInputRef}
-          placeholder="콘텐츠 검색"
+          placeholder="이름 혹은 아이디 검색"
           size="small"
           type="search"
         />
@@ -113,6 +115,10 @@ export const ManagementHeadRows = React.forwardRef(function (
       >
         전체 다시 불러오기
       </ReloadButton>
+
+      <Box mt={2} mb={2} fontSize={18} fontWeight="bold">
+        {search !== '' && `검색어 : ${search}`}
+      </Box>
     </HeadRows>
   );
 });

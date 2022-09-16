@@ -35,7 +35,7 @@ export function HeaderBar() {
           alignItems="center"
         >
           <Image
-            src="/assets/images/onlineCenterLogo.png"
+            src="/assets/images/ctsoecLogo.png"
             height={40}
             width={230}
             alt="Your Name"

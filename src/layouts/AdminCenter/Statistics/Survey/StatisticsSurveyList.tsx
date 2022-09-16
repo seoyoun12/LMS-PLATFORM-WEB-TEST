@@ -33,7 +33,7 @@ const headRows: {
   // { name: '수료생', align: 'right' },
 ];
 
-export function StaticsSurveyList() {
+export function StatisticsSurveyList() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const router = useRouter();

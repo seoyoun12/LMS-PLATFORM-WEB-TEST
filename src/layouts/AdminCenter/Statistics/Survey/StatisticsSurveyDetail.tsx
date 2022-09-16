@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Box } from '@mui/material';
 
-export function StaticsSurveyDetail() {
+export function StatisticsSurveyDetail() {
   return (
     <StaticsSurveyDetailWrap>
       <Box>설문통계</Box>

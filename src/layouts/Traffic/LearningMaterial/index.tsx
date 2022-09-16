@@ -25,7 +25,10 @@ export type MaterialTabType =
 
 export function LearningMaterialLayout() {
   const router = useRouter();
-  const { type } = router.query as Record<"type", MaterialTabType>;
+  const { type, id } = router.query as {
+    type: MaterialTabType;
+    id?: string;
+  };
 
   const handleClickTab = (tabValue: MaterialTabType) => {
     router.push(`/traffic/learning-material/${tabValue}`);
@@ -36,6 +39,9 @@ export function LearningMaterialLayout() {
       case "education":
         return <EducationLayout materialType={getMaterialType(type)} />;
       case "learning_guide":
+        if (id) {
+          return <p>asdasd</p>;
+        }
         return <LearningGuideLayout materialType={getMaterialType(type)} />;
       case "reference":
         return <ReferenceLayout materialType={getMaterialType(type)} />;

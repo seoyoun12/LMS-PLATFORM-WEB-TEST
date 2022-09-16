@@ -21,6 +21,7 @@ import {
 import { format } from "date-fns";
 import DownloadIcon from "public/assets/images/ic_download.svg";
 import { Button } from "@mui/material";
+import { GET, POST } from "@common/httpClient";
 
 interface ReferenceLayoutProps {
   materialType: MaterialType;
@@ -31,7 +32,6 @@ export default function ReferenceLayout({
 }: ReferenceLayoutProps) {
   const [tabType, setTabType] = useState<MaterialSubType | "">("");
   const { data } = useGetLearningMaterial(materialType, tabType);
-  console.log(data);
 
   const handleClickChip = (value: MaterialSubType) => {
     if (value === tabType) {
@@ -39,6 +39,23 @@ export default function ReferenceLayout({
       return;
     }
     setTabType(value);
+  };
+
+  const handleClickDownload = async (name: string, seq: number) => {
+    const data = await POST<string>(
+      `/file/${seq}`,
+      {},
+      {
+        responseType: "blob",
+      }
+    );
+
+    const url = window.URL.createObjectURL(new Blob([data]));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+    a.click();
+    a.remove();
   };
 
   return (
@@ -105,7 +122,14 @@ export default function ReferenceLayout({
                 </ReferenceItemHeaderDateWrapper>
               </TableItem>
               <TableItem width="10%">
-                <Button>
+                <Button
+                  onClick={() =>
+                    handleClickDownload(
+                      value.s3Files[0].name,
+                      value.s3Files[0].seq
+                    )
+                  }
+                >
                   <DownloadIcon />
                 </Button>
               </TableItem>

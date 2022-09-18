@@ -217,7 +217,7 @@ export function Drawer({ children }: { children: ReactNode }) {
         {
           name: '설문통계',
           // href: '/admin-center/statics-survey',
-          href: '/admin-center/statics/survey',
+          href: '/admin-center/statistics/survey',
           isActive: router.pathname === '',
         },
         // {
@@ -271,10 +271,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           <List>
             <Box display="flex" gap="8px" flexDirection="column" padding="1rem">
               {/* <Logo /> */}
-              <Image 
-            src="/assets/images/ctsoecLogo.png"
-            height={40}
-            width={230} />
+              <Image src="/assets/images/ctsoecLogo.png" height={40} width={230} />
               <Typography fontWeight="bold" fontSize="18px" textAlign="center">
                 학습관리센터
               </Typography>

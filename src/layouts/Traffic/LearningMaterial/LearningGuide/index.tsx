@@ -16,7 +16,6 @@ import {
   LearningGuideItemContentTitle,
   LearningGuideItemImageContainer,
 } from "./style";
-import { CircularProgress } from "@mui/material";
 import BackgroundImage from "@/public/assets/images/certificates_background.svg";
 import { NotFound } from "@components/ui/NotFound";
 import { format } from "date-fns";

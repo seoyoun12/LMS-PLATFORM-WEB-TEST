@@ -121,3 +121,14 @@ export function useGetLearningMaterial(
 
   return data;
 }
+
+export function useGetLearningMaterialDetail(
+  learningMaterialSeq: number | string
+) {
+  const data = useSWR<SWRResponse<LearningMaterialResponseDto>>(
+    [`/learning-material/${learningMaterialSeq}`],
+    GET
+  );
+
+  return data;
+}

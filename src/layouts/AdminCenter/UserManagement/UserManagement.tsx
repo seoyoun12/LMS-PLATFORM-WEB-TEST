@@ -71,43 +71,43 @@ export function UserManagement() {
   const date = new Date();
   const year = date.getFullYear();
 
-  const onClickRemoveUser = async (userSeq: number) => {
-    try {
-      const dialogConfirmed = await dialog({
-        title: '유저 삭제하기',
-        description: (
-          <div>
-            <div>삭제시 회원의 모든 정보가 영구적으로 삭제됩니다.</div>
-            <div>정말로 삭제하시겠습니까?</div>
-            <div style={{ color: 'red', fontSize: '14px' }}>*복구가 불가능합니다.*</div>
-          </div>
-        ),
-        confirmText: '삭제하기',
-        cancelText: '취소',
-      });
-      if (dialogConfirmed) {
-        await removeUser(userSeq);
-        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-        await mutate();
-      }
-    } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
-    }
-  };
+  // const onClickRemoveUser = async (userSeq: number) => {
+  //   try {
+  //     const dialogConfirmed = await dialog({
+  //       title: '유저 삭제하기',
+  //       description: (
+  //         <div>
+  //           <div>삭제시 회원의 모든 정보가 영구적으로 삭제됩니다.</div>
+  //           <div>정말로 삭제하시겠습니까?</div>
+  //           <div style={{ color: 'red', fontSize: '14px' }}>*복구가 불가능합니다.*</div>
+  //         </div>
+  //       ),
+  //       confirmText: '삭제하기',
+  //       cancelText: '취소',
+  //     });
+  //     if (dialogConfirmed) {
+  //       await removeUser(userSeq);
+  //       snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
+  //       await mutate();
+  //     }
+  //   } catch (e: any) {
+  //     snackbar({ variant: 'error', message: e.data.message });
+  //   }
+  // };
 
   // console.log('!!!!!!!!!!!!! : ', data?.content.find(item => item.seq === userSeq).birth);
-  // const ymdBirth = data?.content.find(item => item.seq === userSeq).birth;
-  const onClickModifyUser = async (seq: number) => {
+  const ymdBirth = data?.content.find(item => item.seq === userSeq)?.birth;
+  const onClickModifyUser = async (seq: number ) => {
     setUserSeq(seq);
-    // const printBirth =
+    // const birth =
     //   Number(ymdBirth.split('-', 1)) < 1000
     //     ? Number(ymdBirth?.slice(0, 2)) + Number(2000) > year
     //       ? 19 + ymdBirth
     //       : 20 + ymdBirth
     //     : ymdBirth;
     // console.log('printBirth : ', printBirth);
-    // setBirth(printBirth);
-    // console.log(birth);
+    // setBirth(birth);
+    // console.log('birth : ', birth);
     setopenUserModifyModal(true);
   };
 
@@ -200,6 +200,7 @@ export function UserManagement() {
               </UserTableCell>
               <UserTableCell align="center">{user.name}</UserTableCell>
               <UserTableCell align="center">
+                {/* 주민번호 뒷자리의 첫번째 번호 백엔드에서 줬으니 차후 수정할것. */}
                 {Number(user.birth?.split('-', 1)) < 1000
                   ? Number(user.birth?.slice(0, 2)) + Number(2000) > year
                     ? 19 + user.birth

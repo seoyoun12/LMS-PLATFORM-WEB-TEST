@@ -28,9 +28,9 @@ const phoneList = ['010', '011'];
 const date = new Date();
 const year = date.getFullYear();
 
-interface FormType extends UserInput {
-  printBirth: string;
-}
+// interface FormType extends UserInput {
+//   printBirth: string;
+// }
 
 export function UserModifyModal({
   open,
@@ -70,7 +70,8 @@ export function UserModifyModal({
     reset,
     // setValue,
     // watch,
-  } = useForm<FormType>();
+    // } = useForm<FormType>();
+  } = useForm<UserInput>();
 
   // console.log('유저번호는 :', userData?.seq);
 
@@ -270,8 +271,18 @@ export function UserModifyModal({
 
           <FormControl className="form-control">
             <TextField
-              {...register('birth')}
+              // {...register('birth')}
               // value={printBirth}
+              value={
+                userData?.birth
+                  ? Number(userData?.birth.split('-', 1)) < 1000
+                    ? userData?.identityNumberFirst == 1 ||
+                      userData?.identityNumberFirst == 2
+                      ? 19 + userData?.birth
+                      : 20 + userData?.birth
+                    : userData?.birth
+                  : ''
+              }
               // value={watch().printBirth}
               type="date"
               size="small"

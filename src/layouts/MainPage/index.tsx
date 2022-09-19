@@ -64,26 +64,24 @@ const LinkList = [
     textColor: '#256AEF',
     color: '#256AEF',
     lineColor: '#2a6fe8',
-    // href: '/category',
-    href: '',
+    href: '/category',
     imgPath: '/assets/images/lowFloor.jpg',
     onClickCard: async () => {
-      // if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
-      //   return localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
-      // if (
-      //   typeof window !== 'undefined' &&
-      //   localStorage.getItem('site_course_type') === courseType.TYPE_LOW_FLOOR_BUS
-      // )
-      //   return;
-      // if (localStorage.getItem('site_course_type') !== courseType.TYPE_LOW_FLOOR_BUS) {
-      //   if (!!localStorage.getItem('ACCESS_TOKEN')) {
-      //     await logout();
-      //     localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
-      //   } else {
-      //   }
-      // }
-      // localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
-      alert('준비 중 입니다.');
+      if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
+        return localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
+      if (
+        typeof window !== 'undefined' &&
+        localStorage.getItem('site_course_type') === courseType.TYPE_LOW_FLOOR_BUS
+      )
+        return;
+      if (localStorage.getItem('site_course_type') !== courseType.TYPE_LOW_FLOOR_BUS) {
+        if (!!localStorage.getItem('ACCESS_TOKEN')) {
+          await logout();
+          localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
+        } else {
+        }
+      }
+      localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
     },
   },
   {
@@ -112,7 +110,6 @@ const LinkList = [
         }
       }
       localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
-      // alert('준비 중 입니다.');
     },
   },
 ];
@@ -272,11 +269,11 @@ const MainPage: NextPage = () => {
                     <MainCategoryCard sx={{ borderTop: `7px solid ${color}` }}>
                       <Box
                         sx={{ cursor: 'pointer' }}
-                        onClick={async () => {
+                        onClick={() => {
                           // setUserPageType(pageType);
-                          if (displayWord === '도민교통')
+                          if (displayWord === '도민교통' || displayWord === '저상버스')
                             return window.alert('준비중 입니다.');
-                          await onClickCard();
+                          onClickCard();
                           router.push(href);
                         }}
                       >

@@ -54,7 +54,7 @@ const hideNavList = [
   // { href: '/'}
 ];
 
-export function MobileNav() {
+export default function MobileNav() {
   const [open, setOpen] = useState(false); //헤더바 오픈여부
   const router = useRouter();
   const isLoginStatus = useIsLoginStatus();
@@ -126,10 +126,10 @@ export function MobileNav() {
   }, [data]);
 
   useEffect(() => {
-    if (window) {
+    if (typeof window !== 'undefined') {
       const bgColor = siteMapMobileList.filter(
         item => item.type === localStorage.getItem('site_course_type')
-      )[0].bgColor;
+      )[0]?.bgColor;
       setTopBoxBgColor(bgColor);
     }
   }, []);

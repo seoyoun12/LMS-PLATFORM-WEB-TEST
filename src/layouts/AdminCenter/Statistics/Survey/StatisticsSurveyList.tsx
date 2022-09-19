@@ -59,7 +59,7 @@ export function StatisticsSurveyList() {
   };
 
   const onClickModify = (seq: number) => {
-    router.push(`/admin-center/statics/survey/detail/${seq}`);
+    router.push(`/admin-center/statistics/survey/detail/${seq}`);
   };
 
   if (error) return <div>Error</div>;

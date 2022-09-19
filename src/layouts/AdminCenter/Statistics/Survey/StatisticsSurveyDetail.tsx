@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { BarChart, DoughnutChart, PieChart } from '@components/ui/Charts';
+import { useSurveyStatistics } from '@common/api/adm/statistics';
+import { Spinner } from '@components/ui';
 const BarData = {
   labels: ['dd', 'as', 'sdf', 'sd', 'sdfsd'],
   datasets: [
@@ -49,6 +51,12 @@ const PieData = {
 export function StatisticsSurveyDetail() {
   const router = useRouter();
   const { surveySeq } = router.query;
+  const { data, error } = useSurveyStatistics(Number(surveySeq));
+
+  console.log(data);
+
+  if (!data) return <Spinner />;
+  if (error) return <div>Error...</div>;
 
   return (
     <StaticsSurveyDetailWrap>

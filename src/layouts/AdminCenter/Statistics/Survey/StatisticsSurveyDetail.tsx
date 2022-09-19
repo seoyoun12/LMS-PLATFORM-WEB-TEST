@@ -67,24 +67,33 @@ export function StatisticsSurveyDetail() {
       <Box>설문통계</Box>
       <Box>{data.surveyName}</Box>
       <Box display="flex">
-        <Card contentPadding={0}>
-          <CardLeft>설문 참여자</CardLeft>
-          <CardRight sx={{ padding: '8px', flexGrow: 1 }}>
-            {data.participantCnt}
-          </CardRight>
-        </Card>
-        <Card contentPadding={0}>
-          <CardLeft>객관식</CardLeft>
-          <CardRight sx={{ padding: '8px', flexGrow: 1 }}>
-            {data.participantCnt}
-          </CardRight>
-        </Card>
-        <Card contentPadding={0}>
-          <CardLeft>주관식</CardLeft>
-          <CardRight sx={{ padding: '8px', flexGrow: 1 }}>
-            {data.participantCnt}
-          </CardRight>
-        </Card>
+        <PieCard>
+          <Card contentPadding={0}>
+            <Box display="flex" justifyContent="center" width="100%">
+              <PieChart ChartData={PieData} width={300} height={300} legend="right" />
+            </Box>
+          </Card>
+        </PieCard>
+        <CntCards>
+          <Card contentPadding={0}>
+            <CardLeft>설문 참여자</CardLeft>
+            <CardRight sx={{ padding: '8px', flexGrow: 1 }}>
+              {data.participantCnt}
+            </CardRight>
+          </Card>
+          <Card contentPadding={0}>
+            <CardLeft>객관식</CardLeft>
+            <CardRight sx={{ padding: '8px', flexGrow: 1 }}>
+              {data.participantCnt}
+            </CardRight>
+          </Card>
+          <Card contentPadding={0}>
+            <CardLeft>주관식</CardLeft>
+            <CardRight sx={{ padding: '8px', flexGrow: 1 }}>
+              {data.participantCnt}
+            </CardRight>
+          </Card>
+        </CntCards>
       </Box>
       <SurveyLayout>
         <SurveyObj>
@@ -140,16 +149,39 @@ export function StatisticsSurveyDetail() {
 
 const StaticsSurveyDetailWrap = styled(Box)``;
 
+const PieCard = styled(Box)`
+  width: 30%;
+`;
+const CntCards = styled(Box)`
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
 const CardLeft = styled(Box)`
   padding: 8px;
   background: #256def;
   color: white;
-  flex-grow: 1;
   text-align: center;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
 `;
 const CardRight = styled(Box)`
   padding: 8px;
   text-align: center;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
 `;
 
 const SurveyLayout = styled(Box)`

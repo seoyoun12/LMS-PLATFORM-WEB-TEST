@@ -52,4 +52,5 @@ const CardHead = styled(Box)`
 `;
 const CardContent = styled(Box)`
   display: flex;
+  height: 100%;
 `;

@@ -16,6 +16,7 @@ import LearningGuideLayout from "@layouts/Traffic/LearningMaterial/LearningGuide
 import ReferenceLayout from "@layouts/Traffic/LearningMaterial/Reference";
 import VideoLayout from "@layouts/Traffic/LearningMaterial/Video";
 import { getMaterialType } from "@layouts/Traffic/LearningMaterial/util";
+import LearningGuideDetailLayout from "@layouts/Traffic/LearningMaterial/LearningGuide/Detail";
 
 export type MaterialTabType =
   | "education"
@@ -40,7 +41,7 @@ export function LearningMaterialLayout() {
         return <EducationLayout materialType={getMaterialType(type)} />;
       case "learning_guide":
         if (id) {
-          return <p>asdasd</p>;
+          return <LearningGuideDetailLayout />;
         }
         return <LearningGuideLayout materialType={getMaterialType(type)} />;
       case "reference":

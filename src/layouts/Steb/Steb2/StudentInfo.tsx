@@ -151,15 +151,15 @@ export function StudentInfo({
               </InputsBox>
             </TableRightCell>
           </TableCustomRow>
-          {hideCarNumber === false && (
-            <TableCustomRow>
-              <TableLeftCell>차량 번호</TableLeftCell>
-              <TableRightCell className="scroll-to-box">
-                <CarNumberBox parantSetValue={setValue} />
-                {/* <TextField {...register('carNumber')} fullWidth /> */}
-              </TableRightCell>
-            </TableCustomRow>
-          )}
+          {/* {hideCarNumber === false && ( */}
+          {/* <TableCustomRow> */}
+          {/* <TableLeftCell>차량 번호</TableLeftCell> */}
+          {/* <TableRightCell className="scroll-to-box"> */}
+          {/* <CarNumberBox parantSetValue={setValue} /> */}
+          {/* <TextField {...register('carNumber')} fullWidth /> */}
+          {/* </TableRightCell> */}
+          {/* </TableCustomRow> */}
+          {/* )} */}
           <TableCustomRow>
             <TableLeftCell>차량 등록지</TableLeftCell>
             <TableRightCell className="scroll-to-box">
@@ -336,8 +336,10 @@ const TableLeftCell = styled(TableCell)`
 `;
 const TableRightCell = styled(TableCell)`
   width: 80%;
+  border-left: 1px solid #d2d2d2;
 
   @media (max-width: 768px) {
+    border-left: none;
     width: 100%;
     padding: 12px 0;
     padding-top: 2px;

@@ -98,7 +98,7 @@ export default function LessonContentSurvey(props: Props) {
           })
           .then(res => {
             setDialog(res.data.success ? 'SUCCESS' : 'FAILED');
-            setDialogMessage(res.data.message);
+            setDialogMessage(res.data.success ? '제출이 완료되었습니다' : '제출 실패했습니다.');
             res.data.success && props.onComplete();
           })
           .catch(err => {

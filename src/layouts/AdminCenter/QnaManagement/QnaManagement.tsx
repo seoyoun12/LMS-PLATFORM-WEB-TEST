@@ -2,6 +2,7 @@ import { categoryBoardList, removeCategoryBoard } from '@common/api/categoryBoar
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
+  Box,
   Button,
   Chip,
   Container,
@@ -26,16 +27,13 @@ import { ProductStatus } from '@common/api/course';
 import { downloadFile } from '@common/api/file';
 
 const headRows = [
-  { name: '번호' }, // seq
-  { name: '유저번호' }, // 유저시퀀스
-  { name: '제목' }, // 문의제목
-  { name: '본문' }, // 문의내용
-  { name: '문의유형' }, // 문의유형
-  { name: '작성일' }, // 생성일
-  { name: '첨부파일' }, // 첨부파일
+  { name: 'No' }, // seq
+  { name: '문의유형' }, // 유저시퀀스
+  { name: '회원아이디(회원이름)' }, // 문의제목
+  { name: '제목' }, // 문의내용
+  { name: '작성일' }, // 문의유형
+  { name: '답변여부' }, // 생성일
   { name: '상태' }, // 상태
-  { name: '답변여부' }, // 답변여부
-  // { name: '답변등록' },
 ];
 
 const tabsConfig = [
@@ -74,13 +72,14 @@ export function QnaManagement() {
   };
 
   return (
-    <>
+    <Box>
       <Table
         pagination={true}
         totalNum={data?.totalElements}
         page={data?.number}
         onChangePage={onChangePage}
         size="small"
+        sx={{ tableLayout: 'fixed' }}
       >
         <TableHead>
           <TableRow>
@@ -101,19 +100,11 @@ export function QnaManagement() {
               onClick={() => onClickAnswerQna(qna.seq)}
             >
               <TableCell align="center">{qna.seq}</TableCell>
-              <TableCell align="center">{qna.userSeq}</TableCell>
-              {/* <TableCell align="center">
-                <SubjectTypography>{qna.title}</SubjectTypography>
-              </TableCell> */}
-              <TableCell align="center">{qna.title}</TableCell>
-              {/* <TableCell align="center">
-                <ContentTypography>{qna.content}</ContentTypography>
-              </TableCell> */}
-              <TableCell align="center">{qna.content}</TableCell>
               <TableCell align="center">
-                {/* {qna.type} */}
                 {tabsConfig.filter(item => item.value === qna.type)[0]?.name}
               </TableCell>
+              <TableCell>{qna.userSeq}</TableCell>
+              <TableCell>{qna.title}</TableCell>
               <TableCell align="center">
                 {dateFormat(qna.createdDtime, 'isoDate')}
               </TableCell>
@@ -144,17 +135,10 @@ export function QnaManagement() {
                   {qna.s3Files[0] ? qna.s3Files[0].name : '파일없음'}
                 </Button>
               </TableCell> */}
-              <TableCell align="center">
+              {/* <TableCell align="center">
                 {qna.s3Files[0] ? qna.s3Files[0].name : '파일없음'}
-              </TableCell>
-              <TableCell align="center">
-                <Chip
-                  variant="outlined"
-                  size="small"
-                  label={qna.status === ProductStatus.APPROVE ? '정상' : '중지'}
-                  color={qna.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
-                />
-              </TableCell>
+              </TableCell> */}
+
               {/* <TableCell align="center">{qna.answeredYn}</TableCell> */}
               <TableCell>
                 <Chip
@@ -167,6 +151,14 @@ export function QnaManagement() {
                   color={
                     qna.answeredYn === AnsweredYn.ANSWEREDY ? 'secondary' : 'warning'
                   }
+                />
+              </TableCell>
+              <TableCell align="center">
+                <Chip
+                  variant="outlined"
+                  size="small"
+                  label={qna.status === ProductStatus.APPROVE ? '정상' : '중지'}
+                  color={qna.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
                 />
               </TableCell>
               {/* <TableCell align="center">
@@ -183,7 +175,7 @@ export function QnaManagement() {
           ))}
         </TableBody>
       </Table>
-    </>
+    </Box>
   );
 }
 

@@ -56,3 +56,32 @@ export const LearningMaterialTabItem = styled(Tab)`
   flex-grow: 1;
   color: #000;
 `;
+
+export const LearningMaterialContentWrapper = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+export const TableWrapper = styled.div`
+  width: 100%;
+`;
+
+export const TableHeader = styled.div`
+  display: flex;
+  line-height: 75px;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #cdcdcd;
+`;
+
+interface TableItemProps {
+  width: string;
+  textAlign?: "left" | "center" | "right";
+}
+
+export const TableItem = styled.div<TableItemProps>`
+  width: ${({ width }) => width};
+  text-align: ${({ textAlign }) => textAlign || "center"};
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;

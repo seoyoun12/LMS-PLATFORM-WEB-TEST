@@ -100,6 +100,7 @@ export default function LessonContentSurvey(props: Props) {
             setDialog(res.data.success ? 'SUCCESS' : 'FAILED');
             setDialogMessage(res.data.message);
             res.data.success && props.onComplete();
+            console.log("설문쪽:", res.data.message)
           })
           .catch(err => {
             setDialog('FAILED');

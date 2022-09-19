@@ -32,14 +32,14 @@ const headRows: {
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
   width: string;
 }[] = [
-  { name: 'No', align: 'center', width: '6.5%' },
+  { name: 'No', align: 'center', width: '5%' },
   { name: '과정분류', align: 'center', width: '8.5%' },
   { name: '교육분류', align: 'center', width: '8.5%' },
   { name: '업종', align: 'center', width: '8.5%' },
-  { name: '과정명', align: 'center', width: '25%' },
-  { name: '생성날짜', align: 'center', width: '15%' },
-  { name: '노출여부', align: 'center', width: '5.5%' },
-  { name: '상태', align: 'center', width: '5.5%' },
+  { name: '과정명', align: 'center', width: '32.5%' },
+  { name: '생성날짜', align: 'center', width: '10%' },
+  { name: '노출여부', align: 'center', width: '5%' },
+  { name: '상태', align: 'center', width: '5%' },
 ];
 
 export function CourseManagement() {
@@ -229,7 +229,7 @@ export function CourseManagement() {
 
 // 과정 목록 글자
 const CourseTitleTypography = styled(Typography)`
-  margin-bottom: 12px;
+  margin-bottom: 30px;
   font-weight: 700;
 `;
 

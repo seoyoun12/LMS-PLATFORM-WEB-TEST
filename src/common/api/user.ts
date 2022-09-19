@@ -131,6 +131,7 @@ export interface User {
   status: number;
   username: string;
   s3Files: S3Files;
+  identityNumberFirst: number;
 }
 
 export interface UserInput {
@@ -142,6 +143,8 @@ export interface UserInput {
   phone?: string;
   birth?: string;
   password?: string;
+  identityNumberFirst: number;
+
 }
 
 

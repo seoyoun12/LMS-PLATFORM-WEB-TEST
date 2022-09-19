@@ -74,9 +74,12 @@ export function QnaManagement() {
     });
   };
 
+  if (error) return <div>Error</div>;
+  if (!data) return <Spinner />;
   return (
     <Box>
       <QnaTitleTypography variant="h5">1대1 문의 목록</QnaTitleTypography>
+
       <Table
         pagination={true}
         totalNum={data?.totalElements}
@@ -107,9 +110,14 @@ export function QnaManagement() {
               <QnaTableCell align="center">
                 {tabsConfig.filter(item => item.value === qna.type)[0]?.name}
               </QnaTableCell>
-              <QnaTableCell align="center">
+              {/* <QnaTableCell align="center">
                 {qna.username}({qna.name})
+              </QnaTableCell> */}
+
+              <QnaTableCell align="center">
+                {qna.username ? `${qna.username}(${qna.name})` : qna.name}
               </QnaTableCell>
+
               <QnaTableCell align="center">
                 <SubjectBox>{qna.title}</SubjectBox>
               </QnaTableCell>
@@ -189,7 +197,7 @@ export function QnaManagement() {
 
 // 1대1문의 목록 글자
 const QnaTitleTypography = styled(Typography)`
-  margin-bottom: 12px;
+  margin-bottom: 30px;
   font-weight: 700;
 `;
 

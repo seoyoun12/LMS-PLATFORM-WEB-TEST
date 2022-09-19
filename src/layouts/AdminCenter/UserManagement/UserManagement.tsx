@@ -25,6 +25,7 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { regCategoryType, registerType } from '@common/api/user';
 import { ProductStatus } from '@common/api/course';
+import { NumberFormat } from 'xlsx';
 
 const userConfig = [
   { label: '실명가입', value: regCategoryType.TYPE_TRANS_EDU },
@@ -37,15 +38,18 @@ const radioConfig = [
   { name: '관리자', value: registerType.TYPE_TRAFFIC_SAFETY_EDU }, // 차후 도민
 ];
 
-const headRows = [
-  { name: 'No', width: '6.5%' },
-  { name: '아이디', width: '19%' },
-  { name: '이름', width: '9.5%' },
-  { name: '생년월일', width: '19%' },
-  { name: '핸드폰번호', width: '19%' },
-  { name: '가입구분', width: '9.5%' },
-  { name: '가입날짜', width: '19%' },
-  // { name: '상태', width: '8.5%' },
+const headRows: {
+  name: string;
+  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  width: string;
+}[] = [
+  { name: 'No', align: 'center', width: '6.5%' },
+  { name: '아이디', align: 'center', width: '19%' },
+  { name: '이름', align: 'center', width: '9.5%' },
+  { name: '생년월일', align: 'center', width: '19%' },
+  { name: '핸드폰번호', align: 'center', width: '19%' },
+  { name: '가입구분', align: 'center', width: '9.5%' },
+  { name: '가입날짜', align: 'center', width: '19%' },
 ];
 
 export function UserManagement() {
@@ -61,6 +65,7 @@ export function UserManagement() {
     // registerType: regCategoryType.TYPE_TRANS_EDU,
   });
   const [userSeq, setUserSeq] = useState<number | null>(null);
+  // const [birth, setBirth] = useState(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
 
   const date = new Date();
@@ -90,8 +95,19 @@ export function UserManagement() {
     }
   };
 
+  // console.log('!!!!!!!!!!!!! : ', data?.content.find(item => item.seq === userSeq).birth);
+  // const ymdBirth = data?.content.find(item => item.seq === userSeq).birth;
   const onClickModifyUser = async (seq: number) => {
     setUserSeq(seq);
+    // const printBirth =
+    //   Number(ymdBirth.split('-', 1)) < 1000
+    //     ? Number(ymdBirth?.slice(0, 2)) + Number(2000) > year
+    //       ? 19 + ymdBirth
+    //       : 20 + ymdBirth
+    //     : ymdBirth;
+    // console.log('printBirth : ', printBirth);
+    // setBirth(printBirth);
+    // console.log(birth);
     setopenUserModifyModal(true);
   };
 
@@ -109,6 +125,8 @@ export function UserManagement() {
     });
   };
 
+  // console.log('생일 : ', data?.content[0].birth);
+
   const handleModalClose = async (isSubmit: boolean) => {
     if (openUserModifyModal) {
       setopenUserModifyModal(false);
@@ -120,8 +138,6 @@ export function UserManagement() {
   if (!data) return <Spinner />;
 
   return (
-    // <div>
-    // <Box className={styles.globalContainer}>
     <Box>
       <Typography fontSize={30} fontWeight="bold">
         회원구분
@@ -138,7 +154,7 @@ export function UserManagement() {
         ))}
       </RadioGroup>
 
-      <UserTypo variant="h5">회원 목록</UserTypo>
+      <UserTypography variant="h5">회원 목록</UserTypography>
 
       <Table
         pagination={true}
@@ -146,14 +162,25 @@ export function UserManagement() {
         page={data.number}
         onChangePage={onChangePage}
         size="small"
+        sx={{ tableLayout: 'fixed' }}
       >
         <TableHead>
           <TableRow>
-            {headRows.map(({ name, width }: { name: string; width: string }) => (
-              <UserTitleTableCell key={name} align="center" width={width}>
-                {name}
-              </UserTitleTableCell>
-            ))}
+            {headRows.map(
+              ({
+                name,
+                align,
+                width,
+              }: {
+                name: string;
+                align: string;
+                width: string;
+              }) => (
+                <UserTitleTableCell key={name} align="center" width={width}>
+                  {name}
+                </UserTitleTableCell>
+              )
+            )}
           </TableRow>
         </TableHead>
 
@@ -165,29 +192,31 @@ export function UserManagement() {
               onClick={() => onClickModifyUser(user.seq)}
               sx={{ cursor: 'pointer' }}
             >
-              <UserTableCell>{user.seq}</UserTableCell>
-              <UserTableCell>
+              <UserTableCell align="center">{user.seq}</UserTableCell>
+              <UserTableCell align="center">
                 {regCategoryType.TYPE_TRANS_EDU === user.regCategory
                   ? '실명가입'
                   : user.username}
               </UserTableCell>
-              <UserTableCell>{user.name}</UserTableCell>
-              <UserTableCell>
+              <UserTableCell align="center">{user.name}</UserTableCell>
+              <UserTableCell align="center">
                 {Number(user.birth?.split('-', 1)) < 1000
                   ? Number(user.birth?.slice(0, 2)) + Number(2000) > year
                     ? 19 + user.birth
                     : 20 + user.birth
                   : user.birth}
               </UserTableCell>
-              <UserTableCell>{user.phone}</UserTableCell>
+              <UserTableCell align="center">{user.phone}</UserTableCell>
               {/* <UserTableCell>{user.smsYn}</UserTableCell> */}
               {/* <UserTableCell>{user.emailYn}</UserTableCell> */}
               {/* <UserTableCell>{user.loginFailedCount}</UserTableCell> */}
               {/* <UserTableCell>{user.failedYn}</UserTableCell> */}
-              <UserTableCell>
+              <UserTableCell align="center">
                 {userConfig.filter(item => item.value === user.regCategory)[0].label}{' '}
               </UserTableCell>
-              <UserTableCell>{user.createdDtime.slice(0, 10)}</UserTableCell>
+              <UserTableCell align="center">
+                {user.createdDtime.slice(0, 10)}
+              </UserTableCell>
               {/* <UserTableCell>
                 <Chip
                   variant="outlined"
@@ -234,30 +263,30 @@ export function UserManagement() {
   );
 }
 
-const UserTypo = styled(Typography)`
-  margin-bottom: 12px;
+// 회원 목록 글자
+const UserTypography = styled(Typography)`
+  margin-bottom: 30px;
   font-weight: 700;
 `;
 
+// 회원 목록 테이블의 title부분
 const UserTitleTableCell = styled(TableCell)`
   font-weight: bold;
   background: #f5f5f5;
   border-right: 1px solid #f0f0f0;
+  border-top: 1px solid #f0f0f0;
 
   &:last-child {
     border-right: 1px solid #f0f0f0;
   }
 `;
 
+// 회원 목록 테이블의 본문
 const UserTableCell = styled(TableCell)`
-  white-space: nowrap;
-  text-align: center;
-  padding-top: 10px;
   margin: 0;
   border-right: 1px solid #f0f0f0;
 
   &:first-child {
-    /* border-right: 1px solid #e0e0e0; */
     background: #f5f5f5;
   }
 `;

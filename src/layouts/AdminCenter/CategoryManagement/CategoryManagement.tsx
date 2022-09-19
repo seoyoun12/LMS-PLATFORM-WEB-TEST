@@ -37,15 +37,15 @@ const headRows: {
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
   width: string;
 }[] = [
-  { name: 'No', align: 'center', width: '6.5%' }, // seq
+  { name: 'No', align: 'center', width: '5%' }, // seq
   { name: '게시판유형', align: 'center', width: '8.5%' }, // boardType
-  { name: '제목', align: 'center', width: '27%' }, // subject
+  { name: '제목', align: 'center', width: '32%' }, // subject
   { name: '작성일', align: 'center', width: '12%' }, // createdDtime
   { name: '수정일', align: 'center', width: '12%' }, // modifiedDtime
   { name: '조회수', align: 'center', width: '8.5%' }, // hit
   { name: '공지여부', align: 'center', width: '8.5%' }, // noticeYn
   { name: '공개여부', align: 'center', width: '8.5%' }, // publicYn
-  { name: '상태', align: 'center', width: '8.5%' }, // status
+  { name: '상태', align: 'center', width: '5%' }, // status
 ];
 
 // const headRows2: [
@@ -292,7 +292,7 @@ export function CategoryManagement() {
 
 // 게시판 목록 글자
 const CategoryTypography = styled(Typography)`
-  margin-bottom: 12px;
+  margin-bottom: 30px;
   font-weight: 700;
 `;
 

@@ -23,7 +23,8 @@ export interface ClickedPlanInfo {
   lessonTime: number;
   courseSubCategoryType: { type: courseSubCategoryType; ko: string };
   courseCategoryType: { type: courseCategoryType; ko: string };
-
+  requestStartDate: string;
+  requestEndDate: string;
   enrolledPeopleCnt: number;
   limitPeople: number;
   studyStartDate: string;
@@ -228,4 +229,6 @@ export function AdminCalendar({
     </CalendarWrap>
   );
 }
-const CalendarWrap = styled(Container)``;
+const CalendarWrap = styled(Container)`
+  margin-bottom: 30px;
+`;

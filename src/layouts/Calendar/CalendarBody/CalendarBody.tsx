@@ -274,6 +274,8 @@ export function CalendarBody({
             limitPeople: extendedProps.limitPeople as number,
             studyStartDate: extendedProps.studyStartDate as string,
             studyEndDate: extendedProps.studyEndDate as string,
+            requestStartDate: extendedProps.requestStartDate as string,
+            requestEndDate: extendedProps.requestEndDate as string,
             start: dateFormat(start as Date, 'yyyy/mm/dd'),
             end: dateFormat(end as Date, 'yyyy/mm/dd'),
           });
@@ -399,8 +401,8 @@ export function CalendarBody({
                 <TableRow>
                   <TableLeftCell>예약가능시간</TableLeftCell>
                   <TableRightCell>
-                    {modalInfo.start.replaceAll('/', '-')} ~{' '}
-                    {modalInfo.end.replaceAll('/', '-')}
+                    {dateFormat(modalInfo.requestStartDate, 'yyyy-mm-dd')} ~{' '}
+                    {dateFormat(modalInfo.requestEndDate, 'yyyy-mm-dd')}
                   </TableRightCell>
                 </TableRow>
               </>

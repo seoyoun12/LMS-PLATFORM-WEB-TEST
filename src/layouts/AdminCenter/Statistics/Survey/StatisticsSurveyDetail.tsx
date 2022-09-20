@@ -119,7 +119,13 @@ export function StatisticsSurveyDetail() {
                     height={250}
                     legend="right"
                   />
-                  <Stack flexGrow={1} display="flex" gap={5} flexWrap="wrap">
+                  <Stack
+                    flexGrow={1}
+                    display="flex"
+                    gap={3}
+                    flexWrap="wrap"
+                    height="250px"
+                  >
                     {chartObjItem.map((item, idx) => {
                       if (!item) return;
                       return (

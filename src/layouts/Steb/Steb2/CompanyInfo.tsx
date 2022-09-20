@@ -33,6 +33,7 @@ import {
   UserTransSaveInputDataType,
 } from '@common/api/courseClass';
 import { CarNumberBox } from '@components/ui/Step';
+import { locationList } from '@layouts/MeEdit/MeEdit';
 
 interface Props {
   isIndividual: boolean;
@@ -242,6 +243,35 @@ export function CompanyInfo({
               </TableRightCell>
             </TableCustomRow>
           )}
+          <TableCustomRow>
+            <TableLeftCell>차량 등록지</TableLeftCell>
+            <TableRightCell className="scroll-to-box">
+              <FormControl fullWidth>
+                <Select
+                  {...register('carRegisteredRegion', {
+                    required: true,
+                  })}
+                >
+                  {/* {locationList.map(item => (
+                    <MenuItem key={item.en} value={item.en}>
+                      {item.ko}
+                    </MenuItem>
+                  ))} */}
+                  {locationList
+                    .filter(item =>
+                      watch().businessSubType === courseSubCategoryType.BUS
+                        ? true
+                        : item.en !== 'CHUNGNAM'
+                    )
+                    .map(item => (
+                      <MenuItem key={item.en} value={item.en}>
+                        {item.ko}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
+            </TableRightCell>
+          </TableCustomRow>
         </Table>
       </TableContainer>
 

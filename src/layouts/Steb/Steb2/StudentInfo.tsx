@@ -16,7 +16,7 @@ import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded
 import { useEffect, useState } from 'react';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { locationList } from '@layouts/MeEdit/MeEdit';
+import { locationList, residenceList } from '@layouts/MeEdit/MeEdit';
 import {
   FieldValues,
   UseFormRegister,
@@ -199,7 +199,7 @@ export function StudentInfo({
                     required: true,
                   })}
                 >
-                  {locationList.map(item => (
+                  {residenceList.map(item => (
                     <MenuItem key={item.en} value={item.en}>
                       {item.ko}
                     </MenuItem>

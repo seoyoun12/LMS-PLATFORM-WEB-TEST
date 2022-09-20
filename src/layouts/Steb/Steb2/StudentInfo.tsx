@@ -190,6 +190,24 @@ export function StudentInfo({
             </TableRightCell>
           </TableCustomRow>
           <TableCustomRow>
+            <TableLeftCell>거주지</TableLeftCell>
+            <TableRightCell className="scroll-to-box">
+              <FormControl fullWidth>
+                <Select
+                  {...register('residence', {
+                    required: true,
+                  })}
+                >
+                  {locationList.map(item => (
+                    <MenuItem key={item.en} value={item.en}>
+                      {item.ko}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </TableRightCell>
+          </TableCustomRow>
+          <TableCustomRow>
             <TableLeftCell>휴대 전화</TableLeftCell>
             <TableRightCell className="scroll-to-box">
               <InputsBox>

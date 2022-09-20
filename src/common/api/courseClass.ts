@@ -83,7 +83,15 @@ export interface CourseClassStepsRes {
   studyStartDate: string;
 }
 
-export function useCourseClass({ courseType, businessType, date }: { courseType: courseType; businessType: businessType; date: string }) {
+export function useCourseClass({
+  courseType,
+  businessType,
+  date,
+}: {
+  courseType: courseType;
+  businessType: businessType;
+  date: string;
+}) {
   const { data, error, mutate } = useSWR<SWRResponse<CourseClassRes[]>>(
     ['/course-class', { params: { courseType, businessType, date } }],
     GET
@@ -96,7 +104,10 @@ export function useCourseClass({ courseType, businessType, date }: { courseType:
 }
 
 export function useSingleCourseClass(classSeq: number) {
-  const { data, error, mutate } = useSWR<SWRResponse<CourseClassRes>>(`/course-class/${classSeq}`, GET);
+  const { data, error, mutate } = useSWR<SWRResponse<CourseClassRes>>(
+    `/course-class/${classSeq}`,
+    GET
+  );
   return {
     data: data?.data,
     error,
@@ -108,7 +119,11 @@ export function getSingleCourseClass(courseClassSeq: number) {
   return GET<{ data: CourseClassRes }>(`/course-class/${courseClassSeq}`);
 }
 
-export function getCourseClassStep(courseType: courseType, courseCategoryType: courseCategoryType, courseBusinessType: businessType) {
+export function getCourseClassStep(
+  courseType: courseType,
+  courseCategoryType: courseCategoryType,
+  courseBusinessType: businessType
+) {
   return GET<{ data: CourseClassStepsRes[] }>('/course-class/step', {
     params: { courseType, courseCategoryType, courseBusinessType },
   });
@@ -118,6 +133,8 @@ export enum RegisterType {
   TYPE_INDIVIDUAL = 'TYPE_INDIVIDUAL',
   TYPE_ORGANIZATION = 'TYPE_ORGANIZATION',
 }
+
+export enum ResidenceType {}
 
 export interface UserTransSaveInputDataType {
   seq: number; //삭제용 구분 시퀀스
@@ -136,12 +153,18 @@ export interface UserTransSaveInputDataType {
   thirdPhone: string;
   registerType: RegisterType; //개인 단체 구분
   smsYn: YN;
+  residence: string; //거주지
 }
 
 export function courseClassIndividualEnroll(
   userTransSaveData: Omit<
     UserTransSaveInputDataType,
-    'firstIdentityNumber' | 'secondIdentityNumber' | 'seq' | 'firstPhone' | 'secondPhone' | 'thirdPhone'
+    | 'firstIdentityNumber'
+    | 'secondIdentityNumber'
+    | 'seq'
+    | 'firstPhone'
+    | 'secondPhone'
+    | 'thirdPhone'
   >
 ) {
   return POST(`/course-user/enroll/individual`, userTransSaveData);
@@ -149,7 +172,12 @@ export function courseClassIndividualEnroll(
 export function courseClassOrganizationEnrll(
   userTransSaveData: Omit<
     UserTransSaveInputDataType,
-    'firstIdentityNumber' | 'secondIdentityNumber' | 'seq' | 'firstPhone' | 'secondPhone' | 'thirdPhone'
+    | 'firstIdentityNumber'
+    | 'secondIdentityNumber'
+    | 'seq'
+    | 'firstPhone'
+    | 'secondPhone'
+    | 'thirdPhone'
   >
 ) {
   return POST(`/course-user/enroll/organization`, userTransSaveData);

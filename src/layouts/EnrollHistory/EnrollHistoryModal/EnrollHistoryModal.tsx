@@ -82,6 +82,7 @@ export function EnrollHistoryModal({
   >([]); //기수 교육시작 교육끝
   const [stepSeq, setStepSeq] = useState<number>();
   const [isStudyPeriod, setIsStudyPeriod] = useState<boolean>(true);
+  const [isAfterStudyDate, setIsAfterStudyDate] = useState<boolean>(false); //학습종료일자가 지났으면 버튼삭제.
 
   useEffect(() => {
     (async function () {
@@ -102,6 +103,11 @@ export function EnrollHistoryModal({
             dateFormat(new Date(), 'yyyy-mm-dd')
           )
         );
+        const isAfter =
+          new Date(watch().studyEndDate.replaceAll('-', '/')).getTime() <
+          new Date().getTime();
+        setIsAfterStudyDate(isAfter);
+
         setPhone('phone1', data.phone.slice(0, 3));
         setPhone('phone2', data.phone.slice(3, 7));
         setPhone('phone3', data.phone.slice(7, 11));
@@ -213,38 +219,42 @@ export function EnrollHistoryModal({
       title={courseTitle}
       maxWidth="lg"
       action={
-        <Box width="100%" display="flex" justifyContent="flex-end" gap={2}>
-          {loading ? (
-            <Spinner fit={true} />
-          ) : isStudyPeriod ? (
-            <Button
-              variant="contained"
-              onClick={() =>
-                router.push(`/course/${watch().seq}/lesson/${watch().firstChapterSeq}`)
-              }
-            >
-              학습하기
-            </Button>
-          ) : (
-            <>
+        isAfterStudyDate ? (
+          ''
+        ) : (
+          <Box width="100%" display="flex" justifyContent="flex-end" gap={2}>
+            {loading ? (
+              <Spinner fit={true} />
+            ) : isStudyPeriod ? (
               <Button
                 variant="contained"
-                // color="warning"
-                sx={{
-                  width: '100px',
-                  background: 'red',
-                  '&:hover': { background: '#cc0000' },
-                }}
-                onClick={onClickDelete}
+                onClick={() =>
+                  router.push(`/course/${watch().seq}/lesson/${watch().firstChapterSeq}`)
+                }
               >
-                신청 취소
+                학습하기
               </Button>
-              <Button variant="contained" sx={{ width: '100px' }} onClick={onSubmit}>
-                신청 수정
-              </Button>
-            </>
-          )}
-        </Box>
+            ) : (
+              <>
+                <Button
+                  variant="contained"
+                  // color="warning"
+                  sx={{
+                    width: '100px',
+                    background: 'red',
+                    '&:hover': { background: '#cc0000' },
+                  }}
+                  onClick={onClickDelete}
+                >
+                  신청 취소
+                </Button>
+                <Button variant="contained" sx={{ width: '100px' }} onClick={onSubmit}>
+                  신청 수정
+                </Button>
+              </>
+            )}
+          </Box>
+        )
       }
     >
       <ModalWrap>
@@ -339,7 +349,7 @@ export function EnrollHistoryModal({
               <TableRightCell className="right-cell">
                 <TextField
                   {...register('userCompanyName')}
-                  disabled={isStudyPeriod}
+                  disabled={isStudyPeriod || isAfterStudyDate}
                   fullWidth
                 />
               </TableRightCell>
@@ -359,7 +369,7 @@ export function EnrollHistoryModal({
                     digit2={watch().carNumber?.substring(2, 4)}
                     oneWord={watch().carNumber?.substring(4, 5)}
                     digit4={watch().carNumber?.substring(5, 9)}
-                    isStudyPeriod={isStudyPeriod}
+                    isStudyPeriod={isStudyPeriod || isAfterStudyDate}
                   />
                 </TableRightCell>
               </TableRow>
@@ -373,7 +383,26 @@ export function EnrollHistoryModal({
                   <Select
                     {...register('carRegisteredRegion')}
                     value={watch().carRegisteredRegion || ''}
-                    disabled={isStudyPeriod}
+                    disabled={isStudyPeriod || isAfterStudyDate}
+                  >
+                    {locationList.map(item => (
+                      <MenuItem key={item.en} value={item.en}>
+                        {item.ko}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </TableRightCell>
+            </TableRow>
+            <TableRow>
+              <TableLeftCell className="left-cell-border">거주지</TableLeftCell>
+
+              <TableRightCell className="right-cell">
+                <FormControl fullWidth>
+                  <Select
+                    {...register('residence')}
+                    value={watch().residence || '없음'}
+                    disabled={isStudyPeriod || isAfterStudyDate}
                   >
                     {locationList.map(item => (
                       <MenuItem key={item.en} value={item.en}>
@@ -396,7 +425,7 @@ export function EnrollHistoryModal({
                       setPhone('phone1', e.target.value);
                     }}
                     value={watchPhone().phone1 || ''}
-                    disabled={isStudyPeriod}
+                    disabled={isStudyPeriod || isAfterStudyDate}
                   >
                     <MenuItem value={''}>선택</MenuItem>
                     {phoneList.map(item => (
@@ -413,7 +442,7 @@ export function EnrollHistoryModal({
                     setPhone('phone2', e.target.value.replace(/[^0-9]/g, ''));
                   }}
                   value={watchPhone().phone2}
-                  disabled={isStudyPeriod}
+                  disabled={isStudyPeriod || isAfterStudyDate}
                   inputProps={{ inputMode: 'numeric' }}
                   fullWidth
                 />
@@ -424,7 +453,7 @@ export function EnrollHistoryModal({
                     setPhone('phone3', e.target.value.replace(/[^0-9]/g, ''));
                   }}
                   value={watchPhone().phone3}
-                  disabled={isStudyPeriod}
+                  disabled={isStudyPeriod || isAfterStudyDate}
                   inputProps={{ inputMode: 'numeric' }}
                   fullWidth
                 />
@@ -446,7 +475,7 @@ export function EnrollHistoryModal({
                       // setValue('courseClassSeq', Number(e.target.value));
                       // setEnrollInfo({ seq: Number(e.target.value) });
                     }}
-                    disabled={isStudyPeriod}
+                    disabled={isStudyPeriod || isAfterStudyDate}
                   >
                     {stepsRes.map(item => {
                       return (

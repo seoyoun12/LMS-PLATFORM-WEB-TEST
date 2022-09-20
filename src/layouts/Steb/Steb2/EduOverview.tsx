@@ -197,13 +197,8 @@ export function EduOverview({
                     })}
                   </Select>
                 </FormControl> */}
-                {
-                  courseBusinessTypeList.filter(
-                    filter =>
-                      (filter.enType?.split('_')[1] as userBusinessType) ===
-                      watch().businessType
-                  )[0]?.type
-                }
+                {(watch('businessType') === userBusinessType.PASSENGER && '여객') ||
+                  (watch('businessType') === userBusinessType.FREIGHT && '화물')}
               </TableRightCell>
             </TableCustomRow>
             <TableCustomRow>

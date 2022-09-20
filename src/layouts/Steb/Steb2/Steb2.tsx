@@ -37,7 +37,7 @@ export default function Steb2() {
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo); //전역에 교육정보 저장
   const [confirm, setConfirm] = useState(false);
   const [isIndividualCheck, setIsIndividualCheck] = useState(false);
-  const [hideCarNumber, setHideCarNumber] = useState(true); //차량번호 숨기기
+  const [hideCarNumber, setHideCarNumber] = useState(false); //차량번호 숨기기
   const [fixedBusinessType, setFixedBusinessType] = useState<userBusinessType>(); //업체정보 운수구분 고정용(여객-여객,화물-화물)
   const [loading, setLoading] = useState(false);
   const confirmRef = useRef<boolean>();
@@ -65,8 +65,11 @@ export default function Steb2() {
   // 스크롤을 위한 이펙트
   useEffect(() => {
     const scrollBoxList = document.querySelectorAll('.scroll-to-box');
+    // if (scrollBoxList.length !== (CheckElementList && CheckElementList.length))
     setCheckElementList(scrollBoxList);
   }, []);
+
+  console.log(watch());
 
   const scrollElement = (indexNumber: number) => {
     CheckElementList[indexNumber].scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -98,8 +101,15 @@ export default function Steb2() {
       scrollElement(2);
       return snackbar({ variant: 'error', message: '회사명을 입력해주세요!' });
     }
-    if (rest.name === '' || !rest.name) {
+    if (!hideCarNumber && !carNumberRegex.test(rest.carNumber)) {
       scrollElement(3);
+      return snackbar({
+        variant: 'error',
+        message: '올바른 형식의 차량번호를 입력해주세요!',
+      });
+    }
+    if (rest.name === '' || !rest.name) {
+      scrollElement(4);
       return snackbar({
         variant: 'error',
         message: '이름을 입력해주세요!(관리자일경우 일반회원으로 시도해주세요)',
@@ -107,45 +117,41 @@ export default function Steb2() {
     }
 
     if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7) {
-      scrollElement(4);
-      return snackbar({
-        variant: 'error',
-        message: '주민번호를 모두 입력해주세요!(관리자일경우 일반회원으로 시도해주세요)',
-      });
-    }
-    if (!hideCarNumber && !carNumberRegex.test(rest.carNumber)) {
       scrollElement(5);
       return snackbar({
         variant: 'error',
-        message: '올바른 형식의 차량번호를 입력해주세요!',
+        message: '주민번호를 모두 입력해주세요!(관리자일경우 일반회원으로 시도해주세요)',
       });
     }
     if (rest.carRegisteredRegion === '' || !rest.carRegisteredRegion) {
       scrollElement(6);
       return snackbar({ variant: 'error', message: '차량등록지를 선택해주세요!' });
     }
+    if (rest.residence === '' || !rest.residence) {
+      scrollElement(7);
+      return snackbar({ variant: 'error', message: '거주지를 선택해주세요!' });
+    }
 
     if (!phoneRegex.test(firstPhone + secondPhone + thirdPhone)) {
-      scrollElement(7);
+      scrollElement(8);
       return snackbar({
         variant: 'error',
         message: '올바른 형식의 휴대전화를 입력해주세요!',
       });
-      // return window.alert('올바른 형식의 휴대전화를 입력해주세요!');
     }
 
     if (!isIndividualCheck) {
-      scrollElement(8);
+      scrollElement(9);
       return snackbar({
         variant: 'error',
         message: '개인정보 수집 및 이용동의에 체크해주세요!',
       });
-      // return window.alert('개인정보 수집 및 이용동의에 체크해주세요!');
     }
 
     const postData = {
       ...rest,
       businessType: watch().businessType, //TYPE_PASSENGER 이런식인줄 알았으나 PASSENGER식으로 요청해야함
+      carNumber: hideCarNumber ? null : rest.carNumber,
       identityNumber: firstIdentityNumber + secondIdentityNumber,
       phone: firstPhone + secondPhone + thirdPhone,
     }; //민증번호때문에 구분
@@ -242,7 +248,6 @@ export default function Steb2() {
   //     };
   //   }
   // }, [confirm]);
-  console.log(watch());
 
   return (
     <Steb2Wrap>

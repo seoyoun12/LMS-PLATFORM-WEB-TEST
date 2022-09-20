@@ -228,4 +228,6 @@ export function AdminCalendar({
     </CalendarWrap>
   );
 }
-const CalendarWrap = styled(Container)``;
+const CalendarWrap = styled(Container)`
+  margin-bottom: 30px;
+`;

@@ -40,6 +40,18 @@ export function StatisticsSurveyDetail() {
   const router = useRouter();
   const { surveySeq } = router.query;
   const { data, error } = useSurveyStatistics(Number(surveySeq));
+  const backgroundColor: string[] = [
+    '#ee4a5d',
+    '#fff77f',
+    '#bae7af',
+    '#afc4e7',
+    '#fdc4f8',
+    '#cb9ffd',
+    '#a9e1ed',
+    '#f3cdad',
+    '#afffba',
+    '#dfd4e4',
+  ];
 
   const PieData = {
     labels: ['객관식', '주관식'],
@@ -65,7 +77,7 @@ export function StatisticsSurveyDetail() {
   return (
     <StaticsSurveyDetailWrap>
       <Box>설문통계</Box>
-      <Box>{data.surveyName}</Box>
+      <Card header={data.surveyName} headSx={{ borderBottom: 0 }} />
       <Box display="flex">
         <PieCard>
           <Card>
@@ -75,23 +87,17 @@ export function StatisticsSurveyDetail() {
           </Card>
         </PieCard>
         <CntCards>
-          <Card wrapSx={{ margin: '24px 0 ' }}>
+          <Card wrapSx={{ flexGrow: 0, height: '50px' }}>
             <CardLeft>설문 참여자</CardLeft>
-            <CardRight sx={{ padding: '8px', flexGrow: 1 }}>
-              {data.participantCnt}
-            </CardRight>
+            <CardRight>{data.participantCnt}</CardRight>
           </Card>
-          <Card wrapSx={{ margin: '24px 0 ' }}>
+          <Card wrapSx={{ flexGrow: 0, height: '50px' }}>
             <CardLeft>객관식</CardLeft>
-            <CardRight sx={{ padding: '8px', flexGrow: 1 }}>
-              {data.participantCnt}
-            </CardRight>
+            <CardRight>{data.participantCnt}</CardRight>
           </Card>
-          <Card wrapSx={{ margin: '24px 0 ' }}>
+          <Card wrapSx={{ flexGrow: 0, height: '50px' }}>
             <CardLeft>주관식</CardLeft>
-            <CardRight sx={{ padding: '8px', flexGrow: 1 }}>
-              {data.participantCnt}
-            </CardRight>
+            <CardRight>{data.participantCnt}</CardRight>
           </Card>
         </CntCards>
       </Box>
@@ -102,14 +108,18 @@ export function StatisticsSurveyDetail() {
               convertObjChartData(item);
             return (
               <Box key={item.surveyQuestionSeq}>
-                <Card header={item.surveyQuestionName}>
+                <Card
+                  header={item.surveyQuestionName}
+                  wrapSx={{ height: '330px' }}
+                  contentSx={{ padding: '16px' }}
+                >
                   <PieChart
                     ChartData={convertedData}
                     width={250}
                     height={250}
                     legend="right"
                   />
-                  <Stack flexGrow={1} display="flex" gap={2}>
+                  <Stack flexGrow={1} display="flex" gap={5} flexWrap="wrap">
                     {chartObjItem.map((item, idx) => {
                       if (!item) return;
                       return (
@@ -118,7 +128,7 @@ export function StatisticsSurveyDetail() {
                           sx={{
                             background: '#979797',
                             color: 'white',
-                            borderRadius: '4px',
+                            borderRadius: '2px',
                             paddingLeft: '8px',
                           }}
                         >
@@ -132,7 +142,11 @@ export function StatisticsSurveyDetail() {
             );
           })}
         </SurveyObj>
-        <SurveySub>주관식 레이아웃</SurveySub>
+        <SurveySub>
+          {data.subjResult.map(item => (
+            <Box>{item.surveyQuestionName}</Box>
+          ))}
+        </SurveySub>
       </SurveyLayout>
       {/* <BarChart ChartData={BarData} width={250} height={250} />
       <DoughnutChart
@@ -158,6 +172,7 @@ const CntCards = styled(Box)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 30px;
 `;
 
 const CardLeft = styled(Box)`

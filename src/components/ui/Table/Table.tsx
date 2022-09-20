@@ -109,7 +109,7 @@ export function Table({
       component={Paper}
       sx={{
         width: '100%',
-        overflow: 'scroll',
+        overflow: 'none',
       }}
     >
       <MuiTable

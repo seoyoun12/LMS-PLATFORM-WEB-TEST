@@ -144,7 +144,7 @@ export interface UserInput {
   birth?: string;
   password?: string;
   identityNumberFirst: number;
-
+  
 }
 
 

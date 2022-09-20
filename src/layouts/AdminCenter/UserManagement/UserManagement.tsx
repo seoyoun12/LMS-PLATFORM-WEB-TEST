@@ -96,8 +96,8 @@ export function UserManagement() {
   // };
 
   // console.log('!!!!!!!!!!!!! : ', data?.content.find(item => item.seq === userSeq).birth);
-  const ymdBirth = data?.content.find(item => item.seq === userSeq)?.birth;
-  const onClickModifyUser = async (seq: number ) => {
+  // const ymdBirth = data?.content.find(item => item.seq === userSeq)?.birth;
+  const onClickModifyUser = async (seq: number) => {
     setUserSeq(seq);
     // const birth =
     //   Number(ymdBirth.split('-', 1)) < 1000
@@ -105,7 +105,6 @@ export function UserManagement() {
     //       ? 19 + ymdBirth
     //       : 20 + ymdBirth
     //     : ymdBirth;
-    // console.log('printBirth : ', printBirth);
     // setBirth(birth);
     // console.log('birth : ', birth);
     setopenUserModifyModal(true);

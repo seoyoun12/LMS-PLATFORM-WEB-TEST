@@ -395,6 +395,25 @@ export function EnrollHistoryModal({
               </TableRightCell>
             </TableRow>
             <TableRow>
+              <TableLeftCell className="left-cell-border">거주지</TableLeftCell>
+
+              <TableRightCell className="right-cell">
+                <FormControl fullWidth>
+                  <Select
+                    {...register('residence')}
+                    value={watch().residence || '없음'}
+                    disabled={isStudyPeriod || isAfterStudyDate}
+                  >
+                    {locationList.map(item => (
+                      <MenuItem key={item.en} value={item.en}>
+                        {item.ko}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </TableRightCell>
+            </TableRow>
+            <TableRow>
               <TableLeftCell className="left-cell-border">휴대번호</TableLeftCell>
 
               <TableRightCell className="right-cell">

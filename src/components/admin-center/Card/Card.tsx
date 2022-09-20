@@ -4,35 +4,23 @@ import { Box, BoxProps, Typography } from '@mui/material';
 export function Card({
   children,
   header,
+  headSx,
   wrapSx,
   contentSx,
 }: {
-  children: React.ReactNode;
-  header?: string;
+  children?: React.ReactNode;
+  header?: string | React.ReactNode;
+  headSx?: React.CSSProperties;
   wrapSx?: React.CSSProperties;
   contentSx?: React.CSSProperties;
 }) {
   return (
     <CardWrap style={wrapSx}>
-      {header && <CardHead>{header}</CardHead>}
+      {header && <CardHead style={headSx}>{header}</CardHead>}
       <CardContent style={contentSx}>{children}</CardContent>
     </CardWrap>
   );
 }
-
-// export default function Cardd() {
-//   return (
-//     <Card sx={{ display: 'flex' }}>
-//       <Box sx={{ display: 'flex', flexDirection: 'column' }}>gd </Box>
-//       <CardMedia
-//         component="img"
-//         sx={{ width: 151 }}
-//         image="/static/images/cards/live-from-space.jpg"
-//         alt="Live from space album cover"
-//       />
-//     </Card>
-//   );
-// }
 
 const CardWrap = styled(Box)`
   box-sizing: border-box;

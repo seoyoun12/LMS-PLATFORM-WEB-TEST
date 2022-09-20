@@ -60,6 +60,7 @@ export interface FindCourseUserRes {
   courseType: courseType;
   courseClassSeq: number;
   firstChapterSeq: number;
+  residence: string; //거주지
 }
 
 export function getSingleCourseUser(courseUserSeq: number, regType: RegType) {

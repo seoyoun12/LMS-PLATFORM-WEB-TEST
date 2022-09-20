@@ -54,9 +54,9 @@ export const checkIsDate = (schedule: CourseClassRes[], currentDate: Date) => {
   };
 
   for (let i = getStartDateOfMonth.getDate(); i <= getEndDateOfMonth.getDate(); i++) {
-    const nowDate = new Date();
+    const nowDate = new Date(currentDate);
     nowDate.setDate(i);
-    // console.log(schedule);
+    console.log(schedule);
     const filteringSchedule = schedule.filter(filt =>
       checkDatePeriod(
         // filt.requestStartDate,
@@ -69,14 +69,17 @@ export const checkIsDate = (schedule: CourseClassRes[], currentDate: Date) => {
         )}-${String(nowDate.getDate()).padStart(2, '0')}`
       )
     );
+    console.log('1', filteringSchedule);
     const scheduleItem = filteringSchedule.map(item => {
       return {
         date: nowDate,
         children: item,
       };
     });
+    console.log('2', scheduleItem);
 
     const scheduleChildren = scheduleItem.map(item => item.children);
+    console.log('3', scheduleChildren);
 
     if (scheduleChildren.length === 0) continue;
 
@@ -85,6 +88,7 @@ export const checkIsDate = (schedule: CourseClassRes[], currentDate: Date) => {
       day: daysName[nowDate.getDay()],
       children: scheduleChildren,
     };
+    console.log('4', scheduleItemByDate);
 
     courseClassArr.push(scheduleItemByDate);
   }

@@ -71,7 +71,8 @@ export default function LessonContentSurvey(props: Props) {
         const formData = new FormData(e.target as HTMLFormElement);
 
         let hasError = false;
-        const errors = props.survey.surveyQuestionList.map((_, i) => {
+        const errors = props.survey.surveyQuestionList.map((q, i) => {
+          if (q.questionType === "TYPE_SUBJECTIVE") return false;
           const value = formData.get(`question_${i}`);
           const isError = value === null || value === undefined || value === '';
           if (isError) hasError = true;

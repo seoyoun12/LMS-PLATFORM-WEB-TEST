@@ -289,9 +289,11 @@ export function UserModifyModal({
               // }
               value={
                 userData?.birth
-                  ? userData?.identityNumberFirst < 3
-                    ? 19 + userData?.birth
-                    : 20 + userData?.birth
+                  ? Number(userData?.birth.split('-', 1)) < 1000
+                    ? userData?.identityNumberFirst < 3
+                      ? 19 + userData?.birth
+                      : 20 + userData?.birth
+                    : userData?.birth
                   : ''
               }
               disabled

@@ -32,6 +32,7 @@ import {
   userBusinessType,
   UserTransSaveInputDataType,
 } from '@common/api/courseClass';
+import { CarNumberBox } from '@components/ui/Step';
 
 interface Props {
   isIndividual: boolean;
@@ -41,6 +42,7 @@ interface Props {
   setValue: UseFormSetValue<UserTransSaveInputDataType>;
   setHideCarNumber: React.Dispatch<React.SetStateAction<boolean>>;
   fixedBusinessType: userBusinessType;
+  hideCarNumber: boolean;
 }
 
 export function CompanyInfo({
@@ -49,6 +51,7 @@ export function CompanyInfo({
   setValue,
   setHideCarNumber,
   fixedBusinessType,
+  hideCarNumber,
 }: Props) {
   // const [businessType, setBusinessType] = useState<string | null>(null);
   // const [businessSubType, setBusinessSubType] = useState<string | null>(null);
@@ -170,7 +173,7 @@ export function CompanyInfo({
           <TableCustomRow>
             <TableLeftCell>운수구분</TableLeftCell>
             <TableRightCell className="scroll-to-box" id="businessType">
-              <FormControl fullWidth>
+              {/* <FormControl fullWidth>
                 <Select
                   labelId="businessType"
                   id="businessType"
@@ -186,13 +189,13 @@ export function CompanyInfo({
                     .map(item => (
                       <MenuItem value={item.enType}>{item.type}</MenuItem>
                     ))}
-                  {/* {userBusinessTypeOne.map(item => (
-                    <MenuItem key={item.enType} value={item.enType}>
-                      {item.type}
-                    </MenuItem>
-                  ))} */}
                 </Select>
-              </FormControl>
+              </FormControl> */}
+              {userBusinessTypeOne
+                .filter(item => item.enType === fixedBusinessType)
+                .map(item => (
+                  <MenuItem value={item.enType}>{item.type}</MenuItem>
+                ))}
             </TableRightCell>
           </TableCustomRow>
           <TableCustomRow>
@@ -221,7 +224,7 @@ export function CompanyInfo({
             <TableLeftCell>회사명</TableLeftCell>
             <TableRightCell className="scroll-to-box">
               <TextField
-                placeholder="회사명 또는 차량등록지역"
+                placeholder="회사명"
                 {...register('businessName')}
                 // value={onReturnValueBusinessName()}
                 value={watch().businessName}
@@ -230,6 +233,15 @@ export function CompanyInfo({
               />
             </TableRightCell>
           </TableCustomRow>
+          {hideCarNumber === false && (
+            <TableCustomRow>
+              <TableLeftCell>차량 번호</TableLeftCell>
+              <TableRightCell className="scroll-to-box">
+                <CarNumberBox parantSetValue={setValue} />
+                {/* <TextField {...register('carNumber')} fullWidth /> */}
+              </TableRightCell>
+            </TableCustomRow>
+          )}
         </Table>
       </TableContainer>
 
@@ -295,7 +307,9 @@ const TableRightCell = styled(TableCell)`
   flex-grow: 1;
   display: flex;
   align-items: center;
+  border-left: 1px solid #d2d2d2;
   @media (max-width: 768px) {
+    border-left: none;
     padding: 12px 0;
     padding-top: 2px;
   }

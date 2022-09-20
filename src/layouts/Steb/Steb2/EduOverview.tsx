@@ -30,7 +30,7 @@ import {
   courseCategory,
   courseSubCategory,
 } from '@layouts/Calendar/CalendarBody/CalendarBody';
-import { FieldValues, UseFormSetValue } from 'react-hook-form';
+import { FieldValues, UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { courseBusinessTypeList, FilterType } from '@layouts/Calendar/Calendar';
 import { courseClassEnrollInfo } from '@common/recoil';
 import { useRecoilState } from 'recoil';
@@ -39,8 +39,10 @@ import { useSnackbar } from '@hooks/useSnackbar';
 export function EduOverview({
   setValue,
   setFixedBusinessType,
+  watch,
 }: {
   setValue: UseFormSetValue<UserTransSaveInputDataType>;
+  watch: UseFormWatch<UserTransSaveInputDataType>;
   setFixedBusinessType: React.Dispatch<React.SetStateAction<userBusinessType>>;
 }) {
   const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(
@@ -64,10 +66,16 @@ export function EduOverview({
   const getSingleCourse = async (courseClassSeq: number) => {
     try {
       const { data } = await getSingleCourseClass(courseClassSeq);
-      // console.log('data', data);
+      console.log('data', data);
 
       setCourseCategoryType(data.course.courseCategoryType as courseCategoryType);
       setCourseBusinessType(data.course.courseBusinessType as businessType); //임시타입
+      setValue(
+        'businessType',
+        data.course.courseBusinessType?.split('_')[1] === userBusinessType.PASSENGER
+          ? userBusinessType.PASSENGER
+          : userBusinessType.FREIGHT
+      ); //
       setFixedBusinessType(
         data.course.courseBusinessType.split('_')[1] === userBusinessType.PASSENGER
           ? userBusinessType.PASSENGER
@@ -128,8 +136,7 @@ export function EduOverview({
             <TableCustomRow>
               <TableLeftCell>온라인과정</TableLeftCell>
               <TableRightCell>
-                <FormControl fullWidth>
-                  {/* <InputLabel id="student">선택</InputLabel> */}
+                {/* <FormControl fullWidth>
                   <Select
                     labelId="student"
                     id="student"
@@ -143,25 +150,24 @@ export function EduOverview({
                       // return { ...prev, courseCategoryType: courseCategory.filter(cate => cate.type === e.target.value)[0].type };
                       // });
                     }}
-                    // label="student"
+                    label="student"
                     disabled
                   >
-                    {/*0번째는 보수일반 */}
                     <MenuItem value={courseCategory[0].type}>보수일반</MenuItem>
-                    {/* {courseCategory.map(item => (
+                    {courseCategory.map(item => (
                       <MenuItem key={item.type} value={item.type}>
                         {item.ko}
                       </MenuItem>
-                    ))} */}
+                    ))}
                   </Select>
-                </FormControl>
+                </FormControl> */}
+                보수일반
               </TableRightCell>
             </TableCustomRow>
             <TableCustomRow>
               <TableLeftCell>운수구분</TableLeftCell>
               <TableRightCell>
-                <FormControl fullWidth>
-                  {/* <InputLabel id="courseBusinessType">선택</InputLabel> */}
+                {/* <FormControl fullWidth>
                   <Select
                     labelId="courseBusinessType"
                     id="courseBusinessType"
@@ -179,12 +185,8 @@ export function EduOverview({
                       // };
                       // });
                     }}
-                    // label="student"
                     disabled
                   >
-                    {/* <MenuItem value={courseBusinessTypeList[1].enType}>
-                      여객 / 화물
-                    </MenuItem> */}
                     {courseBusinessTypeList.map(item => {
                       if (item.enType === businessType.TYPE_ALL) return;
                       return (
@@ -194,14 +196,20 @@ export function EduOverview({
                       );
                     })}
                   </Select>
-                </FormControl>
+                </FormControl> */}
+                {
+                  courseBusinessTypeList.filter(
+                    filter =>
+                      (filter.enType?.split('_')[1] as userBusinessType) ===
+                      watch().businessType
+                  )[0]?.type
+                }
               </TableRightCell>
             </TableCustomRow>
             <TableCustomRow>
               <TableLeftCell>기수 / 교육일자</TableLeftCell>
               <TableRightCell>
-                <FormControl fullWidth>
-                  {/* {/* <InputLabel id="student">선택</InputLabel> */}
+                {/* <FormControl fullWidth>
                   <Select
                     labelId="student"
                     id="student"
@@ -217,7 +225,6 @@ export function EduOverview({
                       // };
                       // });
                     }}
-                    // label="student"
                     disabled
                   >
                     {stepsRes.map(item => {
@@ -228,7 +235,13 @@ export function EduOverview({
                       );
                     })}
                   </Select>
-                </FormControl>
+                </FormControl> */}
+                {stepsRes
+                  .filter(filter => filter.seq === stepSeq)
+                  .map(
+                    item =>
+                      `${item.step}기 / ${item.studyStartDate} ~ ${item.studyEndDate}`
+                  )}
               </TableRightCell>
             </TableCustomRow>
           </Table>
@@ -271,7 +284,9 @@ const TableRightCell = styled(TableCell)`
   flex-grow: 1;
   display: flex;
   align-items: center;
+  border-left: 1px solid #d2d2d2;
   @media (max-width: 768px) {
+    border-left: none;
     padding: 12px 0;
     padding-top: 2px;
   }

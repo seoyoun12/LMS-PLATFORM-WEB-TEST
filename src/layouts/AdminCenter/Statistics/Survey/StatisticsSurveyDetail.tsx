@@ -76,11 +76,10 @@ export function StatisticsSurveyDetail() {
 
   return (
     <StaticsSurveyDetailWrap>
-      <Box>설문통계</Box>
       <Card header={data.surveyName} headSx={{ borderBottom: 0 }} />
       <Box display="flex">
         <PieCard>
-          <Card>
+          <Card header="객관식 주관식 비율">
             <Box display="flex" justifyContent="center" width="100%">
               <PieChart ChartData={PieData} width={300} height={300} legend="right" />
             </Box>
@@ -150,7 +149,19 @@ export function StatisticsSurveyDetail() {
         </SurveyObj>
         <SurveySub>
           {data.subjResult.map(item => (
-            <Box>{item.surveyQuestionName}</Box>
+            <Box key={item.surveyQuestionSeq}>
+              <Card
+                header={item.surveyQuestionName}
+                contentSx={{ padding: '0 16px' }}
+                wrapSx={{ height: '330px' }}
+              >
+                <Stack width="100%" height="250px">
+                  {item.answerList.map(item => (
+                    <MenuItem>{item}</MenuItem>
+                  ))}
+                </Stack>
+              </Card>
+            </Box>
           ))}
         </SurveySub>
       </SurveyLayout>

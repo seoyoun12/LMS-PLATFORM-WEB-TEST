@@ -77,6 +77,7 @@ export function convertObjChartData(chartData: StatisticsSurveyObjDto) {
     }
     i++;
   }
+  console.log('제발려', chartObjCnt, chartData, chartData[`chartData${1}`]);
 
   const convertedData = {
     labels: chartObjItem.filter(item => item),

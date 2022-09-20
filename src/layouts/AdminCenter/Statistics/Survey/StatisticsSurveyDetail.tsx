@@ -68,7 +68,7 @@ export function StatisticsSurveyDetail() {
       <Box>{data.surveyName}</Box>
       <Box display="flex">
         <PieCard>
-          <Card contentPadding={0}>
+          <Card>
             <Box display="flex" justifyContent="center" width="100%">
               <PieChart ChartData={PieData} width={300} height={300} legend="right" />
             </Box>

@@ -40,6 +40,18 @@ export function StatisticsSurveyDetail() {
   const router = useRouter();
   const { surveySeq } = router.query;
   const { data, error } = useSurveyStatistics(Number(surveySeq));
+  const backgroundColor: string[] = [
+    '#ee4a5d',
+    '#fff77f',
+    '#bae7af',
+    '#afc4e7',
+    '#fdc4f8',
+    '#cb9ffd',
+    '#a9e1ed',
+    '#f3cdad',
+    '#afffba',
+    '#dfd4e4',
+  ];
 
   const PieData = {
     labels: ['객관식', '주관식'],

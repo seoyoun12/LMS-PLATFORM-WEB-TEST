@@ -169,6 +169,7 @@ export function EnrollHistoryModal({
           carNumber: watch().carNumber,
           carRegisteredRegion: watch().carRegisteredRegion,
           courseClassSeq: stepSeq,
+          residence: watch().residence,
           phone: watchPhone().phone1 + watchPhone().phone2 + watchPhone().phone3,
         };
 

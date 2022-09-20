@@ -26,7 +26,7 @@ export function CheckBeforeEnrollDialog({
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogContent>
-        <DialogContentText>{message}</DialogContentText>
+        <DialogContentText sx={{ whiteSpace: 'pre-wrap' }}>{message}</DialogContentText>
       </DialogContent>
       <DialogActions>
         {duplicated ? (

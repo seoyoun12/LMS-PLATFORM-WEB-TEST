@@ -144,6 +144,7 @@ export function UserModifyModal({
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
     }
+    handleClose(true);
   };
 
   const onSubmit: SubmitHandler<UserInput> = async userInput => {

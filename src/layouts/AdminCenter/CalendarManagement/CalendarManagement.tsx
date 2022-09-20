@@ -26,24 +26,27 @@ import {
 import { Link } from '@components/common';
 import { courseBusinessTypeList, eduLegendList } from '@layouts/Calendar/Calendar';
 import { AdminCalendar } from './AdminCalendar';
+import {
+  courseCategory,
+  courseReg,
+  courseSubCategory,
+} from '@layouts/Calendar/CalendarBody/CalendarBody';
 
 const headRows: {
   name: string;
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  width: string;
 }[] = [
-  { name: '번호', align: 'left' },
-  { name: '연도 / 기수', align: 'center' },
-  { name: '접수여부', align: 'center' },
-  { name: '교육타입 / 교육시간', align: 'center' },
-  // { name: '방법', align: 'right' },
-  { name: '교육구분', align: 'center' },
-  // { name: '??', align: 'right' },
-  // { name: '업종', align: 'center' },
-  // { name: '교육대상', align: 'right' },
-
-  { name: '신청인원 / 제한', align: 'center' },
-  { name: '교육기간', align: 'center' },
-  { name: '신청기간', align: 'center' },
+  { name: 'No', align: 'center', width: '4%' },
+  { name: '과정분류', align: 'center', width: '6%' }, // courseType : 운수종사자 / 저상버스
+  { name: '교육분류', align: 'center', width: '6%' }, // courseCategoryType : 보수 / 양성 / 신규 등
+  { name: '업종', align: 'center', width: '6%' }, // courseSubCategoryType : 버스, 전세버스, 특수여객 등등
+  { name: '과정명', align: 'center', width: '23%' }, // courseName
+  { name: '연도 / 기수', align: 'center', width: '10%' }, // year / step
+  { name: '신청인원 / 제한인원', align: 'center', width: '10%' }, // enrolledPeopleCnt / limitPeople
+  { name: '신청기간', align: 'center', width: '15%' }, // requestStartDate ~ requestEndDate
+  { name: '교육기간', align: 'center', width: '15%' }, // studyStartDate ~ studyEndDate
+  { name: '접수여부', align: 'center', width: '5%' }, // isReceive
 ];
 
 export function CalendarManagement() {
@@ -78,19 +81,20 @@ export function CalendarManagement() {
     if (value === CourseType.TYPE_PROVINCIAL) setCourseType(value);
   };
 
-  useEffect(() => {
-    const { page } = router.query;
-    // setPage(!isNaN(Number(page)) ? Number(page) : 0);
-  }, [router]);
+  // pagination 제거
+  // useEffect(() => {
+  //   const { page } = router.query;
+  //   // setPage(!isNaN(Number(page)) ? Number(page) : 0);
+  // }, [router]);
 
-  const onChangePage = async (page: number) => {
-    await router.push({
-      pathname: router.pathname,
-      query: {
-        page,
-      },
-    });
-  };
+  // const onChangePage = async (page: number) => {
+  //   await router.push({
+  //     pathname: router.pathname,
+  //     query: {
+  //       page,
+  //     },
+  //   });
+  // };
 
   // 수정
   const onClickmodifyCourse = async (seq: number) => {
@@ -98,24 +102,24 @@ export function CalendarManagement() {
     mutate();
   };
 
-  const onRemoveCourse = async (calendarId: number) => {
-    try {
-      const dialogConfirmed = await dialog({
-        title: '일정 삭제하기',
-        description: '정말로 삭제하시겠습니까?',
-        confirmText: '삭제하기',
-        cancelText: '취소',
-      });
-      if (dialogConfirmed) {
-        await courseClassRemove(calendarId);
-        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-        // await mutate([`/course-class/adm`, { params: { businessType: businessType.TYPE_ALL, date: '2022-07' } }]);
-        await mutate();
-      }
-    } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
-    }
-  };
+  // const onRemoveCourse = async (calendarId: number) => {
+  //   try {
+  //     const dialogConfirmed = await dialog({
+  //       title: '일정 삭제하기',
+  //       description: '정말로 삭제하시겠습니까?',
+  //       confirmText: '삭제하기',
+  //       cancelText: '취소',
+  //     });
+  //     if (dialogConfirmed) {
+  //       await courseClassRemove(calendarId);
+  //       snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
+  //       // await mutate([`/course-class/adm`, { params: { businessType: businessType.TYPE_ALL, date: '2022-07' } }]);
+  //       await mutate();
+  //     }
+  //   } catch (e: any) {
+  //     snackbar({ variant: 'error', message: e.data.message });
+  //   }
+  // };
 
   // if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
@@ -154,73 +158,125 @@ export function CalendarManagement() {
       />
 
       <Table
-        pagination={true}
+        // pagination={true}
         // totalNum={data.totalElements}
-        page={1}
+        // page={1}
         //  onChangePage={onChangePage}
         size="small"
+        sx={{ tableLayout: 'fixed' }}
       >
         <TableHead>
           <TableRow>
-            {headRows.map(({ name, align }) => (
-              <TableCell key={name} align={align}>
-                {name}
-              </TableCell>
-            ))}
-            <TableCell>{}</TableCell>
+            {headRows.map(
+              ({
+                name,
+                align,
+                width,
+              }: {
+                name: string;
+                align: string;
+                width: string;
+              }) => (
+                <CalendarTitleTableCell key={name} align="center" width={width}>
+                  {name}
+                </CalendarTitleTableCell>
+              )
+            )}
           </TableRow>
         </TableHead>
+
         <TableBody>
-          {data.map(data => {
+          {data?.map(data => {
             const isReceive =
               new Date(data.requestEndDate).getTime() - new Date().getTime() > 0
                 ? true
                 : false;
             return (
               <TableRow
-                sx={{ cursor: 'pointer' }}
+                sx={{ cursor: 'pointer', overflow: 'hidden' }}
                 key={data.seq}
                 hover
                 onClick={() => onClickmodifyCourse(data.seq)}
               >
-                <TableCell>{data.seq}</TableCell>
-                <TableCell align="center">
+                <CalendarTableCell align="center">{data.seq}</CalendarTableCell>
+                <CalendarTableCell align="center">
+                  {/* {data.course.courseType} */}
+                  {courseReg.filter(item => item.type === data.course.courseType)[0]?.ko}
+                </CalendarTableCell>
+                <CalendarTableCell align="center">
+                  {/* {data.course.courseCategoryType} */}
+                  {
+                    courseCategory.filter(
+                      item => item.type === data.course.courseCategoryType
+                    )[0]?.ko
+                  }
+                </CalendarTableCell>
+                <CalendarTableCell align="center">
+                  {/* {data.course.courseSubCategoryType} */}
+                  {
+                    courseSubCategory.filter(
+                      item => item.type === data.course.courseSubCategoryType
+                    )[0]?.ko
+                  }
+                </CalendarTableCell>
+                <CalendarTableCell align="center">
+                  {data.course.contentName}
+                </CalendarTableCell>
+                <CalendarTableCell align="center">
                   {data.year} / {data.step}
-                </TableCell>
-                <TableCell align="center">
+                </CalendarTableCell>
+                <CalendarTableCell align="center">
+                  {data.enrolledPeopleCnt} / {data.limitPeople}
+                </CalendarTableCell>
+                <CalendarTableCell align="center">
+                  {dateFormat(data.requestStartDate, 'yyyy-mm-dd')} ~{' '}
+                  {dateFormat(data.requestEndDate, 'yyyy-mm-dd')}
+                </CalendarTableCell>
+                <CalendarTableCell align="center">
+                  {dateFormat(data.studyStartDate, 'yyyy-mm-dd')} ~{' '}
+                  {dateFormat(data.studyEndDate, 'yyyy-mm-dd')}
+                </CalendarTableCell>
+                <CalendarTableCell align="center">
                   {isReceive ? '접수중' : '마감'}
-                  {/* </Link> */}
-                </TableCell>
+                </CalendarTableCell>
+                {/* 
+                <CalendarTableCell></CalendarTableCell>
+                <CalendarTableCell align="center">
+                  {data.year} / {data.step}
+                </CalendarTableCell>
+                <CalendarTableCell align="center">
+                  {isReceive ? '접수중' : '마감'}
+                </CalendarTableCell> */}
                 {/* courseCategoryType eduLegendList */}
-                <TableCell align="center">
-                  {/* {eduLegendList.filter(
+                {/* <CalendarTableCell align="center"> */}
+                {/* {eduLegendList.filter(
                     item => item.enType === data.course.courseCategoryType
                   )[0]?.title || '보수일반 교육'}{' '} */}
-                  보수일반 /{data.course.lessonTime}
-                  {/* {dateFormat(data.eduTypeAndTime, 'isoDate')} */}
-                </TableCell>
-                <TableCell align="center">
+                {/* 보수일반 /{data.course.lessonTime} */}
+                {/* {dateFormat(data.eduTypeAndTime, 'isoDate')} */}
+                {/* </CalendarTableCell> */}
+                {/* <CalendarTableCell align="center">
                   {
                     courseBusinessTypeList.filter(
                       business => business.enType === data.course.courseBusinessType
                     )[0].type
-                  }
-                  {/* 여객 / 화물 */}
-                </TableCell>
+                  } */}
+                {/* 여객 / 화물 */}
+                {/* </CalendarTableCell> */}
                 {/* <TableCell align="right">{'data.className'}</TableCell>
                 <TableCell align="right">{'data.jobType'}</TableCell> */}
                 {/* <TableCell align="center">{data.course.courseSubCategoryType}</TableCell> */}
-                <TableCell align="center">
+                {/* <CalendarTableCell align="center">
                   {data.enrolledPeopleCnt} / {data.limitPeople}
-                </TableCell>
-                <TableCell align="center">
+                </CalendarTableCell>
+                <CalendarTableCell align="center">
                   {dateFormat(data.studyStartDate, 'yyyy-mm-dd')} ~{' '}
                   {dateFormat(data.studyEndDate, 'yyyy-mm-dd')}
-                </TableCell>
-                <TableCell align="center">
+                </CalendarTableCell>
+                <CalendarTableCell align="center">
                   {dateFormat(data.requestStartDate, 'yyyy-mm-dd')} ~{' '}
                   {dateFormat(data.requestEndDate, 'yyyy-mm-dd')}
-                </TableCell>
+                </CalendarTableCell> */}
                 {/* <TableCell>
                   <Link href={`/admin-center/calendar/modify/${data.seq}`}>
                     <Button variant="text" color="neutral" size="small">
@@ -258,5 +314,33 @@ export function CalendarManagement() {
 const CalendarManagementWrap = styled(Box)`
   tr {
     white-space: nowrap;
+  }
+`;
+
+// 일정 목록 글자
+const CalendarTypography = styled(Typography)`
+  margin-bottom: 30px;
+  font-weight: 700;
+`;
+
+// 일정 목록 테이블의 Title부분
+const CalendarTitleTableCell = styled(TableCell)`
+  font-weight: bold;
+  background: #f5f5f5;
+  border-right: 1px solid #f0f0f0;
+  border-top: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-right: 1px solid #f0f0f0;
+  }
+`;
+
+// 일정 목록 테이블의 본문
+const CalendarTableCell = styled(TableCell)`
+  margin: 0;
+  border-right: 1px solid #f0f0f0;
+
+  &:first-child {
+    background: #f5f5f5;
   }
 `;

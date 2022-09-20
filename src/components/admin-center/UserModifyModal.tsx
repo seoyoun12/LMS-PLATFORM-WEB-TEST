@@ -61,6 +61,7 @@ export function UserModifyModal({
   const dialog = useDialog();
   const snackbar = useSnackbar();
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [birth, setBirth] = useState(null);
 
   const {
     register,
@@ -81,7 +82,7 @@ export function UserModifyModal({
 
   // useEffect(() => {
   //   setValue(
-  //     'printBirth',
+  //     'birth',
   //     Number(userData?.birth.split('-', 1)) < 1000
   //       ? Number(userData?.birth?.slice(0, 2)) + Number(2000) > year
   //         ? 19 + userData?.birth
@@ -202,6 +203,7 @@ export function UserModifyModal({
           <FormControl className="form-control">
             <TextField
               value={userData?.seq}
+              disabled
               type="text"
               size="small"
               variant="outlined"
@@ -215,6 +217,7 @@ export function UserModifyModal({
               size="small"
               variant="outlined"
               label="이름"
+              disabled
             />
             <ErrorMessage errors={errors} name="name" as={<FormHelperText error />} />
           </FormControl>
@@ -271,18 +274,29 @@ export function UserModifyModal({
 
           <FormControl className="form-control">
             <TextField
+              // {...register('printBirth')}
               // {...register('birth')}
               // value={printBirth}
+              // value={
+              //   userData?.birth
+              //     ? Number(userData?.birth.split('-', 1)) < 1000
+              //       ? userData?.identityNumberFirst == 1 ||
+              //         userData?.identityNumberFirst == 2
+              //         ? 19 + userData?.birth
+              //         : 20 + userData?.birth
+              //       : userData?.birth
+              //     : ''
+              // }
               value={
                 userData?.birth
                   ? Number(userData?.birth.split('-', 1)) < 1000
-                    ? userData?.identityNumberFirst == 1 ||
-                      userData?.identityNumberFirst == 2
+                    ? userData?.identityNumberFirst < 3
                       ? 19 + userData?.birth
                       : 20 + userData?.birth
                     : userData?.birth
                   : ''
               }
+              disabled
               // value={watch().printBirth}
               type="date"
               size="small"

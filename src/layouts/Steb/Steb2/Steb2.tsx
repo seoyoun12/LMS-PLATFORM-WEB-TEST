@@ -108,8 +108,12 @@ export default function Steb2() {
         message: '올바른 형식의 차량번호를 입력해주세요!',
       });
     }
-    if (rest.name === '' || !rest.name) {
+    if (rest.carRegisteredRegion === '' || !rest.carRegisteredRegion) {
       scrollElement(4);
+      return snackbar({ variant: 'error', message: '차량등록지를 선택해주세요!' });
+    }
+    if (rest.name === '' || !rest.name) {
+      scrollElement(5);
       return snackbar({
         variant: 'error',
         message: '이름을 입력해주세요!(관리자일경우 일반회원으로 시도해주세요)',
@@ -117,15 +121,11 @@ export default function Steb2() {
     }
 
     if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7) {
-      scrollElement(5);
+      scrollElement(6);
       return snackbar({
         variant: 'error',
         message: '주민번호를 모두 입력해주세요!(관리자일경우 일반회원으로 시도해주세요)',
       });
-    }
-    if (rest.carRegisteredRegion === '' || !rest.carRegisteredRegion) {
-      scrollElement(6);
-      return snackbar({ variant: 'error', message: '차량등록지를 선택해주세요!' });
     }
     if (rest.residence === '' || !rest.residence) {
       scrollElement(7);

@@ -16,7 +16,7 @@ import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded
 import { useEffect, useState } from 'react';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { locationList } from '@layouts/MeEdit/MeEdit';
+import { locationList, residenceList } from '@layouts/MeEdit/MeEdit';
 import {
   FieldValues,
   UseFormRegister,
@@ -160,35 +160,36 @@ export function StudentInfo({
           {/* </TableRightCell> */}
           {/* </TableCustomRow> */}
           {/* )} */}
-          <TableCustomRow>
-            <TableLeftCell>차량 등록지</TableLeftCell>
-            <TableRightCell className="scroll-to-box">
-              <FormControl fullWidth>
-                <Select
-                  {...register('carRegisteredRegion', {
-                    required: true,
-                  })}
-                >
-                  {/* {locationList.map(item => (
+
+          {/* <TableCustomRow> */}
+          {/* <TableLeftCell>차량 등록지</TableLeftCell> */}
+          {/* <TableRightCell className="scroll-to-box"> */}
+          {/* <FormControl fullWidth> */}
+          {/* <Select */}
+          {/* {...register('carRegisteredRegion', { */}
+          {/* required: true, */}
+          {/* })} */}
+          {/* > */}
+          {/* {locationList.map(item => (
                     <MenuItem key={item.en} value={item.en}>
                       {item.ko}
                     </MenuItem>
                   ))} */}
-                  {locationList
-                    .filter(item =>
-                      watch().businessSubType === courseSubCategoryType.BUS
-                        ? true
-                        : item.en !== 'CHUNGNAM'
-                    )
-                    .map(item => (
-                      <MenuItem key={item.en} value={item.en}>
-                        {item.ko}
-                      </MenuItem>
-                    ))}
-                </Select>
-              </FormControl>
-            </TableRightCell>
-          </TableCustomRow>
+          {/* {locationList */}
+          {/* .filter(item => */}
+          {/* watch().businessSubType === courseSubCategoryType.BUS */}
+          {/* ? true */}
+          {/* : item.en !== 'CHUNGNAM' */}
+          {/* ) */}
+          {/* .map(item => ( */}
+          {/* <MenuItem key={item.en} value={item.en}> */}
+          {/* {item.ko} */}
+          {/* </MenuItem> */}
+          {/* ))} */}
+          {/* </Select> */}
+          {/* </FormControl> */}
+          {/* </TableRightCell> */}
+          {/* </TableCustomRow> */}
           <TableCustomRow>
             <TableLeftCell>거주지</TableLeftCell>
             <TableRightCell className="scroll-to-box">
@@ -198,7 +199,7 @@ export function StudentInfo({
                     required: true,
                   })}
                 >
-                  {locationList.map(item => (
+                  {residenceList.map(item => (
                     <MenuItem key={item.en} value={item.en}>
                       {item.ko}
                     </MenuItem>

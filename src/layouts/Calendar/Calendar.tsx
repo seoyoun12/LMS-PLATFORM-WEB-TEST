@@ -24,6 +24,8 @@ export interface ClickedPlanInfo {
   courseBusinessType: businessType;
   courseSubCategoryType: { type: courseSubCategoryType; ko: string };
   courseCategoryType: { type: courseCategoryType; ko: string };
+  requestStartDate: string;
+  requestEndDate: string;
   enableToEnrollYn: YN;
   enrolledPeopleCnt: number;
   limitPeople: number;

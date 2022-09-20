@@ -42,7 +42,6 @@ export const locationList = [
   { ko: '홍성', en: 'HONGSEONG' },
   { ko: '예산', en: 'YESAN' },
   { ko: '태안', en: 'TAEAN' },
-  // { ko: '충남', en: 'CHUNGNAM' },
   { ko: '세종', en: 'SEJONG' },
   // { ko: '서울', en: 'SEOUL' },
   // { ko: '부산', en: 'BUSAN' },
@@ -61,7 +60,7 @@ export const locationList = [
   // { ko: '제주', en: 'JEJU' },
 ];
 export const residenceList = [
-  { ko: '충남', en: 'CHUNGNAM' },
+  // { ko: '충남', en: 'CHUNGNAM' },
   { ko: '천안', en: 'CHEONAN' },
   { ko: '공주', en: 'GONGJU' },
   { ko: '보령', en: 'BORYEONG' },

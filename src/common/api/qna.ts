@@ -29,6 +29,8 @@ export interface Qna {
   title: string;
   type: QnaType;
   userSeq: number;
+  username: string;
+  name: string;
 }
 
 export type QnaInput = Partial<Qna>;

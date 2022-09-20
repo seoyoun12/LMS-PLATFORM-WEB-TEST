@@ -28,7 +28,8 @@ export default function LessonContentSurveyQuestion(props: Props) {
 								<QuestionFormControlLabel key={i} control={<Radio size="small"/>} label={v[0]} value={v[1]}/>
 							))}
 						</RadioGroup>
-						{props.error && <FormHelperText>하나를 선택해 주세요.</FormHelperText>}
+						{props.error && <FormHelperText>하나를 선택해 주세요.</FormHelperText>} 
+						{/* 비워도 제출가능하기 */}
 					</QuestionFormControl>
 				</QuestionItemContainer>
 			</QuestionContainer>

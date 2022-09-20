@@ -25,6 +25,12 @@ import { Phone4Regex } from '@utils/inputRegexes';
 import { useDialog } from '@hooks/useDialog';
 
 const phoneList = ['010', '011'];
+const date = new Date();
+const year = date.getFullYear();
+
+// interface FormType extends UserInput {
+//   printBirth: string;
+// }
 
 export function UserModifyModal({
   open,
@@ -55,12 +61,17 @@ export function UserModifyModal({
   const dialog = useDialog();
   const snackbar = useSnackbar();
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [birth, setBirth] = useState(null);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
     reset,
+    // setValue,
+    // watch,
+    // } = useForm<FormType>();
   } = useForm<UserInput>();
 
   // console.log('유저번호는 :', userData?.seq);
@@ -68,6 +79,48 @@ export function UserModifyModal({
   useEffect(() => {
     reset({ ...userData });
   }, [userData, open, reset]);
+
+  // useEffect(() => {
+  //   setValue(
+  //     'birth',
+  //     Number(userData?.birth.split('-', 1)) < 1000
+  //       ? Number(userData?.birth?.slice(0, 2)) + Number(2000) > year
+  //         ? 19 + userData?.birth
+  //         : 20 + userData?.birth
+  //       : userData?.birth
+  //   );
+  // }, []);
+
+  // console.log('스플릿 :', userData?.birth.split('-', 1));
+  // console.log('누구세요? : ', userData);
+  // console.log('1생일이 언제에요? : ', userData?.birth);
+  // console.log(
+  //   '2생일이 언제에요? : ',
+  //   Number(userData?.birth.split('-', 1)) < 1000
+  //     ? Number(userData?.birth?.slice(0, 2)) + Number(2000) > year
+  //       ? 19 + userData?.birth
+  //       : 20 + userData?.birth
+  //     : userData?.birth
+  // );
+
+  // const printBirth =
+  //   Number(userData?.birth.split('-', 1)) < 1000
+  //     ? Number(userData?.birth?.slice(0, 2)) + Number(2000) > year
+  //       ? 19 + userData?.birth
+  //       : 20 + userData?.birth
+  //     : userData?.birth;
+
+  // console.log('printBirth : ', printBirth);
+
+  // if (userData?.birth.length < 9) {
+  //   if (userData?.identityNumberFirst == 1 || userData?.identityNumberFirst == 2) {
+  //     19 + userData?.birth;
+  //     console.log('최종생일 : ', 19 + userData?.birth);
+  //   } else if (userData?.identityNumberFirst == 3 || userData?.identityNumberFirst == 4) {
+  //     20 + userData?.birth;
+  //     console.log('최종생일 : ', 20 + userData?.birth);
+  //   }
+  // }
 
   const onClickRemoveUser = async (userSeq: number) => {
     try {
@@ -150,6 +203,7 @@ export function UserModifyModal({
           <FormControl className="form-control">
             <TextField
               value={userData?.seq}
+              disabled
               type="text"
               size="small"
               variant="outlined"
@@ -163,6 +217,7 @@ export function UserModifyModal({
               size="small"
               variant="outlined"
               label="이름"
+              disabled
             />
             <ErrorMessage errors={errors} name="name" as={<FormHelperText error />} />
           </FormControl>
@@ -219,7 +274,28 @@ export function UserModifyModal({
 
           <FormControl className="form-control">
             <TextField
-              {...register('birth')}
+              // {...register('printBirth')}
+              // {...register('birth')}
+              // value={printBirth}
+              // value={
+              //   userData?.birth
+              //     ? Number(userData?.birth.split('-', 1)) < 1000
+              //       ? userData?.identityNumberFirst == 1 ||
+              //         userData?.identityNumberFirst == 2
+              //         ? 19 + userData?.birth
+              //         : 20 + userData?.birth
+              //       : userData?.birth
+              //     : ''
+              // }
+              value={
+                userData?.birth
+                  ? userData?.identityNumberFirst < 3
+                    ? 19 + userData?.birth
+                    : 20 + userData?.birth
+                  : ''
+              }
+              disabled
+              // value={watch().printBirth}
               type="date"
               size="small"
               variant="outlined"

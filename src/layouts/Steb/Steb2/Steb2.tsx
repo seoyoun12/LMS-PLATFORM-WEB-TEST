@@ -37,7 +37,7 @@ export default function Steb2() {
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo); //전역에 교육정보 저장
   const [confirm, setConfirm] = useState(false);
   const [isIndividualCheck, setIsIndividualCheck] = useState(false);
-  const [hideCarNumber, setHideCarNumber] = useState(false);
+  const [hideCarNumber, setHideCarNumber] = useState(true); //차량번호 숨기기
   const [fixedBusinessType, setFixedBusinessType] = useState<userBusinessType>(); //업체정보 운수구분 고정용(여객-여객,화물-화물)
   const [loading, setLoading] = useState(false);
   const confirmRef = useRef<boolean>();
@@ -242,12 +242,17 @@ export default function Steb2() {
   //     };
   //   }
   // }, [confirm]);
+  console.log(watch());
 
   return (
     <Steb2Wrap>
       {isDesktop && <StebHeader value={2} />}
       <Steb2BodyContainer>
-        <EduOverview setValue={setValue} setFixedBusinessType={setFixedBusinessType} />
+        <EduOverview
+          setValue={setValue}
+          watch={watch}
+          setFixedBusinessType={setFixedBusinessType}
+        />
         <CompanyInfo
           isIndividual={isIndividual}
           setIsIndividual={setIsIndividual}
@@ -256,6 +261,7 @@ export default function Steb2() {
           setValue={setValue}
           setHideCarNumber={setHideCarNumber}
           fixedBusinessType={fixedBusinessType}
+          hideCarNumber={hideCarNumber}
         />
         <StudentList registerType={registerType} setRegisterType={setRegisterType} />
         <StudentInfo

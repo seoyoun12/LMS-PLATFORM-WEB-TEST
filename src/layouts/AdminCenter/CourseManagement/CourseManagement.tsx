@@ -32,14 +32,14 @@ const headRows: {
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
   width: string;
 }[] = [
-  { name: 'No', align: 'center', width: '6.5%' },
+  { name: 'No', align: 'center', width: '5%' },
   { name: '과정분류', align: 'center', width: '8.5%' },
   { name: '교육분류', align: 'center', width: '8.5%' },
   { name: '업종', align: 'center', width: '8.5%' },
-  { name: '과정명', align: 'center', width: '25%' },
-  { name: '생성날짜', align: 'center', width: '15%' },
-  { name: '노출여부', align: 'center', width: '5.5%' },
-  { name: '상태', align: 'center', width: '5.5%' },
+  { name: '과정명', align: 'center', width: '32.5%' },
+  { name: '생성날짜', align: 'center', width: '10%' },
+  { name: '노출여부', align: 'center', width: '5%' },
+  { name: '상태', align: 'center', width: '5%' },
 ];
 
 export function CourseManagement() {
@@ -122,15 +122,7 @@ export function CourseManagement() {
   // );
   return (
     <Box>
-      <Typography
-        variant="h5"
-        sx={{
-          mb: '12px',
-          fontWeight: 700,
-        }}
-      >
-        과정 목록
-      </Typography>
+      <CourseTitleTypography variant="h5">과정 목록</CourseTitleTypography>
       <ManagementSearchHeadRow
         ref={searchInputRef}
         search={searchTitle}
@@ -146,6 +138,7 @@ export function CourseManagement() {
           page={data.number}
           onChangePage={onChangePage}
           size="small"
+          sx={{ tableLayout: 'fixed' }}
         >
           <TableHead>
             <TableRow>
@@ -184,7 +177,9 @@ export function CourseManagement() {
                     )[0]?.ko
                   }
                 </CourseTableCell>
-                <CourseTableCell align="center">{course.courseName}</CourseTableCell>
+                <CourseTableCell align="center">
+                  <SubjectBox>{course.courseName}</SubjectBox>
+                </CourseTableCell>
                 <CourseTableCell align="center">
                   {dateFormat(course.createdDtime, 'isoDate')}
                 </CourseTableCell>
@@ -232,20 +227,34 @@ export function CourseManagement() {
   );
 }
 
+// 과정 목록 글자
+const CourseTitleTypography = styled(Typography)`
+  margin-bottom: 30px;
+  font-weight: 700;
+`;
+
+// 과정 제목. ellipsis 적용.
+const SubjectBox = styled(Box)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+`;
+
+// 과정 목록 테이블의 Title부분
 const CourseTitleTableCell = styled(TableCell)`
   font-weight: bold;
   background: #f5f5f5;
   border-right: 1px solid #f0f0f0;
+  border-top: 1px solid #f0f0f0;
 
   &:last-child {
     border-right: 1px solid #f0f0f0;
   }
 `;
 
+// 과정 목록 테이블의 본문
 const CourseTableCell = styled(TableCell)`
-  white-space: nowrap;
-  text-align: center;
-  padding-top: 10px;
   margin: 0;
   border-right: 1px solid #f0f0f0;
 

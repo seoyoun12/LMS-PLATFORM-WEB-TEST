@@ -69,7 +69,7 @@ export function BoardAccordionV2({
           >
             <BoardBox>
               <BoardSeqBox textAlign="center">{seq}</BoardSeqBox>
-              <BoardSeqTitleBox paddingLeft="1rem">{name.slice(0, 16)}</BoardSeqTitleBox>
+              <BoardSeqTitleBox paddingLeft="1rem">{name}</BoardSeqTitleBox>
               <BoardCreatedBox textAlign="center">{date.toString()}</BoardCreatedBox>
             </BoardBox>
           </AccordionSummary>
@@ -168,11 +168,16 @@ const BoardSeqBox = styled(Box)`
   width: 20%;
 `;
 const BoardSeqTitleBox = styled(Box)`
-  width: 50%;
+  width: 100%;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  /* white-space: nowrap; */
+  /* 두줄까지 출력 후 ... */
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 const BoardCreatedBox = styled(Box)`
   width: 30%;

@@ -37,15 +37,15 @@ const headRows: {
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
   width: string;
 }[] = [
-  { name: 'No', align: 'center', width: '6.5%' }, // seq
+  { name: 'No', align: 'center', width: '5%' }, // seq
   { name: '게시판유형', align: 'center', width: '8.5%' }, // boardType
-  { name: '제목', align: 'center', width: '27%' }, // subject
+  { name: '제목', align: 'center', width: '32%' }, // subject
   { name: '작성일', align: 'center', width: '12%' }, // createdDtime
   { name: '수정일', align: 'center', width: '12%' }, // modifiedDtime
   { name: '조회수', align: 'center', width: '8.5%' }, // hit
   { name: '공지여부', align: 'center', width: '8.5%' }, // noticeYn
   { name: '공개여부', align: 'center', width: '8.5%' }, // publicYn
-  { name: '상태', align: 'center', width: '8.5%' }, // status
+  { name: '상태', align: 'center', width: '5%' }, // status
 ];
 
 // const headRows2: [
@@ -152,7 +152,7 @@ export function CategoryManagement() {
   return (
     <Box>
       <Typography fontSize={30} fontWeight="bold">
-        게시판구분
+        게시판 구분
       </Typography>
       <RadioGroup row sx={{ mb: 6 }}>
         {tabsConfig.map(({ name, value }: { name: string; value: string }) => (
@@ -174,9 +174,10 @@ export function CategoryManagement() {
         page={data?.number}
         onChangePage={onChangePage}
         size="small"
+        sx={{ tableLayout: 'fixed' }}
       >
         <TableHead>
-          <CategoryTableRow>
+          <TableRow>
             {headRows.map(
               ({
                 name,
@@ -192,7 +193,7 @@ export function CategoryManagement() {
                 </CategoryTitleTableCell>
               )
             )}
-          </CategoryTableRow>
+          </TableRow>
         </TableHead>
 
         <TableBody>
@@ -289,53 +290,38 @@ export function CategoryManagement() {
   );
 }
 
+// 게시판 목록 글자
 const CategoryTypography = styled(Typography)`
-  margin-bottom: 12px;
+  margin-bottom: 30px;
   font-weight: 700;
 `;
 
-const CategoryTableRow = styled(TableRow)`
-  white-space: nowrap;
-`;
-
-// const SubjectTypography = styled(Typography)`
-//   text-overflow: ellipsis;
-//   overflow: hidden;
-//   white-space: nowrap;
-//   width: 400px; // 부모 넓이 그대로는 못가나?
-// `;
-
+// 게시판 제목. ellipsis 적용.
 const SubjectBox = styled(Box)`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  width: 400px; // 부모 넓이 그대로는 못가나?
+  width: 100%;
 `;
 
-const ContentTypography = styled(Typography)`
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 255px;
-`;
-
+// 게시판 목록 테이블의 Title부분
 const CategoryTitleTableCell = styled(TableCell)`
   font-weight: bold;
   background: #f5f5f5;
   border-right: 1px solid #f0f0f0;
+  border-top: 1px solid #f0f0f0;
 
   &:last-child {
     border-right: 1px solid #f0f0f0;
   }
 `;
+
+// 게시판 목록 테이블의 본문
 const CategoryTableCell = styled(TableCell)`
-  white-space: nowrap;
-  padding-top: 10px;
   margin: 0;
   border-right: 1px solid #f0f0f0;
 
   &:first-child {
-    /* border-right: 1px solid #e0e0e0; */
     background: #f5f5f5;
   }
 `;

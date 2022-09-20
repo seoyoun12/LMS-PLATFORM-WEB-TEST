@@ -1,7 +1,7 @@
-import { categoryBoardList, removeCategoryBoard } from '@common/api/categoryBoard';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
+  Box,
   Button,
   Chip,
   Container,
@@ -25,17 +25,18 @@ import { AnsweredYn, qnaAdmList } from '@common/api/qna';
 import { ProductStatus } from '@common/api/course';
 import { downloadFile } from '@common/api/file';
 
-const headRows = [
-  { name: '번호' }, // seq
-  { name: '유저번호' }, // 유저시퀀스
-  { name: '제목' }, // 문의제목
-  { name: '본문' }, // 문의내용
-  { name: '문의유형' }, // 문의유형
-  { name: '작성일' }, // 생성일
-  { name: '첨부파일' }, // 첨부파일
-  { name: '상태' }, // 상태
-  { name: '답변여부' }, // 답변여부
-  // { name: '답변등록' },
+const headRows: {
+  name: string;
+  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  width: string;
+}[] = [
+  { name: 'No', align: 'center', width: '5%' },
+  { name: '문의유형', align: 'center', width: '12%' },
+  { name: '회원아이디(회원이름)', align: 'center', width: '17%' },
+  { name: '제목', align: 'center', width: '44%' },
+  { name: '작성일', align: 'center', width: '8.5%' },
+  { name: '답변여부', align: 'center', width: '8.5%' },
+  { name: '상태', align: 'center', width: '5%' },
 ];
 
 const tabsConfig = [
@@ -73,21 +74,26 @@ export function QnaManagement() {
     });
   };
 
+  if (error) return <div>Error</div>;
+  if (!data) return <Spinner />;
   return (
-    <>
+    <Box>
+      <QnaTitleTypography variant="h5">1대1 문의 목록</QnaTitleTypography>
+
       <Table
         pagination={true}
         totalNum={data?.totalElements}
         page={data?.number}
         onChangePage={onChangePage}
         size="small"
+        sx={{ tableLayout: 'fixed' }}
       >
         <TableHead>
           <TableRow>
-            {headRows.map(({ name }: { name: string }) => (
-              <TableCell key={name} align="center">
+            {headRows.map(({ name, align, width }) => (
+              <QnaTitleTableCell key={name} align={align} width={width}>
                 {name}
-              </TableCell>
+              </QnaTitleTableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -100,23 +106,24 @@ export function QnaManagement() {
               hover
               onClick={() => onClickAnswerQna(qna.seq)}
             >
-              <TableCell align="center">{qna.seq}</TableCell>
-              <TableCell align="center">{qna.userSeq}</TableCell>
-              {/* <TableCell align="center">
-                <SubjectTypography>{qna.title}</SubjectTypography>
-              </TableCell> */}
-              <TableCell align="center">{qna.title}</TableCell>
-              {/* <TableCell align="center">
-                <ContentTypography>{qna.content}</ContentTypography>
-              </TableCell> */}
-              <TableCell align="center">{qna.content}</TableCell>
-              <TableCell align="center">
-                {/* {qna.type} */}
+              <QnaTableCell align="center">{qna.seq}</QnaTableCell>
+              <QnaTableCell align="center">
                 {tabsConfig.filter(item => item.value === qna.type)[0]?.name}
-              </TableCell>
-              <TableCell align="center">
+              </QnaTableCell>
+              {/* <QnaTableCell align="center">
+                {qna.username}({qna.name})
+              </QnaTableCell> */}
+
+              <QnaTableCell align="center">
+                {qna.username ? `${qna.username}(${qna.name})` : qna.name}
+              </QnaTableCell>
+
+              <QnaTableCell align="center">
+                <SubjectBox>{qna.title}</SubjectBox>
+              </QnaTableCell>
+              <QnaTableCell align="center">
                 {dateFormat(qna.createdDtime, 'isoDate')}
-              </TableCell>
+              </QnaTableCell>
               {/* <TableCell align="center">
                 {dateFormat(qna.modifiedDtime, 'isoDate')}
               </TableCell> */}
@@ -144,21 +151,14 @@ export function QnaManagement() {
                   {qna.s3Files[0] ? qna.s3Files[0].name : '파일없음'}
                 </Button>
               </TableCell> */}
-              <TableCell align="center">
+              {/* <TableCell align="center">
                 {qna.s3Files[0] ? qna.s3Files[0].name : '파일없음'}
-              </TableCell>
-              <TableCell align="center">
-                <Chip
-                  variant="outlined"
-                  size="small"
-                  label={qna.status === ProductStatus.APPROVE ? '정상' : '중지'}
-                  color={qna.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
-                />
-              </TableCell>
+              </TableCell> */}
+
               {/* <TableCell align="center">{qna.answeredYn}</TableCell> */}
-              <TableCell>
+              <QnaTableCell align="center">
                 <Chip
-                  sx={{ width: '80px', marginLeft: '10px', marginBottom: '3px' }}
+                  sx={{ width: '80px' }} // marginLeft: '10px', marginBottom: '3px'
                   // variant="outlined"
                   size="small"
                   label={
@@ -168,7 +168,15 @@ export function QnaManagement() {
                     qna.answeredYn === AnsweredYn.ANSWEREDY ? 'secondary' : 'warning'
                   }
                 />
-              </TableCell>
+              </QnaTableCell>
+              <QnaTableCell align="center">
+                <Chip
+                  variant="outlined"
+                  size="small"
+                  label={qna.status === ProductStatus.APPROVE ? '정상' : '중지'}
+                  color={qna.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
+                />
+              </QnaTableCell>
               {/* <TableCell align="center">
                 <Button
                   variant="text"
@@ -183,20 +191,43 @@ export function QnaManagement() {
           ))}
         </TableBody>
       </Table>
-    </>
+    </Box>
   );
 }
 
-const SubjectTypography = styled(Typography)`
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 150px;
+// 1대1문의 목록 글자
+const QnaTitleTypography = styled(Typography)`
+  margin-bottom: 30px;
+  font-weight: 700;
 `;
 
-const ContentTypography = styled(Typography)`
+// 1대1문의 제목. ellipsis 적용.
+const SubjectBox = styled(Box)`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  width: 255px;
+  width: 100%;
+`;
+
+// 1대1문의 목록 테이블의 Title부분
+const QnaTitleTableCell = styled(TableCell)`
+  font-weight: bold;
+  background: #f5f5f5;
+  border-right: 1px solid #f0f0f0;
+  border-top: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-right: 1px solid #f0f0f0;
+  }
+`;
+
+// 1대1문의 목록 테이블의 본문
+const QnaTableCell = styled(TableCell)`
+  margin: 0;
+  border-right: 1px solid #f0f0f0;
+
+  &:first-child {
+    /* border-right: 1px solid #e0e0e0; */
+    background: #f5f5f5;
+  }
 `;

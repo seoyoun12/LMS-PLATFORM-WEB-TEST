@@ -75,19 +75,19 @@ export function StatisticsSurveyDetail() {
           </Card>
         </PieCard>
         <CntCards>
-          <Card contentPadding={0}>
+          <Card wrapSx={{ margin: '24px 0 ' }}>
             <CardLeft>설문 참여자</CardLeft>
             <CardRight sx={{ padding: '8px', flexGrow: 1 }}>
               {data.participantCnt}
             </CardRight>
           </Card>
-          <Card contentPadding={0}>
+          <Card wrapSx={{ margin: '24px 0 ' }}>
             <CardLeft>객관식</CardLeft>
             <CardRight sx={{ padding: '8px', flexGrow: 1 }}>
               {data.participantCnt}
             </CardRight>
           </Card>
-          <Card contentPadding={0}>
+          <Card wrapSx={{ margin: '24px 0 ' }}>
             <CardLeft>주관식</CardLeft>
             <CardRight sx={{ padding: '8px', flexGrow: 1 }}>
               {data.participantCnt}
@@ -114,6 +114,7 @@ export function StatisticsSurveyDetail() {
                       if (!item) return;
                       return (
                         <Box
+                          key={idx}
                           sx={{
                             background: '#979797',
                             color: 'white',
@@ -160,12 +161,11 @@ const CntCards = styled(Box)`
 `;
 
 const CardLeft = styled(Box)`
-  padding: 8px;
+  padding: 0px 8px;
   background: #256def;
   color: white;
   text-align: center;
   width: 50%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,10 +173,9 @@ const CardLeft = styled(Box)`
   font-weight: bold;
 `;
 const CardRight = styled(Box)`
-  padding: 8px;
+  padding: 0px 8px;
   text-align: center;
   width: 50%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;

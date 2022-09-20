@@ -4,20 +4,18 @@ import { Box, BoxProps, Typography } from '@mui/material';
 export function Card({
   children,
   header,
-  sx,
-  parantPadding,
-  contentPadding = '16px',
+  wrapSx,
+  contentSx,
 }: {
   children: React.ReactNode;
   header?: string;
-  sx?: BoxProps;
-  parantPadding?: string | number;
-  contentPadding?: string | number;
+  wrapSx?: React.CSSProperties;
+  contentSx?: React.CSSProperties;
 }) {
   return (
-    <CardWrap padding={parantPadding} sx={sx}>
+    <CardWrap style={wrapSx}>
       {header && <CardHead>{header}</CardHead>}
-      <CardContent padding={contentPadding}>{children}</CardContent>
+      <CardContent style={contentSx}>{children}</CardContent>
     </CardWrap>
   );
 }
@@ -50,7 +48,7 @@ const CardHead = styled(Box)`
   font-weight: bold;
   border-bottom: 1px solid #c4c4c4;
 `;
-const CardContent = styled(Box)`
+const CardContent = styled(Box)<{ style: React.CSSProperties }>`
   display: flex;
   height: 100%;
 `;

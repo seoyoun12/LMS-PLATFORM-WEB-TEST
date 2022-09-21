@@ -12,6 +12,8 @@ export interface Props {
 
 export default function LessonContentSurveyQuestion(props: Props) {
 
+	const [value, setValue] = React.useState<string>(props.question.answered || "");
+
 	switch (props.question.questionType) {
 
 		case "TYPE_MULTIPLE_CHOICE": return (
@@ -24,12 +26,11 @@ export default function LessonContentSurveyQuestion(props: Props) {
 						disabled={props.loading}
 					>
 						<RadioGroup name={`question_${props.index}`}>
-							{Array.from({ length: 10 }, (x, i) => [props.question.surveyMultipleChoice[`item${i + 1}`], i + 1]).filter((v) => !!v[0]).map((v: [string, number], i) => (
-								<QuestionFormControlLabel key={i} control={<Radio size="small"/>} label={v[0]} value={v[1]}/>
+							{Array.from({ length: 10 }, (x, i) => [props.question.surveyMultipleChoice[`item${i + 1}`], (i + 1).toString()]).filter((v) => !!v[0]).map((v: [string, string], i) => (
+								<QuestionFormControlLabel key={i} control={<Radio size="small"/>} label={v[0]} value={v[1]} checked={(value.startsWith("item") ? value.slice(4) : value) === v[1]} onChange={() => setValue(v[1])}/>
 							))}
+							{props.error && <FormHelperText>하나를 선택해 주세요.</FormHelperText>} 
 						</RadioGroup>
-						{props.error && <FormHelperText>하나를 선택해 주세요.</FormHelperText>} 
-						{/* 비워도 제출가능하기 */}
 					</QuestionFormControl>
 				</QuestionItemContainer>
 			</QuestionContainer>
@@ -38,12 +39,10 @@ export default function LessonContentSurveyQuestion(props: Props) {
 			<QuestionContainer>
 				<QuestionTitle>{props.index + 1}. {props.question.content}</QuestionTitle>
 				<QuestionItemContainer>
-					<QuestionFormControl
-						required
-						error={props.error}
-						disabled={props.loading}
-					>
+					<QuestionFormControl disabled={props.loading} error={props.error}>
 						<TextField
+							value={value}
+							onChange={(e) => setValue(e.target.value || "")}
 							multiline
 							rows={4}
 							name={`question_${props.index}`}

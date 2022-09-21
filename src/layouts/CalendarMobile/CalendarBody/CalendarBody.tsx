@@ -17,7 +17,13 @@ import {
 } from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import FullCalendar from '@fullcalendar/react';
-import { CalendarEvent, ClickedPlanInfo, eduLegendList, FilterType } from '../Calendar';
+import {
+  CalendarEvent,
+  ClickedPlanInfo,
+  courseBusinessTypeList,
+  eduLegendList,
+  FilterType,
+} from '../Calendar';
 import { Modal } from '@components/ui/Modal';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import dateFormat from 'dateformat';
@@ -27,6 +33,7 @@ import {
   courseCategoryType,
   CourseClassRes,
   courseSubCategoryType,
+  businessType,
 } from '@common/api/courseClass';
 import { courseClassEnrollInfo } from '@common/recoil';
 import { useRecoilState } from 'recoil';
@@ -36,6 +43,7 @@ import { NotFound } from '@components/ui/NotFound';
 import { useState } from 'react';
 import { getIsExistUser } from '@common/api/courseUser';
 import { CheckBeforeEnrollDialog } from '@components/ui/Calendar';
+import { isThisMinute } from 'date-fns';
 
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -209,6 +217,7 @@ export function CalendarBody({
       seq: item.seq,
       step: item.step,
       lessonTime: item.course.lessonTime,
+      courseBusinessType: item.course.courseBusinessType as businessType,
       courseCategoryType: courseCategory.filter(
         categoryItem => categoryItem.type === item.course.courseCategoryType
       )[0],
@@ -362,20 +371,30 @@ export function CalendarBody({
                   <TableRightCell>{modalInfo.step}</TableRightCell>
                 </TableRow>
                 <TableRow>
-                  <TableLeftCell>교육과정</TableLeftCell>
-                  <TableRightCell>
+                  <TableLeftCell>온라인교육</TableLeftCell>
+                  {/* <TableRightCell>
                     {modalInfo.courseCategoryType
                       ? modalInfo.courseCategoryType.ko
                       : '오류'}
-                  </TableRightCell>
+                  </TableRightCell> */}
+                  <TableRightCell>보수일반교육</TableRightCell>
                 </TableRow>
                 <TableRow>
-                  <TableLeftCell>업종구분</TableLeftCell>
+                  <TableLeftCell>교육구분</TableLeftCell>
+                  <TableRightCell>
+                    {
+                      courseBusinessTypeList.filter(
+                        item => item.enType === modalInfo.courseBusinessType
+                      )[0]?.type
+                    }
+                    {/* 여객 / 화물 */}
+                  </TableRightCell>
+                  {/* <TableLeftCell>업종구분</TableLeftCell>
                   <TableRightCell>
                     {modalInfo.courseSubCategoryType
                       ? modalInfo.courseSubCategoryType.ko
                       : '오류'}
-                  </TableRightCell>
+                  </TableRightCell> */}
                 </TableRow>
                 <TableRow>
                   <TableLeftCell>교육일</TableLeftCell>

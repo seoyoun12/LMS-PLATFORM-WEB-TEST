@@ -30,6 +30,7 @@ import { ProductStatus } from '@common/api/course';
 import { NumberFormat } from 'xlsx';
 import { grey } from '@mui/material/colors';
 import SearchIcon from '@mui/icons-material/Search';
+import ReplayIcon from '@mui/icons-material/Replay';
 
 const userConfig = [
   { label: '실명가입', value: regCategoryType.TYPE_TRANS_EDU },
@@ -163,19 +164,7 @@ export function UserManagement() {
         회원구분
       </Typography>
 
-      <SearchContainer onSubmit={handleSearch}>
-        <SearchInput
-          inputRef={searchInputRef}
-          placeholder="콘텐츠 검색"
-          size="small"
-          type="search"
-        />
-        <IconButton type="submit">
-          <SearchIcon />
-        </IconButton>
-      </SearchContainer>
-
-      <RadioGroup row sx={{ mb: 6 }}>
+      <RadioGroup row sx={{ mb: 3 }}>
         {radioConfig.map(({ name, value }) => (
           <FormControlLabel
             key={name}
@@ -186,6 +175,28 @@ export function UserManagement() {
           />
         ))}
       </RadioGroup>
+      <SearchBox>
+        <SearchContainer onSubmit={handleSearch}>
+          <SearchInput
+            inputRef={searchInputRef}
+            placeholder="회원 검색"
+            size="small"
+            type="search"
+          />
+          <IconButton type="submit">
+            <SearchIcon />
+          </IconButton>
+        </SearchContainer>
+        <ReloadButton
+          size="small"
+          color="neutral"
+          variant="text"
+          endIcon={<ReplayIcon htmlColor={grey[700]} />}
+          onClick={e => handleSearch(e, true)}
+        >
+          전체 다시 불러오기
+        </ReloadButton>
+      </SearchBox>
 
       <UserTypography variant="h5">회원 목록</UserTypography>
 
@@ -297,19 +308,30 @@ export function UserManagement() {
   );
 }
 
+// 검색창 박스
+const SearchBox = styled(Box)`
+  /* border: 1px solid black; */
+  margin-bottom: 30px;
+`;
+
 // 검색창
 const SearchContainer = styled.form`
   display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 4px 6px 0 6px;
-  margin-bottom: 24px;
+  /* align-items: center; */
+  width: 20%;
+  padding: 4px 6px 0 10px;
   border-radius: 4px;
   border: 1px solid ${grey[300]};
 `;
-// 검색창
+
+// 검색 Input창
 const SearchInput = styled(InputBase)`
   width: 100%;
+`;
+
+// 검색창 되돌리기 버튼
+const ReloadButton = styled(Button)`
+  margin-top: 3px;
 `;
 
 // 회원 목록 글자

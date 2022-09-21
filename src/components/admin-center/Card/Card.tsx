@@ -7,17 +7,19 @@ export function Card({
   headSx,
   wrapSx,
   contentSx,
+  onClick,
 }: {
   children?: React.ReactNode;
   header?: string | React.ReactNode;
   headSx?: React.CSSProperties;
   wrapSx?: React.CSSProperties;
   contentSx?: React.CSSProperties;
+  onClick?: () => void;
 }) {
   return (
-    <CardWrap style={wrapSx}>
+    <CardWrap style={wrapSx} onClick={onClick}>
       {header && <CardHead style={headSx}>{header}</CardHead>}
-      <CardContent style={contentSx}>{children}</CardContent>
+      {children && <CardContent style={contentSx}>{children}</CardContent>}
     </CardWrap>
   );
 }

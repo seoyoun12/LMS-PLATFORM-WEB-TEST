@@ -79,13 +79,12 @@ export function StudentInfo({
       }
     }
     if (user && registerType === RegisterType.TYPE_ORGANIZATION) {
-      // const first = user.identityNumber.slice(0, 6);
-      // const second = user.identityNumber.slice(6, 14);
-      // setValue('name', user.name);
-      // setValue('firstIdentityNumber', first);
-      // setFirstIdentityNumber(first);
-      // setValue('secondIdentityNumber', second);
-      // setSecondidentityNumber(second);
+      //단체신청시 이름과 주민등록번호 인풋 초기화.
+      setValue('name', '');
+      setValue('firstIdentityNumber', '');
+      setValue('secondIdentityNumber', '');
+      setFirstIdentityNumber('');
+      setSecondidentityNumber('');
       if (!user.roles.filter(role => role === UserRole.ROLE_TRANS_MANAGER)[0]) {
         window.alert('권한이 없는 유저입니다.');
         setRegisterType(RegisterType.TYPE_INDIVIDUAL);

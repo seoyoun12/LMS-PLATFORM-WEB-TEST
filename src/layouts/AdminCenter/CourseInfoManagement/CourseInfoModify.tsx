@@ -4,7 +4,8 @@ import { Box, Tab, TableBody, TableCell, TableHead, TableRow } from '@mui/materi
 import { useRouter } from 'next/router';
 import { css } from '@emotion/css';
 import styled from '@emotion/styled';
-import { CourseInfomation } from '@components/admin-center/CourseInfo/CourseInfomation';
+import { CourseInformation } from '@components/admin-center/CourseInfo/CourseInfomation';
+import { EnrollInformation } from '@components/admin-center/CourseInfo/EnrollInformation';
 import { LearningStatus } from '@components/admin-center/CourseInfo/LearningStatus';
 import { ProgressStatus } from '@components/admin-center/CourseInfo/ProgressStatus';
 import { Spinner } from '@components/ui';
@@ -26,7 +27,8 @@ export function CourseInfoModify() {
 
   return (
     <Box>
-      <CourseInfomation courseInfo={data?.courseInfo} />
+      <CourseInformation courseInfo={data?.courseInfo} />
+      <EnrollInformation />
       <LearningStatus learningStatusList={data?.learningStatusList} />
       <ProgressStatus progressList={data.progressStatusList} onMutate={onMutate} />
     </Box>

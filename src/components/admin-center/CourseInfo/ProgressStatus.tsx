@@ -183,7 +183,7 @@ const TableHeadercell = styled(MuiTableCell)`
   border-top: 1px solid #c4c4c4;
   border-right: 1px solid #c4c4c4;
   font-weight: bold;
-  background-color: #eef7fc;
+  background-color: #f5f5f5;
 `;
 
 const TableBody = styled(MuiTableBody)`

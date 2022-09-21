@@ -10,7 +10,7 @@ interface Props {
   courseInfo: UserCourseInfoDetailCourseInfoDto;
 }
 
-export function CourseInfomation({ courseInfo }: Props) {
+export function CourseInformation({ courseInfo }: Props) {
   const router = useRouter();
   const snackbar = useSnackbar();
   const { courseUserSeq } = router.query;

@@ -1,48 +1,25 @@
+import { useState } from 'react';
 import styled from '@emotion/styled';
-import { Box, MenuItem, Stack } from '@mui/material';
+import { Box, Button, MenuItem, Stack } from '@mui/material';
 import { useRouter } from 'next/router';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { BarChart, DoughnutChart, PieChart } from '@components/ui/Charts';
 import { useSurveyStatistics } from '@common/api/adm/statistics';
-import { Spinner } from '@components/ui';
+import { Modal, Spinner } from '@components/ui';
 import { Card } from '@components/admin-center/Card/Card';
 import { convertObjChartData } from '@utils/convertChartData';
-const BarData = {
-  labels: ['dd', 'as', 'sdf', 'sd', 'sdfsd'],
-  datasets: [
-    {
-      label: '어쩔티비',
-      backgroundColor: 'rgba(238, 173, 81,1)',
-      borderColor: 'rgba(238, 173, 81,1)',
-      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-      hoverBorderColor: 'rgba(255,99,132,1)',
-      data: [12, 34, 45, 22, 32],
-    },
-  ],
-};
-
-const DoughnutData = {
-  labels: ['원', '투'],
-  datasets: [
-    {
-      labels: ['넹', '넹2'],
-      backgroundColor: ['rgba(238, 173, 81,1)', '#ee7051', '#51a7ee', '#ee51ee'],
-      borderColor: 'rgba(238, 173, 81,1)',
-      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-      hoverBorderColor: 'rgba(255,99,132,1)',
-      data: [12, 12],
-    },
-  ],
-};
+import { NotFound } from '@components/ui/NotFound';
 
 export function StatisticsSurveyDetail() {
   const router = useRouter();
   const { surveySeq } = router.query;
   const { data, error } = useSurveyStatistics(Number(surveySeq));
+  const [open, setOpen] = useState(false);
+  const [modalSubList, setModalSubList] = useState<string[]>([]);
   const backgroundColor: string[] = [
     '#ee4a5d',
-    '#fff77f',
+    '#dbcd00',
     '#bae7af',
     '#afc4e7',
     '#fdc4f8',
@@ -52,6 +29,10 @@ export function StatisticsSurveyDetail() {
     '#afffba',
     '#dfd4e4',
   ];
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const PieData = {
     labels: ['객관식', '주관식'],
@@ -66,7 +47,6 @@ export function StatisticsSurveyDetail() {
       },
     ],
   };
-  console.log(data);
 
   if (!data) return <Spinner />;
   if (error) return <div>Error...</div>;
@@ -131,7 +111,7 @@ export function StatisticsSurveyDetail() {
                         <Box
                           key={idx}
                           sx={{
-                            background: '#979797',
+                            background: backgroundColor[idx],
                             color: 'white',
                             borderRadius: '2px',
                             paddingLeft: '8px',
@@ -155,8 +135,23 @@ export function StatisticsSurveyDetail() {
                 contentSx={{ padding: '0 16px' }}
                 wrapSx={{ height: '330px' }}
               >
-                <Stack width="100%" height="250px">
-                  {item.answerList.map(item => (
+                <Stack
+                  width="100%"
+                  height="250px"
+                  sx={{
+                    mask: `linear-gradient(black, black, transparent)`,
+                    backdropFilter: `blur(8px)`,
+                  }}
+                  onClick={() => {
+                    setOpen(true);
+                    setModalSubList(item.answerList);
+                  }}
+                >
+                  {item.answerList.map(item => {
+                    if (item === '') return;
+                    return <MenuItem>{item}</MenuItem>;
+                  })}
+                  {new Array(11).fill('테스트').map(item => (
                     <MenuItem>{item}</MenuItem>
                   ))}
                 </Stack>
@@ -165,16 +160,27 @@ export function StatisticsSurveyDetail() {
           ))}
         </SurveySub>
       </SurveyLayout>
-      {/* <BarChart ChartData={BarData} width={250} height={250} />
-      <DoughnutChart
-        ChartData={DoughnutData}
-        width={250}
-        height={250}
-        centerText="Test"
-      />
-      <Card>
-        <PieChart ChartData={PieData} width={250} height={250} />
-      </Card> */}
+      <Modal
+        open={open}
+        onCloseModal={handleClose}
+        maxWidth="lg"
+        action={
+          <Button variant="contained" onClick={() => setOpen(false)}>
+            닫기
+          </Button>
+        }
+      >
+        <Box padding="12px 0" minWidth="500px">
+          {modalSubList.length === 0 ? (
+            <NotFound content="주관식 정보가 없는것 같습니다.." />
+          ) : (
+            modalSubList.map(item => {
+              if (item === '') return;
+              return <MenuItem>{item}</MenuItem>;
+            })
+          )}
+        </Box>
+      </Modal>
     </StaticsSurveyDetailWrap>
   );
 }
@@ -190,29 +196,26 @@ const CntCards = styled(Box)`
   flex-direction: column;
   justify-content: space-between;
   gap: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
 `;
 
 const CardLeft = styled(Box)`
   padding: 0px 8px;
   background: #256def;
   color: white;
-  text-align: center;
   width: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  font-weight: bold;
 `;
 const CardRight = styled(Box)`
   padding: 0px 8px;
-  text-align: center;
   width: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  font-weight: bold;
 `;
 
 const SurveyLayout = styled(Box)`

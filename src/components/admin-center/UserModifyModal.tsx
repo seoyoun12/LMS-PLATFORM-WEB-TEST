@@ -291,7 +291,10 @@ export function UserModifyModal({
               value={
                 userData?.birth
                   ? Number(userData?.birth.split('-', 1)) < 1000
-                    ? userData?.identityNumberFirst < 3
+                    ? userData?.identityNumberFirst == 1 ||
+                      userData?.identityNumberFirst == 2 ||
+                      userData?.identityNumberFirst == 5 ||
+                      userData?.identityNumberFirst == 6
                       ? 19 + userData?.birth
                       : 20 + userData?.birth
                     : userData?.birth

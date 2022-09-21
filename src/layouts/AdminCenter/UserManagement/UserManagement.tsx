@@ -9,13 +9,15 @@ import {
   FormControlLabel,
   Radio,
   Chip,
+  InputBase,
+  IconButton,
 } from '@mui/material';
 import styles from '@styles/common.module.scss';
 import { Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { userList, removeUser } from '@common/api/adm/user';
 import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
@@ -26,6 +28,8 @@ import { useDialog } from '@hooks/useDialog';
 import { regCategoryType, registerType } from '@common/api/user';
 import { ProductStatus } from '@common/api/course';
 import { NumberFormat } from 'xlsx';
+import { grey } from '@mui/material/colors';
+import SearchIcon from '@mui/icons-material/Search';
 
 const userConfig = [
   { label: '실명가입', value: regCategoryType.TYPE_TRANS_EDU },
@@ -58,19 +62,35 @@ export function UserManagement() {
   const dialog = useDialog();
   const [page, setPage] = useState(0);
   const [typeValue, setTypeValue] = useState(registerType.TYPE_TRANS_EDU);
-  const { data, error, mutate } = userList({
-    page,
-    registerType: typeValue,
-    // regCategoryType.TYPE_TRANS_EDU && regCategoryType.TYPE_TRAFFIC_SAFETY_EDU,
-    // registerType: regCategoryType.TYPE_TRANS_EDU,
-  });
   const [userSeq, setUserSeq] = useState<number | null>(null);
-  // const [birth, setBirth] = useState(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
-
   const date = new Date();
   const year = date.getFullYear();
 
+  // 검색기능
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const [keyword, setKeyword] = useState<string>('');
+  const { data, error, mutate } = userList({
+    page,
+    registerType: typeValue,
+    keyword,
+  });
+
+  // 검색기능
+  const handleSearch = async (event: FormEvent, isReload = false) => {
+    event.preventDefault();
+    if (isReload) {
+      setKeyword(null);
+      setPage(0);
+      return mutate();
+    }
+
+    if (searchInputRef.current) {
+      setKeyword(searchInputRef.current.value);
+    }
+  };
+
+  // 삭제. 기능 이동. modal 안쪽으로.
   // const onClickRemoveUser = async (userSeq: number) => {
   //   try {
   //     const dialogConfirmed = await dialog({
@@ -95,6 +115,7 @@ export function UserManagement() {
   //   }
   // };
 
+  // birth 변경. 지금은 백엔드에서 yy-mm-dd로 보내주는중. yyyy-mm-dd로 변경시도.
   // console.log('!!!!!!!!!!!!! : ', data?.content.find(item => item.seq === userSeq).birth);
   // const ymdBirth = data?.content.find(item => item.seq === userSeq)?.birth;
   const onClickModifyUser = async (seq: number) => {
@@ -110,6 +131,7 @@ export function UserManagement() {
     setopenUserModifyModal(true);
   };
 
+  // pagination
   useEffect(() => {
     const { page } = router.query;
     setPage(!isNaN(Number(page)) ? Number(page) : 0);
@@ -124,8 +146,7 @@ export function UserManagement() {
     });
   };
 
-  // console.log('생일 : ', data?.content[0].birth);
-
+  // modal 제어
   const handleModalClose = async (isSubmit: boolean) => {
     if (openUserModifyModal) {
       setopenUserModifyModal(false);
@@ -141,6 +162,19 @@ export function UserManagement() {
       <Typography fontSize={30} fontWeight="bold">
         회원구분
       </Typography>
+
+      <SearchContainer onSubmit={handleSearch}>
+        <SearchInput
+          inputRef={searchInputRef}
+          placeholder="콘텐츠 검색"
+          size="small"
+          type="search"
+        />
+        <IconButton type="submit">
+          <SearchIcon />
+        </IconButton>
+      </SearchContainer>
+
       <RadioGroup row sx={{ mb: 6 }}>
         {radioConfig.map(({ name, value }) => (
           <FormControlLabel
@@ -262,6 +296,21 @@ export function UserManagement() {
     // {/* </div> */}
   );
 }
+
+// 검색창
+const SearchContainer = styled.form`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 4px 6px 0 6px;
+  margin-bottom: 24px;
+  border-radius: 4px;
+  border: 1px solid ${grey[300]};
+`;
+// 검색창
+const SearchInput = styled(InputBase)`
+  width: 100%;
+`;
 
 // 회원 목록 글자
 const UserTypography = styled(Typography)`

@@ -284,8 +284,8 @@ export function CalendarBody({
                     - {child.courseCategoryType.ko} 교육
                   </Box>
                   <Box mt={1}>
-                    {child.requestStartDate.split(' ')[0]} ~{' '}
-                    {child.requestEndDate.split(' ')[0]} [
+                    {child.studyStartDate.split(' ')[0]} ~{' '}
+                    {child.studyEndDate.split(' ')[0]} [
                     {child.limitPeople === 0
                       ? '인원제한없음'
                       : `${child.currentJoin}/

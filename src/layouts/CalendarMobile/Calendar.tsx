@@ -23,7 +23,7 @@ export interface ClickedPlanInfo {
   lessonTime: number;
   courseSubCategoryType: { type: courseSubCategoryType; ko: string };
   courseCategoryType: { type: courseCategoryType; ko: string };
-
+  courseBusinessType: businessType;
   enrolledPeopleCnt: number;
   limitPeople: number;
   studyStartDate: string;

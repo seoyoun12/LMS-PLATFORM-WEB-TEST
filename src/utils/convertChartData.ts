@@ -71,13 +71,12 @@ export function convertObjChartData(chartData: StatisticsSurveyObjDto) {
   let chartObjCnt: number[] = []; //객관식 아이템들
   let i = 1;
   for (const [key, value] of Object.entries(chartData)) {
-    if (chartData[`item${i}`]) {
+    if (key === `item${i}`) {
       chartObjItem.push(value.objName);
       chartObjCnt.push(value.objAnsweredCnt);
+      i++;
     }
-    i++;
   }
-  console.log('제발려', chartObjCnt, chartData, chartData[`chartData${1}`]);
 
   const convertedData = {
     labels: chartObjItem.filter(item => item),

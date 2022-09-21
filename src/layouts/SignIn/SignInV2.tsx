@@ -74,7 +74,7 @@ export function SignInV2() {
     loadingRef.current = true;
     setLoading(true);
     try {
-      const res = await signIn(username, password, loginType.TYPE_TRANS_EDU, name);
+      const res = await signIn(username, password, loginType.TYPE_TRANS_EDU, name.replaceAll(' ',''));
       if (res.success) {
         setIsLoginState(true);
         setUsetInfo({

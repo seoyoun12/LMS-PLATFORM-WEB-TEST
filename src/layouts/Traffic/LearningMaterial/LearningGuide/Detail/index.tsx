@@ -1,6 +1,6 @@
-import { MaterialTabType } from "@layouts/Traffic/LearningMaterial";
-import { useRouter } from "next/router";
-import { useGetLearningMaterialDetail } from "@common/api/learningMaterial";
+import { MaterialTabType } from '@layouts/Traffic/LearningMaterial';
+import { useRouter } from 'next/router';
+import { useGetLearningMaterialDetail } from '@common/api/learningMaterial';
 import {
   GuideDetailHeaderDateText,
   GuideDetailHeaderDateWrapper,
@@ -22,12 +22,12 @@ import {
   SlideThumbItem,
   SlideThumbWrapper,
   SlideWrapper,
-} from "@layouts/Traffic/LearningMaterial/LearningGuide/Detail/style";
-import { NotFound } from "@components/ui/NotFound";
-import { format } from "date-fns";
-import useEmblaCarousel from "embla-carousel-react";
-import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
-import { useCallback, useEffect, useState } from "react";
+} from '@layouts/Traffic/LearningMaterial/LearningGuide/Detail/style';
+import { NotFound } from '@components/ui/NotFound';
+import { format } from 'date-fns';
+import useEmblaCarousel from 'embla-carousel-react';
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function LearningGuideDetailLayout() {
   const router = useRouter();
@@ -43,7 +43,7 @@ export default function LearningGuideDetailLayout() {
   });
 
   const [thumbRef, thumb] = useEmblaCarousel({
-    containScroll: "keepSnaps",
+    containScroll: 'keepSnaps',
     dragFree: true,
   });
 
@@ -66,7 +66,7 @@ export default function LearningGuideDetailLayout() {
   }, [slide, thumb, setSelectedIndex]);
 
   const onThumbClick = useCallback(
-    (index) => {
+    index => {
       if (!slide || !thumb) return;
       if (thumb.clickAllowed()) slide.scrollTo(index);
     },
@@ -76,7 +76,7 @@ export default function LearningGuideDetailLayout() {
   useEffect(() => {
     if (!slide) return;
     onSelect();
-    slide.on("select", onSelect);
+    slide.on('select', onSelect);
   }, [slide, onSelect]);
 
   if (!data?.data) {
@@ -90,12 +90,10 @@ export default function LearningGuideDetailLayout() {
   return (
     <GuideDetailWrapper>
       <GuideDetailHeaderWrapper>
-        <GuideDetailHeaderTitleText>
-          {detailValue.title}
-        </GuideDetailHeaderTitleText>
+        <GuideDetailHeaderTitleText>{detailValue.title}</GuideDetailHeaderTitleText>
         <GuideDetailHeaderDateWrapper>
           <GuideDetailHeaderDateText>
-            {format(new Date(detailValue.createdDtime), "yyyy. MM. dd")}
+            {format(new Date(detailValue.createdDtime), 'yyyy. MM. dd')}
           </GuideDetailHeaderDateText>
         </GuideDetailHeaderDateWrapper>
       </GuideDetailHeaderWrapper>
@@ -103,7 +101,7 @@ export default function LearningGuideDetailLayout() {
       <SlideContentContainer>
         <SlideContainer ref={slideRef}>
           <SlideWrapper>
-            {detailValue.s3Files.map((value) => (
+            {detailValue.s3Files.map(value => (
               <SlideItem key={value.seq}>
                 <img src={value.path} alt="thumb" />
               </SlideItem>
@@ -127,9 +125,7 @@ export default function LearningGuideDetailLayout() {
             />
           </SlideProgressContentWrapper>
           <SlideProgressTextWrapper>
-            <SlideProgressSelectedText>
-              {selectedIndex + 1}
-            </SlideProgressSelectedText>
+            <SlideProgressSelectedText>{selectedIndex + 1}</SlideProgressSelectedText>
             <SlideProgressText>/{detailValue.s3Files.length}</SlideProgressText>
           </SlideProgressTextWrapper>
         </SlideProgressContainer>

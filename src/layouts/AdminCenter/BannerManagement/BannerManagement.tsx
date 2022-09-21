@@ -21,15 +21,14 @@ import { useRouter } from 'next/router';
 const headRows: {
   name: string;
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  width: string;
 }[] = [
-  { name: '번호', align: 'left' },
-  { name: '제목', align: 'center' },
-  // { name: '이동URL', align: 'left' },
-  { name: '게시기간 시작일', align: 'center' },
-  { name: '게시기간 종료일', align: 'center' },
-  // { name: '파일이름', align: 'center' },
-  { name: '배너 생성일', align: 'center' },
-  { name: '사용여부', align: 'center' },
+  { name: 'No', align: 'center', width: '5%' },
+  { name: '제목', align: 'center', width: '32%' },
+  { name: '게시기간 시작일', align: 'center', width: '12%' },
+  { name: '게시기간 종료일', align: 'center', width: '12%' },
+  { name: '배너 생성일', align: 'center', width: '8.5%' },
+  { name: '사용여부', align: 'center', width: '8.5%' },
 ];
 
 export function BannerManagement() {
@@ -65,28 +64,30 @@ export function BannerManagement() {
 
   if (!data) return <Spinner />;
   return (
-    <BannnerManagementContainer>
-      <Typography
-        variant="h5"
-        sx={{
-          mb: '12px',
-          fontWeight: 700,
-        }}
-      >
-        배너 목록
-      </Typography>
+    <Box>
+      <BannerTypography variant="h5">게시판 목록</BannerTypography>
 
       <Table>
         <TableHead>
           <TableRow>
-            {headRows.map(({ name, align }) => (
-              <TableCell key={name} align={align}>
-                {name}
-              </TableCell>
-            ))}
-            <TableCell>{}</TableCell>
+            {headRows.map(
+              ({
+                name,
+                align,
+                width,
+              }: {
+                name: string;
+                align: string;
+                width: string;
+              }) => (
+                <BannerTitleTableCell key={name} align="center" width={width}>
+                  {name}
+                </BannerTitleTableCell>
+              )
+            )}
           </TableRow>
         </TableHead>
+
         <TableBody>
           {data.map(item => (
             <TableRow
@@ -95,27 +96,29 @@ export function BannerManagement() {
               hover
               onClick={() => onClickmodifyBanner(item.seq)}
             >
-              <TableCell>{item.seq}</TableCell>
-              <TableCell align="center">{item.title}</TableCell>
+              <BannerTableCell align="center">{item.seq}</BannerTableCell>
+              <BannerTableCell align="center">
+                <SubjectBox>{item.title}</SubjectBox>
+              </BannerTableCell>
               {/* <TableCell>{item.toUrl}</TableCell> */}
-              <TableCell align="center">
+              <BannerTableCell align="center">
                 {dateFormat(item.startDate, 'yyyy-mm-dd')}
-              </TableCell>
-              <TableCell align="center">
+              </BannerTableCell>
+              <BannerTableCell align="center">
                 {dateFormat(item.endDate, 'yyyy-mm-dd')}
-              </TableCell>
+              </BannerTableCell>
               {/* <TableCell align='center' >{item.s3Files[0]?.name || 'No File'}</TableCell> */}
-              <TableCell align="center">
+              <BannerTableCell align="center">
                 {dateFormat(item.createdDtime, 'yyyy-mm-dd')}
-              </TableCell>
-              <TableCell align="center">
+              </BannerTableCell>
+              <BannerTableCell align="center">
                 <Chip
                   variant="outlined"
                   size="small"
                   label={item.status === ProductStatus.APPROVE ? '정상' : '중지'}
                   color={item.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
                 />
-              </TableCell>
+              </BannerTableCell>
               {/* <TableCell style={{ width: 120 }} align="right">
                 <Link href={`/admin-center/banner/modify/${item.seq}`}>
                   <Button variant="text" color="neutral" size="small">
@@ -135,12 +138,42 @@ export function BannerManagement() {
           ))}
         </TableBody>
       </Table>
-    </BannnerManagementContainer>
+    </Box>
   );
 }
 
-const BannnerManagementContainer = styled(Box)`
-  tr {
-    white-space: nowrap;
+// 게시판 목록 글자
+const BannerTypography = styled(Typography)`
+  margin-bottom: 30px;
+  font-weight: 700;
+`;
+
+// 게시판 제목. ellipsis 적용.
+const SubjectBox = styled(Box)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+`;
+
+// 게시판 목록 테이블의 Title부분
+const BannerTitleTableCell = styled(TableCell)`
+  font-weight: bold;
+  background: #f5f5f5;
+  border-right: 1px solid #f0f0f0;
+  border-top: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-right: 1px solid #f0f0f0;
+  }
+`;
+
+// 게시판 목록 테이블의 본문
+const BannerTableCell = styled(TableCell)`
+  margin: 0;
+  border-right: 1px solid #f0f0f0;
+
+  &:first-child {
+    background: #f5f5f5;
   }
 `;

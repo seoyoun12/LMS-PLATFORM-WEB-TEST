@@ -167,6 +167,7 @@ const TableTopHeadCell = styled(MuiTableCell)`
   width: 33.3%;
   background: #f5f5f5;
   border-top: 1px solid #c4c4c4;
+  font-weight: bold;
 `;
 
 const TableHeaderRow = styled(MuiTableRow)`

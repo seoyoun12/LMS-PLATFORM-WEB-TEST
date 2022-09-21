@@ -61,6 +61,7 @@ const TableHeadFull = styled(TableCell)`
   width: 100%;
   background: #f5f5f5;
   border: 1px solid #c4c4c4;
+  font-weight: bold;
 `;
 
 const TableLeftCell = styled(TableCell)`

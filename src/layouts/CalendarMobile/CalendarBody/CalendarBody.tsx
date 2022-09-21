@@ -228,6 +228,8 @@ export function CalendarBody({
       limitPeople: item.limitPeople,
       studyStartDate: item.studyStartDate,
       studyEndDate: item.studyEndDate,
+      requestStartDate: item.requestStartDate as string,
+      requestEndDate: item.requestEndDate as string,
       // start: dateFormat(item.start.replaceAll('-', '/'), 'yyyy-mm-dd'), //신청시작일자
       // end: dateFormat(item.end.replaceAll('-', '/'), 'yyyy-mm-dd'), //싱청종료일자
       start: dateFormat(item.studyStartDate.replaceAll('-', '/'), 'yyyy-mm-dd'), //학습일자로 바뀜 (2022-09-02) //여기서도 건들고 유틸쪽 checkDate에서 period체크 수정해야함
@@ -421,7 +423,8 @@ export function CalendarBody({
                 <TableRow>
                   <TableLeftCell>예약가능시간</TableLeftCell>
                   <TableRightCell>
-                    {modalInfo.start} ~ {modalInfo.end}
+                    {dateFormat(modalInfo.requestStartDate, 'yyyy-mm-dd')} ~{' '}
+                    {dateFormat(modalInfo.requestEndDate, 'yyyy-mm-dd')}
                   </TableRightCell>
                 </TableRow>
               </>

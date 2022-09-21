@@ -13,6 +13,7 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { ReactNode, useCallback } from 'react';
+import styled from '@emotion/styled';
 
 interface TablePaginationActionsProps {
   count: number;
@@ -105,21 +106,27 @@ export function Table({
   };
 
   return (
-    <TableContainer
-      component={Paper}
-      sx={{
-        width: '100%',
-        overflow: 'none',
-      }}
-    >
-      <MuiTable
+    <>
+      <TableContainer
+        component={Paper}
         sx={{
           width: '100%',
+          // overflow: 'scroll',
+          // 관리자페이지 목록 테이블 스크롤 제거. 차후 다른 페이지에서 table 사용에 문제있을시 롤백.
+          overflow: 'none',
         }}
-        aria-label="custom pagination table"
-        {...restProps}
       >
-        {children}
+        <MuiTable
+          sx={{
+            width: '100%',
+          }}
+          aria-label="custom pagination table"
+          {...restProps}
+        >
+          {children}
+        </MuiTable>
+      </TableContainer>
+      <PaginationBox>
         {pagination && (
           <TableFooter>
             <TableRow>
@@ -146,7 +153,13 @@ export function Table({
             </TableRow>
           </TableFooter>
         )}
-      </MuiTable>
-    </TableContainer>
+      </PaginationBox>
+    </>
   );
 }
+
+const PaginationBox = styled(Box)`
+  display: flex;
+  align-items: center; /* 수직 정렬 */
+  justify-content: center; /* 수평 정렬 */
+`;

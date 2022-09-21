@@ -28,6 +28,8 @@ export interface ClickedPlanInfo {
   limitPeople: number;
   studyStartDate: string;
   studyEndDate: string;
+  requestStartDate: string;
+  requestEndDate: string;
   start: string;
   end: string;
 }

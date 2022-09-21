@@ -3,14 +3,15 @@ import useSWR, { SWRResponse } from 'swr';
 import { PaginationResult } from 'types/fetch';
 import { registerType, User, UserInput } from '@common/api/user';
 
-export function userList({ page, elementCnt, registerType }: {
+export function userList({ page, elementCnt, registerType, keyword }: {
   page: number,
   elementCnt?: number,
-  registerType: registerType
+  registerType: registerType,
+  keyword: string
 }) {
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<User[]>>>([
     `/user/adm`, {
-      params: { page, elementCnt, registerType }
+      params: { page, elementCnt, registerType, keyword }
     }
   ], GET);
 

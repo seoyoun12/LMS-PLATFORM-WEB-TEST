@@ -35,11 +35,12 @@ const mainDisplayList = [
 const headRows: {
   name: string;
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  width: string;
 }[] = [
-  { name: '번호', align: 'left' },
-  { name: 'display타입', align: 'left' },
-  { name: '상태', align: 'left' },
-  { name: '변경', align: 'center' },
+  { name: 'No', align: 'center', width: '5%' },
+  { name: 'display타입', align: 'center', width: '15%' },
+  { name: '변경', align: 'center', width: '75%' },
+  { name: '상태', align: 'center', width: '5%' },
 ];
 
 export function MainDisplayManagement() {
@@ -78,58 +79,96 @@ export function MainDisplayManagement() {
   if (error) return <Box>Error..</Box>;
 
   return (
-    <MainDisplayManagementWrap>
-      <Typography
-        variant="h5"
-        sx={{
-          mb: '12px',
-          fontWeight: 700,
-        }}
-      >
-        메인화면 목록
-      </Typography>
+    <Container>
+      <MainDisplayTypography variant="h5">메인화면 목록</MainDisplayTypography>
 
       <Table>
         <TableHead>
           <TableRow>
-            {headRows.map(({ name, align }) => (
-              <TableCell key={name} align={align}>
-                {name}
-              </TableCell>
-            ))}
+            {headRows.map(
+              ({
+                name,
+                align,
+                width,
+              }: {
+                name: string;
+                align: string;
+                width: string;
+              }) => (
+                <MainDisplayTitleTableCell key={name} align="center" width={width}>
+                  {name}
+                </MainDisplayTitleTableCell>
+              )
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
           {data?.map(item => (
             <TableRow>
-              <TableCell>{item.seq}</TableCell>
-              <TableCell>
+              <MainDisplayTableCell align="center">{item.seq}</MainDisplayTableCell>
+              <MainDisplayTableCell align="center">
                 {
                   mainDisplayList.filter(
                     filter => filter.type === item.mainDisplayType
                   )[0].title
                 }
-              </TableCell>
-              <TableCell>
+              </MainDisplayTableCell>
+
+              <MainDisplayTableCell style={{ width: 120 }} align="center">
+                <Switch
+                  checked={item.status === ProductStatus.APPROVE ? true : false}
+                  onChange={(e, checked) => handleStatusChange(checked, item)}
+                />
+              </MainDisplayTableCell>
+
+              <MainDisplayTableCell align="center">
                 <Chip
                   variant="outlined"
                   size="small"
                   label={item.status === ProductStatus.APPROVE ? '정상' : '중지'}
                   color={item.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
                 />
-              </TableCell>
-              <TableCell style={{ width: 120 }} align="right">
-                <Switch
-                  checked={item.status === ProductStatus.APPROVE ? true : false}
-                  onChange={(e, checked) => handleStatusChange(checked, item)}
-                />
-              </TableCell>
+              </MainDisplayTableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </MainDisplayManagementWrap>
+    </Container>
   );
 }
 
-const MainDisplayManagementWrap = styled(Container)``;
+// 메인화면 목록 글자
+const MainDisplayTypography = styled(Typography)`
+  margin-bottom: 30px;
+  font-weight: 700;
+`;
+
+// 메인화면 제목. ellipsis 적용.
+const SubjectBox = styled(Box)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+`;
+
+// 메인화면 목록 테이블의 Title부분
+const MainDisplayTitleTableCell = styled(TableCell)`
+  font-weight: bold;
+  background: #f5f5f5;
+  border-right: 1px solid #f0f0f0;
+  border-top: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-right: 1px solid #f0f0f0;
+  }
+`;
+
+// 메인화면 목록 테이블의 본문
+const MainDisplayTableCell = styled(TableCell)`
+  margin: 0;
+  border-right: 1px solid #f0f0f0;
+
+  &:first-child {
+    background: #f5f5f5;
+  }
+`;

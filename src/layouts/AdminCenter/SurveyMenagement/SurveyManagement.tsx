@@ -25,14 +25,12 @@ import { NotFound } from '@components/ui/NotFound';
 const headRows: {
   name: string;
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  width: string;
 }[] = [
-  { name: '번호', align: 'left' },
-  { name: '과정명', align: 'center' },
-  { name: '생성 날짜', align: 'center' },
-  // { name: '노출 여부', align: 'right' },
-  { name: '상태', align: 'center' },
-  // { name: '수강생', align: 'right' },
-  // { name: '수료생', align: 'right' },
+  { name: 'No', align: 'center', width: '5%' },
+  { name: '과정명', align: 'center', width: '70%' },
+  { name: '생성 날짜', align: 'center', width: '20%' },
+  { name: '상태', align: 'center', width: '5%' },
 ];
 
 export function SurveyManagement() {
@@ -94,15 +92,8 @@ export function SurveyManagement() {
 
   return (
     <Box>
-      <Typography
-        variant="h5"
-        sx={{
-          mb: '12px',
-          fontWeight: 700,
-        }}
-      >
-        설문 목록
-      </Typography>
+      <SurveyTypography variant="h5">설문 목록</SurveyTypography>
+
       <SurveyManagementHeadRows
         ref={searchInputRef}
         handleSearch={handleSearch}
@@ -121,22 +112,30 @@ export function SurveyManagement() {
         >
           <TableHead>
             <TableRow>
-              {headRows.map(({ name, align }) => (
-                <TableCell className={spaceNoWrap} key={name} align={align}>
-                  {name}
-                </TableCell>
-              ))}
+              {headRows.map(
+                ({
+                  name,
+                  align,
+                  width,
+                }: {
+                  name: string;
+                  align: string;
+                  width: string;
+                }) => (
+                  <SurveyTitleTableCell key={name} align="center" width={width}>
+                    {name}
+                  </SurveyTitleTableCell>
+                )
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
             {data.content.map(survey => (
-              <CustomTableRow
-                key={survey.seq}
-                hover
-                onClick={() => onClickModify(survey.seq)}
-              >
-                <TableCell>{survey.seq}</TableCell>
-                <TableCell align="center">
+              <TableRow key={survey.seq} hover onClick={() => onClickModify(survey.seq)}>
+                <SurveyTableCell align="center">
+                  <SubjectBox>{survey.seq}</SubjectBox>
+                </SurveyTableCell>
+                <SurveyTableCell align="center">
                   {/* <Link
                   href={`/admin-center/course/modify/${survey.seq}`}
                   underline="hover"
@@ -144,10 +143,10 @@ export function SurveyManagement() {
                 > */}
                   {survey.title}
                   {/* </Link> */}
-                </TableCell>
-                <TableCell align="center" className={spaceNoWrap}>
+                </SurveyTableCell>
+                <SurveyTableCell align="center">
                   {dateFormat(survey.createdDtime, 'isoDate')}
-                </TableCell>
+                </SurveyTableCell>
                 {/* <TableCell align="right">
                 <Chip
                   label={survey.displayYn === YN.YES ? '보임' : '숨김'}
@@ -156,14 +155,14 @@ export function SurveyManagement() {
                   color={survey.displayYn === YN.YES ? 'secondary' : 'default'}
                   />
               </TableCell> */}
-                <TableCell align="center">
+                <SurveyTableCell align="center">
                   <Chip
                     label={survey.status ? '정상' : '중지'}
                     variant="outlined"
                     size="small"
                     color={survey.status ? 'secondary' : 'default'}
                   />
-                </TableCell>
+                </SurveyTableCell>
                 {/* <TableCell></TableCell>
               <TableCell></TableCell>
 
@@ -187,7 +186,7 @@ export function SurveyManagement() {
                   삭제
                 </Button>
               </TableCell> */}
-              </CustomTableRow>
+              </TableRow>
             ))}
           </TableBody>
         </Table>
@@ -196,10 +195,38 @@ export function SurveyManagement() {
   );
 }
 
-const spaceNoWrap = css`
-  white-space: nowrap;
+// 설문 목록 글자
+const SurveyTypography = styled(Typography)`
+  margin-bottom: 30px;
+  font-weight: 700;
 `;
 
-const CustomTableRow = styled(TableRow)`
-  cursor: pointer;
+// 설문 제목. ellipsis 적용.
+const SubjectBox = styled(Box)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+`;
+
+// 설문 목록 테이블의 Title부분
+const SurveyTitleTableCell = styled(TableCell)`
+  font-weight: bold;
+  background: #f5f5f5;
+  border-right: 1px solid #f0f0f0;
+  border-top: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-right: 1px solid #f0f0f0;
+  }
+`;
+
+// 설문 목록 테이블의 본문
+const SurveyTableCell = styled(TableCell)`
+  margin: 0;
+  border-right: 1px solid #f0f0f0;
+
+  &:first-child {
+    background: #f5f5f5;
+  }
 `;

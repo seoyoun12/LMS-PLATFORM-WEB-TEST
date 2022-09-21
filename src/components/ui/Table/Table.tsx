@@ -139,6 +139,9 @@ export function Table({
                 sx={{
                   overflow: 'unset',
                   justifyContent: 'start',
+                  border: 'none',
+                  padding: '0px',
+                  margin: '0px',
                 }}
                 SelectProps={{
                   inputProps: {
@@ -162,4 +165,7 @@ const PaginationBox = styled(Box)`
   display: flex;
   align-items: center; /* 수직 정렬 */
   justify-content: center; /* 수평 정렬 */
+  margin-top: 20px;
+  padding: 0;
+  margin-left: -5%;
 `;

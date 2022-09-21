@@ -65,7 +65,7 @@ export function BannerManagement() {
   if (!data) return <Spinner />;
   return (
     <Box>
-      <BannerTypography variant="h5">게시판 목록</BannerTypography>
+      <BannerTypography variant="h5">배너 목록</BannerTypography>
 
       <Table>
         <TableHead>
@@ -142,13 +142,13 @@ export function BannerManagement() {
   );
 }
 
-// 게시판 목록 글자
+// 배너 목록 글자
 const BannerTypography = styled(Typography)`
   margin-bottom: 30px;
   font-weight: 700;
 `;
 
-// 게시판 제목. ellipsis 적용.
+// 배너 제목. ellipsis 적용.
 const SubjectBox = styled(Box)`
   text-overflow: ellipsis;
   overflow: hidden;
@@ -156,7 +156,7 @@ const SubjectBox = styled(Box)`
   width: 100%;
 `;
 
-// 게시판 목록 테이블의 Title부분
+// 배너 목록 테이블의 Title부분
 const BannerTitleTableCell = styled(TableCell)`
   font-weight: bold;
   background: #f5f5f5;
@@ -168,7 +168,7 @@ const BannerTitleTableCell = styled(TableCell)`
   }
 `;
 
-// 게시판 목록 테이블의 본문
+// 배너 목록 테이블의 본문
 const BannerTableCell = styled(TableCell)`
   margin: 0;
   border-right: 1px solid #f0f0f0;

@@ -25,17 +25,20 @@ import { CourseType } from '@common/api/adm/courseClass';
 import { NotFound } from '@components/ui/NotFound';
 import { ManagementHeadRows } from '@components/admin-center/CourseInfo/ManagementHeadRows';
 
-const headRows = [
-  { name: '번호' },
-  { name: '이름' },
-  { name: '아이디' },
-  { name: '과정명' },
-  { name: '기수' },
-  { name: '학습기간' },
-  { name: '진도율' },
-  { name: '수료여부' },
-  { name: '상태' },
-  //   { name: '수료처리' },
+const headRows: {
+  name: string;
+  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  width: string;
+}[] = [
+  { name: 'No', align: 'center', width: '5%' },
+  { name: '이름', align: 'center', width: '6%' },
+  { name: '아이디', align: 'center', width: '8%' },
+  { name: '과정명', align: 'center', width: '41%' },
+  { name: '기수', align: 'center', width: '10%' },
+  { name: '학습기간', align: 'center', width: '15%' },
+  { name: '진도율', align: 'center', width: '5%' },
+  { name: '수료여부', align: 'center', width: '5%' },
+  { name: '상태', align: 'center', width: '5%' },
 ];
 
 export function CourseInfoManagement() {
@@ -130,7 +133,7 @@ export function CourseInfoManagement() {
   // user/adm/course-info/detail/{courseUserSeq}
   return (
     <Box>
-      <UserTypo variant="h5">전체 수강생 학습현황</UserTypo>
+      <CourseInfoTypography variant="h5">전체 수강생 학습현황</CourseInfoTypography>
       <ManagementHeadRows
         ref={searchInputRef}
         search={nameOrUsername}
@@ -151,15 +154,26 @@ export function CourseInfoManagement() {
           page={data?.number}
           onChangePage={onChangePage}
           size="small"
+          sx={{ tableLayout: 'fixed' }}
         >
           <TableHead>
-            <UserTableRow>
-              {headRows.map(({ name }: { name: string }) => (
-                <UserTitleTableCell key={name} align="center">
-                  {name}
-                </UserTitleTableCell>
-              ))}
-            </UserTableRow>
+            <TableRow>
+              {headRows.map(
+                ({
+                  name,
+                  align,
+                  width,
+                }: {
+                  name: string;
+                  align: string;
+                  width: string;
+                }) => (
+                  <CourseInfoTitleTableCell key={name} align="center" width={width}>
+                    {name}
+                  </CourseInfoTitleTableCell>
+                )
+              )}
+            </TableRow>
           </TableHead>
 
           <TableBody>
@@ -170,15 +184,29 @@ export function CourseInfoManagement() {
                 hover
                 onClick={() => onClickmodifyCourseInfo(user.courseUserSeq)}
               >
-                <UserTableCell>{user.courseUserSeq}</UserTableCell>
-                <UserTableCell>{user.name}</UserTableCell>
-                <UserTableCell>{user.username || '실명계정'}</UserTableCell>
-                <UserTableCell>{user.courseName}</UserTableCell>
-                <UserTableCell>{user.yearAndStep}</UserTableCell>
-                <UserTableCell>{user.studyDate}</UserTableCell>
-                <UserTableCell>{user.displayTotalProgress}</UserTableCell>
-                <UserTableCell>{user.displayCompleteYn}</UserTableCell>
-                <UserTableCell>{user.displayClassLearningStatus}</UserTableCell>
+                <CourseInfoTableCell align="center">
+                  {user.courseUserSeq}
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">{user.name}</CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  {user.username || '실명계정'}
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  <SubjectBox>{user.courseName}</SubjectBox>
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  {user.yearAndStep}
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">{user.studyDate}</CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  {user.displayTotalProgress}
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  {user.displayCompleteYn}
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  {user.displayClassLearningStatus}
+                </CourseInfoTableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -229,4 +257,42 @@ const UserTableCell = styled(TableCell)`
   text-align: center;
   padding-top: 10px;
   margin: 0;
+`;
+
+///////////////
+
+// 학습현황 글자
+const CourseInfoTypography = styled(Typography)`
+  margin-bottom: 30px;
+  font-weight: 700;
+`;
+
+// 학습현황 제목. ellipsis 적용.
+const SubjectBox = styled(Box)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+`;
+
+// 학습현황 테이블의 title부분
+const CourseInfoTitleTableCell = styled(TableCell)`
+  font-weight: bold;
+  background: #f5f5f5;
+  border-right: 1px solid #f0f0f0;
+  border-top: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-right: 1px solid #f0f0f0;
+  }
+`;
+
+// 학습현황 테이블의 본문
+const CourseInfoTableCell = styled(TableCell)`
+  margin: 0;
+  border-right: 1px solid #f0f0f0;
+
+  &:first-child {
+    background: #f5f5f5;
+  }
 `;

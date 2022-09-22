@@ -104,7 +104,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       } catch (e: any) {
         console.dir(e);
         if (e.data?.status === 401) {
-          window.alert('잘못된 로그인정보 입니다. 로그아웃 합니다.');
+          window.alert('중복로그인이 확인되어 로그아웃 됩니다.');
           localStorage.removeItem('ACCESS_TOKEN');
           localStorage.removeItem('REFRESH_TOKEN');
           return router.push('/');

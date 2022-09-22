@@ -19,6 +19,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { QuestionType, SurveyMultipleChoice } from '@common/api/adm/survey';
+import { useDialog } from '@hooks/useDialog';
 
 interface Props {
   open: boolean;
@@ -44,6 +45,10 @@ const defaultValue = {
   },
 };
 
+interface formTypeInputs {
+  inputs: { [idx: string]: string }[];
+}
+
 export function SurveyQuestionModifyModal({
   open,
   handleClose,
@@ -51,6 +56,7 @@ export function SurveyQuestionModifyModal({
   setQuestions,
 }: Props) {
   const snackbar = useSnackbar();
+  const dialog = useDialog();
   const [type, setType] = useState<QuestionType>(
     surveyQuestion.questionType === QuestionType.TYPE_MULTIPLE_CHOICE
       ? QuestionType.TYPE_MULTIPLE_CHOICE
@@ -59,6 +65,13 @@ export function SurveyQuestionModifyModal({
   const { register, setValue, watch } = useForm<SurveyQuestionRequestDto>({
     defaultValues: defaultValue,
   });
+
+  const {
+    register: inputsRegister,
+    setValue: inputsSetValue,
+    watch: inputsWatch,
+  } = useForm<formTypeInputs>();
+
   useEffect(() => {
     setValue('content', surveyQuestion.content);
     setValue('questionType', surveyQuestion.questionType);
@@ -68,6 +81,26 @@ export function SurveyQuestionModifyModal({
         : QuestionType.TYPE_SUBJECTIVE
     );
     setValue('surveyMultipleChoice', surveyQuestion.surveyMultipleChoice);
+
+    //실제로 루프를 멈추는게 아닙니다. filter는 끝까지 돕니다. 최적화를 한다면 for를 사용하세요.
+    let stopLoop = false;
+    const splitItems = Object.entries(surveyQuestion.surveyMultipleChoice);
+    const inputList = splitItems
+      .filter(filter => filter[0].includes('item'))
+      .filter(filter => {
+        if (!filter[1]) stopLoop = true;
+        if (stopLoop) return false;
+        return true;
+      })
+      .map(item => {
+        const key = item[0];
+        if (!item[1]) return;
+        return {
+          [key]: item[1],
+        };
+      });
+    inputsSetValue('inputs', inputList);
+    console.log(inputList);
   }, []);
 
   //change question Type
@@ -80,6 +113,15 @@ export function SurveyQuestionModifyModal({
   };
 
   const onClickModify = () => {
+    //배열로 된 inputs를 변환합니다.
+    let convertedChoice = {};
+    inputsWatch().inputs.forEach(item => {
+      const key = Object.keys(item)[0];
+      convertedChoice[key] = item;
+    });
+
+    //이곳에 검증 추가해야합니다.
+
     setQuestions(prev =>
       prev.map(item => {
         if (item.dummySeq === surveyQuestion.dummySeq) {
@@ -89,8 +131,9 @@ export function SurveyQuestionModifyModal({
             questionType: type,
             surveyMultipleChoice:
               type === QuestionType.TYPE_MULTIPLE_CHOICE
-                ? watch().surveyMultipleChoice
-                : null,
+                ? convertedChoice
+                : // watch().surveyMultipleChoice
+                  null,
           };
         }
         return item;
@@ -98,6 +141,29 @@ export function SurveyQuestionModifyModal({
     );
     handleClose();
   };
+
+  //Textfield를 추가합니다.
+  const onClickAddInput = async () => {
+    const inputsLength = inputsWatch().inputs.length;
+    const confirm = await dialog({
+      variant: 'confirm',
+      title: '문항 추가하기',
+      description: '정말로 문항을 추가하시겠습니까?',
+    });
+    if (!confirm) return snackbar({ variant: 'info', message: '추가를 취소하셨습니다.' });
+    if (inputsLength === 10)
+      return snackbar({ variant: 'error', message: '10문항을 초과할수 없습니다.' });
+
+    inputsSetValue(`inputs.${inputsLength}`, {
+      [`item${inputsLength + 1}`]: '',
+    });
+  };
+
+  console.log(inputsWatch());
+
+  //Textfield를 삭제합니다.
+  //객체 재정렬이 필요합니다.
+  const onClickRemoveInput = async () => {};
 
   return (
     <Modal
@@ -148,6 +214,18 @@ export function SurveyQuestionModifyModal({
               </Box>
             </TableCell>
           </TableRow>
+
+          {type === QuestionType.TYPE_MULTIPLE_CHOICE && (
+            <TableRow>
+              <TableCell>객관식 문항 추가하기</TableCell>
+              <TableCell>
+                <Button variant="contained" onClick={onClickAddInput}>
+                  추가하기
+                </Button>
+              </TableCell>
+            </TableRow>
+          )}
+
           {type === QuestionType.TYPE_SUBJECTIVE ? (
             <TableRow>
               <TableCell>주관식입니다</TableCell>
@@ -155,7 +233,17 @@ export function SurveyQuestionModifyModal({
             </TableRow>
           ) : (
             <>
-              <TableRow>
+              {inputsWatch('inputs')?.map((item, idx) => (
+                <TableRow>
+                  <TableCell>{Object.keys(item)[0].split('item')[1]}</TableCell>
+                  <TableCell>
+                    <TextField
+                      {...inputsRegister(`inputs.${idx}.${Object.keys(item)[0]}`)}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+              {/* <TableRow>
                 <TableCell>1</TableCell>
                 <TableCell>
                   <TextField {...register('surveyMultipleChoice.item1')} />
@@ -241,7 +329,7 @@ export function SurveyQuestionModifyModal({
                       <TextField {...register('surveyMultipleChoice.item10')} />
                     </TableCell>
                   </TableRow>
-                )}
+                )} */}
             </>
           )}
         </TableBody>

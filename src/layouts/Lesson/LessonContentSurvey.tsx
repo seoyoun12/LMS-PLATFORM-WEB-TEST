@@ -60,7 +60,7 @@ export default function LessonContentSurvey(props: Props) {
 
         const formData = new FormData(e.target as HTMLFormElement);
         const awnserList = props.survey.surveyQuestionList.map((question, i) => ({
-          answer: formData.get(`question_${i}`).toString(),
+          answer: formData.get(`question_${i}`)?.toString() || (question.questionType === "TYPE_MULTIPLE_CHOICE" ? "0" : ""),
           surveyQuestionSeq: question.seq,
         }));
 

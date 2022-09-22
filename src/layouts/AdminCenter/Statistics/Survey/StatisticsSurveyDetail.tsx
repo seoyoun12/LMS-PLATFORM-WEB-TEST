@@ -10,19 +10,21 @@ import { Modal, Spinner } from '@components/ui';
 import { Card } from '@components/admin-center/Card/Card';
 import { convertObjChartData } from '@utils/convertChartData';
 import { NotFound } from '@components/ui/NotFound';
+import { ParticipateListModal } from '@components/admin-center/Statistics/ParticipateListModal';
 
 export function StatisticsSurveyDetail() {
   const router = useRouter();
   const { surveySeq } = router.query;
   const { data, error } = useSurveyStatistics(Number(surveySeq));
   const [open, setOpen] = useState(false);
+  const [openParticipate, setOpenParticipate] = useState(false);
   const [modalSubList, setModalSubList] = useState<string[]>([]);
   const backgroundColor: string[] = [
     '#ee4a5d',
-    '#dbcd00',
+    '#ee7051',
     '#bae7af',
     '#afc4e7',
-    '#fdc4f8',
+    '#ff98f6',
     '#cb9ffd',
     '#a9e1ed',
     '#f3cdad',
@@ -31,6 +33,7 @@ export function StatisticsSurveyDetail() {
   ];
 
   const handleClose = () => {
+    setOpenParticipate(false);
     setOpen(false);
   };
 
@@ -50,33 +53,38 @@ export function StatisticsSurveyDetail() {
 
   if (!data) return <Spinner />;
   if (error) return <div>Error...</div>;
-  for (const [key, value] of Object.entries(data.objResult[0])) {
-    console.log(key[`item${1}`], value);
-  }
 
   return (
     <StaticsSurveyDetailWrap>
       <Card header={data.surveyName} headSx={{ borderBottom: 0 }} />
       <Box display="flex">
         <PieCard>
-          <Card header="객관식 주관식 비율">
+          <Card header="객관식 주관식 문항개수 현황">
             <Box display="flex" justifyContent="center" width="100%">
               <PieChart ChartData={PieData} width={300} height={300} legend="right" />
             </Box>
           </Card>
         </PieCard>
         <CntCards>
-          <Card wrapSx={{ flexGrow: 0, height: '50px' }}>
+          <Card
+            header={'설문 정보'}
+            wrapSx={{ flexGrow: 0 }}
+            headSx={{ borderBottom: 'none' }}
+          />
+          <Card
+            wrapSx={{ flexGrow: 0, height: '50px', cursor: 'pointer' }}
+            onClick={() => setOpenParticipate(true)}
+          >
             <CardLeft>설문 참여자</CardLeft>
             <CardRight>{data.participantCnt}</CardRight>
           </Card>
           <Card wrapSx={{ flexGrow: 0, height: '50px' }}>
-            <CardLeft>객관식</CardLeft>
-            <CardRight>{data.participantCnt}</CardRight>
+            <CardLeft>객관식 문항 개수</CardLeft>
+            <CardRight>{data.objCnt}</CardRight>
           </Card>
           <Card wrapSx={{ flexGrow: 0, height: '50px' }}>
-            <CardLeft>주관식</CardLeft>
-            <CardRight>{data.participantCnt}</CardRight>
+            <CardLeft>주관식 문항 개수</CardLeft>
+            <CardRight>{data.subjCnt}</CardRight>
           </Card>
         </CntCards>
       </Box>
@@ -90,35 +98,35 @@ export function StatisticsSurveyDetail() {
                 <Card
                   header={item.surveyQuestionName}
                   wrapSx={{ height: '330px' }}
-                  contentSx={{ padding: '16px' }}
+                  contentSx={{ height: '268px', padding: '16px' }}
                 >
                   <PieChart
                     ChartData={convertedData}
-                    width={250}
-                    height={250}
+                    width={236}
+                    height={236}
                     legend="right"
                   />
-                  <Stack
-                    flexGrow={1}
-                    display="flex"
-                    gap={3}
-                    flexWrap="wrap"
-                    height="250px"
-                  >
+                  <Stack flexGrow={1} display="flex" gap={1}>
                     {chartObjItem.map((item, idx) => {
                       if (!item) return;
                       return (
-                        <Box
-                          key={idx}
-                          sx={{
+                        <Card
+                          header={item}
+                          headSx={{
+                            padding: '0 4px',
                             background: backgroundColor[idx],
                             color: 'white',
-                            borderRadius: '2px',
-                            paddingLeft: '8px',
+                            fontSize: '14px',
+                          }}
+                          wrapSx={{ flexGrow: 0, margin: '0 8px' }}
+                          contentSx={{
+                            fontSize: '14px',
+                            padding: '0 4px',
+                            height: 'auto',
                           }}
                         >
-                          {item}: {chartObjCnt[idx]}
-                        </Box>
+                          <>{chartObjCnt[idx]}</>
+                        </Card>
                       );
                     })}
                   </Stack>
@@ -151,9 +159,6 @@ export function StatisticsSurveyDetail() {
                     if (item === '') return;
                     return <MenuItem>{item}</MenuItem>;
                   })}
-                  {new Array(11).fill('테스트').map(item => (
-                    <MenuItem>{item}</MenuItem>
-                  ))}
                 </Stack>
               </Card>
             </Box>
@@ -172,7 +177,7 @@ export function StatisticsSurveyDetail() {
       >
         <Box padding="12px 0" minWidth="500px">
           {modalSubList.length === 0 ? (
-            <NotFound content="주관식 정보가 없는것 같습니다.." />
+            <NotFound content="입력된 주관식 정보가 없는것 같습니다.." />
           ) : (
             modalSubList.map(item => {
               if (item === '') return;
@@ -181,6 +186,7 @@ export function StatisticsSurveyDetail() {
           )}
         </Box>
       </Modal>
+      <ParticipateListModal open={openParticipate} onCloseModal={handleClose} />
     </StaticsSurveyDetailWrap>
   );
 }
@@ -195,7 +201,7 @@ const CntCards = styled(Box)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 30px;
+  gap: 18px;
   font-size: 18px;
   font-weight: bold;
   text-align: center;

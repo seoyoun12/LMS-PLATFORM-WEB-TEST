@@ -189,7 +189,7 @@ export default function Steb2() {
             setValue('seq', data.seq);
             setEnroll(prev => [...prev, watch()]);
             setLoading(false);
-            router.push('/stebMove/steb3');
+            // router.push('/stebMove/steb3');
           })
           .catch(async e => {
             console.dir(e.data.status);
@@ -199,7 +199,7 @@ export default function Steb2() {
               setValue('seq', data.seq);
               setEnroll(prev => [...prev, watch()]);
               setLoading(false);
-              router.push('/stebMove/steb3');
+              // router.push('/stebMove/steb3');
             }
           });
       }
@@ -215,6 +215,11 @@ export default function Steb2() {
     // setConfirm(true);
     confirmRef.current = true;
     // if (confirm) {
+    if (enroll.length === 0)
+      return snackbar({
+        variant: 'error',
+        message: '신청한 교육신청자가 없습니다! 교육신청자를 추가한 후 확인해주세요',
+      });
     setEnrollInfo({ seq: Number(enrollInfo && enrollInfo.seq) });
     router.push('/stebMove/steb3');
     // }
@@ -294,6 +299,7 @@ export default function Steb2() {
           {registerType === RegisterType.TYPE_ORGANIZATION && (
             <Button
               variant="contained"
+              color="success"
               onClick={onClickConfirm}
               disabled={loading}
               fullWidth
@@ -312,6 +318,7 @@ const Steb2Wrap = styled(Box)``;
 const Steb2BodyContainer = styled(Container)`
   padding: 0 1rem;
   margin-top: 6rem;
+  margin-bottom: 4rem;
   .MuiTextField-root {
     background: #eeefff;
   }

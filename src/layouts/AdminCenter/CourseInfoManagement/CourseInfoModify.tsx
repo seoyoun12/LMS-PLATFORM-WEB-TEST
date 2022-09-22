@@ -17,7 +17,7 @@ export function CourseInfoModify() {
   // const { data, error } = detailCourseInfo({ courseUserSeq: Number(courseUserSeq) }); // 비구조화할당?
   const { data, error, mutate } = detailCourseInfo(Number(courseUserSeq));
 
-  console.log('데이터 : ', data);
+  console.log('course info modify 데이터 : ', data);
 
   const onMutate = () => {
     mutate();
@@ -28,7 +28,6 @@ export function CourseInfoModify() {
   return (
     <Box>
       <CourseInformation courseInfo={data?.courseInfo} />
-      <EnrollInformation />
       <LearningStatus learningStatusList={data?.learningStatusList} />
       <ProgressStatus progressList={data.progressStatusList} onMutate={onMutate} />
     </Box>

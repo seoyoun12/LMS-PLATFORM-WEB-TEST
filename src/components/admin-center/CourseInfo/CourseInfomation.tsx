@@ -1,20 +1,61 @@
 import { detailCourseInfo } from '@common/api/adm/learningInfo';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { Box, Tab, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  MenuItem,
+  Select,
+  Tab,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import { css } from '@emotion/css';
 import styled from '@emotion/styled';
 import { UserCourseInfoDetailCourseInfoDto } from '@common/api/Api';
+import { userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
+import { UserTransSaveInputDataType } from '@common/api/courseClass';
+import {
+  FieldValues,
+  useForm,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
+import { useState } from 'react';
+import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 
 interface Props {
   courseInfo: UserCourseInfoDetailCourseInfoDto;
 }
+const defaultValues = {
+  // contentType: ContentType.CONTENT_MP4,
+  // businessSubType: courseSubCategory.filter(filter => filter.type === businessSubType),
+};
 
 export function CourseInformation({ courseInfo }: Props) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    reset,
+    watch,
+    setValue,
+    resetField,
+  } = useForm<UserCourseInfoDetailCourseInfoDto>({ defaultValues });
+
   const router = useRouter();
   const snackbar = useSnackbar();
   const { courseUserSeq } = router.query;
-  // const { data, error } = detailCourseInfo(Number(courseUserSeq));
+
+  const [businessSubType, setBusinessSubType] = useState();
+
+  const handleBusinessSubType = (e: any) => {
+    setBusinessSubType(e.target.value);
+  };
 
   return (
     <CourseInfomationBox>
@@ -51,6 +92,63 @@ export function CourseInformation({ courseInfo }: Props) {
           </TableRightCell>
         </TableRow>
       </TableBody>
+
+      <TableHeadFull colSpan={4} sx={{ display: 'table', width: '100%', mt: '10px' }}>
+        업체정보
+      </TableHeadFull>
+
+      <TableBody sx={{ display: 'table', width: '100%' }}>
+        <TableRow>
+          <TableLeftCell align="center">업종구분</TableLeftCell>
+          <TableRightCell>
+            <FormControl fullWidth>
+              <Select
+                labelId="businessSubType"
+                id="businessSubType"
+                placeholder="업종 유형선택"
+                // value={courseInfo.businessSubType}
+                onChange={handleBusinessSubType}
+                // value={courseSubCategory.filter(
+                //   filter => filter.type === courseInfo?.businessSubType
+                // )}
+              >
+                {courseSubCategory
+                  // .filter(filter => filter.type === courseInfo?.businessSubType)
+                  .map(item => (
+                    <MenuItem key={item.type} value={item.type} sx={{ fontSize: '14px' }}>
+                      {item.ko}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+            {/* {courseInfo?.businessSubType} */}
+          </TableRightCell>
+          <TableLeftCell align="center">회사명</TableLeftCell>
+          <TableRightCell>{courseInfo?.businessName}</TableRightCell>
+        </TableRow>
+        <TableRow>
+          <TableLeftCell align="center">차량번호</TableLeftCell>
+          <TableRightCell>{courseInfo?.carNumber}</TableRightCell>
+          <TableLeftCell align="center">차량등록지</TableLeftCell>
+          <TableRightCell>{courseInfo?.carRegistrationRegion}</TableRightCell>
+        </TableRow>
+      </TableBody>
+
+      <TableHeadFull
+        colSpan={4}
+        sx={{ display: 'table', width: '100%', marginTop: '10px' }}
+      >
+        교육신청자 정보
+      </TableHeadFull>
+
+      <TableBody sx={{ display: 'table', width: '100%' }}>
+        <TableRow>
+          <TableLeftCell align="center">거주지</TableLeftCell>
+          <TableRightCell>{courseInfo?.residence}</TableRightCell>
+          <TableLeftCell align="center">휴대전화</TableLeftCell>
+          <TableRightCell>{courseInfo?.phone}</TableRightCell>
+        </TableRow>
+      </TableBody>
     </CourseInfomationBox>
   );
 }
@@ -79,4 +177,5 @@ const TableRightCell = styled(TableCell)`
   width: 40%;
   border-bottom: 1px solid #c4c4c4;
   border-right: 1px solid #c4c4c4;
+  font: 14px;
 `;

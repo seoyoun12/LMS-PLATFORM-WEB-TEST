@@ -6497,6 +6497,25 @@ export interface UserCourseInfoAvalStepsResponseDto {
 }
 
 export interface UserCourseInfoDetailCourseInfoDto {
+
+  // 회사명
+  businessName: string;
+
+  // 업종구분
+  businessSubType: string;
+
+  // 차량번호
+  carNumber: string;
+
+  // 차량등록지
+  carRegistrationRegion: string;
+
+  // 거주지
+  residence: string;
+
+  // 휴대전화
+  phone: string;
+
   /** 상태 */
   classLearningStatus?: "정상" | "퇴교";
 

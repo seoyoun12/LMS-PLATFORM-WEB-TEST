@@ -31,12 +31,6 @@ export function StatisticsSurveyDetail() {
     '#afffba',
     '#dfd4e4',
   ];
-
-  const handleClose = () => {
-    setOpenParticipate(false);
-    setOpen(false);
-  };
-
   const PieData = {
     labels: ['객관식', '주관식'],
     datasets: [
@@ -49,6 +43,11 @@ export function StatisticsSurveyDetail() {
         data: [data?.objCnt, data?.subjCnt],
       },
     ],
+  };
+
+  const handleClose = () => {
+    setOpenParticipate(false);
+    setOpen(false);
   };
 
   if (!data) return <Spinner />;

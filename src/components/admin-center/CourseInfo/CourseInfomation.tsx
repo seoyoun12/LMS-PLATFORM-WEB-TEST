@@ -16,7 +16,10 @@ import { css } from '@emotion/css';
 import styled from '@emotion/styled';
 import { UserCourseInfoDetailCourseInfoDto } from '@common/api/Api';
 import { userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
-import { UserTransSaveInputDataType } from '@common/api/courseClass';
+import {
+  courseSubCategoryType,
+  UserTransSaveInputDataType,
+} from '@common/api/courseClass';
 import {
   FieldValues,
   useForm,
@@ -24,8 +27,9 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
+import { copyFileSync } from 'fs';
 
 interface Props {
   courseInfo: UserCourseInfoDetailCourseInfoDto;
@@ -51,11 +55,18 @@ export function CourseInformation({ courseInfo }: Props) {
   const snackbar = useSnackbar();
   const { courseUserSeq } = router.query;
 
-  const [businessSubType, setBusinessSubType] = useState();
+  const [businessSubType, setBusinessSubType] = useState<string>();
 
   const handleBusinessSubType = (e: any) => {
     setBusinessSubType(e.target.value);
   };
+  // Select 박스 초깃값 설정.
+  useEffect(() => {
+    // 처음엔 undefined
+    if (courseInfo?.businessSubType) {
+      setBusinessSubType(courseInfo?.businessSubType);
+    }
+  }, [courseInfo?.businessSubType]); // []에 courseInfo를 넣는거는 이 값을 바라보면서 undefined에서 바뀌었을때 여길 봐달라
 
   return (
     <CourseInfomationBox>
@@ -106,11 +117,12 @@ export function CourseInformation({ courseInfo }: Props) {
                 labelId="businessSubType"
                 id="businessSubType"
                 placeholder="업종 유형선택"
-                // value={courseInfo.businessSubType}
+                value={businessSubType || ''}
                 onChange={handleBusinessSubType}
                 // value={courseSubCategory.filter(
                 //   filter => filter.type === courseInfo?.businessSubType
                 // )}
+                // {...register('businessSubType')}
               >
                 {courseSubCategory
                   // .filter(filter => filter.type === courseInfo?.businessSubType)

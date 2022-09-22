@@ -1,12 +1,11 @@
 import React from "react";
 import styled from "@emotion/styled";
 import type { SurveyQuestionResponseDto } from "@common/api/Api";
-import { FormControl, FormControlLabel, FormHelperText, Radio, RadioGroup, TextField } from "@mui/material";
+import { FormControl, FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
 
 export interface Props {
 	index: number;
 	question: SurveyQuestionResponseDto;
-	error?: boolean;
 	loading?: boolean;
 }
 
@@ -20,16 +19,11 @@ export default function LessonContentSurveyQuestion(props: Props) {
 			<QuestionContainer>
 				<QuestionTitle>{props.index + 1}. {props.question.content}</QuestionTitle>
 				<QuestionItemContainer>
-					<QuestionFormControl
-						required
-						error={props.error}
-						disabled={props.loading}
-					>
+					<QuestionFormControl disabled={props.loading}>
 						<RadioGroup name={`question_${props.index}`}>
 							{Array.from({ length: 10 }, (x, i) => [props.question.surveyMultipleChoice[`item${i + 1}`], (i + 1).toString()]).filter((v) => !!v[0]).map((v: [string, string], i) => (
 								<QuestionFormControlLabel key={i} control={<Radio size="small"/>} label={v[0]} value={v[1]} checked={(value.startsWith("item") ? value.slice(4) : value) === v[1]} onChange={() => setValue(v[1])}/>
 							))}
-							{props.error && <FormHelperText>하나를 선택해 주세요.</FormHelperText>} 
 						</RadioGroup>
 					</QuestionFormControl>
 				</QuestionItemContainer>
@@ -39,7 +33,7 @@ export default function LessonContentSurveyQuestion(props: Props) {
 			<QuestionContainer>
 				<QuestionTitle>{props.index + 1}. {props.question.content}</QuestionTitle>
 				<QuestionItemContainer>
-					<QuestionFormControl disabled={props.loading} error={props.error}>
+					<QuestionFormControl disabled={props.loading}>
 						<TextField
 							value={value}
 							onChange={(e) => setValue(e.target.value || "")}

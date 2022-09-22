@@ -134,7 +134,7 @@ export function StudentList({ registerType, setRegisterType }: Props) {
                         <TableRightCell>{item.name}</TableRightCell>
                       </UserTableRow>
                       <UserTableRow>
-                        <TableLeftCell>민증</TableLeftCell>
+                        <TableLeftCell>주민번호</TableLeftCell>
                         <TableRightCell>{item.firstIdentityNumber} - ●●●●●●●</TableRightCell>
                       </UserTableRow>
                       <UserTableRow>
@@ -142,12 +142,12 @@ export function StudentList({ registerType, setRegisterType }: Props) {
                         <TableRightCell>{item.carNumber}</TableRightCell>
                       </UserTableRow>
                       <UserTableRow>
-                        <TableLeftCell>등록지</TableLeftCell>
+                        <TableLeftCell>차량등록지</TableLeftCell>
                         <TableRightCell>{locationList.filter(regi => regi.en === item.carRegisteredRegion)[0].ko}</TableRightCell>
                       </UserTableRow>
                       <UserTableRow>
-                        <TableLeftCell>휴대전화링</TableLeftCell>
-                        <TableRightCell>{item.phone}</TableRightCell>
+                        <TableLeftCell>휴대전화</TableLeftCell>
+                        <TableRightCell>{`${item.firstPhone}-${item.secondPhone}-${item.thirdPhone}`}</TableRightCell>
                       </UserTableRow>
                     </StuTableBody>
                   </StuTableContainer>

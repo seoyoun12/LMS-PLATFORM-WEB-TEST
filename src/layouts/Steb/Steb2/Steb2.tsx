@@ -185,22 +185,33 @@ export default function Steb2() {
         })
           .then(async res => {
             //계정생성완료 후 작업
-            const { data } = await courseClassOrganizationEnrll(postData);
-            setValue('seq', data.seq);
-            setEnroll(prev => [...prev, watch()]);
-            setLoading(false);
-            // router.push('/stebMove/steb3');
+            try{
+              const { data } = await courseClassOrganizationEnrll(postData);
+              setValue('seq', data.seq);
+              setEnroll(prev => [...prev, watch()]);
+              setLoading(false);
+            }
+            catch(e: any){
+              snackbar({ variant: 'error', message: e.data.message });
+              setLoading(false);
+            }
           })
           .catch(async e => {
             console.dir(e.data.status);
             if (e.data.status === 400) {
               //이미 존재하는 계정
-              const { data } = await courseClassOrganizationEnrll(postData);
-              setValue('seq', data.seq);
-              setEnroll(prev => [...prev, watch()]);
-              setLoading(false);
-              // router.push('/stebMove/steb3');
+              try{
+                const { data } = await courseClassOrganizationEnrll(postData);
+                setValue('seq', data.seq);
+                setEnroll(prev => [...prev, watch()]);
+                setLoading(false);
+              }
+              catch(e: any){
+                snackbar({ variant: 'error', message: e.data.message });
+                setLoading(false);
+              }
             }
+            if(e.data.status !== 400) snackbar({ variant: 'error', message: e.data.message });
           });
       }
     } catch (e: any) {

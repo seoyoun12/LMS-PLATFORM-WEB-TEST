@@ -144,9 +144,7 @@ export interface UserInput {
   birth?: string;
   password?: string;
   identityNumberFirst: number;
-  
 }
-
 
 export async function getMyUser(): Promise<{ data: MyUser }> {
   //안쓰는 친구

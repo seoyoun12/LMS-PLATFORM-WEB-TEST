@@ -53,6 +53,7 @@ const defaultValues: Partial<CourseClassCreate> = {
 
 interface FormType extends CourseClassCreate {
   courseClassSeq: number;
+  courseName: string;
 }
 
 export function CalendarModify() {
@@ -79,16 +80,19 @@ export function CalendarModify() {
     (async function () {
       try {
         const { data } = await getDetailCourseClass(Number(courseClassSeq));
-        setValue('year', data.year);
-        setValue('step', data.step);
-        setValue('limitPeopleYn', data.limitPeopleYn);
+        // setValue('year', data.year);
+        // setValue('step', data.step);
+        // setValue('limitPeopleYn', data.limitPeopleYn);
         setLimitPeopleCheck(data.limitPeopleYn === YN.YES ? true : false);
-        setValue('limitPeople', data.limitPeople);
-        setValue('requestStartDate', dateFormat(data.requestStartDate, 'yyyy-mm-dd'));
-        setValue('requestEndDate', dateFormat(data.requestEndDate, 'yyyy-mm-dd'));
-        setValue('studyStartDate', dateFormat(data.studyStartDate, 'yyyy-mm-dd'));
-        setValue('studyEndDate', dateFormat(data.studyEndDate, 'yyyy-mm-dd'));
-        setValue('courseClassSeq', data.seq);
+        // setValue('limitPeople', data.limitPeople);
+        // setValue('requestStartDate', dateFormat(data.requestStartDate, 'yyyy-mm-dd'));
+        // setValue('requestEndDate', dateFormat(data.requestEndDate, 'yyyy-mm-dd'));
+        // setValue('studyStartDate', dateFormat(data.studyStartDate, 'yyyy-mm-dd'));
+        // setValue('studyEndDate', dateFormat(data.studyEndDate, 'yyyy-mm-dd'));
+        // setValue('courseClassSeq', data.seq);
+        reset({ ...data });
+        setValue('courseSeq', data.course.seq);
+        setValue('courseName', data.course.courseName);
         setCourseName(data.course.courseName);
       } catch (e: any) {
         window.alert(
@@ -98,10 +102,10 @@ export function CalendarModify() {
     })();
   }, []);
 
+  //수정
   const onSubmit: SubmitHandler<FormType> = async e => {
     const { step, year, limitPeople, courseClassSeq, ...rest } = e;
 
-    // if (!courseSeq) return window.alert('과정을 등록해야합니다!');
     try {
       setLoading(true);
       const dialogConfirmed = await dialog({
@@ -113,7 +117,6 @@ export function CalendarModify() {
 
       if (!dialogConfirmed) return setLoading(false);
       await modifyCourseClass({
-        // ...watch(),
         ...rest,
         step: Number(step),
         year: Number(year),
@@ -123,8 +126,6 @@ export function CalendarModify() {
       window.alert('완료 되었습니다.');
       router.push('/admin-center/calendar');
     } catch (e: any) {
-      // snackbar({ variant: 'error', message: e });
-      // window.alert(e.data.message);
       snackbar({ variant: 'error', message: e.data.message });
       if (e.data?.data.length > 0) {
         snackbar({ variant: 'error', message: e.data.data[0].message.split('.')[0] });
@@ -157,7 +158,6 @@ export function CalendarModify() {
         snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
         router.push(`/admin-center/calendar`);
         // await mutate([`/course-class/adm`, { params: { businessType: businessType.TYPE_ALL, date: '2022-07' } }]);
-        // await mutate();
       }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -173,16 +173,8 @@ export function CalendarModify() {
           fontWeight: 700,
         }}
       >
-        일정 등록
+        일정 수정
       </Typography>
-      {/* <CourseConnectButton
-        variant="contained"
-        color="secondary"
-        onClick={() => setOpenModal(true)}
-        disabled
-      >
-        과정 선택
-      </CourseConnectButton> */}
       <Box>
         <Typography component="span">과정: </Typography>
         {watch().courseSeq && (

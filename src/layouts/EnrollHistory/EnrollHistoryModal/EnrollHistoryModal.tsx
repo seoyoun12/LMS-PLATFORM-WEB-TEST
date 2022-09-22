@@ -20,7 +20,7 @@ import { CarNumberBox } from '@components/ui/Step';
 import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { locationList } from '@layouts/MeEdit/MeEdit';
+import { locationList, residenceList } from '@layouts/MeEdit/MeEdit';
 import {
   userBusinessTypeOne,
   userBusinessTypeTwo,
@@ -205,7 +205,7 @@ export function EnrollHistoryModal({
       if (regType === RegisterType.TYPE_ORGANIZATION) {
         await delelteCourseUserOrga(courseUserSeq);
       }
-      snackbar({ variant: 'success', message: '성공적으로 수정완료 했습니다.' });
+      snackbar({ variant: 'success', message: '성공적으로 신청취소 했습니다.' });
       handleClose();
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -405,7 +405,7 @@ export function EnrollHistoryModal({
                     value={watch().residence || '없음'}
                     disabled={isStudyPeriod || isAfterStudyDate}
                   >
-                    {locationList.map(item => (
+                    {residenceList.map(item => (
                       <MenuItem key={item.en} value={item.en}>
                         {item.ko}
                       </MenuItem>

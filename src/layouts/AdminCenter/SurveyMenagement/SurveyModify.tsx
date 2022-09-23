@@ -5,7 +5,11 @@ import {
   QuestionType,
   SurveyRes,
 } from '@common/api/adm/survey';
-import { SurveyQuestionRequestDto, SurveyRequestDto } from '@common/api/Api';
+import {
+  SurveyMultipleChoiceRequestDto,
+  SurveyQuestionRequestDto,
+  SurveyRequestDto,
+} from '@common/api/Api';
 import { SurveyQuestionItem } from '@components/admin-center';
 import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
@@ -92,6 +96,7 @@ export function SurveyModify() {
       return window.alert('적어도 하나의 문항 , 첫번째 문항이 필요합니다!');
     } else {
       const randomSeq = Math.floor(Math.random() * 1000);
+      //주관식용 조건문인것으로 추정
       if (!watch().surveyMultipleChoice.item1) {
         setQuestions(prev => [
           ...prev,
@@ -106,14 +111,44 @@ export function SurveyModify() {
         setDisableTitle(true);
         return;
       }
+      //객관식
+      let stopLoop = false;
+      let converted = Object.values(watch().surveyMultipleChoice)
+        .filter(value => {
+          if (!value) stopLoop = true;
+          if (stopLoop) return false;
+          return true;
+        })
+        .map((item, idx) => {
+          return {
+            [`item${idx + 1}`]: item,
+          };
+        });
+      //배열로 된 inputs를 변환합니다.
+      let convertedChoice = {};
+      converted.forEach(item => {
+        const key = Object.keys(item)[0];
+        convertedChoice[key] = item[key];
+      });
+      // setValue('surveyMultipleChoice', convertedChoice);
+      console.log('객객객', watch(), convertedChoice);
+      // watch().surveyMultipleChoice
       setQuestions(prev => [
         ...prev,
-        { ...watch(), dummySeq: randomSeq, questionType: type },
+        {
+          ...watch(),
+          surveyMultipleChoice: convertedChoice,
+          dummySeq: randomSeq,
+          questionType: type,
+        },
       ]);
+      //상태업데이트전 실행되는것같습니다.
+      //watch로 넣지말고 변환된값을 직접넣어주세요.
       reset();
       setDisableTitle(true);
     }
   };
+  console.log(watch(), questions);
 
   const onClickModifySubmit = async () => {
     let arr = questions.map(item => {
@@ -123,6 +158,7 @@ export function SurveyModify() {
         surveyMultipleChoice: item.surveyMultipleChoice,
       };
     });
+
     try {
       const dialogConfirmed = await dialog({
         title: '콘텐츠 수정하기',
@@ -208,7 +244,8 @@ export function SurveyModify() {
                   fontWeight: 700,
                 }}
               >
-                각 문항별 이름 (문항 순서대로 작성해주세요!)
+                각 문항별 이름 (문항 순서대로 작성해주세요! 빈 문항부터 끝 문항까지
+                잘립니다.)
               </Typography>
               <TextField
                 placeholder="1번 문항"

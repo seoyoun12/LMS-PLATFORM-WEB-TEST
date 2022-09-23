@@ -122,9 +122,11 @@ export function SurveyQuestionModifyModal({
 
   const onClickModify = () => {
     if (QuestionType.TYPE_MULTIPLE_CHOICE === type) {
-      if (!inputsWatch()?.inputs) {
+      if (!inputsWatch()?.inputs)
         return snackbar({ variant: 'error', message: '문항을 만들어주세요!' });
-      }
+
+      if (inputsWatch().inputs.length === 0)
+        return snackbar({ variant: 'error', message: '문항을 만들어주세요!' });
     }
     console.log('ss', inputsWatch(), watch());
     //validate

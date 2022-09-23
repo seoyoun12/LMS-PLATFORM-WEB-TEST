@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Box, Drawer, MenuItem, Typography } from '@mui/material';
+import { Avatar, Box, Drawer, MenuItem, Typography } from '@mui/material';
 import Image from 'next/image';
 import { Link } from '@components/common';
 import { useEffect, useState } from 'react';
@@ -15,11 +15,13 @@ import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { logout } from '@common/api';
 import { useRecoilState } from 'recoil';
 import { userInfo } from '@common/recoil';
-import { regCategoryType } from '@common/api/user';
+import { regCategoryType, useMyUser } from '@common/api/user';
 import UnsuIcon from '/public/assets/svgs/unsuIcon.svg';
 import LowFloorIcon from '/public/assets/svgs/lowFloorIcon.svg';
 import DominIcon from '/public/assets/svgs/dominIcon.svg';
 import { MainDisplayType, useMainDisplay } from '@common/api/mainDisplay';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useDialog } from '@hooks/useDialog';
 
 const siteMapMobileList = [
   {
@@ -57,6 +59,7 @@ const hideNavList = [
 export default function MobileNav() {
   const [open, setOpen] = useState(false); //헤더바 오픈여부
   const router = useRouter();
+  const dialog = useDialog();
   const isLoginStatus = useIsLoginStatus();
   const [userInfoData, setUserInfoData] = useRecoilState(userInfo); //유저데이터. 전역에 저장된 정보
   const { data, error } = useMainDisplay();
@@ -82,6 +85,7 @@ export default function MobileNav() {
     })
   );
   const [topBoxBgColor, setTopBoxBgColor] = useState<string>('#236cef');
+  const { user, error: userError } = useMyUser();
 
   useEffect(() => {
     if (router.route === '/') {
@@ -132,7 +136,7 @@ export default function MobileNav() {
       )[0]?.bgColor;
       setTopBoxBgColor(bgColor);
     }
-  }, []);
+  }, [router]);
 
   const onClickSignin = () => {
     if (localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL) {
@@ -142,10 +146,16 @@ export default function MobileNav() {
     }
   };
 
-  const onClickLogout = () => {
-    logout();
+  const onClickLogout = async () => {
+    const logoutConfirm = await dialog({
+      variant: 'confirm',
+      title: '로그아웃',
+      description: '정말로 로그아웃하시겠습니까?',
+    });
+    if (!logoutConfirm) return;
+    await logout();
+    await router.push('/');
     handleClose();
-    router.push('/');
   };
 
   const handleChangeCategory = (name: string) => {
@@ -212,12 +222,37 @@ export default function MobileNav() {
           />
           <Drawer open={open} anchor="right" onClose={handleClose} sx={{ zIndex: 1202 }}>
             <DrawerTopBox topBoxBgColor={topBoxBgColor}>
+              <Box />
+              <CloseIcon fontSize="large" onClick={() => handleClose()} />
+            </DrawerTopBox>
+            <DrawerTopBox topBoxBgColor={topBoxBgColor} style={{ height: '100px' }}>
               {isLoginStatus ? (
-                <Box onClick={onClickLogout}>로그아웃</Box>
+                <Box display="flex" alignContent="center">
+                  <Avatar sx={{ width: 40, height: 40 }}>
+                    {user && user.s3Files.length > 0 ? (
+                      <Image src={user.s3Files[0].path} layout="fill" />
+                    ) : (
+                      'M'
+                    )}
+                  </Avatar>
+                  <Box
+                    ml={2}
+                    sx={{
+                      whiteSpace: 'pre-wrap',
+                      height: '40px',
+                      textAlign: 'center',
+                      fontSize: '14px',
+                    }}
+                  >{`${user?.name}님 \n환영합니다!`}</Box>
+                </Box>
+              ) : (
+                ''
+              )}
+              {isLoginStatus ? (
+                <LogoutIcon onClick={onClickLogout} />
               ) : (
                 <Box onClick={onClickSignin}>로그인</Box>
               )}
-              <CloseIcon fontSize="large" onClick={() => handleClose()} />
             </DrawerTopBox>
             {/* <SiteMapTypo>사이트맵 이동하기</SiteMapTypo> */}
             <SiteMapWrap>

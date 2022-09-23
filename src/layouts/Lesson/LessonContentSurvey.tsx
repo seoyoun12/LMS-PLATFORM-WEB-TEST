@@ -24,11 +24,6 @@ export default function LessonContentSurvey(props: Props) {
   const [loadingForm, setLoadingForm] = React.useState<boolean>(false);
   const [dialog, setDialog] = React.useState<'FAILED' | 'SUCCESS' | null>(null);
   const [dialogMessage, setDialogMessage] = React.useState<string | null>(null);
-  const [errors, setErrors] = React.useState<boolean[]>(
-    new Array(props.survey === null ? 0 : props.survey.surveyQuestionList.length).fill(
-      false
-    )
-  );
 
   // 이펙트.
 
@@ -36,11 +31,6 @@ export default function LessonContentSurvey(props: Props) {
     setLoadingData(false);
     setLoadingForm(false);
     setDialog(null);
-    setErrors(
-      new Array(props.survey === null ? 0 : props.survey.surveyQuestionList.length).fill(
-        false
-      )
-    );
   }, [props.survey]);
 
   // 렌더링.
@@ -69,23 +59,8 @@ export default function LessonContentSurvey(props: Props) {
         }
 
         const formData = new FormData(e.target as HTMLFormElement);
-
-        let hasError = false;
-        const errors = props.survey.surveyQuestionList.map((q, i) => {
-          if (q.questionType === "TYPE_SUBJECTIVE") return false;
-          const value = formData.get(`question_${i}`);
-          const isError = value === null || value === undefined || value === '';
-          if (isError) hasError = true;
-          return isError;
-        });
-
-        if (hasError) {
-          setErrors(errors);
-          return;
-        }
-
         const awnserList = props.survey.surveyQuestionList.map((question, i) => ({
-          answer: formData.get(`question_${i}`).toString(),
+          answer: formData.get(`question_${i}`)?.toString() || (question.questionType === "TYPE_MULTIPLE_CHOICE" ? "0" : ""),
           surveyQuestionSeq: question.seq,
         }));
 
@@ -133,7 +108,6 @@ export default function LessonContentSurvey(props: Props) {
             key={index}
             index={index}
             question={question}
-            error={errors[index]}
             loading={loadingData}
           />
         ))}

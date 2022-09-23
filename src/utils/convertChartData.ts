@@ -15,10 +15,10 @@ const BarData = {
 export function convertObjChartData(chartData: StatisticsSurveyObjDto) {
   const backgroundColor: string[] = [
     '#ee4a5d',
-    '#fff77f',
+    '#ee7051',
     '#bae7af',
     '#afc4e7',
-    '#fdc4f8',
+    '#ff98f6',
     '#cb9ffd',
     '#a9e1ed',
     '#f3cdad',
@@ -27,10 +27,10 @@ export function convertObjChartData(chartData: StatisticsSurveyObjDto) {
   ];
   const borderColor: string[] = [
     '#ee4a5d',
-    '#fff77f',
+    '#ee7051',
     '#bae7af',
     '#afc4e7',
-    '#fdc4f8',
+    '#ff98f6',
     '#cb9ffd',
     '#a9e1ed',
     '#f3cdad',
@@ -39,10 +39,10 @@ export function convertObjChartData(chartData: StatisticsSurveyObjDto) {
   ];
   const hoverBackgroundColor: string[] = [
     '#ee4a5d',
-    '#fff77f',
+    '#ee7051',
     '#bae7af',
     '#afc4e7',
-    '#fdc4f8',
+    '#ff98f6',
     '#cb9ffd',
     '#a9e1ed',
     '#f3cdad',
@@ -51,10 +51,10 @@ export function convertObjChartData(chartData: StatisticsSurveyObjDto) {
   ];
   const hoverBorderColor: string[] = [
     '#ee4a5d',
-    '#fff77f',
+    '#ee7051',
     '#bae7af',
     '#afc4e7',
-    '#fdc4f8',
+    '#ff98f6',
     '#cb9ffd',
     '#a9e1ed',
     '#f3cdad',

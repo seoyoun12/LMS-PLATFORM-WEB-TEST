@@ -185,22 +185,33 @@ export default function Steb2() {
         })
           .then(async res => {
             //계정생성완료 후 작업
-            const { data } = await courseClassOrganizationEnrll(postData);
-            setValue('seq', data.seq);
-            setEnroll(prev => [...prev, watch()]);
-            setLoading(false);
-            router.push('/stebMove/steb3');
+            try{
+              const { data } = await courseClassOrganizationEnrll(postData);
+              setValue('seq', data.seq);
+              setEnroll(prev => [...prev, watch()]);
+              setLoading(false);
+            }
+            catch(e: any){
+              snackbar({ variant: 'error', message: e.data.message });
+              setLoading(false);
+            }
           })
           .catch(async e => {
             console.dir(e.data.status);
             if (e.data.status === 400) {
               //이미 존재하는 계정
-              const { data } = await courseClassOrganizationEnrll(postData);
-              setValue('seq', data.seq);
-              setEnroll(prev => [...prev, watch()]);
-              setLoading(false);
-              router.push('/stebMove/steb3');
+              try{
+                const { data } = await courseClassOrganizationEnrll(postData);
+                setValue('seq', data.seq);
+                setEnroll(prev => [...prev, watch()]);
+                setLoading(false);
+              }
+              catch(e: any){
+                snackbar({ variant: 'error', message: e.data.message });
+                setLoading(false);
+              }
             }
+            if(e.data.status !== 400) snackbar({ variant: 'error', message: e.data.message });
           });
       }
     } catch (e: any) {
@@ -215,6 +226,11 @@ export default function Steb2() {
     // setConfirm(true);
     confirmRef.current = true;
     // if (confirm) {
+    if (enroll.length === 0)
+      return snackbar({
+        variant: 'error',
+        message: '신청한 교육신청자가 없습니다! 교육신청자를 추가한 후 확인해주세요',
+      });
     setEnrollInfo({ seq: Number(enrollInfo && enrollInfo.seq) });
     router.push('/stebMove/steb3');
     // }
@@ -294,6 +310,7 @@ export default function Steb2() {
           {registerType === RegisterType.TYPE_ORGANIZATION && (
             <Button
               variant="contained"
+              color="success"
               onClick={onClickConfirm}
               disabled={loading}
               fullWidth
@@ -312,6 +329,7 @@ const Steb2Wrap = styled(Box)``;
 const Steb2BodyContainer = styled(Container)`
   padding: 0 1rem;
   margin-top: 6rem;
+  margin-bottom: 4rem;
   .MuiTextField-root {
     background: #eeefff;
   }

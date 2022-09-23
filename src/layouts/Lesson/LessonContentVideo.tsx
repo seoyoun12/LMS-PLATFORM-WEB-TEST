@@ -144,7 +144,7 @@ export default function LessonContentVideo(props: Props) {
 
       apiSeconds.current++;
 
-      if (apiSeconds.current >= 5) {
+      if (apiSeconds.current >= 15) {
         ApiClient.courseLog
           .createCourseModulesUsingPost1({
             courseUserSeq: courseUserSeq,

@@ -1,10 +1,14 @@
+import ApiClient from '@common/api/ApiClient';
+import { learningStatus } from '@common/recoil';
 import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
 import { Box, Button, Container } from '@mui/material';
 import Image from 'next/image';
+import { useRecoilState } from 'recoil';
 
 export default function LessonHeader() {
   const dialog = useDialog();
+  const [lessonVideoInfo , setLessonVideoInfo] = useRecoilState(learningStatus)
   const onCloseWindow = async () => {
     const isConfirm = await dialog({
       title: '학습종료하기',
@@ -14,6 +18,28 @@ export default function LessonHeader() {
       cancelText: '취소',
     });
     if (!isConfirm) return;
+    console.log(lessonVideoInfo , '외주');
+    // return;
+    const {courseUserSeq,
+      lessonSeq,
+      studyTime,
+      studyLastTime,
+      courseProgressSeq} = lessonVideoInfo
+    await ApiClient.courseLog
+    .createCourseModulesUsingPost1({
+      courseUserSeq: courseUserSeq,
+      lessonSeq: lessonSeq,
+      studyTime: studyTime,
+    })
+    .then(() =>
+      ApiClient.courseProgress.updateCourseProgressUsingPut({
+        courseUserSeq: courseUserSeq,
+        courseProgressSeq: courseProgressSeq,
+        lessonSeq: lessonSeq,
+        studyLastTime: studyLastTime,
+      })
+    );
+
     window.close();
   };
 

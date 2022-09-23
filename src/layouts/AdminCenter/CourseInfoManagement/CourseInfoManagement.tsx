@@ -24,6 +24,8 @@ import { grey } from '@mui/material/colors';
 import { CourseType } from '@common/api/adm/courseClass';
 import { NotFound } from '@components/ui/NotFound';
 import { ManagementHeadRows } from '@components/admin-center/CourseInfo/ManagementHeadRows';
+import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
+import { convertBirth } from '@utils/convertBirth';
 
 const headRows: {
   name: string;
@@ -32,12 +34,15 @@ const headRows: {
 }[] = [
   { name: 'No', align: 'center', width: '5%' },
   { name: '이름', align: 'center', width: '6%' },
-  { name: '아이디', align: 'center', width: '8%' },
-  { name: '과정명', align: 'center', width: '41%' },
+  { name: '아이디', align: 'center', width: '6%' },
+  { name: '생년월일', align: 'center', width: '8%' },
+  { name: '휴대폰번호', align: 'center', width: '8%' },
+  { name: '업종', align: 'center', width: '6%' },
+  { name: '과정명', align: 'center', width: '28%' },
   { name: '기수', align: 'center', width: '10%' },
-  { name: '학습기간', align: 'center', width: '15%' },
+  { name: '학습기간', align: 'center', width: '7%' },
   { name: '진도율', align: 'center', width: '5%' },
-  { name: '수료여부', align: 'center', width: '5%' },
+  { name: '수료여부', align: 'center', width: '6%' },
   { name: '상태', align: 'center', width: '5%' },
 ];
 
@@ -182,6 +187,21 @@ export function CourseInfoManagement() {
                   {user.username || '실명계정'}
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
+                  <SubjectBox>{convertBirth(user.birth)}</SubjectBox>
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  <SubjectBox>{user.phone}</SubjectBox>
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  <SubjectBox>
+                    {
+                      courseSubCategory.filter(
+                        filter => filter.type === user.businessSubType
+                      )[0]?.ko
+                    }
+                  </SubjectBox>
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
                   <SubjectBox>{user.courseName}</SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
@@ -281,6 +301,7 @@ const CourseInfoTitleTableCell = styled(TableCell)`
 const CourseInfoTableCell = styled(TableCell)`
   margin: 0;
   border-right: 1px solid #f0f0f0;
+  padding: 4px 4px;
 
   &:first-child {
     background: #f5f5f5;

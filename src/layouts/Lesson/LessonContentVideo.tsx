@@ -9,6 +9,8 @@ import type {
   LessonDetailClientResponseDto,
 } from '@common/api/Api';
 import ApiClient from '@common/api/ApiClient';
+import { useRecoilState } from 'recoil';
+import { learningStatus } from '@common/recoil';
 
 const PLAYER_ELEMENT_ID = 'lesson-player' as const;
 
@@ -25,6 +27,7 @@ interface Props {
 export default function LessonContentVideo(props: Props) {
   const router = useRouter();
   const routerAsPath = router.asPath;
+  const [lessonVideoInfo , setLessonVideoInfo] = useRecoilState(learningStatus); //헤더 학습종료를 위한 리코일
 
   // 스테이트.
 
@@ -144,7 +147,7 @@ export default function LessonContentVideo(props: Props) {
 
       apiSeconds.current++;
 
-      if (apiSeconds.current >= 15) {
+      if (apiSeconds.current >= 30) {
         ApiClient.courseLog
           .createCourseModulesUsingPost1({
             courseUserSeq: courseUserSeq,
@@ -162,7 +165,15 @@ export default function LessonContentVideo(props: Props) {
 
         apiSeconds.current = 0;
         apiVideoSeconds.current = 0;
+        
       }
+        setLessonVideoInfo({
+          courseUserSeq,
+          lessonSeq,
+          studyTime: apiVideoSeconds.current,
+          studyLastTime: videoCurrentSeconds.current,
+          courseProgressSeq: courseProgressSeq
+        });
     }, 1000);
 
     apiTimer.current = timer;

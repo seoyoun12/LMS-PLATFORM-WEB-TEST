@@ -18,7 +18,6 @@ export default function LessonHeader() {
       cancelText: '취소',
     });
     if (!isConfirm) return;
-    console.log(lessonVideoInfo , '외주');
     // return;
     const {courseUserSeq,
       lessonSeq,

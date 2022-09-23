@@ -56,7 +56,6 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
       width < 767 ? setIsMobile(true) : setIsMobile(false);
     });
   }, []);
-  console.log(data);
 
   if (!data) return <Spinner />;
   if (!deprecated?.length) return <div>loading</div>;

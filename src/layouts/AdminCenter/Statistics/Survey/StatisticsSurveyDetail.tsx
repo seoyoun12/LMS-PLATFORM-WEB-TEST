@@ -105,7 +105,7 @@ export function StatisticsSurveyDetail() {
                     height={236}
                     legend="right"
                   />
-                  <Stack flexGrow={1} display="flex" gap={1}>
+                  <Stack flexGrow={1} display="flex" flexWrap='wrap' gap={1}>
                     {chartObjItem.map((item, idx) => {
                       if (!item) return;
                       return (
@@ -117,7 +117,7 @@ export function StatisticsSurveyDetail() {
                             color: 'white',
                             fontSize: '14px',
                           }}
-                          wrapSx={{ flexGrow: 0, margin: '0 8px' }}
+                          wrapSx={{ flexGrow: 0, margin: '0 8px'  }}
                           contentSx={{
                             fontSize: '14px',
                             padding: '0 4px',

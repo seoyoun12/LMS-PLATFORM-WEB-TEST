@@ -44,7 +44,7 @@ export function ParticipateDetailModal({ open, onCloseModal }: Props) {
           </Box>
           <Box pl={1}>
             <Box lineHeight="24px">본 교육에 만족하셨습니까?</Box>
-            <Box lineHeight="24px">{`=>`} 만족스러웠던것 같기도 합니다.</Box>
+            <Box lineHeight="24px">{`=>`} 만족합니다.</Box>
           </Box>
         </Box>
         <Box display="flex" fontSize="16px">
@@ -57,7 +57,7 @@ export function ParticipateDetailModal({ open, onCloseModal }: Props) {
               multiline
               rows={4}
               fullWidth
-              value={'교육이 정말 만족스러웠달까요.'}
+              value={'현재 설문참여정보는 준비중인 기능입니다.'}
             />
           </Box>
         </Box>

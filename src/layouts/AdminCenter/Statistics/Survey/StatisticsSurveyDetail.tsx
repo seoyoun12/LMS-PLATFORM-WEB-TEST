@@ -105,7 +105,7 @@ export function StatisticsSurveyDetail() {
                     height={236}
                     legend="right"
                   />
-                  <Stack flexGrow={1} display="flex" gap={1}>
+                  <Stack flexGrow={1} display="flex" flexWrap='wrap' gap={1}>
                     {chartObjItem.map((item, idx) => {
                       if (!item) return;
                       return (
@@ -117,7 +117,7 @@ export function StatisticsSurveyDetail() {
                             color: 'white',
                             fontSize: '14px',
                           }}
-                          wrapSx={{ flexGrow: 0, margin: '0 8px' }}
+                          wrapSx={{ flexGrow: 0, margin: '0 8px'  }}
                           contentSx={{
                             fontSize: '14px',
                             padding: '0 4px',
@@ -156,6 +156,7 @@ export function StatisticsSurveyDetail() {
                 >
                   {item.answerList.map(item => {
                     if (item === '') return;
+                    if(item.length > 50) return <MenuItem>{item.slice(0,50)}...</MenuItem>;
                     return <MenuItem>{item}</MenuItem>;
                   })}
                 </Stack>
@@ -231,4 +232,5 @@ const SurveyObj = styled(Box)`
 `;
 const SurveySub = styled(Box)`
   width: 50%;
+  overflow:hidden;
 `;

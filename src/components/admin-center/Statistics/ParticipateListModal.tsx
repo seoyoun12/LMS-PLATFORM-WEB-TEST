@@ -107,9 +107,9 @@ export function ParticipateListModal({ open, onCloseModal }: Props) {
                 onClick={() => setOpenParticipateDetail(true)}
               >
                 <TableCell component="th" scope="row" align="center">
-                  홍홍
+                  1
                 </TableCell>
-                <TableCell align="center">홍길동씨</TableCell>
+                <TableCell align="center">홍길동</TableCell>
               </TableRow>
             </TableBody>
           </Table>

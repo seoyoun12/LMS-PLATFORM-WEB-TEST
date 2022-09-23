@@ -156,6 +156,7 @@ export function StatisticsSurveyDetail() {
                 >
                   {item.answerList.map(item => {
                     if (item === '') return;
+                    if(item.length > 50) return <MenuItem>{item.slice(0,50)}...</MenuItem>;
                     return <MenuItem>{item}</MenuItem>;
                   })}
                 </Stack>
@@ -231,4 +232,5 @@ const SurveyObj = styled(Box)`
 `;
 const SurveySub = styled(Box)`
   width: 50%;
+  overflow:hidden;
 `;

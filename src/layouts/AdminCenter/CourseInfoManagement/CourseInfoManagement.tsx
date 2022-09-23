@@ -112,8 +112,13 @@ export function CourseInfoManagement() {
 
   // 수정페이지로
   const onClickmodifyCourseInfo = async (seq: number) => {
-    router.push(`/admin-center/course-info/modify/${seq}`);
-    mutate();
+    // router.push(`/admin-center/course-info/modify/${seq}`);
+    window.open(
+      `/admin-center/course-info/modify/${seq}`,
+      // '',
+      '_blank'
+    );
+    // mutate();
     //??
   };
 

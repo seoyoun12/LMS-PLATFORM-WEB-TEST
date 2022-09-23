@@ -13,6 +13,7 @@ import {
 } from '../Api';
 import { YN } from '@common/constant';
 import { CourseType } from './courseClass';
+import { courseSubCategoryType } from '../courseClass';
 
 interface LearningInfoRes {
   courseClassSeq: number; //과정클래스시퀀스
@@ -27,6 +28,9 @@ interface LearningInfoRes {
   username: string; //아이디
   yearAndStep: string; //기수
   displayTotalProgress: string;
+  birth: string; //생년월일
+  businessSubType: courseSubCategoryType; //업종
+  phone: string; //폰
 }
 
 interface DetailCourse {

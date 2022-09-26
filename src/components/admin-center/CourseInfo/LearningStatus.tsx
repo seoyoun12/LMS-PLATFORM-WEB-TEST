@@ -17,7 +17,6 @@ export function LearningStatus({ learningStatusList }: Props) {
   const { courseUserSeq } = router.query;
   // const { data, error } = detailCourseInfo(Number(courseUserSeq));
 
-  console.log('러닝스테이터스리스트 : ', learningStatusList);
   // console.log(
   //   '러닝스테이터스리스트 : ',
   //   learningStatusList?.map(item => item.elementName)

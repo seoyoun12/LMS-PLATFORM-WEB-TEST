@@ -18,6 +18,7 @@ export function CourseInfoModify() {
   const { data, error, mutate } = detailCourseInfo(Number(courseUserSeq));
 
   console.log('course info modify 데이터 : ', data);
+  console.log('차량번호 : ', data?.courseInfo?.carNumber);
 
   const onMutate = () => {
     mutate();

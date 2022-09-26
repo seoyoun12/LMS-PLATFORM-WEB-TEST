@@ -7,6 +7,7 @@ import {
   FormHelperText,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Tab,
   TableBody,
   TableCell,
@@ -36,6 +37,7 @@ import { copyFileSync } from 'fs';
 import { ErrorMessage } from '@hookform/error-message';
 import { Spinner } from '@components/ui';
 import { locationList, residenceList } from '@layouts/MeEdit/MeEdit';
+import { CarNumberBox } from '@components/ui/Step';
 
 interface Props {
   courseInfo: UserCourseInfoDetailCourseInfoDto;
@@ -98,6 +100,9 @@ export function CourseInformation({ courseInfo }: Props) {
     }
   }, [courseInfo?.businessSubType]);
   // []에 courseInfo를 넣는거는 이 값을 바라보면서 undefined에서 바뀌었을때 여길 봐달라
+
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////
 
   return (
     <CourseInfomationBox>
@@ -194,7 +199,7 @@ export function CourseInformation({ courseInfo }: Props) {
           {/* <TableRightCell>{courseInfo?.carNumber}</TableRightCell> */}
           <TableRightCell>
             <FormControl fullWidth sx={{ height: '100%' }}>
-              <TextField
+              {/* <TextField
                 {...register('carNumber', { required: '차량번호를 입력해주세요.' })}
                 size="small"
                 label="차량번호"
@@ -205,7 +210,8 @@ export function CourseInformation({ courseInfo }: Props) {
                 errors={errors}
                 name="carNumber"
                 as={<FormHelperText error />}
-              />
+              /> */}
+              {/* <CarNumberBox parantSetValue={setValue} /> */}
             </FormControl>
           </TableRightCell>
 

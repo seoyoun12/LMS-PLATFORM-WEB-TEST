@@ -138,7 +138,7 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
       const dialogConfirmed = await dialog({
         title: '과정 삭제하기',
         description: '정말로 삭제하시겠습니까?',
-        confirmText: '삭제하기',
+        confirmText: '삭제',
         cancelText: '취소',
       });
       if (dialogConfirmed) {

@@ -35,7 +35,7 @@ import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { copyFileSync } from 'fs';
 import { ErrorMessage } from '@hookform/error-message';
 import { Spinner } from '@components/ui';
-import { locationList } from '@layouts/MeEdit/MeEdit';
+import { locationList, residenceList } from '@layouts/MeEdit/MeEdit';
 
 interface Props {
   courseInfo: UserCourseInfoDetailCourseInfoDto;
@@ -64,6 +64,7 @@ export function CourseInformation({ courseInfo }: Props) {
   const [businessName, setBusinessName] = useState<string>(); // 회사명
   const [carRegistrationRegion, setCarRegistrationRegion] = useState<string>(); // 차량등록지
   const [loading, setLoading] = useState(false);
+  const [residence, setResidence] = useState<string>(); // 거주지
 
   // 업종구분
   const handleBusinessSubType = (e: any) => {
@@ -79,6 +80,12 @@ export function CourseInformation({ courseInfo }: Props) {
   const handleCarRegistrationRegion = (e: any) => {
     setCarRegistrationRegion(e.target.value);
   };
+
+  // 거주지
+  const handleResidence = (e: any) => {
+    setResidence(e.target.value);
+  };
+
   // Select 박스 초깃값 설정.
   useEffect(() => {
     // 처음엔 undefined
@@ -86,6 +93,7 @@ export function CourseInformation({ courseInfo }: Props) {
       setBusinessSubType(courseInfo?.businessSubType); // 업종구분
       // setBusinessName(courseInfo?.businessName); // 회사명
       setCarRegistrationRegion(courseInfo?.carRegistrationRegion); // 차량등록지
+      setResidence(courseInfo?.residence);
       reset({ ...courseInfo }); // ...?
     }
   }, [courseInfo?.businessSubType]);
@@ -212,38 +220,56 @@ export function CourseInformation({ courseInfo }: Props) {
                 placeholder="차량등록지 선택"
                 value={carRegistrationRegion || ''}
                 onChange={handleCarRegistrationRegion}
-                // value={courseSubCategory.filter(
-                //   filter => filter.type === courseInfo?.businessSubType
-                // )}
-                // {...register('businessSubType')}
               >
-                {locationList
-                  // .filter(filter => filter.type === courseInfo?.businessSubType)
-                  .map(item => (
-                    // <MenuItem key={item.type} value={item.type} sx={{ fontSize: '14px' }}>
-                    <MenuItem key={item.en} value={item.en}>
-                      {item.ko}
-                    </MenuItem>
-                  ))}
+                {locationList.map(item => (
+                  <MenuItem key={item.en} value={item.en}>
+                    {item.ko}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </TableRightCell>
         </TableRow>
       </TableBody>
 
-      <TableHeadFull
-        colSpan={4}
-        sx={{ display: 'table', width: '100%', marginTop: '10px' }}
-      >
+      <TableHeadFull colSpan={4} sx={{ display: 'table', width: '100%', mt: '3px' }}>
         교육신청자 정보
       </TableHeadFull>
 
       <TableBody sx={{ display: 'table', width: '100%' }}>
         <TableRow>
           <TableLeftCell align="center">거주지</TableLeftCell>
-          <TableRightCell>{courseInfo?.residence}</TableRightCell>
+          <TableRightCell>
+            <FormControl fullWidth>
+              <Select
+                labelId="residence"
+                id="residence"
+                placeholder="거주지 선택"
+                value={residence || ''}
+                onChange={handleResidence}
+              >
+                {residenceList.map(item => (
+                  <MenuItem key={item.en} value={item.en}>
+                    {item.ko}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </TableRightCell>
+
+          {/* <TableRightCell>{courseInfo?.residence}</TableRightCell> */}
           <TableLeftCell align="center">휴대전화</TableLeftCell>
-          <TableRightCell>{courseInfo?.phone}</TableRightCell>
+          <TableRightCell>
+            <FormControl fullWidth sx={{ height: '100%' }}>
+              <TextField
+                {...register('phone', { required: '핸드폰번호 입력해주세요.' })}
+                size="small"
+                label="핸드폰번호"
+                variant="outlined"
+              />
+              <ErrorMessage errors={errors} name="phone" as={<FormHelperText error />} />
+            </FormControl>
+          </TableRightCell>
         </TableRow>
       </TableBody>
 

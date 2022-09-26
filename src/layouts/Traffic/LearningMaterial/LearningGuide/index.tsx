@@ -5,9 +5,6 @@ import {
 import {
   LearningGuideContainer,
   LearningGuideContentContainer,
-  LearningGuideHeaderContainer,
-  LearningGuideHeaderSubtitle,
-  LearningGuideHeaderTitle,
   LearningGuideItemContainer,
   LearningGuideItemContentContainer,
   LearningGuideItemContentDate,
@@ -16,7 +13,6 @@ import {
   LearningGuideItemContentTitle,
   LearningGuideItemImageContainer,
 } from "./style";
-import BackgroundImage from "@/public/assets/images/certificates_background.svg";
 import { NotFound } from "@components/ui/NotFound";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
@@ -37,14 +33,6 @@ export default function LearningGuideLayout({
 
   return (
     <LearningGuideContainer>
-      <LearningGuideHeaderContainer>
-        <LearningGuideHeaderTitle>증명서 발급</LearningGuideHeaderTitle>
-        <LearningGuideHeaderSubtitle>
-          수료확인 및 증명서 발급을 받을 수 있습니다!
-        </LearningGuideHeaderSubtitle>
-        <BackgroundImage />
-      </LearningGuideHeaderContainer>
-
       <LearningGuideContentContainer>
         {data?.data.length <= 0 ? (
           <NotFound content="신청한 과정이 존재하지 않습니다!" />
@@ -67,9 +55,9 @@ export default function LearningGuideLayout({
                       <LearningGuideItemContentTitle>
                         {item.title}
                       </LearningGuideItemContentTitle>
-                      <LearningGuideItemContentDate>
-                        조회수: 0
-                      </LearningGuideItemContentDate>
+                      {/*<LearningGuideItemContentDate>*/}
+                      {/*  조회수: 0*/}
+                      {/*</LearningGuideItemContentDate>*/}
                     </LearningGuideItemContentHeaderContainer>
                     <LearningGuideItemContentSubtitle>
                       {format(new Date(item.createdDtime), "yyyy. MM. dd")}

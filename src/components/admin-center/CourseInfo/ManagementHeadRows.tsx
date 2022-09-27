@@ -10,10 +10,10 @@ import { CompleteType, StatusType } from '@common/api/adm/learningInfo';
 interface Props {
   //   searchInputRef: React.MutableRefObject<HTMLInputElement>;
   search: string;
-  courseType: CourseType;
+  // courseType: CourseType;
   completeType: CompleteType | null;
   statusType: StatusType | null;
-  onChangeType: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  // onChangeType: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSearch: (e: React.FormEvent, isReload?: boolean) => Promise<void>;
   onChangeCompleteType: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeStatusType: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -22,10 +22,8 @@ interface Props {
 export const ManagementHeadRows = React.forwardRef(function (
   {
     search,
-    courseType,
     completeType,
     statusType,
-    onChangeType,
     handleSearch,
     onChangeCompleteType,
     onChangeStatusType,
@@ -34,7 +32,7 @@ export const ManagementHeadRows = React.forwardRef(function (
 ) {
   return (
     <HeadRows>
-      <Box>
+      {/* <Box>
         <Box>과정타입</Box>
         <Radio
           value={CourseType.TYPE_TRANS_WORKER}
@@ -54,7 +52,7 @@ export const ManagementHeadRows = React.forwardRef(function (
           checked={courseType === CourseType.TYPE_PROVINCIAL}
         />
         <span>도민교통</span>
-      </Box>
+      </Box> */}
       <Box>
         <Box>수료여부</Box>
         <Radio

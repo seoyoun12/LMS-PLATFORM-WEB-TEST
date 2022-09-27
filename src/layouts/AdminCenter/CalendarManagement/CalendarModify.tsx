@@ -93,6 +93,7 @@ export function CalendarModify() {
         reset({ ...data });
         setValue('courseSeq', data.course.seq);
         setValue('courseName', data.course.courseName);
+        setValue('courseClassSeq', Number(data.seq));
         setCourseName(data.course.courseName);
       } catch (e: any) {
         window.alert(

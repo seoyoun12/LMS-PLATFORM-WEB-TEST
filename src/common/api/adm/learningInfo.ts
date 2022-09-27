@@ -54,10 +54,17 @@ export interface CourseLearningInfoRequestDto {
   statusType?: StatusType;
 }
 
+export interface CourseLearningInfoInput {
+  businessName: string;
+  businessSubType: string;
+  carNumber: string;
+  carRegistrationRegion: string;
+  phone: string;
+  residence: string;
+}
+
 export function useLearningInfo({ page, ...rest }: CourseLearningInfoRequestDto) {
-  const { data, error, mutate } = useSWR<
-    SWRResponse<PaginationResult<LearningInfoRes[]>>
-  >(
+  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<LearningInfoRes[]>>>(
     [
       `/course/adm/learning-info/`,
       {
@@ -71,6 +78,32 @@ export function useLearningInfo({ page, ...rest }: CourseLearningInfoRequestDto)
     error,
     mutate,
   };
+}
+
+
+// 상세
+export function detailCourseInfo(courseUserSeq: number) {
+  const { data, error, mutate } = useSWR<SWRResponse<DetailCourse>>(
+    courseUserSeq ? `/user/adm/course-info/detail/${courseUserSeq}` : null,
+    GET
+  );
+  return {
+    data: data?.data,
+    error,
+    mutate,
+  };
+}
+
+// 수정
+export async function modifyLearningInfo({
+  courseUserSeq, 
+  courseLearningInfoInput
+} : {
+  courseUserSeq: number;
+  courseLearningInfoInput: CourseLearningInfoInput
+}) {
+  return await PUT(`/user/adm/course-info/detail/${courseUserSeq}`, courseLearningInfoInput);
+
 }
 
 // export function detailCourseInfo({
@@ -87,17 +120,7 @@ export function useLearningInfo({ page, ...rest }: CourseLearningInfoRequestDto)
 //   }
 // }
 
-export function detailCourseInfo(courseUserSeq: number) {
-  const { data, error, mutate } = useSWR<SWRResponse<DetailCourse>>(
-    courseUserSeq ? `/user/adm/course-info/detail/${courseUserSeq}` : null,
-    GET
-  );
-  return {
-    data: data?.data,
-    error,
-    mutate,
-  };
-}
+
 
 export function modifyCompleteAllCourseInfo(courseUserSeq: number) {
   return PUT(`/user/adm/course-info/progress/${courseUserSeq}/all-complete`);

@@ -1,9 +1,11 @@
-import { detailCourseInfo } from '@common/api/adm/learningInfo';
+import {
+  CourseLearningInfoInput,
+  detailCourseInfo,
+  modifyLearningInfo,
+} from '@common/api/adm/learningInfo';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { Box, Tab, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Box } from '@mui/material';
 import { useRouter } from 'next/router';
-import { css } from '@emotion/css';
-import styled from '@emotion/styled';
 import { CourseInformation } from '@components/admin-center/CourseInfo/CourseInfomation';
 import { EnrollInformation } from '@components/admin-center/CourseInfo/EnrollInformation';
 import { LearningStatus } from '@components/admin-center/CourseInfo/LearningStatus';
@@ -17,6 +19,34 @@ export function CourseInfoModify() {
   // const { data, error } = detailCourseInfo({ courseUserSeq: Number(courseUserSeq) }); // 비구조화할당?
   const { data, error, mutate } = detailCourseInfo(Number(courseUserSeq));
 
+  const handleSubmit = async ({
+    courseLearningInfoInput,
+    setLoading,
+  }: {
+    courseLearningInfoInput: CourseLearningInfoInput;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  }) => {
+    try {
+      setLoading(true);
+      if (Number(courseUserSeq)) {
+        await modifyLearningInfo({
+          courseUserSeq: Number(courseUserSeq),
+          courseLearningInfoInput,
+        });
+        console.log('1. courseLearningInfoInput : ', courseLearningInfoInput);
+        snackbar({ variant: 'success', message: '수정 되었습니다.' });
+        await mutate();
+        router.push(`/admin-center/course-info/modify/${courseUserSeq}`);
+        setLoading(false);
+      }
+    } catch (e: any) {
+      console.error(e);
+      snackbar({ variant: 'error', message: '수정에 실패했습니다.' });
+      await mutate();
+      setLoading(false);
+    }
+  };
+
   console.log('course info modify 데이터 : ', data);
   console.log('차량번호 : ', data?.courseInfo?.carNumber);
 
@@ -24,49 +54,14 @@ export function CourseInfoModify() {
     mutate();
   };
 
+  if (error) return <div>...ERROR</div>;
   if (!data) return <Spinner />;
 
   return (
     <Box>
-      <CourseInformation courseInfo={data?.courseInfo} />
+      <CourseInformation courseInfo={data?.courseInfo} onHandleSubmit={handleSubmit} />
       <LearningStatus learningStatusList={data?.learningStatusList} />
       <ProgressStatus progressList={data.progressStatusList} onMutate={onMutate} />
     </Box>
   );
 }
-
-const LearningCourseTableBox = styled(Box)`
-  border: 3px solid black;
-  box-sizing: border-box;
-`;
-
-const TableHeadFull = styled(TableCell)`
-  width: 100%;
-  background: #f5f5f5;
-  border-top: 1px solid #c4c4c4;
-  border-right: 1px solid #c4c4c4;
-  border-left: 1px solid #c4c4c4;
-  /* border-bottom: 1px solid #c4c4c4; */
-  font-weight: 400;
-`;
-
-const TableLeftCell = styled(TableCell)`
-  width: 10%;
-  background: #f5f5f5;
-  /* border-top: 1px solid #c4c4c4; */
-  border-right: 1px solid #c4c4c4;
-  border-left: 1px solid #c4c4c4;
-  border-bottom: 1px solid #c4c4c4;
-  font-weight: 400;
-`;
-
-const TableRightCell = styled(TableCell)`
-  width: 40%;
-  /* border-top: 1px solid #c4c4c4; */
-  border-bottom: 1px solid #c4c4c4;
-  border-right: 1px solid #c4c4c4;
-  font-weight: 400;
-`;
-const pt20 = css`
-  border: 1px solid #b4b4b4;
-`;

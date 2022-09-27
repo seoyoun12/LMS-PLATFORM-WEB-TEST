@@ -1,4 +1,4 @@
-import { detailCourseInfo } from '@common/api/adm/learningInfo';
+import { CourseLearningInfoInput, detailCourseInfo } from '@common/api/adm/learningInfo';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
   Box,
@@ -26,6 +26,7 @@ import {
 } from '@common/api/courseClass';
 import {
   FieldValues,
+  SubmitHandler,
   useForm,
   UseFormRegister,
   UseFormSetValue,
@@ -39,54 +40,91 @@ import { Spinner } from '@components/ui';
 import { locationList, residenceList } from '@layouts/MeEdit/MeEdit';
 import { CarNumberBox } from '@components/ui/Step';
 
-interface Props {
-  courseInfo: UserCourseInfoDetailCourseInfoDto;
-}
+// interface Props {
+//   courseInfo: UserCourseInfoDetailCourseInfoDto;
+//   onHandleSubmit: {
+//     courseLearningInfoInput: CourseLearningInfoInput;
+//   };
+// }
 const defaultValues = {
   // contentType: ContentType.CONTENT_MP4,
   // businessSubType: courseSubCategory.filter(filter => filter.type === businessSubType),
 };
 
-export function CourseInformation({ courseInfo }: Props) {
+// export function CourseInformation({ courseInfo, onHandleSubmit }: Props) {
+export function CourseInformation({
+  courseInfo,
+  onHandleSubmit,
+}: {
+  courseInfo?: UserCourseInfoDetailCourseInfoDto;
+  onHandleSubmit: ({
+    courseLearningInfoInput,
+    courseUserSeq,
+    setLoading,
+  }: // businessSubType,
+  // carRegistrationRegion,
+  // residence,
+  {
+    courseLearningInfoInput: CourseLearningInfoInput;
+    courseUserSeq: number;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    // businessSubType: string;
+    // carRegistrationRegion: string;
+    // residence: string;
+  }) => void;
+}) {
+  const router = useRouter();
+  const snackbar = useSnackbar();
+  const { courseUserSeq } = router.query;
+  const [businessSubType, setBusinessSubType] = useState<string>(); // 업종구분
+  const [carRegistrationRegion, setCarRegistrationRegion] = useState<string>(); // 차량등록지
+  const [residence, setResidence] = useState<string>(); // 거주지
+  const [loading, setLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
     reset,
-    watch,
+    watch, // useState를 사용하면 같은 동작을 두번.
     setValue,
     resetField,
-  } = useForm<UserCourseInfoDetailCourseInfoDto>({ defaultValues });
-
-  const router = useRouter();
-  const snackbar = useSnackbar();
-  const { courseUserSeq } = router.query;
-  const [businessSubType, setBusinessSubType] = useState<string>(); // 업종구분
-  const [businessName, setBusinessName] = useState<string>(); // 회사명
-  const [carRegistrationRegion, setCarRegistrationRegion] = useState<string>(); // 차량등록지
-  const [loading, setLoading] = useState(false);
-  const [residence, setResidence] = useState<string>(); // 거주지
+    // } = useForm<UserCourseInfoDetailCourseInfoDto>({ defaultValues });
+  } = useForm<UserCourseInfoDetailCourseInfoDto>();
+  // useForm 안에있는 businessSubType는 useState로 변경된 값과는 전혀 별개의 값.
+  // setValue.
 
   // 업종구분
-  const handleBusinessSubType = (e: any) => {
+  const handleBusinessSubType = async (e: any) => {
     setBusinessSubType(e.target.value);
+    setValue('businessSubType', e.target.value);
+    // console.log('업종구분 : ', setBusinessSubType(e.target.value));
+    // console.log('업종구분 value : ', e.target.value);
+    // console.log('businessSubType : ', businessSubType);
   };
-
-  // 회사명
-  // const handleBusinessName = (e: any) => {
-  //   setBusinessName(e.target.value);
-  // };
+  // console.log('업종구분 businessSubType : ', businessSubType);
 
   // 차량등록지
-  const handleCarRegistrationRegion = (e: any) => {
+  const handleCarRegistrationRegion = async (e: any) => {
     setCarRegistrationRegion(e.target.value);
+    setValue('carRegistrationRegion', e.target.value);
+    // console.log('차량등록지 : ', setCarRegistrationRegion(e.target.value));
+    // console.log('차량등록지 value : ', e.target.value);
+    // console.log('carRegistrationRegion : ', carRegistrationRegion);
   };
+  // console.log('차량등록지 carRegistrationRegion : ', carRegistrationRegion);
 
   // 거주지
-  const handleResidence = (e: any) => {
+  // const handleResidence = (e: any) => {
+  const handleResidence = async (e: any) => {
     setResidence(e.target.value);
+    setValue('residence', e.target.value);
+    // console.log('거주지 : ', setResidence(e.target.value));
+    // console.log('거주지 value : ', e.target.value);
+    // console.log('residence : ', residence);
   };
+  // console.log('거주지 residence : ', residence);
 
   // Select 박스 초깃값 설정.
   useEffect(() => {
@@ -95,17 +133,34 @@ export function CourseInformation({ courseInfo }: Props) {
       setBusinessSubType(courseInfo?.businessSubType); // 업종구분
       // setBusinessName(courseInfo?.businessName); // 회사명
       setCarRegistrationRegion(courseInfo?.carRegistrationRegion); // 차량등록지
-      setResidence(courseInfo?.residence);
-      reset({ ...courseInfo }); // ...?
+      setResidence(courseInfo?.residence); // 거주지
+      reset({ ...courseInfo }); // ...? 초기화시켜주는데 안에있는 인자로 초기화? reset() -> 값이 X
     }
   }, [courseInfo?.businessSubType]);
   // []에 courseInfo를 넣는거는 이 값을 바라보면서 undefined에서 바뀌었을때 여길 봐달라
+
+  const onSubmit: SubmitHandler<CourseLearningInfoInput> = async (
+    courseLearningInfoInput: CourseLearningInfoInput
+  ) => {
+    console.log('2. courseLearningInfoInput : ', courseLearningInfoInput);
+
+    onHandleSubmit({
+      courseLearningInfoInput: courseLearningInfoInput,
+      courseUserSeq: Number(courseUserSeq),
+      setLoading,
+      // businessSubType,
+      // carRegistrationRegion,
+      // residence,
+    });
+    // console.log('courseLearningInfoInput : ', courseLearningInfoInput);
+  };
 
   //
   //////////////////////////////////////////////////////////////////////////////////////////
 
   return (
-    <CourseInfomationBox>
+    <CourseInfomationBox component="form" onSubmit={handleSubmit(onSubmit)}>
+      {/* <CourseInfomationBox component="form" onSubmit={onSubmit}> useForm을 사용하지 않을때.*/}
       <TableHeadFull colSpan={4} sx={{ display: 'table', width: '100%' }}>
         수강정보
       </TableHeadFull>
@@ -155,6 +210,18 @@ export function CourseInformation({ courseInfo }: Props) {
                 placeholder="업종 유형선택"
                 value={businessSubType || ''}
                 onChange={handleBusinessSubType}
+                // onChange={e => {
+                //   setBusinessSubType(
+                //     courseSubCategory.filter(item => item.type === e.target.value)[0].type
+                //   );
+                // }}
+                // onChange={e => {
+                //   handleBusinessSubType(
+                //     courseSubCategory.filter(
+                //       filter => filter.type === courseInfo?.businessSubType
+                //     )
+                //   );
+                // }}
                 // value={courseSubCategory.filter(
                 //   filter => filter.type === courseInfo?.businessSubType
                 // )}

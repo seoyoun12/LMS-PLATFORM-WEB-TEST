@@ -178,16 +178,17 @@ export default function Lesson(props: LessonProps) {
             .findCourseUsingGet(course.courseUserSeq)
             .then((res) => {
               const course = res.data.data;
+              const completed = course.lessons[lessonIndex].completedYn === "Y";
               
               const newCourseLessonsCompleted = [...courseLessonsCompleted];
-              newCourseLessonsCompleted[lessonIndex] = true;
+              newCourseLessonsCompleted[lessonIndex] = completed;
 
               setCourseLessonsCompleted(newCourseLessonsCompleted);
               setCourseTotalProgress(course.totalProgress);
               
-              if (course.lessons[lessonIndex + 1] && isEnd) setDialog("NEXT");
+              if (completed && course.lessons[lessonIndex + 1] && isEnd) setDialog("NEXT");
 
-              return true;
+              return completed;
             })
           }
         />

@@ -230,7 +230,15 @@ export function EnrollHistoryModal({
               <Button
                 variant="contained"
                 onClick={() =>
-                  router.push(`/course/${watch().seq}/lesson/${watch().firstChapterSeq}`)
+                  {
+                    window.open(
+                      `/course/${watch().seq}/lesson/${
+                        watch().firstChapterSeq
+                      }`,
+                      // '',
+                      '_blank'
+                    );
+                  }
                 }
               >
                 학습하기

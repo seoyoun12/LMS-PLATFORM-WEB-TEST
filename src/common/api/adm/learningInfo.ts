@@ -4,6 +4,8 @@ import { FetchPaginationResponse, PaginationResult } from 'types/fetch';
 import { CourseInput, CourseRes } from '@common/api/course';
 import {
   CourseDetailClientResponseDto,
+  CourseLearningInfoCoursesResponseDto,
+  CourseLearningInfoStepResponseDto,
   CourseModuleFindResponseDto,
   CourseUserMyInfoResponseDto,
   Pageable,
@@ -74,6 +76,38 @@ export function useLearningInfo({ page, ...rest }: CourseLearningInfoRequestDto)
     data: data?.data,
     error,
     mutate,
+  };
+}
+
+export function useLearningInfoCourses() {
+  const { data, error, mutate } = useSWR<
+    SWRResponse<CourseLearningInfoCoursesResponseDto[]>
+  >(`/course/adm/learning-info/courses`, GET, {
+    revalidateOnFocus: false,
+    onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+      if (error.status === 401) return;
+      if (retryCount > 4) return;
+    },
+  });
+  return {
+    courses: data?.data,
+    coursesError: error,
+  };
+}
+
+export function useLearningInfoStep(courseSeq: number) {
+  const { data, error, mutate } = useSWR<
+    SWRResponse<CourseLearningInfoStepResponseDto[]>
+  >(`/course/adm/learning-info/step/${courseSeq}`, GET, {
+    revalidateOnFocus: false,
+    onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+      if (error.status === 401) return;
+      if (retryCount > 4) return;
+    },
+  });
+  return {
+    steps: data?.data,
+    stepsError: error,
   };
 }
 

@@ -26,6 +26,7 @@ import { NotFound } from '@components/ui/NotFound';
 import { ManagementHeadRows } from '@components/admin-center/CourseInfo/ManagementHeadRows';
 import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { convertBirth } from '@utils/convertBirth';
+import { SelectClassAndStep } from '@components/admin-center/CourseInfo/SelectClassAndStep';
 
 const headRows: {
   name: string;
@@ -51,9 +52,10 @@ export function CourseInfoManagement() {
   const [notFound, setNotFound] = useState(false);
   const [page, setPage] = useState(0);
   const [nameOrUsername, setNameOrUsername] = useState<string>(''); //이름 혹은 아이디
-  // const [courseType, setCourseType] = useState<CourseType>(CourseType.TYPE_TRANS_WORKER); //과정타입
   const [completeType, setCompleteType] = useState<CompleteType | null>(null); //수료타입
   const [statusType, setStatusType] = useState<StatusType | null>(null); //상태타입
+  const [courseSeq, setCourseSeq] = useState<number | null>(null);
+  const [courseClassSeq, setCourseClassSeq] = useState<number | null>(null); // 과정클래스
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const { data, error, mutate } = useLearningInfo({
     page,
@@ -61,6 +63,8 @@ export function CourseInfoManagement() {
     completeType,
     statusType,
     nameOrUsername,
+    courseSeq,
+    courseClassSeq,
   });
 
   // Pagination
@@ -68,14 +72,18 @@ export function CourseInfoManagement() {
     setPage(page);
   };
 
-  //change question Type
-  // const onChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = e.target.value;
-  //   setNotFound(false);
-  //   if (value === CourseType.TYPE_TRANS_WORKER) return setCourseType(value);
-  //   if (value === CourseType.TYPE_LOW_FLOOR_BUS) return setCourseType(value);
-  //   if (value === CourseType.TYPE_PROVINCIAL) return setCourseType(value);
-  // };
+  //과정 선택
+  const onChageCourseSeq = (courseSeq: number | null) => {
+    setNotFound(false);
+    if (!courseSeq) return setCourseSeq(null);
+    setCourseSeq(courseSeq);
+  };
+  //기수 선택
+  const onChageCourseClassSeq = (courseClassSeq: number | null) => {
+    setNotFound(false);
+    if (!courseSeq) return setCourseClassSeq(null);
+    setCourseClassSeq(courseClassSeq);
+  };
 
   //change completeType(수료여부)
   const onChangeCompleteType = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,7 +108,8 @@ export function CourseInfoManagement() {
     setNotFound(false);
     if (isReload) {
       setPage(0);
-      // setCourseType(CourseType.TYPE_TRANS_WORKER);
+      setCourseClassSeq(null);
+      setCourseSeq(null);
       setCompleteType(null);
       setStatusType(null);
       return setNameOrUsername('');
@@ -118,8 +127,6 @@ export function CourseInfoManagement() {
       // '',
       '_blank'
     );
-    // mutate();
-    //??
   };
 
   useEffect(() => {
@@ -134,13 +141,17 @@ export function CourseInfoManagement() {
   return (
     <Box>
       <CourseInfoTypography variant="h5">전체 수강생 학습현황</CourseInfoTypography>
+      <SelectClassAndStep
+        courseSeq={courseSeq}
+        onChageCourseSeq={onChageCourseSeq}
+        courseClassSeq={courseClassSeq}
+        onChageCourseClassSeq={onChageCourseClassSeq}
+      />
       <ManagementHeadRows
         ref={searchInputRef}
         search={nameOrUsername}
-        // courseType={courseType}
         completeType={completeType}
         statusType={statusType}
-        // onChangeType={onChangeType}
         handleSearch={handleSearch}
         onChangeCompleteType={onChangeCompleteType}
         onChangeStatusType={onChangeStatusType}

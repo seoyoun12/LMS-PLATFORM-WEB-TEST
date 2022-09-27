@@ -5,6 +5,7 @@
  * @returns string
  */
 export const convertBirth = (birth: string) => {
+  if (!birth) return '없음';
   if (birth.split('-')[0].length === 4) return birth;
   let format = '?';
   const birthYear = Number(birth.split('-')[0]);

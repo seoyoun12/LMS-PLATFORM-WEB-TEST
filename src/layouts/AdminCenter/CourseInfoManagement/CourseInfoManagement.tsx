@@ -51,13 +51,13 @@ export function CourseInfoManagement() {
   const [notFound, setNotFound] = useState(false);
   const [page, setPage] = useState(0);
   const [nameOrUsername, setNameOrUsername] = useState<string>(''); //이름 혹은 아이디
-  const [courseType, setCourseType] = useState<CourseType>(CourseType.TYPE_TRANS_WORKER); //과정타입
+  // const [courseType, setCourseType] = useState<CourseType>(CourseType.TYPE_TRANS_WORKER); //과정타입
   const [completeType, setCompleteType] = useState<CompleteType | null>(null); //수료타입
   const [statusType, setStatusType] = useState<StatusType | null>(null); //상태타입
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const { data, error, mutate } = useLearningInfo({
     page,
-    courseType,
+    // courseType,
     completeType,
     statusType,
     nameOrUsername,
@@ -69,13 +69,13 @@ export function CourseInfoManagement() {
   };
 
   //change question Type
-  const onChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setNotFound(false);
-    if (value === CourseType.TYPE_TRANS_WORKER) return setCourseType(value);
-    if (value === CourseType.TYPE_LOW_FLOOR_BUS) return setCourseType(value);
-    if (value === CourseType.TYPE_PROVINCIAL) return setCourseType(value);
-  };
+  // const onChangeType = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value;
+  //   setNotFound(false);
+  //   if (value === CourseType.TYPE_TRANS_WORKER) return setCourseType(value);
+  //   if (value === CourseType.TYPE_LOW_FLOOR_BUS) return setCourseType(value);
+  //   if (value === CourseType.TYPE_PROVINCIAL) return setCourseType(value);
+  // };
 
   //change completeType(수료여부)
   const onChangeCompleteType = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,7 +100,7 @@ export function CourseInfoManagement() {
     setNotFound(false);
     if (isReload) {
       setPage(0);
-      setCourseType(CourseType.TYPE_TRANS_WORKER);
+      // setCourseType(CourseType.TYPE_TRANS_WORKER);
       setCompleteType(null);
       setStatusType(null);
       return setNameOrUsername('');
@@ -137,10 +137,10 @@ export function CourseInfoManagement() {
       <ManagementHeadRows
         ref={searchInputRef}
         search={nameOrUsername}
-        courseType={courseType}
+        // courseType={courseType}
         completeType={completeType}
         statusType={statusType}
-        onChangeType={onChangeType}
+        // onChangeType={onChangeType}
         handleSearch={handleSearch}
         onChangeCompleteType={onChangeCompleteType}
         onChangeStatusType={onChangeStatusType}

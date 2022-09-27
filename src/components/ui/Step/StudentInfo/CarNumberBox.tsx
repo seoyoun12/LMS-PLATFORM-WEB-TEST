@@ -17,6 +17,7 @@ const oneWordList = ['아', '바', '사', '자', '배'];
 
 interface Props {
   parantSetValue: UseFormSetValue<UserTransSaveInputDataType>;
+  // parantSetValue: UseFormSetValue<UserTransSaveInputDataType>;
 }
 
 interface FormType {

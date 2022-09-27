@@ -167,6 +167,11 @@ const Player = styled.div<{ showControl?: boolean }>`
     height: auto !important;
   }
 
+  & .ncplayer-video-root {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
   & .ncplayer-progress {
     display: ${({ showControl }) => showControl ? "block" : "none"};
   }

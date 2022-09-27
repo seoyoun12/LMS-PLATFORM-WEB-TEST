@@ -19,15 +19,17 @@ export function LearningCourse() {
 
   const onClickEnterCourseLesson = (res: LearningStatusRes) => {
     const isStartStudy =
-      new Date(res.studyStartDate.replaceAll('-', '/').split(' ')[0]).getTime() <
+      new Date(res.studyStartDate.replaceAll('-', '/')).getTime() <
       new Date().getTime(); //현재시간이 크면 true 아니면 false
     const isEndedStudy =
-      new Date(res.studyEndDate.replaceAll('-', '/').split(' ')[0]).getTime() <
+      new Date(res.studyEndDate.replaceAll('-', '/')).getTime() <
       new Date().getTime(); //현재시간이 크면 true 아니면 false
-    if (res.progressStatus === ProgressStatus.TYPE_BEFORE || !isStartStudy)
+      console.log(isEndedStudy , '아아아아' , res.studyEndDate,new Date(res.studyEndDate).getTime() , new Date().getTime())
+      if (res.progressStatus === ProgressStatus.TYPE_BEFORE || !isStartStudy)
       return snackbar({ variant: 'error', message: '아직 학습이 시작되지 않았습니다!' });
     if (res.progressStatus === ProgressStatus.TYPE_ENDED || isEndedStudy)
       return snackbar({ variant: 'error', message: '종료된 학습입니다!' });
+
 
     if (res.progressStatus === ProgressStatus.TYPE_PROGRESSING) {
       // router.push(

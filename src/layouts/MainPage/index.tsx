@@ -333,14 +333,14 @@ const MainPage: NextPage = () => {
           </Box>
         </ContentBox>
       </MainContainer>
-      <FooterContainer
-        onClick={async () => {
-          await LinkList[2].onClickCard();
-          router.push(LinkList[2].href);
-        }}
-        sx={{ color: 'black' }}
-      >
+      <FooterContainer sx={{ color: 'black' }}>
         <FooterWord>CTTI</FooterWord>
+        <SecretTrafficTunnel
+          onClick={async () => {
+            await LinkList[2].onClickCard();
+            router.push(LinkList[2].href);
+          }}
+        />
       </FooterContainer>
     </WrapMainContainer>
   );
@@ -523,4 +523,13 @@ const FooterWord = styled(Box)`
     font-size: 8rem;
   }
 `;
+
+const SecretTrafficTunnel = styled(Box)`
+  position: absolute;
+  width: 111px;
+  height: 77px;
+  left: 20px;
+  bottom: 20px;
+`;
+
 export default MainPage;

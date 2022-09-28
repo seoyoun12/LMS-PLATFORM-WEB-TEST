@@ -54,42 +54,50 @@ export const userBusinessTypeOne = [
 export const userBusinessTypeTwo = [
   {
     category: 'PASSENGER',
+    TYPE_BUSINESS: 'TYPE_PASSENGER',
     type: '버스',
     enType: courseSubCategoryType.BUS,
     // isMoreInfo: true
   },
   {
     category: 'PASSENGER',
+    TYPE_BUSINESS: 'TYPE_PASSENGER',
     type: '전세버스',
     enType: courseSubCategoryType.CHARTER_BUS,
   },
   {
     category: 'PASSENGER',
+    TYPE_BUSINESS: 'TYPE_PASSENGER',
     type: '특수여객',
     enType: courseSubCategoryType.SPECIAL_PASSENGER,
   },
   {
     category: 'PASSENGER',
+    TYPE_BUSINESS: 'TYPE_PASSENGER',
     type: '법인택시',
     enType: courseSubCategoryType.CORPORATE_TAXI,
   },
   {
     category: 'FREIGHT',
+    TYPE_BUSINESS: 'TYPE_CARGO',
     type: '일반화물',
     enType: courseSubCategoryType.GENERAL_CARGO,
   },
   {
     category: 'PASSENGER',
+    TYPE_BUSINESS: 'TYPE_PASSENGER',
     type: '개인택시',
     enType: courseSubCategoryType.PRIVATE_TAXI,
   },
   {
     category: 'FREIGHT',
+    TYPE_BUSINESS: 'TYPE_CARGO',
     type: '용달화물',
     enType: courseSubCategoryType.CONSIGNMENT,
   },
   {
     category: 'FREIGHT',
+    TYPE_BUSINESS: 'TYPE_CARGO',
     type: '개별화물',
     enType: courseSubCategoryType.INDIVIDUAL_CARGO,
   },

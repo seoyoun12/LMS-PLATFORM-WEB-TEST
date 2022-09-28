@@ -7,7 +7,6 @@ import {
   getSingleCourseUser,
   modifyCourseUserIndi,
   modifyCourseUserOrga,
-  ModifyCourseUserReqDto,
   RegType,
   delelteCourseUserIndi,
   delelteCourseUserOrga,
@@ -16,7 +15,6 @@ import {
 import { phoneList } from '@common/constant';
 import { Modal, Spinner } from '@components/ui';
 import { EnrollHistoryCarNumberBox } from '@components/ui/EnrollHistory';
-import { CarNumberBox } from '@components/ui/Step';
 import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -31,6 +29,7 @@ import {
   FormControl,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Table,
   TableBody,
   TableCell,
@@ -83,6 +82,8 @@ export function EnrollHistoryModal({
   const [stepSeq, setStepSeq] = useState<number>();
   const [isStudyPeriod, setIsStudyPeriod] = useState<boolean>(true);
   const [isAfterStudyDate, setIsAfterStudyDate] = useState<boolean>(false); //학습종료일자가 지났으면 버튼삭제.
+  const [hideCarNumber, setHideCarNumber] = useState<boolean>(false); //특정 비지니스 서브업종은 비활성화
+  const [disabledCompany, setDisabledCompany] = useState<boolean>(false); //특정 비지니스 서브업종은 비활성화
 
   useEffect(() => {
     (async function () {
@@ -96,6 +97,7 @@ export function EnrollHistoryModal({
             : RegType.TYPE_ORGANIZATION
         );
         reset({ ...data });
+        console.log(data, '데이타타 타타타');
         setIsStudyPeriod(
           checkDatePeriod(
             watch().studyStartDate,
@@ -107,6 +109,8 @@ export function EnrollHistoryModal({
           new Date(watch().studyEndDate.replaceAll('-', '/')).getTime() <
           new Date().getTime();
         setIsAfterStudyDate(isAfter);
+
+        onChangeBusinessSubType(data.userSubBusinessType);
 
         setPhone('phone1', data.phone.slice(0, 3));
         setPhone('phone2', data.phone.slice(3, 7));
@@ -212,6 +216,68 @@ export function EnrollHistoryModal({
     }
   };
 
+  //인풋 잠금처리를 위한 change
+  const onChangeBusinessSubType = (value: string) => {
+    // const {
+    //   target: { value },
+    // } = e;
+    if (courseSubCategoryType.CHARTER_BUS === value) {
+      setValue('userCompanyName', '');
+      setValue('userSubBusinessType', value as courseSubCategoryType);
+      setDisabledCompany(false);
+      return setHideCarNumber(false);
+    }
+
+    if (courseSubCategoryType.SPECIAL_PASSENGER === value) {
+      setValue('userCompanyName', '');
+      setValue('userSubBusinessType', value as courseSubCategoryType);
+      setDisabledCompany(false);
+      return setHideCarNumber(true);
+    }
+
+    if (courseSubCategoryType.PRIVATE_TAXI === value) {
+      setValue(
+        'userCompanyName',
+        userBusinessTypeTwo.filter(item => item.enType === value)[0].type
+      );
+      setValue('userSubBusinessType', value as courseSubCategoryType);
+      setDisabledCompany(true);
+      return setHideCarNumber(false);
+    }
+
+    //차량번호 비활성화
+    if (
+      courseSubCategoryType.BUS === value ||
+      courseSubCategoryType.CHARTER_BUS === value ||
+      courseSubCategoryType.CORPORATE_TAXI === value
+    ) {
+      setValue('carNumber', null);
+      setValue('userCompanyName', '');
+      setValue('userSubBusinessType', value as courseSubCategoryType);
+      setDisabledCompany(false);
+      return setHideCarNumber(true);
+    }
+
+    //회사명 고정
+    if (
+      courseSubCategoryType.PRIVATE_TAXI === value ||
+      courseSubCategoryType.CONSIGNMENT === value ||
+      courseSubCategoryType.INDIVIDUAL_CARGO === value
+    ) {
+      setDisabledCompany(true);
+      setValue(
+        'userCompanyName',
+        userBusinessTypeTwo.filter(item => item.enType === value)[0].type
+      );
+      if (courseSubCategoryType.PRIVATE_TAXI === value) setDisabledCompany(false); //개인택시 보이게
+      return setValue('userSubBusinessType', value);
+    }
+    setDisabledCompany(false);
+    setHideCarNumber(false);
+    setValue('userCompanyName', '');
+    setValue('userSubBusinessType', value as courseSubCategoryType);
+  };
+
   if (getDateLoading) return <Spinner />;
   return (
     <Modal
@@ -229,17 +295,13 @@ export function EnrollHistoryModal({
             ) : isStudyPeriod ? (
               <Button
                 variant="contained"
-                onClick={() =>
-                  {
-                    window.open(
-                      `/course/${watch().seq}/lesson/${
-                        watch().firstChapterSeq
-                      }`,
-                      // '',
-                      '_blank'
-                    );
-                  }
-                }
+                onClick={() => {
+                  window.open(
+                    `/course/${watch().seq}/lesson/${watch().firstChapterSeq}`,
+                    // '',
+                    '_blank'
+                  );
+                }}
               >
                 학습하기
               </Button>
@@ -321,18 +383,6 @@ export function EnrollHistoryModal({
                 </TableDoubleRightCell>
               </TableDoubleParantRightCell>
             </TableDoubleRow>
-            {/* <TableRow>
-              <TableLeftCell>회사명</TableLeftCell>
-              <TableRightCell>
-                <TextField {...register('')} fullWidth />
-              </TableRightCell>
-            </TableRow> */}
-            {/* <TableRow>
-              <TableLeftCell>차량번호</TableLeftCell>
-              <TableRightCell>
-                <TextField {...register('carNumber')} fullWidth />
-              </TableRightCell>
-            </TableRow> */}
             <TableDoubleRow>
               <TableDoubleParantLeftCell>
                 <TableDoubleLeftCell className="left-cell-border">
@@ -353,17 +403,61 @@ export function EnrollHistoryModal({
             </TableDoubleRow>
 
             <TableRow>
+              <TableLeftCell className="left-cell-border">업종</TableLeftCell>
+
+              <TableRightCell className="right-cell">
+                <FormControl fullWidth>
+                  <Select
+                    {...register('userSubBusinessType')}
+                    onChange={e => {
+                      onChangeBusinessSubType(e.target.value);
+                    }}
+                    value={watch().userSubBusinessType || ''}
+                    disabled={isStudyPeriod || isAfterStudyDate}
+                  >
+                    {userBusinessTypeTwo
+                      .filter(filter => filter.TYPE_BUSINESS === watch().businessType)
+                      .map(item => {
+                        console.log(item);
+                        return (
+                          <MenuItem key={item.enType} value={item.enType}>
+                            {item.type}
+                          </MenuItem>
+                        );
+                      })}
+                  </Select>
+                </FormControl>
+              </TableRightCell>
+            </TableRow>
+
+            <TableRow>
               <TableLeftCell className="left-cell-border">회사명</TableLeftCell>
 
               <TableRightCell className="right-cell">
                 <TextField
                   {...register('userCompanyName')}
-                  disabled={isStudyPeriod || isAfterStudyDate}
+                  disabled={isStudyPeriod || isAfterStudyDate || disabledCompany}
                   fullWidth
                 />
               </TableRightCell>
             </TableRow>
-            {courseSubCategoryType.BUS === watch().userSubBusinessType ||
+            {hideCarNumber === false && (
+              <TableRow>
+                <TableLeftCell className="left-cell-border">차량번호</TableLeftCell>
+
+                <TableRightCell className="right-cell">
+                  <EnrollHistoryCarNumberBox
+                    parantSetValue={setValue}
+                    localName={watch().carNumber?.substring(0, 2)}
+                    digit2={watch().carNumber?.substring(2, 4)}
+                    oneWord={watch().carNumber?.substring(4, 5)}
+                    digit4={watch().carNumber?.substring(5, 9)}
+                    isStudyPeriod={isStudyPeriod || isAfterStudyDate}
+                  />
+                </TableRightCell>
+              </TableRow>
+            )}
+            {/* {courseSubCategoryType.BUS === watch().userSubBusinessType ||
             courseSubCategoryType.CHARTER_BUS === watch().userSubBusinessType ||
             courseSubCategoryType.CORPORATE_TAXI === watch().userSubBusinessType ? (
               ''
@@ -382,7 +476,7 @@ export function EnrollHistoryModal({
                   />
                 </TableRightCell>
               </TableRow>
-            )}
+            )} */}
 
             <TableRow>
               <TableLeftCell className="left-cell-border">차량등록지</TableLeftCell>

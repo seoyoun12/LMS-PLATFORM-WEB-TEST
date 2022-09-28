@@ -1050,6 +1050,12 @@ export interface CourseLearningInfoResponseDto {
   regDate?: string;
 
   /**
+   * 기수
+   * @format int32
+   */
+  step?: number;
+
+  /**
    * 학습기간 (yyyy.MM.dd ~ yyyy.MM.dd)
    * @example 2022.08.23 ~ 2022.09.10
    */
@@ -4800,7 +4806,8 @@ export interface FileMultipartCompleteRequestDto {
     | "RESOURCE_QNA_ANSWER_FILE"
     | "RESOURCE_LEARNING_MATERIAL_FILE"
     | "RESOURCE_USER_PROFILE_FILE"
-    | "RESOURCE_USER_CERTIFICATES";
+    | "RESOURCE_USER_CERTIFICATES"
+    | "RESOURCE_USER_CERTIFICATES_PDF";
 }
 
 export interface FileMultipartCreateRequestDto {
@@ -4832,7 +4839,8 @@ export interface FileMultipartCreateRequestDto {
     | "RESOURCE_QNA_ANSWER_FILE"
     | "RESOURCE_LEARNING_MATERIAL_FILE"
     | "RESOURCE_USER_PROFILE_FILE"
-    | "RESOURCE_USER_CERTIFICATES";
+    | "RESOURCE_USER_CERTIFICATES"
+    | "RESOURCE_USER_CERTIFICATES_PDF";
 }
 
 export interface FileMultipartCreateResponseDto {
@@ -6274,6 +6282,12 @@ export interface PostDetailResponseDto {
   /** 공지 상단 노출 여부 - 공지만 해당, 이외는 N */
   noticeYn?: string;
 
+  /**
+   * 게시글 타입 시퀀스
+   * @format int32
+   */
+  postTypeSeq?: number;
+
   /** 공개여부 */
   publicYn?: string;
 
@@ -6347,6 +6361,12 @@ export interface PostResponseDto {
 
   /** 공지 상단 노출 여부 - 공지만 해당, 이외는 N */
   noticeYn?: string;
+
+  /**
+   * 게시글 타입 시퀀스
+   * @format int32
+   */
+  postTypeSeq?: number;
 
   /** 공개여부 */
   publicYn?: string;
@@ -7391,6 +7411,9 @@ export interface UserCourseInfoDetailCourseInfoDto {
     | "HIGH_PRESSURE_GAS_FLAMMABLE"
     | "HIGH_PRESSURE_GAS_TOXIC";
 
+  /** 교육 구분 */
+  businessType?: "PASSENGER" | "FREIGHT";
+
   /** 차량번호 */
   carNumber?: string;
 
@@ -8111,6 +8134,14 @@ export interface UserLoginHistoryResponseDto {
 
   /** @format int64 */
   userSeq?: number;
+}
+
+export interface UserMobilePdfResponseDto {
+  /**
+   * 모바일 PDF 경로
+   * @example https://...
+   */
+  pdfPath?: string;
 }
 
 export interface UserModifyRequestDto {
@@ -9070,6 +9101,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/adm/statistics/survey/${surveySeq}`,
         method: "GET",
         ...params,
+      })
+    /**
+     * @description 관리자페이지에서 전체 유저의 로그인 통계를 조회한다. * 유저 이름 검색 가능
+     *
+     * @tags [관리자] 통계 API
+     * @name AdmFindUserStatisticsUsingGet
+     * @summary [관리자] 로그인 통계 조회 - JWT
+     * @request GET:/adm/statistics/user/loginStatistics
+     */,
+    admFindUserStatisticsUsingGet: (
+      query: { elementCnt?: number; page: number; searchName?: string },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<InputStream>, void>({
+        path: `/adm/statistics/user/loginStatistics`,
+        method: "GET",
+        query: query,
+        ...params,
       }),
   };
   auth = {
@@ -9422,14 +9471,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/course/adm/learning-info/
      */,
     admFindAllCourseLearningUsersUsingGet: (
-      query?: {
+      query: {
+        businessType?: "PASSENGER" | "FREIGHT";
+        carRegitRegion?:
+          | "CHEONAN"
+          | "GONGJU"
+          | "BORYEONG"
+          | "ASAN"
+          | "SEOSAN"
+          | "NONSAN"
+          | "GYERYONG"
+          | "DANGJIN"
+          | "GEUMSAN"
+          | "BUYEO"
+          | "SEOCHEON"
+          | "CHEONGYANG"
+          | "HONGSEONG"
+          | "YESAN"
+          | "TAEAN"
+          | "CHUNGNAM"
+          | "SEJONG"
+          | "SEOUL"
+          | "BUSAN"
+          | "DAEGU"
+          | "INCHEON"
+          | "GWANGJU"
+          | "DAEJEON"
+          | "ULSAN"
+          | "GYEONGGI"
+          | "GANGWON"
+          | "CHUNGBUK"
+          | "JEONBUK"
+          | "JEONNAM"
+          | "GYEONGBUK"
+          | "GYEONGNAM"
+          | "JEJU";
         completeType?: "TYPE_INCOMPLETE" | "TYPE_COMPLETE";
         courseClassSeq?: number;
         courseSeq?: number;
         courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
         elementCnt?: number;
         nameOrUsername?: string;
-        page?: number;
+        page: number;
         statusType?: "TYPE_NORMAL" | "TYPE_OUT";
       },
       params: RequestParams = {},
@@ -10825,7 +10908,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           | "RESOURCE_QNA_ANSWER_FILE"
           | "RESOURCE_LEARNING_MATERIAL_FILE"
           | "RESOURCE_USER_PROFILE_FILE"
-          | "RESOURCE_USER_CERTIFICATES";
+          | "RESOURCE_USER_CERTIFICATES"
+          | "RESOURCE_USER_CERTIFICATES_PDF";
         fileContentType: string;
         fileOriginalName: string;
       },
@@ -12571,7 +12655,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 특정 유저의 aT 를 헤더로 전달받아 해당하는 유저의 정보를 반환한다.
+     * @description 특정 유저의 aT 를 헤더로 전달받아 해당하는 유저의 정보를 반환한다. 특정유저가 듣고있는 과정-유저테이블의 수료여부와 수료번호를 검증하여 업데이트 처리한다.
      *
      * @tags [관리자 & App] 유저 API
      * @name FindMyInfoUsingGet
@@ -12609,6 +12693,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     findCertificatesConfirmUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<UserMyinfoCertificatesConfirmResponseDto>, void>({
         path: `/user/myinfo/certificates/confirm/${courseUserSeq}`,
+        method: "GET",
+        ...params,
+      })
+    /**
+     * @description 모바일 환경에서 반드시 <b>[App] 유저 마이페이지 내 증명서 PDF 다운로드</b> API 를 호출한 이후, S3 에 업로드 된 PDF 파일의 경로를 반환한다. Path Variable 로 전달받는 courseUserSeq 에 대하여, S3 에 업로드 된 PDF 파일이 없을 경우 404 예외를 발생시킨다. 파일이 존재할 경우 해당 PDF 파일의 S3 경로를 바로 반환한다.
+     *
+     * @tags [관리자 & App] 유저 API
+     * @name GetCertMobilePdfPathUsingGet
+     * @summary [App - Mobile 전용] 유저 마이페이지 내 증명서 PDF 다운로드 경로 조회 API
+     * @request GET:/user/myinfo/certificates/download/mobile/{courseUserSeq}
+     */,
+    getCertMobilePdfPathUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<UserMobilePdfResponseDto>, void>({
+        path: `/user/myinfo/certificates/download/mobile/${courseUserSeq}`,
         method: "GET",
         ...params,
       })

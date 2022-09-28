@@ -24,6 +24,7 @@ import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { ErrorMessage } from '@hookform/error-message';
 import { Spinner } from '@components/ui';
 import {
+  businessSubType,
   businessSubTypeCategoryReg,
   businessSubTypeReg,
   locationList,
@@ -68,11 +69,12 @@ export function CourseInformation({
   const router = useRouter();
   const snackbar = useSnackbar();
   const { courseUserSeq } = router.query;
-  const [businessSubType, setBusinessSubType] = useState<string>(); // 업종구분
-  const [carRegistrationRegion, setCarRegistrationRegion] = useState<string>(); // 차량등록지
-  const [residence, setResidence] = useState<string>(); // 거주지
+  const [businessSubTypeState, setBusinessSubTypeState] = useState<string>(); // 업종구분
+  const [carRegistrationRegionState, setCarRegistrationRegionState] = useState<string>(); // 차량등록지
+  const [residenceState, setResidenceState] = useState<string>(); // 거주지
 
-  const [disabledCarNumber, setDisabledCarNumber] = useState(false);
+  const [disabledCarNumber, setDisabledCarNumber] = useState(false); // 차량번호 비활성화
+  const [disabledBusinessName, setDisabledBusinessName] = useState(false); // 회사명 비활성화
 
   const [loading, setLoading] = useState(false);
 
@@ -92,22 +94,22 @@ export function CourseInformation({
   // console.log('courseInfo?.businessType : ', courseInfo?.businessType);
   // 차량번호 disabled 처리해주는 boolean
 
-  // 업종구분
-  const handleBusinessSubType = async (e: any) => {
-    setBusinessSubType(e.target.value);
-    setValue('businessSubType', e.target.value);
-  };
+  // 업종구분 -
+  // const handleBusinessSubType = async (e: any) => {
+  //   setBusinessSubTypeState(e.target.value);
+  //   setValue('businessSubType', e.target.value);
+  // };
   // console.log('업종구분 businessSubType : ', businessSubType);
 
   // 차량등록지
   const handleCarRegistrationRegion = async (e: any) => {
-    setCarRegistrationRegion(e.target.value);
+    setCarRegistrationRegionState(e.target.value);
     setValue('carRegistrationRegion', e.target.value);
   };
 
   // 거주지
   const handleResidence = async (e: any) => {
-    setResidence(e.target.value);
+    setResidenceState(e.target.value);
     setValue('residence', e.target.value);
   };
 
@@ -122,85 +124,83 @@ export function CourseInformation({
   };
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-  // const onChangeBusinessSubType = (e: SelectChangeEvent<unknown>) => {
-  //   const {
-  //     target: { value },
-  //   } = e;
+  // 업종구분
+  const handleBusinessSubType = (e: SelectChangeEvent<unknown>) => {
+    const {
+      target: { value },
+    } = e;
 
-  //   // 회사명 활성화 + 차량번호 비활성화
-  //   if (
-  //     courseSubCategoryType.CHARTER_BUS === value ||
-  //     courseSubCategoryType.SPECIAL_PASSENGER === value ||
-  //     courseSubCategoryType.CORPORATE_TAXI === value
-  //   ) {
-  //     setDisabledCompany(false);
-  //   }
+    if (businessSubType.CHARTER_BUS === value) {
+      setValue('businessName', '');
+      setValue('businessSubType', value as businessSubType);
+      setDisabledCarNumber(true);
+    }
 
-  //   if (businessSubTypeReg.type === value) {
-  //     setValue('businessName', '');
-  //     setValue('businessSubType', value as courseSubCategoryType);
-  //     setDisabledCompany(false);
-  //     return setHideCarNumber(false);
-  //   }
+    if (businessSubType.SPECIAL_PASSENGER === value) {
+      setValue('businessName', '');
+      setValue('businessSubType', value as businessSubType);
+      setDisabledCarNumber(true);
+    }
 
-  //   if (businessSubTypeReg.SPECIAL_PASSENGER === value) {
-  //     setValue('businessName', '');
-  //     setValue('businessSubType', value as courseSubCategoryType);
-  //     setDisabledCompany(false);
-  //     return setHideCarNumber(true);
-  //   }
+    if (businessSubType.PRIVATE_TAXI === value) {
+      setValue(
+        'businessName',
+        businessSubTypeCategoryReg.filter(item => item.enType === value)[0].type
+      );
+      setValue('businessSubType', value as businessSubType);
+      setDisabledCarNumber(true);
+    }
 
-  //   if (businessSubTypeReg.PRIVATE_TAXI === value) {
-  //     setValue(
-  //       'businessName',
-  //       userBusinessTypeTwo.filter(item => item.enType === value)[0].type
-  //     );
-  //     setValue('businessSubType', value as courseSubCategoryType);
-  //     setDisabledCompany(true);
-  //     return setHideCarNumber(false);
-  //   }
+    //차량번호 비활성화
+    if (
+      businessSubType.BUS === value ||
+      businessSubType.CHARTER_BUS === value ||
+      businessSubType.CORPORATE_TAXI === value
+    ) {
+      setValue('carNumber', null);
+      setValue('businessName', '');
+      setValue('businessSubType', value as businessSubType);
+      setDisabledCarNumber(true);
+    }
 
-  //   //차량번호 비활성화
-  //   if (
-  //     businessSubTypeReg.BUS === value ||
-  //     businessSubTypeReg.CHARTER_BUS === value ||
-  //     businessSubTypeReg.CORPORATE_TAXI === value
-  //   ) {
-  //     setValue('carNumber', null);
-  //     setValue('businessName', '');
-  //     setValue('businessSubType', value as courseSubCategoryType);
-  //     setDisabledCompany(false);
-  //     return setHideCarNumber(true);
-  //   }
+    //회사명 고정
+    if (
+      businessSubType.PRIVATE_TAXI === value ||
+      businessSubType.CONSIGNMENT === value ||
+      businessSubType.INDIVIDUAL_CARGO === value
+    ) {
+      setDisabledBusinessName(true);
+      setDisabledCarNumber(false);
+      setValue(
+        'businessName',
+        businessSubTypeCategoryReg.filter(item => item.enType === value)[0].type
+      );
+      if (businessSubType.PRIVATE_TAXI === value) {
+        //개인택시 보이게
+        setDisabledCarNumber(false);
+      }
+      return setValue('businessSubType', value);
+    }
+    setDisabledBusinessName(false);
+    setDisabledCarNumber(true);
+    setDisabledCarNumber(false);
 
-  //   //회사명 고정
-  //   if (
-  //     courseSubCategoryType.PRIVATE_TAXI === value ||
-  //     courseSubCategoryType.CONSIGNMENT === value ||
-  //     courseSubCategoryType.INDIVIDUAL_CARGO === value
-  //   ) {
-  //     setDisabledCompany(true);
-  //     setValue(
-  //       'businessName',
-  //       userBusinessTypeTwo.filter(item => item.enType === value)[0].type
-  //     );
-  //     if (courseSubCategoryType.PRIVATE_TAXI === value) setDisabledCompany(false); //개인택시 보이게
-  //     return setValue('businessSubType', value);
-  //   }
-  //   setDisabledCompany(false);
-  //   setHideCarNumber(false);
-  //   setValue('businessName', '');
-  //   setValue('businessSubType', value as courseSubCategoryType);
-  // };
+    setValue('businessName', '');
+    setValue('businessSubType', value as businessSubType);
+    // setBusinessSubTypeState(e.target.value);
+    // setValue('businessSubType', e.target.value);
+    setBusinessSubTypeState(value as businessSubType);
+    // setValue('businessSubType', e.target.value);
+  };
   ///////////////////////////////////////////////////////////////////////////////////////////////////
 
   // Select 박스 초깃값 설정.
   useEffect(() => {
     // 처음엔 undefined
     if (courseInfo) {
-      setBusinessSubType(courseInfo?.businessSubType); // 업종구분
-      setCarRegistrationRegion(courseInfo?.carRegistrationRegion); // 차량등록지
-      setResidence(courseInfo?.residence); // 거주지
+      setBusinessSubTypeState(courseInfo?.businessSubType); // 업종구분
+      setCarRegistrationRegionState(courseInfo?.carRegistrationRegion); // 차량등록지
+      setResidenceState(courseInfo?.residence); // 거주지
       reset({ ...courseInfo }); // ...? 초기화시켜주는데 안에있는 인자로 초기화? reset() -> 값이 X
       if (courseInfo.carNumber) {
         setValue('firstStr', courseInfo.carNumber.slice(0, 2));
@@ -296,7 +296,7 @@ export function CourseInformation({
                 labelId="businessSubType"
                 id="businessSubType"
                 placeholder="업종 유형선택"
-                value={businessSubType || ''}
+                value={businessSubTypeState || ''}
                 onChange={handleBusinessSubType}
               >
                 {businessSubTypeCategoryReg
@@ -317,6 +317,7 @@ export function CourseInformation({
                 {...register('businessName', { required: '회사명을 입력해주세요.' })}
                 label="회사명"
                 variant="outlined"
+                disabled={disabledBusinessName}
               />
               <ErrorMessage
                 errors={errors}
@@ -404,7 +405,7 @@ export function CourseInformation({
                 labelId="carRegistrationRegion"
                 id="carRegistrationRegion"
                 placeholder="차량등록지 선택"
-                value={carRegistrationRegion || ''}
+                value={carRegistrationRegionState || ''}
                 onChange={handleCarRegistrationRegion}
               >
                 {locationList.map(item => (
@@ -431,7 +432,7 @@ export function CourseInformation({
                 labelId="residence"
                 id="residence"
                 placeholder="거주지 선택"
-                value={residence || ''}
+                value={residenceState || ''}
                 onChange={handleResidence}
               >
                 {residenceList.map(item => (

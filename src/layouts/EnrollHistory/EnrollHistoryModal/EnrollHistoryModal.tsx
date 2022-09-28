@@ -37,7 +37,7 @@ import {
   TextField,
 } from '@mui/material';
 import { checkDatePeriod } from '@utils/checkDate';
-import { Phone4Regex } from '@utils/inputRegexes';
+import { carNumberRegex, Phone4Regex } from '@utils/inputRegexes';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import dateFormat from 'dateformat';
@@ -97,7 +97,6 @@ export function EnrollHistoryModal({
             : RegType.TYPE_ORGANIZATION
         );
         reset({ ...data });
-        console.log(data, '데이타타 타타타');
         setIsStudyPeriod(
           checkDatePeriod(
             watch().studyStartDate,
@@ -151,12 +150,28 @@ export function EnrollHistoryModal({
     //   return window.alert('모두 입력해 주세요!');
     // }
 
+    if (!hideCarNumber && !carNumberRegex.test(watch().carNumber)) {
+      return snackbar({
+        variant: 'error',
+        message: '올바른 형식의 차량번호를 입력해주세요!',
+      });
+    }
+    if (watch().userCompanyName === '' || !watch().userCompanyName) {
+      return snackbar({
+        variant: 'error',
+        message: '회사명을 입력해주세요!',
+      });
+    }
     if (
       watchPhone().phone1.length !== 3 ||
       watchPhone().phone2.length !== 4 ||
       watchPhone().phone3.length !== 4
-    )
-      return window.alert('휴대번호를 올바르게 입력해주세요');
+    ) {
+      return snackbar({
+        variant: 'error',
+        message: '올바른 휴대번호를 입력해주세요!',
+      });
+    }
     try {
       setLoading(true);
       const dialogConfirmed = await dialog({
@@ -165,6 +180,10 @@ export function EnrollHistoryModal({
         confirmText: '수정하기',
         cancelText: '취소',
       });
+      if (!dialogConfirmed) {
+        setLoading(false);
+      }
+
       if (dialogConfirmed) {
         const dataValue = {
           businessName: watch().userCompanyName,
@@ -222,14 +241,14 @@ export function EnrollHistoryModal({
     //   target: { value },
     // } = e;
     if (courseSubCategoryType.CHARTER_BUS === value) {
-      setValue('userCompanyName', '');
+      // setValue('userCompanyName', '');
       setValue('userSubBusinessType', value as courseSubCategoryType);
       setDisabledCompany(false);
       return setHideCarNumber(false);
     }
 
     if (courseSubCategoryType.SPECIAL_PASSENGER === value) {
-      setValue('userCompanyName', '');
+      // setValue('userCompanyName', '');
       setValue('userSubBusinessType', value as courseSubCategoryType);
       setDisabledCompany(false);
       return setHideCarNumber(true);
@@ -252,7 +271,7 @@ export function EnrollHistoryModal({
       courseSubCategoryType.CORPORATE_TAXI === value
     ) {
       setValue('carNumber', null);
-      setValue('userCompanyName', '');
+      // setValue('userCompanyName', '');
       setValue('userSubBusinessType', value as courseSubCategoryType);
       setDisabledCompany(false);
       return setHideCarNumber(true);
@@ -417,14 +436,11 @@ export function EnrollHistoryModal({
                   >
                     {userBusinessTypeTwo
                       .filter(filter => filter.TYPE_BUSINESS === watch().businessType)
-                      .map(item => {
-                        console.log(item);
-                        return (
-                          <MenuItem key={item.enType} value={item.enType}>
-                            {item.type}
-                          </MenuItem>
-                        );
-                      })}
+                      .map(item => (
+                        <MenuItem key={item.enType} value={item.enType}>
+                          {item.type}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
               </TableRightCell>
@@ -457,26 +473,6 @@ export function EnrollHistoryModal({
                 </TableRightCell>
               </TableRow>
             )}
-            {/* {courseSubCategoryType.BUS === watch().userSubBusinessType ||
-            courseSubCategoryType.CHARTER_BUS === watch().userSubBusinessType ||
-            courseSubCategoryType.CORPORATE_TAXI === watch().userSubBusinessType ? (
-              ''
-            ) : (
-              <TableRow>
-                <TableLeftCell className="left-cell-border">차량번호</TableLeftCell>
-
-                <TableRightCell className="right-cell">
-                  <EnrollHistoryCarNumberBox
-                    parantSetValue={setValue}
-                    localName={watch().carNumber?.substring(0, 2)}
-                    digit2={watch().carNumber?.substring(2, 4)}
-                    oneWord={watch().carNumber?.substring(4, 5)}
-                    digit4={watch().carNumber?.substring(5, 9)}
-                    isStudyPeriod={isStudyPeriod || isAfterStudyDate}
-                  />
-                </TableRightCell>
-              </TableRow>
-            )} */}
 
             <TableRow>
               <TableLeftCell className="left-cell-border">차량등록지</TableLeftCell>
@@ -580,6 +576,9 @@ export function EnrollHistoryModal({
                     }}
                     disabled={isStudyPeriod || isAfterStudyDate}
                   >
+                    <MenuItem value={''}>
+                      종료된 기수이거나 기수가 존재하지 않습니다!
+                    </MenuItem>
                     {stepsRes.map(item => {
                       return (
                         <MenuItem key={item.step} value={item.seq}>

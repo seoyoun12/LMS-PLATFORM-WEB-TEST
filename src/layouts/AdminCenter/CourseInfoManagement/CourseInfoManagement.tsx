@@ -56,6 +56,8 @@ export function CourseInfoManagement() {
   const [statusType, setStatusType] = useState<StatusType | null>(null); //상태타입
   const [courseSeq, setCourseSeq] = useState<number | null>(null);
   const [courseClassSeq, setCourseClassSeq] = useState<number | null>(null); // 과정클래스
+  const [businessType, setBusinessType] = useState<string | null>(null); //업종타입
+  const [carRegitRegion, setCarRegitRegion] = useState<string | null>(null); //차량등록지
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const { data, error, mutate } = useLearningInfo({
     page,
@@ -65,6 +67,8 @@ export function CourseInfoManagement() {
     nameOrUsername,
     courseSeq,
     courseClassSeq,
+    businessType,
+    carRegitRegion,
   });
 
   // Pagination
@@ -83,6 +87,17 @@ export function CourseInfoManagement() {
     setNotFound(false);
     if (!courseSeq) return setCourseClassSeq(null);
     setCourseClassSeq(courseClassSeq);
+  };
+
+  //업종구분
+  const onChangeBusinessType = (value: string) => {
+    setNotFound(false);
+    setBusinessType(value);
+  };
+  //차량등록지
+  const onChangeCarRegitRegion = (value: string) => {
+    setNotFound(false);
+    setCarRegitRegion(value);
   };
 
   //change completeType(수료여부)
@@ -155,6 +170,10 @@ export function CourseInfoManagement() {
         handleSearch={handleSearch}
         onChangeCompleteType={onChangeCompleteType}
         onChangeStatusType={onChangeStatusType}
+        businessType={businessType}
+        onChangeBusinessType={onChangeBusinessType}
+        carRegitRegion={carRegitRegion}
+        onChangeCarRegitRegion={onChangeCarRegitRegion}
       />
       {notFound ? (
         <NotFound content="학습현황이 존재하지 않습니다!" />

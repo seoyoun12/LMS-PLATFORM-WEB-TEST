@@ -58,6 +58,8 @@ export interface CourseLearningInfoRequestDto {
   nameOrUsername?: string;
   page: number;
   statusType?: StatusType;
+  businessType?: string;
+  carRegitRegion?: string;
 }
 
 export function useLearningInfo({ page, ...rest }: CourseLearningInfoRequestDto) {

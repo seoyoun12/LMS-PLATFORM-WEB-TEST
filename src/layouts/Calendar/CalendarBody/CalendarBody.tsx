@@ -70,6 +70,7 @@ export const courseCategory = [
   { type: courseCategoryType.TYPE_HANDICAPPED, ko: '교통약자 이동편의 증진' },
   { type: courseCategoryType.TYPE_DANGEROUS, ko: '위험물질 운송차량 운전자' },
 ];
+
 export const courseSubCategory = [
   { type: courseSubCategoryType.BUS, ko: '버스' },
   { type: courseSubCategoryType.CHARTER_BUS, ko: '전세버스' },

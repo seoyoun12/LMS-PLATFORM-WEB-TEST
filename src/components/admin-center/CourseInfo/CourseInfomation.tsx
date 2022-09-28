@@ -1,4 +1,4 @@
-import { CourseLearningInfoInput, detailCourseInfo } from '@common/api/adm/learningInfo';
+import { CourseLearningInfoInput } from '@common/api/adm/learningInfo';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
   Box,
@@ -7,8 +7,6 @@ import {
   FormHelperText,
   MenuItem,
   Select,
-  SelectChangeEvent,
-  Tab,
   TableBody,
   TableCell,
   TableHead,
@@ -19,26 +17,13 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/css';
 import styled from '@emotion/styled';
 import { UserCourseInfoDetailCourseInfoDto } from '@common/api/Api';
-import { userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
-import {
-  courseSubCategoryType,
-  UserTransSaveInputDataType,
-} from '@common/api/courseClass';
-import {
-  FieldValues,
-  SubmitHandler,
-  useForm,
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormWatch,
-} from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
-import { copyFileSync } from 'fs';
 import { ErrorMessage } from '@hookform/error-message';
 import { Spinner } from '@components/ui';
 import { locationList, residenceList } from '@layouts/MeEdit/MeEdit';
-import { CarNumberBox } from '@components/ui/Step';
+import { businessSubTypeReg } from 'src/staticDataDescElements/staticType';
 
 // interface Props {
 //   courseInfo: UserCourseInfoDetailCourseInfoDto;
@@ -46,9 +31,27 @@ import { CarNumberBox } from '@components/ui/Step';
 //     courseLearningInfoInput: CourseLearningInfoInput;
 //   };
 // }
+
+interface FormType extends UserCourseInfoDetailCourseInfoDto {
+  firstStr: string;
+  firstNum: string;
+  secondStr: string;
+  secondNum: string;
+}
+
+const localList = [
+  { title: '충남', type: 'NAM' },
+  { title: '세종', type: 'SEJONG' },
+];
+const oneWordList = ['아', '바', '사', '자', '배'];
+
 const defaultValues = {
   // contentType: ContentType.CONTENT_MP4,
   // businessSubType: courseSubCategory.filter(filter => filter.type === businessSubType),
+  firstStr: '',
+  firstNum: '',
+  secondStr: '',
+  secondNum: '',
 };
 
 // export function CourseInformation({ courseInfo, onHandleSubmit }: Props) {
@@ -61,16 +64,10 @@ export function CourseInformation({
     courseLearningInfoInput,
     courseUserSeq,
     setLoading,
-  }: // businessSubType,
-  // carRegistrationRegion,
-  // residence,
-  {
+  }: {
     courseLearningInfoInput: CourseLearningInfoInput;
     courseUserSeq: number;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-    // businessSubType: string;
-    // carRegistrationRegion: string;
-    // residence: string;
   }) => void;
 }) {
   const router = useRouter();
@@ -79,19 +76,22 @@ export function CourseInformation({
   const [businessSubType, setBusinessSubType] = useState<string>(); // 업종구분
   const [carRegistrationRegion, setCarRegistrationRegion] = useState<string>(); // 차량등록지
   const [residence, setResidence] = useState<string>(); // 거주지
+  // const [firstNum, setFirstNum] = useState<string>(); // 차량번호1
+  // const [secondNum, setSecondNum] = useState<string>(); // 차량번호2
+
   const [loading, setLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    control,
     reset,
-    watch, // useState를 사용하면 같은 동작을 두번.
+    watch, // useState를 사용하면 같은 동작을 두번. watch를 사용하자.
     setValue,
-    resetField,
     // } = useForm<UserCourseInfoDetailCourseInfoDto>({ defaultValues });
-  } = useForm<UserCourseInfoDetailCourseInfoDto>();
+  } = useForm<FormType>({ defaultValues });
+  // } = useForm<UserCourseInfoDetailCourseInfoDto>();
+
   // useForm 안에있는 businessSubType는 useState로 변경된 값과는 전혀 별개의 값.
   // setValue.
 
@@ -109,29 +109,29 @@ export function CourseInformation({
   const handleCarRegistrationRegion = async (e: any) => {
     setCarRegistrationRegion(e.target.value);
     setValue('carRegistrationRegion', e.target.value);
-    // console.log('차량등록지 : ', setCarRegistrationRegion(e.target.value));
-    // console.log('차량등록지 value : ', e.target.value);
-    // console.log('carRegistrationRegion : ', carRegistrationRegion);
   };
-  // console.log('차량등록지 carRegistrationRegion : ', carRegistrationRegion);
 
   // 거주지
-  // const handleResidence = (e: any) => {
   const handleResidence = async (e: any) => {
     setResidence(e.target.value);
     setValue('residence', e.target.value);
-    // console.log('거주지 : ', setResidence(e.target.value));
-    // console.log('거주지 value : ', e.target.value);
-    // console.log('residence : ', residence);
   };
-  // console.log('거주지 residence : ', residence);
+
+  // 차량번호 1
+  const handleFirstStr = async (e: any) => {
+    setValue('firstStr', e.target.value);
+  };
+
+  // 차량번호 2
+  const handleSecondStr = async (e: any) => {
+    setValue('secondStr', e.target.value);
+  };
 
   // Select 박스 초깃값 설정.
   useEffect(() => {
     // 처음엔 undefined
     if (courseInfo?.businessSubType) {
       setBusinessSubType(courseInfo?.businessSubType); // 업종구분
-      // setBusinessName(courseInfo?.businessName); // 회사명
       setCarRegistrationRegion(courseInfo?.carRegistrationRegion); // 차량등록지
       setResidence(courseInfo?.residence); // 거주지
       reset({ ...courseInfo }); // ...? 초기화시켜주는데 안에있는 인자로 초기화? reset() -> 값이 X
@@ -139,7 +139,16 @@ export function CourseInformation({
   }, [courseInfo?.businessSubType]);
   // []에 courseInfo를 넣는거는 이 값을 바라보면서 undefined에서 바뀌었을때 여길 봐달라
 
-  const onSubmit: SubmitHandler<CourseLearningInfoInput> = async (
+  // 차량번호 설정.
+  useEffect(() => {
+    const { firstStr, firstNum, secondStr, secondNum } = watch(); // 차량번호
+    const carNumber = firstStr + firstNum + secondStr + secondNum;
+    setValue('carNumber', carNumber);
+    console.log('차량번호 carNumber : ', carNumber);
+    console.log('차량번호 watch().carNumber : ', watch().carNumber);
+  }, [watch().firstNum, watch().firstStr, watch().secondNum, watch().secondStr]);
+
+  const onSubmit: SubmitHandler<FormType> = async (
     courseLearningInfoInput: CourseLearningInfoInput
   ) => {
     console.log('2. courseLearningInfoInput : ', courseLearningInfoInput);
@@ -148,9 +157,6 @@ export function CourseInformation({
       courseLearningInfoInput: courseLearningInfoInput,
       courseUserSeq: Number(courseUserSeq),
       setLoading,
-      // businessSubType,
-      // carRegistrationRegion,
-      // residence,
     });
     // console.log('courseLearningInfoInput : ', courseLearningInfoInput);
   };
@@ -227,7 +233,7 @@ export function CourseInformation({
                 // )}
                 // {...register('businessSubType')}
               >
-                {courseSubCategory
+                {businessSubTypeReg
                   // .filter(filter => filter.type === courseInfo?.businessSubType)
                   .map(item => (
                     // <MenuItem key={item.type} value={item.type} sx={{ fontSize: '14px' }}>
@@ -247,10 +253,8 @@ export function CourseInformation({
             <FormControl fullWidth>
               <TextField
                 {...register('businessName', { required: '회사명을 입력해주세요.' })}
-                size="small"
                 label="회사명"
                 variant="outlined"
-                // onChange={handleBusinessName}
               />
               <ErrorMessage
                 errors={errors}
@@ -260,26 +264,70 @@ export function CourseInformation({
             </FormControl>
           </TableRightCell>
         </TableRow>
-
+        {/* ============================================================================================= */}
         <TableRow>
           <TableLeftCell align="center">차량번호</TableLeftCell>
-          {/* <TableRightCell>{courseInfo?.carNumber}</TableRightCell> */}
           <TableRightCell>
-            <FormControl fullWidth sx={{ height: '100%' }}>
-              {/* <TextField
-                {...register('carNumber', { required: '차량번호를 입력해주세요.' })}
-                size="small"
-                label="차량번호"
+            <Box display="flex" width="100%" gap={1}>
+              {/* 차량번호 첫번째 */}
+              <FormControl fullWidth>
+                <Select
+                  labelId="firstStr"
+                  id="firstStr"
+                  placeholder="지역명"
+                  value={watch().firstStr}
+                  onChange={handleFirstStr}
+                >
+                  {localList.map(item => (
+                    <MenuItem key={item.title} value={item.title}>
+                      {item.title}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              {/* 차량번호 두번째 */}
+              <TextField
+                // {...register('firstNum', { required: '앞 두자리 번호를 입력해주세요.' })}
+                {...register('firstNum')}
+                onChange={e => {
+                  if (e.target.value.length > 2) return;
+                  setValue('firstNum', e.target.value.replace(/[^0-9]/g, ''));
+                }}
+                value={watch().firstNum}
+                label="차량번호1"
                 variant="outlined"
-                // value={courseInfo?.carNumber}
+                fullWidth
               />
-              <ErrorMessage
-                errors={errors}
-                name="carNumber"
-                as={<FormHelperText error />}
-              /> */}
-              {/* <CarNumberBox parantSetValue={setValue} /> */}
-            </FormControl>
+              {/* 차량번호 세번째 */}
+              <FormControl fullWidth>
+                <Select
+                  labelId="secondStr"
+                  id="secondStr"
+                  placeholder="용도기호 한글 한글자"
+                  value={watch().secondStr}
+                  onChange={handleSecondStr}
+                >
+                  {oneWordList.map(item => (
+                    <MenuItem key={item} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              {/* 차량번호 네번째 */}
+              <TextField
+                // {...register('secondNum', { required: '뒤 네자리 번호를 입력해주세요.' })}
+                {...register('secondNum')}
+                onChange={e => {
+                  if (e.target.value.length > 4) return;
+                  setValue('secondNum', e.target.value.replace(/[^0-9]/g, ''));
+                }}
+                value={watch().secondNum}
+                label="차량번호2"
+                variant="outlined"
+                fullWidth
+              />
+            </Box>
           </TableRightCell>
 
           <TableLeftCell align="center">차량등록지</TableLeftCell>
@@ -336,7 +384,6 @@ export function CourseInformation({
             <FormControl fullWidth sx={{ height: '100%' }}>
               <TextField
                 {...register('phone', { required: '핸드폰번호 입력해주세요.' })}
-                size="small"
                 label="핸드폰번호"
                 variant="outlined"
               />
@@ -380,10 +427,6 @@ const TableRightCell = styled(TableCell)`
   border-bottom: 1px solid #c4c4c4;
   border-right: 1px solid #c4c4c4;
   font: 14px;
-`;
-
-const textField = css`
-  margin-bottom: 20px;
 `;
 
 const ButtonBox = styled(Box)`

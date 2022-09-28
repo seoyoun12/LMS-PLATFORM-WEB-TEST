@@ -106,7 +106,7 @@ export function CarNumberBox({ parantSetValue }: Props) {
           setValue('digit4', e.target.value.replace(/[^0-9]/g, ''));
         }}
         value={watch().digit4}
-        placeholder="일련번호 4자리"
+        placeholder="차량번호 4자리"
         inputProps={{ inputMode: 'numeric' }}
         fullWidth
       />

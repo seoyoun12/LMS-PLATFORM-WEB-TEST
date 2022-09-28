@@ -156,7 +156,7 @@ export function ProgressStatus({ progressList, onMutate }: Props) {
 
 const ProgressStatusBox = styled(Box)`
   margin-top: 10px;
-  .MuiTableRow-root:first-child {
+  .MuiTableRow-root:first-of-type {
     td {
       border-top: 1px solid rgba(224, 224, 224, 1);
     }
@@ -171,7 +171,7 @@ const TableTopHeadCell = styled(MuiTableCell)`
 `;
 
 const TableHeaderRow = styled(MuiTableRow)`
-  .MuiTableCell-root:first-child {
+  .MuiTableCell-root:first-of-type {
     border-left: 1px solid #c4c4c4;
     border-right: 0;
   }

@@ -6501,6 +6501,9 @@ export interface UserCourseInfoDetailCourseInfoDto {
   // 회사명
   businessName: string;
 
+  // 타입구분
+  businessType: string;
+
   // 업종구분
   businessSubType: string;
 

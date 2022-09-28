@@ -91,7 +91,7 @@ const TableLeftCell = styled(TableCell)`
   border-bottom: 1px solid #c4c4c4;
   width: 15%;
 
-  &:first-child {
+  &:first-of-type {
     border-left: 1px solid #c4c4c4;
     width: 10%;
   }

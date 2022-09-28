@@ -7,6 +7,7 @@ import {
   FormHelperText,
   MenuItem,
   Select,
+  SelectChangeEvent,
   TableBody,
   TableCell,
   TableHead,
@@ -22,15 +23,12 @@ import { useEffect, useState } from 'react';
 import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { ErrorMessage } from '@hookform/error-message';
 import { Spinner } from '@components/ui';
-import { locationList, residenceList } from '@layouts/MeEdit/MeEdit';
-import { businessSubTypeReg } from 'src/staticDataDescElements/staticType';
-
-// interface Props {
-//   courseInfo: UserCourseInfoDetailCourseInfoDto;
-//   onHandleSubmit: {
-//     courseLearningInfoInput: CourseLearningInfoInput;
-//   };
-// }
+import {
+  businessSubTypeCategoryReg,
+  businessSubTypeReg,
+  locationList,
+  residenceList,
+} from 'src/staticDataDescElements/staticType';
 
 interface FormType extends UserCourseInfoDetailCourseInfoDto {
   firstStr: string;
@@ -46,15 +44,12 @@ const localList = [
 const oneWordList = ['아', '바', '사', '자', '배'];
 
 const defaultValues = {
-  // contentType: ContentType.CONTENT_MP4,
-  // businessSubType: courseSubCategory.filter(filter => filter.type === businessSubType),
   firstStr: '',
   firstNum: '',
   secondStr: '',
   secondNum: '',
 };
 
-// export function CourseInformation({ courseInfo, onHandleSubmit }: Props) {
 export function CourseInformation({
   courseInfo,
   onHandleSubmit,
@@ -76,8 +71,8 @@ export function CourseInformation({
   const [businessSubType, setBusinessSubType] = useState<string>(); // 업종구분
   const [carRegistrationRegion, setCarRegistrationRegion] = useState<string>(); // 차량등록지
   const [residence, setResidence] = useState<string>(); // 거주지
-  // const [firstNum, setFirstNum] = useState<string>(); // 차량번호1
-  // const [secondNum, setSecondNum] = useState<string>(); // 차량번호2
+
+  const [disabledCarNumber, setDisabledCarNumber] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -94,14 +89,13 @@ export function CourseInformation({
 
   // useForm 안에있는 businessSubType는 useState로 변경된 값과는 전혀 별개의 값.
   // setValue.
+  // console.log('courseInfo?.businessType : ', courseInfo?.businessType);
+  // 차량번호 disabled 처리해주는 boolean
 
   // 업종구분
   const handleBusinessSubType = async (e: any) => {
     setBusinessSubType(e.target.value);
     setValue('businessSubType', e.target.value);
-    // console.log('업종구분 : ', setBusinessSubType(e.target.value));
-    // console.log('업종구분 value : ', e.target.value);
-    // console.log('businessSubType : ', businessSubType);
   };
   // console.log('업종구분 businessSubType : ', businessSubType);
 
@@ -127,16 +121,95 @@ export function CourseInformation({
     setValue('secondStr', e.target.value);
   };
 
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  // const onChangeBusinessSubType = (e: SelectChangeEvent<unknown>) => {
+  //   const {
+  //     target: { value },
+  //   } = e;
+
+  //   // 회사명 활성화 + 차량번호 비활성화
+  //   if (
+  //     courseSubCategoryType.CHARTER_BUS === value ||
+  //     courseSubCategoryType.SPECIAL_PASSENGER === value ||
+  //     courseSubCategoryType.CORPORATE_TAXI === value
+  //   ) {
+  //     setDisabledCompany(false);
+  //   }
+
+  //   if (businessSubTypeReg.type === value) {
+  //     setValue('businessName', '');
+  //     setValue('businessSubType', value as courseSubCategoryType);
+  //     setDisabledCompany(false);
+  //     return setHideCarNumber(false);
+  //   }
+
+  //   if (businessSubTypeReg.SPECIAL_PASSENGER === value) {
+  //     setValue('businessName', '');
+  //     setValue('businessSubType', value as courseSubCategoryType);
+  //     setDisabledCompany(false);
+  //     return setHideCarNumber(true);
+  //   }
+
+  //   if (businessSubTypeReg.PRIVATE_TAXI === value) {
+  //     setValue(
+  //       'businessName',
+  //       userBusinessTypeTwo.filter(item => item.enType === value)[0].type
+  //     );
+  //     setValue('businessSubType', value as courseSubCategoryType);
+  //     setDisabledCompany(true);
+  //     return setHideCarNumber(false);
+  //   }
+
+  //   //차량번호 비활성화
+  //   if (
+  //     businessSubTypeReg.BUS === value ||
+  //     businessSubTypeReg.CHARTER_BUS === value ||
+  //     businessSubTypeReg.CORPORATE_TAXI === value
+  //   ) {
+  //     setValue('carNumber', null);
+  //     setValue('businessName', '');
+  //     setValue('businessSubType', value as courseSubCategoryType);
+  //     setDisabledCompany(false);
+  //     return setHideCarNumber(true);
+  //   }
+
+  //   //회사명 고정
+  //   if (
+  //     courseSubCategoryType.PRIVATE_TAXI === value ||
+  //     courseSubCategoryType.CONSIGNMENT === value ||
+  //     courseSubCategoryType.INDIVIDUAL_CARGO === value
+  //   ) {
+  //     setDisabledCompany(true);
+  //     setValue(
+  //       'businessName',
+  //       userBusinessTypeTwo.filter(item => item.enType === value)[0].type
+  //     );
+  //     if (courseSubCategoryType.PRIVATE_TAXI === value) setDisabledCompany(false); //개인택시 보이게
+  //     return setValue('businessSubType', value);
+  //   }
+  //   setDisabledCompany(false);
+  //   setHideCarNumber(false);
+  //   setValue('businessName', '');
+  //   setValue('businessSubType', value as courseSubCategoryType);
+  // };
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+
   // Select 박스 초깃값 설정.
   useEffect(() => {
     // 처음엔 undefined
-    if (courseInfo?.businessSubType) {
+    if (courseInfo) {
       setBusinessSubType(courseInfo?.businessSubType); // 업종구분
       setCarRegistrationRegion(courseInfo?.carRegistrationRegion); // 차량등록지
       setResidence(courseInfo?.residence); // 거주지
       reset({ ...courseInfo }); // ...? 초기화시켜주는데 안에있는 인자로 초기화? reset() -> 값이 X
+      if (courseInfo.carNumber) {
+        setValue('firstStr', courseInfo.carNumber.slice(0, 2));
+        setValue('firstNum', courseInfo.carNumber.slice(2, 4));
+        setValue('secondStr', courseInfo.carNumber.slice(4, 5));
+        setValue('secondNum', courseInfo.carNumber.slice(5));
+      }
     }
-  }, [courseInfo?.businessSubType]);
+  }, [courseInfo]);
   // []에 courseInfo를 넣는거는 이 값을 바라보면서 undefined에서 바뀌었을때 여길 봐달라
 
   // 차량번호 설정.
@@ -144,15 +217,24 @@ export function CourseInformation({
     const { firstStr, firstNum, secondStr, secondNum } = watch(); // 차량번호
     const carNumber = firstStr + firstNum + secondStr + secondNum;
     setValue('carNumber', carNumber);
-    console.log('차량번호 carNumber : ', carNumber);
-    console.log('차량번호 watch().carNumber : ', watch().carNumber);
+    // console.log('차량번호 carNumber : ', carNumber);
+    // console.log('차량번호 watch().carNumber : ', watch().carNumber);
   }, [watch().firstNum, watch().firstStr, watch().secondNum, watch().secondStr]);
+
+  // 차량번호 disabled
+  useEffect(() => {
+    if (
+      courseInfo?.businessSubType === 'BUS' ||
+      courseInfo?.businessSubType === 'SPECIAL_PASSENGER' ||
+      courseInfo?.businessSubType === 'CORPORATE_TAXI'
+    ) {
+      setDisabledCarNumber(true);
+    }
+  }, [businessSubType]);
 
   const onSubmit: SubmitHandler<FormType> = async (
     courseLearningInfoInput: CourseLearningInfoInput
   ) => {
-    console.log('2. courseLearningInfoInput : ', courseLearningInfoInput);
-
     onHandleSubmit({
       courseLearningInfoInput: courseLearningInfoInput,
       courseUserSeq: Number(courseUserSeq),
@@ -216,40 +298,20 @@ export function CourseInformation({
                 placeholder="업종 유형선택"
                 value={businessSubType || ''}
                 onChange={handleBusinessSubType}
-                // onChange={e => {
-                //   setBusinessSubType(
-                //     courseSubCategory.filter(item => item.type === e.target.value)[0].type
-                //   );
-                // }}
-                // onChange={e => {
-                //   handleBusinessSubType(
-                //     courseSubCategory.filter(
-                //       filter => filter.type === courseInfo?.businessSubType
-                //     )
-                //   );
-                // }}
-                // value={courseSubCategory.filter(
-                //   filter => filter.type === courseInfo?.businessSubType
-                // )}
-                // {...register('businessSubType')}
               >
-                {businessSubTypeReg
-                  // .filter(filter => filter.type === courseInfo?.businessSubType)
+                {businessSubTypeCategoryReg
+                  .filter(item => item.category === courseInfo?.businessType)
                   .map(item => (
-                    // <MenuItem key={item.type} value={item.type} sx={{ fontSize: '14px' }}>
-                    <MenuItem key={item.type} value={item.type}>
-                      {item.ko}
+                    <MenuItem key={item.enType} value={item.enType}>
+                      {item.type}
                     </MenuItem>
                   ))}
               </Select>
             </FormControl>
-            {/* {courseInfo?.businessSubType} */}
           </TableRightCell>
 
           <TableLeftCell align="center">회사명</TableLeftCell>
-          {/* <TableRightCell>{courseInfo?.businessName}</TableRightCell> */}
           <TableRightCell>
-            {/* <FormControl className={textField}> */}
             <FormControl fullWidth>
               <TextField
                 {...register('businessName', { required: '회사명을 입력해주세요.' })}
@@ -277,6 +339,7 @@ export function CourseInformation({
                   placeholder="지역명"
                   value={watch().firstStr}
                   onChange={handleFirstStr}
+                  disabled={disabledCarNumber}
                 >
                   {localList.map(item => (
                     <MenuItem key={item.title} value={item.title}>
@@ -294,18 +357,20 @@ export function CourseInformation({
                   setValue('firstNum', e.target.value.replace(/[^0-9]/g, ''));
                 }}
                 value={watch().firstNum}
-                label="차량번호1"
+                label="차종번호 2자리"
                 variant="outlined"
                 fullWidth
+                disabled={disabledCarNumber}
               />
               {/* 차량번호 세번째 */}
               <FormControl fullWidth>
                 <Select
                   labelId="secondStr"
                   id="secondStr"
-                  placeholder="용도기호 한글 한글자"
+                  placeholder="용도기호 한글자"
                   value={watch().secondStr}
                   onChange={handleSecondStr}
+                  disabled={disabledCarNumber}
                 >
                   {oneWordList.map(item => (
                     <MenuItem key={item} value={item}>
@@ -323,15 +388,15 @@ export function CourseInformation({
                   setValue('secondNum', e.target.value.replace(/[^0-9]/g, ''));
                 }}
                 value={watch().secondNum}
-                label="차량번호2"
+                label="차량번호 4자리"
                 variant="outlined"
                 fullWidth
+                disabled={disabledCarNumber}
               />
             </Box>
           </TableRightCell>
 
           <TableLeftCell align="center">차량등록지</TableLeftCell>
-          {/* <TableRightCell>{courseInfo?.carRegistrationRegion}</TableRightCell> */}
 
           <TableRightCell>
             <FormControl fullWidth>
@@ -378,7 +443,6 @@ export function CourseInformation({
             </FormControl>
           </TableRightCell>
 
-          {/* <TableRightCell>{courseInfo?.residence}</TableRightCell> */}
           <TableLeftCell align="center">휴대전화</TableLeftCell>
           <TableRightCell>
             <FormControl fullWidth sx={{ height: '100%' }}>
@@ -416,7 +480,7 @@ const TableLeftCell = styled(TableCell)`
   background: #f5f5f5;
   border-right: 1px solid #c4c4c4;
   border-bottom: 1px solid #c4c4c4;
-  &:first-child {
+  &:first-of-type {
     border-left: 1px solid #c4c4c4;
     width: 10%;
   }

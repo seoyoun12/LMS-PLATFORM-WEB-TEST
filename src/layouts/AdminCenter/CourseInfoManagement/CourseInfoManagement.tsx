@@ -27,6 +27,7 @@ import { ManagementHeadRows } from '@components/admin-center/CourseInfo/Manageme
 import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { convertBirth } from '@utils/convertBirth';
 import { SelectClassAndStep } from '@components/admin-center/CourseInfo/SelectClassAndStep';
+import { utils, writeFile } from 'xlsx';
 
 const headRows: {
   name: string;
@@ -150,11 +151,71 @@ export function CourseInfoManagement() {
     }
   }, [data]);
 
+  const onClickDown = () => {
+    const Excel = utils.book_new();
+    // const EXCEL_CONTENT = utils.json_to_sheet(
+    //   [
+    //     { No: '컬럼1', 이름: '컬럼2', 아이디: '컬럼3', 생년월일: '머임' },
+    //     { No: '컬럼1s', 이름: '컬럼d2', 아이디: '컬럼3f', 생년월일: '머임' },
+    //   ]
+    //   // { header: ['컬럼1', '컬럼2', '어쩔컬럼3'], skipHeader: false }
+    // );
+    const EXCEL_CONTENT = utils.aoa_to_sheet([
+      [
+        'No',
+        '이름',
+        '아이디',
+        '생년월일',
+        '휴대폰번호',
+        '업종',
+        '과정명',
+        '기수',
+        '학습기간',
+        '진도율',
+        '수료여부',
+        '상태',
+      ],
+      [
+        232,
+        '홍길동',
+        '실명계정',
+        '2022-02-22',
+        '01012341234',
+        '전세버스',
+        '설문용과정',
+        '2022/012',
+        '2022-01-01 ~ 2022-06-06',
+        '93.0%',
+        '미수료',
+        '정상',
+      ],
+      [
+        222,
+        '홍길동1',
+        '실명계정',
+        '2022-02-22',
+        '01012341234',
+        '버스',
+        '설문용과정',
+        '2022/012',
+        '2022-01-01 ~ 2022-06-06',
+        '93.0%',
+        '미수료',
+        '퇴교',
+      ],
+    ]);
+    utils.book_append_sheet(Excel, EXCEL_CONTENT, '충남 학습현황 데이터');
+    writeFile(Excel, '테스트.xlsx');
+  };
+
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
   // user/adm/course-info/detail/{courseUserSeq}
   return (
     <Box>
+      {/* <Button variant="contained" onClick={onClickDown}>
+        실험용 엑셀
+      </Button> */}
       <CourseInfoTypography variant="h5">전체 수강생 학습현황</CourseInfoTypography>
       <SelectClassAndStep
         courseSeq={courseSeq}

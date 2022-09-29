@@ -63,12 +63,12 @@ export interface CourseLearningInfoRequestDto {
 }
 
 export interface CourseLearningInfoInput {
-  businessName: string;
-  businessSubType: string;
-  carNumber: string;
-  carRegistrationRegion: string;
-  phone: string;
-  residence: string;
+  businessName?: string;
+  businessSubType?: string;
+  carNumber?: string;
+  carRegistrationRegion?: string;
+  phone?: string;
+  residence?: string;
 }
 
 export function useLearningInfo({ page, ...rest }: CourseLearningInfoRequestDto) {
@@ -118,7 +118,7 @@ export function useLearningInfoStep(courseSeq: number) {
     steps: data?.data,
     stepsError: error,
   };
-
+}
 // 상세
 export function detailCourseInfo(courseUserSeq: number) {
   const { data, error, mutate } = useSWR<SWRResponse<DetailCourse>>(

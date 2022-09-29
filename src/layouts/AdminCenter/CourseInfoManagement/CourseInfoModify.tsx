@@ -19,8 +19,6 @@ export function CourseInfoModify() {
   // const { data, error } = detailCourseInfo({ courseUserSeq: Number(courseUserSeq) }); // 비구조화할당?
   const { data, error, mutate } = detailCourseInfo(Number(courseUserSeq));
 
-  console.log('학습현황 상세정보 : ', data);
-
   const handleSubmit = async ({
     courseLearningInfoInput,
     setLoading,
@@ -35,7 +33,6 @@ export function CourseInfoModify() {
           courseUserSeq: Number(courseUserSeq),
           courseLearningInfoInput,
         });
-        console.log('1. courseLearningInfoInput : ', courseLearningInfoInput);
         snackbar({ variant: 'success', message: '수정 되었습니다.' });
         await mutate();
         router.push(`/admin-center/course-info`);
@@ -49,9 +46,6 @@ export function CourseInfoModify() {
       setLoading(false);
     }
   };
-
-  console.log('course info modify 데이터 : ', data);
-  console.log('차량번호 : ', data?.courseInfo?.carNumber);
 
   const onMutate = () => {
     mutate();

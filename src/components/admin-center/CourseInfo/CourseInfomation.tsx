@@ -46,14 +46,14 @@ const oneWordList = ['아', '바', '사', '자', '배'];
 
 const defaultValues = {
   // 처음 undefined면 value 가 변경되어도 적용이 안된다. 그래서 초기값 d v 로 빈 스트링을 넣어준다.
-  businessSubType: '',
+  // businessSubType: '',
   businessName: '',
   firstStr: '',
   firstNum: '',
   secondStr: '',
   secondNum: '',
-  carRegistrationRegion: '',
-  residence: '',
+  // carRegistrationRegion: '',
+  // residence: '',
   phone: '',
 };
 
@@ -302,7 +302,7 @@ export function CourseInformation({
                 id="businessSubType"
                 placeholder="업종 유형선택"
                 // value={businessSubTypeState || ''}
-                value={watch().businessSubType}
+                value={watch().businessSubType || ''}
                 onChange={handleBusinessSubType}
               >
                 {businessSubTypeCategoryReg
@@ -321,7 +321,7 @@ export function CourseInformation({
             <FormControl fullWidth>
               <TextField
                 {...register('businessName', { required: '회사명을 입력해주세요.' })}
-                value={watch().businessName}
+                value={watch().businessName || ''}
                 label="회사명"
                 variant="outlined"
                 disabled={disabledBusinessName}
@@ -345,7 +345,7 @@ export function CourseInformation({
                   labelId="firstStr"
                   id="firstStr"
                   placeholder="지역명"
-                  value={watch().firstStr}
+                  value={watch().firstStr || ''}
                   onChange={handleFirstStr}
                   disabled={disabledCarNumber}
                 >
@@ -364,7 +364,7 @@ export function CourseInformation({
                   if (e.target.value.length > 2) return;
                   setValue('firstNum', e.target.value.replace(/[^0-9]/g, ''));
                 }}
-                value={watch().firstNum}
+                value={watch().firstNum || ''}
                 label="차종번호 2자리"
                 variant="outlined"
                 fullWidth
@@ -376,7 +376,7 @@ export function CourseInformation({
                   labelId="secondStr"
                   id="secondStr"
                   placeholder="용도기호 한글자"
-                  value={watch().secondStr}
+                  value={watch().secondStr || ''}
                   onChange={handleSecondStr}
                   disabled={disabledCarNumber}
                 >
@@ -395,7 +395,7 @@ export function CourseInformation({
                   if (e.target.value.length > 4) return;
                   setValue('secondNum', e.target.value.replace(/[^0-9]/g, ''));
                 }}
-                value={watch().secondNum}
+                value={watch().secondNum || ''}
                 label="차량번호 4자리"
                 variant="outlined"
                 fullWidth
@@ -413,7 +413,7 @@ export function CourseInformation({
                 id="carRegistrationRegion"
                 placeholder="차량등록지 선택"
                 // value={carRegistrationRegionState || ''}
-                value={watch().carRegistrationRegion}
+                value={watch().carRegistrationRegion || ''}
                 onChange={handleCarRegistrationRegion}
               >
                 {locationList.map(item => (
@@ -441,7 +441,7 @@ export function CourseInformation({
                 id="residence"
                 placeholder="거주지 선택"
                 // value={residenceState || ''}
-                value={watch().residence}
+                value={watch().residence || ''}
                 onChange={handleResidence}
               >
                 {residenceList.map(item => (
@@ -469,7 +469,7 @@ export function CourseInformation({
                 label="핸드폰번호"
                 variant="outlined"
                 // type="number"
-                value={watch().phone}
+                value={watch().phone || ''}
               />
               <ErrorMessage errors={errors} name="phone" as={<FormHelperText error />} />
             </FormControl>

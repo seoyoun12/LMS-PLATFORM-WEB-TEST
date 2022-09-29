@@ -7452,7 +7452,6 @@ export interface UserCourseInfoDetailCourseInfoDto {
     | "GYEONGNAM"
     | "JEJU";
 
-
   /** 상태 */
   classLearningStatus?: "정상" | "퇴교";
 

@@ -136,69 +136,57 @@ export function CourseInformation({
       target: { value },
     } = e;
 
-    if (businessSubType.CHARTER_BUS === value) {
-      // setValue('businessName', '');
-      setValue('businessSubType', value as businessSubType);
+    if (businessSubType.BUS === value) {
+      if (courseInfo.businessName === '개인택시') {
+        setValue('businessName', '');
+      } else {
+        setValue('businessName', courseInfo.businessName);
+      }
+      setValue('businessSubType', value);
+      setDisabledBusinessName(false);
       setDisabledCarNumber(true);
     }
 
+    if (businessSubType.CHARTER_BUS === value) {
+      if (courseInfo.businessName === '개인택시') {
+        setValue('businessName', '');
+      } else {
+        setValue('businessName', courseInfo.businessName);
+      }
+      setValue('businessSubType', value);
+      setDisabledBusinessName(false);
+      setDisabledCarNumber(false);
+    }
+
     if (businessSubType.SPECIAL_PASSENGER === value) {
-      setValue('businessName', '');
-      setValue('businessSubType', value as businessSubType);
+      if (courseInfo.businessName === '개인택시') {
+        setValue('businessName', '');
+      } else {
+        setValue('businessName', courseInfo.businessName);
+      }
+      setValue('businessSubType', value);
+      setDisabledBusinessName(false);
+      setDisabledCarNumber(true);
+    }
+
+    if (businessSubType.CORPORATE_TAXI === value) {
+      if (courseInfo.businessName === '개인택시') {
+        setValue('businessName', '');
+      } else {
+        setValue('businessName', courseInfo.businessName);
+      }
+      setValue('businessSubType', value);
+      setDisabledBusinessName(false);
       setDisabledCarNumber(true);
     }
 
     if (businessSubType.PRIVATE_TAXI === value) {
-      setValue(
-        'businessName',
-        businessSubTypeCategoryReg.filter(item => item.enType === value)[0].type
-      );
-      setValue('businessSubType', value as businessSubType);
-      setDisabledCarNumber(true);
-    }
-
-    //차량번호 비활성화
-    if (
-      businessSubType.BUS === value ||
-      businessSubType.CHARTER_BUS === value ||
-      businessSubType.CORPORATE_TAXI === value
-    ) {
-      setValue('carNumber', null);
-      setValue('businessName', '');
-      setValue('businessSubType', value as businessSubType);
-      setDisabledCarNumber(true);
-    }
-
-    //회사명 고정
-    if (
-      businessSubType.PRIVATE_TAXI === value ||
-      businessSubType.CONSIGNMENT === value ||
-      businessSubType.INDIVIDUAL_CARGO === value
-    ) {
+      setValue('businessName', '개인택시');
+      setValue('businessSubType', value);
       setDisabledBusinessName(true);
       setDisabledCarNumber(false);
-      setValue(
-        'businessName',
-        businessSubTypeCategoryReg.filter(item => item.enType === value)[0].type
-      );
-      if (businessSubType.PRIVATE_TAXI === value) {
-        //개인택시 보이게
-        setDisabledCarNumber(false);
-      }
-      return setValue('businessSubType', value);
     }
-    setDisabledBusinessName(false);
-    setDisabledCarNumber(true);
-    setDisabledCarNumber(false);
-
-    setValue('businessName', '');
-    setValue('businessSubType', value as businessSubType);
-    // setBusinessSubTypeState(e.target.value);
-    // setValue('businessSubType', e.target.value);
-    // setBusinessSubTypeState(value as businessSubType);
-    // setValue('businessSubType', e.target.value);
   };
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
 
   // Select 박스 초깃값 설정.
   useEffect(() => {
@@ -210,21 +198,23 @@ export function CourseInformation({
       setValue('businessSubType', courseInfo.businessSubType);
       setValue('carRegistrationRegion', courseInfo.carRegistrationRegion);
       setValue('residence', courseInfo.residence);
-      // console.log('courseInfo.businessSubType : ', courseInfo.businessSubType);
-      // console.log(
-      //   'courseInfo.carRegistrationRegion : ',
-      //   courseInfo.carRegistrationRegion
-      // );
-      // console.log('courseInfo.residence : ', courseInfo.residence);
       reset({ ...courseInfo }); // ...? 초기화시켜주는데 안에있는 인자로 초기화? reset() -> 값이 X
+
       if (courseInfo.carNumber) {
         setValue('firstStr', courseInfo.carNumber.slice(0, 2));
         setValue('firstNum', courseInfo.carNumber.slice(2, 4));
         setValue('secondStr', courseInfo.carNumber.slice(4, 5));
         setValue('secondNum', courseInfo.carNumber.slice(5));
       }
+
+      if (courseInfo.businessSubType === businessSubType.PRIVATE_TAXI) {
+        setValue('businessName', '개인택시');
+        setDisabledBusinessName(true);
+        setDisabledCarNumber(false);
+      }
     }
   }, [courseInfo]);
+
   // []에 courseInfo를 넣는거는 이 값을 바라보면서 undefined에서 바뀌었을때 여길 봐달라
 
   // 차량번호 설정.
@@ -467,9 +457,18 @@ export function CourseInformation({
           <TableRightCell>
             <FormControl fullWidth sx={{ height: '100%' }}>
               <TextField
-                {...register('phone', { required: '핸드폰번호 입력해주세요.' })}
+                {...register('phone', {
+                  // pattern: /^[1][3,4,5,7,8][0-9]{9}$/,
+                  required: '핸드폰번호 입력해주세요.',
+                })}
+                onChange={e => {
+                  if (e.target.value.length > 11) return;
+                  setValue('phone', e.target.value.replace(/[^0-9]/g, ''));
+                  // setValue('phone', e.target.value.replace(/^\d{3}-\d{3,4}-\d{4}$/, ''));
+                }}
                 label="핸드폰번호"
                 variant="outlined"
+                // type="number"
                 value={watch().phone}
               />
               <ErrorMessage errors={errors} name="phone" as={<FormHelperText error />} />

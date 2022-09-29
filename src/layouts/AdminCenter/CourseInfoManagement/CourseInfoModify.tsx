@@ -38,7 +38,8 @@ export function CourseInfoModify() {
         console.log('1. courseLearningInfoInput : ', courseLearningInfoInput);
         snackbar({ variant: 'success', message: '수정 되었습니다.' });
         await mutate();
-        router.push(`/admin-center/course-info/modify/${courseUserSeq}`);
+        router.push(`/admin-center/course-info`);
+        // router.push(`/admin-center/course-info/modify/${courseUserSeq}`);
         setLoading(false);
       }
     } catch (e: any) {

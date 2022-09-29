@@ -156,7 +156,7 @@ export function ProgressStatus({ progressList, onMutate }: Props) {
 
 const ProgressStatusBox = styled(Box)`
   margin-top: 10px;
-  .MuiTableRow-root:first-child {
+  .MuiTableRow-root:first-of-type {
     td {
       border-top: 1px solid rgba(224, 224, 224, 1);
     }
@@ -167,14 +167,15 @@ const TableTopHeadCell = styled(MuiTableCell)`
   width: 33.3%;
   background: #f5f5f5;
   border-top: 1px solid #c4c4c4;
+  font-weight: bold;
 `;
 
 const TableHeaderRow = styled(MuiTableRow)`
-  .MuiTableCell-root:first-child {
+  .MuiTableCell-root:first-of-type {
     border-left: 1px solid #c4c4c4;
     border-right: 0;
   }
-  .MuiTableCell-root:nth-child(2) {
+  .MuiTableCell-root:nth-of-type(2) {
     border-left: 1px solid #c4c4c4;
   }
 `;
@@ -183,7 +184,7 @@ const TableHeadercell = styled(MuiTableCell)`
   border-top: 1px solid #c4c4c4;
   border-right: 1px solid #c4c4c4;
   font-weight: bold;
-  background-color: #eef7fc;
+  background-color: #f5f5f5;
 `;
 
 const TableBody = styled(MuiTableBody)`

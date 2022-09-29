@@ -16,8 +16,8 @@ const localList = [
 const oneWordList = ['아', '바', '사', '자', '배'];
 
 interface Props {
-  parantSetValue: UseFormSetValue<UserTransSaveInputDataType>;
   // parantSetValue: UseFormSetValue<UserTransSaveInputDataType>;
+  parantSetValue: UseFormSetValue<any>;
 }
 
 interface FormType {
@@ -107,7 +107,7 @@ export function CarNumberBox({ parantSetValue }: Props) {
           setValue('digit4', e.target.value.replace(/[^0-9]/g, ''));
         }}
         value={watch().digit4}
-        placeholder="일련번호 4자리"
+        placeholder="차량번호 4자리"
         inputProps={{ inputMode: 'numeric' }}
         fullWidth
       />

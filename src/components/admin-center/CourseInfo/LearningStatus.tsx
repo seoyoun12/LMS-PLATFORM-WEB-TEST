@@ -17,7 +17,6 @@ export function LearningStatus({ learningStatusList }: Props) {
   const { courseUserSeq } = router.query;
   // const { data, error } = detailCourseInfo(Number(courseUserSeq));
 
-  console.log('러닝스테이터스리스트 : ', learningStatusList);
   // console.log(
   //   '러닝스테이터스리스트 : ',
   //   learningStatusList?.map(item => item.elementName)
@@ -82,6 +81,7 @@ const TableHeadFull = styled(TableCell)`
   width: 100%;
   background: #f5f5f5;
   border: 1px solid #c4c4c4;
+  font-weight: bold;
 `;
 
 const TableLeftCell = styled(TableCell)`
@@ -91,7 +91,7 @@ const TableLeftCell = styled(TableCell)`
   border-bottom: 1px solid #c4c4c4;
   width: 15%;
 
-  &:first-child {
+  &:first-of-type {
     border-left: 1px solid #c4c4c4;
     width: 10%;
   }

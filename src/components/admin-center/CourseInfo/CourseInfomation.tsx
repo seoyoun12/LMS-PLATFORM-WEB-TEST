@@ -45,10 +45,16 @@ const localList = [
 const oneWordList = ['아', '바', '사', '자', '배'];
 
 const defaultValues = {
+  // 처음 undefined면 value 가 변경되어도 적용이 안된다. 그래서 초기값 d v 로 빈 스트링을 넣어준다.
+  businessSubType: '',
+  businessName: '',
   firstStr: '',
   firstNum: '',
   secondStr: '',
   secondNum: '',
+  carRegistrationRegion: '',
+  residence: '',
+  phone: '',
 };
 
 export function CourseInformation({
@@ -69,9 +75,9 @@ export function CourseInformation({
   const router = useRouter();
   const snackbar = useSnackbar();
   const { courseUserSeq } = router.query;
-  const [businessSubTypeState, setBusinessSubTypeState] = useState<string>(); // 업종구분
+  // const [businessSubTypeState, setBusinessSubTypeState] = useState<string>(); // 업종구분
   const [carRegistrationRegionState, setCarRegistrationRegionState] = useState<string>(); // 차량등록지
-  const [residenceState, setResidenceState] = useState<string>(); // 거주지
+  // const [residenceState, setResidenceState] = useState<string>(); // 거주지
 
   const [disabledCarNumber, setDisabledCarNumber] = useState(false); // 차량번호 비활성화
   const [disabledBusinessName, setDisabledBusinessName] = useState(false); // 회사명 비활성화
@@ -103,13 +109,13 @@ export function CourseInformation({
 
   // 차량등록지
   const handleCarRegistrationRegion = async (e: any) => {
-    setCarRegistrationRegionState(e.target.value);
+    // setCarRegistrationRegionState(e.target.value);
     setValue('carRegistrationRegion', e.target.value);
   };
 
   // 거주지
   const handleResidence = async (e: any) => {
-    setResidenceState(e.target.value);
+    // setResidenceState(e.target.value);
     setValue('residence', e.target.value);
   };
 
@@ -131,7 +137,7 @@ export function CourseInformation({
     } = e;
 
     if (businessSubType.CHARTER_BUS === value) {
-      setValue('businessName', '');
+      // setValue('businessName', '');
       setValue('businessSubType', value as businessSubType);
       setDisabledCarNumber(true);
     }
@@ -189,7 +195,7 @@ export function CourseInformation({
     setValue('businessSubType', value as businessSubType);
     // setBusinessSubTypeState(e.target.value);
     // setValue('businessSubType', e.target.value);
-    setBusinessSubTypeState(value as businessSubType);
+    // setBusinessSubTypeState(value as businessSubType);
     // setValue('businessSubType', e.target.value);
   };
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -198,9 +204,18 @@ export function CourseInformation({
   useEffect(() => {
     // 처음엔 undefined
     if (courseInfo) {
-      setBusinessSubTypeState(courseInfo?.businessSubType); // 업종구분
-      setCarRegistrationRegionState(courseInfo?.carRegistrationRegion); // 차량등록지
-      setResidenceState(courseInfo?.residence); // 거주지
+      // setBusinessSubTypeState(courseInfo?.businessSubType); // 업종구분
+      // setCarRegistrationRegionState(courseInfo?.carRegistrationRegion); // 차량등록지
+      // setResidenceState(courseInfo?.residence); // 거주지
+      setValue('businessSubType', courseInfo.businessSubType);
+      setValue('carRegistrationRegion', courseInfo.carRegistrationRegion);
+      setValue('residence', courseInfo.residence);
+      // console.log('courseInfo.businessSubType : ', courseInfo.businessSubType);
+      // console.log(
+      //   'courseInfo.carRegistrationRegion : ',
+      //   courseInfo.carRegistrationRegion
+      // );
+      // console.log('courseInfo.residence : ', courseInfo.residence);
       reset({ ...courseInfo }); // ...? 초기화시켜주는데 안에있는 인자로 초기화? reset() -> 값이 X
       if (courseInfo.carNumber) {
         setValue('firstStr', courseInfo.carNumber.slice(0, 2));
@@ -222,15 +237,15 @@ export function CourseInformation({
   }, [watch().firstNum, watch().firstStr, watch().secondNum, watch().secondStr]);
 
   // 차량번호 disabled
-  useEffect(() => {
-    if (
-      courseInfo?.businessSubType === 'BUS' ||
-      courseInfo?.businessSubType === 'SPECIAL_PASSENGER' ||
-      courseInfo?.businessSubType === 'CORPORATE_TAXI'
-    ) {
-      setDisabledCarNumber(true);
-    }
-  }, [businessSubType]);
+  // useEffect(() => {
+  //   if (
+  //     courseInfo?.businessSubType === 'BUS' ||
+  //     courseInfo?.businessSubType === 'SPECIAL_PASSENGER' ||
+  //     courseInfo?.businessSubType === 'CORPORATE_TAXI'
+  //   ) {
+  //     setDisabledCarNumber(true);
+  //   }
+  // }, [courseInfo]);
 
   const onSubmit: SubmitHandler<FormType> = async (
     courseLearningInfoInput: CourseLearningInfoInput
@@ -296,7 +311,8 @@ export function CourseInformation({
                 labelId="businessSubType"
                 id="businessSubType"
                 placeholder="업종 유형선택"
-                value={businessSubTypeState || ''}
+                // value={businessSubTypeState || ''}
+                value={watch().businessSubType}
                 onChange={handleBusinessSubType}
               >
                 {businessSubTypeCategoryReg
@@ -315,6 +331,7 @@ export function CourseInformation({
             <FormControl fullWidth>
               <TextField
                 {...register('businessName', { required: '회사명을 입력해주세요.' })}
+                value={watch().businessName}
                 label="회사명"
                 variant="outlined"
                 disabled={disabledBusinessName}
@@ -405,7 +422,8 @@ export function CourseInformation({
                 labelId="carRegistrationRegion"
                 id="carRegistrationRegion"
                 placeholder="차량등록지 선택"
-                value={carRegistrationRegionState || ''}
+                // value={carRegistrationRegionState || ''}
+                value={watch().carRegistrationRegion}
                 onChange={handleCarRegistrationRegion}
               >
                 {locationList.map(item => (
@@ -432,7 +450,8 @@ export function CourseInformation({
                 labelId="residence"
                 id="residence"
                 placeholder="거주지 선택"
-                value={residenceState || ''}
+                // value={residenceState || ''}
+                value={watch().residence}
                 onChange={handleResidence}
               >
                 {residenceList.map(item => (
@@ -451,6 +470,7 @@ export function CourseInformation({
                 {...register('phone', { required: '핸드폰번호 입력해주세요.' })}
                 label="핸드폰번호"
                 variant="outlined"
+                value={watch().phone}
               />
               <ErrorMessage errors={errors} name="phone" as={<FormHelperText error />} />
             </FormControl>

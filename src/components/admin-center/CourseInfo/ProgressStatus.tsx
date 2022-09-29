@@ -175,7 +175,7 @@ const TableHeaderRow = styled(MuiTableRow)`
     border-left: 1px solid #c4c4c4;
     border-right: 0;
   }
-  .MuiTableCell-root:nth-child(2) {
+  .MuiTableCell-root:nth-of-type(2) {
     border-left: 1px solid #c4c4c4;
   }
 `;

@@ -31,6 +31,7 @@ import {
   courseReg,
   courseSubCategory,
 } from '@layouts/Calendar/CalendarBody/CalendarBody';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 
 const headRows: {
   name: string;
@@ -149,6 +150,17 @@ export function CalendarManagement() {
           checked={courseType === CourseType.TYPE_LOW_FLOOR_BUS}
         />
         <span>저상버스</span>
+        <Box width="100%" display="flex">
+          <Button
+            variant="contained"
+            color="success"
+            style={{ marginLeft: 'auto' }}
+            onClick={() => snackbar({ variant: 'info', message: '준비중입니다.' })}
+          >
+            <FileCopyIcon sx={{ marginRight: '4px' }} />
+            일정 엑셀다운로드
+          </Button>
+        </Box>
       </Box>
 
       <AdminCalendar
@@ -340,7 +352,7 @@ const CalendarTableCell = styled(TableCell)`
   margin: 0;
   border-right: 1px solid #f0f0f0;
 
-  &:first-child {
+  &:first-of-type {
     background: #f5f5f5;
   }
 `;

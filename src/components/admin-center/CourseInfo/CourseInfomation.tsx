@@ -186,6 +186,34 @@ export function CourseInformation({
       setDisabledBusinessName(true);
       setDisabledCarNumber(false);
     }
+
+    if (businessSubType.GENERAL_CARGO === value) {
+      if (
+        courseInfo.businessName === '용달화물' ||
+        courseInfo.businessName === '개별화물'
+      ) {
+        setValue('businessName', '');
+      } else {
+        setValue('businessName', courseInfo.businessName);
+      }
+      setValue('businessSubType', value);
+      setDisabledBusinessName(false);
+      setDisabledCarNumber(false);
+    }
+
+    if (businessSubType.CONSIGNMENT === value) {
+      setValue('businessName', '용달화물');
+      setValue('businessSubType', value);
+      setDisabledBusinessName(true);
+      setDisabledCarNumber(false);
+    }
+
+    if (businessSubType.INDIVIDUAL_CARGO === value) {
+      setValue('businessName', '개별화물');
+      setValue('businessSubType', value);
+      setDisabledBusinessName(true);
+      setDisabledCarNumber(false);
+    }
   };
 
   // Select 박스 초깃값 설정.
@@ -209,6 +237,18 @@ export function CourseInformation({
 
       if (courseInfo.businessSubType === businessSubType.PRIVATE_TAXI) {
         setValue('businessName', '개인택시');
+        setDisabledBusinessName(true);
+        setDisabledCarNumber(false);
+      }
+
+      if (courseInfo.businessSubType === businessSubType.CONSIGNMENT) {
+        setValue('businessName', '용달화물');
+        setDisabledBusinessName(true);
+        setDisabledCarNumber(false);
+      }
+
+      if (courseInfo.businessSubType === businessSubType.INDIVIDUAL_CARGO) {
+        setValue('businessName', '개별화물');
         setDisabledBusinessName(true);
         setDisabledCarNumber(false);
       }

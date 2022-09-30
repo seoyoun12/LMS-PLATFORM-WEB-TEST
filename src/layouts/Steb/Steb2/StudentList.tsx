@@ -1,9 +1,24 @@
 import { courseUserOrganCancel, RegisterType } from '@common/api/courseClass';
 import { courseClassEnrollList } from '@common/recoil';
 import styled from '@emotion/styled';
-import { Box, Button, Container, Grid, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import React from 'react';
-import { FieldValues, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
+import {
+  FieldValues,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
 import { useRecoilState } from 'recoil';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import { Table } from '@components/ui';
@@ -86,9 +101,11 @@ export function StudentList({ registerType, setRegisterType }: Props) {
         <Button
           sx={{
             color: registerType === RegisterType.TYPE_INDIVIDUAL ? 'white' : '#888888',
-            background: registerType === RegisterType.TYPE_INDIVIDUAL ? '#256aef' : '#f1f1f1',
+            background:
+              registerType === RegisterType.TYPE_INDIVIDUAL ? '#256aef' : '#f1f1f1',
             '&.MuiButtonBase-root:hover': {
-              bgcolor: registerType === RegisterType.TYPE_INDIVIDUAL ? '#568dfa' : '#dfdfdf',
+              bgcolor:
+                registerType === RegisterType.TYPE_INDIVIDUAL ? '#568dfa' : '#dfdfdf',
             },
             fontWeight: 'bold',
           }}
@@ -100,9 +117,11 @@ export function StudentList({ registerType, setRegisterType }: Props) {
         <Button
           sx={{
             color: registerType === RegisterType.TYPE_ORGANIZATION ? 'white' : '#888888',
-            background: registerType === RegisterType.TYPE_ORGANIZATION ? '#256aef' : '#f1f1f1',
+            background:
+              registerType === RegisterType.TYPE_ORGANIZATION ? '#256aef' : '#f1f1f1',
             '&.MuiButtonBase-root:hover': {
-              bgcolor: registerType === RegisterType.TYPE_ORGANIZATION ? '#568dfa' : '#dfdfdf',
+              bgcolor:
+                registerType === RegisterType.TYPE_ORGANIZATION ? '#568dfa' : '#dfdfdf',
             },
             fontWeight: 'bold',
           }}
@@ -115,18 +134,32 @@ export function StudentList({ registerType, setRegisterType }: Props) {
       <Box>
         {registerType === RegisterType.TYPE_ORGANIZATION && (
           <Typography variant="h5" fontWeight="bold" display="flex" alignItems="center">
-            <HorizontalRuleRoundedIcon sx={{ transform: 'scale(1,2)', color: '#3498db' }} />
+            <HorizontalRuleRoundedIcon
+              sx={{ transform: 'scale(1,2)', color: '#3498db' }}
+            />
             <span>교육신청자 리스트</span>
           </Typography>
         )}
         <StudentItemListWrap>
-          <StuGrid container columns={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2 }} rowSpacing={4} columnSpacing={4}>
+          <StuGrid
+            container
+            columns={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2 }}
+            rowSpacing={4}
+            columnSpacing={4}
+          >
             {registerType === RegisterType.TYPE_ORGANIZATION &&
               organization.length > 0 &&
               organization.map(item => (
                 // test.length > 0 &&
                 // test.map(item => (
-                <StudentListItem item xs={1} sm={1} md={1} lg={1} key={item.courseClassSeq}>
+                <StudentListItem
+                  item
+                  xs={1}
+                  sm={1}
+                  md={1}
+                  lg={1}
+                  key={item.courseClassSeq}
+                >
                   <StuTableContainer>
                     <StuTableBody>
                       <UserTableRow>
@@ -135,7 +168,9 @@ export function StudentList({ registerType, setRegisterType }: Props) {
                       </UserTableRow>
                       <UserTableRow>
                         <TableLeftCell>주민번호</TableLeftCell>
-                        <TableRightCell>{item.firstIdentityNumber} - ●●●●●●●</TableRightCell>
+                        <TableRightCell>
+                          {item.firstIdentityNumber} - ●●●●●●●
+                        </TableRightCell>
                       </UserTableRow>
                       <UserTableRow>
                         <TableLeftCell>차량번호</TableLeftCell>
@@ -143,7 +178,13 @@ export function StudentList({ registerType, setRegisterType }: Props) {
                       </UserTableRow>
                       <UserTableRow>
                         <TableLeftCell>차량등록지</TableLeftCell>
-                        <TableRightCell>{locationList.filter(regi => regi.en === item.carRegisteredRegion)[0].ko}</TableRightCell>
+                        <TableRightCell>
+                          {
+                            locationList.filter(
+                              regi => regi.en === item.carRegisteredRegion
+                            )[0].ko
+                          }
+                        </TableRightCell>
                       </UserTableRow>
                       <UserTableRow>
                         <TableLeftCell>휴대전화</TableLeftCell>
@@ -151,8 +192,19 @@ export function StudentList({ registerType, setRegisterType }: Props) {
                       </UserTableRow>
                     </StuTableBody>
                   </StuTableContainer>
-                  <Box width="200px" display="flex" alignItems="flex-end" margin="auto" mt={4}>
-                    <Button variant="outlined" color="neutral" onClick={() => onClickDelete(item.seq, item)} fullWidth>
+                  <Box
+                    width="200px"
+                    display="flex"
+                    alignItems="flex-end"
+                    margin="auto"
+                    mt={4}
+                  >
+                    <Button
+                      variant="outlined"
+                      color="neutral"
+                      onClick={() => onClickDelete(item.seq, item)}
+                      fullWidth
+                    >
                       삭제
                     </Button>
                   </Box>
@@ -196,7 +248,7 @@ const StuGrid = styled(Grid)``;
 const UserTableRow = styled(TableRow)`
   display: flex;
 
-  /* td:first-child {
+  /* td:first-of-type {
     width: 50%;
   } */
   td:last-child {

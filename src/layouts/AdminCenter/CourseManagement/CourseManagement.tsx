@@ -258,7 +258,7 @@ const CourseTableCell = styled(TableCell)`
   margin: 0;
   border-right: 1px solid #f0f0f0;
 
-  &:first-child {
+  &:first-of-type {
     /* border-right: 1px solid #e0e0e0; */
     background: #f5f5f5;
   }

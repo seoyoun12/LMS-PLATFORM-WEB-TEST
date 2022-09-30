@@ -37,6 +37,7 @@ const headRows: {
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
   width: string;
 }[] = [
+  // { name: 'No1', align: 'center', width: '2.5%' }, // seq
   { name: 'No', align: 'center', width: '5%' }, // seq
   { name: '게시판유형', align: 'center', width: '8.5%' }, // boardType
   { name: '제목', align: 'center', width: '32%' }, // subject
@@ -204,7 +205,8 @@ export function CategoryManagement() {
               hover
               onClick={() => onClickmodifyCategoryBoard(category.seq)}
             >
-              <CategoryTableCell align="center">{category.seq}</CategoryTableCell>
+              {/* <CategoryTableCell align="center">{category.seq}</CategoryTableCell> */}
+              <CategoryTableCell align="center">{category.postTypeSeq}</CategoryTableCell>
               <CategoryTableCell align="center">
                 {tabsConfig.filter(item => item.value === category.boardType)[0]?.name}
               </CategoryTableCell>
@@ -321,7 +323,7 @@ const CategoryTableCell = styled(TableCell)`
   margin: 0;
   border-right: 1px solid #f0f0f0;
 
-  &:first-child {
+  &:first-of-type {
     background: #f5f5f5;
   }
 `;

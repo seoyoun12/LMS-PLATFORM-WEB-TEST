@@ -1,9 +1,22 @@
 import { courseUserOrganCancel, RegisterType } from '@common/api/courseClass';
 import { courseClassEnrollList } from '@common/recoil';
 import styled from '@emotion/styled';
-import { Box, Button, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import React from 'react';
-import { FieldValues, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
+import {
+  FieldValues,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
 import { useRecoilState } from 'recoil';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import { Table } from '@components/ui';
@@ -50,7 +63,9 @@ export function StudentList({ registerType, setRegisterType }: Props) {
       <Box>
         {registerType === RegisterType.TYPE_ORGANIZATION && (
           <Typography variant="h5" fontWeight="bold" display="flex" alignItems="center">
-            <HorizontalRuleRoundedIcon sx={{ transform: 'scale(1,2)', color: '#3498db' }} />
+            <HorizontalRuleRoundedIcon
+              sx={{ transform: 'scale(1,2)', color: '#3498db' }}
+            />
             <span>교육신청자 리스트</span>
           </Typography>
         )}
@@ -75,7 +90,13 @@ export function StudentList({ registerType, setRegisterType }: Props) {
                     </UserTableRow>
                     <UserTableRow>
                       <TableCell>등록지</TableCell>
-                      <TableCell>{locationList.filter(regi => regi.en === item.carRegisteredRegion)[0].ko}</TableCell>
+                      <TableCell>
+                        {
+                          locationList.filter(
+                            regi => regi.en === item.carRegisteredRegion
+                          )[0].ko
+                        }
+                      </TableCell>
                     </UserTableRow>
                     <UserTableRow>
                       <TableCell>휴대전화링</TableCell>
@@ -84,7 +105,11 @@ export function StudentList({ registerType, setRegisterType }: Props) {
                   </TableBody>
                 </StuTableContainer>
                 <Box width="20%" display="flex" alignItems="flex-end">
-                  <Button variant="outlined" onClick={() => onClickDelete(item.seq, item)} fullWidth>
+                  <Button
+                    variant="outlined"
+                    onClick={() => onClickDelete(item.seq, item)}
+                    fullWidth
+                  >
                     삭제
                   </Button>
                 </Box>
@@ -119,7 +144,7 @@ const StuTableContainer = styled(TableContainer)`
     font-weight: bold;
   }
   .css-dfr580-MuiTableRow-root {
-    /* :first-child {
+    /* :first-of-type {
       td {
         border-top: none;
       }
@@ -135,7 +160,7 @@ const StuTableContainer = styled(TableContainer)`
 const UserTableRow = styled(TableRow)`
   display: flex;
 
-  td:first-child {
+  td:first-of-type {
     width: 50%;
   }
   td:last-child {

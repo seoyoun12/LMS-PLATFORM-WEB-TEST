@@ -31,6 +31,7 @@ import { NumberFormat } from 'xlsx';
 import { grey } from '@mui/material/colors';
 import SearchIcon from '@mui/icons-material/Search';
 import ReplayIcon from '@mui/icons-material/Replay';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 
 const userConfig = [
   { label: '실명가입', value: regCategoryType.TYPE_TRANS_EDU },
@@ -198,6 +199,18 @@ export function UserManagement() {
         </ReloadButton>
       </SearchBox>
 
+      <Box display="flex">
+        <Button
+          variant="contained"
+          color="success"
+          sx={{ marginLeft: 'auto' }}
+          onClick={() => snackbar({ variant: 'info', message: '준비중입니다.' })}
+        >
+          <FileCopyIcon sx={{ marginRight: '4px' }} />
+          설문통계 엑셀다운로드
+        </Button>
+      </Box>
+
       <UserTypography variant="h5">회원 목록</UserTypography>
 
       <Table
@@ -357,7 +370,7 @@ const UserTableCell = styled(TableCell)`
   margin: 0;
   border-right: 1px solid #f0f0f0;
 
-  &:first-child {
+  &:first-of-type {
     background: #f5f5f5;
   }
 `;

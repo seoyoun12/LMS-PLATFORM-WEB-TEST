@@ -380,7 +380,7 @@ const CategoryLeftBox = styled(Box)`
 const CategoryLeftItem = styled(Box)`
   border-bottom: 1px solid #ababab;
   padding: 1rem;
-  :first-child {
+  :first-of-type {
     border-top: 1px solid #ababab;
   }
 `;

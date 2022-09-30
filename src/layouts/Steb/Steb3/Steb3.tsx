@@ -429,7 +429,7 @@ const StuTableContainer = styled(TableContainer)`
     font-weight: bold;
   }
   .css-dfr580-MuiTableRow-root {
-    /* :first-child {
+    /* :first-of-type {
       td {
         border-top: none;
       }
@@ -445,7 +445,7 @@ const StuTableContainer = styled(TableContainer)`
 
 const UserTableRow = styled(TableRow)`
   display: flex;
-  /* td:first-child {
+  /* td:first-of-type {
   }
   td:last-child {
   } */

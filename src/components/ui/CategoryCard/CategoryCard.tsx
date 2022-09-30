@@ -32,7 +32,7 @@ const categoryData = [
   {
     id: 3,
     title: '운수종사자',
-    href: '/me/my-course',
+    href: '/me/my-course?tab=ing',
     icon: 'assets/images/studyTransIcon.png',
     // icon: <StudyIcon />,
     color: '#F1C3C1',

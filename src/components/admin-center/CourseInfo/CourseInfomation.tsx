@@ -30,6 +30,7 @@ import {
   locationList,
   residenceList,
 } from 'src/staticDataDescElements/staticType';
+import { carNumberRegex } from '@utils/inputRegexes';
 
 interface FormType extends UserCourseInfoDetailCourseInfoDto {
   firstStr: string;
@@ -235,6 +236,17 @@ export function CourseInformation({
         setValue('secondNum', courseInfo.carNumber.slice(5));
       }
 
+      if (
+        // businessName이었음.
+        courseInfo.businessSubType === businessSubType.BUS ||
+        courseInfo.businessSubType === businessSubType.SPECIAL_PASSENGER ||
+        courseInfo.businessSubType === businessSubType.CORPORATE_TAXI
+      ) {
+        setValue('businessName', courseInfo.businessName);
+        setDisabledBusinessName(false);
+        setDisabledCarNumber(true);
+      }
+
       if (courseInfo.businessSubType === businessSubType.PRIVATE_TAXI) {
         setValue('businessName', '개인택시');
         setDisabledBusinessName(true);
@@ -280,6 +292,10 @@ export function CourseInformation({
   const onSubmit: SubmitHandler<FormType> = async (
     courseLearningInfoInput: CourseLearningInfoInput
   ) => {
+    if (!carNumberRegex.test(watch().carNumber)) {
+      // 정규표현식 적용
+      return snackbar({ variant: 'error', message: '차량번호를 정확히 기입해주십시오.' });
+    }
     onHandleSubmit({
       courseLearningInfoInput: courseLearningInfoInput,
       courseUserSeq: Number(courseUserSeq),
@@ -399,7 +415,7 @@ export function CourseInformation({
               {/* 차량번호 두번째 */}
               <TextField
                 // {...register('firstNum', { required: '앞 두자리 번호를 입력해주세요.' })}
-                {...register('firstNum')}
+                {...register('firstNum', { required: '앞 두자리 번호를 입력해주세요.' })}
                 onChange={e => {
                   if (e.target.value.length > 2) return;
                   setValue('firstNum', e.target.value.replace(/[^0-9]/g, ''));

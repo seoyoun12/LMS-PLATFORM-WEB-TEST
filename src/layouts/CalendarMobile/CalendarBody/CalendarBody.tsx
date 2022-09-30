@@ -423,8 +423,15 @@ export function CalendarBody({
                 <TableRow>
                   <TableLeftCell>예약가능시간</TableLeftCell>
                   <TableRightCell>
-                    {dateFormat(modalInfo.requestStartDate.replaceAll('-', '/'), 'yyyy-mm-dd')} ~{' '}
-                    {dateFormat(modalInfo.requestEndDate.replaceAll('-', '/'), 'yyyy-mm-dd')}
+                    {dateFormat(
+                      modalInfo.requestStartDate.replaceAll('-', '/'),
+                      'yyyy-mm-dd'
+                    )}{' '}
+                    ~{' '}
+                    {dateFormat(
+                      modalInfo.requestEndDate.replaceAll('-', '/'),
+                      'yyyy-mm-dd'
+                    )}
                   </TableRightCell>
                 </TableRow>
               </>

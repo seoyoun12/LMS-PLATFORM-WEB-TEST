@@ -975,6 +975,9 @@ export interface CourseLearningInfoResponseDto {
    */
   birth?: string;
 
+  /** 업체정보 - 회사명 */
+  businessName?: string;
+
   /** 업종 */
   businessSubType?:
     | "BUS"
@@ -992,6 +995,44 @@ export interface CourseLearningInfoResponseDto {
     | "HAZARDOUS_CHEMICALS"
     | "HIGH_PRESSURE_GAS_FLAMMABLE"
     | "HIGH_PRESSURE_GAS_TOXIC";
+
+  /** 교육신청자정보 - 차량번호 */
+  carNumber?: string;
+
+  /** 교육신청자정보 - 차량 등록지 */
+  carRegisteredRegion?:
+    | "CHEONAN"
+    | "GONGJU"
+    | "BORYEONG"
+    | "ASAN"
+    | "SEOSAN"
+    | "NONSAN"
+    | "GYERYONG"
+    | "DANGJIN"
+    | "GEUMSAN"
+    | "BUYEO"
+    | "SEOCHEON"
+    | "CHEONGYANG"
+    | "HONGSEONG"
+    | "YESAN"
+    | "TAEAN"
+    | "CHUNGNAM"
+    | "SEJONG"
+    | "SEOUL"
+    | "BUSAN"
+    | "DAEGU"
+    | "INCHEON"
+    | "GWANGJU"
+    | "DAEJEON"
+    | "ULSAN"
+    | "GYEONGGI"
+    | "GANGWON"
+    | "CHUNGBUK"
+    | "JEONBUK"
+    | "JEONNAM"
+    | "GYEONGBUK"
+    | "GYEONGNAM"
+    | "JEJU";
 
   /**
    * 과정 클래스 시퀀스
@@ -1048,6 +1089,41 @@ export interface CourseLearningInfoResponseDto {
    * @example 2022.08.20
    */
   regDate?: string;
+
+  /** 교육신청자정보 - 거주지 */
+  residence?:
+    | "CHEONAN"
+    | "GONGJU"
+    | "BORYEONG"
+    | "ASAN"
+    | "SEOSAN"
+    | "NONSAN"
+    | "GYERYONG"
+    | "DANGJIN"
+    | "GEUMSAN"
+    | "BUYEO"
+    | "SEOCHEON"
+    | "CHEONGYANG"
+    | "HONGSEONG"
+    | "YESAN"
+    | "TAEAN"
+    | "CHUNGNAM"
+    | "SEJONG"
+    | "SEOUL"
+    | "BUSAN"
+    | "DAEGU"
+    | "INCHEON"
+    | "GWANGJU"
+    | "DAEJEON"
+    | "ULSAN"
+    | "GYEONGGI"
+    | "GANGWON"
+    | "CHUNGBUK"
+    | "JEONBUK"
+    | "JEONNAM"
+    | "GYEONGBUK"
+    | "GYEONGNAM"
+    | "JEJU";
 
   /**
    * 기수
@@ -9534,6 +9610,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     admFindAllOpenCoursesUsingGet: (params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<CourseLearningInfoCoursesResponseDto[]>, any>({
         path: `/course/adm/learning-info/courses`,
+        method: "GET",
+        ...params,
+      })
+    /**
+     * @description 개설된 과정-유저에 대한 모든 수강 인원을 조회한다.
+     *
+     * @tags [관리자] 학습 현황 API
+     * @name AdmFindAllCourseLearningUsersUsingGet1
+     * @summary [관리자] 수강 인원 전체 조회 API - JWT, Page
+     * @request GET:/course/adm/learning-info/learning-info-all
+     */,
+    admFindAllCourseLearningUsersUsingGet1: (params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<void>, any>({
+        path: `/course/adm/learning-info/learning-info-all`,
         method: "GET",
         ...params,
       })

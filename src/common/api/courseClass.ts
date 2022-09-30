@@ -69,6 +69,8 @@ export interface CourseClassRes {
   start: string;
   end: string;
   status: ProductStatus;
+  cancelAvailEndDate: string;
+  cancelAvailStartDate: string;
 }
 
 export interface CourseClassStepsRes {

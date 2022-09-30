@@ -1,6 +1,7 @@
 import { YN } from '@common/constant';
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
+import { CourseClassResponseDto } from '../Api';
 import { businessType, CourseClassRes } from '../courseClass';
 
 export enum CourseType {
@@ -30,7 +31,7 @@ export function getDetailCourseClass(courseClassSeq: number) {
   return GET<{ data: CourseClassRes }>(`/course-class/adm/${courseClassSeq}`);
 }
 
-export interface CourseClassUpdateReqDto {
+export interface CourseClassUpdateReqDto extends CourseClassResponseDto {
   courseClassSeq: number;
   limitPeople: number;
   limitPeopleYn: YN;

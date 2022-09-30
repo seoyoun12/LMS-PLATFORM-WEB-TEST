@@ -11,14 +11,19 @@ import { Card } from '@components/admin-center/Card/Card';
 import { convertObjChartData } from '@utils/convertChartData';
 import { NotFound } from '@components/ui/NotFound';
 import { ParticipateListModal } from '@components/admin-center/Statistics/ParticipateListModal';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { getExcelSurveyDetail } from '@common/api/adm/excel';
 
 export function StatisticsSurveyDetail() {
+  const snackbar = useSnackbar();
   const router = useRouter();
   const { surveySeq } = router.query;
   const { data, error } = useSurveyStatistics(Number(surveySeq));
   const [open, setOpen] = useState(false);
   const [openParticipate, setOpenParticipate] = useState(false);
   const [modalSubList, setModalSubList] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   const backgroundColor: string[] = [
     '#ee4a5d',
     '#ee7051',
@@ -50,12 +55,48 @@ export function StatisticsSurveyDetail() {
     setOpen(false);
   };
 
+  const onClickExcelDownload = async (surveyName: string) => {
+    return snackbar({ variant: 'info', message: '준비중입니다.' });
+    const a = document.createElement('a');
+    setLoading(true);
+    try {
+      const data = await getExcelSurveyDetail(Number(surveySeq));
+      const excel = new Blob([data]);
+      a.href = URL.createObjectURL(excel);
+      a.download = `충남_관리자_설문통계_${surveyName}.xlsx`;
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(a.href);
+      console.log('엑셀', data);
+      snackbar({ variant: 'success', message: '다운로드 완료' });
+      setLoading(false);
+    } catch (e) {
+      snackbar({ variant: 'error', message: e.data.message });
+      setLoading(false);
+    }
+  };
+
   if (!data) return <Spinner />;
   if (error) return <div>Error...</div>;
 
   return (
     <StaticsSurveyDetailWrap>
-      <Card header={data.surveyName} headSx={{ borderBottom: 0 }} />
+      <Card
+        header={
+          <Box display="flex" justifyContent="space-between">
+            <Box>{data.surveyName}</Box>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => onClickExcelDownload(data.surveyName)}
+            >
+              <FileCopyIcon sx={{ marginRight: '4px' }} />
+              설문통계 엑셀다운로드
+            </Button>
+          </Box>
+        }
+        headSx={{ borderBottom: 0 }}
+      />
       <Box display="flex">
         <PieCard>
           <Card header="객관식 주관식 문항개수 현황">
@@ -105,7 +146,7 @@ export function StatisticsSurveyDetail() {
                     height={236}
                     legend="right"
                   />
-                  <Stack flexGrow={1} display="flex" flexWrap='wrap' gap={1}>
+                  <Stack flexGrow={1} display="flex" flexWrap="wrap" gap={1}>
                     {chartObjItem.map((item, idx) => {
                       if (!item) return;
                       return (
@@ -117,7 +158,7 @@ export function StatisticsSurveyDetail() {
                             color: 'white',
                             fontSize: '14px',
                           }}
-                          wrapSx={{ flexGrow: 0, margin: '0 8px'  }}
+                          wrapSx={{ flexGrow: 0, margin: '0 8px' }}
                           contentSx={{
                             fontSize: '14px',
                             padding: '0 4px',
@@ -136,7 +177,7 @@ export function StatisticsSurveyDetail() {
         </SurveyObj>
         <SurveySub>
           {data.subjResult.map(item => (
-            <Box key={item.surveyQuestionSeq}>
+            <Box key={item.surveyQuestionSeq} sx={{ cursor: 'pointer' }}>
               <Card
                 header={item.surveyQuestionName}
                 contentSx={{ padding: '0 16px' }}
@@ -156,7 +197,8 @@ export function StatisticsSurveyDetail() {
                 >
                   {item.answerList.map(item => {
                     if (item === '') return;
-                    if(item.length > 50) return <MenuItem>{item.slice(0,50)}...</MenuItem>;
+                    if (item.length > 50)
+                      return <MenuItem>{item.slice(0, 50)}...</MenuItem>;
                     return <MenuItem>{item}</MenuItem>;
                   })}
                 </Stack>
@@ -232,5 +274,5 @@ const SurveyObj = styled(Box)`
 `;
 const SurveySub = styled(Box)`
   width: 50%;
-  overflow:hidden;
+  overflow: hidden;
 `;

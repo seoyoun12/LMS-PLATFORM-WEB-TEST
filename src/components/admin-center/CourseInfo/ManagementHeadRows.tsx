@@ -1,6 +1,7 @@
 import { CourseType } from '@common/api/adm/courseClass';
 import styled from '@emotion/styled';
 import {
+  Backdrop,
   Box,
   Button,
   IconButton,
@@ -19,6 +20,11 @@ import {
   userBusinessTypeTwo,
 } from '@layouts/MeEdit/TransWorker/TransWorker';
 import { locationList } from '@layouts/MeEdit/MeEdit';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import { getExcelCourseLearning } from '@common/api/adm/excel';
+import { useState } from 'react';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { Spinner } from '@components/ui';
 
 interface Props {
   //   searchInputRef: React.MutableRefObject<HTMLInputElement>;
@@ -50,6 +56,27 @@ export const ManagementHeadRows = React.forwardRef(function (
   }: Props,
   searchInputRef
 ) {
+  const snackbar = useSnackbar();
+  const [loading, setLoading] = useState(false);
+  const onClickExcelDownload = async () => {
+    const a = document.createElement('a');
+    setLoading(true);
+    try {
+      const data = await getExcelCourseLearning();
+      const excel = new Blob([data]);
+      a.href = URL.createObjectURL(excel);
+      a.download = '충남_관리자_학습현황_모든데이터.xlsx';
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(a.href);
+      snackbar({ variant: 'success', message: '다운로드 완료' });
+      setLoading(false);
+    } catch (e) {
+      snackbar({ variant: 'error', message: e.data.message });
+      setLoading(false);
+    }
+  };
+
   return (
     <HeadRows>
       <Box>
@@ -135,19 +162,48 @@ export const ManagementHeadRows = React.forwardRef(function (
           <SearchIcon />
         </IconButton>
       </SearchContainer>
-      <ReloadButton
-        size="small"
-        color="neutral"
-        variant="text"
-        endIcon={<ReplayIcon htmlColor={grey[700]} />}
-        onClick={e => handleSearch(e, true)}
-      >
-        전체 다시 불러오기
-      </ReloadButton>
+      <Box width="100%" display="flex" justifyContent="space-between">
+        <ReloadButton
+          size="small"
+          color="neutral"
+          variant="text"
+          endIcon={<ReplayIcon htmlColor={grey[700]} />}
+          onClick={e => handleSearch(e, true)}
+        >
+          전체 다시 불러오기
+        </ReloadButton>
+        <Button
+          variant="contained"
+          color="success"
+          disabled={loading}
+          onClick={onClickExcelDownload}
+        >
+          {loading ? (
+            <Spinner fit={true} />
+          ) : (
+            <>
+              <FileCopyIcon sx={{ marginRight: '4px' }} />
+              학습현황 엑셀다운로드
+            </>
+          )}
+        </Button>
+      </Box>
 
       <Box mt={2} mb={2} fontSize={18} fontWeight="bold">
         {search !== '' && `검색어 : ${search}`}
       </Box>
+      <Backdrop open={loading}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          sx={{ background: 'white', borderRadius: '4px', padding: '12px' }}
+        >
+          <Spinner fit={true} />
+          <Box color="#246def" fontWeight="bold">
+            다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
+          </Box>
+        </Box>
+      </Backdrop>
     </HeadRows>
   );
 });
@@ -166,6 +222,4 @@ const SearchInput = styled(InputBase)`
   width: 100%;
 `;
 
-const ReloadButton = styled(Button)`
-  margin-left: auto;
-`;
+const ReloadButton = styled(Button)``;

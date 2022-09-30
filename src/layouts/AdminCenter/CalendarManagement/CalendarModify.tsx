@@ -69,9 +69,7 @@ export function CalendarModify() {
     register,
     handleSubmit,
     formState: { errors },
-    control,
     reset,
-    resetField,
     watch,
     setValue,
   } = useForm<FormType>({ defaultValues });
@@ -80,17 +78,9 @@ export function CalendarModify() {
     (async function () {
       try {
         const { data } = await getDetailCourseClass(Number(courseClassSeq));
-        // setValue('year', data.year);
-        // setValue('step', data.step);
-        // setValue('limitPeopleYn', data.limitPeopleYn);
+        const { cancelAvailStartDate, cancelAvailEndDate, ...rest } = data;
         setLimitPeopleCheck(data.limitPeopleYn === YN.YES ? true : false);
-        // setValue('limitPeople', data.limitPeople);
-        // setValue('requestStartDate', dateFormat(data.requestStartDate, 'yyyy-mm-dd'));
-        // setValue('requestEndDate', dateFormat(data.requestEndDate, 'yyyy-mm-dd'));
-        // setValue('studyStartDate', dateFormat(data.studyStartDate, 'yyyy-mm-dd'));
-        // setValue('studyEndDate', dateFormat(data.studyEndDate, 'yyyy-mm-dd'));
-        // setValue('courseClassSeq', data.seq);
-        reset({ ...data });
+        reset({ ...rest });
         setValue('courseSeq', data.course.seq);
         setValue('courseName', data.course.courseName);
         setValue('courseClassSeq', Number(data.seq));
@@ -105,7 +95,17 @@ export function CalendarModify() {
 
   //수정
   const onSubmit: SubmitHandler<FormType> = async e => {
-    const { step, year, limitPeople, courseClassSeq, ...rest } = e;
+    const {
+      step,
+      year,
+      limitPeople,
+      courseClassSeq,
+      requestStartDate,
+      requestEndDate,
+      studyStartDate,
+      studyEndDate,
+      ...rest
+    } = e;
 
     try {
       setLoading(true);
@@ -115,10 +115,15 @@ export function CalendarModify() {
         confirmText: '확인',
         cancelText: '취소',
       });
+      console.log(rest, 'dd');
 
       if (!dialogConfirmed) return setLoading(false);
       await modifyCourseClass({
         ...rest,
+        requestStartDate: requestStartDate.split(' ')[0],
+        requestEndDate: requestEndDate.split(' ')[0],
+        studyStartDate: studyStartDate.split(' ')[0],
+        studyEndDate: studyEndDate.split(' ')[0],
         step: Number(step),
         year: Number(year),
         limitPeople: Number(limitPeople),

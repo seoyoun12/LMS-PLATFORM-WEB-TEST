@@ -10,7 +10,6 @@ export enum QnaType {
   TYPE_WEB_OR_APP = 'TYPE_WEB_OR_APP',
   TYPE_ETC = 'TYPE_ETC',
 }
-
 export enum AnsweredYn {
   ANSWEREDY = 'Y',
   ANSWEREDN = 'N',

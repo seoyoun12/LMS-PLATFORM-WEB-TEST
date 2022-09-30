@@ -226,7 +226,7 @@ const SurveyTableCell = styled(TableCell)`
   margin: 0;
   border-right: 1px solid #f0f0f0;
 
-  &:first-child {
+  &:first-of-type {
     background: #f5f5f5;
   }
 `;

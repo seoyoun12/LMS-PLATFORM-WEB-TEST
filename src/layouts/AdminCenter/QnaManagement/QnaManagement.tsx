@@ -23,7 +23,6 @@ import dateFormat from 'dateformat';
 import styled from '@emotion/styled';
 import { AnsweredYn, qnaAdmList } from '@common/api/qna';
 import { ProductStatus } from '@common/api/course';
-import { downloadFile } from '@common/api/file';
 
 const headRows: {
   name: string;
@@ -42,8 +41,8 @@ const headRows: {
 const tabsConfig = [
   { name: '회원가입/로그인', value: 'TYPE_SIGNUP_OR_SIGNIN' },
   { name: '교육/수료', value: 'TYPE_EDU_OR_COMPLETE' },
-  { name: '홈페이지/앱', value: 'TYPE_WEB_OR_APP ' },
-  { name: '기타', value: 'TYPE_ETC ' },
+  { name: '홈페이지/앱', value: 'TYPE_WEB_OR_APP' },
+  { name: '기타', value: 'TYPE_ETC' },
 ];
 
 export function QnaManagement() {
@@ -226,7 +225,7 @@ const QnaTableCell = styled(TableCell)`
   margin: 0;
   border-right: 1px solid #f0f0f0;
 
-  &:first-child {
+  &:first-of-type {
     /* border-right: 1px solid #e0e0e0; */
     background: #f5f5f5;
   }

@@ -22,6 +22,7 @@ export interface CategoryBoard {
   noticeYn: YN;
   publicYn: YN;
   seq: number;
+  postTypeSeq: number;
   status: ProductStatus;
   subject: string;
   userSeq: number;

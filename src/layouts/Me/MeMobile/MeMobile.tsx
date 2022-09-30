@@ -253,7 +253,7 @@ const SideBarContent = styled.section`
 const SideBarInfoLink = styled(Link)`
   flex-grow: 1;
   width: 33.3%;
-  :first-child {
+  :first-of-type {
     /* border-top: 1px solid #e5e5e5; */
   }
 `;

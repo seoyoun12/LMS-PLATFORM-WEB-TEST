@@ -136,6 +136,7 @@ export function CategoryBoardQuestionForm({
     control,
     reset,
     resetField,
+    setValue,
   } = useForm<FormType>({ defaultValues });
 
   const handleFileChange = (e: ChangeEvent) => {
@@ -151,6 +152,14 @@ export function CategoryBoardQuestionForm({
     setFileName(null);
     setIsFileDelete(true);
   };
+
+  // useEffect(() => {
+  //   if (smsChecked) {
+  //     setValue('smsYn', YN.YES);
+  //   } else if (!smsChecked) {
+  //     setValue('smsYn', YN.NO);
+  //   }
+  // }, [setSmsChecked]);
 
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...qna }, event) => {
     event?.preventDefault();
@@ -170,7 +179,10 @@ export function CategoryBoardQuestionForm({
       return window.alert('제목, 내용, 휴대번호, 문의유형 모두 입력해주세요!');
     if (!individualCheck)
       return window.alert('개인정보 수집 및 활용에 동의하셔야 합니다!');
-    onHandleSubmit({ qnaInput, files, isFileDelete });
+
+    console.log('qnaInput : ', qnaInput);
+
+    // onHandleSubmit({ qnaInput, files, isFileDelete });
   };
 
   return (
@@ -240,7 +252,7 @@ export function CategoryBoardQuestionForm({
                   />
                 </Box>
 
-                <Box display={'flex'} alignItems="center">
+                {/* <Box display={'flex'} alignItems="center">
                   <Checkbox
                     checked={smsChecked}
                     onChange={(e, checked) => {
@@ -255,6 +267,22 @@ export function CategoryBoardQuestionForm({
                   >
                     알림신청
                   </Typography>
+                </Box> */}
+
+                <Box display={'flex'} alignItems="center">
+                  <Checkbox
+                    checked={smsChecked}
+                    onChange={(e, checked) => {
+                      if (checked) {
+                        setValue('smsYn', YN.YES);
+                        setSmsChecked(checked);
+                      } else if (!checked) {
+                        setValue('smsYn', YN.NO);
+                        setSmsChecked(checked);
+                      }
+                    }}
+                  />
+                  <Typography>알림신청</Typography>
                 </Box>
               </FormControl>
             </TableCellRight>

@@ -10,6 +10,12 @@ export enum QnaType {
   TYPE_WEB_OR_APP = 'TYPE_WEB_OR_APP',
   TYPE_ETC = 'TYPE_ETC',
 }
+
+export enum smsYn {
+  SMSY = 'Y',
+  SMSN = 'N'
+}
+
 export enum AnsweredYn {
   ANSWEREDY = 'Y',
   ANSWEREDN = 'N',
@@ -30,6 +36,7 @@ export interface Qna {
   userSeq: number;
   username: string;
   name: string;
+  smsYn: string;
 }
 
 export type QnaInput = Partial<Qna>;

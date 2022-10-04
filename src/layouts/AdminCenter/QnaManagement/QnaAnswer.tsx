@@ -33,11 +33,15 @@ export function QnaAnswer() {
     files,
     seq,
     qnaAnswerInput,
+    setLoading,
   }: {
     files: File[];
     seq: number;
     qnaAnswerInput: QnaAnswerInput;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   }) => {
+    setLoading(true);
+
     try {
       const qnaAnswer = await uploadQnaAnswer(data.seq, qnaAnswerInput);
       await fileHandler(files, qnaAnswer.data);

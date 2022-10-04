@@ -46,7 +46,7 @@ const localList = [
 const oneWordList = ['아', '바', '사', '자', '배'];
 
 const defaultValues = {
-  // 처음 undefined면 value 가 변경되어도 적용이 안된다. 그래서 초기값 d v 로 빈 스트링을 넣어준다.
+  // 처음 undefined면 value 가 변경되어도 적용이 안된다. 그래서 초기값 defaultValues 로 빈 스트링을 넣어준다.
   // businessSubType: '',
   businessName: '',
   firstStr: '',
@@ -144,10 +144,10 @@ export function CourseInformation({
       } else {
         setValue('businessName', courseInfo.businessName);
       }
-      setValue('firstStr', null);
-      setValue('firstNum', null);
-      setValue('secondStr', null);
-      setValue('secondNum', null);
+      setValue('firstStr', '');
+      setValue('firstNum', '');
+      setValue('secondStr', '');
+      setValue('secondNum', '');
       setValue('businessSubType', value);
       setDisabledBusinessName(false);
       setDisabledCarNumber(true);
@@ -326,8 +326,9 @@ export function CourseInformation({
       setValue('carNumber', ''); // 차후 null처리 요망
     }
 
-    console.log('courseLearningInfoInput : ', courseLearningInfoInput);
-    console.log('watch().carNumber : ', watch().carNumber);
+    // console.log('courseLearningInfoInput : ', courseLearningInfoInput);
+    // console.log('watch().carNumber : ', watch().carNumber);
+
     onHandleSubmit({
       courseLearningInfoInput: {
         ...courseLearningInfoInput,

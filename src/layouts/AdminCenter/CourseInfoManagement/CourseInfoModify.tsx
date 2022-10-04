@@ -26,7 +26,7 @@ export function CourseInfoModify() {
     courseLearningInfoInput: CourseLearningInfoInput;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   }) => {
-    console.log('courseLearningInfoInput 부모 : ', courseLearningInfoInput);
+    // console.log('courseLearningInfoInput 부모 : ', courseLearningInfoInput);
     try {
       setLoading(true);
       if (Number(courseUserSeq)) {

@@ -25,6 +25,13 @@ export function QnaQuestionForm() {
             번호
           </TableCell>
           <TableCell sx={{ width: '10%', textAlign: 'center' }}>{data?.seq}</TableCell>
+
+          <TableCell sx={{ background: '#e0e0e0', width: '10%', textAlign: 'center' }}>
+            이름
+          </TableCell>
+          <TableCell sx={{ width: '10%', textAlign: 'center' }}>
+            {data.username ? `${data.username}(${data.name})` : data.name}
+          </TableCell>
           <TableCell sx={{ background: '#e0e0e0', width: '10%', textAlign: 'center' }}>
             문의타입
           </TableCell>

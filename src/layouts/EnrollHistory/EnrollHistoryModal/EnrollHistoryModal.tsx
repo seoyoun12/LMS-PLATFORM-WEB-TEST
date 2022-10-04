@@ -75,8 +75,8 @@ export function EnrollHistoryModal({
       step: number;
       studyStartDate: string;
       studyEndDate: string;
-      enrolledPeopleCnt: number;
-      limitPeople: number;
+      enrolledPeopleCnt?: number;
+      limitPeople?: number;
     }[]
   >([]); //기수 교육시작 교육끝
   const [stepSeq, setStepSeq] = useState<number>();
@@ -121,18 +121,50 @@ export function EnrollHistoryModal({
           data.categoryType,
           data.businessType
         );
+
         setStepsRes(
           stepData.data.map(item => {
             return {
               seq: item.seq,
               step: item.step,
-              studyStartDate: item.studyStartDate,
-              studyEndDate: item.studyEndDate,
+              studyStartDate: dateFormat(
+                item.studyStartDate.replaceAll('-', '/'),
+                'yyyy-mm-dd'
+              ),
+              studyEndDate: dateFormat(
+                item.studyEndDate.replaceAll('-', '/'),
+                'yyyy-mm-dd'
+              ),
               enrolledPeopleCnt: item.enrolledPeopleCnt,
               limitPeople: item.limitPeople,
             };
           })
         );
+        if (
+          checkDatePeriod(
+            watch().studyStartDate,
+            watch().studyEndDate,
+            dateFormat(new Date(), 'yyyy-mm-dd')
+          ) ||
+          isAfter
+        ) {
+          setStepsRes([
+            {
+              seq: data.courseClassSeq,
+              step: data.step,
+              studyStartDate: dateFormat(
+                data.studyStartDate.replaceAll('-', '/'),
+                'yyyy-mm-dd'
+              ),
+              studyEndDate: dateFormat(
+                data.studyEndDate.replaceAll('-', '/'),
+                'yyyy-mm-dd'
+              ),
+              enrolledPeopleCnt: data.enrolledPeopleCnt,
+              limitPeople: data.limitPeople,
+            },
+          ]);
+        }
         setGetDataLoading(false);
       } catch (e: any) {
         setGetDataLoading(false);
@@ -576,9 +608,6 @@ export function EnrollHistoryModal({
                     }}
                     disabled={isStudyPeriod || isAfterStudyDate}
                   >
-                    <MenuItem value={''}>
-                      종료된 기수이거나 기수가 존재하지 않습니다!
-                    </MenuItem>
                     {stepsRes.map(item => {
                       return (
                         <MenuItem key={item.step} value={item.seq}>

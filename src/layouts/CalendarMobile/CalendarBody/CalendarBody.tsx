@@ -226,8 +226,8 @@ export function CalendarBody({
       )[0],
       enrolledPeopleCnt: item.enrolledPeopleCnt,
       limitPeople: item.limitPeople,
-      studyStartDate: item.studyStartDate,
-      studyEndDate: item.studyEndDate,
+      studyStartDate: item.studyStartDate.replaceAll('-', '/'),
+      studyEndDate: item.studyEndDate.replaceAll('-', '/'),
       requestStartDate: item.requestStartDate as string,
       requestEndDate: item.requestEndDate as string,
       // start: dateFormat(item.start.replaceAll('-', '/'), 'yyyy-mm-dd'), //신청시작일자
@@ -401,15 +401,8 @@ export function CalendarBody({
                 <TableRow>
                   <TableLeftCell>교육일</TableLeftCell>
                   <TableRightCell>
-                    {dateFormat(
-                      modalInfo.studyStartDate.replaceAll('-', '/'),
-                      'yyyy-mm-dd'
-                    )}{' '}
-                    ~{' '}
-                    {dateFormat(
-                      modalInfo.studyEndDate.replaceAll('-', '/'),
-                      'yyyy-mm-dd'
-                    )}
+                    {dateFormat(modalInfo.studyStartDate.replaceAll('-', '/'), 'yyyy-mm-dd')} ~{' '}
+                    {dateFormat(modalInfo.studyEndDate.replaceAll('-', '/'), 'yyyy-mm-dd')}
                   </TableRightCell>
                 </TableRow>
                 <TableRow>

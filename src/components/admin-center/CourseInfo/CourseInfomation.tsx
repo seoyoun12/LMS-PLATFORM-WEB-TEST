@@ -33,10 +33,10 @@ import {
 import { carNumberRegex } from '@utils/inputRegexes';
 
 interface FormType extends UserCourseInfoDetailCourseInfoDto {
-  firstStr: string;
-  firstNum: string;
-  secondStr: string;
-  secondNum: string;
+  firstStr?: string;
+  firstNum?: string;
+  secondStr?: string;
+  secondNum?: string;
 }
 
 const localList = [
@@ -46,7 +46,7 @@ const localList = [
 const oneWordList = ['아', '바', '사', '자', '배'];
 
 const defaultValues = {
-  // 처음 undefined면 value 가 변경되어도 적용이 안된다. 그래서 초기값 d v 로 빈 스트링을 넣어준다.
+  // 처음 undefined면 value 가 변경되어도 적용이 안된다. 그래서 초기값 defaultValues 로 빈 스트링을 넣어준다.
   // businessSubType: '',
   businessName: '',
   firstStr: '',
@@ -77,7 +77,7 @@ export function CourseInformation({
   const snackbar = useSnackbar();
   const { courseUserSeq } = router.query;
   // const [businessSubTypeState, setBusinessSubTypeState] = useState<string>(); // 업종구분
-  const [carRegistrationRegionState, setCarRegistrationRegionState] = useState<string>(); // 차량등록지
+  // const [carRegistrationRegionState, setCarRegistrationRegionState] = useState<string>(); // 차량등록지
   // const [residenceState, setResidenceState] = useState<string>(); // 거주지
 
   const [disabledCarNumber, setDisabledCarNumber] = useState(false); // 차량번호 비활성화
@@ -138,17 +138,23 @@ export function CourseInformation({
     } = e;
 
     if (businessSubType.BUS === value) {
+      // 버스
       if (courseInfo.businessName === '개인택시') {
         setValue('businessName', '');
       } else {
         setValue('businessName', courseInfo.businessName);
       }
+      setValue('firstStr', '');
+      setValue('firstNum', '');
+      setValue('secondStr', '');
+      setValue('secondNum', '');
       setValue('businessSubType', value);
       setDisabledBusinessName(false);
       setDisabledCarNumber(true);
     }
 
     if (businessSubType.CHARTER_BUS === value) {
+      // 전세버스
       if (courseInfo.businessName === '개인택시') {
         setValue('businessName', '');
       } else {
@@ -160,28 +166,39 @@ export function CourseInformation({
     }
 
     if (businessSubType.SPECIAL_PASSENGER === value) {
+      // 특수여객
       if (courseInfo.businessName === '개인택시') {
         setValue('businessName', '');
       } else {
         setValue('businessName', courseInfo.businessName);
       }
+      setValue('firstStr', '');
+      setValue('firstNum', '');
+      setValue('secondStr', '');
+      setValue('secondNum', '');
       setValue('businessSubType', value);
       setDisabledBusinessName(false);
       setDisabledCarNumber(true);
     }
 
     if (businessSubType.CORPORATE_TAXI === value) {
+      // 법인택시
       if (courseInfo.businessName === '개인택시') {
         setValue('businessName', '');
       } else {
         setValue('businessName', courseInfo.businessName);
       }
+      setValue('firstStr', '');
+      setValue('firstNum', '');
+      setValue('secondStr', '');
+      setValue('secondNum', '');
       setValue('businessSubType', value);
       setDisabledBusinessName(false);
       setDisabledCarNumber(true);
     }
 
     if (businessSubType.PRIVATE_TAXI === value) {
+      // 개인택시
       setValue('businessName', '개인택시');
       setValue('businessSubType', value);
       setDisabledBusinessName(true);
@@ -189,6 +206,7 @@ export function CourseInformation({
     }
 
     if (businessSubType.GENERAL_CARGO === value) {
+      // 일반화물
       if (
         courseInfo.businessName === '용달화물' ||
         courseInfo.businessName === '개별화물'
@@ -203,6 +221,7 @@ export function CourseInformation({
     }
 
     if (businessSubType.CONSIGNMENT === value) {
+      // 용달화물
       setValue('businessName', '용달화물');
       setValue('businessSubType', value);
       setDisabledBusinessName(true);
@@ -210,6 +229,7 @@ export function CourseInformation({
     }
 
     if (businessSubType.INDIVIDUAL_CARGO === value) {
+      // 개별화물
       setValue('businessName', '개별화물');
       setValue('businessSubType', value);
       setDisabledBusinessName(true);
@@ -242,6 +262,10 @@ export function CourseInformation({
         courseInfo.businessSubType === businessSubType.SPECIAL_PASSENGER ||
         courseInfo.businessSubType === businessSubType.CORPORATE_TAXI
       ) {
+        setValue('firstStr', '');
+        setValue('firstNum', '');
+        setValue('secondStr', '');
+        setValue('secondNum', '');
         setValue('businessName', courseInfo.businessName);
         setDisabledBusinessName(false);
         setDisabledCarNumber(true);
@@ -254,12 +278,14 @@ export function CourseInformation({
       }
 
       if (courseInfo.businessSubType === businessSubType.CONSIGNMENT) {
+        // 용달화물
         setValue('businessName', '용달화물');
         setDisabledBusinessName(true);
         setDisabledCarNumber(false);
       }
 
       if (courseInfo.businessSubType === businessSubType.INDIVIDUAL_CARGO) {
+        // 개별화물
         setValue('businessName', '개별화물');
         setDisabledBusinessName(true);
         setDisabledCarNumber(false);
@@ -292,17 +318,29 @@ export function CourseInformation({
   const onSubmit: SubmitHandler<FormType> = async (
     courseLearningInfoInput: CourseLearningInfoInput
   ) => {
-    if (!carNumberRegex.test(watch().carNumber)) {
+    if (!carNumberRegex.test(watch().carNumber) && !disabledCarNumber) {
       // 정규표현식 적용
       return snackbar({ variant: 'error', message: '차량번호를 정확히 기입해주십시오.' });
     }
+    if (watch().carNumber.length < 9) {
+      setValue('carNumber', ''); // 차후 null처리 요망
+    }
+
+    // console.log('courseLearningInfoInput : ', courseLearningInfoInput);
+    // console.log('watch().carNumber : ', watch().carNumber);
+
     onHandleSubmit({
-      courseLearningInfoInput: courseLearningInfoInput,
+      courseLearningInfoInput: {
+        ...courseLearningInfoInput,
+        carNumber: watch().carNumber,
+      },
       courseUserSeq: Number(courseUserSeq),
       setLoading,
     });
     // console.log('courseLearningInfoInput : ', courseLearningInfoInput);
   };
+
+  console.log('watch : ', watch());
 
   //
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -415,7 +453,7 @@ export function CourseInformation({
               {/* 차량번호 두번째 */}
               <TextField
                 // {...register('firstNum', { required: '앞 두자리 번호를 입력해주세요.' })}
-                {...register('firstNum', { required: '앞 두자리 번호를 입력해주세요.' })}
+                {...register('firstNum')}
                 onChange={e => {
                   if (e.target.value.length > 2) return;
                   setValue('firstNum', e.target.value.replace(/[^0-9]/g, ''));

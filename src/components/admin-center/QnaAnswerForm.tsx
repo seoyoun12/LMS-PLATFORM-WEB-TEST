@@ -20,6 +20,7 @@ import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined
 import { css } from '@emotion/css';
 import router from 'next/router';
 import { downloadFile } from '@common/api/file';
+import { Spinner } from '@components/ui';
 
 interface Props {
   qnaSeq?: number;
@@ -27,10 +28,12 @@ interface Props {
     qnaAnswerInput,
     files,
     qnaSeq,
+    setLoading,
   }: {
     qnaAnswerInput: QnaAnswerInput;
     files?: File[];
     qnaSeq?: number;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   }) => void;
 }
 
@@ -43,6 +46,8 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
   const [fileName, setFileName] = useState<string | null>(null);
   const { qnaSeq } = router.query;
   const { data } = qnaDetail(Number(qnaSeq));
+  const [loading, setLoading] = useState(false);
+
   // const { data } = qnaDetail(Number(qna.qnaSeq));
 
   const {
@@ -75,7 +80,7 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
       ...qnaAnswer,
       content: markdownContent,
     };
-    onHandleSubmit({ qnaAnswerInput, files });
+    onHandleSubmit({ qnaAnswerInput, files, setLoading });
   };
 
   return (
@@ -158,8 +163,8 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
             돌아가기
           </SubmitBtn>
         ) : (
-          <SubmitBtn variant="contained" type="submit">
-            문의 답변 등록
+          <SubmitBtn variant="contained" type="submit" disabled={loading}>
+            {loading ? <Spinner fit={true} /> : '문의 답변 등록'}
           </SubmitBtn>
         )}
       </ButtonBox>

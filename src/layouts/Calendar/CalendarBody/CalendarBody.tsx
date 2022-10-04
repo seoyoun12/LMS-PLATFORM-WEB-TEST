@@ -309,7 +309,7 @@ export function CalendarBody({
                   window.alert('로그인이 필요한 서비스입니다.');
                   return router.push({
                     pathname: '/sign-in',
-                    query: { redirect: router.asPath },
+                    query: { redirect: `stebMove/steb2` },
                   });
                 }
 
@@ -385,8 +385,15 @@ export function CalendarBody({
                 <TableRow>
                   <TableLeftCell>교육일</TableLeftCell>
                   <TableRightCell>
-                    {dateFormat(modalInfo.studyStartDate.replaceAll('-','/'), 'yyyy-mm-dd')} ~{' '}
-                    {dateFormat(modalInfo.studyEndDate.replaceAll('-','/'), 'yyyy-mm-dd')}
+                    {dateFormat(
+                      modalInfo.studyStartDate.replaceAll('-', '/'),
+                      'yyyy-mm-dd'
+                    )}{' '}
+                    ~{' '}
+                    {dateFormat(
+                      modalInfo.studyEndDate.replaceAll('-', '/'),
+                      'yyyy-mm-dd'
+                    )}
                   </TableRightCell>
                 </TableRow>
                 <TableRow>
@@ -400,8 +407,15 @@ export function CalendarBody({
                 <TableRow>
                   <TableLeftCell>예약가능시간</TableLeftCell>
                   <TableRightCell>
-                    {dateFormat(modalInfo.requestStartDate.replaceAll('-','/'), 'yyyy-mm-dd')} ~{' '}
-                    {dateFormat(modalInfo.requestEndDate.replaceAll('-','/'), 'yyyy-mm-dd')}
+                    {dateFormat(
+                      modalInfo.requestStartDate.replaceAll('-', '/'),
+                      'yyyy-mm-dd'
+                    )}{' '}
+                    ~{' '}
+                    {dateFormat(
+                      modalInfo.requestEndDate.replaceAll('-', '/'),
+                      'yyyy-mm-dd'
+                    )}
                   </TableRightCell>
                 </TableRow>
               </>

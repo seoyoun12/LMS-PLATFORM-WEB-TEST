@@ -180,9 +180,9 @@ export function CategoryBoardQuestionForm({
     if (!individualCheck)
       return window.alert('개인정보 수집 및 활용에 동의하셔야 합니다!');
 
-    console.log('qnaInput : ', qnaInput);
+    // console.log('qnaInput : ', qnaInput);
 
-    // onHandleSubmit({ qnaInput, files, isFileDelete });
+    onHandleSubmit({ qnaInput, files, isFileDelete });
   };
 
   return (

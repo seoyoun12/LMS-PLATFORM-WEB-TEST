@@ -72,16 +72,13 @@ export function UserManagement() {
   const dialog = useDialog();
   const [page, setPage] = useState(0);
   // const [typeValue, setTypeValue] = useState(registerType.TYPE_TRANS_EDU);
-  const [authoritiesTypeValue, setAuthoritiesTypeValue] = useState(
-    authoritiesType.ROLE_TRANS_USER
+  const [authoritiesValue, setAuthoritiesValue] = useState(
+    authoritiesType.ROLE_TRANS_USER || null
   );
   const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
   const date = new Date();
   const year = date.getFullYear();
-
-  console.log('authoritiesTypeValue : ', authoritiesTypeValue);
-  // console.log('회원정보 Data : ', data);
 
   // 검색기능
   const searchInputRef = useRef<HTMLInputElement | null>(null);
@@ -90,9 +87,17 @@ export function UserManagement() {
   const { data, error, mutate } = userList({
     page,
     // registerType: typeValue,
-    authoritiesType: authoritiesTypeValue,
+    authorities: authoritiesValue,
+    // authorities,
     keyword,
   });
+
+  const onChangeAuthoritis = (value: string) => {
+    setAuthoritiesValue(value);
+  };
+  //
+  console.log('authoritiesValue : ', authoritiesValue);
+  console.log('회원정보 Data : ', data);
 
   // 검색기능
   const handleSearch = async (event: FormEvent, isReload = false) => {
@@ -187,8 +192,8 @@ export function UserManagement() {
             key={name}
             label={name}
             value={value}
-            control={<Radio checked={authoritiesTypeValue == value} />}
-            onClick={() => setAuthoritiesTypeValue(value)}
+            control={<Radio checked={authoritiesValue == value} />}
+            onClick={() => onChangeAuthoritis(value)}
           />
         ))}
       </RadioGroup>

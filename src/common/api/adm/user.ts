@@ -4,11 +4,11 @@ import { PaginationResult } from 'types/fetch';
 import { authoritiesType, registerType, User, UserInput } from '@common/api/user';
 
 // export function userList({ page, elementCnt, registerType, keyword }: {
-export function userList({ page, elementCnt, authoritiesType, keyword }: {
+export function userList({ page, elementCnt, authorities, keyword }: {
   page: number,
   elementCnt?: number,
   // registerType: registerType,
-  authoritiesType: authoritiesType,
+  authorities: authoritiesType,
   keyword: string
 }) {
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<User[]>>>([

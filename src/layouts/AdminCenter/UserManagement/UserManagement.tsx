@@ -207,7 +207,7 @@ export function UserManagement() {
           onClick={() => snackbar({ variant: 'info', message: '준비중입니다.' })}
         >
           <FileCopyIcon sx={{ marginRight: '4px' }} />
-          설문통계 엑셀다운로드
+          회원목록 엑셀다운로드
         </Button>
       </Box>
 

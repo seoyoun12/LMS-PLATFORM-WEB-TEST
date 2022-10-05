@@ -25,7 +25,7 @@ export function QnaQuestionForm() {
   const qna = router.query;
   const { data } = qnaDetail(Number(qna.qnaSeq));
 
-  console.log('1대1문의 데이터 : ', data);
+  // console.log('1대1문의 데이터 : ', data);
 
   return (
     <QuestionBox>
@@ -40,8 +40,14 @@ export function QnaQuestionForm() {
           <TableCell sx={{ background: '#e0e0e0', width: '7%', textAlign: 'center' }}>
             이름
           </TableCell>
-          <TableCell sx={{ width: '30%', textAlign: 'center' }}>
+          <TableCell sx={{ width: '10%', textAlign: 'center' }}>
             {data.username ? `${data.username}(${data.name})` : data.name}
+          </TableCell>
+          <TableCell sx={{ background: '#e0e0e0', width: '7%', textAlign: 'center' }}>
+            번호
+          </TableCell>
+          <TableCell sx={{ width: '20%', textAlign: 'center' }}>
+            {data.phone ? `${data.phone}` : '번호없음'}
           </TableCell>
           <TableCell sx={{ background: '#e0e0e0', width: '8%', textAlign: 'center' }}>
             문의타입

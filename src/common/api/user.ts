@@ -102,6 +102,14 @@ export interface MyUser extends User {
   pushToken: string;
 }
 
+export enum authoritiesType { // user Role
+  ROLE_TRANS_USER = 'ROLE_TRANS_USER',
+  ROLE_TRAFFIC_SAFETY_USER = 'ROLE_TRAFFIC_SAFETY_USER',
+  ROLE_TRANS_MANAGER = 'ROLE_TRANS_MANAGER',
+  ROLE_TRAFFIC_SAFETY_MANAGER = 'ROLE_TRAFFIC_SAFETY_MANAGER',
+  ROLE_ADMIN = 'ROLE_ADMIN',
+}
+
 export enum regCategoryType {
   TYPE_TRANS_EDU = 'TYPE_TRANS_EDU',
   TYPE_TRAFFIC_SAFETY_EDU = 'TYPE_TRAFFIC_SAFETY_EDU',

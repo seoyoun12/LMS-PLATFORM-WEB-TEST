@@ -25,7 +25,7 @@ import dateFormat from 'dateformat';
 import { UserModifyModal } from '@components/admin-center/UserModifyModal';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
-import { regCategoryType, registerType } from '@common/api/user';
+import { authoritiesType, regCategoryType, registerType } from '@common/api/user';
 import { ProductStatus } from '@common/api/course';
 import { NumberFormat } from 'xlsx';
 import { grey } from '@mui/material/colors';
@@ -38,10 +38,18 @@ const userConfig = [
   { label: '핸드폰가입', value: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU },
 ];
 
+// const radioConfig = [
+//   // { name: '전체', value: '' }, // Type이 required
+//   { name: '저상/운수', value: registerType.TYPE_TRANS_EDU },
+//   { name: '관리자', value: registerType.TYPE_TRAFFIC_SAFETY_EDU }, // 차후 도민
+// ];
+
 const radioConfig = [
-  // { name: '전체', value: '' }, // Type이 required
-  { name: '저상/운수', value: registerType.TYPE_TRANS_EDU },
-  { name: '관리자', value: registerType.TYPE_TRAFFIC_SAFETY_EDU }, // 차후 도민
+  { name: '회원(운수)', value: authoritiesType.ROLE_TRANS_USER },
+  { name: '회원(도민)', value: authoritiesType.ROLE_TRAFFIC_SAFETY_USER },
+  { name: '관리자(운수)', value: authoritiesType.ROLE_TRANS_MANAGER },
+  { name: '관리자(도민)', value: authoritiesType.ROLE_TRAFFIC_SAFETY_MANAGER },
+  { name: '통합관리자', value: authoritiesType.ROLE_ADMIN },
 ];
 
 const headRows: {
@@ -63,18 +71,26 @@ export function UserManagement() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const [page, setPage] = useState(0);
-  const [typeValue, setTypeValue] = useState(registerType.TYPE_TRANS_EDU);
+  // const [typeValue, setTypeValue] = useState(registerType.TYPE_TRANS_EDU);
+  const [authoritiesTypeValue, setAuthoritiesTypeValue] = useState(
+    authoritiesType.ROLE_TRANS_USER
+  );
   const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
   const date = new Date();
   const year = date.getFullYear();
 
+  console.log('authoritiesTypeValue : ', authoritiesTypeValue);
+  // console.log('회원정보 Data : ', data);
+
   // 검색기능
   const searchInputRef = useRef<HTMLInputElement | null>(null);
+
   const [keyword, setKeyword] = useState<string>('');
   const { data, error, mutate } = userList({
     page,
-    registerType: typeValue,
+    // registerType: typeValue,
+    authoritiesType: authoritiesTypeValue,
     keyword,
   });
 
@@ -171,16 +187,17 @@ export function UserManagement() {
             key={name}
             label={name}
             value={value}
-            control={<Radio checked={typeValue == value} />}
-            onClick={() => setTypeValue(value)}
+            control={<Radio checked={authoritiesTypeValue == value} />}
+            onClick={() => setAuthoritiesTypeValue(value)}
           />
         ))}
       </RadioGroup>
+
       <SearchBox>
         <SearchContainer onSubmit={handleSearch}>
           <SearchInput
             inputRef={searchInputRef}
-            placeholder="회원 검색"
+            placeholder="이름 또는 핸드폰번호"
             size="small"
             type="search"
           />

@@ -21,6 +21,8 @@ import { css } from '@emotion/css';
 import router from 'next/router';
 import { downloadFile } from '@common/api/file';
 import { Spinner } from '@components/ui';
+import dateFormat from 'dateformat';
+import SaveIcon from '@mui/icons-material/Save';
 
 interface Props {
   qnaSeq?: number;
@@ -87,11 +89,11 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
   return (
     <QnaAnswerBox
       component="form"
-      // encType="multipart/form-data"
       onSubmit={handleSubmit(onSubmit)}
+      // encType="multipart/form-data"
       // noValidate
     >
-      <FormControl>
+      <FormControl sx={{ width: '100%' }}>
         <TableHeadFull colSpan={4} sx={{ display: 'table', width: '100%', mt: '20px' }}>
           1대1문의 답변
         </TableHeadFull>
@@ -100,7 +102,9 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
           <TableRow>
             <TableLeftCell align="center">등록날짜</TableLeftCell>
             <TableRightCell>
-              {data.qnaAnswer?.content ? data.qnaAnswer.createdDtime : ''}
+              {data.qnaAnswer?.content
+                ? dateFormat(data.qnaAnswer.createdDtime, 'isoDate')
+                : ''}
             </TableRightCell>
             <TableLeftCell align="center">첨부파일</TableLeftCell>
             <TableRightCell>
@@ -142,9 +146,8 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
                       {}
                     </FileUploader>
                     {fileName ? (
-                      <Chip
-                        sx={{ mt: '8px' }}
-                        icon={<OndemandVideoOutlinedIcon />}
+                      <FileChip
+                        icon={<SaveIcon />}
                         label={fileName}
                         onDelete={handleDeleteFile}
                       />
@@ -207,11 +210,14 @@ const TuiViewerBox = styled(Box)`
   /* height: 600px; */
   /* padding: 20px; */
   /* font-size: 14px; 적용안됨 */
+  padding: 30px 0 30px 0;
 `;
 
 /////////////////////
 
-const QnaAnswerBox = styled(Box)``;
+const QnaAnswerBox = styled(Box)`
+  width: 100%;
+`;
 
 const TableHeadFull = styled(TableCell)`
   width: 100%;
@@ -235,14 +241,19 @@ const TableRightCell = styled(TableCell)`
   width: 40%;
   border-bottom: 1px solid #c4c4c4;
   border-right: 1px solid #c4c4c4;
-  font: 14px;
+  font-size: 14px;
 `;
 
 const TableLongCell = styled(TableCell)`
   width: 90%;
   border-bottom: 1px solid #c4c4c4;
   border-right: 1px solid #c4c4c4;
-  padding-top: 50px;
-  padding-bottom: 50px;
+  /* padding-top: 50px;
+  padding-bottom: 50px; */
   white-space: pre-wrap;
+`;
+
+const FileChip = styled(Chip)`
+  margin-left: 10px;
+  height: 36.5px;
 `;

@@ -16,10 +16,20 @@ interface Props {
 }
 
 function Label({ children }: { children: ReactNode }) {
-  return (<Typography variant="subtitle2" className="subtitle">{children}</Typography>);
+  return (
+    <Typography variant="subtitle2" className="subtitle">
+      {children}
+    </Typography>
+  );
 }
 
-const FileUploaderRoot = ({ onFileChange, register, regName, accept = undefined, children }: Props) => {
+const FileUploaderRoot = ({
+  onFileChange,
+  register,
+  regName,
+  accept = undefined,
+  children,
+}: Props) => {
   const inputRef = useRef<HTMLDivElement>(null);
   const { onChange, onBlur, name, ref } = register(regName);
 

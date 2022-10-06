@@ -353,29 +353,29 @@ export function CourseInformation({
       </TableHeadFull>
       <TableBody sx={{ display: 'table', width: '100%' }}>
         <TableRow>
-          <TableLeftCell>과정명</TableLeftCell>
+          <TableLeftCell align="center">과정명</TableLeftCell>
           <TableRightCell>{courseInfo?.courseName}</TableRightCell>
-          <TableLeftCell>년도 / 차수</TableLeftCell>
+          <TableLeftCell align="center">년도 / 차수</TableLeftCell>
           <TableRightCell>{courseInfo?.yearAndStep}</TableRightCell>
         </TableRow>
         <TableRow>
-          <TableLeftCell>회원명</TableLeftCell>
+          <TableLeftCell align="center">회원명</TableLeftCell>
           <TableRightCell>{courseInfo?.name}</TableRightCell>
-          <TableLeftCell>회원아이디</TableLeftCell>
+          <TableLeftCell align="center">회원아이디</TableLeftCell>
           <TableRightCell>
             {courseInfo?.username ? courseInfo?.username : '-'}
           </TableRightCell>
         </TableRow>
         <TableRow>
-          <TableLeftCell>학습기간</TableLeftCell>
+          <TableLeftCell align="center">학습기간</TableLeftCell>
           <TableRightCell>{courseInfo?.studyDate}</TableRightCell>
-          <TableLeftCell>등록일</TableLeftCell>
+          <TableLeftCell align="center">등록일</TableLeftCell>
           <TableRightCell>{courseInfo?.regDate}</TableRightCell>
         </TableRow>
         <TableRow>
-          <TableLeftCell>상태</TableLeftCell>
+          <TableLeftCell align="center">상태</TableLeftCell>
           <TableRightCell>{courseInfo?.classLearningStatus}</TableRightCell>
-          <TableLeftCell>수료여부</TableLeftCell>
+          <TableLeftCell align="center">수료여부</TableLeftCell>
           <TableRightCell>
             {courseInfo?.completeYn === 'Y' ? '수료' : '미수료'}
           </TableRightCell>

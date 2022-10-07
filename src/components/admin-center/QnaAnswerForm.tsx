@@ -101,12 +101,19 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
         <TableBody sx={{ display: 'table', width: '100%' }}>
           <TableRow>
             <TableLeftCell align="center">등록날짜</TableLeftCell>
-            <TableRightCell>
+            {/* <TableRightCell>
               {data.qnaAnswer?.content
                 ? dateFormat(data.qnaAnswer.createdDtime, 'isoDate')
                 : ''}
+            </TableRightCell> */}
+            <TableRightCell>
+              {data.qnaAnswer?.content ? data.qnaAnswer.createdDtime : ''}
             </TableRightCell>
-            <TableLeftCell align="center">첨부파일</TableLeftCell>
+            <TableLeftCell align="center">
+              관리자
+              <br />
+              첨부파일
+            </TableLeftCell>
             <TableRightCell>
               {data.qnaAnswer?.content ? (
                 <div>

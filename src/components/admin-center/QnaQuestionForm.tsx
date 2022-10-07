@@ -47,12 +47,17 @@ export function QnaQuestionForm() {
             {tabsConfig.filter(item => item.value === data.type)[0]?.name}
           </TableRightCell>
           <TableLeftCell align="center">문의날짜</TableLeftCell>
-          <TableRightCell>{dateFormat(data?.createdDtime, 'isoDate')}</TableRightCell>
+          {/* <TableRightCell>{dateFormat(data?.createdDtime, 'isoDate')}</TableRightCell> */}
+          <TableRightCell>{data?.createdDtime}</TableRightCell>
         </TableRow>
         <TableRow>
           <TableLeftCell align="center">문의제목</TableLeftCell>
           <TableRightCell>{data?.title}</TableRightCell>
-          <TableLeftCell align="center">첨부파일</TableLeftCell>
+          <TableLeftCell align="center" sx={{ whiteSpace: 'pre-wrap' }}>
+            문의자
+            <br />
+            첨부파일
+          </TableLeftCell>
           <TableRightCell>
             {data?.s3Files[0] ? (
               <Button

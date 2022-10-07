@@ -25,7 +25,7 @@ import dateFormat from 'dateformat';
 import { UserModifyModal } from '@components/admin-center/UserModifyModal';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
-import { regCategoryType, registerType } from '@common/api/user';
+import { authoritiesType, regCategoryType, registerType } from '@common/api/user';
 import { ProductStatus } from '@common/api/course';
 import { NumberFormat } from 'xlsx';
 import { grey } from '@mui/material/colors';
@@ -43,6 +43,15 @@ const radioConfig = [
   { name: '저상/운수', value: registerType.TYPE_TRANS_EDU },
   { name: '관리자', value: registerType.TYPE_TRAFFIC_SAFETY_EDU }, // 차후 도민
 ];
+
+// const radioConfig = [
+//   { name: '회원(전체)', value: null },
+//   { name: '회원(운수)', value: authoritiesType.ROLE_TRANS_USER },
+//   { name: '회원(도민)', value: authoritiesType.ROLE_TRAFFIC_SAFETY_USER },
+//   { name: '관리자(운수)', value: authoritiesType.ROLE_TRANS_MANAGER },
+//   // { name: '관리자(도민)', value: authoritiesType.ROLE_TRAFFIC_SAFETY_MANAGER },
+//   { name: '통합관리자', value: authoritiesType.ROLE_ADMIN },
+// ];
 
 const headRows: {
   name: string;
@@ -64,6 +73,10 @@ export function UserManagement() {
   const dialog = useDialog();
   const [page, setPage] = useState(0);
   const [typeValue, setTypeValue] = useState(registerType.TYPE_TRANS_EDU);
+  const [authorities, setAuthorities] = useState(null);
+  const [authoritiesValue, setAuthoritiesValue] = useState(
+    authoritiesType.ROLE_TRANS_USER || null
+  );
   const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
   const date = new Date();
@@ -71,12 +84,17 @@ export function UserManagement() {
 
   // 검색기능
   const searchInputRef = useRef<HTMLInputElement | null>(null);
+
   const [keyword, setKeyword] = useState<string>('');
   const { data, error, mutate } = userList({
     page,
     registerType: typeValue,
+    // authorities: authorities,
     keyword,
   });
+
+  console.log('authoritiesValue : ', authorities);
+  console.log('회원정보 Data : ', data);
 
   // 검색기능
   const handleSearch = async (event: FormEvent, isReload = false) => {
@@ -171,16 +189,19 @@ export function UserManagement() {
             key={name}
             label={name}
             value={value}
+            // control={<Radio checked={authorities == value} />}
             control={<Radio checked={typeValue == value} />}
+            // onClick={() => setAuthorities(value)}
             onClick={() => setTypeValue(value)}
           />
         ))}
       </RadioGroup>
+
       <SearchBox>
         <SearchContainer onSubmit={handleSearch}>
           <SearchInput
             inputRef={searchInputRef}
-            placeholder="회원 검색"
+            placeholder="이름 또는 핸드폰번호"
             size="small"
             type="search"
           />
@@ -207,7 +228,7 @@ export function UserManagement() {
           onClick={() => snackbar({ variant: 'info', message: '준비중입니다.' })}
         >
           <FileCopyIcon sx={{ marginRight: '4px' }} />
-          설문통계 엑셀다운로드
+          회원목록 엑셀다운로드
         </Button>
       </Box>
 

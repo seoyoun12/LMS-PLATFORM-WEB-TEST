@@ -37,6 +37,7 @@ export interface Qna {
   username: string;
   name: string;
   smsYn: string;
+  phone: string;
 }
 
 export type QnaInput = Partial<Qna>;

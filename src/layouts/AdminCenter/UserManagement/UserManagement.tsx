@@ -38,20 +38,20 @@ const userConfig = [
   { label: '핸드폰가입', value: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU },
 ];
 
-// const radioConfig = [
-//   // { name: '전체', value: '' }, // Type이 required
-//   { name: '저상/운수', value: registerType.TYPE_TRANS_EDU },
-//   { name: '관리자', value: registerType.TYPE_TRAFFIC_SAFETY_EDU }, // 차후 도민
-// ];
-
 const radioConfig = [
-  { name: '회원(전체)', value: null },
-  { name: '회원(운수)', value: authoritiesType.ROLE_TRANS_USER },
-  { name: '회원(도민)', value: authoritiesType.ROLE_TRAFFIC_SAFETY_USER },
-  { name: '관리자(운수)', value: authoritiesType.ROLE_TRANS_MANAGER },
-  // { name: '관리자(도민)', value: authoritiesType.ROLE_TRAFFIC_SAFETY_MANAGER },
-  { name: '통합관리자', value: authoritiesType.ROLE_ADMIN },
+  // { name: '전체', value: '' }, // Type이 required
+  { name: '저상/운수', value: registerType.TYPE_TRANS_EDU },
+  { name: '관리자', value: registerType.TYPE_TRAFFIC_SAFETY_EDU }, // 차후 도민
 ];
+
+// const radioConfig = [
+//   { name: '회원(전체)', value: null },
+//   { name: '회원(운수)', value: authoritiesType.ROLE_TRANS_USER },
+//   { name: '회원(도민)', value: authoritiesType.ROLE_TRAFFIC_SAFETY_USER },
+//   { name: '관리자(운수)', value: authoritiesType.ROLE_TRANS_MANAGER },
+//   // { name: '관리자(도민)', value: authoritiesType.ROLE_TRAFFIC_SAFETY_MANAGER },
+//   { name: '통합관리자', value: authoritiesType.ROLE_ADMIN },
+// ];
 
 const headRows: {
   name: string;
@@ -88,8 +88,8 @@ export function UserManagement() {
   const [keyword, setKeyword] = useState<string>('');
   const { data, error, mutate } = userList({
     page,
-    // registerType: typeValue,
-    authorities: authorities,
+    registerType: typeValue,
+    // authorities: authorities,
     keyword,
   });
 
@@ -189,10 +189,10 @@ export function UserManagement() {
             key={name}
             label={name}
             value={value}
-            control={<Radio checked={authorities == value} />}
-            // control={<Radio checked={typeValue == value} />}
-            onClick={() => setAuthorities(value)}
-            // onClick={() => setTypeValue(value)}
+            // control={<Radio checked={authorities == value} />}
+            control={<Radio checked={typeValue == value} />}
+            // onClick={() => setAuthorities(value)}
+            onClick={() => setTypeValue(value)}
           />
         ))}
       </RadioGroup>

@@ -135,7 +135,18 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
                         }
                       }}
                     >
-                      {data.qnaAnswer?.s3Files[0].name}
+                      {/* {data.qnaAnswer?.s3Files[0].name} */}
+                      {data.qnaAnswer?.s3Files ? (
+                        <FileChip
+                          icon={<SaveIcon />}
+                          sx={{ cursor: 'pointer' }}
+                          label={
+                            <Box sx={{ display: 'flex' }}>
+                              <Box>{data?.qnaAnswer.s3Files[0].name}</Box>
+                            </Box>
+                          }
+                        />
+                      ) : null}
                     </Button>
                   ) : (
                     '파일없음'
@@ -261,6 +272,5 @@ const TableLongCell = styled(TableCell)`
 `;
 
 const FileChip = styled(Chip)`
-  margin-left: 10px;
   height: 36.5px;
 `;

@@ -80,7 +80,6 @@ export function QnaManagement() {
   return (
     <Box>
       <QnaTitleTypography variant="h5">1대1 문의 목록</QnaTitleTypography>
-
       <Table
         pagination={true}
         totalNum={data?.totalElements}

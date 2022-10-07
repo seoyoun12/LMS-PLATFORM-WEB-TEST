@@ -3,6 +3,7 @@ import { qnaDetail } from '@common/api/qna';
 import {
   Box,
   Button,
+  Chip,
   Container,
   styled,
   TableBody,
@@ -12,6 +13,8 @@ import {
 import { borderBottom } from '@mui/system';
 import dateFormat from 'dateformat';
 import { useRouter } from 'next/router';
+import SaveIcon from '@mui/icons-material/Save';
+import { useState } from 'react';
 
 const tabsConfig = [
   { name: '회원가입/로그인', value: 'TYPE_SIGNUP_OR_SIGNIN' },
@@ -63,7 +66,29 @@ export function QnaQuestionForm() {
                   }
                 }}
               >
-                {data?.s3Files[0].name}
+                {data?.s3Files ? (
+                  <FileChip
+                    icon={<SaveIcon />}
+                    sx={{ cursor: 'pointer' }}
+                    // label={data?.s3Files[0].name}
+                    label={
+                      <Box sx={{ display: 'flex' }}>
+                        {/* <Box sx={{ lineHeight: '32px' }}>{data?.s3Files[0].name}</Box> */}
+                        <Box>{data?.s3Files[0].name}</Box>
+                        {/* <Box sx={{ ml: '30px' }}>
+                          <Chip
+                            label={
+                              <Box>
+                                {Math.round((data?.s3Files[0].size / 1024) * 10) / 10}mb
+                              </Box>
+                            }
+                          />
+                        </Box> */}
+                      </Box>
+                    }
+                  />
+                ) : null}
+                {/* {data?.s3Files[0].name} */}
               </Button>
             ) : (
               '파일없음'
@@ -243,4 +268,8 @@ const TableLongCell = styled(TableCell)`
   padding-top: 50px;
   padding-bottom: 50px;
   white-space: pre-wrap;
+`;
+
+const FileChip = styled(Chip)`
+  height: 36.5px;
 `;

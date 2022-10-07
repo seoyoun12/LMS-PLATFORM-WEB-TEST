@@ -18,6 +18,8 @@ export function QnaAnswer() {
   const { qnaSeq } = router.query;
   const { data, error } = qnaDetail(Number(qnaSeq));
 
+  // console.log('1대1데이터 : ', data);
+
   const fileHandler = async (files: File[], qnaAnswer: QnaAnswer) => {
     const isFileUpload = files.length > 0;
     if (isFileUpload) {

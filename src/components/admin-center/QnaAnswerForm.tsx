@@ -51,7 +51,7 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
   // const { data } = qnaDetail(Number(qna.qnaSeq));
   const [loading, setLoading] = useState(false);
 
-  console.log('qna 답변 데이터 : ', data);
+  // console.log('qna 답변 데이터 : ', data);
 
   const {
     register,

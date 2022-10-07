@@ -34,25 +34,12 @@ export function QnaQuestionForm() {
       </TableHeadFull>
       <TableBody sx={{ display: 'table', width: '100%' }}>
         <TableRow>
-          <TableLeftCell align="center">이름</TableLeftCell>
+          {/* <TableLeftCell align="center">이름</TableLeftCell>
           <TableRightCell>
             {data.username ? `${data.username}(${data.name})` : data.name}
-          </TableRightCell>
+          </TableRightCell> */}
           <TableLeftCell align="center">전화번호</TableLeftCell>
           <TableRightCell>{data.phone ? `${data.phone}` : '번호없음'}</TableRightCell>
-        </TableRow>
-        <TableRow>
-          <TableLeftCell align="center">문의유형</TableLeftCell>
-          <TableRightCell>
-            {tabsConfig.filter(item => item.value === data.type)[0]?.name}
-          </TableRightCell>
-          <TableLeftCell align="center">문의날짜</TableLeftCell>
-          {/* <TableRightCell>{dateFormat(data?.createdDtime, 'isoDate')}</TableRightCell> */}
-          <TableRightCell>{data?.createdDtime}</TableRightCell>
-        </TableRow>
-        <TableRow>
-          <TableLeftCell align="center">문의제목</TableLeftCell>
-          <TableRightCell>{data?.title}</TableRightCell>
           <TableLeftCell align="center" sx={{ whiteSpace: 'pre-wrap' }}>
             문의자
             <br />
@@ -82,6 +69,48 @@ export function QnaQuestionForm() {
               '파일없음'
             )}
           </TableRightCell>
+        </TableRow>
+        <TableRow>
+          <TableLeftCell align="center">문의유형</TableLeftCell>
+          <TableRightCell>
+            {tabsConfig.filter(item => item.value === data.type)[0]?.name}
+          </TableRightCell>
+          <TableLeftCell align="center">문의날짜</TableLeftCell>
+          {/* <TableRightCell>{dateFormat(data?.createdDtime, 'isoDate')}</TableRightCell> */}
+          <TableRightCell>{data?.createdDtime}</TableRightCell>
+        </TableRow>
+        <TableRow>
+          <TableLeftCell align="center">문의제목</TableLeftCell>
+          <TableRightCell colSpan={3}>{data?.title}</TableRightCell>
+          {/* <TableLeftCell align="center" sx={{ whiteSpace: 'pre-wrap' }}>
+            문의자
+            <br />
+            첨부파일
+          </TableLeftCell>
+          <TableRightCell>
+            {data?.s3Files[0] ? (
+              <Button
+                sx={{ padding: '0px' }}
+                onClick={async () => {
+                  try {
+                    const blobData = await downloadFile(data.s3Files[0].seq);
+                    const url = window.URL.createObjectURL(new Blob([blobData]));
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${data.s3Files[0].name}`;
+                    a.click();
+                    a.remove();
+                  } catch (e: any) {
+                    console.log(e);
+                  }
+                }}
+              >
+                {data?.s3Files[0].name}
+              </Button>
+            ) : (
+              '파일없음'
+            )}
+          </TableRightCell> */}
         </TableRow>
         <TableRow>
           <TableLeftCell align="center">문의내용</TableLeftCell>

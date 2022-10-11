@@ -14,6 +14,7 @@ import {
   TooltipProps,
   Tooltip,
   tooltipClasses,
+  Backdrop,
 } from '@mui/material';
 import styles from '@styles/common.module.scss';
 import { Table } from '@components/ui';
@@ -77,10 +78,10 @@ export function UserManagement() {
   const dialog = useDialog();
   const [page, setPage] = useState(0);
   const [typeValue, setTypeValue] = useState(registerType.TYPE_TRANS_EDU);
-  const [authorities, setAuthorities] = useState(null);
-  const [authoritiesValue, setAuthoritiesValue] = useState(
-    authoritiesType.ROLE_TRANS_USER || null
-  );
+  // const [authorities, setAuthorities] = useState(null);
+  // const [authoritiesValue, setAuthoritiesValue] = useState(
+  //   authoritiesType.ROLE_TRANS_USER || null
+  // );
   const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
   const date = new Date();
@@ -99,8 +100,8 @@ export function UserManagement() {
     keyword,
   });
 
-  console.log('authoritiesValue : ', authorities);
-  console.log('회원정보 Data : ', data);
+  // console.log('authoritiesValue : ', authorities);
+  // console.log('회원정보 Data : ', data);
 
   // 검색기능
   const handleSearch = async (event: FormEvent, isReload = false) => {
@@ -229,7 +230,7 @@ export function UserManagement() {
         <SearchContainer onSubmit={handleSearch}>
           <SearchInput
             inputRef={searchInputRef}
-            placeholder="이름 또는 핸드폰번호"
+            placeholder="이름 또는 핸드폰번호 검색"
             size="small"
             type="search"
           />
@@ -266,6 +267,22 @@ export function UserManagement() {
           )}
         </Button>
       </Box>
+
+      <Box mt={2} mb={2} fontSize={18} fontWeight="bold">
+        {keyword !== '' && `검색어 : ${keyword}`}
+      </Box>
+      <Backdrop open={loading}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          sx={{ background: 'white', borderRadius: '4px', padding: '12px' }}
+        >
+          <Spinner fit={true} />
+          <Box color="#246def" fontWeight="bold">
+            다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
+          </Box>
+        </Box>
+      </Backdrop>
 
       <UserTypography variant="h5">회원 목록</UserTypography>
 

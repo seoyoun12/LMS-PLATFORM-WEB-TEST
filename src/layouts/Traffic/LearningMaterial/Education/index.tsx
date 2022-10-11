@@ -7,29 +7,27 @@ import {
   EducationItemHeaderWrapper,
   EducationItemWrapper,
   EducationWrapper,
-} from "@layouts/Traffic/LearningMaterial/Education/style";
-import React, { useState } from "react";
+} from '@layouts/Traffic/LearningMaterial/Education/style';
+import React, { useState } from 'react';
 import {
   MaterialSubType,
   MaterialType,
   useGetLearningMaterial,
-} from "@common/api/learningMaterial";
+} from '@common/api/learningMaterial';
 import {
   TableHeader,
   TableItem,
   TableWrapper,
-} from "@layouts/Traffic/LearningMaterial/style";
-import ArrowDown from "public/assets/images/ic_arrow_down.svg";
-import { format } from "date-fns";
+} from '@layouts/Traffic/LearningMaterial/style';
+import ArrowDown from 'public/assets/images/ic_arrow_down.svg';
+import { format } from 'date-fns';
 
 interface EducationLayoutProps {
   materialType: MaterialType;
 }
 
-export default function EducationLayout({
-  materialType,
-}: EducationLayoutProps) {
-  const [tabType, setTabType] = useState<MaterialSubType | "">("");
+export default function EducationLayout({ materialType }: EducationLayoutProps) {
+  const [tabType, setTabType] = useState<MaterialSubType | ''>('');
   const { data } = useGetLearningMaterial(materialType, tabType);
   console.log(data);
 
@@ -37,7 +35,7 @@ export default function EducationLayout({
 
   const handleClickChip = (value: MaterialSubType) => {
     if (value === tabType) {
-      setTabType("");
+      setTabType('');
       return;
     }
     setTabType(value);
@@ -57,35 +55,25 @@ export default function EducationLayout({
         <EducationChipItem
           label="어린이"
           color="primary"
-          variant={
-            tabType === MaterialSubType.TYPE_CHILDREN ? "filled" : "outlined"
-          }
+          variant={tabType === MaterialSubType.TYPE_CHILDREN ? 'filled' : 'outlined'}
           onClick={() => handleClickChip(MaterialSubType.TYPE_CHILDREN)}
         />
         <EducationChipItem
           label="청소년"
           color="primary"
-          variant={
-            tabType === MaterialSubType.TYPE_TEENAGER ? "filled" : "outlined"
-          }
+          variant={tabType === MaterialSubType.TYPE_TEENAGER ? 'filled' : 'outlined'}
           onClick={() => handleClickChip(MaterialSubType.TYPE_TEENAGER)}
         />
         <EducationChipItem
           label="어르신"
           color="primary"
-          variant={
-            tabType === MaterialSubType.TYPE_ELDERLY ? "filled" : "outlined"
-          }
+          variant={tabType === MaterialSubType.TYPE_ELDERLY ? 'filled' : 'outlined'}
           onClick={() => handleClickChip(MaterialSubType.TYPE_ELDERLY)}
         />
         <EducationChipItem
           label="자가운전자"
           color="primary"
-          variant={
-            tabType === MaterialSubType.TYPE_SELF_DRIVING
-              ? "filled"
-              : "outlined"
-          }
+          variant={tabType === MaterialSubType.TYPE_SELF_DRIVING ? 'filled' : 'outlined'}
           onClick={() => handleClickChip(MaterialSubType.TYPE_SELF_DRIVING)}
         />
       </EducationChipWrapper>
@@ -99,7 +87,7 @@ export default function EducationLayout({
       </TableWrapper>
 
       {data &&
-        data.data.map((value) => (
+        data.data.map(value => (
           <EducationItemWrapper
             open={selectedPost === value.seq}
             key={value.seq}
@@ -111,19 +99,15 @@ export default function EducationLayout({
                 {value.title}
               </TableItem>
               <TableItem width="25%">
-                <EducationItemHeaderDateWrapper
-                  open={selectedPost === value.seq}
-                >
+                <EducationItemHeaderDateWrapper open={selectedPost === value.seq}>
                   <EducationItemHeaderDateText>
-                    {format(new Date(value.createdDtime), "yyyy. MM. dd")}
+                    {format(new Date(value.createdDtime), 'yyyy. MM. dd')}
                   </EducationItemHeaderDateText>
                   <ArrowDown />
                 </EducationItemHeaderDateWrapper>
               </TableItem>
             </EducationItemHeaderWrapper>
-            <EducationItemContentWrapper>
-              {value.content}
-            </EducationItemContentWrapper>
+            <EducationItemContentWrapper>{value.content}</EducationItemContentWrapper>
           </EducationItemWrapper>
         ))}
     </EducationWrapper>

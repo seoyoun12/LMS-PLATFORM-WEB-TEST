@@ -89,6 +89,7 @@ export function UserManagement() {
   const [loading, setLoading] = useState(false);
 
   // 검색기능
+  const [notFound, setNotFound] = useState(false);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const [keyword, setKeyword] = useState<string>('');
   const [nameOrUsername, setNameOrUsername] = useState<string>(''); //이름 혹은 아이디
@@ -106,6 +107,7 @@ export function UserManagement() {
   // 검색기능
   const handleSearch = async (event: FormEvent, isReload = false) => {
     event.preventDefault();
+    setNotFound(false);
     if (isReload) {
       // setKeyword(null);
       setPage(0);
@@ -118,7 +120,11 @@ export function UserManagement() {
       // setNameOrUsername(searchInputRef.current.value);
     }
   };
-
+  useEffect(() => {
+    if (data) {
+      data.content.length === 0 && setNotFound(true);
+    }
+  }, [data]);
   // 삭제. 기능 이동. modal 안쪽으로.
   // const onClickRemoveUser = async (userSeq: number) => {
   //   try {

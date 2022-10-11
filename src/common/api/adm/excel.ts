@@ -11,3 +11,8 @@ export function getExcelSurveyDetail(surveySeq: number) {
     { responseType: 'blob' }
   );
 }
+
+// 회원관리 리스트 엑셀다운로드
+export function getExcelUserList() {
+  return POST(`/adm/excel/download/user`,{}, { responseType: 'blob' })
+}

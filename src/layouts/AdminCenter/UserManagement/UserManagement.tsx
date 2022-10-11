@@ -35,6 +35,7 @@ import { grey } from '@mui/material/colors';
 import SearchIcon from '@mui/icons-material/Search';
 import ReplayIcon from '@mui/icons-material/Replay';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
+import { getExcelUserList } from '@common/api/adm/excel';
 
 const userConfig = [
   { label: '실명가입', value: regCategoryType.TYPE_TRANS_EDU },
@@ -84,15 +85,17 @@ export function UserManagement() {
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
   const date = new Date();
   const year = date.getFullYear();
+  const [loading, setLoading] = useState(false);
 
   // 검색기능
   const searchInputRef = useRef<HTMLInputElement | null>(null);
-
   const [keyword, setKeyword] = useState<string>('');
+  const [nameOrUsername, setNameOrUsername] = useState<string>(''); //이름 혹은 아이디
   const { data, error, mutate } = userList({
     page,
     registerType: typeValue,
     // authorities: authorities,
+    // nameOrUsername,
     keyword,
   });
 
@@ -103,13 +106,15 @@ export function UserManagement() {
   const handleSearch = async (event: FormEvent, isReload = false) => {
     event.preventDefault();
     if (isReload) {
-      setKeyword(null);
+      // setKeyword(null);
       setPage(0);
-      return mutate();
+      // return mutate();
+      return setKeyword('');
     }
 
     if (searchInputRef.current) {
       setKeyword(searchInputRef.current.value);
+      // setNameOrUsername(searchInputRef.current.value);
     }
   };
 
@@ -152,6 +157,26 @@ export function UserManagement() {
     // setBirth(birth);
     // console.log('birth : ', birth);
     setopenUserModifyModal(true);
+  };
+
+  // 엑셀
+  const onClickExcelDownload = async () => {
+    const a = document.createElement('a');
+    setLoading(true);
+    try {
+      const data = await getExcelUserList();
+      const excel = new Blob([data]);
+      a.href = URL.createObjectURL(excel);
+      a.download = '충남_관리자_회원목록_리스트.xlsx';
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(a.href);
+      snackbar({ variant: 'success', message: '다운로드 완료' });
+      setLoading(false);
+    } catch (e) {
+      snackbar({ variant: 'error', message: e.data.message });
+      setLoading(false);
+    }
   };
 
   // pagination
@@ -228,10 +253,17 @@ export function UserManagement() {
           variant="contained"
           color="success"
           sx={{ marginLeft: 'auto' }}
-          onClick={() => snackbar({ variant: 'info', message: '준비중입니다.' })}
+          // onClick={() => snackbar({ variant: 'info', message: '준비중입니다.' })}
+          onClick={onClickExcelDownload}
         >
-          <FileCopyIcon sx={{ marginRight: '4px' }} />
-          회원목록 엑셀다운로드
+          {loading ? (
+            <Spinner fit={true} />
+          ) : (
+            <>
+              <FileCopyIcon sx={{ marginRight: '4px' }} />
+              회원목록 엑셀다운로드
+            </>
+          )}
         </Button>
       </Box>
 

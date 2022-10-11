@@ -11,6 +11,9 @@ import {
   Chip,
   InputBase,
   IconButton,
+  TooltipProps,
+  Tooltip,
+  tooltipClasses,
 } from '@mui/material';
 import styles from '@styles/common.module.scss';
 import { Table } from '@components/ui';
@@ -276,7 +279,11 @@ export function UserManagement() {
                   ? '실명가입'
                   : user.username}
               </UserTableCell>
-              <UserTableCell align="center">{user.name}</UserTableCell>
+
+              <UserTableCell align="center">
+                <NameBox title={user.name}>{user.name}</NameBox>
+              </UserTableCell>
+
               <UserTableCell align="center">
                 {/* 주민번호 뒷자리의 첫번째 번호 백엔드에서 줬으니 차후 수정할것. */}
                 {Number(user.birth?.split('-', 1)) < 1000
@@ -394,4 +401,12 @@ const UserTableCell = styled(TableCell)`
   &:first-of-type {
     background: #f5f5f5;
   }
+`;
+
+// 회원 이름. ellipsis 적용.
+const NameBox = styled(Box)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 `;

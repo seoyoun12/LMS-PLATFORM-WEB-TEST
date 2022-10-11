@@ -115,7 +115,9 @@ export function QnaManagement() {
               </QnaTableCell> */}
 
               <QnaTableCell align="center">
-                {qna.username ? `${qna.username}(${qna.name})` : qna.name}
+                <NameBox title={qna.username ? `${qna.username}(${qna.name})` : qna.name}>
+                  {qna.username ? `${qna.username}(${qna.name})` : qna.name}
+                </NameBox>
               </QnaTableCell>
 
               <QnaTableCell align="center">
@@ -230,4 +232,12 @@ const QnaTableCell = styled(TableCell)`
     /* border-right: 1px solid #e0e0e0; */
     background: #f5f5f5;
   }
+`;
+
+// 회원 이름. ellipsis 적용.
+const NameBox = styled(Box)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 `;

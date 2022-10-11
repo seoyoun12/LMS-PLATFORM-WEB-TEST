@@ -119,6 +119,7 @@ export function CourseInfoManagement() {
     if (value === StatusType.TYPE_OUT) return setStatusType(value);
   };
 
+  // 검색
   const handleSearch = async (e: FormEvent, isReload = false) => {
     e.preventDefault();
     setNotFound(false);
@@ -278,7 +279,9 @@ export function CourseInfoManagement() {
                 <CourseInfoTableCell align="center">
                   {user.courseUserSeq}
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">{user.name}</CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  <NameBox title={user.name}>{user.name}</NameBox>
+                </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
                   {user.username || '실명계정'}
                 </CourseInfoTableCell>
@@ -402,4 +405,12 @@ const CourseInfoTableCell = styled(TableCell)`
   &:first-of-type {
     background: #f5f5f5;
   }
+`;
+
+// 회원 이름. ellipsis 적용.
+const NameBox = styled(Box)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 `;

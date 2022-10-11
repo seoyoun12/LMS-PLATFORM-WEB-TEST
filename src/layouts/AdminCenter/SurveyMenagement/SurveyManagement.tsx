@@ -131,7 +131,12 @@ export function SurveyManagement() {
           </TableHead>
           <TableBody>
             {data.content.map(survey => (
-              <TableRow key={survey.seq} hover onClick={() => onClickModify(survey.seq)}>
+              <TableRow
+                key={survey.seq}
+                hover
+                sx={{ cursor: 'pointer' }}
+                onClick={() => onClickModify(survey.seq)}
+              >
                 <SurveyTableCell align="center">
                   <SubjectBox>{survey.seq}</SubjectBox>
                 </SurveyTableCell>

@@ -37,18 +37,14 @@ export function QnaQuestionForm() {
       </TableHeadFull>
       <TableBody sx={{ display: 'table', width: '100%' }}>
         <TableRow>
-          {/* <TableLeftCell align="center">이름</TableLeftCell>
+          <TableLeftCell align="center">이름</TableLeftCell>
           <TableRightCell>
             {data.username ? `${data.username}(${data.name})` : data.name}
-          </TableRightCell> */}
+          </TableRightCell>
           <TableLeftCell align="center">전화번호</TableLeftCell>
           <TableRightCell>{data.phone ? `${data.phone}` : '번호없음'}</TableRightCell>
-          <TableLeftCell align="center" sx={{ whiteSpace: 'pre-wrap' }}>
-            문의자
-            <br />
-            첨부파일
-          </TableLeftCell>
-          <TableRightCell>
+
+          {/* <TableRightCell>
             {data?.s3Files[0] ? (
               <Button
                 sx={{ padding: '0px' }}
@@ -70,30 +66,18 @@ export function QnaQuestionForm() {
                   <FileChip
                     icon={<SaveIcon />}
                     sx={{ cursor: 'pointer' }}
-                    // label={data?.s3Files[0].name}
                     label={
                       <Box sx={{ display: 'flex' }}>
-                        {/* <Box sx={{ lineHeight: '32px' }}>{data?.s3Files[0].name}</Box> */}
                         <Box>{data?.s3Files[0].name}</Box>
-                        {/* <Box sx={{ ml: '30px' }}>
-                          <Chip
-                            label={
-                              <Box>
-                                {Math.round((data?.s3Files[0].size / 1024) * 10) / 10}mb
-                              </Box>
-                            }
-                          />
-                        </Box> */}
                       </Box>
                     }
                   />
                 ) : null}
-                {/* {data?.s3Files[0].name} */}
               </Button>
             ) : (
               '파일없음'
             )}
-          </TableRightCell>
+          </TableRightCell> */}
         </TableRow>
         <TableRow>
           <TableLeftCell align="center">문의유형</TableLeftCell>
@@ -106,8 +90,8 @@ export function QnaQuestionForm() {
         </TableRow>
         <TableRow>
           <TableLeftCell align="center">문의제목</TableLeftCell>
-          <TableRightCell colSpan={3}>{data?.title}</TableRightCell>
-          {/* <TableLeftCell align="center" sx={{ whiteSpace: 'pre-wrap' }}>
+          <TableRightCell>{data?.title}</TableRightCell>
+          <TableLeftCell align="center" sx={{ whiteSpace: 'pre-wrap' }}>
             문의자
             <br />
             첨부파일
@@ -135,7 +119,7 @@ export function QnaQuestionForm() {
             ) : (
               '파일없음'
             )}
-          </TableRightCell> */}
+          </TableRightCell>
         </TableRow>
         <TableRow>
           <TableLeftCell align="center">문의내용</TableLeftCell>

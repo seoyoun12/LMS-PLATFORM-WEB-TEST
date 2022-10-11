@@ -526,10 +526,11 @@ const FooterWord = styled(Box)`
 
 const SecretTrafficTunnel = styled(Box)`
   position: absolute;
-  width: 111px;
-  height: 77px;
-  left: 20px;
-  bottom: 20px;
+  width: 10px;
+  height: 10px;
+  left: 0px;
+  bottom: 0px;
+  /* border: 1px solid red; */
 `;
 
 export default MainPage;

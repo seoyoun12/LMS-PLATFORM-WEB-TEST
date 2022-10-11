@@ -11,6 +11,9 @@ import {
   Chip,
   InputBase,
   IconButton,
+  TooltipProps,
+  Tooltip,
+  tooltipClasses,
 } from '@mui/material';
 import styles from '@styles/common.module.scss';
 import { Table } from '@components/ui';
@@ -38,20 +41,20 @@ const userConfig = [
   { label: '핸드폰가입', value: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU },
 ];
 
-const radioConfig = [
-  // { name: '전체', value: '' }, // Type이 required
-  { name: '저상/운수', value: registerType.TYPE_TRANS_EDU },
-  { name: '관리자', value: registerType.TYPE_TRAFFIC_SAFETY_EDU }, // 차후 도민
-];
-
 // const radioConfig = [
-//   { name: '회원(전체)', value: null },
-//   { name: '회원(운수)', value: authoritiesType.ROLE_TRANS_USER },
-//   { name: '회원(도민)', value: authoritiesType.ROLE_TRAFFIC_SAFETY_USER },
-//   { name: '관리자(운수)', value: authoritiesType.ROLE_TRANS_MANAGER },
-//   // { name: '관리자(도민)', value: authoritiesType.ROLE_TRAFFIC_SAFETY_MANAGER },
-//   { name: '통합관리자', value: authoritiesType.ROLE_ADMIN },
+//   // { name: '전체', value: '' }, // Type이 required
+//   { name: '저상/운수', value: registerType.TYPE_TRANS_EDU },
+//   { name: '관리자', value: registerType.TYPE_TRAFFIC_SAFETY_EDU }, // 차후 도민
 // ];
+
+const radioConfig = [
+  { name: '회원(전체)', value: null },
+  { name: '회원(운수)', value: authoritiesType.ROLE_TRANS_USER },
+  { name: '회원(도민)', value: authoritiesType.ROLE_TRAFFIC_SAFETY_USER },
+  { name: '관리자(운수)', value: authoritiesType.ROLE_TRANS_MANAGER },
+  // { name: '관리자(도민)', value: authoritiesType.ROLE_TRAFFIC_SAFETY_MANAGER },
+  { name: '통합관리자', value: authoritiesType.ROLE_ADMIN },
+];
 
 const headRows: {
   name: string;
@@ -88,8 +91,8 @@ export function UserManagement() {
   const [keyword, setKeyword] = useState<string>('');
   const { data, error, mutate } = userList({
     page,
-    registerType: typeValue,
-    // authorities: authorities,
+    // registerType: typeValue,
+    authorities: authorities,
     keyword,
   });
 
@@ -189,10 +192,10 @@ export function UserManagement() {
             key={name}
             label={name}
             value={value}
-            // control={<Radio checked={authorities == value} />}
-            control={<Radio checked={typeValue == value} />}
-            // onClick={() => setAuthorities(value)}
-            onClick={() => setTypeValue(value)}
+            control={<Radio checked={authorities == value} />}
+            // control={<Radio checked={typeValue == value} />}
+            onClick={() => setAuthorities(value)}
+            // onClick={() => setTypeValue(value)}
           />
         ))}
       </RadioGroup>
@@ -276,7 +279,11 @@ export function UserManagement() {
                   ? '실명가입'
                   : user.username}
               </UserTableCell>
-              <UserTableCell align="center">{user.name}</UserTableCell>
+
+              <UserTableCell align="center">
+                <NameBox title={user.name}>{user.name}</NameBox>
+              </UserTableCell>
+
               <UserTableCell align="center">
                 {/* 주민번호 뒷자리의 첫번째 번호 백엔드에서 줬으니 차후 수정할것. */}
                 {Number(user.birth?.split('-', 1)) < 1000
@@ -394,4 +401,12 @@ const UserTableCell = styled(TableCell)`
   &:first-of-type {
     background: #f5f5f5;
   }
+`;
+
+// 회원 이름. ellipsis 적용.
+const NameBox = styled(Box)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 `;

@@ -153,7 +153,7 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
                   )}
                 </div>
               ) : (
-                <>
+                <Box>
                   {/* <FormLabel sx={{ mt: 2, mb: 1 }}>첨부파일업로드</FormLabel> */}
                   <div className="board-uploader">
                     <FileUploader
@@ -165,13 +165,14 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
                     </FileUploader>
                     {fileName ? (
                       <FileChip
+                        sx={{ ml: '5px' }}
                         icon={<SaveIcon />}
                         label={fileName}
                         onDelete={handleDeleteFile}
                       />
                     ) : null}
                   </div>
-                </>
+                </Box>
               )}
             </TableRightCell>
           </TableRow>

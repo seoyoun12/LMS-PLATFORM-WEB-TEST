@@ -84,7 +84,7 @@ export function CategoryManagement() {
     page,
   });
 
-  console.log('게시판 data : ', data);
+  // console.log('게시판 data : ', data);
 
   // for (let i = 0; i < tabsConfig.length; i++) {
   //   if (tabsConfig[i].value === data.content) {

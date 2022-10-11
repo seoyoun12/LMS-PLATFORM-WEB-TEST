@@ -406,6 +406,7 @@ const CourseInfoTableCell = styled(TableCell)`
     background: #f5f5f5;
   }
 `;
+
 // 회원 이름. ellipsis 적용.
 const NameBox = styled(Box)`
   text-overflow: ellipsis;

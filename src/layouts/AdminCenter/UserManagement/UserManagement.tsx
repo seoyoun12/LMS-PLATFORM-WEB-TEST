@@ -187,18 +187,23 @@ export function UserManagement() {
   };
 
   // pagination
-  useEffect(() => {
-    const { page } = router.query;
-    setPage(!isNaN(Number(page)) ? Number(page) : 0);
-  }, [router.query]);
+  // useEffect(() => {
+  //   const { page } = router.query;
+  //   setPage(!isNaN(Number(page)) ? Number(page) : 0);
+  // }, [router.query]);
 
-  const onChangePage = async (page: number) => {
-    await router.push({
-      pathname: router.pathname,
-      query: {
-        page,
-      },
-    });
+  // const onChangePage = async (page: number) => {
+  //   await router.push({
+  //     pathname: router.pathname,
+  //     query: {
+  //       page,
+  //     },
+  //   });
+  // };
+
+  // pagination 02
+  const onChangePage = (page: number) => {
+    setPage(page);
   };
 
   // modal 제어

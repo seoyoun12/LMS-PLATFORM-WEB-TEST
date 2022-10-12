@@ -41,7 +41,7 @@ interface Props {
   onChangeCarRegitRegion: (value: string) => void;
 }
 
-export const ManagementHeadRows = React.forwardRef(function (
+export const HeadRowsCenter = React.forwardRef(function (
   {
     search,
     completeType,
@@ -80,7 +80,7 @@ export const ManagementHeadRows = React.forwardRef(function (
   return (
     <HeadRows>
       <Box>
-        <Box display="flex" gap={1} width="1000px">
+        <Box display="flex" gap={1}>
           <Box width="50%">
             <Box>업종</Box>
             <Select
@@ -172,7 +172,7 @@ export const ManagementHeadRows = React.forwardRef(function (
         >
           전체 다시 불러오기
         </ReloadButton>
-        <Button
+        {/* <Button
           variant="contained"
           color="success"
           disabled={loading}
@@ -186,13 +186,13 @@ export const ManagementHeadRows = React.forwardRef(function (
               학습현황 엑셀다운로드
             </>
           )}
-        </Button>
+        </Button> */}
       </Box>
 
       <Box mt={2} mb={2} fontSize={18} fontWeight="bold">
         {search !== '' && `검색어 : ${search}`}
       </Box>
-      <Backdrop open={loading}>
+      {/* <Backdrop open={loading}>
         <Box
           display="flex"
           flexDirection="column"
@@ -203,11 +203,13 @@ export const ManagementHeadRows = React.forwardRef(function (
             다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
           </Box>
         </Box>
-      </Backdrop>
+      </Backdrop> */}
     </HeadRows>
   );
 });
-const HeadRows = styled(Box)``;
+const HeadRows = styled(Box)`
+  width: 33.3%;
+`;
 const SearchContainer = styled.form`
   display: flex;
   align-items: center;

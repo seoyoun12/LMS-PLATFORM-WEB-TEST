@@ -23,11 +23,14 @@ import { CompleteType, StatusType, useLearningInfo } from '@common/api/adm/learn
 import { grey } from '@mui/material/colors';
 import { CourseType } from '@common/api/adm/courseClass';
 import { NotFound } from '@components/ui/NotFound';
-import { ManagementHeadRows } from '@components/admin-center/CourseInfo/ManagementHeadRows';
+import { HeadRowsCenter } from '@components/admin-center/CourseInfo/HeadRowsCenter';
 import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { convertBirth } from '@utils/convertBirth';
-import { SelectClassAndStep } from '@components/admin-center/CourseInfo/SelectClassAndStep';
+import { HeadRowsLeft } from '@components/admin-center/CourseInfo/HeadRowsLeft';
 import { utils, writeFile } from 'xlsx';
+import { HeadRowsRight } from '@components/admin-center/CourseInfo/HeadRowsRight';
+import { HeadRowsBottom } from '@components/admin-center/CourseInfo/HeadRowsBottom';
+import { useForm } from 'react-hook-form';
 
 const headRows: {
   name: string;
@@ -47,6 +50,21 @@ const headRows: {
   { name: '수료여부', align: 'center', width: '6%' },
   { name: '상태', align: 'center', width: '5%' },
 ];
+
+interface FormType {
+  page: number;
+  courseType: string;
+  completeType: CompleteType | null;
+  statusType: StatusType | null;
+  courseSeq: number | null;
+  courseClassSeq: number | null;
+  businessType: string | null;
+  carRegitRegion: string | null;
+}
+
+const defaultValues = {
+  page: 0,
+};
 
 export function CourseInfoManagement() {
   const router = useRouter();
@@ -71,6 +89,8 @@ export function CourseInfoManagement() {
     businessType,
     carRegitRegion,
   });
+
+  const { watch, setValue, reset, register } = useForm<FormType>({ defaultValues });
 
   // Pagination
   const onChangePage = (page: number) => {
@@ -217,25 +237,29 @@ export function CourseInfoManagement() {
         실험용 엑셀
       </Button> */}
       <CourseInfoTypography variant="h5">전체 수강생 학습현황</CourseInfoTypography>
-      <SelectClassAndStep
-        courseSeq={courseSeq}
-        onChageCourseSeq={onChageCourseSeq}
-        courseClassSeq={courseClassSeq}
-        onChageCourseClassSeq={onChageCourseClassSeq}
-      />
-      <ManagementHeadRows
-        ref={searchInputRef}
-        search={nameOrUsername}
-        completeType={completeType}
-        statusType={statusType}
-        handleSearch={handleSearch}
-        onChangeCompleteType={onChangeCompleteType}
-        onChangeStatusType={onChangeStatusType}
-        businessType={businessType}
-        onChangeBusinessType={onChangeBusinessType}
-        carRegitRegion={carRegitRegion}
-        onChangeCarRegitRegion={onChangeCarRegitRegion}
-      />
+      <Box display="flex" flexDirection="column" gap={2}>
+        <HeadRowsLeft
+          courseSeq={courseSeq}
+          onChageCourseSeq={onChageCourseSeq}
+          courseClassSeq={courseClassSeq}
+          onChageCourseClassSeq={onChageCourseClassSeq}
+        />
+        <HeadRowsCenter
+          ref={searchInputRef}
+          search={nameOrUsername}
+          completeType={completeType}
+          statusType={statusType}
+          handleSearch={handleSearch}
+          onChangeCompleteType={onChangeCompleteType}
+          onChangeStatusType={onChangeStatusType}
+          businessType={businessType}
+          onChangeBusinessType={onChangeBusinessType}
+          carRegitRegion={carRegitRegion}
+          onChangeCarRegitRegion={onChangeCarRegitRegion}
+        />
+        {/* <HeadRowsRight /> */}
+      </Box>
+      <HeadRowsBottom />
       {notFound ? (
         <NotFound content="학습현황이 존재하지 않습니다!" />
       ) : (

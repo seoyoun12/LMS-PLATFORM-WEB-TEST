@@ -22,6 +22,8 @@ import Image from 'next/image';
 import styled from '@emotion/styled';
 import { transIndividualSummary } from '@utils/individualSummaries';
 import { UserRole } from '@common/api/user';
+import dynamic from 'next/dynamic';
+import { courseType } from '@common/api/courseClass';
 
 export function SignInV2() {
   const router = useRouter();
@@ -141,7 +143,9 @@ export function SignInV2() {
           {/* <LockOutlinedIcon /> */}
           <Image src={'/assets/images/loginLogo.png'} width={60} height={60} />
         </Avatar>
-        <Box
+
+        <Title />
+        {/* <Box
           width="fit-content"
           fontSize="22px"
           display="flex"
@@ -150,9 +154,7 @@ export function SignInV2() {
         >
           <Box>실명인증이&nbsp;</Box>
           <Box>필요합니다.</Box>
-          {/* <Box>진행하고&nbsp;</Box>
-          <Box>있습니다.</Box> */}
-        </Box>
+        </Box> */}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
@@ -304,4 +306,39 @@ const ViewContentBox = styled(Box)`
   border-radius: 4px;
   cursor: pointer;
 `;
+
+const Title = dynamic(
+  () =>
+    Promise.resolve(() => {
+      if (localStorage.getItem('site_course_type') === 'TYPE_TRANS_WORKER')
+        return (
+          <Box width="fit-content" fontSize="22px" flexDirection={'column'}>
+            <Box display="flex" flexWrap="wrap" justifyContent="center">
+              <Box>본 교육과정은&nbsp;</Box>
+              <Box>충남 또는 세종시&nbsp;</Box>
+            </Box>
+            <Box display="flex" flexWrap="wrap" justifyContent="center">
+              <Box>소속차량 운수종사자만&nbsp;</Box>
+              <Box>교육 신청 하실 수 있습니다.</Box>
+            </Box>
+          </Box>
+        );
+      if (localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS')
+        return (
+          <Box width="fit-content" fontSize="22px" flexDirection={'column'}>
+            <Box display="flex" flexWrap="wrap" justifyContent="center">
+              <Box>본 교육과정은&nbsp;</Box>
+              <Box>충남 소속 저상버스&nbsp;</Box>
+            </Box>
+            <Box display="flex" flexWrap="wrap" justifyContent="center">
+              <Box>차량 운전자만&nbsp;</Box>
+              <Box>교육 신청 하실 수 있습니다.</Box>
+            </Box>
+          </Box>
+        );
+      return <Box>Error...</Box>;
+    }),
+  { ssr: false }
+);
+
 const ConfirmButton = styled(Button)``;

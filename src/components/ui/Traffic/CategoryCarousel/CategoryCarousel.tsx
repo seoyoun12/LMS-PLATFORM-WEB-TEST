@@ -25,6 +25,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
   // const { data, error } = useBannerList();
   const { data: BannerData } = useBannerList();
 
+  // 배너 타입 결정
   const data = BannerData?.filter(
     item => item.bannerTypeEnums === 'BANNER_TYPE_PROVINCIAL'
   );

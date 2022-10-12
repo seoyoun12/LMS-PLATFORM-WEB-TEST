@@ -30,8 +30,10 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
   // );
 
   // 배너 타입 결정
-  const data = BannerData?.filter(
-    item => item.bannerTypeEnums === 'BANNER_TYPE_TRANSPORT_WORKER'
+  const data = BannerData?.filter(item =>
+    localStorage.getItem('site_course_type') === 'TYPE_TRANS_WORKER'
+      ? item.bannerTypeEnums === 'BANNER_TYPE_TRANSPORT_WORKER'
+      : item.bannerTypeEnums === 'BANNER_TYPE_LOW_FLOOR_BUS'
   );
   // console.log('필터링 배너 데이터 : ', data);
 

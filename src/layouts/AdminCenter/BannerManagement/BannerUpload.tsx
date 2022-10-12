@@ -1,5 +1,10 @@
 import { BbsType, uploadFile } from '@common/api/adm/file';
-import { BannerRes, createBannerAdm } from '@common/api/banner';
+import {
+  BannerRes,
+  bannerTypeEnums,
+  BannerTypeEnums,
+  createBannerAdm,
+} from '@common/api/banner';
 import { ProductStatus } from '@common/api/course';
 import { FileUploader } from '@components/ui/FileUploader';
 import styled from '@emotion/styled';
@@ -11,8 +16,10 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
   TextareaAutosize,
   TextField,
   Typography,
@@ -38,6 +45,7 @@ interface FormType {
   status: ProductStatus;
   toUrl: string;
   files: File[];
+  bannerTypeEnums: BannerTypeEnums;
 }
 
 const defaultValues = {
@@ -45,6 +53,7 @@ const defaultValues = {
   files: [],
   startDate: dateFormat(new Date(), 'yyyy-mm-dd'),
   endDate: dateFormat(new Date(), 'yyyy-mm-dd'),
+  bannerTypeEnums: BannerTypeEnums.BANNER_TYPE_TRANSPORT_WORKER,
 };
 
 export function BannerUpload() {
@@ -64,6 +73,10 @@ export function BannerUpload() {
     setValue,
     watch,
   } = useForm<FormType>({ defaultValues });
+
+  const handleBannerTypeEnums = async (e: any) => {
+    setValue('bannerTypeEnums', e.target.value);
+  };
 
   const fileHandler = async (files: File[], bannerSeq: number) => {
     const isFileUpload = files.length > 0;
@@ -86,6 +99,7 @@ export function BannerUpload() {
     try {
       const { data }: { data: BannerRes } = await createBannerAdm(rest);
       await fileHandler(files, data.seq);
+      console.log('submit data : ', data);
       snackbar({ variant: 'success', message: '성공적으로 완료되었습니다.' });
       router.push(`/admin-center/banner`);
     } catch (e: any) {
@@ -132,6 +146,23 @@ export function BannerUpload() {
         <Typography variant="h5" fontWeight="bold">
           배너 등록
         </Typography>
+        <FormControl>
+          <Select
+            sx={{ width: '37.5%;' }}
+            size="small"
+            labelId="bannerTypeEnums"
+            id="bannerTypeEnums"
+            placeholder="교육타입 선택"
+            value={watch().bannerTypeEnums || ''}
+            onChange={handleBannerTypeEnums}
+          >
+            {bannerTypeEnums.map(item => (
+              <MenuItem key={item.type} value={item.type}>
+                {item.ko}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <Box display="flex" justifyContent="space-between">
           <Box display="flex" flexDirection="column" gap="4px">
             {/* <Box width={450} height={70}>

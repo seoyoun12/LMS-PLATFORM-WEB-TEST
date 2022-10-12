@@ -85,6 +85,7 @@ const Footer: FC<Props> = () => {
                   href={item.href}
                   color="#000"
                   fontWeight="bold"
+                  key={item.name}
                 >
                   {item.name}
                 </Link>
@@ -107,7 +108,12 @@ const Footer: FC<Props> = () => {
           <UplineFootConatainer>
             {isTablet &&
               LinkList.map(item => (
-                <Link className="uplineFoot" href={item.href} color="#000">
+                <Link
+                  className="uplineFoot"
+                  key={item.name}
+                  href={item.href}
+                  color="#000"
+                >
                   {item.name}
                 </Link>
               ))}

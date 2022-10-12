@@ -37,6 +37,8 @@ export function BannerManagement() {
   const router = useRouter();
   const { data, error, mutate } = useBannerListAdm();
 
+  console.log('Banner Data : ', data);
+
   // 수정
   const onClickmodifyBanner = async (seq: number) => {
     router.push(`/admin-center/banner/modify/${seq}`);

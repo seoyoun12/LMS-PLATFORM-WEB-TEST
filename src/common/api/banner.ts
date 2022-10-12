@@ -10,6 +10,7 @@ export interface banner {
   startDate: string;
   status: ProductStatus;
   toUrl: string;
+  bannerTypeEnums: BannerTypeEnums;
 }
 
 export interface BannerRes extends banner {
@@ -18,6 +19,18 @@ export interface BannerRes extends banner {
   s3Files: S3Files;
   seq: number;
 }
+export enum BannerTypeEnums {
+  BANNER_TYPE_TRANSPORT_WORKER ='BANNER_TYPE_TRANSPORT_WORKER', // 운수종사자
+  BANNER_TYPE_LOW_FLOOR_BUS ='BANNER_TYPE_LOW_FLOOR_BUS', // 저상버스
+  BANNER_TYPE_PROVINCIAL ='BANNER_TYPE_PROVINCIAL', // 도민교통
+}
+
+export const bannerTypeEnums = [
+  { type: BannerTypeEnums.BANNER_TYPE_TRANSPORT_WORKER, ko: '운수종사자' },
+  { type: BannerTypeEnums.BANNER_TYPE_LOW_FLOOR_BUS, ko: '저상버스' },
+  { type: BannerTypeEnums.BANNER_TYPE_PROVINCIAL, ko: '도민교통' },
+];
+
 
 export function useBannerList() {
   const { data, error } = useSWR<SWRResponse<BannerRes[]>>('/banner', GET);

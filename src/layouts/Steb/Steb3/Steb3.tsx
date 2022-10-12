@@ -140,6 +140,8 @@ export default function Steb3() {
     };
   }, []);
 
+  console.log(enrollList, 'dd');
+
   // if (loading) return <Spinner />;
   if (loading || !info) return <Spinner />;
   return (
@@ -182,45 +184,55 @@ export default function Steb3() {
           <TableContainer>
             <Table sx={{ borderTop: '3px solid #000' }}>
               <TableCustomRow>
-                <TableLeftCell>교육과정</TableLeftCell>
+                <TableLeftCell>온라인과정</TableLeftCell>
                 <TableRitghCell>
-                  <Select
-                    disabled
-                    value={
-                      courseCategory.filter(
-                        cate => cate.type === info.courseCategoryType
-                      )[0]?.type
-                    }
-                    fullWidth
-                  >
-                    {courseCategory.map(item => (
-                      <MenuItem key={item.type} value={item.type}>
-                        {item.ko}
+                  {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS' ? (
+                    <Select disabled value={'TYPE_LOW_FLOOR_BUS'} fullWidth>
+                      <MenuItem value={'TYPE_LOW_FLOOR_BUS'}>
+                        저상버스 운전자교육
                       </MenuItem>
-                    ))}
-                  </Select>
+                    </Select>
+                  ) : (
+                    <Select
+                      disabled
+                      value={
+                        courseCategory.filter(
+                          cate => cate.type === info.courseCategoryType
+                        )[0]?.type
+                      }
+                      fullWidth
+                    >
+                      {courseCategory.map(item => (
+                        <MenuItem key={item.type} value={item.type}>
+                          {item.ko}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
                 </TableRitghCell>
               </TableCustomRow>
-              <TableCustomRow>
-                <TableLeftCell>운수구분</TableLeftCell>
-                <TableRitghCell>
-                  <Select
-                    disabled
-                    value={
-                      courseBusinessTypeList.filter(
-                        business => business.enType === info.courseBusinessType
-                      )[0].enType
-                    }
-                    fullWidth
-                  >
-                    {courseBusinessTypeList.map(item => (
-                      <MenuItem key={item.enType} value={item.enType}>
-                        {item.type}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </TableRitghCell>
-              </TableCustomRow>
+              {!(localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS') && (
+                <TableCustomRow>
+                  <TableLeftCell>운수구분</TableLeftCell>
+                  <TableRitghCell>
+                    <Select
+                      disabled
+                      value={
+                        courseBusinessTypeList.filter(
+                          business => business.enType === info.courseBusinessType
+                        )[0].enType
+                      }
+                      fullWidth
+                    >
+                      {courseBusinessTypeList.map(item => (
+                        <MenuItem key={item.enType} value={item.enType}>
+                          {item.type}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </TableRitghCell>
+                </TableCustomRow>
+              )}
               <TableCustomRow>
                 <TableLeftCell>기수 / 교육일자</TableLeftCell>
                 <TableRitghCell>
@@ -283,10 +295,12 @@ export default function Steb3() {
                             {item.firstIdentityNumber} - ●●●●●●●
                           </StuTableRightCell>
                         </UserTableRow>
-                        <UserTableRow>
-                          <StuTableLeftCell>차량번호</StuTableLeftCell>
-                          <StuTableRightCell>{item.carNumber}</StuTableRightCell>
-                        </UserTableRow>
+                        {item.carNumber && (
+                          <UserTableRow>
+                            <StuTableLeftCell>차량번호</StuTableLeftCell>
+                            <StuTableRightCell>{item.carNumber}</StuTableRightCell>
+                          </UserTableRow>
+                        )}
                         <UserTableRow>
                           <StuTableLeftCell>등록지</StuTableLeftCell>
                           <StuTableRightCell>

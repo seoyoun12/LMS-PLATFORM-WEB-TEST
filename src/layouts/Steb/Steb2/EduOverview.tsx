@@ -161,13 +161,16 @@ export function EduOverview({
                     ))}
                   </Select>
                 </FormControl> */}
-                보수일반
+                {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS'
+                  ? '저상버스 운전자교육'
+                  : '보수일반'}
               </TableRightCell>
             </TableCustomRow>
-            <TableCustomRow>
-              <TableLeftCell>운수구분</TableLeftCell>
-              <TableRightCell>
-                {/* <FormControl fullWidth>
+            {!(localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS') && (
+              <TableCustomRow>
+                <TableLeftCell>운수구분</TableLeftCell>
+                <TableRightCell>
+                  {/* <FormControl fullWidth>
                   <Select
                     labelId="courseBusinessType"
                     id="courseBusinessType"
@@ -197,10 +200,11 @@ export function EduOverview({
                     })}
                   </Select>
                 </FormControl> */}
-                {(watch('businessType') === userBusinessType.PASSENGER && '여객') ||
-                  (watch('businessType') === userBusinessType.FREIGHT && '화물')}
-              </TableRightCell>
-            </TableCustomRow>
+                  {(watch('businessType') === userBusinessType.PASSENGER && '여객') ||
+                    (watch('businessType') === userBusinessType.FREIGHT && '화물')}
+                </TableRightCell>
+              </TableCustomRow>
+            )}
             <TableCustomRow>
               <TableLeftCell>기수 / 교육일자</TableLeftCell>
               <TableRightCell>

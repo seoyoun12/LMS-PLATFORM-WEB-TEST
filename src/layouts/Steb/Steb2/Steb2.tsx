@@ -93,9 +93,12 @@ export default function Steb2() {
       scrollElement(0);
       return snackbar({ variant: 'error', message: '운수구분을 선택해주세요!' });
     }
-    if (String(rest.businessSubType) === '' || !rest.businessSubType) {
-      scrollElement(1);
-      return snackbar({ variant: 'error', message: '업종구분을 선택해주세요!' });
+    //저상버스 처리
+    if (!(localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS')) {
+      if (String(rest.businessSubType) === '' || !rest.businessSubType) {
+        scrollElement(1);
+        return snackbar({ variant: 'error', message: '업종구분을 선택해주세요!' });
+      }
     }
     if (rest.businessName === '' || !rest.businessName) {
       scrollElement(2);
@@ -185,13 +188,12 @@ export default function Steb2() {
         })
           .then(async res => {
             //계정생성완료 후 작업
-            try{
+            try {
               const { data } = await courseClassOrganizationEnrll(postData);
               setValue('seq', data.seq);
               setEnroll(prev => [...prev, watch()]);
               setLoading(false);
-            }
-            catch(e: any){
+            } catch (e: any) {
               snackbar({ variant: 'error', message: e.data.message });
               setLoading(false);
             }
@@ -200,18 +202,18 @@ export default function Steb2() {
             console.dir(e.data.status);
             if (e.data.status === 400) {
               //이미 존재하는 계정
-              try{
+              try {
                 const { data } = await courseClassOrganizationEnrll(postData);
                 setValue('seq', data.seq);
                 setEnroll(prev => [...prev, watch()]);
                 setLoading(false);
-              }
-              catch(e: any){
+              } catch (e: any) {
                 snackbar({ variant: 'error', message: e.data.message });
                 setLoading(false);
               }
             }
-            if(e.data.status !== 400) snackbar({ variant: 'error', message: e.data.message });
+            if (e.data.status !== 400)
+              snackbar({ variant: 'error', message: e.data.message });
           });
       }
     } catch (e: any) {

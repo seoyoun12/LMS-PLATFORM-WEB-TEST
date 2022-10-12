@@ -15,7 +15,7 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   userBusinessTypeOne,
   userBusinessTypeTwo,
@@ -60,11 +60,7 @@ export function CompanyInfo({
   // const { businessName, businessType, businessSubType } = watch();
   const [disabledCompany, setDisabledCompany] = useState(false);
 
-  const onChangeBusinessSubType = (e: SelectChangeEvent<unknown>) => {
-    const {
-      target: { value },
-    } = e;
-
+  const onChangeBusinessSubType = (value: string) => {
     //회사명 활성화 + 차량번호 비활성화
     // if (
     //   courseSubCategoryType.CHARTER_BUS === value ||
@@ -145,6 +141,14 @@ export function CompanyInfo({
     }
   };
 
+  //임시로 만든 저상버스용 이펙트
+  useEffect(() => {
+    if (localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS') {
+      setValue('businessSubType', courseSubCategoryType.BUS);
+      onChangeBusinessSubType('BUS');
+    }
+  }, []);
+
   // const onChangeCompanyName = (e: any) => {
   //   setValue('businessName', e.target.value);
   // };
@@ -171,10 +175,11 @@ export function CompanyInfo({
       </Box> */}
       <TableContainer>
         <Table sx={{ borderTop: '3px solid #000' }}>
-          <TableCustomRow>
-            <TableLeftCell>운수구분</TableLeftCell>
-            <TableRightCell className="scroll-to-box" id="businessType">
-              {/* <FormControl fullWidth>
+          {!(localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS') && (
+            <TableCustomRow>
+              <TableLeftCell>운수구분</TableLeftCell>
+              <TableRightCell className="scroll-to-box" id="businessType">
+                {/* <FormControl fullWidth>
                 <Select
                   labelId="businessType"
                   id="businessType"
@@ -192,35 +197,40 @@ export function CompanyInfo({
                     ))}
                 </Select>
               </FormControl> */}
-              {userBusinessTypeOne
-                .filter(item => item.enType === fixedBusinessType)
-                .map(item => (
-                  <MenuItem value={item.enType}>{item.type}</MenuItem>
-                ))}
-            </TableRightCell>
-          </TableCustomRow>
-          <TableCustomRow>
-            <TableLeftCell>업종구분</TableLeftCell>
-            <TableRightCell className="scroll-to-box" id="businessSubType">
-              <FormControl fullWidth>
-                <Select
-                  labelId="businessSubType"
-                  id="businessSubType"
-                  placeholder="업종 유형선택"
-                  {...register('businessSubType')}
-                  onChange={onChangeBusinessSubType}
-                >
-                  {userBusinessTypeTwo
-                    .filter(filter => filter.category === watch().businessType)
-                    .map(item => (
-                      <MenuItem key={item.enType} value={item.enType}>
-                        {item.type}
-                      </MenuItem>
-                    ))}
-                </Select>
-              </FormControl>
-            </TableRightCell>
-          </TableCustomRow>
+                {userBusinessTypeOne
+                  .filter(item => item.enType === fixedBusinessType)
+                  .map(item => (
+                    <MenuItem value={item.enType}>{item.type}</MenuItem>
+                  ))}
+              </TableRightCell>
+            </TableCustomRow>
+          )}
+
+          {!(localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS') && (
+            <TableCustomRow>
+              <TableLeftCell>업종구분</TableLeftCell>
+              <TableRightCell className="scroll-to-box" id="businessSubType">
+                <FormControl fullWidth>
+                  <Select
+                    labelId="businessSubType"
+                    id="businessSubType"
+                    placeholder="업종 유형선택"
+                    {...register('businessSubType')}
+                    onChange={e => onChangeBusinessSubType(e.target.value as string)}
+                  >
+                    {userBusinessTypeTwo
+                      .filter(filter => filter.category === watch().businessType)
+                      .map(item => (
+                        <MenuItem key={item.enType} value={item.enType}>
+                          {item.type}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </TableRightCell>
+            </TableCustomRow>
+          )}
+
           <TableCustomRow>
             <TableLeftCell>회사명</TableLeftCell>
             <TableRightCell className="scroll-to-box">

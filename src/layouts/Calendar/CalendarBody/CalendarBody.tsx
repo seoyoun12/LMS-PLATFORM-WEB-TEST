@@ -346,11 +346,11 @@ export function CalendarBody({
             <span>교육개요</span>
           </Box> */}
           <EduGuide>
-            <span>교육안내</span>
+            <span>교육 상세정보</span>
           </EduGuide>
-          <EduSummury>
+          {/* <EduSummury>
             <span>교육개요</span>
-          </EduSummury>
+          </EduSummury> */}
           <TableBody
             sx={{ display: 'table', width: '100%', borderTop: '1px solid #c4c4c4' }}
           >
@@ -358,26 +358,33 @@ export function CalendarBody({
               <>
                 <TableRow>
                   <TableLeftCell>기수</TableLeftCell>
-                  <TableRightCell>{modalInfo.step}</TableRightCell>
+                  <TableRightCell>{modalInfo.step}기</TableRightCell>
                 </TableRow>
                 <TableRow>
-                  <TableLeftCell>온라인 교육</TableLeftCell>
+                  <TableLeftCell>온라인과정</TableLeftCell>
                   <TableRightCell>
                     {/* {modalInfo.courseCategoryType ? modalInfo.courseCategoryType.ko : '오류'} */}
-                    보수일반교육
+                    {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS'
+                      ? '저상버스 운전자교육'
+                      : '보수일반'}
                   </TableRightCell>
                 </TableRow>
-                <TableRow>
-                  <TableLeftCell>교육구분</TableLeftCell>
-                  <TableRightCell>
-                    {
-                      courseBusinessTypeList.filter(
-                        item => item.enType === modalInfo.courseBusinessType
-                      )[0]?.type
-                    }
-                    {/* 여객 / 화물 */}
-                  </TableRightCell>
-                </TableRow>
+                {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS' ? (
+                  ''
+                ) : (
+                  <TableRow>
+                    <TableLeftCell>운수구분</TableLeftCell>
+                    <TableRightCell>
+                      {
+                        courseBusinessTypeList.filter(
+                          item => item.enType === modalInfo.courseBusinessType
+                        )[0]?.type
+                      }
+                      {/* 여객 / 화물 */}
+                    </TableRightCell>
+                  </TableRow>
+                )}
+
                 {/* <TableRow>
                   <TableLeftCell>업종구분</TableLeftCell>
                   <TableRightCell>{modalInfo.courseSubCategoryType ? modalInfo.courseSubCategoryType.ko : '오류'}</TableRightCell>
@@ -397,7 +404,7 @@ export function CalendarBody({
                   </TableRightCell>
                 </TableRow>
                 <TableRow>
-                  <TableLeftCell>신청/정원</TableLeftCell>
+                  <TableLeftCell>신청 / 정원</TableLeftCell>
                   <TableRightCell>
                     {modalInfo.limitPeople === 0
                       ? '제한없음'
@@ -464,23 +471,29 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
         </Box>
         <Box>
           {/* {extendedProps.step}기 {extendedProps.courseCategoryType.ko}교육 */}
-          보수일반교육
+          {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS'
+            ? '저상버스 운전자교육'
+            : '보수일반'}
         </Box>
       </Box>
-      <Box>
-        {/* {
-          courseBusinessTypeList.filter(
+      {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS' ? (
+        ''
+      ) : (
+        <Box>
+          {/* courseBusinessTypeList.filter(
             item => item.enType === extendedProps.course.courseBusinessType
-          )[0]?.type
-        }{' '}/  */}
-        {extendedProps.courseSubCategoryType.type === courseSubCategoryType.BUS
-          ? '여객'
-          : extendedProps.courseSubCategoryType.type ===
-            courseSubCategoryType.INDIVIDUAL_CARGO
-          ? '화물'
-          : 'null'}
-        {/* 여객 / 화물 */}
-      </Box>
+          )[0]?.type */}
+
+          {extendedProps.courseSubCategoryType.type === courseSubCategoryType.BUS
+            ? '여객'
+            : extendedProps.courseSubCategoryType.type ===
+              courseSubCategoryType.INDIVIDUAL_CARGO
+            ? '화물'
+            : 'null'}
+          {/* 여객 / 화물 */}
+        </Box>
+      )}
+
       <Box>
         {extendedProps.limitPeople === 0
           ? '제한없음'
@@ -605,8 +618,9 @@ const CalendarWrap = styled(Box)<{ filter: string }>`
 const EduGuide = styled(Typography)`
   width: fit-content;
   font-weight: 700;
-  font-size: 36px;
+  font-size: 24px;
   margin: auto;
+  padding-bottom: 12px;
 `;
 
 const EduSummury = styled(Typography)`

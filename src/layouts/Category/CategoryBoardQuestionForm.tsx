@@ -212,7 +212,9 @@ export function CategoryBoardQuestionForm({
                     onChange={onChangePhoneNum01}
                   >
                     {phoneList.map(item => (
-                      <MenuItem value={item}>{item}</MenuItem>
+                      <MenuItem key={item} value={item}>
+                        {item}
+                      </MenuItem>
                     ))}
                   </Select>
                   -

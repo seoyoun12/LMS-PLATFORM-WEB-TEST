@@ -6,9 +6,9 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, ListItem, Typography } from '@mui/material';
 import Image from 'next/image';
-import { useBannerList } from '@common/api/banner';
+import { BannerTypeEnums, useBannerList } from '@common/api/banner';
 import { Spinner } from '../Spinner';
 
 interface Datas {
@@ -23,7 +23,21 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
   const [secondSwiper, setSecondSwiper] = useState();
   const [swiperPageNumber, setSwiperPageNumber] = useState(0);
   // const { data, error } = useBannerList();
-  const { data } = useBannerList();
+  const { data: BannerData } = useBannerList();
+  // const { data } = useBannerList();
+  // const BannerData = data?.filter(
+  //   item => item.bannerTypeEnums === 'BANNER_TYPE_PROVINCIAL'
+  // );
+
+  // 배너 타입 결정
+  const data = BannerData?.filter(
+    item => item.bannerTypeEnums === 'BANNER_TYPE_TRANSPORT_WORKER'
+  );
+  // console.log('필터링 배너 데이터 : ', data);
+
+  // useEffect(() => {}, []);
+
+  // console.log('카테고리케러셀데이터 : ', data);
 
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);

@@ -23,7 +23,12 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
   const [secondSwiper, setSecondSwiper] = useState();
   const [swiperPageNumber, setSwiperPageNumber] = useState(0);
   // const { data, error } = useBannerList();
-  const { data } = useBannerList();
+  const { data: BannerData } = useBannerList();
+
+  const data = BannerData?.filter(
+    item => item.bannerTypeEnums === 'BANNER_TYPE_PROVINCIAL'
+  );
+  // console.log('필터링 배너 데이터 : ', data);
 
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);

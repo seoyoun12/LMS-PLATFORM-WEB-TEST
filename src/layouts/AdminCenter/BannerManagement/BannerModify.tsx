@@ -1,6 +1,8 @@
 import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
 import {
   BannerRes,
+  bannerTypeEnums,
+  BannerTypeEnums,
   getSingleBannerAdm,
   modifyBannerAdm,
   removeBannerAdm,
@@ -22,6 +24,8 @@ import {
   TextField,
   Typography,
   TextareaAutosize,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -46,6 +50,7 @@ interface FormType {
   status: ProductStatus;
   toUrl: string;
   files: File[];
+  bannerTypeEnums: BannerTypeEnums;
 }
 
 const defaultValues = {
@@ -99,6 +104,7 @@ export function BannerModify() {
         setValue('endDate', dateFormat(data.endDate, 'yyyy-mm-dd'));
         setValue('toUrl', data.toUrl);
         setValue('status', data.status);
+        setValue('bannerTypeEnums', data.bannerTypeEnums);
 
         setFileName(data.s3Files[0]?.name || null);
         setFileSeq(data.s3Files[0]?.seq);
@@ -131,6 +137,11 @@ export function BannerModify() {
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
     }
+  };
+
+  // 배너 타입 변경
+  const handleBannerTypeEnums = async (e: any) => {
+    setValue('bannerTypeEnums', e.target.value);
   };
 
   const handleFileChange = async (e: ChangeEvent) => {
@@ -193,6 +204,23 @@ export function BannerModify() {
         <Typography variant="h5" fontWeight="bold">
           배너 변경
         </Typography>
+        <FormControl>
+          <Select
+            sx={{ width: '37.5%;' }}
+            size="small"
+            labelId="bannerTypeEnums"
+            id="bannerTypeEnums"
+            placeholder="교육타입 선택"
+            value={watch().bannerTypeEnums || ''}
+            onChange={handleBannerTypeEnums}
+          >
+            {bannerTypeEnums.map(item => (
+              <MenuItem key={item.type} value={item.type}>
+                {item.ko}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         {/* <TextField
           placeholder="배너 제목"
           {...register('title', { required: '배너이름을 입력해주세요.' })}

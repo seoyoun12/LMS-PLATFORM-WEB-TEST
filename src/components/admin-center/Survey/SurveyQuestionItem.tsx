@@ -61,6 +61,7 @@ export function SurveyQuestionItem({ item, setQuestions }: Props) {
           <TableCell width="70%">{objToJsx(item.surveyMultipleChoice)}</TableCell>
           <TableCell width="10%">
             <Button
+              sx={{ mt: '-2px', mb: '2px' }}
               variant="contained"
               color="warning"
               onClick={() => onClickDeleteQuestion(item.dummySeq)}

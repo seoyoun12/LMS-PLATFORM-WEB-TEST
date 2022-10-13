@@ -170,7 +170,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
                   control={<Radio />}
                   label="자주묻는질문"
                 />
-                <FormControlLabel
+                {/* <FormControlLabel
                   value={'TYPE_GUIDE_AUTH'}
                   control={<Radio />}
                   label="회원가입 및 로그인"
@@ -184,7 +184,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
                   value={'TYPE_GUIDE_EDU_LEARNING'}
                   control={<Radio />}
                   label="학습방법"
-                />
+                /> */}
                 {/* <FormControlLabel value={"TYPE_REVIEW"} control={<Radio />} label="문의 내역" /> */}
                 {/* <FormControlLabel value={YN.NO} control={<Radio />} label="공개N" /> */}
               </RadioGroup>

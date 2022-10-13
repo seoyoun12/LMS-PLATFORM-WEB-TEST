@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { NextPage } from 'next';
 import {
   MeCertificateContainer,
   MeCertificateContentContainer,
@@ -15,48 +15,48 @@ import {
   PrintModalButtonWrapper,
   PrintModalImage,
   PrintModalWrapper,
-} from "@components/MeCertificate/style";
-import { useGetUserMyinfoCertificates } from "@common/api/user/myinfo/certificates";
-import { GET, POST } from "@common/httpClient";
+} from '@components/MeCertificate/style';
+import { useGetUserMyinfoCertificates } from '@common/api/user/myinfo/certificates';
+import { GET, POST } from '@common/httpClient';
 import {
   UserMyinfoCertificatesConfirmResponseDto,
   UserMyinfoCertificatesResponseDto,
-} from "@common/api/Api";
-import BackgroundImage from "public/assets/images/certificates_background.svg";
-import { NotFound } from "@components/ui/NotFound";
-import { useState } from "react";
-import { AxiosResponse } from "axios";
-import { FetchState } from "types/fetch";
-import { CircularProgress } from "@mui/material";
+} from '@common/api/Api';
+import BackgroundImage from 'public/assets/images/certificates_background.svg';
+import { NotFound } from '@components/ui/NotFound';
+import { useState } from 'react';
+import { AxiosResponse } from 'axios';
+import { FetchState } from 'types/fetch';
+import { Backdrop, CircularProgress } from '@mui/material';
+import { Spinner } from '@components/ui';
 
 const MeCertificate: NextPage = () => {
   const { certificateList, mutate } = useGetUserMyinfoCertificates();
   const [selectedCertificate, setSelectedCertificate] =
     useState<UserMyinfoCertificatesConfirmResponseDto | null>(null);
   const [showCertificateFetchState, setShowCertificateFetchState] =
-    useState<FetchState>("READY");
+    useState<FetchState>('READY');
   const [downloadCertificateFetchState, setDownloadCertificateFetchState] =
-    useState<FetchState>("READY");
+    useState<FetchState>('READY');
+  const [getCertificateState, setGetCertificateState] = useState<string>('READY');
 
-  const handleClickShowCertificates = async (
-    item: UserMyinfoCertificatesResponseDto
-  ) => {
-    if (!item.courseUserSeq || showCertificateFetchState === "FETCHING") {
+  const handleClickShowCertificates = async (item: UserMyinfoCertificatesResponseDto) => {
+    if (!item.courseUserSeq || showCertificateFetchState === 'FETCHING') {
       return;
     }
 
-    setShowCertificateFetchState("FETCHING");
+    setShowCertificateFetchState('FETCHING');
 
     try {
-      const { data } = await GET<
-        AxiosResponse<UserMyinfoCertificatesConfirmResponseDto>
-      >(`/user/myinfo/certificates/confirm/${item.courseUserSeq}`);
+      const { data } = await GET<AxiosResponse<UserMyinfoCertificatesConfirmResponseDto>>(
+        `/user/myinfo/certificates/confirm/${item.courseUserSeq}`
+      );
       mutate();
       setSelectedCertificate(data);
-      setShowCertificateFetchState("SUCCESS");
+      setShowCertificateFetchState('SUCCESS');
     } catch (e) {
       alert(e.data.message);
-      setShowCertificateFetchState("FAILURE");
+      setShowCertificateFetchState('FAILURE');
     }
     return;
   };
@@ -64,32 +64,32 @@ const MeCertificate: NextPage = () => {
   const handleClickDownloadCertificate = async () => {
     if (
       !selectedCertificate?.courseUserSeq ||
-      downloadCertificateFetchState === "FETCHING"
+      downloadCertificateFetchState === 'FETCHING'
     ) {
       return;
     }
 
-    setDownloadCertificateFetchState("FETCHING");
-    alert("수료 조건을 충족하여 증명서가 발급됩니다.");
+    setDownloadCertificateFetchState('FETCHING');
+    alert('수료 조건을 충족하여 증명서가 발급됩니다.');
 
     try {
       const data = await POST<string>(
         `/user/myinfo/certificates/download/${selectedCertificate.courseUserSeq}`,
         {},
         {
-          responseType: "blob",
+          responseType: 'blob',
         }
       );
 
       const url = window.URL.createObjectURL(new Blob([data]));
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = url;
       a.download = `${selectedCertificate.fileName}.pdf`;
       a.click();
       a.remove();
-      setDownloadCertificateFetchState("SUCCESS");
+      setDownloadCertificateFetchState('SUCCESS');
     } catch (e) {
-      setDownloadCertificateFetchState("FAILURE");
+      setDownloadCertificateFetchState('FAILURE');
     }
   };
 
@@ -104,11 +104,11 @@ const MeCertificate: NextPage = () => {
 
     win.document.write('<html lang="ko"><head>');
     win.document.write('<meta charset="UTF-8">');
-    win.document.write("</head><body>");
+    win.document.write('</head><body>');
     win.document.write(
       `<img src="${selectedCertificate.certImagePath}" style="width: 100%;" />`
     );
-    win.document.write("</body></html>");
+    win.document.write('</body></html>');
     win.document.close();
     setTimeout(function () {
       win.print();
@@ -131,10 +131,10 @@ const MeCertificate: NextPage = () => {
                 프린트
               </PrintModalButton>
               <PrintModalButton onClick={handleClickDownloadCertificate}>
-                {downloadCertificateFetchState === "FETCHING" ? (
+                {downloadCertificateFetchState === 'FETCHING' ? (
                   <CircularProgress />
                 ) : (
-                  "저장"
+                  '저장'
                 )}
               </PrintModalButton>
             </PrintModalButtonWrapper>
@@ -173,7 +173,7 @@ const MeCertificate: NextPage = () => {
                     {/*<MeCertificateItemContentSubtitle>Python</MeCertificateItemContentSubtitle>*/}
 
                     <MeCertificateItemConfirmButton>
-                      {item.completeYn === "Y" ? "증명서 발급" : "수료 확인"}
+                      {item.completeYn === 'Y' ? '증명서 발급' : '수료 확인'}
                     </MeCertificateItemConfirmButton>
                   </MeCertificateItemContentContainer>
                 </MeCertificateItemContainer>
@@ -181,6 +181,9 @@ const MeCertificate: NextPage = () => {
           </>
         )}
       </MeCertificateContentContainer>
+      <Backdrop open={showCertificateFetchState === 'SUCCESS' ? false : true}>
+        <Spinner />
+      </Backdrop>
     </MeCertificateContainer>
   );
 };

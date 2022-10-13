@@ -67,9 +67,9 @@ const tabsConfig = [
   // { name: '전체', value: '' }, // board Type이 required
   { name: '공지사항', value: 'TYPE_NOTICE' },
   { name: '자주묻는질문', value: 'TYPE_FAQ' },
-  { name: '회원가입 및 로그인', value: 'TYPE_GUIDE_AUTH ' },
-  { name: '교육신청방법', value: 'TYPE_GUIDE_EDU_REGI ' },
-  { name: '학습방법', value: 'TYPE_GUIDE_EDU_LEARNING ' },
+  // { name: '회원가입 및 로그인', value: 'TYPE_GUIDE_AUTH ' },
+  // { name: '교육신청방법', value: 'TYPE_GUIDE_EDU_REGI ' },
+  // { name: '학습방법', value: 'TYPE_GUIDE_EDU_LEARNING ' },
 ];
 
 export function CategoryManagement() {

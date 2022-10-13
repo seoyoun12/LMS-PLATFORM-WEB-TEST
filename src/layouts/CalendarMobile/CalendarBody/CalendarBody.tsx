@@ -274,14 +274,20 @@ export function CalendarBody({
                     {child.title}
                   </CalendarItemHeader>
                   <Box mt={1}>
-                    [{child.courseCategoryType.ko}]{' '}
-                    {child.courseSubCategoryType.type === courseSubCategoryType.BUS
-                      ? '여객'
-                      : child.courseSubCategoryType.type ===
-                        courseSubCategoryType.INDIVIDUAL_CARGO
-                      ? '화물'
-                      : 'null'}{' '}
-                    - {child.courseCategoryType.ko} 교육
+                    {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS' ? (
+                      <>저상버스 운전자교육</>
+                    ) : (
+                      <>
+                        [{child.courseCategoryType.ko}]{' '}
+                        {child.courseSubCategoryType.type === courseSubCategoryType.BUS
+                          ? '여객'
+                          : child.courseSubCategoryType.type ===
+                            courseSubCategoryType.INDIVIDUAL_CARGO
+                          ? '화물'
+                          : 'null'}{' '}
+                        - {child.courseCategoryType.ko} 교육
+                      </>
+                    )}
                   </Box>
                   <Box mt={1}>
                     {child.studyStartDate.split(' ')[0]} ~{' '}
@@ -358,11 +364,8 @@ export function CalendarBody({
       >
         <TableContainer sx={{ padding: '0 8px' }}>
           <EduGuide>
-            <span>교육안내</span>
+            <span>교육 상세정보</span>
           </EduGuide>
-          <EduSummury>
-            <span>교육개요</span>
-          </EduSummury>
           <TableBody
             sx={{ display: 'table', width: '100%', borderTop: '1px solid #c4c4c4' }}
           >
@@ -370,39 +373,48 @@ export function CalendarBody({
               <>
                 <TableRow>
                   <TableLeftCell>기수</TableLeftCell>
-                  <TableRightCell>{modalInfo.step}</TableRightCell>
+                  <TableRightCell>{modalInfo.step}기</TableRightCell>
                 </TableRow>
                 <TableRow>
-                  <TableLeftCell>온라인교육</TableLeftCell>
+                  <TableLeftCell>온라인과정</TableLeftCell>
                   {/* <TableRightCell>
                     {modalInfo.courseCategoryType
                       ? modalInfo.courseCategoryType.ko
                       : '오류'}
                   </TableRightCell> */}
-                  <TableRightCell>보수일반교육</TableRightCell>
-                </TableRow>
-                <TableRow>
-                  <TableLeftCell>교육구분</TableLeftCell>
                   <TableRightCell>
-                    {
-                      courseBusinessTypeList.filter(
-                        item => item.enType === modalInfo.courseBusinessType
-                      )[0]?.type
-                    }
-                    {/* 여객 / 화물 */}
+                    {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS'
+                      ? '저상버스 운전자교육'
+                      : '보수일반'}
                   </TableRightCell>
-                  {/* <TableLeftCell>업종구분</TableLeftCell>
-                  <TableRightCell>
-                    {modalInfo.courseSubCategoryType
-                      ? modalInfo.courseSubCategoryType.ko
-                      : '오류'}
-                  </TableRightCell> */}
                 </TableRow>
+                {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS' ? (
+                  ''
+                ) : (
+                  <TableRow>
+                    <TableLeftCell>운수구분</TableLeftCell>
+                    <TableRightCell>
+                      {
+                        courseBusinessTypeList.filter(
+                          item => item.enType === modalInfo.courseBusinessType
+                        )[0]?.type
+                      }
+                      {/* 여객 / 화물 */}
+                    </TableRightCell>
+                  </TableRow>
+                )}
                 <TableRow>
                   <TableLeftCell>교육일</TableLeftCell>
                   <TableRightCell>
-                    {dateFormat(modalInfo.studyStartDate.replaceAll('-', '/'), 'yyyy-mm-dd')} ~{' '}
-                    {dateFormat(modalInfo.studyEndDate.replaceAll('-', '/'), 'yyyy-mm-dd')}
+                    {dateFormat(
+                      modalInfo.studyStartDate.replaceAll('-', '/'),
+                      'yyyy-mm-dd'
+                    )}{' '}
+                    ~{' '}
+                    {dateFormat(
+                      modalInfo.studyEndDate.replaceAll('-', '/'),
+                      'yyyy-mm-dd'
+                    )}
                   </TableRightCell>
                 </TableRow>
                 <TableRow>
@@ -530,6 +542,7 @@ const EduGuide = styled(Typography)`
   font-weight: 700;
   font-size: 24px;
   margin: auto;
+  padding-bottom: 12px;
 `;
 
 const EduSummury = styled(Typography)`

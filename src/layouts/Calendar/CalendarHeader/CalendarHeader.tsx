@@ -104,32 +104,40 @@ export function CalendarHeader({
           ))}
         </Box> */}
       </Box>
-      <FilterWrap>
-        {filterList.map(item => (
-          <FilterButton
-            key={item.enType}
-            variant="contained"
-            onClick={onChangeFilter}
-            value={item.enType}
-            sx={{
-              background: filter === item.enType ? '#256aef' : '#d8d6d6',
-              '&:hover': {
-                backgroundColor: filter === item.enType ? '#143c89' : '#919191',
-              },
-            }}
-          >
-            {item.type}
-          </FilterButton>
-        ))}
-      </FilterWrap>
-      <Box display="flex" justifyContent="center" gap="1rem" mt={4}>
-        {eduLegendList.map(legend => (
-          <Box key={legend.enType} display="flex" alignItems="center">
-            <CircleRoundedIcon sx={{ fontSize: '1rem', color: legend.color }} />{' '}
-            <span>{legend.title}</span>
-          </Box>
-        ))}
-      </Box>
+      {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS' ? (
+        ''
+      ) : (
+        <FilterWrap>
+          {filterList.map(item => (
+            <FilterButton
+              key={item.enType}
+              variant="contained"
+              onClick={onChangeFilter}
+              value={item.enType}
+              sx={{
+                background: filter === item.enType ? '#256aef' : '#d8d6d6',
+                '&:hover': {
+                  backgroundColor: filter === item.enType ? '#143c89' : '#919191',
+                },
+              }}
+            >
+              {item.type}
+            </FilterButton>
+          ))}
+        </FilterWrap>
+      )}
+      {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS' ? (
+        ''
+      ) : (
+        <Box display="flex" justifyContent="center" gap="1rem" mt={4}>
+          {eduLegendList.map(legend => (
+            <Box key={legend.enType} display="flex" alignItems="center">
+              <CircleRoundedIcon sx={{ fontSize: '1rem', color: legend.color }} />{' '}
+              <span>{legend.title}</span>
+            </Box>
+          ))}
+        </Box>
+      )}
     </CalendarHeaderWrap>
   );
 }

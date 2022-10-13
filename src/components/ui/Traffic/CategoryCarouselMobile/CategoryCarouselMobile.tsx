@@ -24,8 +24,13 @@ export const CategoryCarouselMobile = ({ datas: deprecated }: { datas: Array<any
   const [secondSwiper, setSecondSwiper] = useState();
   const [swiperPageNumber, setSwiperPageNumber] = useState(0);
   // const { data, error } = useBannerList();
-  const { data } = useBannerList();
+  const { data: BannerData } = useBannerList();
   const isDesktop = useResponsive(768);
+
+  // 배너 타입 결정
+  const data = BannerData?.filter(
+    item => item.bannerTypeEnums === 'BANNER_TYPE_PROVINCIAL'
+  );
 
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);

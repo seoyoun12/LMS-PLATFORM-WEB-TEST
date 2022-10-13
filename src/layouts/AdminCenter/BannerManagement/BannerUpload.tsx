@@ -97,9 +97,10 @@ export function BannerUpload() {
           '"script"단어가 포함되어있어 수정이 불가능합니다. 해당 단어를 제거해주세요',
       });
     try {
+      setLoading(true);
       const { data }: { data: BannerRes } = await createBannerAdm(rest);
       await fileHandler(files, data.seq);
-      console.log('submit data : ', data);
+      // console.log('submit data : ', data);
       snackbar({ variant: 'success', message: '성공적으로 완료되었습니다.' });
       router.push(`/admin-center/banner`);
     } catch (e: any) {
@@ -299,7 +300,7 @@ export function BannerUpload() {
           />
         ) : null}
         <ButtonBox>
-          <SubmitBtn variant="contained" type="submit">
+          <SubmitBtn variant="contained" type="submit" disabled={loading}>
             {loading ? <Spinner fit={true} /> : '등록'}
           </SubmitBtn>
         </ButtonBox>

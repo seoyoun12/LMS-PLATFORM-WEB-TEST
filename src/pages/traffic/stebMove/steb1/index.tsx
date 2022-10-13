@@ -10,7 +10,8 @@ export default function Steb1Page() {
       <Head>
         <title>충남교통연수원</title>
       </Head>
-      <Steb1 />
+      {/* <Steb1 /> */}
+      <div>없는 페이지입니다.</div>
     </Container>
   );
 }

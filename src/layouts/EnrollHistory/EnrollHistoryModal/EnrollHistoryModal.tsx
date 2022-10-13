@@ -434,49 +434,56 @@ export function EnrollHistoryModal({
                 </TableDoubleRightCell>
               </TableDoubleParantRightCell>
             </TableDoubleRow>
-            <TableDoubleRow>
-              <TableDoubleParantLeftCell>
-                <TableDoubleLeftCell className="left-cell-border">
-                  교육구분
-                </TableDoubleLeftCell>
-                <TableDoubleRightCell className="right-cell">
-                  {watch().userBusinessType === 'FREIGHT' ? '화물' : '여객'}
-                </TableDoubleRightCell>
-              </TableDoubleParantLeftCell>
-              <TableDoubleParantLeftCell>
-                <TableDoubleLeftCell className="left-cell-border">
-                  온라인과정
-                </TableDoubleLeftCell>
-                <TableDoubleRightCell className="right-cell">
-                  보수일반
-                </TableDoubleRightCell>
-              </TableDoubleParantLeftCell>
-            </TableDoubleRow>
 
             <TableRow>
-              <TableLeftCell className="left-cell-border">업종</TableLeftCell>
+              <TableLeftCell className="left-cell-border">온라인과정</TableLeftCell>
 
               <TableRightCell className="right-cell">
-                <FormControl fullWidth>
-                  <Select
-                    {...register('userSubBusinessType')}
-                    onChange={e => {
-                      onChangeBusinessSubType(e.target.value);
-                    }}
-                    value={watch().userSubBusinessType || ''}
-                    disabled={isStudyPeriod || isAfterStudyDate}
-                  >
-                    {userBusinessTypeTwo
-                      .filter(filter => filter.TYPE_BUSINESS === watch().businessType)
-                      .map(item => (
-                        <MenuItem key={item.enType} value={item.enType}>
-                          {item.type}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
+                {watch().courseType === 'TYPE_LOW_FLOOR_BUS'
+                  ? '저상버스 운전자교육'
+                  : '보수일반'}
               </TableRightCell>
             </TableRow>
+
+            {watch().courseType === 'TYPE_LOW_FLOOR_BUS' ? (
+              ''
+            ) : (
+              <TableDoubleRow>
+                <TableDoubleParantLeftCell>
+                  <TableDoubleLeftCell className="left-cell-border">
+                    교육구분
+                  </TableDoubleLeftCell>
+                  <TableDoubleRightCell className="right-cell">
+                    {watch().userBusinessType === 'FREIGHT' ? '화물' : '여객'}
+                  </TableDoubleRightCell>
+                </TableDoubleParantLeftCell>
+                <TableDoubleParantLeftCell>
+                  <TableDoubleLeftCell className="left-cell-border">
+                    업종
+                  </TableDoubleLeftCell>
+                  <TableDoubleRightCell className="right-cell">
+                    <FormControl fullWidth>
+                      <Select
+                        {...register('userSubBusinessType')}
+                        onChange={e => {
+                          onChangeBusinessSubType(e.target.value);
+                        }}
+                        value={watch().userSubBusinessType || ''}
+                        disabled={isStudyPeriod || isAfterStudyDate}
+                      >
+                        {userBusinessTypeTwo
+                          .filter(filter => filter.TYPE_BUSINESS === watch().businessType)
+                          .map(item => (
+                            <MenuItem key={item.enType} value={item.enType}>
+                              {item.type}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
+                  </TableDoubleRightCell>
+                </TableDoubleParantLeftCell>
+              </TableDoubleRow>
+            )}
 
             <TableRow>
               <TableLeftCell className="left-cell-border">회사명</TableLeftCell>

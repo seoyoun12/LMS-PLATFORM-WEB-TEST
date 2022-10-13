@@ -119,24 +119,28 @@ export function CalendarHeader({
         /> */}
       </DateWrap>
 
-      <FilterWrap mt={2}>
-        {filterList.map(item => (
-          <FilterButton
-            key={item.enType}
-            variant="contained"
-            onClick={onChangeFilter}
-            value={item.enType}
-            sx={{
-              background: filter === item.enType ? '#256aef' : '#d8d6d6',
-              '&:hover': {
-                backgroundColor: filter === item.enType ? '#143c89' : '#919191',
-              },
-            }}
-          >
-            {item.type}
-          </FilterButton>
-        ))}
-      </FilterWrap>
+      {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS' ? (
+        ''
+      ) : (
+        <FilterWrap mt={2}>
+          {filterList.map(item => (
+            <FilterButton
+              key={item.enType}
+              variant="contained"
+              onClick={onChangeFilter}
+              value={item.enType}
+              sx={{
+                background: filter === item.enType ? '#256aef' : '#d8d6d6',
+                '&:hover': {
+                  backgroundColor: filter === item.enType ? '#143c89' : '#919191',
+                },
+              }}
+            >
+              {item.type}
+            </FilterButton>
+          ))}
+        </FilterWrap>
+      )}
     </CalendarHeaderWrap>
   );
 }

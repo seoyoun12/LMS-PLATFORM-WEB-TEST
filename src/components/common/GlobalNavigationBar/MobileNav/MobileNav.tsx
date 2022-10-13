@@ -170,8 +170,8 @@ export default function MobileNav() {
     mainDisplayType: MainDisplayType;
   }) => {
     const isEqual = userInfoData.regCategory.includes(item.regCategory);
-    if (item.mainDisplayType === 'EDUCATION_GROUND_BUS_DRIVER')
-      return window.alert('준비중 입니다.');
+    // if (item.mainDisplayType === 'EDUCATION_GROUND_BUS_DRIVER')
+    //   return window.alert('준비중 입니다.');
     if (item.mainDisplayType === 'EDUCATION_PROVINCIAL_TRAFFIC_SAFETY')
       return window.alert('준비중 입니다.');
     //로그인안되었거나 유저데이터가 앙 없거나 이상할때

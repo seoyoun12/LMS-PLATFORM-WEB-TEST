@@ -24,8 +24,14 @@ export const CategoryCarouselMobile = ({ datas: deprecated }: { datas: Array<any
   const [secondSwiper, setSecondSwiper] = useState();
   const [swiperPageNumber, setSwiperPageNumber] = useState(0);
   // const { data, error } = useBannerList();
-  const { data } = useBannerList();
+  const { data: BannerData } = useBannerList();
   const isDesktop = useResponsive(768);
+  // 배너 타입 결정
+  const data = BannerData?.filter(item =>
+    localStorage.getItem('site_course_type') === 'TYPE_TRANS_WORKER'
+      ? item.bannerTypeEnums === 'BANNER_TYPE_TRANSPORT_WORKER'
+      : item.bannerTypeEnums === 'BANNER_TYPE_LOW_FLOOR_BUS'
+  );
 
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);

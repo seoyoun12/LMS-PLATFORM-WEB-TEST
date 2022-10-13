@@ -122,6 +122,7 @@ export function BannerModify() {
           '"script"단어가 포함되어있어 수정이 불가능합니다. 해당 단어를 제거해주세요',
       });
     try {
+      setLoading(true);
       const { data }: { data: BannerRes } = await modifyBannerAdm(Number(bannerId), rest);
       if (watch().files.length !== 0) {
         if (fileSeq)
@@ -169,6 +170,7 @@ export function BannerModify() {
         cancelText: '취소',
       });
       if (dialogConfirmed) {
+        setLoading(true);
         await removeBannerAdm(bannerSeq);
         snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
         router.push(`/admin-center/banner`);
@@ -361,8 +363,8 @@ export function BannerModify() {
           배너 수정시 상태 , 게시종료일자를 모두 업데이트 해야합니다!
         </Typography>
         <ButtonBox>
-          <SubmitBtn variant="contained" type="submit">
-            수정
+          <SubmitBtn variant="contained" type="submit" disabled={loading}>
+            {loading ? <Spinner fit={true} /> : '수정'}
           </SubmitBtn>
           <DeleteBtn
             color="warning"

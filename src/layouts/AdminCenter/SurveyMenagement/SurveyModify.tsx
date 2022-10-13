@@ -11,6 +11,7 @@ import {
   SurveyRequestDto,
 } from '@common/api/Api';
 import { SurveyQuestionItem } from '@components/admin-center';
+import { Spinner } from '@components/ui';
 import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -46,7 +47,7 @@ export function SurveyModify() {
   const [disableTitle, setDisableTitle] = useState(false);
   const [title, setTitle] = useState<string>();
   const [type, setType] = useState<QuestionType>(QuestionType.TYPE_MULTIPLE_CHOICE);
-
+  const [loading, setLoading] = useState(false);
   const { register, setValue, watch, reset } = useForm<SurveyQuestionRequestDto>({
     defaultValues: defaultValue,
   });
@@ -171,6 +172,7 @@ export function SurveyModify() {
           title,
           surveyQuestionList: arr,
         };
+        setLoading(true);
         await modifySurvey(Number(surveySeq), data);
         snackbar({ variant: 'success', message: '수정 완료했습니다.' });
         router.push(`/admin-center/survey`);
@@ -182,6 +184,8 @@ export function SurveyModify() {
 
   const onClickDelete = async () => {
     try {
+      setLoading(true);
+
       const dialogConfirmed = await dialog({
         title: '콘텐츠 삭제하기',
         description: '정말로 삭제하시겠습니까?',
@@ -289,7 +293,12 @@ export function SurveyModify() {
               />
             </>
           )}
-          <Button variant="contained" onClick={onClickAddQuestion} fullWidth>
+          <Button
+            variant="contained"
+            onClick={onClickAddQuestion}
+            fullWidth
+            sx={{ mt: '10px;', mb: '10px' }}
+          >
             추가
           </Button>
 
@@ -297,21 +306,44 @@ export function SurveyModify() {
             <SurveyQuestionItem item={item} setQuestions={setQuestions} />
           ))}
         </Box>
-        <Button variant="contained" onClick={onClickModifySubmit} fullWidth>
-          수정
-        </Button>
-        <Button
-          variant="contained"
-          color="warning"
-          onClick={onClickDelete}
-          sx={{ marginTop: '2rem' }}
-          fullWidth
-        >
-          삭제
-        </Button>
+        <ButtonBox>
+          <SubmitBtn
+            variant="contained"
+            onClick={onClickModifySubmit}
+            fullWidth
+            disabled={loading}
+          >
+            {loading ? <Spinner fit={true} /> : '수정'}
+          </SubmitBtn>
+          <DeleteBtn
+            variant="contained"
+            color="warning"
+            onClick={onClickDelete}
+            // sx={{ marginTop: '2rem' }}
+            fullWidth
+            disabled={loading}
+          >
+            {loading ? <Spinner fit={true} /> : '삭제'}
+          </DeleteBtn>
+        </ButtonBox>
       </Container>
     </SurveyModifyWrap>
   );
 }
 
 const SurveyModifyWrap = styled(Box)``;
+
+const ButtonBox = styled(Box)`
+  margin: 20px 0 20px 0;
+`;
+
+const SubmitBtn = styled(Button)`
+  width: 15%;
+  float: right;
+  margin: 0 0 0 5px;
+`;
+
+const DeleteBtn = styled(Button)`
+  width: 15%;
+  float: right;
+`;

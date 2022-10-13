@@ -5,6 +5,7 @@ import {
   SurveyRequestDto,
 } from '@common/api/Api';
 import { SurveyQuestionItem } from '@components/admin-center';
+import { Spinner } from '@components/ui';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
@@ -52,6 +53,7 @@ export function SurveyUpload() {
   const [type, setType] = useState<QuestionType>(QuestionType.TYPE_MULTIPLE_CHOICE);
   const [title, setTitle] = useState<string>();
   const [disableTitle, setDisableTitle] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { register, watch, setValue, handleSubmit, reset } =
     useForm<SurveyQuestionRequestDto>({ defaultValues: defaultValue });
 
@@ -101,6 +103,7 @@ export function SurveyUpload() {
       };
     });
     try {
+      setLoading(true);
       const data: SurveyRequestDto = {
         title,
         surveyQuestionList: arr,
@@ -210,9 +213,16 @@ export function SurveyUpload() {
             <SurveyQuestionItem item={item} setQuestions={setQuestions} />
           ))}
         </Box>
-        <Button variant="contained" onClick={onClickSubmit} fullWidth>
-          업로드
-        </Button>
+        <ButtonBox>
+          <SubmitBtn
+            variant="contained"
+            onClick={onClickSubmit}
+            fullWidth
+            disabled={loading}
+          >
+            {loading ? <Spinner fit={true} /> : '업로드'}
+          </SubmitBtn>
+        </ButtonBox>
       </Container>
     </SurveyUploadWrap>
   );
@@ -226,4 +236,19 @@ const SurveyUploadWrap = styled(Box)`
   .question-child:last-child {
     border-bottom: none;
   }
+`;
+
+const ButtonBox = styled(Box)`
+  margin: 20px 0 20px 0;
+`;
+
+const SubmitBtn = styled(Button)`
+  width: 15%;
+  float: right;
+  margin: 0 0 0 5px;
+`;
+
+const DeleteBtn = styled(Button)`
+  width: 15%;
+  float: right;
 `;

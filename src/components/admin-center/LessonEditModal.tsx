@@ -134,7 +134,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
     };
 
     try {
-      if (files) {
+      if (files.length > 0) {
         await modifyLesson({ lessonSeq: lesson.seq, lesson });
         await fileHandler(files, lesson);
         const isTrue = await handleProgressStatus();

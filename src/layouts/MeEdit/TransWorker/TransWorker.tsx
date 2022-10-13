@@ -29,6 +29,7 @@ import {
   TableRow,
   TableCell,
   SwitchProps,
+  Backdrop,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent, useEffect, useState } from 'react';
@@ -168,6 +169,7 @@ export function TransWorker({ type, locationList }: Props) {
   const dialog = useDialog();
   const snackbar = useSnackbar();
   const router = useRouter();
+  const [backdropLoading, setBackdropLoading] = useState(false);
   const [loading, setLoading] = useState(false);
 
   //  /[^0-9]/g 은 문자넣으면 true
@@ -176,20 +178,27 @@ export function TransWorker({ type, locationList }: Props) {
 
   useEffect(() => {
     (async function () {
-      const { data } = await getTransport();
-      if (data.s3Files.length > 0) {
-        setValue('fileSeq', data.s3Files[0].seq);
-        setValue('filePath', data.s3Files[0].path);
+      try {
+        setBackdropLoading(true);
+        const { data } = await getTransport();
+        if (data.s3Files.length > 0) {
+          setValue('fileSeq', data.s3Files[0].seq);
+          setValue('filePath', data.s3Files[0].path);
+        }
+        setVehicleNumber(data.carNumber);
+        setCompany(data.company);
+        setPhone(isStringInPhone(data.phone) ? data.phone.slice(0, 3) : '');
+        setPhone2(isStringInPhone(data.phone) ? data.phone.slice(3, 7) : '');
+        setPhone3(isStringInPhone(data.phone) ? data.phone.slice(7, 11) : '');
+        setSmsChecked(data.smsYn === YN.YES ? true : false);
+        setOccupation1(data.userBusinessTypeOne);
+        setOccupation2(data.userBusinessTypeTwo);
+        setVehicleRegi(data.userRegistrationType);
+        setBackdropLoading(false);
+      } catch (e: any) {
+        snackbar({ variant: 'error', message: e.data.message });
+        setBackdropLoading(false);
       }
-      setVehicleNumber(data.carNumber);
-      setCompany(data.company);
-      setPhone(isStringInPhone(data.phone) ? data.phone.slice(0, 3) : '');
-      setPhone2(isStringInPhone(data.phone) ? data.phone.slice(3, 7) : '');
-      setPhone3(isStringInPhone(data.phone) ? data.phone.slice(7, 11) : '');
-      setSmsChecked(data.smsYn === YN.YES ? true : false);
-      setOccupation1(data.userBusinessTypeOne);
-      setOccupation2(data.userBusinessTypeTwo);
-      setVehicleRegi(data.userRegistrationType);
     })();
 
     return () => {
@@ -257,10 +266,12 @@ export function TransWorker({ type, locationList }: Props) {
   const handleFileChange = async (e: ChangeEvent) => {
     e.preventDefault();
 
+    setBackdropLoading(true);
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setValue('urlImage', URL.createObjectURL(files[0]));
     setFileName(files[0].name);
+    setTimeout(() => setBackdropLoading(false), 200);
   };
 
   const fileHandler = async (files: File[], userSeq: number) => {
@@ -497,6 +508,9 @@ export function TransWorker({ type, locationList }: Props) {
             {loading ? <Spinner fit={true} /> : '수정하기'}
           </SubmitButton>
         </Box>
+        <Backdrop open={backdropLoading}>
+          <Spinner />
+        </Backdrop>
       </TransAndLowFloorContainer>
     </>
   );

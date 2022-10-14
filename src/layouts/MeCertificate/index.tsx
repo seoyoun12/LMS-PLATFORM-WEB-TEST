@@ -181,7 +181,15 @@ const MeCertificate: NextPage = () => {
           </>
         )}
       </MeCertificateContentContainer>
-      <Backdrop open={showCertificateFetchState === 'SUCCESS' ? false : true}>
+      <Backdrop
+        open={
+          showCertificateFetchState === 'SUCCESS' ||
+          showCertificateFetchState === 'READY' ||
+          showCertificateFetchState === 'FAILURE'
+            ? false
+            : true
+        }
+      >
         <Spinner />
       </Backdrop>
     </MeCertificateContainer>

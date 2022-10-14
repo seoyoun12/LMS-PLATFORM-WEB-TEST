@@ -45,6 +45,23 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       try {
         if (router.route === '/') return;
 
+        console.log('router', router);
+
+        // 메인에서 운수 or 저상으로 이동시 도메인에 값 추가
+        if (router.query.type === 'unsu') {
+          // console.log('운수');
+          // router.push('/category?type=unsu');
+          // localStorage.setItem('site_course_type', null);
+          localStorage.setItem('site_course_type', courseType.TYPE_TRANS_WORKER);
+          router.push('/category');
+        } else if (router.query.type === 'jeosang') {
+          // console.log('저상');
+          // router.push('/category?type=jeosang');
+          // localStorage.setItem('site_course_type', null);
+          localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
+          router.push('/category');
+        }
+
         const currentPageNotNeedLogin = notNeededLoginPathList.some(item =>
           router.route.includes(item.href)
         );

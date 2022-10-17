@@ -16,7 +16,7 @@
 .figcaption{
   position:relative;
   width:300px; height:300px;
-  background:rgba(0,0,0,0.1); /* 투명도 */
+  background:rgba(0,0,0,0.5); /* 투명도 */
   opacity:0;
   transition: all 0.5s;
   box-sizing: border-box;

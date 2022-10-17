@@ -119,12 +119,12 @@ export function CategoryCard() {
           ))}
           {/*  */}
           {/* <Box className="figure">
-            <Box className="figcaption">
-              <Box className="line">
-                <span>card</span>
+              <Box className="figcaption">
+                <Box className="line">
+                  <span>card</span>
+                </Box>
               </Box>
-            </Box>
-          </Box> */}
+            </Box> */}
           {/*  */}
         </GridWrap>
       </Container>

@@ -35,11 +35,6 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
       ? item.bannerTypeEnums === 'BANNER_TYPE_TRANSPORT_WORKER'
       : item.bannerTypeEnums === 'BANNER_TYPE_LOW_FLOOR_BUS'
   );
-  // console.log('필터링 배너 데이터 : ', data);
-
-  // useEffect(() => {}, []);
-
-  // console.log('카테고리케러셀데이터 : ', data);
 
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);

@@ -120,10 +120,6 @@ export enum registerType {
   TYPE_TRAFFIC_SAFETY_EDU = 'TYPE_TRAFFIC_SAFETY_EDU',
 }
 
-// export enum authoritiesType {
-//   TYPE_
-// }
-
 export interface User {
   // authorities: ;
   birth: string;

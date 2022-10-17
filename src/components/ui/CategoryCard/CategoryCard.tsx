@@ -1,6 +1,13 @@
 import styles from '@styles/common.module.scss';
 import styled from '@emotion/styled';
-import { Box, Button, Container, Grid, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  cardActionAreaClasses,
+  Container,
+  Grid,
+  Typography,
+} from '@mui/material';
 import { Link } from '@components/common';
 import CalendarIcon from '/public/assets/svgs/calendarIcon.svg';
 import PromiseIcon from '/public/assets/svgs/promiseIcon.svg';
@@ -79,6 +86,7 @@ export function CategoryCard() {
               <GridLink href={categoryData.href} width="100px  " underline="none">
                 <Box
                   sx={{
+                    // border: '1px solid red',
                     border: `5px solid ${categoryData.color}`,
                     // width: 'fit-content',
                     margin: 'auto',
@@ -109,6 +117,15 @@ export function CategoryCard() {
               </GridLink>
             </GridItem>
           ))}
+          {/*  */}
+          {/* <Box className="figure">
+            <Box className="figcaption">
+              <Box className="line">
+                <span>card</span>
+              </Box>
+            </Box>
+          </Box> */}
+          {/*  */}
         </GridWrap>
       </Container>
     </CardWrap>

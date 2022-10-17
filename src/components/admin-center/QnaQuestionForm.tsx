@@ -114,7 +114,15 @@ export function QnaQuestionForm() {
                   }
                 }}
               >
-                {data?.s3Files[0].name}
+                <FileChip
+                  icon={<SaveIcon />}
+                  sx={{ cursor: 'pointer' }}
+                  label={
+                    <Box sx={{ display: 'flex' }}>
+                      <Box>{data?.s3Files[0]?.name}</Box>
+                    </Box>
+                  }
+                />
               </Button>
             ) : (
               '파일없음'

@@ -24,7 +24,7 @@ export function Step3StudentList({
         .filter(item => item.enType === trafficInfo?.candidateType)[0]
         ?.category.filter(fil => fil.enType === trafficInfo?.candidateDetailType)
         .map(item => {
-          console.log(item);
+          // console.log(item);
           return (
             <TableContainer sx={{ width: '50%', margin: 'auto', marginTop: '2rem' }}>
               <Table sx={{ borderTop: '2px solid #c3c3c3' }}>

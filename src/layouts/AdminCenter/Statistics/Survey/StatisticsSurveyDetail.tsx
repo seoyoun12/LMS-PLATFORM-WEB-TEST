@@ -67,7 +67,7 @@ export function StatisticsSurveyDetail() {
       a.click();
       a.remove();
       URL.revokeObjectURL(a.href);
-      console.log('엑셀', data);
+      // console.log('엑셀', data);
       snackbar({ variant: 'success', message: '다운로드 완료' });
       setLoading(false);
     } catch (e) {

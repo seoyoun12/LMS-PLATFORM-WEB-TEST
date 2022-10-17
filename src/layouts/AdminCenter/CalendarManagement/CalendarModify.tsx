@@ -115,7 +115,7 @@ export function CalendarModify() {
         confirmText: '확인',
         cancelText: '취소',
       });
-      console.log(rest, 'dd');
+      // console.log(rest, 'dd');
 
       if (!dialogConfirmed) return setLoading(false);
       await modifyCourseClass({

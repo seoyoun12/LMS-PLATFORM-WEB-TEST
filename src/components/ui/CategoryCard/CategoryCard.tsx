@@ -1,5 +1,6 @@
 import styles from '@styles/common.module.scss';
 import styled from '@emotion/styled';
+import { keyframes } from 'styled-components';
 import {
   Box,
   Button,
@@ -118,6 +119,7 @@ export function CategoryCard() {
             </GridItem>
           ))}
           {/*  */}
+          {/* <PracticeBox className="sample"> */}
           {/* <Box className="figure">
               <Box className="figcaption">
                 <Box className="line">
@@ -125,6 +127,7 @@ export function CategoryCard() {
                 </Box>
               </Box>
             </Box> */}
+          {/* </PracticeBox> */}
           {/*  */}
         </GridWrap>
       </Container>
@@ -194,3 +197,19 @@ const GridLink = styled(Link)`
   text-align: center;
   color: black;
 `;
+
+// const PracticeBox = styled(Box)`
+//   width: 100px;
+//   height: 100px;
+//   border: 1px solid black;
+//   animation: fadein 3s;
+
+//   @keyframes fadein {
+//     from {
+//       opacity: 0;
+//     }
+//     to {
+//       opacity: 1;
+//     }
+//   }
+// `;

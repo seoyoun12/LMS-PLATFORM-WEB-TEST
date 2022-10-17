@@ -187,7 +187,7 @@ export function CourseModuleUploadModal({
       }
     })();
   }, []);
-  console.log(watch());
+  // console.log(watch());
 
   const onChangeSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSurveySeq(Number(e.target.value));

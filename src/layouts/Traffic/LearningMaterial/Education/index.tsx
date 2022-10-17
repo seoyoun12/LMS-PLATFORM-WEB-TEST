@@ -29,7 +29,7 @@ interface EducationLayoutProps {
 export default function EducationLayout({ materialType }: EducationLayoutProps) {
   const [tabType, setTabType] = useState<MaterialSubType | ''>('');
   const { data } = useGetLearningMaterial(materialType, tabType);
-  console.log(data);
+  // console.log(data);
 
   const [selectedPost, setSelectedPost] = useState<number | null>(null);
 

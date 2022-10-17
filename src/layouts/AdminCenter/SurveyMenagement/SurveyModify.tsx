@@ -132,7 +132,7 @@ export function SurveyModify() {
         convertedChoice[key] = item[key];
       });
       // setValue('surveyMultipleChoice', convertedChoice);
-      console.log('객객객', watch(), convertedChoice);
+      // console.log('객객객', watch(), convertedChoice);
       // watch().surveyMultipleChoice
       setQuestions(prev => [
         ...prev,
@@ -149,7 +149,7 @@ export function SurveyModify() {
       setDisableTitle(true);
     }
   };
-  console.log(watch(), questions);
+  // console.log(watch(), questions);
 
   const onClickModifySubmit = async () => {
     let arr = questions.map(item => {

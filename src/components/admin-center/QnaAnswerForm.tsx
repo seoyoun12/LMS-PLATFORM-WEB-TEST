@@ -119,6 +119,10 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
                 <div>
                   {data.qnaAnswer?.s3Files[0] ? (
                     <Button
+                      sx={{
+                        padding: '0px',
+                        borderRadius: '15px',
+                      }}
                       onClick={async () => {
                         try {
                           const blobData = await downloadFile(

@@ -99,7 +99,10 @@ export function QnaQuestionForm() {
           <TableRightCell>
             {data?.s3Files[0] ? (
               <Button
-                sx={{ padding: '0px' }}
+                sx={{
+                  padding: '0px',
+                  borderRadius: '15px',
+                }}
                 onClick={async () => {
                   try {
                     const blobData = await downloadFile(data.s3Files[0].seq);

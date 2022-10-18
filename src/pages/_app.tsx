@@ -3,7 +3,7 @@ import '@styles/muiButton.scss';
 import '@styles/palette.scss';
 import '../../styles/font.css';
 // import '../../styles/card01.css';
-import '../../styles/card02.css';
+// import '../../styles/card02.css';
 
 import { AppProps } from 'next/app';
 import { ManagedUIContext } from '@components/ui';

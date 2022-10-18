@@ -23,7 +23,13 @@ function Label({ children }: { children: ReactNode }) {
   );
 }
 
-const FileUploaderRoot = ({ onFileChange, register, regName, accept = undefined, children }: Props) => {
+const FileUploaderRoot = ({
+  onFileChange,
+  register,
+  regName,
+  accept = undefined,
+  children,
+}: Props) => {
   const inputRef = useRef<HTMLDivElement>(null);
   const { onChange, onBlur, name, ref } = register(regName);
 

@@ -121,7 +121,7 @@ export enum registerType {
 }
 
 export interface User {
-  // authorities: ;
+  authorities: authoritiesType;
   birth: string;
   createdDtime: string;
   email: string;

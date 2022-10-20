@@ -53,7 +53,8 @@ const headRows: {
 
 interface FormType {
   page: number;
-  courseType: string;
+  nameOrUsername?: string;
+  courseType?: CourseType;
   completeType: CompleteType | null;
   statusType: StatusType | null;
   courseSeq: number | null;
@@ -64,6 +65,14 @@ interface FormType {
 
 const defaultValues = {
   page: 0,
+  // courseType: string,
+  nameOrUsername: '',
+  completeType: null,
+  statusType: null,
+  courseSeq: null,
+  courseClassSeq: null,
+  businessType: null,
+  carRegitRegion: null,
 };
 
 export function CourseInfoManagement() {
@@ -78,22 +87,26 @@ export function CourseInfoManagement() {
   const [businessType, setBusinessType] = useState<string | null>(null); //업종타입
   const [carRegitRegion, setCarRegitRegion] = useState<string | null>(null); //차량등록지
   const searchInputRef = useRef<HTMLInputElement | null>(null);
-  const { data, error, mutate } = useLearningInfo({
-    page,
-    // courseType,
-    completeType,
-    statusType,
-    nameOrUsername,
-    courseSeq,
-    courseClassSeq,
-    businessType,
-    carRegitRegion,
-  });
 
   const { watch, setValue, reset, register } = useForm<FormType>({ defaultValues });
+  const { data, error, mutate } = useLearningInfo(
+    {
+      page,
+      // courseType,
+      completeType,
+      statusType,
+      nameOrUsername,
+      courseSeq,
+      courseClassSeq,
+      businessType,
+      carRegitRegion,
+    }
+    // watch()
+  );
 
   // Pagination
   const onChangePage = (page: number) => {
+    setValue('page', page);
     setPage(page);
   };
 
@@ -101,24 +114,30 @@ export function CourseInfoManagement() {
   const onChageCourseSeq = (courseSeq: number | null) => {
     setNotFound(false);
     if (!courseSeq) return setCourseSeq(null);
+    if (!courseSeq) return setValue('courseSeq', null);
     setCourseSeq(courseSeq);
+    setValue('courseSeq', courseSeq);
   };
   //기수 선택
   const onChageCourseClassSeq = (courseClassSeq: number | null) => {
     setNotFound(false);
     if (!courseSeq) return setCourseClassSeq(null);
+    if (!courseSeq) return setValue('courseClassSeq', null);
     setCourseClassSeq(courseClassSeq);
+    setValue('courseClassSeq', courseClassSeq);
   };
 
   //업종구분
   const onChangeBusinessType = (value: string) => {
     setNotFound(false);
     setBusinessType(value);
+    setValue('businessType', value);
   };
   //차량등록지
   const onChangeCarRegitRegion = (value: string) => {
     setNotFound(false);
     setCarRegitRegion(value);
+    setValue('carRegitRegion', value);
   };
 
   //change completeType(수료여부)

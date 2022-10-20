@@ -23,11 +23,20 @@ export function HeadRowsRight({}: Props) {
         <Typography>업체명</Typography>
         <TextField fullWidth />
       </Box>
+      <Box width="100%">
+        <Typography>핸드폰번호</Typography>
+        <TextField fullWidth />
+      </Box>
+      <Box width="100%">
+        <Typography>주민번호</Typography>
+        <TextField fullWidth />
+      </Box>
     </HeadRowsRightWrap>
   );
 }
 const HeadRowsRightWrap = styled(Box)`
   display: flex;
+  flex-direction: column;
   gap: 4px;
   width: 33.3%;
 `;

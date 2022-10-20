@@ -28,31 +28,20 @@ import { Spinner } from '@components/ui';
 
 interface Props {
   //   searchInputRef: React.MutableRefObject<HTMLInputElement>;
-  search: string;
   completeType: CompleteType | null;
   statusType: StatusType | null;
   handleSearch: (e: React.FormEvent, isReload?: boolean) => Promise<void>;
   onChangeCompleteType: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeStatusType: (e: React.ChangeEvent<HTMLInputElement>) => void;
-
-  businessType: string | null;
-  onChangeBusinessType: (value: string) => void;
-  carRegitRegion: string | null;
-  onChangeCarRegitRegion: (value: string) => void;
 }
 
 export const HeadRowsCenter = React.forwardRef(function (
   {
-    search,
     completeType,
     statusType,
-    businessType,
-    carRegitRegion,
     handleSearch,
     onChangeCompleteType,
     onChangeStatusType,
-    onChangeBusinessType,
-    onChangeCarRegitRegion,
   }: Props,
   searchInputRef
 ) {
@@ -80,38 +69,6 @@ export const HeadRowsCenter = React.forwardRef(function (
   return (
     <HeadRows>
       <Box>
-        <Box display="flex" gap={1}>
-          <Box width="50%">
-            <Box>업종</Box>
-            <Select
-              onChange={e => onChangeBusinessType(e.target.value)}
-              value={String(businessType)}
-              fullWidth
-            >
-              <MenuItem value={null}>-없음-</MenuItem>
-              {userBusinessTypeOne.map(item => (
-                <MenuItem key={item.enType} value={item.enType}>
-                  {item.type}
-                </MenuItem>
-              ))}
-            </Select>
-          </Box>
-          <Box width="50%">
-            <Box>차량등록지</Box>
-            <Select
-              onChange={e => onChangeCarRegitRegion(e.target.value)}
-              value={String(carRegitRegion)}
-              fullWidth
-            >
-              <MenuItem value={null}>-없음-</MenuItem>
-              {locationList.map(item => (
-                <MenuItem key={item.en} value={item.en}>
-                  {item.ko}
-                </MenuItem>
-              ))}
-            </Select>
-          </Box>
-        </Box>
         <Box>수료여부</Box>
         <Radio
           value={null}
@@ -172,7 +129,7 @@ export const HeadRowsCenter = React.forwardRef(function (
         >
           전체 다시 불러오기
         </ReloadButton>
-        <Button
+        {/* <Button
           variant="contained"
           color="success"
           disabled={loading}
@@ -186,12 +143,9 @@ export const HeadRowsCenter = React.forwardRef(function (
               학습현황 엑셀다운로드
             </>
           )}
-        </Button>
+        </Button> */}
       </Box>
 
-      <Box mt={2} mb={2} fontSize={18} fontWeight="bold">
-        {search !== '' && `검색어 : ${search}`}
-      </Box>
       <Backdrop open={loading}>
         <Box
           display="flex"

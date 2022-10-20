@@ -19,9 +19,11 @@ import {
 import { useEffect, useState } from 'react';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 
-interface Props {}
+interface Props {
+  search: string;
+}
 
-export function HeadRowsBottom({}: Props) {
+export function HeadRowsBottom({ search }: Props) {
   const snackbar = useSnackbar();
   const [loading, setLoading] = useState(false);
   const onClickExcelDownload = async () => {
@@ -45,6 +47,9 @@ export function HeadRowsBottom({}: Props) {
   return (
     <HeadRowsBottomWrap>
       {/* <Button variant="contained">검색하기</Button> */}
+      <Box mt={2} mb={2} fontSize={18} fontWeight="bold">
+        {search !== '' && `검색어 : ${search}`}
+      </Box>
       <Button
         variant="contained"
         color="success"
@@ -79,6 +84,5 @@ const HeadRowsBottomWrap = styled(Box)`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  flex-direction: row-reverse;
   gap: 4px;
 `;

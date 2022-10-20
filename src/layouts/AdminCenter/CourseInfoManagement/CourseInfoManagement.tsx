@@ -59,11 +59,17 @@ interface FormType {
   statusType: StatusType | null;
   courseSeq: number | null;
   courseClassSeq: number | null;
-  businessType: string | null;
+  businessName: string; //업체명
+  businessType: string | null; //업종 PASSENGER , FREIGHT
   carRegitRegion: string | null;
+  carNumber: string | null; //차량번호
+  studyStartDate: string; //학습시작일
+  studyEndDate: string; //학습종료일
+  phone: string; //전화번호
+  identityNumber: string; //주민번호 (-포함)
 }
 
-const defaultValues = {
+const defaultValues: FormType = {
   page: 0,
   // courseType: string,
   nameOrUsername: '',
@@ -71,21 +77,27 @@ const defaultValues = {
   statusType: null,
   courseSeq: null,
   courseClassSeq: null,
+  businessName: '',
   businessType: null,
   carRegitRegion: null,
+  carNumber: null,
+  studyStartDate: '',
+  studyEndDate: '',
+  phone: '',
+  identityNumber: '',
 };
 
 export function CourseInfoManagement() {
   const router = useRouter();
   const [notFound, setNotFound] = useState(false);
-  const [page, setPage] = useState(0);
-  const [nameOrUsername, setNameOrUsername] = useState<string>(''); //이름 혹은 아이디
-  const [completeType, setCompleteType] = useState<CompleteType | null>(null); //수료타입
-  const [statusType, setStatusType] = useState<StatusType | null>(null); //상태타입
-  const [courseSeq, setCourseSeq] = useState<number | null>(null);
-  const [courseClassSeq, setCourseClassSeq] = useState<number | null>(null); // 과정클래스
-  const [businessType, setBusinessType] = useState<string | null>(null); //업종타입
-  const [carRegitRegion, setCarRegitRegion] = useState<string | null>(null); //차량등록지
+  // const [page, setPage] = useState(0);
+  // const [nameOrUsername, setNameOrUsername] = useState<string>(''); //이름 혹은 아이디
+  // const [completeType, setCompleteType] = useState<CompleteType | null>(null); //수료타입
+  // const [statusType, setStatusType] = useState<StatusType | null>(null); //상태타입
+  // const [courseSeq, setCourseSeq] = useState<number | null>(null);
+  // const [courseClassSeq, setCourseClassSeq] = useState<number | null>(null); // 과정클래스
+  // const [businessType, setBusinessType] = useState<string | null>(null); //업종타입
+  // const [carRegitRegion, setCarRegitRegion] = useState<string | null>(null); //차량등록지
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
   const { watch, setValue, reset, register } = useForm<FormType>({ defaultValues });
@@ -107,36 +119,36 @@ export function CourseInfoManagement() {
   // Pagination
   const onChangePage = (page: number) => {
     setValue('page', page);
-    setPage(page);
+    // setPage(page);
   };
 
   //과정 선택
   const onChageCourseSeq = (courseSeq: number | null) => {
     setNotFound(false);
-    if (!courseSeq) return setCourseSeq(null);
+    // if (!courseSeq) return setCourseSeq(null);
     if (!courseSeq) return setValue('courseSeq', null);
-    setCourseSeq(courseSeq);
+    // setCourseSeq(courseSeq);
     setValue('courseSeq', courseSeq);
   };
   //기수 선택
   const onChageCourseClassSeq = (courseClassSeq: number | null) => {
     setNotFound(false);
-    if (!courseSeq) return setCourseClassSeq(null);
-    if (!courseSeq) return setValue('courseClassSeq', null);
-    setCourseClassSeq(courseClassSeq);
+    // if (!courseSeq) return setCourseClassSeq(null);
+    if (!watch().courseSeq) return setValue('courseClassSeq', null);
+    // setCourseClassSeq(courseClassSeq);
     setValue('courseClassSeq', courseClassSeq);
   };
 
   //업종구분
   const onChangeBusinessType = (value: string) => {
     setNotFound(false);
-    setBusinessType(value);
+    // setBusinessType(value);
     setValue('businessType', value);
   };
   //차량등록지
   const onChangeCarRegitRegion = (value: string) => {
     setNotFound(false);
-    setCarRegitRegion(value);
+    // setCarRegitRegion(value);
     setValue('carRegitRegion', value);
   };
 
@@ -144,15 +156,21 @@ export function CourseInfoManagement() {
   const onChangeCompleteType = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setNotFound(false);
-    if (!value) return setCompleteType(null);
-    if (value === CompleteType.TYPE_COMPLETE) return setCompleteType(value);
-    if (value === CompleteType.TYPE_INCOMPLETE) return setCompleteType(value);
+    // if (!value) return setCompleteType(null);
+    // if (value === CompleteType.TYPE_COMPLETE) return setCompleteType(value);
+    // if (value === CompleteType.TYPE_INCOMPLETE) return setCompleteType(value);
+    if (!value) return setValue('completeType', null);
+    if (value === CompleteType.TYPE_COMPLETE) return setValue('completeType', value);
+    if (value === CompleteType.TYPE_INCOMPLETE) return setValue('completeType', value);
   };
 
   //퇴교여부
   const onChangeStatusType = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setNotFound(false);
+    // if (!value) return setStatusType(null);
+    // if (value === StatusType.TYPE_NORMAL) return setStatusType(value);
+    // if (value === StatusType.TYPE_OUT) return setStatusType(value);
     if (!value) return setValue('statusType', null);
     if (value === StatusType.TYPE_NORMAL) return setValue('statusType', value);
     if (value === StatusType.TYPE_OUT) return setValue('statusType', value);
@@ -163,15 +181,21 @@ export function CourseInfoManagement() {
     e.preventDefault();
     setNotFound(false);
     if (isReload) {
-      setPage(0);
-      setCourseClassSeq(null);
-      setCourseSeq(null);
-      setCompleteType(null);
-      setStatusType(null);
-      return setNameOrUsername('');
+      // setPage(0);
+      // setCourseClassSeq(null);
+      // setCourseSeq(null);
+      // setCompleteType(null);
+      // setStatusType(null);
+      setValue('page', 0);
+      setValue('courseClassSeq', null);
+      setValue('courseSeq', null);
+      setValue('completeType', null);
+      setValue('statusType', null);
+      return setValue('nameOrUsername', '');
     }
     if (searchInputRef.current) {
-      setNameOrUsername(searchInputRef.current.value);
+      setValue('nameOrUsername', searchInputRef.current.value);
+      // setNameOrUsername(searchInputRef.current.value);
     }
   };
 
@@ -257,27 +281,27 @@ export function CourseInfoManagement() {
         실험용 엑셀
       </Button> */}
       <CourseInfoTypography variant="h5">전체 수강생 학습현황</CourseInfoTypography>
-      <Box display="flex" flexDirection="column" gap={2}>
+      <Box display="flex" gap={2}>
         <HeadRowsLeft
-          courseSeq={courseSeq}
+          courseSeq={watch().courseSeq}
           onChageCourseSeq={onChageCourseSeq}
-          courseClassSeq={courseClassSeq}
+          courseClassSeq={watch().courseClassSeq}
           onChageCourseClassSeq={onChageCourseClassSeq}
         />
         <HeadRowsCenter
           ref={searchInputRef}
-          search={nameOrUsername}
-          completeType={completeType}
-          statusType={statusType}
+          search={watch().nameOrUsername}
+          completeType={watch().completeType}
+          statusType={watch().statusType}
           handleSearch={handleSearch}
           onChangeCompleteType={onChangeCompleteType}
           onChangeStatusType={onChangeStatusType}
-          businessType={businessType}
+          businessType={watch().businessType}
           onChangeBusinessType={onChangeBusinessType}
-          carRegitRegion={carRegitRegion}
+          carRegitRegion={watch().carRegitRegion}
           onChangeCarRegitRegion={onChangeCarRegitRegion}
         />
-        {/* <HeadRowsRight /> */}
+        <HeadRowsRight />
       </Box>
       <HeadRowsBottom />
       {notFound ? (

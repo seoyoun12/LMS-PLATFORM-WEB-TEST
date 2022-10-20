@@ -172,7 +172,7 @@ export const HeadRowsCenter = React.forwardRef(function (
         >
           전체 다시 불러오기
         </ReloadButton>
-        {/* <Button
+        <Button
           variant="contained"
           color="success"
           disabled={loading}
@@ -186,13 +186,13 @@ export const HeadRowsCenter = React.forwardRef(function (
               학습현황 엑셀다운로드
             </>
           )}
-        </Button> */}
+        </Button>
       </Box>
 
       <Box mt={2} mb={2} fontSize={18} fontWeight="bold">
         {search !== '' && `검색어 : ${search}`}
       </Box>
-      {/* <Backdrop open={loading}>
+      <Backdrop open={loading}>
         <Box
           display="flex"
           flexDirection="column"
@@ -203,7 +203,7 @@ export const HeadRowsCenter = React.forwardRef(function (
             다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
           </Box>
         </Box>
-      </Backdrop> */}
+      </Backdrop>
     </HeadRows>
   );
 });

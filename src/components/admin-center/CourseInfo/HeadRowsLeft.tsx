@@ -40,14 +40,14 @@ export function HeadRowsLeft({
 
   return (
     <HeadRowsLeftWrap>
-      {/* <BoxRow>
+      <BoxRow>
         <Box>
           <Typography>업종선택</Typography>
           <Radio />
           <Radio />
           <Radio />
         </Box>
-      </BoxRow> */}
+      </BoxRow>
       <BoxRow>
         <Box width="50%">
           <Typography>과정 선택</Typography>
@@ -76,7 +76,7 @@ export function HeadRowsLeft({
           </Select>
         </Box>
       </BoxRow>
-      {/* <Box>
+      <Box>
         <Typography>교육연도</Typography>
         <Select fullWidth>
           <MenuItem value={null}>전체</MenuItem>
@@ -93,7 +93,7 @@ export function HeadRowsLeft({
             <MenuItem value={null}>없음</MenuItem>
           </Select>
         </Box>
-      </Box> */}
+      </Box>
     </HeadRowsLeftWrap>
   );
 }

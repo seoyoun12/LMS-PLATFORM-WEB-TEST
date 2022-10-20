@@ -90,18 +90,18 @@ export function CourseInfoManagement() {
 
   const { watch, setValue, reset, register } = useForm<FormType>({ defaultValues });
   const { data, error, mutate } = useLearningInfo(
-    {
-      page,
-      // courseType,
-      completeType,
-      statusType,
-      nameOrUsername,
-      courseSeq,
-      courseClassSeq,
-      businessType,
-      carRegitRegion,
-    }
-    // watch()
+    // {
+    //   page,
+    //   // courseType,
+    //   completeType,
+    //   statusType,
+    //   nameOrUsername,
+    //   courseSeq,
+    //   courseClassSeq,
+    //   businessType,
+    //   carRegitRegion,
+    // }
+    watch()
   );
 
   // Pagination
@@ -153,9 +153,12 @@ export function CourseInfoManagement() {
   const onChangeStatusType = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setNotFound(false);
-    if (!value) return setStatusType(null);
-    if (value === StatusType.TYPE_NORMAL) return setStatusType(value);
-    if (value === StatusType.TYPE_OUT) return setStatusType(value);
+    // if (!value) return setStatusType(null);
+    // if (value === StatusType.TYPE_NORMAL) return setStatusType(value);
+    // if (value === StatusType.TYPE_OUT) return setStatusType(value);
+    if (!value) return setValue('statusType', null);
+    if (value === StatusType.TYPE_NORMAL) return setValue('statusType', value);
+    if (value === StatusType.TYPE_OUT) return setValue('statusType', value);
   };
 
   // 검색

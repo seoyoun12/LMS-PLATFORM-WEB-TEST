@@ -4,7 +4,15 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Box, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import {
+  Box,
+  Button,
+  Chip,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+} from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import dateFormat from 'dateformat';
@@ -16,6 +24,7 @@ import { downloadFile } from '@common/api/file';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { S3Files } from 'types/file';
 import { TuiViewer } from '@components/common/TuiEditor';
+import SaveIcon from '@mui/icons-material/Save';
 
 interface BoardAccordionAccordionList {
   seq: number;
@@ -92,7 +101,7 @@ export function BoardAccordionV2({
                   </BoardContent>
 
                   {/* <Box width="20%" /> */}
-                  <Box>
+                  {/* <Box>
                     {s3Files.length > 0 && (
                       <Box display="flex" alignItems="center" mt={4}>
                         {' '}
@@ -122,9 +131,43 @@ export function BoardAccordionV2({
                     >
                       {s3Files[0]?.name}
                     </Box>
-                  </Box>
+                  </Box> */}
+
+                  {s3Files[0]?.name ? (
+                    <Button
+                      sx={{
+                        padding: '0px',
+                        // backgroundColor: 'red',
+                        borderRadius: '15px',
+                      }}
+                      onClick={async () => {
+                        try {
+                          const blobData = await downloadFile(s3Files[0].seq);
+                          const url = window.URL.createObjectURL(new Blob([blobData]));
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = `${s3Files[0].name}`;
+                          a.click();
+                          a.remove();
+                        } catch (e: any) {
+                          console.log(e);
+                        }
+                      }}
+                    >
+                      <FileChip
+                        icon={<SaveIcon />}
+                        sx={{ cursor: 'pointer' }}
+                        label={
+                          <Box sx={{ display: 'flex' }}>
+                            <Box>{s3Files[0]?.name}</Box>
+                          </Box>
+                        }
+                      />
+                    </Button>
+                  ) : (
+                    ''
+                  )}
                 </BoardContentBox>
-                {/* // ))} */}
               </List>
             </nav>
           </BoardAccordionDetails>
@@ -199,4 +242,9 @@ const BoardContentBox = styled(Box)`
 const BoardContent = styled(Box)`
   /* width: 70%;
   white-space: pre-wrap; */
+`;
+
+const FileChip = styled(Chip)`
+  height: 36.5px;
+  padding: 0px;
 `;

@@ -1,6 +1,14 @@
 import styles from '@styles/common.module.scss';
 import styled from '@emotion/styled';
-import { Box, Button, Container, Grid, Typography } from '@mui/material';
+import { keyframes } from 'styled-components';
+import {
+  Box,
+  Button,
+  cardActionAreaClasses,
+  Container,
+  Grid,
+  Typography,
+} from '@mui/material';
 import { Link } from '@components/common';
 import CalendarIcon from '/public/assets/svgs/calendarIcon.svg';
 import PromiseIcon from '/public/assets/svgs/promiseIcon.svg';
@@ -79,6 +87,7 @@ export function CategoryCard() {
               <GridLink href={categoryData.href} width="100px  " underline="none">
                 <Box
                   sx={{
+                    // border: '1px solid red',
                     border: `5px solid ${categoryData.color}`,
                     // width: 'fit-content',
                     margin: 'auto',
@@ -109,6 +118,17 @@ export function CategoryCard() {
               </GridLink>
             </GridItem>
           ))}
+          {/*  */}
+          {/* <PracticeBox className="sample"> */}
+          {/* <Box className="figure">
+              <Box className="figcaption">
+                <Box className="line">
+                  <span>card</span>
+                </Box>
+              </Box>
+            </Box> */}
+          {/* </PracticeBox> */}
+          {/*  */}
         </GridWrap>
       </Container>
     </CardWrap>
@@ -177,3 +197,19 @@ const GridLink = styled(Link)`
   text-align: center;
   color: black;
 `;
+
+// const PracticeBox = styled(Box)`
+//   width: 100px;
+//   height: 100px;
+//   border: 1px solid black;
+//   animation: fadein 3s;
+
+//   @keyframes fadein {
+//     from {
+//       opacity: 0;
+//     }
+//     to {
+//       opacity: 1;
+//     }
+//   }
+// `;

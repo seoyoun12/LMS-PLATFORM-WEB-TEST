@@ -340,7 +340,7 @@ export function CourseInformation({
     // console.log('courseLearningInfoInput : ', courseLearningInfoInput);
   };
 
-  console.log('watch : ', watch());
+  // console.log('watch : ', watch());
 
   //
   //////////////////////////////////////////////////////////////////////////////////////////

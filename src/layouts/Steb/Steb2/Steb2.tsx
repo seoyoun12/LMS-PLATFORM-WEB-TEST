@@ -69,7 +69,7 @@ export default function Steb2() {
     setCheckElementList(scrollBoxList);
   }, []);
 
-  console.log(watch());
+  // console.log(watch());
 
   const scrollElement = (indexNumber: number) => {
     CheckElementList[indexNumber].scrollIntoView({ behavior: 'smooth', block: 'center' });

@@ -2,6 +2,8 @@ import '@styles/reset.scss';
 import '@styles/muiButton.scss';
 import '@styles/palette.scss';
 import '../../styles/font.css';
+// import '../../styles/card01.css';
+// import '../../styles/card02.css';
 
 import { AppProps } from 'next/app';
 import { ManagedUIContext } from '@components/ui';
@@ -9,6 +11,7 @@ import { RecoilRoot } from 'recoil';
 import { ReactNode } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { Card } from '@material-ui/core';
 
 const Noop = ({ children }: { children: ReactNode }) => <>{children}</>;
 
@@ -47,4 +50,3 @@ export default function App({ Component, pageProps }: AppProps) {
     </RecoilRoot>
   );
 }
-

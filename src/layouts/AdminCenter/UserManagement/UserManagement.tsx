@@ -101,8 +101,46 @@ export function UserManagement() {
     keyword,
   });
 
-  // console.log('authoritiesValue : ', authorities);
+  // console.log(
+  //   '필터 data : ',
+  //   data?.content.filter(item => item.authorities === authorities)
+  // );
+
   // console.log('회원정보 Data : ', data);
+  // console.log('회원정보 Data.content : ', data.content);
+  // console.log(
+  //   '회원정보 Data.content 1 : ',
+  //   data.content.filter(item => item.name === '이세정')
+  // );
+
+  // console.log('authorities : ', authorities);
+  // console.log(
+  //   '회원정보 Data.content authorities 2 : ',
+  //   data?.content.filter(item => item.authorities === authorities)
+  // );
+
+  // console.log('data?.content[0].authorities : ', data?.content[0].authorities);
+
+  // console.log(
+  //   'map data : ',
+  //   data?.content.map(item => item.authorities[0] === authorities)
+  // );
+
+  // console.log(
+  //   'map data 2 : ',
+  //   data?.content.map(item =>
+  //     data?.content.filter(item => item.authorities[0] === authorities)
+  //   )
+  // );
+
+  // console.log(
+  //   'authorities 필터 데이터 : ',
+  //   data?.content.filter(item => item.authorities[0] === authorities)
+  // );
+
+  // console.log(data.filter());
+
+  // console.log('authoritiesValue : ', authorities);
 
   // 검색기능
   const handleSearch = async (event: FormEvent, isReload = false) => {

@@ -45,7 +45,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       try {
         if (router.route === '/') return;
 
-        console.log('router', router);
+        // console.log('router', router);
 
         // 메인에서 운수 or 저상으로 이동시 도메인에 값 추가
         if (router.query.type === 'unsu') {

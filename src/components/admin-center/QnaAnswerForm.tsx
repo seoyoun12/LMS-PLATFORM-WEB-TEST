@@ -119,6 +119,10 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
                 <div>
                   {data.qnaAnswer?.s3Files[0] ? (
                     <Button
+                      sx={{
+                        padding: '0px',
+                        borderRadius: '15px',
+                      }}
                       onClick={async () => {
                         try {
                           const blobData = await downloadFile(
@@ -135,18 +139,15 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
                         }
                       }}
                     >
-                      {/* {data.qnaAnswer?.s3Files[0].name} */}
-                      {data.qnaAnswer?.s3Files ? (
-                        <FileChip
-                          icon={<SaveIcon />}
-                          sx={{ cursor: 'pointer' }}
-                          label={
-                            <Box sx={{ display: 'flex' }}>
-                              <Box>{data?.qnaAnswer.s3Files[0].name}</Box>
-                            </Box>
-                          }
-                        />
-                      ) : null}
+                      <FileChip
+                        icon={<SaveIcon />}
+                        sx={{ cursor: 'pointer' }}
+                        label={
+                          <Box sx={{ display: 'flex' }}>
+                            <Box>{data?.qnaAnswer.s3Files[0].name}</Box>
+                          </Box>
+                        }
+                      />
                     </Button>
                   ) : (
                     '파일없음'

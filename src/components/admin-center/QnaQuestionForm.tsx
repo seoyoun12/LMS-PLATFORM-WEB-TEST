@@ -99,7 +99,10 @@ export function QnaQuestionForm() {
           <TableRightCell>
             {data?.s3Files[0] ? (
               <Button
-                sx={{ padding: '0px' }}
+                sx={{
+                  padding: '0px',
+                  borderRadius: '15px',
+                }}
                 onClick={async () => {
                   try {
                     const blobData = await downloadFile(data.s3Files[0].seq);
@@ -114,7 +117,15 @@ export function QnaQuestionForm() {
                   }
                 }}
               >
-                {data?.s3Files[0].name}
+                <FileChip
+                  icon={<SaveIcon />}
+                  sx={{ cursor: 'pointer' }}
+                  label={
+                    <Box sx={{ display: 'flex' }}>
+                      <Box>{data?.s3Files[0]?.name}</Box>
+                    </Box>
+                  }
+                />
               </Button>
             ) : (
               '파일없음'

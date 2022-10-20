@@ -108,7 +108,7 @@ export function SurveyQuestionModifyModal({
         };
       });
     inputsSetValue('inputs', inputList);
-    console.log(inputList);
+    // console.log(inputList);
   }, []);
 
   //change question Type
@@ -128,7 +128,7 @@ export function SurveyQuestionModifyModal({
       if (inputsWatch().inputs.length === 0)
         return snackbar({ variant: 'error', message: '문항을 만들어주세요!' });
     }
-    console.log('ss', inputsWatch(), watch());
+    // console.log('ss', inputsWatch(), watch());
     //validate
     let isEmpty = false;
     inputsWatch().inputs.forEach(item => {
@@ -184,7 +184,7 @@ export function SurveyQuestionModifyModal({
     });
   };
 
-  console.log(inputsWatch());
+  // console.log(inputsWatch());
 
   //Textfield를 삭제합니다.
   const onClickRemoveInput = async (dummySeq: string | number) => {

@@ -85,7 +85,7 @@ export default function LearningGuideDetailLayout() {
 
   const detailValue = data.data;
 
-  console.log(detailValue);
+  // console.log(detailValue);
 
   return (
     <GuideDetailWrapper>

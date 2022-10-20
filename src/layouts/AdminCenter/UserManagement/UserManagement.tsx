@@ -328,7 +328,7 @@ export function UserManagement() {
         >
           <Spinner fit={true} />
           <Box color="#246def" fontWeight="bold">
-            다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
+            다운로드가 오래걸릴수 있습니다. 페이지를 이탈하지 마세요.
           </Box>
         </Box>
       </Backdrop>

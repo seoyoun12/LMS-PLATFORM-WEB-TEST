@@ -100,12 +100,6 @@ export function UserManagement() {
     // nameOrUsername,
     keyword,
   });
-
-  // console.log(
-  //   '필터 data : ',
-  //   data?.content.filter(item => item.authorities === authorities)
-  // );
-
   // console.log('회원정보 Data : ', data);
   // console.log('회원정보 Data.content : ', data.content);
   // console.log(
@@ -328,7 +322,7 @@ export function UserManagement() {
         >
           <Spinner fit={true} />
           <Box color="#246def" fontWeight="bold">
-            다운로드가 오래걸릴수 있습니다. 페이지를 이탈하지 마세요.
+            다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
           </Box>
         </Box>
       </Backdrop>

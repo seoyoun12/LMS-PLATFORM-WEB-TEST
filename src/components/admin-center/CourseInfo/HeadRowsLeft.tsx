@@ -23,6 +23,7 @@ import { UseFormRegister } from 'react-hook-form';
 
 interface FormType {
   page: number;
+  notFound: boolean;
   nameOrUsername: string; //이름 혹은 아이디
   courseType: CourseType; //운수종사자 저상 도민 타입
   completeType: CompleteType | null; //수료타입

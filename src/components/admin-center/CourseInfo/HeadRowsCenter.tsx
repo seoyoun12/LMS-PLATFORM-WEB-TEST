@@ -9,6 +9,8 @@ import {
   MenuItem,
   Radio,
   Select,
+  TextField,
+  Typography,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import React from 'react';
@@ -30,18 +32,22 @@ interface Props {
   //   searchInputRef: React.MutableRefObject<HTMLInputElement>;
   completeType: CompleteType | null;
   statusType: StatusType | null;
+  carNumber: string;
   handleSearch: (e: React.FormEvent, isReload?: boolean) => Promise<void>;
   onChangeCompleteType: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeStatusType: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeCarNumber: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const HeadRowsCenter = React.forwardRef(function (
   {
     completeType,
     statusType,
+    carNumber,
     handleSearch,
     onChangeCompleteType,
     onChangeStatusType,
+    onChangeCarNumber,
   }: Props,
   searchInputRef
 ) {
@@ -108,7 +114,15 @@ export const HeadRowsCenter = React.forwardRef(function (
         <span>퇴교</span>
       </Box>
 
-      <SearchContainer onSubmit={handleSearch}>
+      <Typography>차량번호</Typography>
+      <TextField
+        onChange={onChangeCarNumber}
+        value={carNumber}
+        sx={{ mb: '12px' }}
+        fullWidth
+      />
+
+      {/* <SearchContainer onSubmit={handleSearch}>
         <SearchInput
           inputRef={searchInputRef}
           placeholder="이름 혹은 아이디 검색"
@@ -119,32 +133,18 @@ export const HeadRowsCenter = React.forwardRef(function (
           <SearchIcon />
         </IconButton>
       </SearchContainer>
-      <Box width="100%" display="flex" justifyContent="space-between">
-        <ReloadButton
-          size="small"
-          color="neutral"
-          variant="text"
-          endIcon={<ReplayIcon htmlColor={grey[700]} />}
-          onClick={e => handleSearch(e, true)}
-        >
-          전체 다시 불러오기
-        </ReloadButton>
-        {/* <Button
-          variant="contained"
-          color="success"
-          disabled={loading}
-          onClick={onClickExcelDownload}
-        >
-          {loading ? (
-            <Spinner fit={true} />
-          ) : (
-            <>
-              <FileCopyIcon sx={{ marginRight: '4px' }} />
-              학습현황 엑셀다운로드
-            </>
-          )}
-        </Button> */}
-      </Box>
+      <ReloadButton
+        size="small"
+        color="neutral"
+        variant="text"
+        endIcon={<ReplayIcon htmlColor={grey[700]} />}
+        onClick={e => handleSearch(e, true)}
+      >
+        전체 다시 불러오기
+      </ReloadButton> */}
+      <SearchContainer>
+        <SearchInput inputRef={searchInputRef} placeholder="이름 혹은 아이디 검색" />
+      </SearchContainer>
 
       <Backdrop open={loading}>
         <Box

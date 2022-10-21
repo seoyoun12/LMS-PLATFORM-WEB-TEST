@@ -100,12 +100,6 @@ export function UserManagement() {
     // nameOrUsername,
     keyword,
   });
-
-  // console.log(
-  //   '필터 data : ',
-  //   data?.content.filter(item => item.authorities === authorities)
-  // );
-
   // console.log('회원정보 Data : ', data);
   // console.log('회원정보 Data.content : ', data.content);
   // console.log(

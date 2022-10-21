@@ -18,10 +18,15 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
+import ReplayIcon from '@mui/icons-material/Replay';
+import { grey } from '@mui/material/colors';
 
-interface Props {}
+interface Props {
+  search: string;
+  handleSubmit: (isReload: boolean) => void;
+}
 
-export function HeadRowsBottom({}: Props) {
+export function HeadRowsBottom({ search, handleSubmit }: Props) {
   const snackbar = useSnackbar();
   const [loading, setLoading] = useState(false);
   const onClickExcelDownload = async () => {
@@ -45,21 +50,45 @@ export function HeadRowsBottom({}: Props) {
   return (
     <HeadRowsBottomWrap>
       {/* <Button variant="contained">검색하기</Button> */}
-      <Button
-        variant="contained"
-        color="success"
-        disabled={loading}
-        onClick={onClickExcelDownload}
-      >
-        {loading ? (
-          <Spinner fit={true} />
-        ) : (
-          <>
-            <FileCopyIcon sx={{ marginRight: '4px' }} />
-            학습현황 엑셀다운로드
-          </>
-        )}
-      </Button>
+      <Box mb={2} fontSize={18} fontWeight="bold">
+        {search !== '' && `검색어 : ${search}`}
+      </Box>
+      <BoxRow sx={{ flexDirection: 'row' }}>
+        <Button
+          variant="contained"
+          onClick={e => handleSubmit(false)}
+          sx={{ width: '20%' }}
+        >
+          검색하기
+        </Button>
+        <ReloadButton
+          size="small"
+          color="neutral"
+          variant="text"
+          endIcon={<ReplayIcon htmlColor={grey[700]} />}
+          sx={{ marginLeft: '12px' }}
+          onClick={e => handleSubmit(true)}
+        >
+          전체 다시 불러오기
+        </ReloadButton>
+      </BoxRow>
+      <BoxRow sx={{ flexDirection: 'row-reverse' }}>
+        <Button
+          variant="contained"
+          color="success"
+          disabled={loading}
+          onClick={onClickExcelDownload}
+        >
+          {loading ? (
+            <Spinner fit={true} />
+          ) : (
+            <>
+              <FileCopyIcon sx={{ marginRight: '4px' }} />
+              학습현황 엑셀다운로드
+            </>
+          )}
+        </Button>
+      </BoxRow>
       <Backdrop open={loading}>
         <Box
           display="flex"
@@ -78,7 +107,14 @@ export function HeadRowsBottom({}: Props) {
 const HeadRowsBottomWrap = styled(Box)`
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  flex-direction: row-reverse;
+  flex-direction: column;
   gap: 4px;
+  margin-bottom: 12px;
 `;
+
+const BoxRow = styled(Box)`
+  width: 100%;
+  display: flex;
+`;
+
+const ReloadButton = styled(Button)``;

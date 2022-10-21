@@ -496,59 +496,6 @@ export interface CourseClassSaveRequestDto {
   year?: number;
 }
 
-export interface CourseClassStepResponseDto {
-  /**
-   * 현재 수강신청인원
-   * @format int32
-   */
-  enrolledPeopleCnt?: number;
-
-  /**
-   * 수강인원제한 인원수 - 0은 무제한
-   * @format int32
-   */
-  limitPeople?: number;
-
-  /** 수강인원제한여부 */
-  limitPeopleYn?: "Y" | "N";
-
-  /**
-   * 수강신청종료일자
-   * @format date-time
-   */
-  requestEndDate?: string;
-
-  /**
-   * 수강신청시작일자
-   * @format date-time
-   */
-  requestStartDate?: string;
-
-  /**
-   * 클래스 시퀀스
-   * @format int64
-   */
-  seq?: number;
-
-  /**
-   * 기수
-   * @format int32
-   */
-  step?: number;
-
-  /**
-   * 학습종료일자
-   * @format date-time
-   */
-  studyEndDate?: string;
-
-  /**
-   * 학습시작일자
-   * @format date-time
-   */
-  studyStartDate?: string;
-}
-
 export interface CourseClassUpdateRequestDto {
   /**
    * 과정 클래스 시퀀스
@@ -966,6 +913,12 @@ export interface CourseLearningInfoCoursesResponseDto {
 
   /** 출력용 과정명 */
   displayCourseName?: string;
+
+  /**
+   * 교육 연도
+   * @format int32
+   */
+  year?: number;
 }
 
 export interface CourseLearningInfoResponseDto {
@@ -1034,6 +987,9 @@ export interface CourseLearningInfoResponseDto {
     | "GYEONGNAM"
     | "JEJU";
 
+  /** 수료번호 */
+  completeNo?: string;
+
   /**
    * 과정 클래스 시퀀스
    * @format int64
@@ -1062,6 +1018,9 @@ export interface CourseLearningInfoResponseDto {
    * @format int64
    */
   courseUserSeq?: number;
+
+  /** 복호화 주민번호 */
+  decryptIdentityNumber?: string;
 
   /** 상태 */
   displayClassLearningStatus?: "정상" | "퇴교";
@@ -2051,6 +2010,12 @@ export interface CourseUserCommonDetailsResponseDto {
   elderly?: number;
 
   /**
+   * 과정 클래스 신청 인원 수
+   * @format int32
+   */
+  enrolledPeopleCnt?: number;
+
+  /**
    * 첫 번째 차시 시퀀스
    * @format int64
    */
@@ -2097,6 +2062,12 @@ export interface CourseUserCommonDetailsResponseDto {
 
   /** 교육 시간 */
   learningTime?: string;
+
+  /**
+   * 과정 클래스 신청 가능 인원 수
+   * @format int32
+   */
+  limitPeople?: number;
 
   /** 교육신청자 정보 - 이름 */
   name?: string;
@@ -6583,6 +6554,9 @@ export interface QnaResponseDto {
   /** 유저 실명 */
   name?: string;
 
+  /** 유저 휴대번호 */
+  phone?: string;
+
   /** 답변 내용 */
   qnaAnswer?: QnaAnswerResponseDto;
 
@@ -6594,6 +6568,9 @@ export interface QnaResponseDto {
    * @format int64
    */
   seq?: number;
+
+  /** 유저 SMS 수신 동의 여부 */
+  smsYn?: string;
 
   /**
    * 상태
@@ -8559,6 +8536,9 @@ export interface UserProvincialUpdateResponseDto {
 }
 
 export interface UserResponseDto {
+  /** 유저 권한 */
+  authorities?: string[];
+
   /** 유저 생년월일 */
   birth?: string;
 
@@ -9091,13 +9071,136 @@ import ApiResponseWrapper from "./ApiResponseWrapper";
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   adm = {
     /**
+     * @description 일정에 대한 목록 정보를 엑셀로 다운로드한다. 검색하고자하는 date 를 입력받아서 엑셀을 다운받는다. <b>courseType 파라미터가 Null 이라면 전체 조회한다.</b>
+     *
+     * @tags [관리자] Excel 파일 다운로드 API
+     * @name DownloadExcelOfCalendarUsingPost
+     * @summary [관리자] 일정 관리 목록 엑셀 다운로드
+     * @request POST:/adm/excel/download/calendar
+     */
+    downloadExcelOfCalendarUsingPost: (
+      query: {
+        businessType: "TYPE_ALL" | "TYPE_PASSENGER" | "TYPE_CARGO";
+        courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
+        date: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<void>, any>({
+        path: `/adm/excel/download/calendar`,
+        method: "POST",
+        query: query,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 개설된 과정-유저에 대한 모든 수강 인원에 대한 정보를 엑셀 다운로드한다.
+     *
+     * @tags [관리자] Excel 파일 다운로드 API
+     * @name AdmFindAllCourseLearningUsersUsingPost
+     * @summary [관리자] 현 수강인원에 대한 정보 엑셀다운로드 API - JWT, Page
+     * @request POST:/adm/excel/download/course-learning-user
+     */,
+    admFindAllCourseLearningUsersUsingPost: (
+      query?: {
+        businessName?: string;
+        businessType?: "PASSENGER" | "FREIGHT";
+        carNumber?: string;
+        carRegitRegion?:
+          | "CHEONAN"
+          | "GONGJU"
+          | "BORYEONG"
+          | "ASAN"
+          | "SEOSAN"
+          | "NONSAN"
+          | "GYERYONG"
+          | "DANGJIN"
+          | "GEUMSAN"
+          | "BUYEO"
+          | "SEOCHEON"
+          | "CHEONGYANG"
+          | "HONGSEONG"
+          | "YESAN"
+          | "TAEAN"
+          | "CHUNGNAM"
+          | "SEJONG"
+          | "SEOUL"
+          | "BUSAN"
+          | "DAEGU"
+          | "INCHEON"
+          | "GWANGJU"
+          | "DAEJEON"
+          | "ULSAN"
+          | "GYEONGGI"
+          | "GANGWON"
+          | "CHUNGBUK"
+          | "JEONBUK"
+          | "JEONNAM"
+          | "GYEONGBUK"
+          | "GYEONGNAM"
+          | "JEJU";
+        completeType?: "TYPE_INCOMPLETE" | "TYPE_COMPLETE";
+        courseClassSeq?: number;
+        courseSeq?: number;
+        courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
+        identityNumber?: string;
+        nameOrUsername?: string;
+        phone?: string;
+        statusType?: "TYPE_NORMAL" | "TYPE_OUT";
+        studyEndDate?: string;
+        studyStartDate?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<void>, any>({
+        path: `/adm/excel/download/course-learning-user`,
+        method: "POST",
+        query: query,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 특정 설문에 대한 설문 결과를 엑셀로 다운로드한다.
+     *
+     * @tags [관리자] Excel 파일 다운로드 API
+     * @name DownloadExcelOfSurveyDetailUsingPost
+     * @summary [관리자 - 개발 중] 설문 통계 상세 엑셀 다운로드
+     * @request POST:/adm/excel/download/survey-detail/{surveySeq}
+     */,
+    downloadExcelOfSurveyDetailUsingPost: (surveySeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<void>, any>({
+        path: `/adm/excel/download/survey-detail/${surveySeq}`,
+        method: "POST",
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 관리자페이지에서 회원 관리 탭에 대한 테이블 데이터를 엑셀로 다운로드한다.
+     *
+     * @tags [관리자] Excel 파일 다운로드 API
+     * @name DownloadExcelOfUsersUsingPost
+     * @summary [관리자] 회원 관리 엑셀 다운로드
+     * @request POST:/adm/excel/download/user
+     */,
+    downloadExcelOfUsersUsingPost: (
+      query?: { keyword?: string; registerType?: "TYPE_TRANS_EDU" | "TYPE_TRAFFIC_SAFETY_EDU" },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<void>, any>({
+        path: `/adm/excel/download/user`,
+        method: "POST",
+        query: query,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
      * @description 관리자페이지 내 학습로그의 접속이력에서 특정 사용자에 대한 접속 이력을 전체 조회한다. userSeq 를 Path Variable 로 전달받으며, 필터링(날짜 및 날짜 기준 오름차/내림차순)에 필요한 데이터를 RequestParam 으로 전달받는다.
      *
      * @tags [관리자] 학습 로그 정보 API
      * @name AdmFindAllHistoryLogsUsingGet
      * @summary [관리자] 접속이력 전체 조회 API - JWT, Page
      * @request GET:/adm/learning-log/history/{userSeq}
-     */
+     */,
     admFindAllHistoryLogsUsingGet: (
       userSeq: number,
       query: {
@@ -9548,7 +9651,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */,
     admFindAllCourseLearningUsersUsingGet: (
       query: {
+        businessName?: string;
         businessType?: "PASSENGER" | "FREIGHT";
+        carNumber?: string;
         carRegitRegion?:
           | "CHEONAN"
           | "GONGJU"
@@ -9587,9 +9692,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         courseSeq?: number;
         courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
         elementCnt?: number;
+        identityNumber?: string;
         nameOrUsername?: string;
         page: number;
+        phone?: string;
         statusType?: "TYPE_NORMAL" | "TYPE_OUT";
+        studyEndDate?: string;
+        studyStartDate?: string;
       },
       params: RequestParams = {},
     ) =>
@@ -9607,24 +9716,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary [관리자] 개설된 과정 전체 조회 API - JWT
      * @request GET:/course/adm/learning-info/courses
      */,
-    admFindAllOpenCoursesUsingGet: (params: RequestParams = {}) =>
+    admFindAllOpenCoursesUsingGet: (query?: { year?: number }, params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<CourseLearningInfoCoursesResponseDto[]>, any>({
         path: `/course/adm/learning-info/courses`,
         method: "GET",
-        ...params,
-      })
-    /**
-     * @description 개설된 과정-유저에 대한 모든 수강 인원을 조회한다.
-     *
-     * @tags [관리자] 학습 현황 API
-     * @name AdmFindAllCourseLearningUsersUsingGet1
-     * @summary [관리자] 수강 인원 전체 조회 API - JWT, Page
-     * @request GET:/course/adm/learning-info/learning-info-all
-     */,
-    admFindAllCourseLearningUsersUsingGet1: (params: RequestParams = {}) =>
-      this.request<ApiResponseWrapper<void>, any>({
-        path: `/course/adm/learning-info/learning-info-all`,
-        method: "GET",
+        query: query,
         ...params,
       })
     /**
@@ -9906,7 +10002,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<ApiResponseWrapper<CourseClassStepResponseDto[]>, any>({
+      this.request<ApiResponseWrapper<CourseClassResponseDto[]>, any>({
         path: `/course-class/step`,
         method: "GET",
         query: query,
@@ -10078,7 +10174,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 과정 진도율 수정 수강생이 강의를 듣고 페이지를 나갈때 실행되는 API
      *
-     * @tags [App & 관리자] 과정 진도율 API - * 관리자 통계 로직 등은 추후 논의
+     * @tags [App & 관리자] 과정 진도율 API
      * @name UpdateCourseProgressUsingPut
      * @summary [App & 관리자] 과정 진도율 수정  API - JWT 사용
      * @request PUT:/course-progress
@@ -10097,7 +10193,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 기획이 순차적인 차시 학습으로 변경(2022-08-29 기준)됨에 따라, 해당 유저가 특정 차시를 들을 수 있는 자격을 확인한다. 이때, 현재 유저가 수강 중인 courseUserSeq 와 수강 자격을 확인하고자하는 lessonSeq 를 Path Variable 로 전달받는다. 반환 값은 Boolean 타입이며, true 일 경우 차시 수강 가능, false 일 경우 차시 수강 불가 상태를 의미한다. 요청하는 유저가 courseUserSeq 의 데이터와 다를 경우(타인의 과정 유저 시퀀스일 경우) 400 예외를 발생시킨다. <b><참고></b> 서버 내 체크 기준은 "GET /course/{courseUserSeq}" API 의 Response 를 통해 전달받는 <b>참고용 프로퍼티</b>인 "recentCompletedChapter" 의 값을 가져와 확인한다. 만일, recentCompletedChapter 가 1이라면, 해당 유저가 1차시에 대하여 수강 완료하였음을 의미하며, 해당 과정 클래스의 2차시를 들을 여건이 충족됨을 의미한다. 이때 리턴 값은 true 이다. recentCompletedChapter 가 1일 때, 해당 유저가 3차시를 수강하려고 하면 false 가 반환된다.
      *
-     * @tags [App & 관리자] 과정 진도율 API - * 관리자 통계 로직 등은 추후 논의
+     * @tags [App & 관리자] 과정 진도율 API
      * @name CheckAvailableLessonUsingGet
      * @summary [App] 과정 내 차시 수강 가능 여부 체크
      * @request GET:/course-progress/lesson/check/{courseUserSeq}/{lessonSeq}
@@ -10111,7 +10207,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * @description 과정 진도율 전체 수정
      *
-     * @tags [App & 관리자] 과정 진도율 API - * 관리자 통계 로직 등은 추후 논의
+     * @tags [App & 관리자] 과정 진도율 API
      * @name UpdateAllCourseProgressUsingPut
      * @summary [App & 관리자] 과정 진도율 전체 수정 API - JWT 사용 - Deprecated
      * @request PUT:/course-progress/{courseUserSeq}
@@ -10864,6 +10960,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/example/html/${identity}`,
         method: "GET",
+        ...params,
+      })
+    /**
+     * No description
+     *
+     * @tags 실험장 API
+     * @name CheckForeignerUsingGet
+     * @summary checkForeigner
+     * @request GET:/example/nice/foreign
+     */,
+    checkForeignerUsingGet: (query?: { identityNumber?: string; name?: string }, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<void>, any>({
+        path: `/example/nice/foreign`,
+        method: "GET",
+        query: query,
         ...params,
       })
     /**
@@ -12075,7 +12186,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 관리자 페이지에서 특정 1:1 문의에 대한 답변을 작성한다.
+     * @description 관리자 페이지에서 특정 1:1 문의에 대한 답변을 작성한다. 답변 등록 시, 해당 문의 글에 대하여 smsYn 이 Y 일 경우 해당 사용자에게 답변 완료 메세지를 전송한다.
      *
      * @tags [App & 관리자] 1:1 문의 API
      * @name AdmCreateQnaAnswerUsingPost
@@ -12418,7 +12529,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         elementCnt?: number;
         keyword?: string;
         page: number;
-        registerType: "TYPE_TRANS_EDU" | "TYPE_TRAFFIC_SAFETY_EDU";
+        registerType?: "TYPE_TRANS_EDU" | "TYPE_TRAFFIC_SAFETY_EDU";
       },
       params: RequestParams = {},
     ) =>
@@ -12532,7 +12643,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 관리자페이지의 수강정보 상세에서 전체 차시에 대하여 진도율을 0% 처리 및 미이수처리한다. PathVariable 로 과정유저시퀀스(courseUserSeq)를 전달받는다. 로직이 정상적으로 수행되면 true 를 반환한다.
+     * @description 관리자페이지의 수강정보 상세에서 전체 차시에 대하여 진도율을 0% 처리 및 미이수처리한다. 만일, 수료된 상태일 경우 미수료 상태로 전환시킨다.PathVariable 로 과정유저시퀀스(courseUserSeq)를 전달받는다. 로직이 정상적으로 수행되면 true 를 반환한다.
      *
      * @tags [관리자] 유저 수강 정보 API
      * @name AdmCancelAllProgressesUsingPut
@@ -12562,7 +12673,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 관리자페이지의 수강정보 상세에서 특정 차시에 대하여 진도율을 0% 처리 및 미이수처리한다. PathVariable 로 과정유저시퀀스(courseUserSeq) 및 학습진행상황시퀀스(courseProgressSeq) 를 전달받는다. 로직이 정상적으로 수행되면 true 를 반환한다.
+     * @description 관리자페이지의 수강정보 상세에서 특정 차시에 대하여 진도율을 0% 처리 및 미이수처리한다. 전체 차시가 100%가 아님에 따라, 수료된 사용자일 경우 미수료처리를 수행한다.PathVariable 로 과정유저시퀀스(courseUserSeq) 및 학습진행상황시퀀스(courseProgressSeq) 를 전달받는다. 로직이 정상적으로 수행되면 true 를 반환한다.
      *
      * @tags [관리자] 유저 수강 정보 API
      * @name AdmCancelProgressUsingPut

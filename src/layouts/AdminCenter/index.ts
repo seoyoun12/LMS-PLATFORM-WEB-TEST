@@ -1,3 +1,5 @@
+import dynamic from 'next/dynamic';
+
 export { AdminCenter } from './AdminCenter';
 export { AdminCenterLayout } from './AdminCenterLayout';
 
@@ -33,5 +35,8 @@ export { SurveyModify } from './SurveyMenagement/SurveyModify';
 export { QnaManagement } from './QnaManagement/QnaManagement';
 export { QnaAnswer } from './QnaManagement/QnaAnswer';
 
-export {CourseInfoManagement} from './CourseInfoManagement/CourseInfoManagement'
-export {CourseInfoModify} from './CourseInfoManagement/CourseInfoModify'
+export const CourseInfoManagement = dynamic(
+  () => import('./CourseInfoManagement/CourseInfoManagement'),
+  { ssr: false }
+);
+export { CourseInfoModify } from './CourseInfoManagement/CourseInfoModify';

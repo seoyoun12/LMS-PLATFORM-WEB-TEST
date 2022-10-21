@@ -112,8 +112,8 @@ export function StatisticsSurveyDetail() {
             headSx={{ borderBottom: 'none' }}
           />
           <Card
-            wrapSx={{ flexGrow: 0, height: '50px', cursor: 'pointer' }}
-            onClick={() => setOpenParticipate(true)}
+            wrapSx={{ flexGrow: 0, height: '50px' }}
+            // onClick={() => setOpenParticipate(true)}
           >
             <CardLeft>설문 참여자</CardLeft>
             <CardRight>{data.participantCnt}</CardRight>

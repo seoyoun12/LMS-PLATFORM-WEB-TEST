@@ -1,6 +1,6 @@
 import { removeCourse, useCourseList } from '@common/api/adm/course';
 import { Table } from '@components/ui';
-import { Button, Chip, TableBody, TableHead, Typography } from '@mui/material';
+import { Box, Button, Chip, TableBody, TableHead, Typography } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { useEffect, useState } from 'react';
@@ -23,12 +23,13 @@ import styled from '@emotion/styled';
 const headRows: {
   name: string;
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  width: string;
 }[] = [
-  { name: '번호', align: 'left' },
-  { name: '과정명', align: 'right' },
-  { name: '생성 날짜', align: 'right' },
+  { name: '번호', align: 'left', width: '5%' },
+  { name: '과정명', align: 'right', width: '70%' },
+  { name: '생성 날짜', align: 'right', width: '20%' },
   // { name: '노출 여부', align: 'right' },
-  { name: '상태', align: 'right' },
+  { name: '상태', align: 'right', width: '5%' },
   // { name: '수강생', align: 'right' },
   // { name: '수료생', align: 'right' },
 ];
@@ -67,42 +68,52 @@ export function StatisticsSurveyList() {
   // return <Spinner />;
 
   return (
-    <Container className={styles.globalContainer}>
-      <Typography
-        variant="h5"
-        sx={{
-          mb: '12px',
-          fontWeight: 700,
-        }}
-      >
+    // <Container className={styles.globalContainer}>
+    <Box>
+      <StatisticsSurveyTypography variant="h5">
         설문 목록(통계)
-      </Typography>
+      </StatisticsSurveyTypography>
+
       <Table
         pagination={true}
         totalNum={data.totalElements}
         page={data.number}
         onChangePage={onChangePage}
         size="small"
+        sx={{ tableLayout: 'fixed' }}
       >
         <TableHead>
           <TableRow>
-            {headRows.map(({ name, align }) => (
-              <TableCell className={spaceNoWrap} key={name} align={align}>
-                {name}
-              </TableCell>
-            ))}
-            <TableCell>{}</TableCell>
+            {headRows.map(
+              ({
+                name,
+                align,
+                width,
+              }: {
+                name: string;
+                align: string;
+                width: string;
+              }) => (
+                <StatisticsSurveyTitleTableCell key={name} align="center" width={width}>
+                  {name}
+                </StatisticsSurveyTitleTableCell>
+              )
+            )}
           </TableRow>
         </TableHead>
+
         <TableBody>
           {data.content.map(survey => (
-            <CustomTableRow
+            <TableRow
               key={survey.seq}
               hover
               onClick={() => onClickModify(survey.seq)}
+              sx={{ cursor: 'pointer' }}
             >
-              <TableCell>{survey.seq}</TableCell>
-              <TableCell align="right">
+              <StatisticsSurveyTableCell align="center">
+                {survey.seq}
+              </StatisticsSurveyTableCell>
+              <StatisticsSurveyTableCell align="center">
                 {/* <Link
                   href={`/admin-center/course/modify/${survey.seq}`}
                   underline="hover"
@@ -110,10 +121,11 @@ export function StatisticsSurveyList() {
                 > */}
                 {survey.title}
                 {/* </Link> */}
-              </TableCell>
-              <TableCell align="right" className={spaceNoWrap}>
+              </StatisticsSurveyTableCell>
+              {/* <TableCell align="right" className={spaceNoWrap}> */}
+              <StatisticsSurveyTableCell align="center">
                 {dateFormat(survey.createdDtime, 'isoDate')}
-              </TableCell>
+              </StatisticsSurveyTableCell>
               {/* <TableCell align="right">
                 <Chip
                   label={survey.displayYn === YN.YES ? '보임' : '숨김'}
@@ -122,30 +134,63 @@ export function StatisticsSurveyList() {
                   color={survey.displayYn === YN.YES ? 'secondary' : 'default'}
                   />
               </TableCell> */}
-              <TableCell align="right">
+              <StatisticsSurveyTableCell align="center">
                 <Chip
                   label={survey.status ? '정상' : '중지'}
                   variant="outlined"
                   size="small"
                   color={survey.status ? 'secondary' : 'default'}
                 />
-              </TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-
-              <TableCell align="right" className={spaceNoWrap}></TableCell>
-            </CustomTableRow>
+              </StatisticsSurveyTableCell>
+            </TableRow>
           ))}
         </TableBody>
       </Table>
-    </Container>
+    </Box>
+    // </Container>
   );
 }
 
-const spaceNoWrap = css`
-  white-space: nowrap;
+// const spaceNoWrap = css`
+//   white-space: nowrap;
+// `;
+
+// const CustomTableRow = styled(TableRow)`
+//   cursor: pointer;
+// `;
+
+// 설문 목록 글자
+const StatisticsSurveyTypography = styled(Typography)`
+  margin-bottom: 30px;
+  font-weight: 700;
 `;
 
-const CustomTableRow = styled(TableRow)`
-  cursor: pointer;
+// 설문 목록 테이블의 title부분
+const StatisticsSurveyTitleTableCell = styled(TableCell)`
+  font-weight: bold;
+  background: #f5f5f5;
+  border-right: 1px solid #f0f0f0;
+  border-top: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-right: 1px solid #f0f0f0;
+  }
+`;
+
+// 설문 목록 테이블의 본문
+const StatisticsSurveyTableCell = styled(TableCell)`
+  margin: 0;
+  border-right: 1px solid #f0f0f0;
+
+  &:first-of-type {
+    background: #f5f5f5;
+  }
+`;
+
+// 설문 제목. ellipsis 적용.
+const StatisticsSurveyBox = styled(Box)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 `;

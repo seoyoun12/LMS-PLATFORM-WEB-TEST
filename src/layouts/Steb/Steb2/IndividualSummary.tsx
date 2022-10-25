@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, Typography } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { transIndividualSummary } from '@utils/individualSummaries';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
@@ -13,19 +13,22 @@ interface Props {
 
 export function IndividualSummary({ setIsIndividualCheck, isIndividualCheck }: Props) {
   //
+
+  const [data, setData] = useState('');
+
   useEffect(() => {
     async function getGetTerms() {
-      {
-        const data = await getTerms({ termType: 'PERSONAL_INFORMATION_TERMS' });
-        console.log(data);
-      }
+      const data = await getTerms({ termType: 'PERSONAL_INFORMATION_TERMS' });
+      setData(data.data.content);
     }
+    getGetTerms();
   }, []);
+  console.log(data);
 
   return (
     <IndividualSummaryWrap mt={2}>
       <SummaryBox>
-        {transIndividualSummary.split('\n').map(item => (
+        {data.split('\n').map(item => (
           <Box>{item}</Box>
         ))}
       </SummaryBox>

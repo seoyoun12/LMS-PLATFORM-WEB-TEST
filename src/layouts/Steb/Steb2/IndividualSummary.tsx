@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
 import { Box, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { transIndividualSummary } from '@utils/individualSummaries';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import { getTerms } from '@common/api/terms';
 
 interface Props {
   isIndividualCheck: boolean;
@@ -11,6 +12,16 @@ interface Props {
 }
 
 export function IndividualSummary({ setIsIndividualCheck, isIndividualCheck }: Props) {
+  //
+  useEffect(() => {
+    async function getGetTerms() {
+      {
+        const data = await getTerms({ termType: 'PERSONAL_INFORMATION_TERMS' });
+        console.log(data);
+      }
+    }
+  }, []);
+
   return (
     <IndividualSummaryWrap mt={2}>
       <SummaryBox>

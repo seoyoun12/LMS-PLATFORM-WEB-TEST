@@ -23,7 +23,6 @@ export function IndividualSummary({ setIsIndividualCheck, isIndividualCheck }: P
     }
     getGetTerms();
   }, []);
-  console.log(data);
 
   return (
     <IndividualSummaryWrap mt={2}>

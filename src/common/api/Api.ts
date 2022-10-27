@@ -12437,13 +12437,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   };
   terms = {
     /**
+     * @description 클라이언트 단에서 약관 타입을 RequestParam 으로 전달받아 이용 약관을 조회한다.
+     *
+     * @tags [관리자] 이용 약관 API
+     * @name FindTermUsingGet
+     * @summary [App] 클라이언트 전용 이용 약관 단건 조회 API
+     * @request GET:/terms
+     */
+    findTermUsingGet: (
+      query: { termType: "CONDITIONS_TERMS" | "PERSONAL_INFORMATION_TERMS" | "LOCATION_BASED_TERMS" },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<TermsResponseDto>, void>({
+        path: `/terms`,
+        method: "GET",
+        query: query,
+        ...params,
+      })
+    /**
      * @description 관리자 페이지에서 생성한 이용 약관을 전체 조회한다.
      *
      * @tags [관리자] 이용 약관 API
      * @name AdmFindAllTermsUsingGet
      * @summary [관리자] 이용 약관 전체 조회 API
      * @request GET:/terms/adm
-     */
+     */,
     admFindAllTermsUsingGet: (params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<TermsResponseDto>, void>({
         path: `/terms/adm`,
@@ -12498,6 +12516,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "PUT",
         body: termsUpdateRequestDto,
         type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 클라이언트 단에서 전체 약관을 리스트로 전달받는다.
+     *
+     * @tags [관리자] 이용 약관 API
+     * @name FindAllTermsUsingGet
+     * @summary [App] 클라이언트 전용 이용 약관 전체 조회 API
+     * @request GET:/terms/all
+     */,
+    findAllTermsUsingGet: (params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<TermsResponseDto[]>, any>({
+        path: `/terms/all`,
+        method: "GET",
         ...params,
       }),
   };

@@ -199,6 +199,12 @@ export default function CourseInfoManagement() {
     if (searchInputRef.current) {
       setValue('nameOrUsername', searchInputRef.current.value);
     }
+
+    const { phone, identityNumber } = watch();
+    if (phone === '' || phone?.replaceAll(' ', '') === '') setValue('phone', null);
+    if (identityNumber === '' || identityNumber?.replaceAll(' ', '') === '')
+      setValue('identityNumber', null);
+
     setSubmitValue(watch());
   };
 

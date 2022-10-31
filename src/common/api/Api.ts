@@ -2426,8 +2426,17 @@ export interface CourseUserExistsResponseDto {
   /** 중복 신청 여부 */
   duplicated?: boolean;
 
+  /**
+   * 중복 신청된 과정 유저 시퀀스
+   * @format int64
+   */
+  duplicatedCourseUserSeq?: number;
+
   /** 수강불가 시 메세지 */
   message?: string;
+
+  /** 중복 신청된 과정 가입 구분 */
+  regType?: "TYPE_INDIVIDUAL" | "TYPE_ORGANIZATION";
 }
 
 export interface CourseUserLogRequestDto {
@@ -7068,6 +7077,47 @@ export interface StatisticsSurveySubjDto {
   surveyQuestionSeq?: number;
 }
 
+export interface StepsBySurveyForExcel {
+  /**
+   * 과정 클래스 시퀀스
+   * @format int64
+   */
+  courseClassSeq?: number;
+
+  /** 과정명 */
+  courseName?: string;
+
+  /**
+   * 출력용 데이터
+   * @example 연도/과정명/기수 (시작일자 ~ 종료일자)
+   */
+  displayStep?: string;
+
+  /**
+   * 기수
+   * @format int32
+   */
+  step?: number;
+
+  /**
+   * 과정 종료일자
+   * @format date-time
+   */
+  studyEndDate?: string;
+
+  /**
+   * 과정 시작일자
+   * @format date-time
+   */
+  studyStartDate?: string;
+
+  /**
+   * 연도
+   * @format int32
+   */
+  year?: number;
+}
+
 export interface SurveyMultipleChoiceRequestDto {
   /** 문항 1 */
   item1?: string;
@@ -8057,8 +8107,20 @@ export interface UserDetailsImpl {
   /** 유저 SMS수신동의여부 */
   smsYn?: string;
 
+  /**
+   * 상태
+   * @format int32
+   */
+  status?: number;
+
   /** 유저 아이디 */
   username?: string;
+
+  /**
+   * 회원 탈퇴 예정일
+   * @format date-time
+   */
+  withdrawalExpect?: string;
 }
 
 export interface UserFindChangeRequestDto {
@@ -9160,18 +9222,37 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 특정 설문에 대한 설문 결과를 엑셀로 다운로드한다.
+     * @description 특정 설문에 대한 설문 결과를 엑셀로 다운로드한다. 이때, 해당 설문에 대하여 등록된 과정들의 기수를 조회하는 API 를 통해 얻은 과정 클래스 시퀀스를 활용하여 특정 기수에 대한 설문 결과를 조회할 수 있다. <b>courseClassSeq 가 null 이거나, 없을 경우 전체 조회로 동작한다.</b>
      *
      * @tags [관리자] Excel 파일 다운로드 API
      * @name DownloadExcelOfSurveyDetailUsingPost
      * @summary [관리자 - 개발 중] 설문 통계 상세 엑셀 다운로드
      * @request POST:/adm/excel/download/survey-detail/{surveySeq}
      */,
-    downloadExcelOfSurveyDetailUsingPost: (surveySeq: number, params: RequestParams = {}) =>
+    downloadExcelOfSurveyDetailUsingPost: (
+      surveySeq: number,
+      query?: { courseClassSeq?: number },
+      params: RequestParams = {},
+    ) =>
       this.request<ApiResponseWrapper<void>, any>({
         path: `/adm/excel/download/survey-detail/${surveySeq}`,
         method: "POST",
+        query: query,
         type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 특정 설문에 대하여 등록된 과정에 대한 기수들을 조회한다. 반환되는 형태는 "과정명/기수 (시작일자 ~ 종료일자)"이다.
+     *
+     * @tags [관리자] Excel 파일 다운로드 API
+     * @name FindStepsBySurveyUsingGet
+     * @summary [관리자] 특정 설문에 대한 기수 조회 API
+     * @request GET:/adm/excel/download/survey-detail/{surveySeq}/step
+     */,
+    findStepsBySurveyUsingGet: (surveySeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<StepsBySurveyForExcel[]>, any>({
+        path: `/adm/excel/download/survey-detail/${surveySeq}/step`,
+        method: "GET",
         ...params,
       })
     /**
@@ -13071,6 +13152,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "PUT",
         body: userTransportUpdateRequestDto,
         type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 클라이언트에서 회원을 탈퇴한다. 유저의 상태를 -1 로 변경한다. 매일 자정 탈퇴한 유저를 체크하여 탈퇴한지 1주일 지난 해당 유저 데이터는 완전히 삭제된다.
+     *
+     * @tags [관리자 & App] 유저 API
+     * @name WithdrawalUserUsingDelete
+     * @summary [App] 회원 탈퇴 API
+     * @request DELETE:/user/withdrawal
+     */,
+    withdrawalUserUsingDelete: (params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<InputStream>, any>({
+        path: `/user/withdrawal`,
+        method: "DELETE",
         ...params,
       }),
   };

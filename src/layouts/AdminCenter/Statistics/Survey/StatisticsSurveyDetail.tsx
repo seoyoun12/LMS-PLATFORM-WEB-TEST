@@ -2,28 +2,23 @@ import { useState } from 'react';
 import styled from '@emotion/styled';
 import { Box, Button, MenuItem, Stack } from '@mui/material';
 import { useRouter } from 'next/router';
-import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
-import { BarChart, DoughnutChart, PieChart } from '@components/ui/Charts';
+import { PieChart } from '@components/ui/Charts';
 import { useSurveyStatistics } from '@common/api/adm/statistics';
 import { Modal, Spinner } from '@components/ui';
 import { Card } from '@components/admin-center/Card/Card';
 import { convertObjChartData } from '@utils/convertChartData';
 import { NotFound } from '@components/ui/NotFound';
 import { ParticipateListModal } from '@components/admin-center/Statistics/ParticipateListModal';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import { useSnackbar } from '@hooks/useSnackbar';
-import { getExcelSurveyDetail } from '@common/api/adm/excel';
+import { StatDownloadExcel } from '@components/admin-center/Statistics/StatDownloadExcel';
 
 export function StatisticsSurveyDetail() {
-  const snackbar = useSnackbar();
   const router = useRouter();
   const { surveySeq } = router.query;
   const { data, error } = useSurveyStatistics(Number(surveySeq));
   const [open, setOpen] = useState(false);
   const [openParticipate, setOpenParticipate] = useState(false);
   const [modalSubList, setModalSubList] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
   const backgroundColor: string[] = [
     '#ee4a5d',
     '#ee7051',
@@ -55,48 +50,13 @@ export function StatisticsSurveyDetail() {
     setOpen(false);
   };
 
-  const onClickExcelDownload = async (surveyName: string) => {
-    return snackbar({ variant: 'info', message: '준비중입니다.' });
-    const a = document.createElement('a');
-    setLoading(true);
-    try {
-      const data = await getExcelSurveyDetail(Number(surveySeq));
-      const excel = new Blob([data]);
-      a.href = URL.createObjectURL(excel);
-      a.download = `충남_관리자_설문통계_${surveyName}.xlsx`;
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(a.href);
-      // console.log('엑셀', data);
-      snackbar({ variant: 'success', message: '다운로드 완료' });
-      setLoading(false);
-    } catch (e) {
-      snackbar({ variant: 'error', message: e.data.message });
-      setLoading(false);
-    }
-  };
-
   if (!data) return <Spinner />;
   if (error) return <div>Error...</div>;
 
   return (
     <StaticsSurveyDetailWrap>
-      <Card
-        header={
-          <Box display="flex" justifyContent="space-between">
-            <Box>{data.surveyName}</Box>
-            <Button
-              variant="contained"
-              color="success"
-              onClick={() => onClickExcelDownload(data.surveyName)}
-            >
-              <FileCopyIcon sx={{ marginRight: '4px' }} />
-              설문통계 엑셀다운로드
-            </Button>
-          </Box>
-        }
-        headSx={{ borderBottom: 0 }}
-      />
+      <StatDownloadExcel data={data} />
+
       <Box display="flex">
         <PieCard>
           <Card header="객관식 주관식 문항개수 현황">

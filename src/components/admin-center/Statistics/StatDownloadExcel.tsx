@@ -52,6 +52,7 @@ export function StatDownloadExcel({ data }: { data: StatisticsSurveyResponseDto 
   };
 
   const onClickZipFileExcelDownload = async (surveyName: string) => {
+    return snackbar({ variant: 'info', message: '비활성화된 기능입니다. 곧 정상화 됩니다. ' });
     const a = document.createElement('a');
     setLoading(true);
     try {

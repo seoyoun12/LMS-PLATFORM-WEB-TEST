@@ -24,6 +24,7 @@ import { transIndividualSummary } from '@utils/individualSummaries';
 import { UserRole } from '@common/api/user';
 import dynamic from 'next/dynamic';
 import { courseType } from '@common/api/courseClass';
+import { getTerms } from '@common/api/terms';
 
 export function SignInV2() {
   const router = useRouter();
@@ -34,6 +35,7 @@ export function SignInV2() {
   const [loading, setLoading] = React.useState(false);
   const [smsYn, setSmsYn] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [termData, setTermData] = React.useState('약관을 불러오는 중입니다...');
   const loadingRef = React.useRef(false);
 
   const { watch, setValue } = useForm({
@@ -54,11 +56,20 @@ export function SignInV2() {
       ? String(router.query?.redirect)
       : '/category';
 
+  //로그인 여부 확인 이펙트.
   useEffect(() => {
     if (isLogin) {
       router.push('/category');
     }
   }, [isLogin]);
+
+  //이용약관 불러오는 이펙트.
+  useEffect(() => {
+    (async function () {
+      const { data } = await getTerms({ termType: 'PERSONAL_INFORMATION_TERMS' });
+      setTermData(data.content);
+    })();
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -274,7 +285,7 @@ export function SignInV2() {
               </Box>
             }
           >
-            {transIndividualSummary.split('\n').map(item => (
+            {termData.split('\n').map(item => (
               <Box>{item}</Box>
             ))}
           </Modal>

@@ -26,7 +26,7 @@ export function StatDownloadExcel({ data }: { data: StatisticsSurveyResponseDto 
     surveySeq: string | number,
     courseClassSeq: number | null = null
   ) => {
-    // return snackbar({ variant: 'info', message: '준비중입니다.' });
+    return snackbar({ variant: 'info', message: '비활성화된 기능입니다.' });
     const a = document.createElement('a');
     setLoading(true);
     try {

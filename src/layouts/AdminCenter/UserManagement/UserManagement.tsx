@@ -49,6 +49,7 @@ const radioConfig = [
   { name: '관리자', value: registerType.TYPE_TRAFFIC_SAFETY_EDU }, // 차후 도민
 ];
 
+// TEST
 // const radioConfig = [
 //   { name: '회원(전체)', value: null },
 //   { name: '회원(운수)', value: authoritiesType.ROLE_TRANS_USER },

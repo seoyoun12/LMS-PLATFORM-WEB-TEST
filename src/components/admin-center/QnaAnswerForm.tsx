@@ -79,9 +79,11 @@ export function QnaAnswerForm({ onHandleSubmit }: Props) {
 
     if (!editorRef.current) return;
     const markdownContent = editorRef.current.getInstance().getMarkdown();
+    const contentHtml = editorRef.current.getInstance().getHTML();
     const qnaAnswerInput = {
       ...qnaAnswer,
       content: markdownContent,
+      contentHtml: contentHtml,
     };
     onHandleSubmit({ qnaAnswerInput, files, setLoading });
   };

@@ -13,7 +13,7 @@ export enum QnaType {
 
 export enum smsYn {
   SMSY = 'Y',
-  SMSN = 'N'
+  SMSN = 'N',
 }
 
 export enum AnsweredYn {
@@ -44,6 +44,7 @@ export type QnaInput = Partial<Qna>;
 
 export interface QnaAnswer {
   content: string;
+  contentHtml: string;
   createdDtime: string;
   modifiedDtime: string;
   s3Files: S3Files;

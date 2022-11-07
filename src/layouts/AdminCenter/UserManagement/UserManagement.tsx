@@ -66,11 +66,11 @@ const headRows: {
 }[] = [
   { name: 'No', align: 'center', width: '6.5%' },
   { name: '아이디', align: 'center', width: '19%' },
-  { name: '이름', align: 'center', width: '9.5%' },
-  { name: '생년월일', align: 'center', width: '19%' },
+  { name: '이름', align: 'center', width: '19.5%' },
+  { name: '생년월일', align: 'center', width: '14%' },
   { name: '핸드폰번호', align: 'center', width: '19%' },
   { name: '가입구분', align: 'center', width: '9.5%' },
-  { name: '가입날짜', align: 'center', width: '19%' },
+  { name: '가입날짜', align: 'center', width: '14%' },
 ];
 
 export function UserManagement() {

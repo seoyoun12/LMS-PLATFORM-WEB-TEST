@@ -38,8 +38,8 @@ const headRows: {
   width: string;
 }[] = [
   { name: 'No', align: 'center', width: '5%' },
-  { name: 'display타입', align: 'center', width: '15%' },
-  { name: '변경', align: 'center', width: '75%' },
+  { name: 'display타입', align: 'center', width: '75%' },
+  { name: '변경', align: 'center', width: '15%' },
   { name: '상태', align: 'center', width: '5%' },
 ];
 

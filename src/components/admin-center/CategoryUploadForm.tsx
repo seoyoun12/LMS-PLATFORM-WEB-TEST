@@ -135,9 +135,11 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
 
     if (!editorRef.current) return;
     const markdownContent = editorRef.current.getInstance().getMarkdown();
+    const contentHtml = editorRef.current.getInstance().getHTML();
     const categoryBoardInput = {
       ...category,
       content: markdownContent,
+      contentHtml: contentHtml,
     };
     // onHandleSubmit({ categoryBoardInput, files, isFileDelete });
     onHandleSubmit({ categoryBoardInput, files, setLoading });

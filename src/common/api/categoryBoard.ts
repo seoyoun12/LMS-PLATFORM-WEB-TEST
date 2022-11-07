@@ -14,6 +14,7 @@ export enum BoardType {
 export interface CategoryBoard {
   boardType: BoardType | string;
   content: string;
+  contentHtml: string;
   courseSeq: number;
   createdDtime: string;
   createdDtimeYmd: string;

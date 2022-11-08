@@ -18,6 +18,7 @@ export function StatDownloadExcel({ data }: { data: StatisticsSurveyResponseDto 
   const router = useRouter();
   const { surveySeq } = router.query;
   const [loading, setLoading] = useState(false);
+  const [enableDown, setEnableDown] = useState(false);
 
   const [steps, setSteps] = useState<StepsBySurveyForExcel[] | undefined>(); //기수 데이터들.
 
@@ -26,7 +27,11 @@ export function StatDownloadExcel({ data }: { data: StatisticsSurveyResponseDto 
     surveySeq: string | number,
     courseClassSeq: number | null = null
   ) => {
-    return snackbar({ variant: 'info', message: '비활성화된 기능입니다. 곧 정상화 됩니다. ' });
+    if (!enableDown)
+      return snackbar({
+        variant: 'error',
+        message: '아직 사용할 수 없는 기능입니다. 곧 정상화 됩니다.',
+      });
     const a = document.createElement('a');
     setLoading(true);
     try {
@@ -52,7 +57,11 @@ export function StatDownloadExcel({ data }: { data: StatisticsSurveyResponseDto 
   };
 
   const onClickZipFileExcelDownload = async (surveyName: string) => {
-    return snackbar({ variant: 'info', message: '비활성화된 기능입니다. 곧 정상화 됩니다. ' });
+    if (!enableDown)
+      return snackbar({
+        variant: 'error',
+        message: '아직 사용할 수 없는 기능입니다. 곧 정상화 됩니다.',
+      });
     const a = document.createElement('a');
     setLoading(true);
     try {
@@ -91,7 +100,7 @@ export function StatDownloadExcel({ data }: { data: StatisticsSurveyResponseDto 
     <Card
       header={
         <Box display="flex" justifyContent="space-between">
-          <Box>{data.surveyName}</Box>
+          <Box onClick={() => setEnableDown(true)}>{data.surveyName}</Box>
           <Box display="flex" flexDirection="column" alignItems="flex-end">
             <Wrapper display="flex" gap={2}>
               {/* <Button
@@ -153,6 +162,9 @@ export function StatDownloadExcel({ data }: { data: StatisticsSurveyResponseDto 
             </Wrapper>
             <Typography color="red" fontWeight="bold">
               1명이상의 수강생이 참여한 설문만 보입니다
+            </Typography>
+            <Typography color="red" fontWeight="bold">
+              ※아직 이 기능을 사용하시면 안됩니다※
             </Typography>
             <Backdrop open={loading}>
               <Box

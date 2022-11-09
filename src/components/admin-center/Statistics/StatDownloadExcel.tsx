@@ -18,7 +18,6 @@ export function StatDownloadExcel({ data }: { data: StatisticsSurveyResponseDto 
   const router = useRouter();
   const { surveySeq } = router.query;
   const [loading, setLoading] = useState(false);
-  const [enableDown, setEnableDown] = useState(false);
 
   const [steps, setSteps] = useState<StepsBySurveyForExcel[] | undefined>(); //기수 데이터들.
 
@@ -27,11 +26,6 @@ export function StatDownloadExcel({ data }: { data: StatisticsSurveyResponseDto 
     surveySeq: string | number,
     courseClassSeq: number | null = null
   ) => {
-    if (!enableDown)
-      return snackbar({
-        variant: 'error',
-        message: '아직 사용할 수 없는 기능입니다. 곧 정상화 됩니다.',
-      });
     const a = document.createElement('a');
     setLoading(true);
     try {
@@ -57,11 +51,6 @@ export function StatDownloadExcel({ data }: { data: StatisticsSurveyResponseDto 
   };
 
   const onClickZipFileExcelDownload = async (surveyName: string) => {
-    if (!enableDown)
-      return snackbar({
-        variant: 'error',
-        message: '아직 사용할 수 없는 기능입니다. 곧 정상화 됩니다.',
-      });
     const a = document.createElement('a');
     setLoading(true);
     try {
@@ -76,7 +65,6 @@ export function StatDownloadExcel({ data }: { data: StatisticsSurveyResponseDto 
       a.click();
       a.remove();
       URL.revokeObjectURL(a.href);
-      // console.log('엑셀', data);
       snackbar({ variant: 'success', message: '다운로드 완료' });
       setLoading(false);
     } catch (e) {

@@ -88,7 +88,7 @@ export function StatDownloadExcel({ data }: { data: StatisticsSurveyResponseDto 
     <Card
       header={
         <Box display="flex" justifyContent="space-between">
-          <Box onClick={() => setEnableDown(true)}>{data.surveyName}</Box>
+          <Box>{data.surveyName}</Box>
           <Box display="flex" flexDirection="column" alignItems="flex-end">
             <Wrapper display="flex" gap={2}>
               {/* <Button

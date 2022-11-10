@@ -56,6 +56,20 @@ export const POST = async <T = any>(
   }
 };
 
+export const POST_TO_ALL_DATA = async <T = any>(
+  url: string,
+  data: object = {},
+  config: AxiosRequestConfig = {}
+) => {
+  try {
+    const response = await api.post<T>(url, data, config);
+    return response;
+  }
+  catch (error: any) {
+    return handleError(error);
+  }
+}
+
 export const PUT = async <T = any>(
   url: string,
   data: object = {},

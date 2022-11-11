@@ -151,9 +151,6 @@ export function StatDownloadExcel({ data }: { data: StatisticsSurveyResponseDto 
             <Typography color="red" fontWeight="bold">
               1명이상의 수강생이 참여한 설문만 보입니다
             </Typography>
-            <Typography color="red" fontWeight="bold">
-              ※아직 이 기능을 사용하시면 안됩니다※
-            </Typography>
             <Backdrop open={loading}>
               <Box
                 display="flex"

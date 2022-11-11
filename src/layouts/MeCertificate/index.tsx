@@ -17,7 +17,7 @@ import {
   PrintModalWrapper,
 } from '@components/MeCertificate/style';
 import { useGetUserMyinfoCertificates } from '@common/api/user/myinfo/certificates';
-import { GET, POST } from '@common/httpClient';
+import { GET, POST, POST_TO_ALL_DATA } from '@common/httpClient';
 import {
   UserMyinfoCertificatesConfirmResponseDto,
   UserMyinfoCertificatesResponseDto,
@@ -73,18 +73,21 @@ const MeCertificate: NextPage = () => {
     alert('수료 조건을 충족하여 증명서가 발급됩니다.');
 
     try {
-      const data = await POST<string>(
+      const { headers, data } = await POST_TO_ALL_DATA<string>(
         `/user/myinfo/certificates/download/${selectedCertificate.courseUserSeq}`,
         {},
         {
           responseType: 'blob',
         }
       );
-
+      let contentDisposition : string;
+      if(!headers['content-disposition']) contentDisposition = '무제_수료증';
+      contentDisposition = headers['content-disposition'];
+      const fileName = contentDisposition.split('filename=')[1];
       const url = window.URL.createObjectURL(new Blob([data]));
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${selectedCertificate.fileName}.pdf`;
+      a.download = `${decodeURIComponent(fileName)}.pdf`;
       a.click();
       a.remove();
       setDownloadCertificateFetchState('SUCCESS');

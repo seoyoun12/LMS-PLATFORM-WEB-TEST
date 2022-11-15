@@ -11,6 +11,7 @@ import {
   allowCommonPahtLis,
   allowUserPahtList,
   notNeededLoginPathList,
+  notNeededSiteCourseTypePathList,
 } from '@utils/loginPathList';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { getMyUser, MyUser, UserRole } from '@common/api/user';
@@ -66,6 +67,11 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           router.route.includes(item.href)
         );
         // if (router.route.includes('stebMove')) {
+
+        //site_coures_type이 필요 없는 페이지인지 체크합니다.
+        const isNotNeededCourseType = notNeededSiteCourseTypePathList.some(item => router.route.includes(item.href))
+        if(isNotNeededCourseType) return;
+
         //null or undefined check
         const isCourseType = localStorage.getItem('site_course_type');
         if (!isCourseType) router.push('/');

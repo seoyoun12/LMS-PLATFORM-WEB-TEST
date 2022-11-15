@@ -53,6 +53,7 @@ const siteMapMobileList = [
 const hideNavList = [
   { href: '/course' },
   { href: '/admin-center' },
+  { href: '/terms' },
   // { href: '/'}
 ];
 

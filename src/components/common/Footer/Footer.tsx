@@ -12,7 +12,8 @@ import Image from 'next/image';
 
 const LinkList = [
   {
-    href: 'https://www.ctti.or.kr/kor/page.do?menuIdx=185&bbscd=0&tcd=0',
+    // href: 'https://www.ctti.or.kr/kor/page.do?menuIdx=185&bbscd=0&tcd=0',
+    href: '/terms?termType=PERSONAL_INFORMATION_TERMS',
     name: '개인정보처리방침',
   },
   {

@@ -119,6 +119,10 @@ export default function LessonContentVideo(props: Props) {
               .updateAllCourseProgressUsingPut(courseUserSeq)
               .then(() => v.data.data.completeYn === "Y" && props.onComplete(isEnd));
             
+          }).catch((e)=>{
+            console.log(e);
+            videoIsPaused.current = true;
+            window.alert('네트워크 오류입니다.');
           });
 
       }
@@ -148,6 +152,7 @@ export default function LessonContentVideo(props: Props) {
       apiSeconds.current++;
 
       if (apiSeconds.current >= 30) {
+        console.log('난가?');
         ApiClient.courseLog
           .createCourseModulesUsingPost1({
             courseUserSeq: courseUserSeq,
@@ -160,8 +165,14 @@ export default function LessonContentVideo(props: Props) {
               courseProgressSeq: courseProgressSeq,
               lessonSeq: lessonSeq,
               studyLastTime: videoCurrentSeconds.current,
+            }).catch((e)=>{
+              console.log(e);
+              window.alert('네트워크 오류입니다.');
             })
-          );
+          ).catch((e)=>{
+            console.log(e);
+            window.alert('네트워크 오류입니다.');
+          });
 
         apiSeconds.current = 0;
         apiVideoSeconds.current = 0;
@@ -200,6 +211,9 @@ export default function LessonContentVideo(props: Props) {
         courseUserSeq: props.courseUserSeq,
         lessonSeq: props.lesson.seq,
         studyTime: 0,
+      }).catch((e)=>{
+        console.log(e);
+        window.alert('네트워크 오류입니다.');
       });
 
       videoIsFirst.current = false;

@@ -13,6 +13,7 @@ export default function Terms() {
   useEffect(() => {
     (async function () {
       try {
+        if (!query.termType) return;
         const termType = query.termType as
           | 'CONDITIONS_TERMS'
           | 'PERSONAL_INFORMATION_TERMS'

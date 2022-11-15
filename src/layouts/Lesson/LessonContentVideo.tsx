@@ -122,7 +122,7 @@ export default function LessonContentVideo(props: Props) {
           }).catch((e)=>{
             console.log(e);
             videoIsPaused.current = true;
-            window.alert('네트워크 오류입니다.');
+            window.alert('네트워크 오류입니다.stopTimer(createCourseModulesUsingPost1 => updateCourseProgressUsingPut => updateAllCourseProgressUsingPut)');
           });
 
       }
@@ -167,11 +167,11 @@ export default function LessonContentVideo(props: Props) {
               studyLastTime: videoCurrentSeconds.current,
             }).catch((e)=>{
               console.log(e);
-              window.alert('네트워크 오류입니다.');
+              window.alert('네트워크 오류입니다.startTimer(updateCourseProgressUsingPut)');
             })
           ).catch((e)=>{
             console.log(e);
-            window.alert('네트워크 오류입니다.');
+            window.alert('네트워크 오류입니다.startTimer(createCourseModulesUsingPost1)');
           });
 
         apiSeconds.current = 0;
@@ -213,7 +213,7 @@ export default function LessonContentVideo(props: Props) {
         studyTime: 0,
       }).catch((e)=>{
         console.log(e);
-        window.alert('네트워크 오류입니다.');
+        window.alert('네트워크 오류입니다.onPlaying(createCourseModulesUsingPost1)');
       });
 
       videoIsFirst.current = false;

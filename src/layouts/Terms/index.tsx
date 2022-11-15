@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import { getTerms } from '@common/api/terms';
 
 export default function Terms() {
@@ -9,26 +9,14 @@ export default function Terms() {
   const router = useRouter();
   const { query } = router;
 
-  //텀타입이 없을 시 개인정보처리약관으로 자동이동.
-  useEffect(() => {
-    if (query) {
-      router.push({
-        pathname: router.pathname,
-        query: {
-          termType: 'PERSONAL_INFORMATION_TERMS',
-        },
-      });
-    }
-  }, []);
-
   //약관 불러오는 훅
   useEffect(() => {
     (async function () {
       try {
-        const termType =
-          (query.termTypeas as 'CONDITIONS_TERMS') ||
-          'PERSONAL_INFORMATION_TERMS' ||
-          'LOCATION_BASED_TERMS';
+        const termType = query.termType as
+          | 'CONDITIONS_TERMS'
+          | 'PERSONAL_INFORMATION_TERMS'
+          | 'LOCATION_BASED_TERMS';
         const { data } = await getTerms({ termType });
         setTerm(data.content);
       } catch (e) {

@@ -121,7 +121,8 @@ export default function LessonContentVideo(props: Props) {
             
           }).catch((e)=>{
             console.log(e);
-            videoIsPaused.current = true;
+            videoPlayer.current.pause();
+            stopTimer('CURRENT');
             window.alert('네트워크 오류입니다.stopTimer(createCourseModulesUsingPost1 => updateCourseProgressUsingPut => updateAllCourseProgressUsingPut)');
           });
 
@@ -167,10 +168,14 @@ export default function LessonContentVideo(props: Props) {
               studyLastTime: videoCurrentSeconds.current,
             }).catch((e)=>{
               console.log(e);
+              videoPlayer.current.pause();
+              stopTimer('CURRENT');
               window.alert('네트워크 오류입니다.startTimer(updateCourseProgressUsingPut)');
             })
           ).catch((e)=>{
             console.log(e);
+            videoPlayer.current.pause();
+            stopTimer('CURRENT');
             window.alert('네트워크 오류입니다.startTimer(createCourseModulesUsingPost1)');
           });
 
@@ -213,6 +218,8 @@ export default function LessonContentVideo(props: Props) {
         studyTime: 0,
       }).catch((e)=>{
         console.log(e);
+        videoPlayer.current.pause();
+        stopTimer('CURRENT');
         window.alert('네트워크 오류입니다.onPlaying(createCourseModulesUsingPost1)');
       });
 

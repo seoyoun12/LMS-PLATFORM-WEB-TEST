@@ -109,7 +109,7 @@ export function EnrollHistoryModal({
           new Date().getTime();
         setIsAfterStudyDate(isAfter);
 
-        onChangeBusinessSubType(data.userSubBusinessType);
+        onChangeBusinessSubType(data.userSubBusinessType , data.userCompanyName);
 
         setPhone('phone1', data.phone.slice(0, 3));
         setPhone('phone2', data.phone.slice(3, 7));
@@ -268,7 +268,7 @@ export function EnrollHistoryModal({
   };
 
   //인풋 잠금처리를 위한 change
-  const onChangeBusinessSubType = (value: string) => {
+  const onChangeBusinessSubType = (value: string , userCompanyName: string) => {
     // const {
     //   target: { value },
     // } = e;
@@ -325,7 +325,7 @@ export function EnrollHistoryModal({
     }
     setDisabledCompany(false);
     setHideCarNumber(false);
-    setValue('userCompanyName', '');
+    setValue('userCompanyName', userCompanyName);
     setValue('userSubBusinessType', value as courseSubCategoryType);
   };
 

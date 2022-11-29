@@ -34,7 +34,7 @@ import { logout } from "@common/api";
 import Logo from "public/assets/svgs/logo.svg";
 import Image from "next/image";
 
-const drawerWidth = 240;
+const drawerWidth = 290;
 
 export function Drawer({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -113,7 +113,23 @@ export function Drawer({ children }: { children: ReactNode }) {
       ),
     },
     {
-      name: "과정관리",
+      name: "과정관리(운수/저상)",
+      children: [
+        {
+          name: "과정 목록",
+          href: "/admin-center/course",
+          isActive: router.pathname === "/admin-center/course",
+        },
+        {
+          name: "과정 등록",
+          href: "/admin-center/course/upload",
+          isActive: router.pathname === "/admin-center/course/upload",
+        },
+      ],
+      icon: <SchoolOutlinedIcon sx={{ mr: "32px", color: grey[700] }} />,
+    },
+    {
+      name: "과정관리(도민)",
       children: [
         {
           name: "과정 목록",

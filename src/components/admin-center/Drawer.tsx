@@ -133,13 +133,13 @@ export function Drawer({ children }: { children: ReactNode }) {
       children: [
         {
           name: "과정 목록",
-          href: "/admin-center/course",
-          isActive: router.pathname === "/admin-center/course",
+          href: "/admin-center/course-traffic",
+          isActive: router.pathname === "/admin-center/course-traffic",
         },
         {
           name: "과정 등록",
-          href: "/admin-center/course/upload",
-          isActive: router.pathname === "/admin-center/course/upload",
+          href: "/admin-center/course-traffic/upload",
+          isActive: router.pathname === "/admin-center/course-traffic/upload",
         },
       ],
       icon: <SchoolOutlinedIcon sx={{ mr: "32px", color: grey[700] }} />,

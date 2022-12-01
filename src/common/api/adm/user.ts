@@ -43,7 +43,6 @@ export async function removeUser(seq: number) {
   return await DELETE(`/user/adm/${seq}`);
 }
 
-
 export function useUser(userSeq: number | null) {
   const { data, error } = useSWR<SWRResponse<User>>(userSeq ? `/user/adm/${userSeq}` : null, GET);
 

@@ -268,7 +268,7 @@ export function EnrollHistoryModal({
   };
 
   //인풋 잠금처리를 위한 change
-  const onChangeBusinessSubType = (value: string , userCompanyName: string) => {
+  const onChangeBusinessSubType = (value: string , userCompanyName?: string) => {
     // const {
     //   target: { value },
     // } = e;

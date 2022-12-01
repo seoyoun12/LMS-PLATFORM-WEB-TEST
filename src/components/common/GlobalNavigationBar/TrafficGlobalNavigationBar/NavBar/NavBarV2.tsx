@@ -299,18 +299,10 @@ export const ProvintialHeaderList = [
         title: "연령별 학습지도안",
         href: "/traffic/learning-material/learning-guide",
       },
-<<<<<<< HEAD
       { title: '교육자료', href: '/traffic/learning-material/education' },
       { title: '교육영상', href: '/traffic/learning-material/video' },
       { title: '타기관자료모음', href: '/traffic/learning-material/reference' },
       { title: '과정게시판', href: '/traffic/category' },
-=======
-      { title: "교육자료", href: "/traffic/learning-material/education" },
-      { title: "교육영상", href: "/traffic/learning-material/video" },
-      { title: "타기관자료모음", href: "/traffic/learning-material/reference" },
-      // 4개까지만 노출되도록 설정되어있는듯 합니다. 제호님 확인좀!
-      // { title: "과정목록", href: "/traffic/learning-material/reference" },
->>>>>>> develop
     ],
   },
   {

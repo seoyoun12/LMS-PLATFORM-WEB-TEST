@@ -12,6 +12,7 @@ export { Library } from "./CourseManagement/Library";
 
 export { CourseTrafficManagement } from "./CourseTrafficManagement/CourseTrafficManagement";
 export { CourseTrafficUpload } from "./CourseTrafficManagement/CourseTrafficUpload";
+export { CourseTrafficModify } from "./CourseTrafficManagement/CourseTrafficModify";
 
 export { ContentManagement } from "./ContentManagement/ContentManagement";
 export { ContentUpload } from "./ContentManagement/ContentUpload";

@@ -10,6 +10,7 @@ export enum MaterialType {
   TYPE_EDUCATIONAL = "TYPE_EDUCATIONAL",
   TYPE_VIDEO = "TYPE_VIDEO",
   TYPE_OTHER_ORGAN = "TYPE_OTHER_ORGAN",
+  TYPE_MEDIA = 'TYPE_MEDIA',
 }
 
 export enum MaterialSubType {

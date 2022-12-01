@@ -152,7 +152,7 @@ const ContentContainer = styled.nav`
     top: 78px;
     box-shadow: 2px 10px 12px 1px rgba(0, 0, 0, 0.1);
     left: 0;
-    min-height: 200px;
+    min-height: 240px;
     border-radius: 0 0 4px 4px;
     transition: min-height 0.2s ease-in-out;
     border-top: 1px solid #e1e1e1;
@@ -224,7 +224,7 @@ const NavContainer = styled.div`
   .dropdown-box {
     position: relative;
     margin-top: 16px;
-    height: 160px;
+    height: 200px;
     transition: height 0.2s ease-in-out;
     overflow: hidden;
   }
@@ -297,6 +297,7 @@ export const ProvintialHeaderList = [
       { title: '교육자료', href: '/traffic/learning-material/education' },
       { title: '교육영상', href: '/traffic/learning-material/video' },
       { title: '타기관자료모음', href: '/traffic/learning-material/reference' },
+      { title: '과정게시판', href: '/traffic/category' },
     ],
   },
   {

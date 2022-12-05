@@ -1,45 +1,52 @@
-import { removeCourse, useCourseList } from '@common/api/adm/course';
-import { Table } from '@components/ui';
-import { Box, Button, Chip, TableBody, TableHead, Typography } from '@mui/material';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import { useEffect, useState } from 'react';
-import { Link } from '@components/common';
-import { grey } from '@mui/material/colors';
-import { useSnackbar } from '@hooks/useSnackbar';
-import { useDialog } from '@hooks/useDialog';
-import * as React from 'react';
-import { useRouter } from 'next/router';
-import styles from '@styles/common.module.scss';
-import { Container } from '@mui/material';
-import dateFormat from 'dateformat';
-import { YN } from '@common/constant';
-import { Spinner } from '@components/ui';
-import { css } from '@emotion/css';
-import { courseAdmList, courseList, courseRemove } from '@common/api/course';
+import { removeCourse, useCourseList } from "@common/api/adm/course";
+import { Table } from "@components/ui";
+import {
+  Box,
+  Button,
+  Chip,
+  TableBody,
+  TableHead,
+  Typography,
+} from "@mui/material";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import { useEffect, useState } from "react";
+import { Link } from "@components/common";
+import { grey } from "@mui/material/colors";
+import { useSnackbar } from "@hooks/useSnackbar";
+import { useDialog } from "@hooks/useDialog";
+import * as React from "react";
+import { useRouter } from "next/router";
+import styles from "@styles/common.module.scss";
+import { Container } from "@mui/material";
+import dateFormat from "dateformat";
+import { YN } from "@common/constant";
+import { Spinner } from "@components/ui";
+import { css } from "@emotion/css";
+import { courseAdmList, courseList, courseRemove } from "@common/api/course";
 import {
   courseReg,
   courseCategory,
   courseSubCategory,
-} from '@layouts/Calendar/CalendarBody/CalendarBody';
-import { CollectionsBookmark } from '@mui/icons-material';
-import styled from '@emotion/styled';
-import { ManagementSearchHeadRow } from '@components/admin-center/ManagementSearchHeadRow';
-import { NotFound } from '@components/ui/NotFound';
+} from "@layouts/Calendar/CalendarBody/CalendarBody";
+import { CollectionsBookmark } from "@mui/icons-material";
+import styled from "@emotion/styled";
+import { ManagementSearchHeadRow } from "@components/admin-center/ManagementSearchHeadRow";
+import { NotFound } from "@components/ui/NotFound";
 
 const headRows: {
   name: string;
-  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  align: "inherit" | "left" | "center" | "right" | "justify";
   width: string;
 }[] = [
-  { name: 'No', align: 'center', width: '5%' },
-  { name: '과정분류', align: 'center', width: '8.5%' },
-  { name: '교육분류', align: 'center', width: '8.5%' },
-  { name: '업종', align: 'center', width: '8.5%' },
-  { name: '과정명', align: 'center', width: '32.5%' },
-  { name: '생성날짜', align: 'center', width: '10%' },
-  { name: '노출여부', align: 'center', width: '5%' },
-  { name: '상태', align: 'center', width: '5%' },
+  { name: "No", align: "center", width: "5%" },
+  { name: "과정분류", align: "center", width: "8.5%" },
+  { name: "교육분류", align: "center", width: "8.5%" },
+  { name: "업종", align: "center", width: "8.5%" },
+  { name: "과정명", align: "center", width: "32.5%" },
+  { name: "생성날짜", align: "center", width: "10%" },
+  { name: "노출여부", align: "center", width: "5%" },
+  { name: "상태", align: "center", width: "5%" },
 ];
 
 export function CourseManagement() {
@@ -49,10 +56,13 @@ export function CourseManagement() {
   const [page, setPage] = useState(0);
   const [seq, setSeq] = useState<number | null>(null);
   const [notFound, setNotFound] = useState(false);
-  const [searchTitle, setSearchTitle] = useState<string>(''); //이름 혹은 아이디
+  const [searchTitle, setSearchTitle] = useState<string>(""); //이름 혹은 아이디
   const searchInputRef = React.useRef<HTMLInputElement | null>(null);
 
-  const { data, error, mutate } = courseAdmList({ page, courseTitle: searchTitle });
+  const { data, error, mutate } = courseAdmList({
+    page,
+    courseTitle: searchTitle,
+  });
   // const { data, error, mutate } = courseList({ page });
 
   // pagination
@@ -82,7 +92,7 @@ export function CourseManagement() {
     setNotFound(false);
     if (isReload) {
       setPage(0);
-      return setSearchTitle('');
+      return setSearchTitle("");
     }
     if (searchInputRef.current) {
       setSearchTitle(searchInputRef.current.value);
@@ -122,7 +132,9 @@ export function CourseManagement() {
   // );
   return (
     <Box>
-      <CourseTitleTypography variant="h5">과정 목록</CourseTitleTypography>
+      <CourseTitleTypography variant="h5">
+        과정 목록(운수/저상)
+      </CourseTitleTypography>
       <ManagementSearchHeadRow
         ref={searchInputRef}
         search={searchTitle}
@@ -138,7 +150,7 @@ export function CourseManagement() {
           page={data.number}
           onChangePage={onChangePage}
           size="small"
-          sx={{ tableLayout: 'fixed' }}
+          sx={{ tableLayout: "fixed" }}
         >
           <TableHead>
             <TableRow>
@@ -151,9 +163,9 @@ export function CourseManagement() {
           </TableHead>
 
           <TableBody>
-            {data.content.map(course => (
+            {data.content.map((course) => (
               <TableRow
-                sx={{ cursor: 'pointer' }}
+                sx={{ cursor: "pointer" }}
                 key={course.seq}
                 hover
                 onClick={() => onClickModifyCourse(course.seq)}
@@ -161,19 +173,23 @@ export function CourseManagement() {
                 <CourseTableCell align="center">{course.seq}</CourseTableCell>
                 {/* <TableCell align="center">{course.courseType}</TableCell> */}
                 <CourseTableCell align="center">
-                  {courseReg.filter(item => item.type === course.courseType)[0]?.ko}
+                  {
+                    courseReg.filter(
+                      (item) => item.type === course.courseType
+                    )[0]?.ko
+                  }
                 </CourseTableCell>
                 <CourseTableCell align="center">
                   {
                     courseCategory.filter(
-                      item => item.type === course.courseCategoryType
+                      (item) => item.type === course.courseCategoryType
                     )[0]?.ko
                   }
                 </CourseTableCell>
                 <CourseTableCell align="center">
                   {
                     courseSubCategory.filter(
-                      item => item.type === course.courseSubCategoryType
+                      (item) => item.type === course.courseSubCategoryType
                     )[0]?.ko
                   }
                 </CourseTableCell>
@@ -181,22 +197,24 @@ export function CourseManagement() {
                   <SubjectBox>{course.courseName}</SubjectBox>
                 </CourseTableCell>
                 <CourseTableCell align="center">
-                  {dateFormat(course.createdDtime, 'isoDate')}
+                  {dateFormat(course.createdDtime, "isoDate")}
                 </CourseTableCell>
                 <CourseTableCell align="center">
                   <Chip
-                    label={course.displayYn === YN.YES ? '보임' : '숨김'}
+                    label={course.displayYn === YN.YES ? "보임" : "숨김"}
                     variant="outlined"
                     size="small"
-                    color={course.displayYn === YN.YES ? 'secondary' : 'default'}
+                    color={
+                      course.displayYn === YN.YES ? "secondary" : "default"
+                    }
                   />
                 </CourseTableCell>
                 <CourseTableCell align="center">
                   <Chip
-                    label={course.status ? '정상' : '중지'}
+                    label={course.status ? "정상" : "중지"}
                     variant="outlined"
                     size="small"
-                    color={course.status ? 'secondary' : 'default'}
+                    color={course.status ? "secondary" : "default"}
                   />
                 </CourseTableCell>
 

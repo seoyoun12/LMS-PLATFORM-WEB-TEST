@@ -34,14 +34,13 @@ export default function MediaLayout({ materialType }: MediaLayoutProps) {
   const [eduSub, setEduSub] = useState<EduTargetSubType>('TYPE_KINDERGARTEN');
   const { data } = useTrafficMediaBoard(eduSub);
 
-  console.log(data, '하이여');
-
   const handleClickPost = (id: number) => {
     router.push(`/traffic/learning-material/media/${id}`);
   };
 
   const handleMainChipClick = (eduMainType: EduTargetMainType) => {
-    const getFirstChild = eduArr.filter(r => r.eduMainType === eduMainType)[0].child[0];
+    const getFirstChild = eduArr.filter(r => r.eduMainType === eduMainType)[0]
+      .child[0];
     setEduMain(eduMainType);
     setEduSub(getFirstChild.eduSubType);
   };
@@ -80,7 +79,10 @@ export default function MediaLayout({ materialType }: MediaLayoutProps) {
           <>
             {data &&
               data.map((item, index) => (
-                <MediaItemContainer key={index} onClick={() => handleClickPost(item.seq)}>
+                <MediaItemContainer
+                  key={index}
+                  onClick={() => handleClickPost(item.seq)}
+                >
                   <MediaItemImageContainer>
                     {(item.s3Files && item.s3Files.length > 0 && (
                       <img src={item.s3Files[0].path} alt="course thumbnail" />
@@ -94,7 +96,9 @@ export default function MediaLayout({ materialType }: MediaLayoutProps) {
 
                   <MediaItemContentContainer>
                     <MediaItemContentHeaderContainer>
-                      <MediaItemContentTitle>{item.title}</MediaItemContentTitle>
+                      <MediaItemContentTitle>
+                        {item.title}
+                      </MediaItemContentTitle>
                       {/*<LearningGuideItemContentDate>*/}
                       {/*  조회수: 0*/}
                       {/*</LearningGuideItemContentDate>*/}

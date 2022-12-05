@@ -53,14 +53,22 @@ export function Steb2() {
     HIGH_SCHOOL: { grade1: 0, grade2: 0, grade3: 0 },
   });
 
-  const { register, setValue, watch, reset } = useForm<ProvincialEnrollSaveRequestDto>({
-    defaultValues: { expectedToStartDtime: dateFormat(new Date(), 'yyyy-mm-dd') },
-  });
+  const { register, setValue, watch, reset } =
+    useForm<ProvincialEnrollSaveRequestDto>({
+      defaultValues: {
+        expectedToStartDtime: dateFormat(new Date(), 'yyyy-mm-dd'),
+      },
+    });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { region, organization, expectedToStartDtime, eduTargetMain, eduTargetSub } =
-      watch();
+    const {
+      region,
+      organization,
+      expectedToStartDtime,
+      eduTargetMain,
+      eduTargetSub,
+    } = watch();
 
     let isPeople = null;
     for (let [key, obj] of Object.entries(detailCounts)) {
@@ -77,17 +85,15 @@ export function Steb2() {
       !eduTargetSub
     )
       return window.alert('모두 입력해 주세요!');
-    if (!isPeople || isPeople <= 0) return window.alert('교육생 명수를 기입해주세요!');
+    if (!isPeople || isPeople <= 0)
+      return window.alert('교육생 명수를 기입해주세요!');
 
     try {
       const obj = watch();
       Object.assign(obj, detailCounts[watch().eduTargetSub]);
 
-      console.log(detailCounts[watch().eduTargetSub], obj, trafficInfo);
-
       const test = await enrollProvincial(obj);
       setTrafficInfo({ ...watch(), peopleCounts: { ...detailCounts } });
-      console.log('헉', trafficInfo, test);
       router.push('steb3');
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -125,7 +131,10 @@ export function Steb2() {
           </Select>
         </FormControl>
         <FormControl fullWidth>
-          <TextField label="소속(학교 , 기관 , 단체)" {...register('organization')} />
+          <TextField
+            label="소속(학교 , 기관 , 단체)"
+            {...register('organization')}
+          />
           <FormHelperText sx={{ color: 'red' }}></FormHelperText>
         </FormControl>
         <DatePicker
@@ -139,7 +148,9 @@ export function Steb2() {
           onChange={date =>
             setValue(
               'expectedToStartDtime',
-              date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd')
+              date
+                ? dateFormat(date, 'yyyy-mm-dd')
+                : dateFormat(new Date(), 'yyyy-mm-dd')
             )
           }
         />
@@ -166,7 +177,9 @@ export function Steb2() {
             {...register('eduTargetSub')}
           >
             {studentList
-              .filter(studentList => watch().eduTargetMain === studentList.enType)[0]
+              .filter(
+                studentList => watch().eduTargetMain === studentList.enType
+              )[0]
               ?.category.map(({ type, enType, ageList }) => (
                 <MenuItem key={enType} value={enType}>
                   {type}

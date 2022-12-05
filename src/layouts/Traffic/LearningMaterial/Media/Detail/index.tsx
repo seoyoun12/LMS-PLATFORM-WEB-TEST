@@ -40,7 +40,6 @@ export default function MediaDetailLayout() {
     prevBoard: ProvincialBoardResponseDto;
     nextBoard: ProvincialBoardResponseDto;
   }>();
-  console.log('헐', id);
 
   useEffect(() => {
     (async function () {
@@ -69,14 +68,12 @@ export default function MediaDetailLayout() {
       try {
         const prevAndNextBoard = { prevBoard: {}, nextBoard: {} };
         const datas = await getTrafficMediaBoard(data.eduTargetSub);
-        console.log(datas);
         datas.data.forEach((r, idx) => {
           if (data.seq === r.seq) {
             prevAndNextBoard.prevBoard = datas.data[idx - 1];
             prevAndNextBoard.nextBoard = datas.data[idx + 1];
           }
         });
-        console.log(prevAndNextBoard);
         setBoardLinks(prevAndNextBoard);
       } catch (e) {
         console.log(e);

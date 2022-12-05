@@ -1,7 +1,19 @@
-import styled from "@emotion/styled";
-import { ButtonBase } from "@mui/material";
+import styled from '@emotion/styled';
+import { ButtonBase, Chip } from '@mui/material';
 
 export const MediaContainer = styled.div``;
+
+export const MediaMainChipWrap = styled.div`
+  display: flex;
+  gap: 4px;
+`;
+export const MediaSubChipWrap = styled.div`
+  display: flex;
+  gap: 4px;
+  margin: 4px 0;
+`;
+
+export const MediaChipItem = styled(Chip)``;
 
 export const MediaContentContainer = styled.div`
   width: 100%;

@@ -1,15 +1,15 @@
-import styled from "@emotion/styled";
-import styles from "@styles/common.module.scss";
-import { grey } from "@mui/material/colors";
-import { Box, MenuItem } from "@mui/material";
-import { Link } from "@components/common";
-import React, { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router";
+import styled from '@emotion/styled';
+import styles from '@styles/common.module.scss';
+import { grey } from '@mui/material/colors';
+import { Box, MenuItem } from '@mui/material';
+import { Link } from '@components/common';
+import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 
 const showRemoteList = [
   // { href: '/traffic/course/[courseSeq]' },
   // { href: '/traffic/admin-center' },
-  { href: "/traffic/category" },
+  { href: '/traffic/category' },
 ];
 
 const IndicatorBox = ({ index, value }: { index: number; value: number }) => {
@@ -17,22 +17,22 @@ const IndicatorBox = ({ index, value }: { index: number; value: number }) => {
     <Box
       sx={{
         opacity: index !== value && 0,
-        height: "4px",
-        width: "100%",
-        background: "#256bef",
-        position: "relative",
+        height: '4px',
+        width: '100%',
+        background: '#256bef',
+        position: 'relative',
       }}
     >
       <Box
         sx={{
-          position: "absolute",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "0px",
-          height: "0px",
-          borderTop: "16px solid #256bef",
-          borderLeft: "14px solid transparent",
-          borderRight: "14px solid transparent",
+          position: 'absolute',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '0px',
+          height: '0px',
+          borderTop: '16px solid #256bef',
+          borderLeft: '14px solid transparent',
+          borderRight: '14px solid transparent',
         }}
       ></Box>
     </Box>
@@ -63,34 +63,34 @@ export function NavBarV2() {
   };
 
   useEffect(() => {
-    const show = showRemoteList.some((e) => router.route.includes(e.href));
+    const show = showRemoteList.some(e => router.route.includes(e.href));
     setIsShowRemote(show);
   }, [router]);
 
   return (
     <ContentContainer>
       <HeaderBackground
-        className={`dropdown-back  ${open ? "" : "hidden"}`}
+        className={`dropdown-back  ${open ? '' : 'hidden'}`}
         // onMouseOver={handleHover}
         // onMouseOut={handleOut}
       ></HeaderBackground>
       <NavContainer>
-        <Box sx={{ display: "flex", height: "100%", width: "100%" }}>
+        <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
           {ProvintialHeaderList.map((item, index) => (
             <HeaderItem
               key={item.category}
-              className={"dropdown-box-wrap"}
-              onMouseOver={(e) => handleHover(e, index)}
+              className={'dropdown-box-wrap'}
+              onMouseOver={e => handleHover(e, index)}
               onMouseOut={handleOut}
             >
               <Link href={item.href} color={grey[900]}>
                 <Box className="header-title">{item.category}</Box>
               </Link>
               <IndicatorBox index={index} value={showIndicatorValue} />
-              <Box className={`dropdown-box ${open ? "" : "hidden"}`}>
+              <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
                 <Box className="link-wrap">
-                  {item.items.map((menuItem) => {
-                    if (menuItem.href === "/me") return;
+                  {item.items.map(menuItem => {
+                    if (menuItem.href === '/me') return;
                     return (
                       <Link
                         className="link-items"
@@ -280,56 +280,56 @@ const RemoteWrap = styled(Box)`
 
 export const ProvintialHeaderList = [
   {
-    category: "교육이용안내",
-    href: "",
+    category: '교육이용안내',
+    href: '',
     items: [
       {
-        title: "회원가입 및 로그인",
-        href: "/traffic/guide?tab=TYPE_GUIDE_AUTH",
+        title: '회원가입 및 로그인',
+        href: '/traffic/guide?tab=TYPE_GUIDE_AUTH',
       },
-      { title: "교육신청방법", href: "/traffic/guide?tab=TYPE_GUIDE_EDU_REGI" },
-      { title: "학습방법", href: "/traffic/guide?tab=TYPE_GUIDE_EDU_LEARNING" },
+      { title: '교육신청방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_REGI' },
+      { title: '학습방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_LEARNING' },
     ],
   },
   {
-    category: "학습자료",
-    href: "/traffic/learning-material/learning-guide",
+    category: '학습자료',
+    href: '/traffic/learning-material/learning-guide',
     items: [
       {
-        title: "연령별 학습지도안",
-        href: "/traffic/learning-material/learning-guide",
+        title: '연령별 학습지도안',
+        href: '/traffic/learning-material/learning-guide',
       },
       { title: '교육자료', href: '/traffic/learning-material/education' },
       { title: '교육영상', href: '/traffic/learning-material/video' },
       { title: '타기관자료모음', href: '/traffic/learning-material/reference' },
-      { title: '과정게시판', href: '/traffic/category' },
+      { title: '과정게시판', href: '/traffic/learning-material/media' },
     ],
   },
   {
-    category: "온라인교육",
-    href: "",
+    category: '온라인교육',
+    href: '',
     items: [
-      { title: "온라인교육 신청", href: "/traffic/stebMove/steb2" },
-      { title: "온라인교육 수정", href: "/traffic/stebMove/steb2" }, // 미완
+      { title: '온라인교육 신청', href: '/traffic/stebMove/steb2' },
+      { title: '온라인교육 수정', href: '/traffic/stebMove/steb2' }, // 미완
     ],
   },
   {
-    category: "나의강의실",
-    href: "/me",
+    category: '나의강의실',
+    href: '/me',
     items: [
-      { title: "정보보기", href: "/me" },
-      { title: "정보수정", href: "/me/edit" },
-      { title: "학습현황", href: "/me/my-course" },
+      { title: '정보보기', href: '/me' },
+      { title: '정보수정', href: '/me/edit' },
+      { title: '학습현황', href: '/me/my-course' },
     ],
   },
   {
-    category: "고객센터",
-    href: "",
+    category: '고객센터',
+    href: '',
     items: [
-      { title: "공지사항", href: "/traffic/service?tab=Notice" },
-      { title: "자주묻는질문", href: "/traffic/service?tab=Faq" },
-      { title: "교육문의", href: "/traffic/service?tab=Question" },
-      { title: "문의내역조회", href: "/traffic/service?tab=Look" },
+      { title: '공지사항', href: '/traffic/service?tab=Notice' },
+      { title: '자주묻는질문', href: '/traffic/service?tab=Faq' },
+      { title: '교육문의', href: '/traffic/service?tab=Question' },
+      { title: '문의내역조회', href: '/traffic/service?tab=Look' },
     ],
   },
 ];

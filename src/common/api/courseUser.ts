@@ -1,6 +1,5 @@
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
-import { CourseUserProvincialSaveRequestDto } from './Api';
 import {
   businessType,
   courseCategoryType,
@@ -109,8 +108,8 @@ export function getIsExistUser(courseClassSeq: number) {
 }
 
 // 운수저상쪽 로직은 courseClass에 있음 여기로 가져와야함.
-export function enrollCourseUserProvincial(
-  requestDto: Partial<CourseUserProvincialSaveRequestDto>
-) {
-  return POST(`/course-user/enroll/provincial`, requestDto);
-}
+// export function enrollCourseUserProvincial(
+//   requestDto: Partial<CourseUserProvincialSaveRequestDto>
+// ) {
+//   return POST(`/course-user/enroll/provincial`, requestDto);
+// }

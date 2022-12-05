@@ -16,11 +16,11 @@ export interface CourseClassTraffic {
   // date: string; //신청날짜
   // student: string;
   // category: string;
-  province?: string; //지엮
-  businessName?: string; // 소속
-  studyStartDate?: string; //신청날짜
-  candidateType?: string;
-  candidateDetailType?: string;
+  region?: string; //지엮
+  organization?: string; // 소속
+  expectedToStartDtime?: string; //신청날짜
+  eduTargetMain?: string;
+  eduTargetSub?: string;
 
   peopleCounts: PeopleCounts;
   // firstGrade: number;

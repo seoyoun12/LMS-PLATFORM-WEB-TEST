@@ -1,15 +1,16 @@
-import styled from "@emotion/styled";
-import { Box, BoxProps } from "@mui/material";
+import styled from '@emotion/styled';
+import { Box, BoxProps } from '@mui/material';
 
 interface Props {
   content: string;
+  style?: React.CSSProperties;
   parantSx?: BoxProps;
   childSx?: BoxProps;
 }
 
-export function NotFound({ content, parantSx, childSx }: Props) {
+export function NotFound({ content, style, parantSx, childSx }: Props) {
   return (
-    <NotFoundContainer sx={parantSx}>
+    <NotFoundContainer sx={parantSx} style={style}>
       <NotFoundWord sx={childSx}>{content}</NotFoundWord>
     </NotFoundContainer>
   );

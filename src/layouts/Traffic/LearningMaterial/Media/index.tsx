@@ -1,65 +1,168 @@
-import { MaterialType } from "@common/api/learningMaterial";
-import { NotFound } from "@components/ui/NotFound";
-import { format } from "date-fns";
-import { useRouter } from "next/router";
-import { MediaContainer, MediaContentContainer, MediaItemContainer, MediaItemContentContainer, MediaItemContentHeaderContainer, MediaItemContentSubtitle, MediaItemContentTitle, MediaItemImageContainer } from "./style";
-
+import {
+  MaterialType,
+  useTrafficMediaBoard,
+  EduTargetSubType,
+  EduTargetMain,
+  EduTargetMainType,
+} from '@common/api/learningMaterial';
+import { GET } from '@common/httpClient';
+import { NotFound } from '@components/ui/NotFound';
+import { format } from 'date-fns';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import {
+  MediaChipItem,
+  MediaMainChipWrap,
+  MediaContainer,
+  MediaContentContainer,
+  MediaItemContainer,
+  MediaItemContentContainer,
+  MediaItemContentHeaderContainer,
+  MediaItemContentSubtitle,
+  MediaItemContentTitle,
+  MediaItemImageContainer,
+  MediaSubChipWrap,
+} from './style';
 
 interface MediaLayoutProps {
-    materialType: MaterialType;
-  }
+  materialType: MaterialType;
+}
 
-export default function MediaLayout({ materialType }: MediaLayoutProps){
-    const data  = [
-        { seq:2,title:'네', createdDtime:'2022-12-01', s3Files:[ { length:2, path: `https://picsum.photos/${Math.round(Math.random() * 1000)}` } ] },
-        { seq:223,title:'네weasd', createdDtime:'2022-12-11', s3Files:[ { length:45, path: `https://picsum.photos/${Math.round(Math.random() * 1000)}` } ] },
-        { seq:24542,title:'네adasd', createdDtime:'2022-12-21', s3Files:[ { length:2324, path: `https://picsum.photos/${Math.round(Math.random() * 1000)}` } ] },
-        { seq:264325,title:'asdasdasdasd네', createdDtime:'2022-12-31', s3Files:[ { length:0, path: `https://picsum.photos/${Math.round(Math.random() * 1000)}` } ] },
-    ];
-    const router = useRouter();
-    
-    const handleClickPost = (id: number) => {
-        router.push(`/traffic/learning-material/media/${id}`);
-    };
+export default function MediaLayout({ materialType }: MediaLayoutProps) {
+  const router = useRouter();
+  const [eduMain, setEduMain] = useState<EduTargetMainType>('TYPE_CHILDREN');
+  const [eduSub, setEduSub] = useState<EduTargetSubType>('TYPE_KINDERGARTEN');
+  const { data } = useTrafficMediaBoard(eduSub);
 
+  console.log(data, '하이여');
 
-    return(
-        <MediaContainer>
-            <MediaContentContainer>
-            {data.length <= 0 ? (
-          <NotFound content="신청한 과정이 존재하지 않습니다!" />
+  const handleClickPost = (id: number) => {
+    router.push(`/traffic/learning-material/media/${id}`);
+  };
+
+  const handleMainChipClick = (eduMainType: EduTargetMainType) => {
+    const getFirstChild = eduArr.filter(r => r.eduMainType === eduMainType)[0].child[0];
+    setEduMain(eduMainType);
+    setEduSub(getFirstChild.eduSubType);
+  };
+
+  return (
+    <MediaContainer>
+      <MediaMainChipWrap>
+        {eduArr.map(r => (
+          <MediaChipItem
+            label={r.eduMainTypeKo}
+            color="primary"
+            variant={eduMain === r.eduMainType ? 'filled' : 'outlined'}
+            onClick={() => handleMainChipClick(r.eduMainType)}
+          />
+        ))}
+      </MediaMainChipWrap>
+      <MediaSubChipWrap>
+        {eduArr
+          .filter(r => r.eduMainType === eduMain)[0]
+          .child.map(r => (
+            <MediaChipItem
+              label={r.eduSubTypeKo}
+              color="primary"
+              variant={eduSub === r.eduSubType ? 'filled' : 'outlined'}
+              onClick={() => setEduSub(r.eduSubType)}
+            />
+          ))}
+      </MediaSubChipWrap>
+      <MediaContentContainer>
+        {!data || data.length <= 0 ? (
+          <NotFound
+            style={{ height: '300px' }}
+            content="권한이 없거나 신청한 과정이 존재하지 않습니다!"
+          />
         ) : (
           <>
             {data &&
               data.map((item, index) => (
-                <MediaItemContainer
-                  key={index}
-                  onClick={() => handleClickPost(item.seq)}
-                >
+                <MediaItemContainer key={index} onClick={() => handleClickPost(item.seq)}>
                   <MediaItemImageContainer>
-                    {item.s3Files && item.s3Files.length > 0 && (
+                    {(item.s3Files && item.s3Files.length > 0 && (
                       <img src={item.s3Files[0].path} alt="course thumbnail" />
+                    )) || (
+                      <NotFound
+                        style={{ height: '100%' }}
+                        content="이미지를 찾을 수 없음."
+                      />
                     )}
                   </MediaItemImageContainer>
 
                   <MediaItemContentContainer>
                     <MediaItemContentHeaderContainer>
-                      <MediaItemContentTitle>
-                        {item.title}
-                      </MediaItemContentTitle>
+                      <MediaItemContentTitle>{item.title}</MediaItemContentTitle>
                       {/*<LearningGuideItemContentDate>*/}
                       {/*  조회수: 0*/}
                       {/*</LearningGuideItemContentDate>*/}
                     </MediaItemContentHeaderContainer>
                     <MediaItemContentSubtitle>
-                      {format(new Date(item.createdDtime), "yyyy. MM. dd")}
+                      {format(new Date(item.createdDtime), 'yyyy. MM. dd')}
                     </MediaItemContentSubtitle>
                   </MediaItemContentContainer>
                 </MediaItemContainer>
               ))}
           </>
         )}
-            </MediaContentContainer>
-        </MediaContainer>
-    )
+      </MediaContentContainer>
+    </MediaContainer>
+  );
 }
+
+const eduArr: {
+  eduMainType: EduTargetMainType;
+  eduMainTypeKo: string;
+  child: { eduSubType: EduTargetSubType; eduSubTypeKo: string }[];
+}[] = [
+  {
+    eduMainType: 'TYPE_CHILDREN',
+    eduMainTypeKo: '어린이',
+    child: [
+      {
+        eduSubType: 'TYPE_KINDERGARTEN',
+        eduSubTypeKo: '유치원',
+      },
+    ],
+  },
+  {
+    eduMainType: 'TYPE_TEENAGER',
+    eduMainTypeKo: '청소년',
+    child: [
+      {
+        eduSubType: 'TYPE_ELEMENTARY',
+        eduSubTypeKo: '초등학생',
+      },
+      {
+        eduSubType: 'TYPE_MIDDLE',
+        eduSubTypeKo: '중학생',
+      },
+      {
+        eduSubType: 'TYPE_HIGH',
+        eduSubTypeKo: '고등학생',
+      },
+    ],
+  },
+  {
+    eduMainType: 'TYPE_ELDERLY',
+    eduMainTypeKo: '노인',
+    child: [
+      {
+        eduSubType: 'TYPE_ELDERLY',
+        eduSubTypeKo: '노인',
+      },
+    ],
+  },
+  {
+    eduMainType: 'TYPE_SELF_DRIVING',
+    eduMainTypeKo: '자가운전자',
+    child: [
+      {
+        eduSubType: 'TYPE_SELF_DRIVER',
+        eduSubTypeKo: '자가운전자',
+      },
+    ],
+  },
+];

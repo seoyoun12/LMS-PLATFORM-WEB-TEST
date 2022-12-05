@@ -4,12 +4,13 @@ import {
   EduTargetSubType,
   EduTargetMain,
   EduTargetMainType,
+  getTrafficMediaBoardRole,
 } from '@common/api/learningMaterial';
 import { GET } from '@common/httpClient';
 import { NotFound } from '@components/ui/NotFound';
 import { format } from 'date-fns';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   MediaChipItem,
   MediaMainChipWrap,
@@ -44,6 +45,26 @@ export default function MediaLayout({ materialType }: MediaLayoutProps) {
     setEduMain(eduMainType);
     setEduSub(getFirstChild.eduSubType);
   };
+
+  useEffect(() => {
+    (async function () {
+      try {
+        const roleData = await getTrafficMediaBoardRole();
+        const getEduMain = eduArr.filter(r => {
+          let flag = false;
+          r.child.forEach(c => {
+            if (c.eduSubType === roleData.data.roles[0]) flag = true;
+          });
+          return flag;
+        });
+        console.log(getEduMain);
+        setEduMain(getEduMain[0].eduMainType);
+        setEduSub(getEduMain[0].child[0].eduSubType);
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  }, []);
 
   return (
     <MediaContainer>

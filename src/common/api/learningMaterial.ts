@@ -6,6 +6,7 @@ import { GET, POST, PUT, DELETE } from '@common/httpClient';
 import {
   LearningMaterialResponseDto,
   ProvincialBoardResponseDto,
+  ProvincialRoleResponseDto,
 } from '@common/api/Api';
 
 export enum MaterialType {
@@ -191,4 +192,8 @@ export function getTrafficMediaBoardDetail(boardSeq: number) {
   return GET<{ data: ProvincialBoardResponseDto }>(
     `/provincial/board/one/${boardSeq}`
   );
+}
+
+export function getTrafficMediaBoardRole() {
+  return GET<{ data: ProvincialRoleResponseDto }>(`/provincial/board/roles`);
 }

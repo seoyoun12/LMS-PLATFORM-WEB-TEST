@@ -17,12 +17,15 @@ import ReferenceLayout from "@layouts/Traffic/LearningMaterial/Reference";
 import VideoLayout from "@layouts/Traffic/LearningMaterial/Video";
 import { getMaterialType } from "@layouts/Traffic/LearningMaterial/util";
 import LearningGuideDetailLayout from "@layouts/Traffic/LearningMaterial/LearningGuide/Detail";
+import MediaLayout from "./Media";
+import MediaDetailLayout from "./Media/Detail";
 
 export type MaterialTabType =
   | "education"
   | "learning_guide"
   | "reference"
-  | "video";
+  | "video"
+  | 'media';
 
 export function LearningMaterialLayout() {
   const router = useRouter();
@@ -48,6 +51,11 @@ export function LearningMaterialLayout() {
         return <ReferenceLayout materialType={getMaterialType(type)} />;
       case "video":
         return <VideoLayout materialType={getMaterialType(type)} />;
+      case "media":
+        if(id) {
+          return <MediaDetailLayout />
+        }
+        return <MediaLayout materialType={getMaterialType(type)} />
       default:
         return <></>;
     }
@@ -84,6 +92,11 @@ export function LearningMaterialLayout() {
               label="타기관자료모음"
               onClick={() => handleClickTab("reference")}
               value="reference"
+            />
+            <LearningMaterialTabItem 
+              label='교육영상게시판' 
+              onClick={()=>handleClickTab('media')} 
+              value='media' 
             />
           </LearningMaterialTabs>
         </LearningMaterialTabWrapper>

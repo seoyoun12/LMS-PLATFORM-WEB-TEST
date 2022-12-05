@@ -30,8 +30,10 @@ import 'react-datepicker/dist/react-datepicker.css';
 import dateFormat from 'dateformat';
 import { ko } from 'date-fns/locale';
 import { CourseClassTraffic } from '@common/recoil/courseClassTraffic/atom';
-import { enrollCourseUserProvincial } from '@common/api/courseUser';
-import { CourseUserProvincialSaveRequestDto } from '@common/api/Api';
+import { enrollProvincial } from '@common/api/provincialEnroll';
+import { ProvincialEnrollSaveRequestDto } from '@common/api/Api';
+// import { enrollCourseUserProvincial } from '@common/api/courseUser';
+// import { CourseUserProvincialSaveRequestDto } from '@common/api/Api';
 
 interface detailCounts {
   [prop: string]: { [prop: string]: number };
@@ -52,14 +54,21 @@ export function Steb2() {
   });
 
   const { register, setValue, watch, reset } =
-    useForm<CourseUserProvincialSaveRequestDto>({
-      defaultValues: { studyStartDate: dateFormat(new Date(), 'yyyy-mm-dd') },
+    useForm<ProvincialEnrollSaveRequestDto>({
+      defaultValues: {
+        expectedToStartDtime: dateFormat(new Date(), 'yyyy-mm-dd'),
+      },
     });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { province, businessName, studyStartDate, candidateType, candidateDetailType } =
-      watch();
+    const {
+      region,
+      organization,
+      expectedToStartDtime,
+      eduTargetMain,
+      eduTargetSub,
+    } = watch();
 
     let isPeople = null;
     for (let [key, obj] of Object.entries(detailCounts)) {
@@ -69,19 +78,21 @@ export function Steb2() {
     }
 
     if (
-      !province ||
-      !businessName ||
-      !studyStartDate ||
-      !candidateType ||
-      !candidateDetailType
+      !region ||
+      !organization ||
+      !expectedToStartDtime ||
+      !eduTargetMain ||
+      !eduTargetSub
     )
       return window.alert('모두 입력해 주세요!');
-    if (!isPeople || isPeople <= 0) return window.alert('교육생 명수를 기입해주세요!');
+    if (!isPeople || isPeople <= 0)
+      return window.alert('교육생 명수를 기입해주세요!');
 
     try {
       const obj = watch();
-      Object.assign(obj, detailCounts[watch().candidateType]);
-      await enrollCourseUserProvincial(obj);
+      Object.assign(obj, detailCounts[watch().eduTargetSub]);
+
+      const test = await enrollProvincial(obj);
       setTrafficInfo({ ...watch(), peopleCounts: { ...detailCounts } });
       router.push('steb3');
     } catch (e: any) {
@@ -109,7 +120,7 @@ export function Steb2() {
           <Select
             labelId="location"
             id="location"
-            {...register('province', { required: true })}
+            {...register('region', { required: true })}
             label="location"
           >
             {locationList.map(item => (
@@ -120,7 +131,10 @@ export function Steb2() {
           </Select>
         </FormControl>
         <FormControl fullWidth>
-          <TextField label="소속(학교 , 기관 , 단체)" {...register('businessName')} />
+          <TextField
+            label="소속(학교 , 기관 , 단체)"
+            {...register('organization')}
+          />
           <FormHelperText sx={{ color: 'red' }}></FormHelperText>
         </FormControl>
         <DatePicker
@@ -129,12 +143,14 @@ export function Steb2() {
           showPopperArrow={false}
           minDate={new Date()}
           customInput={<TextField fullWidth />}
-          selected={new Date(watch().studyStartDate)}
+          selected={new Date(watch().expectedToStartDtime)}
           onSelect={() => {}}
           onChange={date =>
             setValue(
-              'studyStartDate',
-              date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd')
+              'expectedToStartDtime',
+              date
+                ? dateFormat(date, 'yyyy-mm-dd')
+                : dateFormat(new Date(), 'yyyy-mm-dd')
             )
           }
         />
@@ -143,7 +159,7 @@ export function Steb2() {
           <Select
             labelId="student"
             id="student"
-            {...register('candidateType')}
+            {...register('eduTargetMain')}
             // label="student"
           >
             {studentList.map((item, index) => (
@@ -158,10 +174,12 @@ export function Steb2() {
           <Select
             labelId="student-category"
             id="student-category"
-            {...register('candidateDetailType')}
+            {...register('eduTargetSub')}
           >
             {studentList
-              .filter(studentList => watch().candidateType === studentList.enType)[0]
+              .filter(
+                studentList => watch().eduTargetMain === studentList.enType
+              )[0]
               ?.category.map(({ type, enType, ageList }) => (
                 <MenuItem key={enType} value={enType}>
                   {type}
@@ -175,12 +193,12 @@ export function Steb2() {
         >
           <TableBody sx={{ width: '80%' }}>
             {studentList
-              .filter(item => watch().candidateType === item.enType)[0]
-              ?.category.filter(item => watch().candidateDetailType === item.enType)[0]
+              .filter(item => watch().eduTargetMain === item.enType)[0]
+              ?.category.filter(item => watch().eduTargetSub === item.enType)[0]
               ?.ageList.map(item => (
                 <CustomInput
                   ageInfo={item}
-                  candidateDetailType={watch().candidateDetailType}
+                  candidateDetailType={watch().eduTargetSub}
                   setDetailCounts={setDetailCounts}
                   detailCounts={detailCounts}
                 />

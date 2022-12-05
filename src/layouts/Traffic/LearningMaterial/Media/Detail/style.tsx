@@ -1,9 +1,8 @@
-import styled from "@emotion/styled";
-import { Chip } from "@mui/material";
-
+import styled from '@emotion/styled';
+import { Chip } from '@mui/material';
 
 export const MediaDetailWrapper = styled.div`
-  padding-bottom: 230px;
+  padding-bottom: 150px;
 `;
 
 export const MediaDetailHeaderWrapper = styled.div`
@@ -15,21 +14,20 @@ export const MediaDetailHeaderTitleText = styled.p`
   font-weight: bold;
 `;
 
-
 export const EducationChipItem = styled(Chip)`
   &:not(:last-of-type) {
     margin-right: 8px;
   }
-  cursor:default ;
+  cursor: default;
 `;
 
-
-export const MediaDetailHeaderDateText = styled.p``;
+export const MediaDetailHeaderDateText = styled.p`
+  margin-bottom: 12px;
+`;
 
 export const MediaDetailHeaderViewText = styled.p``;
 
 // export const MediaYouTubeContainer = styled.div``;
-
 
 export const VideoItemContentWrapper = styled.div`
   padding: 14px 10%;
@@ -39,4 +37,38 @@ export const VideoItemContentWrapper = styled.div`
     width: 100%;
     height: 500px;
   }
+`;
+
+export const MediaDetailContentWrapper = styled.div`
+  padding-top: 32px;
+`;
+
+export const MediaDetailBoardLinksWrapper = styled.div`
+  display: flex;
+  gap: 300px;
+  padding-top: 200px;
+`;
+
+export const MediaDetailBoardLinkItem = styled.div`
+  flex: 1 1 0%;
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+`;
+
+export const MediaDetailBoardLinkItemBlock = styled.div`
+  background-color: #f8f9fa;
+  padding: 16px;
+  cursor: pointer;
+`;
+
+export const MediaDetailBoardLinkItemDescription = styled.div`
+  font-size: 12px;
+`;
+export const MediaDetailBoardLinkItemTitle = styled.div`
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  //?? 상위 박스에hidden 넣어줘야함. 그래야 잘받음.
 `;

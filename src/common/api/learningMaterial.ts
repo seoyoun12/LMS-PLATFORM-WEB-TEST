@@ -3,7 +3,10 @@ import { PaginationResult } from 'types/fetch';
 import { S3Files } from 'types/file';
 import { ProductStatus } from './course';
 import { GET, POST, PUT, DELETE } from '@common/httpClient';
-import { LearningMaterialResponseDto, ProvincialBoardResponseDto } from '@common/api/Api';
+import {
+  LearningMaterialResponseDto,
+  ProvincialBoardResponseDto,
+} from '@common/api/Api';
 
 export enum MaterialType {
   TYPE_BY_AGE = 'TYPE_BY_AGE',
@@ -123,7 +126,9 @@ export function useGetLearningMaterial(
   return data;
 }
 
-export function useGetLearningMaterialDetail(learningMaterialSeq: number | string) {
+export function useGetLearningMaterialDetail(
+  learningMaterialSeq: number | string
+) {
   const data = useSWR<SWRResponse<LearningMaterialResponseDto>>(
     [`/learning-material/${learningMaterialSeq}`],
     GET
@@ -164,10 +169,9 @@ export type EduTargetSubType =
 
 //교육 영상 게시판 전체 불러오기
 export function useTrafficMediaBoard(eduTargetSub: EduTargetSubType) {
-  const { data, error, mutate } = useSWR<SWRResponse<ProvincialBoardResponseDto[]>>(
-    [`/provincial/board/all/${eduTargetSub}`],
-    GET
-  );
+  const { data, error, mutate } = useSWR<
+    SWRResponse<ProvincialBoardResponseDto[]>
+  >([`/provincial/board/all/${eduTargetSub}`], GET);
 
   return {
     data: data?.data,
@@ -176,7 +180,15 @@ export function useTrafficMediaBoard(eduTargetSub: EduTargetSubType) {
   };
 }
 
+export function getTrafficMediaBoard(eduTargetSub: EduTargetSubType) {
+  return GET<{ data: ProvincialBoardResponseDto[] }>(
+    `/provincial/board/all/${eduTargetSub}`
+  );
+}
+
 //교육 영상 게시판 상세 불러오기
 export function getTrafficMediaBoardDetail(boardSeq: number) {
-  return GET<{ data: ProvincialBoardResponseDto }>(`/provincial/board/one/${boardSeq}`);
+  return GET<{ data: ProvincialBoardResponseDto }>(
+    `/provincial/board/one/${boardSeq}`
+  );
 }

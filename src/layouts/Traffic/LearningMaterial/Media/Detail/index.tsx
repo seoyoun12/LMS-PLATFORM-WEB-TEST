@@ -2,6 +2,7 @@ import { ProvincialBoardResponseDto } from '@common/api/Api';
 import {
   EduTargetMain,
   EduTargetSub,
+  getTrafficMediaBoard,
   getTrafficMediaBoardDetail,
 } from '@common/api/learningMaterial';
 import { NotFound } from '@components/ui/NotFound';
@@ -11,6 +12,12 @@ import { useEffect, useState } from 'react';
 import { MaterialTabType } from '../..';
 import {
   EducationChipItem,
+  MediaDetailBoardLinkItem,
+  MediaDetailBoardLinkItemBlock,
+  MediaDetailBoardLinkItemDescription,
+  MediaDetailBoardLinkItemTitle,
+  MediaDetailBoardLinksWrapper,
+  MediaDetailContentWrapper,
   MediaDetailHeaderDateText,
   MediaDetailHeaderTitleText,
   MediaDetailHeaderWrapper,
@@ -20,7 +27,6 @@ import {
 
 export default function MediaDetailLayout() {
   const router = useRouter();
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const { id } = router.query as {
     type: MaterialTabType;
     id: string;
@@ -30,6 +36,11 @@ export default function MediaDetailLayout() {
     eduTargetMain: string;
     eduTargetSub: string;
   }>();
+  const [boardLinks, setBoardLinks] = useState<{
+    prevBoard: ProvincialBoardResponseDto;
+    nextBoard: ProvincialBoardResponseDto;
+  }>();
+  console.log('헐', id);
 
   useEffect(() => {
     (async function () {
@@ -41,15 +52,37 @@ export default function MediaDetailLayout() {
         const eduTargetSub = Object.entries(EduTargetSub).filter(
           r => r[0] === data.eduTargetSub
         )[0][1];
-        console.log('안녕하세요', data, id);
-        console.log(eduTargetSub);
-        setEduTargetTypes({ eduTargetMain: eduTargetMain, eduTargetSub: eduTargetSub });
+        setEduTargetTypes({
+          eduTargetMain: eduTargetMain,
+          eduTargetSub: eduTargetSub,
+        });
         setData(data);
       } catch (e) {
         console.log(e);
       }
     })();
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    (async function () {
+      if (!data) return;
+      try {
+        const prevAndNextBoard = { prevBoard: {}, nextBoard: {} };
+        const datas = await getTrafficMediaBoard(data.eduTargetSub);
+        console.log(datas);
+        datas.data.forEach((r, idx) => {
+          if (data.seq === r.seq) {
+            prevAndNextBoard.prevBoard = datas.data[idx - 1];
+            prevAndNextBoard.nextBoard = datas.data[idx + 1];
+          }
+        });
+        console.log(prevAndNextBoard);
+        setBoardLinks(prevAndNextBoard);
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  }, [data]);
 
   if (!data) return <NotFound content="게시물이 존재하지 않습니다." />;
 
@@ -58,7 +91,10 @@ export default function MediaDetailLayout() {
       <MediaDetailHeaderWrapper>
         <MediaDetailHeaderTitleText>{data.title}</MediaDetailHeaderTitleText>
         <MediaDetailHeaderDateText>
-          {format(new Date(data.createdDtime.replaceAll('-', '/')), 'yyyy.MM.dd')}
+          {format(
+            new Date(data.createdDtime.replaceAll('-', '/')),
+            'yyyy.MM.dd'
+          )}
         </MediaDetailHeaderDateText>
         <EducationChipItem
           label={eduTargetTypes.eduTargetMain}
@@ -79,7 +115,48 @@ export default function MediaDetailLayout() {
           allowFullScreen
         />
       </VideoItemContentWrapper>
-      <div>{data.content}</div>
+      <MediaDetailContentWrapper>{data.content}</MediaDetailContentWrapper>
+
+      <MediaDetailBoardLinksWrapper>
+        <MediaDetailBoardLinkItem>
+          {boardLinks?.prevBoard && (
+            <MediaDetailBoardLinkItemBlock
+              onClick={() => {
+                setData(undefined);
+                router.push(
+                  `/traffic/learning-material/media/${boardLinks.prevBoard.seq}`
+                );
+              }}
+            >
+              <MediaDetailBoardLinkItemDescription>
+                이전 게시글
+              </MediaDetailBoardLinkItemDescription>
+              <MediaDetailBoardLinkItemTitle>
+                {boardLinks.prevBoard.title}
+              </MediaDetailBoardLinkItemTitle>
+            </MediaDetailBoardLinkItemBlock>
+          )}
+        </MediaDetailBoardLinkItem>
+        <MediaDetailBoardLinkItem>
+          {boardLinks?.nextBoard && (
+            <MediaDetailBoardLinkItemBlock
+              onClick={() => {
+                setData(undefined);
+                router.push(
+                  `/traffic/learning-material/media/${boardLinks.nextBoard.seq}`
+                );
+              }}
+            >
+              <MediaDetailBoardLinkItemDescription>
+                다음 게시글
+              </MediaDetailBoardLinkItemDescription>
+              <MediaDetailBoardLinkItemTitle>
+                {boardLinks.nextBoard.title}
+              </MediaDetailBoardLinkItemTitle>
+            </MediaDetailBoardLinkItemBlock>
+          )}
+        </MediaDetailBoardLinkItem>
+      </MediaDetailBoardLinksWrapper>
     </MediaDetailWrapper>
   );
 }

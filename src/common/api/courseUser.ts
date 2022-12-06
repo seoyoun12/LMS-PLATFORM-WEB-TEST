@@ -1,6 +1,5 @@
 import { DELETE, GET, POST, PUT } from "@common/httpClient";
 import useSWR, { SWRResponse } from "swr";
-// import { CourseUserProvincialSaveRequestDto } from "./Api";
 import {
   businessType,
   courseCategoryType,

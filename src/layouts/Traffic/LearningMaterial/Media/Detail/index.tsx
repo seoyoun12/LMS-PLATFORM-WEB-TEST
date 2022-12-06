@@ -41,6 +41,11 @@ export default function MediaDetailLayout() {
     nextBoard: ProvincialBoardResponseDto;
   }>();
 
+  const handleBoardLinkClick = (boardSeq: number) => {
+    setData(undefined);
+    router.push(`/traffic/learning-material/media/${boardSeq}`);
+  };
+
   useEffect(() => {
     (async function () {
       try {
@@ -118,12 +123,7 @@ export default function MediaDetailLayout() {
         <MediaDetailBoardLinkItem>
           {boardLinks?.prevBoard && (
             <MediaDetailBoardLinkItemBlock
-              onClick={() => {
-                setData(undefined);
-                router.push(
-                  `/traffic/learning-material/media/${boardLinks.prevBoard.seq}`
-                );
-              }}
+              onClick={() => handleBoardLinkClick(boardLinks.prevBoard.seq)}
             >
               <MediaDetailBoardLinkItemDescription>
                 이전 게시글
@@ -137,12 +137,7 @@ export default function MediaDetailLayout() {
         <MediaDetailBoardLinkItem>
           {boardLinks?.nextBoard && (
             <MediaDetailBoardLinkItemBlock
-              onClick={() => {
-                setData(undefined);
-                router.push(
-                  `/traffic/learning-material/media/${boardLinks.nextBoard.seq}`
-                );
-              }}
+              onClick={() => handleBoardLinkClick(boardLinks.nextBoard.seq)}
             >
               <MediaDetailBoardLinkItemDescription>
                 다음 게시글

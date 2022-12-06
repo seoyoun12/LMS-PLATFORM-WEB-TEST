@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Chip } from '@mui/material';
 
 export const MediaDetailWrapper = styled.div`
-  padding-bottom: 150px;
+  padding: 0 8px 150px;
 `;
 
 export const MediaDetailHeaderWrapper = styled.div`
@@ -32,10 +32,13 @@ export const MediaDetailHeaderViewText = styled.p``;
 export const VideoItemContentWrapper = styled.div`
   padding: 14px 10%;
   background-color: #fbfbfb;
-
   > iframe {
     width: 100%;
-    height: 500px;
+    /* height: 500px; */
+    aspect-ratio: 16/9;
+  }
+  @media (max-width: 1024px) {
+    padding: 14px 0%;
   }
 `;
 
@@ -46,7 +49,15 @@ export const MediaDetailContentWrapper = styled.div`
 export const MediaDetailBoardLinksWrapper = styled.div`
   display: flex;
   gap: 300px;
-  padding-top: 200px;
+  padding-top: 100px;
+  @media (max-width: 1024px) {
+    gap: 100px;
+    padding-top: 80px;
+  }
+  @media (max-width: 768px) {
+    gap: 4px;
+    padding-top: 80px;
+  }
 `;
 
 export const MediaDetailBoardLinkItem = styled.div`

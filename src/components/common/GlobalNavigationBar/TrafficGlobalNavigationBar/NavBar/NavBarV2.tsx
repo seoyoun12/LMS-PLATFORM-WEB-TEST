@@ -310,7 +310,7 @@ export const ProvintialHeaderList = [
     href: '',
     items: [
       { title: '온라인교육 신청', href: '/traffic/stebMove/steb2' },
-      { title: '온라인교육 수정', href: '/traffic/stebMove/steb2' }, // 미완
+      { title: '온라인교육 수정', href: '/me/enroll-history' }, // 미완
     ],
   },
   {

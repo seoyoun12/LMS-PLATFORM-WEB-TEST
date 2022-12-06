@@ -13,6 +13,11 @@ import styled from "@emotion/styled";
 import { Table } from "@components/ui";
 import dateFormat from "dateformat";
 import { YN } from "@common/constant";
+import { useSnackbar } from "@hooks/useSnackbar";
+import { useEffect, useState } from "react";
+import { useDialog } from "@hooks/useDialog";
+import { useRouter } from "next/router";
+import { courseTrafficList } from "@common/api/adm/course-traffic";
 
 const headRows: {
   name: string;
@@ -28,6 +33,30 @@ const headRows: {
 ];
 
 export function CourseTrafficManagement() {
+  const snackbar = useSnackbar();
+  const dialog = useDialog();
+  const router = useRouter();
+  const [page, setPage] = useState(0);
+  const [seq, setSeq] = useState<number | null>(null);
+
+  const { data, error, mutate } = courseTrafficList({ page });
+
+  console.log("data : ", data);
+
+  // pagination
+  useEffect(() => {
+    const { page } = router.query;
+    setPage(!isNaN(Number(page)) ? Number(page) : 0);
+  }, [router.query]);
+
+  const onChangePage = async (page: number) => {
+    await router.push({
+      pathname: router.pathname,
+      query: {
+        page,
+      },
+    });
+  };
   return (
     <Box>
       <CourseTrafficTitleTypography variant="h5">

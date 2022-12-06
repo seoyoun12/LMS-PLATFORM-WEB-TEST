@@ -1,6 +1,7 @@
 import { Modal, Spinner } from '@components/ui';
 import styled from '@emotion/styled';
 import {
+  Backdrop,
   Box,
   Button,
   Table,
@@ -49,7 +50,7 @@ export function EnrollHistoryTrafficModal({
   enrollOrganization,
 }: Props) {
   const snackbar = useSnackbar();
-  const [enrollData, setEnrollData] = useState<EnrollData>();
+  const [enrollDetailData, setEnrollDetailData] = useState<EnrollData>();
 
   const handleEnrollCancel = async (enrollSeq: number) => {
     try {
@@ -69,33 +70,39 @@ export function EnrollHistoryTrafficModal({
     (async function () {
       try {
         const { data } = await getEnrollProvincialDetail(enrollSeq);
-        console.log(data);
-        const filterPeople = Object.entries(data).filter(r =>
+        const filteredPeople = Object.entries(data).filter(r =>
           filterEnrollPeoples.includes(r[0])
         );
-        const notFilterPeople = Object.entries(data).filter(
+        const notFilteredPeople = Object.entries(data).filter(
           r => !filterEnrollPeoples.includes(r[0])
         );
-        console.log('gdgd', filterPeople, notFilterPeople);
-        const getActivePeople = filterPeople.filter(r => r[1]);
-        console.log('ㄴㅔ', getActivePeople);
-        const peoplesCount = { persons: [] };
-        getActivePeople.forEach(r => {
-          peoplesCount.persons.push({ age: r[0], count: r[1] });
+        const getExistPeople = filteredPeople.filter(r => r[1]);
+        const enrollData = { persons: [] };
+        getExistPeople.forEach(r => {
+          enrollData.persons.push({ age: r[0], count: r[1] });
         });
-        notFilterPeople.forEach(r => {
-          Object.assign(peoplesCount, { [r[0]]: r[1] });
+        notFilteredPeople.forEach(r => {
+          Object.assign(enrollData, { [r[0]]: r[1] });
         });
-        console.log('음', peoplesCount);
-        setEnrollData(peoplesCount);
+        setEnrollDetailData(enrollData);
       } catch (e) {
         console.log(e);
+        snackbar({
+          variant: 'error',
+          message:
+            e.data?.message || '정보를 불러오는중에 문제가 발생했습니다.',
+        });
+        handleClose();
       }
     })();
   }, []);
-  console.log('완료', enrollData);
 
-  if (!enrollData) return <div></div>;
+  if (!enrollDetailData)
+    return (
+      <Backdrop open={open}>
+        <Spinner />
+      </Backdrop>
+    );
 
   return (
     <Modal
@@ -113,7 +120,7 @@ export function EnrollHistoryTrafficModal({
               background: 'red',
               '&:hover': { background: '#cc0000' },
             }}
-            onClick={() => handleEnrollCancel(enrollData.seq)}
+            onClick={() => handleEnrollCancel(enrollDetailData.seq)}
           >
             신청 취소
           </Button>
@@ -129,7 +136,7 @@ export function EnrollHistoryTrafficModal({
                   NO
                 </TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
-                  {enrollData.seq}
+                  {enrollDetailData.seq}
                 </TableDoubleRightCell>
               </TableDoubleParantLeftCell>
               <TableDoubleParantRightCell sx={{ width: '50%' }}>
@@ -137,7 +144,7 @@ export function EnrollHistoryTrafficModal({
                   예약자
                 </TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
-                  {enrollData.userInfo.name}
+                  {enrollDetailData.userInfo.name}
                 </TableDoubleRightCell>
               </TableDoubleParantRightCell>
             </TableDoubleRow>
@@ -150,7 +157,7 @@ export function EnrollHistoryTrafficModal({
                 <TableDoubleRightCell className="right-cell">
                   {
                     Object.entries(EduTargetMain).filter(
-                      r => r[0] === enrollData.eduTargetMain
+                      r => r[0] === enrollDetailData.eduTargetMain
                     )[0][1]
                   }
                 </TableDoubleRightCell>
@@ -162,13 +169,13 @@ export function EnrollHistoryTrafficModal({
                 <TableDoubleRightCell className="right-cell">
                   {
                     Object.entries(EduTargetSub).filter(
-                      r => r[0] === enrollData.eduTargetSub
+                      r => r[0] === enrollDetailData.eduTargetSub
                     )[0][1]
                   }
                 </TableDoubleRightCell>
               </TableDoubleParantRightCell>
             </TableDoubleRow>
-            {enrollData.persons.map(r => (
+            {enrollDetailData.persons.map(r => (
               <TableRow>
                 <TableLeftCell className="left-cell-border large-font">
                   {eduSubArr.filter(d => d.subType === r.age)[0].subKo}
@@ -183,7 +190,7 @@ export function EnrollHistoryTrafficModal({
                 교육 희망일
               </TableLeftCell>
               <TableRightCell className="right-cell">
-                {enrollData.expectedToStartDtime}
+                {enrollDetailData.expectedToStartDtime}
               </TableRightCell>
             </TableRow>
             <TableRow>
@@ -191,7 +198,7 @@ export function EnrollHistoryTrafficModal({
                 교육 만료일
               </TableLeftCell>
               <TableRightCell className="right-cell">
-                {enrollData.expiredDtime}
+                {enrollDetailData.expiredDtime}
               </TableRightCell>
             </TableRow>
           </TableBody>

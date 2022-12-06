@@ -40,7 +40,11 @@ export default function MediaDetailLayout() {
     prevBoard: ProvincialBoardResponseDto;
     nextBoard: ProvincialBoardResponseDto;
   }>();
-  console.log('헐', id);
+
+  const handleBoardLinkClick = (boardSeq: number) => {
+    setData(undefined);
+    router.push(`/traffic/learning-material/media/${boardSeq}`);
+  };
 
   useEffect(() => {
     (async function () {
@@ -69,14 +73,12 @@ export default function MediaDetailLayout() {
       try {
         const prevAndNextBoard = { prevBoard: {}, nextBoard: {} };
         const datas = await getTrafficMediaBoard(data.eduTargetSub);
-        console.log(datas);
         datas.data.forEach((r, idx) => {
           if (data.seq === r.seq) {
             prevAndNextBoard.prevBoard = datas.data[idx - 1];
             prevAndNextBoard.nextBoard = datas.data[idx + 1];
           }
         });
-        console.log(prevAndNextBoard);
         setBoardLinks(prevAndNextBoard);
       } catch (e) {
         console.log(e);
@@ -121,12 +123,7 @@ export default function MediaDetailLayout() {
         <MediaDetailBoardLinkItem>
           {boardLinks?.prevBoard && (
             <MediaDetailBoardLinkItemBlock
-              onClick={() => {
-                setData(undefined);
-                router.push(
-                  `/traffic/learning-material/media/${boardLinks.prevBoard.seq}`
-                );
-              }}
+              onClick={() => handleBoardLinkClick(boardLinks.prevBoard.seq)}
             >
               <MediaDetailBoardLinkItemDescription>
                 이전 게시글
@@ -140,12 +137,7 @@ export default function MediaDetailLayout() {
         <MediaDetailBoardLinkItem>
           {boardLinks?.nextBoard && (
             <MediaDetailBoardLinkItemBlock
-              onClick={() => {
-                setData(undefined);
-                router.push(
-                  `/traffic/learning-material/media/${boardLinks.nextBoard.seq}`
-                );
-              }}
+              onClick={() => handleBoardLinkClick(boardLinks.nextBoard.seq)}
             >
               <MediaDetailBoardLinkItemDescription>
                 다음 게시글

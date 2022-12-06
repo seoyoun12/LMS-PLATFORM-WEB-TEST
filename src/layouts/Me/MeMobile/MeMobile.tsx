@@ -38,16 +38,19 @@ const myInfoList = [
     label: '정보수정',
     value: '/edit',
     icon: <MobileMeEditIcon witdh="50px" height="50px" />,
+    regCategory: ['TYPE_TRANS_EDU', 'TYPE_TRAFFIC_SAFETY_EDU'],
   },
   {
     label: '학습현황',
     value: '/my-course',
     icon: <MobileMeMyCourseIcon witdh="50px" height="50px" />,
+    regCategory: ['TYPE_TRANS_EDU'],
   },
   {
     label: '증명서발급',
     value: '/certificate',
     icon: <MobileCertificateIcon witdh="50px" height="50px" />,
+    regCategory: ['TYPE_TRANS_EDU'],
   },
   // { label: '온라인 교육 신청내역', value: '/enroll-history' },
 ];
@@ -60,8 +63,9 @@ export function MeMobile() {
 
   const onClickEnterCourseLesson = (res: LearningStatusRes) => {
     const isStartStudy =
-      new Date(res.studyStartDate.replaceAll('-', '/').split(' ')[0]).getTime() <
-      new Date().getTime(); //현재시간이 크면 true 아니면 false
+      new Date(
+        res.studyStartDate.replaceAll('-', '/').split(' ')[0]
+      ).getTime() < new Date().getTime(); //현재시간이 크면 true 아니면 false
     const isEndedStudy =
       new Date(res.studyEndDate.replaceAll('-', '/').split(' ')[0]).getTime() <
       new Date().getTime(); //현재시간이 크면 true 아니면 false
@@ -101,7 +105,11 @@ export function MeMobile() {
         <div>
           <Typography fontSize={22}>{user.name}</Typography>
           <Typography>
-            {user.email ? user.email : <Box color={grey[400]}>이메일이 없습니다.</Box>}
+            {user.email ? (
+              user.email
+            ) : (
+              <Box color={grey[400]}>이메일이 없습니다.</Box>
+            )}
           </Typography>
         </div>
       </UserInfoSection>
@@ -109,19 +117,21 @@ export function MeMobile() {
         <SideBar>
           {/* <SideBarTitle variant="h6">내 정보</SideBarTitle> */}
           <SideBarContent>
-            {myInfoList.map(item => (
-              <SideBarInfoLink
-                color={grey[900]}
-                href={`/me${item.value}`}
-                key={item.value}
-              >
-                <SideBarInfoItem>
-                  <SideBarIcon>{item.icon}</SideBarIcon>
-                  {item.label}
-                  {/* <ArrowForwardIcon /> */}
-                </SideBarInfoItem>
-              </SideBarInfoLink>
-            ))}
+            {myInfoList
+              .filter(r => r.regCategory.includes(user.regCategory))
+              .map(item => (
+                <SideBarInfoLink
+                  color={grey[900]}
+                  href={`/me${item.value}`}
+                  key={item.value}
+                >
+                  <SideBarInfoItem>
+                    <SideBarIcon>{item.icon}</SideBarIcon>
+                    {item.label}
+                    {/* <ArrowForwardIcon /> */}
+                  </SideBarInfoItem>
+                </SideBarInfoLink>
+              ))}
             {/* {myInfoList.map(({ href, name }) => (
               <Link
                 key={name}
@@ -177,7 +187,14 @@ export function MeMobile() {
                   const startDate = res.studyStartDate.slice(0, 10);
                   const endDate = res.studyEndDate.slice(0, 10);
                   return (
-                    <Grid item xs={1} sm={1} md={1} lg={1} key={res.courseClassSeq}>
+                    <Grid
+                      item
+                      xs={1}
+                      sm={1}
+                      md={1}
+                      lg={1}
+                      key={res.courseClassSeq}
+                    >
                       <Box onClick={() => onClickEnterCourseLesson(res)}>
                         <ContentCardV2
                           image={res.thumbnailImage}

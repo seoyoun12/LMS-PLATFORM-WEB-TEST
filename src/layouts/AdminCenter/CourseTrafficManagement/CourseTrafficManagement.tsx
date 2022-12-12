@@ -17,7 +17,27 @@ import { useSnackbar } from "@hooks/useSnackbar";
 import { useEffect, useState } from "react";
 import { useDialog } from "@hooks/useDialog";
 import { useRouter } from "next/router";
-import { courseTrafficList } from "@common/api/adm/course-traffic";
+import {
+  courseTrafficList,
+  TargetMainType,
+  TargetSubType,
+} from "@common/api/adm/course-traffic";
+
+const targetMainConfig = [
+  { label: "어린이", value: TargetMainType.TYPE_CHILDREN },
+  { label: "청소년", value: TargetMainType.TYPE_TEENAGER },
+  { label: "어르신", value: TargetMainType.TYPE_ELDERLY },
+  { label: "자가운전자", value: TargetMainType.TYPE_SELF_DRIVING },
+];
+
+const targetSubConfig = [
+  { label: "유치원", value: TargetSubType.TYPE_KINDERGARTEN },
+  { label: "초등학교", value: TargetSubType.TYPE_ELEMENTARY },
+  { label: "중학교", value: TargetSubType.TYPE_MIDDLE },
+  { label: "고등학교", value: TargetSubType.TYPE_HIGH },
+  { label: "자가운전자", value: TargetSubType.TYPE_SELF_DRIVER },
+  { label: "어르신", value: TargetSubType.TYPE_ELDERLY },
+];
 
 const headRows: {
   name: string;
@@ -25,10 +45,11 @@ const headRows: {
   width: string;
 }[] = [
   { name: "No", align: "center", width: "5%" },
-  { name: "도민유형", align: "center", width: "10%" },
-  { name: "제목", align: "center", width: "63%" },
-  { name: "생성날짜", align: "center", width: "8.5%" },
-  { name: "수정날짜", align: "center", width: "8.5%" },
+  { name: "도민유형1", align: "center", width: "12%" },
+  { name: "도민유형2", align: "center", width: "12%" },
+  { name: "제목", align: "center", width: "54%" },
+  { name: "생성날짜", align: "center", width: "10%" },
+  // { name: "수정날짜", align: "center", width: "8.5%" },
   { name: "상태", align: "center", width: "5%" },
 ];
 
@@ -42,6 +63,8 @@ export function CourseTrafficManagement() {
   const { data, error, mutate } = courseTrafficList({ page });
 
   console.log("data : ", data);
+
+  console.log("data.content : ", data?.content);
 
   // pagination
   useEffect(() => {
@@ -57,6 +80,17 @@ export function CourseTrafficManagement() {
       },
     });
   };
+
+  // 수정
+  const onClickModifyCourse = async (seq: number) => {
+    setSeq(seq);
+    router.push(`/admin-center/course-traffic/modify/${seq}`);
+    mutate();
+  };
+
+  if (error) return <div>Error</div>;
+  if (!data) return <Spinner />;
+
   return (
     <Box>
       <CourseTrafficTitleTypography variant="h5">
@@ -65,9 +99,9 @@ export function CourseTrafficManagement() {
 
       <Table
         pagination={true}
-        // totalNum={data.totalElements}
-        // page={data.number}
-        // onChangePage={onChangePage}
+        totalNum={data.totalElements}
+        page={data.number}
+        onChangePage={onChangePage}
         size="small"
         sx={{ tableLayout: "fixed" }}
       >
@@ -86,34 +120,46 @@ export function CourseTrafficManagement() {
         </TableHead>
 
         <TableBody>
-          {/* {data.content.map((course) => ( */}
-          <TableRow
-            sx={{ cursor: "pointer" }}
-            // key={course.seq}
-            hover
-            // onClick={() => onClickModifyCourse(course.seq)}
-          >
-            <CourseTrafficTableCell align="center">
-              {/* {course.seq} */}
-            </CourseTrafficTableCell>
-            {/* <TableCell align="center">{course.courseType}</TableCell> */}
-            <CourseTrafficTableCell align="center"></CourseTrafficTableCell>
-            <CourseTrafficTableCell align="center"></CourseTrafficTableCell>
-            <CourseTrafficTableCell align="center">
-              <SubjectBox>{/* {course.courseName} */}</SubjectBox>
-            </CourseTrafficTableCell>
-            <CourseTrafficTableCell align="center">
-              {/* {dateFormat(course.createdDtime, "isoDate")} */}
-            </CourseTrafficTableCell>
-            <CourseTrafficTableCell align="center">
-              <Chip
-              // label={course.status ? "정상" : "중지"}
-              // variant="outlined"
-              // size="small"
-              // color={course.status ? "secondary" : "default"}
-              />
-            </CourseTrafficTableCell>
-          </TableRow>
+          {data?.content.map((courseTraffic) => (
+            <TableRow
+              sx={{ cursor: "pointer" }}
+              key={courseTraffic.seq}
+              hover
+              onClick={() => onClickModifyCourse(courseTraffic.seq)}
+            >
+              <CourseTrafficTableCell align="center">
+                {courseTraffic.seq}
+              </CourseTrafficTableCell>
+              <CourseTrafficTableCell align="center">
+                {
+                  targetMainConfig.filter(
+                    (item) => item.value === courseTraffic.eduTargetMain
+                  )[0].label
+                }
+              </CourseTrafficTableCell>
+              <CourseTrafficTableCell align="center">
+                {
+                  targetSubConfig.filter(
+                    (item) => item.value === courseTraffic.eduTargetSub
+                  )[0].label
+                }
+              </CourseTrafficTableCell>
+              <CourseTrafficTableCell align="center">
+                <SubjectBox>{courseTraffic.title}</SubjectBox>
+              </CourseTrafficTableCell>
+              <CourseTrafficTableCell align="center">
+                {dateFormat(courseTraffic.createdDtime, "isoDate")}
+              </CourseTrafficTableCell>
+              <CourseTrafficTableCell align="center">
+                <Chip
+                  label={courseTraffic.status ? "정상" : "중지"}
+                  variant="outlined"
+                  size="small"
+                  color={courseTraffic.status ? "secondary" : "default"}
+                />
+              </CourseTrafficTableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </Box>

@@ -1,10 +1,27 @@
 import { GET } from "@common/httpClient";
 import useSWR, { SWRResponse } from "swr";
 import { PaginationResult } from "types/fetch";
+import { ProvincialBoardResponseDto } from "../Api";
 
-export interface CourseTraffic {
-  totalElements: number;
-  totalPages: number;
+// export interface CourseTraffic {
+//   totalElements: number;
+//   totalPages: number;
+// }
+
+export enum TargetMainType {
+  TYPE_CHILDREN = "TYPE_CHILDREN",
+  TYPE_TEENAGER = "TYPE_TEENAGER",
+  TYPE_ELDERLY = "TYPE_ELDERLY",
+  TYPE_SELF_DRIVING = "TYPE_SELF_DRIVING",
+}
+
+export enum TargetSubType {
+  TYPE_KINDERGARTEN = "TYPE_KINDERGARTEN",
+  TYPE_ELEMENTARY = "TYPE_ELEMENTARY",
+  TYPE_MIDDLE = "TYPE_MIDDLE",
+  TYPE_HIGH = "TYPE_HIGH",
+  TYPE_SELF_DRIVER = "TYPE_SELF_DRIVER",
+  TYPE_ELDERLY = "TYPE_ELDERLY",
 }
 
 export function courseTrafficList({
@@ -15,7 +32,7 @@ export function courseTrafficList({
   page: number;
 }) {
   const { data, error, mutate } = useSWR<
-    SWRResponse<PaginationResult<CourseTraffic[]>>
+    SWRResponse<PaginationResult<ProvincialBoardResponseDto[]>>
   >(
     [
       `/provincial/board/adm`,

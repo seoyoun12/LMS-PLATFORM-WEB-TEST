@@ -1,11 +1,11 @@
 import {
   learningMaterialList,
   learningMaterialRemove,
-} from "@common/api/learningMaterial";
-import { useDialog } from "@hooks/useDialog";
-import { useSnackbar } from "@hooks/useSnackbar";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+} from '@common/api/learningMaterial';
+import { useDialog } from '@hooks/useDialog';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -21,40 +21,40 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from "@mui/material";
-import { Spinner, Table } from "@components/ui";
-import dateFormat from "dateformat";
-import styled from "@emotion/styled";
-import { ProductStatus } from "@common/api/course";
+} from '@mui/material';
+import { Spinner, Table } from '@components/ui';
+import dateFormat from 'dateformat';
+import styled from '@emotion/styled';
+import { ProductStatus } from '@common/api/course';
 
 const headRows: {
   name: string;
-  align: "inherit" | "left" | "center" | "right" | "justify";
+  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
   width: string;
 }[] = [
   // { name: 'No1', align: 'center', width: '2.5%' }, // seq
-  { name: "No", align: "center", width: "5%" }, // seq
-  { name: "학습자료유형", align: "center", width: "8.5%" }, // materialType
-  { name: "학습자료상세유형", align: "center", width: "8.5%" }, // materialSubType
-  { name: "제목", align: "center", width: "32%" }, // title
-  { name: "작성일", align: "center", width: "12%" }, // createdDtime
-  { name: "수정일", align: "center", width: "12%" }, // modifiedDtime
-  { name: "상태", align: "center", width: "5%" }, // status
+  { name: 'No', align: 'center', width: '5%' }, // seq
+  { name: '학습자료유형', align: 'center', width: '8.5%' }, // materialType
+  { name: '학습자료상세유형', align: 'center', width: '8.5%' }, // materialSubType
+  { name: '제목', align: 'center', width: '32%' }, // title
+  { name: '작성일', align: 'center', width: '12%' }, // createdDtime
+  { name: '수정일', align: 'center', width: '12%' }, // modifiedDtime
+  { name: '상태', align: 'center', width: '5%' }, // status
 ];
 
 const typeTabsConfig = [
-  { name: "전체", value: "" },
-  { name: "연령별 교수학습 지도안", value: "TYPE_BY_AGE" },
-  { name: "교육자료", value: "TYPE_EDUCATIONAL" },
-  { name: "교육영상", value: "TYPE_VIDEO" },
-  { name: "타기관자료모음", value: "TYPE_OTHER_ORGAN" },
+  { name: '전체', value: '' },
+  { name: '연령별 교수학습 지도안', value: 'TYPE_BY_AGE' },
+  { name: '교육자료', value: 'TYPE_EDUCATIONAL' },
+  { name: '교육영상', value: 'TYPE_VIDEO' },
+  { name: '타기관자료모음', value: 'TYPE_OTHER_ORGAN' },
 ];
 
 const subTypeTabsConfig = [
-  { name: "어린이", value: "TYPE_CHILDREN" },
-  { name: "청소년", value: "TYPE_TEENAGER" },
-  { name: "어르신", value: "TYPE_ELDERLY" },
-  { name: "자가운전자", value: "TYPE_SELF_DRIVING" },
+  { name: '어린이', value: 'TYPE_CHILDREN' },
+  { name: '청소년', value: 'TYPE_TEENAGER' },
+  { name: '어르신', value: 'TYPE_ELDERLY' },
+  { name: '자가운전자', value: 'TYPE_SELF_DRIVING' },
 ];
 
 export function LearningMaterialManagement() {
@@ -63,8 +63,8 @@ export function LearningMaterialManagement() {
   const dialog = useDialog();
   const [page, setPage] = useState(0);
   const [seq, setSeq] = useState<number | null>(null);
-  const [typeValue, setTypeValue] = useState("");
-  const [subTypeValue, setSubTypeValue] = useState("");
+  const [typeValue, setTypeValue] = useState('');
+  const [subTypeValue, setSubTypeValue] = useState('');
   const [subType, setSubType] = useState<boolean>(true);
 
   const { data, error, mutate } = learningMaterialList({
@@ -114,8 +114,6 @@ export function LearningMaterialManagement() {
     });
   };
 
-  console.log("학습자료 data : ", data);
-
   if (error) return <div>...ERROR</div>;
   if (!data) return <Spinner />;
 
@@ -148,7 +146,7 @@ export function LearningMaterialManagement() {
         page={data?.number}
         onChangePage={onChangePage}
         size="small"
-        sx={{ tableLayout: "fixed" }}
+        sx={{ tableLayout: 'fixed' }}
       >
         <TableHead>
           <TableRow>
@@ -175,9 +173,9 @@ export function LearningMaterialManagement() {
         </TableHead>
 
         <TableBody>
-          {data?.content.map((lm) => (
+          {data?.content.map(lm => (
             <TableRow
-              sx={{ cursor: "pointer" }}
+              sx={{ cursor: 'pointer' }}
               key={lm.seq}
               hover
               onClick={() => onClickModifyLM(lm.seq)}
@@ -188,7 +186,7 @@ export function LearningMaterialManagement() {
               <LearningMaterialTableCell align="center">
                 {
                   typeTabsConfig.filter(
-                    (item) => item.value === lm.materialType
+                    item => item.value === lm.materialType
                   )[0]?.name
                 }
                 {/* {lm.materialType} */}
@@ -196,7 +194,7 @@ export function LearningMaterialManagement() {
               <LearningMaterialTableCell align="center">
                 {
                   subTypeTabsConfig.filter(
-                    (item) => item.value === lm.materialSubType
+                    item => item.value === lm.materialSubType
                   )[0]?.name
                 }
               </LearningMaterialTableCell>
@@ -204,10 +202,10 @@ export function LearningMaterialManagement() {
                 <SubjectBox>{lm.title}</SubjectBox>
               </LearningMaterialTableCell>
               <LearningMaterialTableCell align="center">
-                {dateFormat(lm.createdDtime, "isoDate")}
+                {dateFormat(lm.createdDtime, 'isoDate')}
               </LearningMaterialTableCell>
               <LearningMaterialTableCell align="center">
-                {dateFormat(lm.modifiedDtime, "isoDate")}
+                {dateFormat(lm.modifiedDtime, 'isoDate')}
               </LearningMaterialTableCell>
               {/* <TableCell align="center">{lm.origin}</TableCell> */}
               {/* <TableCell align="center">
@@ -217,11 +215,11 @@ export function LearningMaterialManagement() {
                 <Chip
                   variant="outlined"
                   size="small"
-                  label={lm.status === ProductStatus.APPROVE ? "정상" : "중지"}
+                  label={lm.status === ProductStatus.APPROVE ? '정상' : '중지'}
                   color={
                     lm.status === ProductStatus.APPROVE
-                      ? "secondary"
-                      : "default"
+                      ? 'secondary'
+                      : 'default'
                   }
                 />
               </LearningMaterialTableCell>

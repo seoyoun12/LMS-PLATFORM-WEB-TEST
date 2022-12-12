@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { Tab, Tabs } from "@mui/material";
+import styled from '@emotion/styled';
+import { Tab, Tabs } from '@mui/material';
 
 export const LearningMaterialWrapper = styled.div``;
 
@@ -75,12 +75,12 @@ export const TableHeader = styled.div`
 
 interface TableItemProps {
   width: string;
-  textAlign?: "left" | "center" | "right";
+  textAlign?: 'left' | 'center' | 'right';
 }
 
 export const TableItem = styled.div<TableItemProps>`
   width: ${({ width }) => width};
-  text-align: ${({ textAlign }) => textAlign || "center"};
+  text-align: ${({ textAlign }) => textAlign || 'center'};
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

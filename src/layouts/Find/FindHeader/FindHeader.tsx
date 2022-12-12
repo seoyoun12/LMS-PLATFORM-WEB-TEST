@@ -17,7 +17,7 @@ export function FindHeader({
     <FindHeaderWrap>
       <Box
         sx={{
-          background: '#3498db',
+          background: '#246aef',
           color: 'white',
           textAlign: 'center',
           paddingTop: '6rem',
@@ -29,7 +29,7 @@ export function FindHeader({
           {title}
         </Typography>
 
-        <Box display="flex" gap="8rem" width="fit-content" margin={'auto'} mt={4}>
+        <FindHeaderStepsWrap>
           {headers.map(item => (
             <Box
               key={item.value}
@@ -42,10 +42,21 @@ export function FindHeader({
               <span>{item.title}</span>
             </Box>
           ))}
-        </Box>
+        </FindHeaderStepsWrap>
       </Box>
     </FindHeaderWrap>
   );
 }
 
 const FindHeaderWrap = styled(Box)``;
+
+const FindHeaderStepsWrap = styled(Box)`
+  display: flex;
+  gap: 8rem;
+  width: fit-content;
+  margin: auto;
+  margin-top: 24px;
+  @media (max-width: 500px) {
+    gap: 4rem;
+  }
+`;

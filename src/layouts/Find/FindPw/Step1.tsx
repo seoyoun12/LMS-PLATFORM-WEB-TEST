@@ -1,4 +1,9 @@
-import { checkingSignin, loginType, SignInResponse } from '@common/api/auth/signIn';
+import { logout } from '@common/api';
+import {
+  checkingSignin,
+  loginType,
+  SignInResponse,
+} from '@common/api/auth/signIn';
 import { existsUserId } from '@common/api/user';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -34,10 +39,14 @@ export function Step1({ handleStepChange, handleUsernameChange }: Props) {
         password,
         loginType.TYPE_TRAFFIC_SAFETY_EDU
       );
-      if (!userData || !userData.data) return window.alert('오류가 발생했습니다.');
-      const { data }: { data: { name: string; phone: string; username: string } } =
-        await existsUserId(username);
-      handleUsernameChange(data.username);
+      if (!userData || !userData.data)
+        return window.alert('오류가 발생했습니다.');
+      // logout();
+      // const {
+      //   data,
+      // }: { data: { name: string; phone: string; username: string } } =
+      //   await existsUserId(username);
+      handleUsernameChange(userData.data.username);
       handleStepChange(2);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });

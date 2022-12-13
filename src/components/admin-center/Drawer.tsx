@@ -128,22 +128,22 @@ export function Drawer({ children }: { children: ReactNode }) {
       ],
       icon: <SchoolOutlinedIcon sx={{ mr: "32px", color: grey[700] }} />,
     },
-    // {
-    //   name: "과정관리(도민)",
-    //   children: [
-    //     {
-    //       name: "과정 목록",
-    //       href: "/admin-center/course-traffic",
-    //       isActive: router.pathname === "/admin-center/course-traffic",
-    //     },
-    //     {
-    //       name: "과정 등록",
-    //       href: "/admin-center/course-traffic/upload",
-    //       isActive: router.pathname === "/admin-center/course-traffic/upload",
-    //     },
-    //   ],
-    //   icon: <SchoolOutlinedIcon sx={{ mr: "32px", color: grey[700] }} />,
-    // },
+    {
+      name: "과정관리(도민)",
+      children: [
+        {
+          name: "과정 목록",
+          href: "/admin-center/course-traffic",
+          isActive: router.pathname === "/admin-center/course-traffic",
+        },
+        {
+          name: "과정 등록",
+          href: "/admin-center/course-traffic/upload",
+          isActive: router.pathname === "/admin-center/course-traffic/upload",
+        },
+      ],
+      icon: <SchoolOutlinedIcon sx={{ mr: "32px", color: grey[700] }} />,
+    },
     {
       name: "콘텐츠관리",
       children: [

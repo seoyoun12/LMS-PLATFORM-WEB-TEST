@@ -1,7 +1,10 @@
-import { GET } from "@common/httpClient";
+import { DELETE, GET, POST } from "@common/httpClient";
 import useSWR, { SWRResponse } from "swr";
 import { PaginationResult } from "types/fetch";
-import { ProvincialBoardResponseDto } from "../Api";
+import {
+  ProvincialBoardResponseDto,
+  ProvincialBoardSaveRequestDto,
+} from "../Api";
 
 // export interface CourseTraffic {
 //   totalElements: number;
@@ -48,4 +51,16 @@ export function courseTrafficList({
     error,
     mutate,
   };
+}
+
+// upload
+export async function courseTrafficUpload(
+  courseTrafficInput: ProvincialBoardSaveRequestDto
+) {
+  return await POST(`/provincial/board/adm`, courseTrafficInput);
+}
+
+// remove
+export async function courseTrafficRemove(boardSeq: number) {
+  return await DELETE(`/provincial/board/adm/${boardSeq}`);
 }

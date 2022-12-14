@@ -20,7 +20,7 @@ export function CourseTrafficUpload() {
     if (isFileUpload) {
       await uploadFile({
         fileTypeId: courseTraffic.seq,
-        fileType: BbsType.TYPE_COURSE,
+        fileType: BbsType.TYPE_PROVINCIAL_BOARD,
         files,
       });
     }
@@ -42,7 +42,7 @@ export function CourseTrafficUpload() {
       const course = await courseTrafficUpload(courseTrafficInput);
       await fileHandler(files, course.data);
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
-      router.push(`/admin-center/course`);
+      router.push(`/admin-center/course-traffic`);
       setLoading(false);
     } catch (e: any) {
       console.error(e);

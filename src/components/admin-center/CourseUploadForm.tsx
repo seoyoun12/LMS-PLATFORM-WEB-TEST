@@ -1,6 +1,6 @@
-import "@toast-ui/editor/dist/toastui-editor.css";
-import { Editor as EditorType } from "@toast-ui/react-editor";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor as EditorType } from '@toast-ui/react-editor';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -17,40 +17,35 @@ import {
   Select,
   TextField,
   Typography,
-} from "@mui/material";
-import styled from "@emotion/styled";
-import {
-  ProductStatus,
-  CourseRes,
-  CourseInput,
-  courseRemove,
-} from "@common/api/course";
-import { YN } from "@common/constant";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { ContentType } from "@common/api/content";
-import { css, cx } from "@emotion/css";
-import { ErrorMessage } from "@hookform/error-message";
-import { FileUploader } from "@components/ui/FileUploader";
-import OndemandVideoOutlinedIcon from "@mui/icons-material/OndemandVideoOutlined";
+} from '@mui/material';
+import styled from '@emotion/styled';
+import { ProductStatus, CourseRes, CourseInput, courseRemove } from '@common/api/course';
+import { YN } from '@common/constant';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { ContentType } from '@common/api/content';
+import { css, cx } from '@emotion/css';
+import { ErrorMessage } from '@hookform/error-message';
+import { FileUploader } from '@components/ui/FileUploader';
+import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import {
   courseReg,
   courseCategory,
   courseSubCategory,
-} from "@layouts/Calendar/CalendarBody/CalendarBody";
+} from '@layouts/Calendar/CalendarBody/CalendarBody';
 import {
   courseCategoryType,
   courseType,
   courseSubCategoryType,
-} from "@common/api/courseClass";
-import Image from "next/image";
-import { Spinner } from "@components/ui";
-import { useDialog } from "@hooks/useDialog";
-import router from "next/router";
-import { courseType as CourseType } from "@common/api/courseClass";
-import { useSnackbar } from "@hooks/useSnackbar";
+} from '@common/api/courseClass';
+import Image from 'next/image';
+import { Spinner } from '@components/ui';
+import { useDialog } from '@hooks/useDialog';
+import router from 'next/router';
+import { courseType as CourseType } from '@common/api/courseClass';
+import { useSnackbar } from '@hooks/useSnackbar';
 
 interface Props {
-  mode?: "upload" | "modify";
+  mode?: 'upload' | 'modify';
   course?: CourseInput;
   // onHandleSubmit: ({ courseInput, files, courseSeq }: {
   onHandleSubmit: ({
@@ -78,25 +73,22 @@ const defaultValues = {
   files: [],
 };
 
-export function CourseUploadForm({
-  mode = "upload",
-  course,
-  onHandleSubmit,
-}: Props) {
+export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Props) {
   // const editorRef = useRef<EditorType>(null);
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
-  const [thumbnail, setThumbnail] = useState("");
+  const [thumbnail, setThumbnail] = useState('');
   const [loading, setLoading] = useState(false);
   const dialog = useDialog();
   const snackbar = useSnackbar();
 
-  const [courseCategoryType, setCourseCategoryType] =
-    useState<courseCategoryType | null>(null); //교육과정
+  const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(
+    null
+  ); //교육과정
   const [courseSubCategoryType, setCourseSubCategoryType] =
     useState<courseSubCategoryType | null>(null); //교육과정
   const [courseType, setCourseType] = useState<courseType | null>(null); //교육과정\
-  const [fileImage, setFileImage] = useState("");
+  const [fileImage, setFileImage] = useState('');
 
   const {
     register,
@@ -118,7 +110,7 @@ export function CourseUploadForm({
   }, []);
 
   useEffect(() => {
-    if (mode === "modify" && !!course) {
+    if (mode === 'modify' && !!course) {
       reset({ ...course });
       setFileName(course.s3Files[0]?.name || null);
     }
@@ -135,7 +127,7 @@ export function CourseUploadForm({
   };
 
   const handleDeleteFile = () => {
-    resetField("files");
+    resetField('files');
     setFileName(null);
     setIsFileDelete(true);
   };
@@ -144,25 +136,22 @@ export function CourseUploadForm({
   const onClickRemoveCourse = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
-        title: "과정 삭제하기",
-        description: "정말로 삭제하시겠습니까?",
-        confirmText: "삭제",
-        cancelText: "취소",
+        title: '과정 삭제하기',
+        description: '정말로 삭제하시겠습니까?',
+        confirmText: '삭제',
+        cancelText: '취소',
       });
       if (dialogConfirmed) {
         await courseRemove(seq);
-        snackbar({ variant: "success", message: "성공적으로 삭제되었습니다." });
+        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
         router.push(`/admin-center/course`);
       }
     } catch (e: any) {
-      snackbar({ variant: "error", message: e.data.message });
+      snackbar({ variant: 'error', message: e.data.message });
     }
   };
 
-  const onSubmit: SubmitHandler<FormType> = async (
-    { files, ...course },
-    event
-  ) => {
+  const onSubmit: SubmitHandler<FormType> = async ({ files, ...course }, event) => {
     event?.preventDefault();
     // if (!editorRef.current) return;
 
@@ -194,16 +183,15 @@ export function CourseUploadForm({
               labelId="courseType"
               id="courseType"
               // value={courseType}
-              onChange={(e) => {
+              onChange={e => {
                 setCourseType(
-                  courseReg.filter((cate) => cate.type === e.target.value)[0]
-                    .type
+                  courseReg.filter(cate => cate.type === e.target.value)[0].type
                 );
               }}
-              value={courseType || ""}
+              value={courseType || ''}
               label="과정분류"
             >
-              {courseReg.map((item) => {
+              {courseReg.map(item => {
                 if (item.type === CourseType.TYPE_PROVINCIAL) return;
                 return (
                   <MenuItem key={item.type} value={item.type}>
@@ -221,27 +209,21 @@ export function CourseUploadForm({
               labelId="courseCategory"
               id="courseCategory"
               // value={courseCategoryType || ''}
-              onChange={(e) => {
+              onChange={e => {
                 setCourseCategoryType(
-                  courseCategory.filter(
-                    (cate) => cate.type === e.target.value
-                  )[0].type
+                  courseCategory.filter(cate => cate.type === e.target.value)[0].type
                 );
                 setValue(
-                  "courseCategoryType",
-                  courseCategory.filter(
-                    (cate) => cate.type === e.target.value
-                  )[0].type
+                  'courseCategoryType',
+                  courseCategory.filter(cate => cate.type === e.target.value)[0].type
                 );
               }}
               value={courseCategory[0].type}
               disabled
               label="교육분류(고정)"
             >
-              <MenuItem value={courseCategory[0].type}>
-                {courseCategory[0].ko}
-              </MenuItem>
-              {courseCategory.map((item) => (
+              <MenuItem value={courseCategory[0].type}>{courseCategory[0].ko}</MenuItem>
+              {courseCategory.map(item => (
                 <MenuItem key={item.type} value={item.type}>
                   {item.ko}
                 </MenuItem>
@@ -254,16 +236,14 @@ export function CourseUploadForm({
             <Select
               labelId="courseSubCategoryType"
               id="courseSubCategoryType"
-              value={watch().courseSubCategoryType || ""}
-              onChange={(e) => {
+              value={watch().courseSubCategoryType || ''}
+              onChange={e => {
                 // setCourseSubCategoryType(
                 //   courseSubCategory.filter(cate => cate.type === e.target.value)[0].type
                 // );
                 setValue(
-                  "courseSubCategoryType",
-                  courseSubCategory.filter(
-                    (cate) => cate.type === e.target.value
-                  )[0].type
+                  'courseSubCategoryType',
+                  courseSubCategory.filter(cate => cate.type === e.target.value)[0].type
                 );
               }}
               // disabled
@@ -284,8 +264,8 @@ export function CourseUploadForm({
 
           <FormControl className={textField}>
             <TextField
-              {...register("courseName", {
-                required: "과정 명을 입력해주세요.",
+              {...register('courseName', {
+                required: '과정 명을 입력해주세요.',
               })}
               size="small"
               label="과정명"
@@ -322,7 +302,7 @@ export function CourseUploadForm({
 
             {fileName ? (
               <Chip
-                sx={{ mt: "8px" }}
+                sx={{ mt: '8px' }}
                 icon={<OndemandVideoOutlinedIcon />}
                 label={fileName}
                 onDelete={handleDeleteFile}
@@ -331,12 +311,12 @@ export function CourseUploadForm({
           </div>
           <Box>
             이미지파일 확장자는
-            <span style={{ color: "red", fontWeight: "bold" }}>
-              {" "}
+            <span style={{ color: 'red', fontWeight: 'bold' }}>
+              {' '}
               jpg, jpeg, png, gif, bmp
             </span>
             만 사용가능합니다. 이미지 사이즈는
-            <span style={{ color: "red", fontWeight: "bold" }}>16:9</span>
+            <span style={{ color: 'red', fontWeight: 'bold' }}>16:9</span>
             비율로 올려주셔야 합니다.
           </Box>
 
@@ -345,7 +325,7 @@ export function CourseUploadForm({
             {course?.s3Files ? (
               <Image
                 className="thumbnailImg"
-                src={course.s3Files[0]?.path || ""} // course.courseFile
+                src={course.s3Files[0]?.path || ''} // course.courseFile
                 layout="fill"
               />
             ) : (
@@ -356,23 +336,17 @@ export function CourseUploadForm({
 
         <FormControl className={cx(textField, lessonTime)}>
           <TextField
-            {...register("lessonTime", {
-              required: "교육 시간을 입력해주세요.",
+            {...register('lessonTime', {
+              required: '교육 시간을 입력해주세요.',
             })}
             size="small"
             label="교육 시간"
             variant="outlined"
             InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">시간</InputAdornment>
-              ),
+              endAdornment: <InputAdornment position="end">시간</InputAdornment>,
             }}
           />
-          <ErrorMessage
-            errors={errors}
-            name="lessonTime"
-            as={<FormHelperText error />}
-          />
+          <ErrorMessage errors={errors} name="lessonTime" as={<FormHelperText error />} />
         </FormControl>
 
         <FormControl className={pt20}>
@@ -392,7 +366,7 @@ export function CourseUploadForm({
                   value={ProductStatus.REJECT}
                   control={<Radio />}
                   label="중지"
-                />{" "}
+                />{' '}
               </RadioGroup>
             )}
           />
@@ -406,16 +380,8 @@ export function CourseUploadForm({
             name="displayYn"
             render={({ field }) => (
               <RadioGroup row {...field}>
-                <FormControlLabel
-                  value={YN.YES}
-                  control={<Radio />}
-                  label="보이기"
-                />
-                <FormControlLabel
-                  value={YN.NO}
-                  control={<Radio />}
-                  label="숨김"
-                />
+                <FormControlLabel value={YN.YES} control={<Radio />} label="보이기" />
+                <FormControlLabel value={YN.NO} control={<Radio />} label="숨김" />
               </RadioGroup>
             )}
           />
@@ -424,14 +390,14 @@ export function CourseUploadForm({
           <SubmitBtn variant="contained" type="submit" disabled={loading}>
             {loading ? (
               <Spinner fit={true} />
-            ) : mode === "upload" ? (
-              "업로드하기"
+            ) : mode === 'upload' ? (
+              '업로드하기'
             ) : (
-              "수정하기"
+              '수정하기'
             )}
           </SubmitBtn>
-          {mode === "upload" ? (
-            ""
+          {mode === 'upload' ? (
+            ''
           ) : (
             <DeleteBtn
               color="warning"
@@ -439,7 +405,7 @@ export function CourseUploadForm({
               onClick={() => onClickRemoveCourse(course.seq)}
               disabled={loading}
             >
-              {loading ? <Spinner fit={true} /> : "삭제"}
+              {loading ? <Spinner fit={true} /> : '삭제'}
             </DeleteBtn>
           )}
         </ButtonBox>

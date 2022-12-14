@@ -22,7 +22,7 @@ import {
   TargetMainType,
   TargetMainTypeReg,
   TargetSubType,
-  TargetSubTypeReg,
+  TargetSubTypeReg1,
 } from 'src/staticDataDescElements/staticType';
 
 // const targetMainConfig = [
@@ -137,7 +137,7 @@ export function CourseTrafficManagement() {
               </CourseTrafficTableCell>
               <CourseTrafficTableCell align="center">
                 {
-                  TargetSubTypeReg.filter(
+                  TargetSubTypeReg1.filter(
                     item => item.type === courseTraffic.eduTargetSub
                   )[0].ko
                 }

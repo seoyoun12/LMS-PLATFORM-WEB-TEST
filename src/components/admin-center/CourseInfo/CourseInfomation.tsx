@@ -112,6 +112,7 @@ export function CourseInformation({
   const handleCarRegistrationRegion = async (e: any) => {
     // setCarRegistrationRegionState(e.target.value);
     setValue('carRegistrationRegion', e.target.value);
+    console.log('asd : ', courseInfo.carRegistrationRegion);
   };
 
   // 거주지

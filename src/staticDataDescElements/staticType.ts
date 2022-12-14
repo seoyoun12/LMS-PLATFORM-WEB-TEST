@@ -204,3 +204,35 @@ export const businessSubTypeCategoryReg = [
   //   enType: courseSubCategoryType.HIGH_PRESSURE_GAS_TOXIC,
   // },
 ];
+
+export enum TargetMainType {
+  TYPE_CHILDREN = "TYPE_CHILDREN",
+  TYPE_TEENAGER = "TYPE_TEENAGER",
+  TYPE_ELDERLY = "TYPE_ELDERLY",
+  TYPE_SELF_DRIVING = "TYPE_SELF_DRIVING",
+}
+
+export const TargetMainTypeReg = [
+  { type: TargetMainType.TYPE_CHILDREN, ko: '어린이' },
+  { type: TargetMainType.TYPE_TEENAGER, ko: '청소년' },
+  { type: TargetMainType.TYPE_ELDERLY, ko: '어르신' },
+  { type: TargetMainType.TYPE_SELF_DRIVING, ko: '자가운전자' },
+]
+
+export enum TargetSubType {
+  TYPE_KINDERGARTEN = "TYPE_KINDERGARTEN",
+  TYPE_ELEMENTARY = "TYPE_ELEMENTARY",
+  TYPE_MIDDLE = "TYPE_MIDDLE",
+  TYPE_HIGH = "TYPE_HIGH",
+  TYPE_SELF_DRIVER = "TYPE_SELF_DRIVER",
+  TYPE_ELDERLY = "TYPE_ELDERLY",
+}
+
+export const TargetSubTypeReg = [
+  { type: TargetSubType.TYPE_KINDERGARTEN, ko: '유치원' },
+  { type: TargetSubType.TYPE_ELEMENTARY, ko: '초등학교' },
+  { type: TargetSubType.TYPE_MIDDLE, ko: '중학교' },
+  { type: TargetSubType.TYPE_HIGH, ko: '고등학교' },
+  { type: TargetSubType.TYPE_SELF_DRIVER, ko: '자가운전자' },
+  { type: TargetSubType.TYPE_ELDERLY, ko: '어르신' },
+]

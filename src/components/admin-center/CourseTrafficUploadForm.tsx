@@ -1,14 +1,14 @@
-import { courseTrafficRemove } from "@common/api/adm/course-traffic";
+import { courseTrafficRemove } from '@common/api/adm/course-traffic';
 import {
   ProvincialBoardResponseDto,
   ProvincialBoardSaveRequestDto,
-} from "@common/api/Api";
-import { useDialog } from "@hooks/useDialog";
-import { useSnackbar } from "@hooks/useSnackbar";
-import router from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import styled from "@emotion/styled";
+} from '@common/api/Api';
+import { useDialog } from '@hooks/useDialog';
+import { useSnackbar } from '@hooks/useSnackbar';
+import router from 'next/router';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import styled from '@emotion/styled';
 import {
   Box,
   Button,
@@ -23,16 +23,16 @@ import {
   RadioGroup,
   Select,
   TextField,
-} from "@mui/material";
-import { css } from "@emotion/css";
-import { Spinner } from "@components/ui";
-import { ErrorMessage } from "@hookform/error-message";
-import { FileUploader } from "@components/ui/FileUploader";
-import OndemandVideoOutlinedIcon from "@mui/icons-material/OndemandVideoOutlined";
-import { ProductStatus } from "@common/api/course";
+} from '@mui/material';
+import { css } from '@emotion/css';
+import { Spinner } from '@components/ui';
+import { ErrorMessage } from '@hookform/error-message';
+import { FileUploader } from '@components/ui/FileUploader';
+import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
+import Image from 'next/image';
 
 interface Props {
-  mode?: "upload" | "modify";
+  mode?: 'upload' | 'modify';
   courseTraffic?: ProvincialBoardResponseDto;
   onHandleSubmit: ({
     courseTrafficInput,
@@ -52,23 +52,20 @@ interface FormType extends ProvincialBoardSaveRequestDto {
 }
 
 const defaultValues = {
-  status: ProductStatus.APPROVE,
-
   files: [],
 };
 
 export function CourseTrafficUploadForm({
-  mode = "upload",
+  mode = 'upload',
   courseTraffic,
   onHandleSubmit,
 }: Props) {
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
-  const [thumbnail, setThumbnail] = useState("");
+  const [thumbnail, setThumbnail] = useState('');
   const [loading, setLoading] = useState(false);
   const dialog = useDialog();
   const snackbar = useSnackbar();
-  const [fileImage, setFileImage] = useState("");
   const {
     register,
     handleSubmit,
@@ -82,8 +79,19 @@ export function CourseTrafficUploadForm({
 
   ////
 
+  // 교육 대상자 타입
+  const handleEduTargetMain = async (e: { target: { value: any } }) => {
+    setValue('eduTargetMain', e.target.value);
+  };
+
+  // 교육 대상자 세부 타입
+  const handleEduTargetSub = async (e: { target: { value: any } }) => {
+    setValue('eduTargetSub', e.target.value);
+  };
+  ////
+
   useEffect(() => {
-    if (mode === "modify" && !!courseTraffic) {
+    if (mode === 'modify' && !!courseTraffic) {
       reset({ ...courseTraffic });
       setFileName(courseTraffic.s3Files[0]?.name || null);
     }
@@ -100,7 +108,7 @@ export function CourseTrafficUploadForm({
   };
 
   const handleDeleteFile = () => {
-    resetField("files");
+    resetField('files');
     setFileName(null);
     setIsFileDelete(true);
   };
@@ -109,18 +117,18 @@ export function CourseTrafficUploadForm({
   const onClickRemoveCourseTraffic = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
-        title: "과정 삭제하기",
-        description: "정말로 삭제하시겠습니까?",
-        confirmText: "삭제",
-        cancelText: "취소",
+        title: '과정 삭제하기',
+        description: '정말로 삭제하시겠습니까?',
+        confirmText: '삭제',
+        cancelText: '취소',
       });
       if (dialogConfirmed) {
         await courseTrafficRemove(seq);
-        snackbar({ variant: "success", message: "성공적으로 삭제되었습니다." });
+        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
         router.push(`/admin-center/course`);
       }
     } catch (e: any) {
-      snackbar({ variant: "error", message: e.data.message });
+      snackbar({ variant: 'error', message: e.data.message });
     }
   };
 
@@ -149,21 +157,27 @@ export function CourseTrafficUploadForm({
       >
         <InputContainer>
           <FormControl fullWidth className="courseUploadInputBox">
-            <InputLabel>타입1</InputLabel>
-            <Select value={""} label="과정분류"></Select>
-          </FormControl>
-          <FormControl fullWidth className="courseUploadInputBox">
-            <InputLabel>타입1</InputLabel>
-            <Select value={""} label="과정분류"></Select>
-          </FormControl>
-
-          <FormControl fullWidth className="courseUploadInputBox">
-            <InputLabel>타입3</InputLabel>
+            <InputLabel>교육 대상자 타입</InputLabel>
             <Select
-              labelId="courseTrafficType"
-              id="courseTrafficType"
-              value={""}
-              label=""
+              labelId="eduTargetMain"
+              id="eduTargetMain"
+              value={''}
+              label="교육 대상자 타입"
+              onChange={handleEduTargetMain}
+            >
+              <MenuItem>어린이</MenuItem>
+              <MenuItem>청소년</MenuItem>
+              <MenuItem>어르신</MenuItem>
+              <MenuItem>자가운전자</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth className="courseUploadInputBox">
+            <InputLabel>교육 대상자 세부 타입</InputLabel>
+            <Select
+              labelId="eduTargetSub"
+              id="eduTargetSub"
+              value={''}
+              label="교육 대상자 세부 타입"
             >
               <MenuItem>1</MenuItem>
               <MenuItem>2</MenuItem>
@@ -172,16 +186,28 @@ export function CourseTrafficUploadForm({
 
           <FormControl className={textField}>
             <TextField
-              {...register("title", {
-                required: "과정 명을 입력해주세요.",
+              {...register('title', {
+                required: '과정 명을 입력해주세요.',
               })}
               size="small"
               label="과정명"
               variant="outlined"
             />
+            <ErrorMessage errors={errors} name="title" as={<FormHelperText error />} />
+          </FormControl>
+
+          <FormControl className={textField}>
+            <TextField
+              {...register('youtubeLink', {
+                required: '유튜브 링크를 입력해주세요.',
+              })}
+              size="small"
+              label="유튜브 링크"
+              variant="outlined"
+            />
             <ErrorMessage
               errors={errors}
-              name="courseTrafficTitle"
+              name="youtubeLink"
               as={<FormHelperText error />}
             />
           </FormControl>
@@ -193,24 +219,12 @@ export function CourseTrafficUploadForm({
               regName="files"
               onFileChange={handleFileChange}
               accept=".jpg, .jpeg, .png"
-              // onFileChange={saveFileImage}
-            >
-              {/* <ThumbnailImg>
-                {course.s3Files ? (
-                  <Image
-                    className="thumbnailImg"
-                    src={course.s3Files[0].path} // course.courseFile
-                    layout="responsive"
-                    width="100%"
-                    height="56.25"
-                  />
-                ) : null}
-              </ThumbnailImg> */}
-            </FileUploader>
+              children={''}
+            />
 
             {fileName ? (
               <Chip
-                sx={{ mt: "8px" }}
+                sx={{ mt: '8px' }}
                 icon={<OndemandVideoOutlinedIcon />}
                 label={fileName}
                 onDelete={handleDeleteFile}
@@ -219,64 +233,40 @@ export function CourseTrafficUploadForm({
           </div>
           <Box>
             이미지파일 확장자는
-            <span style={{ color: "red", fontWeight: "bold" }}>
-              {" "}
+            <span style={{ color: 'red', fontWeight: 'bold' }}>
               jpg, jpeg, png, gif, bmp
             </span>
             만 사용가능합니다. 이미지 사이즈는
-            <span style={{ color: "red", fontWeight: "bold" }}>16:9</span>
+            <span style={{ color: 'red', fontWeight: 'bold' }}>16:9</span>
             비율로 올려주셔야 합니다.
           </Box>
 
           <FormLabel sx={{ mt: 1, mb: 1 }}>미리보기</FormLabel>
           <ThumbnailImg>
-            {/* {courseTraffic?.s3Files ? (
+            {courseTraffic?.s3Files ? (
               <Image
                 className="thumbnailImg"
-                src={courseTraffic.s3Files[0]?.path || ""}
+                src={courseTraffic.s3Files[0]?.path || ''}
                 layout="fill"
               />
             ) : (
               <Image src={thumbnail} layout="fill" />
-            )} */}
+            )}
           </ThumbnailImg>
         </InputContainer>
-
-        <FormControl className={pt20}>
-          <FormLabel focused={false}>상태</FormLabel>
-          <Controller
-            rules={{ required: true }}
-            control={control}
-            name="status"
-            render={({ field }) => (
-              <RadioGroup row {...field}>
-                <FormControlLabel
-                  value={ProductStatus.APPROVE}
-                  control={<Radio />}
-                  label="정상"
-                />
-                <FormControlLabel
-                  value={ProductStatus.REJECT}
-                  control={<Radio />}
-                  label="중지"
-                />{" "}
-              </RadioGroup>
-            )}
-          />
-        </FormControl>
 
         <ButtonBox>
           <SubmitBtn variant="contained" type="submit" disabled={loading}>
             {loading ? (
               <Spinner fit={true} />
-            ) : mode === "upload" ? (
-              "업로드하기"
+            ) : mode === 'upload' ? (
+              '업로드하기'
             ) : (
-              "수정하기"
+              '수정하기'
             )}
           </SubmitBtn>
-          {mode === "upload" ? (
-            ""
+          {mode === 'upload' ? (
+            ''
           ) : (
             <DeleteBtn
               color="warning"
@@ -284,7 +274,7 @@ export function CourseTrafficUploadForm({
               onClick={() => onClickRemoveCourseTraffic(courseTraffic.seq)}
               disabled={loading}
             >
-              {loading ? <Spinner fit={true} /> : "삭제"}
+              {loading ? <Spinner fit={true} /> : '삭제'}
             </DeleteBtn>
           )}
         </ButtonBox>

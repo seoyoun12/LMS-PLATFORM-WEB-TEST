@@ -7,50 +7,52 @@ import {
   TableRow,
   TableCell,
   Typography,
-} from "@mui/material";
-import { Spinner } from "@components/ui";
-import styled from "@emotion/styled";
-import { Table } from "@components/ui";
-import dateFormat from "dateformat";
-import { YN } from "@common/constant";
-import { useSnackbar } from "@hooks/useSnackbar";
-import { useEffect, useState } from "react";
-import { useDialog } from "@hooks/useDialog";
-import { useRouter } from "next/router";
+} from '@mui/material';
+import { Spinner } from '@components/ui';
+import styled from '@emotion/styled';
+import { Table } from '@components/ui';
+import dateFormat from 'dateformat';
+import { YN } from '@common/constant';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { useEffect, useState } from 'react';
+import { useDialog } from '@hooks/useDialog';
+import { useRouter } from 'next/router';
+import { courseTrafficList } from '@common/api/adm/course-traffic';
 import {
-  courseTrafficList,
   TargetMainType,
+  TargetMainTypeReg,
   TargetSubType,
-} from "@common/api/adm/course-traffic";
+  TargetSubTypeReg,
+} from 'src/staticDataDescElements/staticType';
 
-const targetMainConfig = [
-  { label: "어린이", value: TargetMainType.TYPE_CHILDREN },
-  { label: "청소년", value: TargetMainType.TYPE_TEENAGER },
-  { label: "어르신", value: TargetMainType.TYPE_ELDERLY },
-  { label: "자가운전자", value: TargetMainType.TYPE_SELF_DRIVING },
-];
+// const targetMainConfig = [
+//   { label: '어린이', value: TargetMainType.TYPE_CHILDREN },
+//   { label: '청소년', value: TargetMainType.TYPE_TEENAGER },
+//   { label: '어르신', value: TargetMainType.TYPE_ELDERLY },
+//   { label: '자가운전자', value: TargetMainType.TYPE_SELF_DRIVING },
+// ];
 
-const targetSubConfig = [
-  { label: "유치원", value: TargetSubType.TYPE_KINDERGARTEN },
-  { label: "초등학교", value: TargetSubType.TYPE_ELEMENTARY },
-  { label: "중학교", value: TargetSubType.TYPE_MIDDLE },
-  { label: "고등학교", value: TargetSubType.TYPE_HIGH },
-  { label: "자가운전자", value: TargetSubType.TYPE_SELF_DRIVER },
-  { label: "어르신", value: TargetSubType.TYPE_ELDERLY },
-];
+// const targetSubConfig = [
+//   { label: '유치원', value: TargetSubType.TYPE_KINDERGARTEN },
+//   { label: '초등학교', value: TargetSubType.TYPE_ELEMENTARY },
+//   { label: '중학교', value: TargetSubType.TYPE_MIDDLE },
+//   { label: '고등학교', value: TargetSubType.TYPE_HIGH },
+//   { label: '자가운전자', value: TargetSubType.TYPE_SELF_DRIVER },
+//   { label: '어르신', value: TargetSubType.TYPE_ELDERLY },
+// ];
 
 const headRows: {
   name: string;
-  align: "inherit" | "left" | "center" | "right" | "justify";
+  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
   width: string;
 }[] = [
-  { name: "No", align: "center", width: "5%" },
-  { name: "도민유형1", align: "center", width: "12%" },
-  { name: "도민유형2", align: "center", width: "12%" },
-  { name: "제목", align: "center", width: "54%" },
-  { name: "생성날짜", align: "center", width: "10%" },
+  { name: 'No', align: 'center', width: '5%' },
+  { name: '교육대상자 분류', align: 'center', width: '12%' },
+  { name: '교육대상자 세부 분류', align: 'center', width: '12%' },
+  { name: '제목', align: 'center', width: '54%' },
+  { name: '생성날짜', align: 'center', width: '10%' },
   // { name: "수정날짜", align: "center", width: "8.5%" },
-  { name: "상태", align: "center", width: "5%" },
+  { name: '상태', align: 'center', width: '5%' },
 ];
 
 export function CourseTrafficManagement() {
@@ -62,9 +64,9 @@ export function CourseTrafficManagement() {
 
   const { data, error, mutate } = courseTrafficList({ page });
 
-  console.log("data : ", data);
+  console.log('data : ', data);
 
-  console.log("data.content : ", data?.content);
+  console.log('data.content : ', data?.content);
 
   // pagination
   useEffect(() => {
@@ -103,16 +105,12 @@ export function CourseTrafficManagement() {
         page={data.number}
         onChangePage={onChangePage}
         size="small"
-        sx={{ tableLayout: "fixed" }}
+        sx={{ tableLayout: 'fixed' }}
       >
         <TableHead>
           <TableRow>
             {headRows.map(({ name, align, width }) => (
-              <CourseTrafficTitleTableCell
-                key={name}
-                align={align}
-                width={width}
-              >
+              <CourseTrafficTitleTableCell key={name} align={align} width={width}>
                 {name}
               </CourseTrafficTitleTableCell>
             ))}
@@ -120,9 +118,9 @@ export function CourseTrafficManagement() {
         </TableHead>
 
         <TableBody>
-          {data?.content.map((courseTraffic) => (
+          {data?.content.map(courseTraffic => (
             <TableRow
-              sx={{ cursor: "pointer" }}
+              sx={{ cursor: 'pointer' }}
               key={courseTraffic.seq}
               hover
               onClick={() => onClickModifyCourse(courseTraffic.seq)}
@@ -132,30 +130,30 @@ export function CourseTrafficManagement() {
               </CourseTrafficTableCell>
               <CourseTrafficTableCell align="center">
                 {
-                  targetMainConfig.filter(
-                    (item) => item.value === courseTraffic.eduTargetMain
-                  )[0].label
+                  TargetMainTypeReg.filter(
+                    item => item.type === courseTraffic.eduTargetMain
+                  )[0].ko
                 }
               </CourseTrafficTableCell>
               <CourseTrafficTableCell align="center">
                 {
-                  targetSubConfig.filter(
-                    (item) => item.value === courseTraffic.eduTargetSub
-                  )[0].label
+                  TargetSubTypeReg.filter(
+                    item => item.type === courseTraffic.eduTargetSub
+                  )[0].ko
                 }
               </CourseTrafficTableCell>
               <CourseTrafficTableCell align="center">
                 <SubjectBox>{courseTraffic.title}</SubjectBox>
               </CourseTrafficTableCell>
               <CourseTrafficTableCell align="center">
-                {dateFormat(courseTraffic.createdDtime, "isoDate")}
+                {dateFormat(courseTraffic.createdDtime, 'isoDate')}
               </CourseTrafficTableCell>
               <CourseTrafficTableCell align="center">
                 <Chip
-                  label={courseTraffic.status ? "정상" : "중지"}
+                  label={courseTraffic.status ? '정상' : '중지'}
                   variant="outlined"
                   size="small"
-                  color={courseTraffic.status ? "secondary" : "default"}
+                  color={courseTraffic.status ? 'secondary' : 'default'}
                 />
               </CourseTrafficTableCell>
             </TableRow>

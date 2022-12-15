@@ -264,7 +264,9 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
 
           <FormControl className={textField}>
             <TextField
-              {...register('courseName', { required: '과정 명을 입력해주세요.' })}
+              {...register('courseName', {
+                required: '과정 명을 입력해주세요.',
+              })}
               size="small"
               label="과정명"
               variant="outlined"
@@ -334,7 +336,9 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
 
         <FormControl className={cx(textField, lessonTime)}>
           <TextField
-            {...register('lessonTime', { required: '교육 시간을 입력해주세요.' })}
+            {...register('lessonTime', {
+              required: '교육 시간을 입력해주세요.',
+            })}
             size="small"
             label="교육 시간"
             variant="outlined"

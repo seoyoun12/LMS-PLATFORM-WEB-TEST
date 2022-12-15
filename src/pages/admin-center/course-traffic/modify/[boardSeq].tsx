@@ -1,4 +1,4 @@
-import { CourseTrafficModify, AdminCenterLayout } from "@layouts/AdminCenter";
+import { CourseTrafficModify, AdminCenterLayout } from '@layouts/AdminCenter';
 
 export default function CourseTrafficModifyPage() {
   return <CourseTrafficModify />;

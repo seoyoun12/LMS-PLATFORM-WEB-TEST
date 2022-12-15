@@ -15,38 +15,42 @@ import {
   Tooltip,
   tooltipClasses,
   Backdrop,
-} from '@mui/material';
-import styles from '@styles/common.module.scss';
-import { Table } from '@components/ui';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useRef, useState } from 'react';
-import { userList, removeUser } from '@common/api/adm/user';
-import styled from '@emotion/styled';
-import { Spinner } from '@components/ui';
-import dateFormat from 'dateformat';
-import { UserModifyModal } from '@components/admin-center/UserModifyModal';
-import { useSnackbar } from '@hooks/useSnackbar';
-import { useDialog } from '@hooks/useDialog';
-import { authoritiesType, regCategoryType, registerType } from '@common/api/user';
-import { ProductStatus } from '@common/api/course';
-import { NumberFormat } from 'xlsx';
-import { grey } from '@mui/material/colors';
-import SearchIcon from '@mui/icons-material/Search';
-import ReplayIcon from '@mui/icons-material/Replay';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import { getExcelUserList } from '@common/api/adm/excel';
+} from "@mui/material";
+import styles from "@styles/common.module.scss";
+import { Table } from "@components/ui";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import { useRouter } from "next/router";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { userList, removeUser } from "@common/api/adm/user";
+import styled from "@emotion/styled";
+import { Spinner } from "@components/ui";
+import dateFormat from "dateformat";
+import { UserModifyModal } from "@components/admin-center/UserModifyModal";
+import { useSnackbar } from "@hooks/useSnackbar";
+import { useDialog } from "@hooks/useDialog";
+import {
+  authoritiesType,
+  regCategoryType,
+  registerType,
+} from "@common/api/user";
+import { ProductStatus } from "@common/api/course";
+import { NumberFormat } from "xlsx";
+import { grey } from "@mui/material/colors";
+import SearchIcon from "@mui/icons-material/Search";
+import ReplayIcon from "@mui/icons-material/Replay";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+import { getExcelUserList } from "@common/api/adm/excel";
 
 const userConfig = [
-  { label: '실명가입', value: regCategoryType.TYPE_TRANS_EDU },
-  { label: '핸드폰가입', value: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU },
+  { label: "실명가입", value: regCategoryType.TYPE_TRANS_EDU },
+  { label: "핸드폰가입", value: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU },
 ];
 
 const radioConfig = [
   // { name: '전체', value: '' }, // Type이 required
-  { name: '저상/운수', value: registerType.TYPE_TRANS_EDU },
-  { name: '관리자', value: registerType.TYPE_TRAFFIC_SAFETY_EDU }, // 차후 도민
+  { name: "저상/운수", value: registerType.TYPE_TRANS_EDU },
+  { name: "관리자", value: registerType.TYPE_TRAFFIC_SAFETY_EDU }, // 차후 도민
 ];
 
 // TEST
@@ -61,16 +65,16 @@ const radioConfig = [
 
 const headRows: {
   name: string;
-  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  align: "inherit" | "left" | "center" | "right" | "justify";
   width: string;
 }[] = [
-  { name: 'No', align: 'center', width: '6.5%' },
-  { name: '아이디', align: 'center', width: '19%' },
-  { name: '이름', align: 'center', width: '19.5%' },
-  { name: '생년월일', align: 'center', width: '14%' },
-  { name: '핸드폰번호', align: 'center', width: '19%' },
-  { name: '가입구분', align: 'center', width: '9.5%' },
-  { name: '가입날짜', align: 'center', width: '14%' },
+  { name: "No", align: "center", width: "6.5%" },
+  { name: "아이디", align: "center", width: "19%" },
+  { name: "이름", align: "center", width: "19.5%" },
+  { name: "생년월일", align: "center", width: "14%" },
+  { name: "핸드폰번호", align: "center", width: "19%" },
+  { name: "가입구분", align: "center", width: "9.5%" },
+  { name: "가입날짜", align: "center", width: "14%" },
 ];
 
 export function UserManagement() {
@@ -92,8 +96,8 @@ export function UserManagement() {
   // 검색기능
   const [notFound, setNotFound] = useState(false);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
-  const [keyword, setKeyword] = useState<string>('');
-  const [nameOrUsername, setNameOrUsername] = useState<string>(''); //이름 혹은 아이디
+  const [keyword, setKeyword] = useState<string>("");
+  const [nameOrUsername, setNameOrUsername] = useState<string>(""); //이름 혹은 아이디
   const { data, error, mutate } = userList({
     page,
     registerType: typeValue,
@@ -145,7 +149,7 @@ export function UserManagement() {
       // setKeyword(null);
       setPage(0);
       // return mutate();
-      return setKeyword('');
+      return setKeyword("");
     }
 
     if (searchInputRef.current) {
@@ -201,20 +205,20 @@ export function UserManagement() {
 
   // 엑셀
   const onClickExcelDownload = async () => {
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     setLoading(true);
     try {
       const data = await getExcelUserList();
       const excel = new Blob([data]);
       a.href = URL.createObjectURL(excel);
-      a.download = '충남_관리자_회원목록_리스트.xlsx';
+      a.download = "충남_관리자_회원목록_리스트.xlsx";
       a.click();
       a.remove();
       URL.revokeObjectURL(a.href);
-      snackbar({ variant: 'success', message: '다운로드 완료' });
+      snackbar({ variant: "success", message: "다운로드 완료" });
       setLoading(false);
     } catch (e) {
-      snackbar({ variant: 'error', message: e.data.message });
+      snackbar({ variant: "error", message: e.data.message });
       setLoading(false);
     }
   };
@@ -287,7 +291,7 @@ export function UserManagement() {
           color="neutral"
           variant="text"
           endIcon={<ReplayIcon htmlColor={grey[700]} />}
-          onClick={e => handleSearch(e, true)}
+          onClick={(e) => handleSearch(e, true)}
         >
           전체 다시 불러오기
         </ReloadButton>
@@ -297,7 +301,7 @@ export function UserManagement() {
         <Button
           variant="contained"
           color="success"
-          sx={{ marginLeft: 'auto' }}
+          sx={{ marginLeft: "auto" }}
           // onClick={() => snackbar({ variant: 'info', message: '준비중입니다.' })}
           onClick={onClickExcelDownload}
         >
@@ -305,7 +309,7 @@ export function UserManagement() {
             <Spinner fit={true} />
           ) : (
             <>
-              <FileCopyIcon sx={{ marginRight: '4px' }} />
+              <FileCopyIcon sx={{ marginRight: "4px" }} />
               회원목록 엑셀다운로드
             </>
           )}
@@ -313,13 +317,13 @@ export function UserManagement() {
       </Box>
 
       <Box mt={2} mb={2} fontSize={18} fontWeight="bold">
-        {keyword !== '' && `검색어 : ${keyword}`}
+        {keyword !== "" && `검색어 : ${keyword}`}
       </Box>
       <Backdrop open={loading}>
         <Box
           display="flex"
           flexDirection="column"
-          sx={{ background: 'white', borderRadius: '4px', padding: '12px' }}
+          sx={{ background: "white", borderRadius: "4px", padding: "12px" }}
         >
           <Spinner fit={true} />
           <Box color="#246def" fontWeight="bold">
@@ -336,7 +340,7 @@ export function UserManagement() {
         page={data.number}
         onChangePage={onChangePage}
         size="small"
-        sx={{ tableLayout: 'fixed' }}
+        sx={{ tableLayout: "fixed" }}
       >
         <TableHead>
           <TableRow>
@@ -359,17 +363,17 @@ export function UserManagement() {
         </TableHead>
 
         <TableBody>
-          {data.content.map(user => (
+          {data.content.map((user) => (
             <TableRow
               key={user.seq}
               hover
               onClick={() => onClickModifyUser(user.seq)}
-              sx={{ cursor: 'pointer' }}
+              sx={{ cursor: "pointer" }}
             >
               <UserTableCell align="center">{user.seq}</UserTableCell>
               <UserTableCell align="center">
                 {regCategoryType.TYPE_TRANS_EDU === user.regCategory
-                  ? '실명가입'
+                  ? "실명가입"
                   : user.username}
               </UserTableCell>
 
@@ -379,7 +383,7 @@ export function UserManagement() {
 
               <UserTableCell align="center">
                 {/* 주민번호 뒷자리의 첫번째 번호 백엔드에서 줬으니 차후 수정할것. */}
-                {Number(user.birth?.split('-', 1)) < 1000
+                {Number(user.birth?.split("-", 1)) < 1000
                   ? Number(user.birth?.slice(0, 2)) + Number(2000) > year
                     ? 19 + user.birth
                     : 20 + user.birth
@@ -391,7 +395,11 @@ export function UserManagement() {
               {/* <UserTableCell>{user.loginFailedCount}</UserTableCell> */}
               {/* <UserTableCell>{user.failedYn}</UserTableCell> */}
               <UserTableCell align="center">
-                {userConfig.filter(item => item.value === user.regCategory)[0].label}{' '}
+                {
+                  userConfig.filter(
+                    (item) => item.value === user.regCategory
+                  )[0].label
+                }{" "}
               </UserTableCell>
               <UserTableCell align="center">
                 {user.createdDtime.slice(0, 10)}
@@ -433,8 +441,8 @@ export function UserManagement() {
 
       <UserModifyModal
         open={openUserModifyModal}
-        handleClose={isSubmit => handleModalClose(isSubmit)}
-        userData={data.content.find(item => item.seq === userSeq)!}
+        handleClose={(isSubmit) => handleModalClose(isSubmit)}
+        userData={data.content.find((item) => item.seq === userSeq)!}
         error={error}
       />
     </Box>

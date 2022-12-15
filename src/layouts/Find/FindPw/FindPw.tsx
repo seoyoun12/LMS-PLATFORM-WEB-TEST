@@ -30,12 +30,28 @@ export function FindPw() {
 
   return (
     <FindPwWrap>
-      <FindHeader value={stepNumber} title={'비밀번호 찾기'} headers={headers} />
-      {stepNumber === 1 && <Step1 handleStepChange={handleStepChange} handleUsernameChange={handleUsernameChange} />}
-      {stepNumber === 2 && <Step2 handleStepChange={handleStepChange} username={username} />}
-      {stepNumber === 3 && <Step3 />}
+      <FindHeader
+        value={stepNumber}
+        title={'비밀번호 찾기'}
+        headers={headers}
+      />
+      <FIndPwStepsWrap>
+        {stepNumber === 1 && (
+          <Step1
+            handleStepChange={handleStepChange}
+            handleUsernameChange={handleUsernameChange}
+          />
+        )}
+        {stepNumber === 2 && (
+          <Step2 handleStepChange={handleStepChange} username={username} />
+        )}
+        {stepNumber === 3 && <Step3 />}
+      </FIndPwStepsWrap>
     </FindPwWrap>
   );
 }
 
 const FindPwWrap = styled(Box)``;
+const FIndPwStepsWrap = styled(Box)`
+  padding: 0 8px 24px 8px;
+`;

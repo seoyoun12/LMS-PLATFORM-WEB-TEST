@@ -161,7 +161,10 @@ export function CategoryBoardQuestionForm({
   //   }
   // }, [setSmsChecked]);
 
-  const onSubmit: SubmitHandler<FormType> = async ({ files, ...qna }, event) => {
+  const onSubmit: SubmitHandler<FormType> = async (
+    { files, ...qna },
+    event
+  ) => {
     event?.preventDefault();
     const qnaInput = {
       ...qna,
@@ -304,8 +307,12 @@ export function CategoryBoardQuestionForm({
                   <MenuItem value={QnaType.TYPE_SIGNUP_OR_SIGNIN}>
                     회원가입/로그인
                   </MenuItem>
-                  <MenuItem value={QnaType.TYPE_EDU_OR_COMPLETE}>교육/수료</MenuItem>
-                  <MenuItem value={QnaType.TYPE_WEB_OR_APP}>홈페이지/앱</MenuItem>
+                  <MenuItem value={QnaType.TYPE_EDU_OR_COMPLETE}>
+                    교육/수료
+                  </MenuItem>
+                  <MenuItem value={QnaType.TYPE_WEB_OR_APP}>
+                    홈페이지/앱
+                  </MenuItem>
                   <MenuItem value={QnaType.TYPE_ETC}>기타</MenuItem>
                 </Select>
               </FormControl>
@@ -365,9 +372,10 @@ export function CategoryBoardQuestionForm({
         </TableBody>
       </TableContainer>
       <Typography sx={{ padding: '1rem', color: grey[500] }}>
-        수집하는 개인 정보[(필수) 문의내용, (선택) 첨부 파일]는 문의 내용 처리 및 고객
-        불만을 해결하기 위해 사용되며, 관련 법령에 따라 3년간 보관 후 삭제됩니다. 동의를
-        거부하실 수 있으며, 동의 거부 시 서비스 이용이 제한 될 수 있습니다.
+        수집하는 개인 정보[(필수) 문의내용, (선택) 첨부 파일]는 문의 내용 처리
+        및 고객 불만을 해결하기 위해 사용되며, 관련 법령에 따라 3년간 보관 후
+        삭제됩니다. 동의를 거부하실 수 있으며, 동의 거부 시 서비스 이용이 제한
+        될 수 있습니다.
       </Typography>
       <Box display={'flex'} alignItems="center">
         <Checkbox

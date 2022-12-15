@@ -5,6 +5,7 @@ import { Tabs } from '@components/ui/Tabs';
 import { GuideBoardAuth } from './GuideBoardAuth';
 import { GuideBoardEduRegi } from './GuideBoardEduRegi';
 import { GuideBoardEduLearning } from './GuideBoardEduLearning';
+import CSRTabs2 from '@components/ui/Tabs2/CSRTabs2';
 
 enum TabValue {
   TYPE_GUIDE_AUTH = 'TYPE_GUIDE_AUTH',
@@ -25,7 +26,14 @@ export function GuideBoard() {
   return (
     <GuideContainer>
       <Box sx={{ mb: '30px' }}>
-        <Tabs tabsConfig={tabsConfig} variant={'fullWidth'} />
+        <CSRTabs2
+          tabsConfig={tabsConfig}
+          variant={'fullWidth'}
+          showBorderBottom={true}
+          gap={2}
+          fontSx={{ fontWeight: 700, fontSize: '20px' }}
+          responsiveWidth={768}
+        />
       </Box>
       {
         {

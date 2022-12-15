@@ -1,7 +1,14 @@
 import { isLoginState, pageType } from '@common/recoil';
 import { pageRegType } from '@common/recoil/pageType/atom';
 import styled from '@emotion/styled';
-import { Box, Button, FormControl, FormHelperText, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  TextField,
+  Typography,
+} from '@mui/material';
 import Link from 'next/link';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useRecoilState } from 'recoil';
@@ -35,9 +42,17 @@ export function Step2({ username, handleStepChange }: Props) {
     if (passwordErr || !username) return;
     if (!password) return window.alert('비밀번호를 입력하세요!');
     if (!confirmPass) return setConfirmPassErr(true);
+    if (password !== confirmPass)
+      return snackbar({
+        variant: 'error',
+        message: '비밀번호확인이 일치하지 않습니다.',
+      });
 
     try {
-      const confirm = await dialog({ title: '변경확인', description: '정말로 패스워드를 변경하시겠습니까?' });
+      const confirm = await dialog({
+        title: '변경확인',
+        description: '정말로 패스워드를 변경하시겠습니까?',
+      });
       if (confirm) {
         if (isLogin) await logout();
         await changeUserPW({ username, password });
@@ -58,7 +73,9 @@ export function Step2({ username, handleStepChange }: Props) {
   return (
     <Step2Wrap>
       <Typo>PW 변경</Typo>
-      <Typography fontWeight="bold">해당 계정의 비밀번호를 변경합니다.</Typography>
+      <Typography fontWeight="bold">
+        해당 계정의 비밀번호를 변경합니다.
+      </Typography>
       <Box className="find-form" component="form" onSubmit={handleSubmit}>
         <FormControl>
           <TextField
@@ -73,7 +90,9 @@ export function Step2({ username, handleStepChange }: Props) {
             id="password"
             autoComplete="current-password"
           />
-          <FormHelperText sx={{ color: 'red' }}>{passwordErr && '올바른 형식이 아닙니다.'}</FormHelperText>
+          <FormHelperText sx={{ color: 'red' }}>
+            {passwordErr && '올바른 형식이 아닙니다.'}
+          </FormHelperText>
           <FormHelperText>
             <HelperBox>
               <WarningAmberIcon sx={{ fontSize: '0.75rem' }} />
@@ -95,7 +114,9 @@ export function Step2({ username, handleStepChange }: Props) {
             id="password"
             autoComplete="current-password"
           />
-          <FormHelperText sx={{ color: 'red' }}>{confirmPassErr && '비밀번호가 일치하지 않습니다.'}</FormHelperText>
+          <FormHelperText sx={{ color: 'red' }}>
+            {confirmPassErr && '비밀번호가 일치하지 않습니다.'}
+          </FormHelperText>
         </FormControl>
 
         <Box display="flex" justifyContent="center" mt={4}>

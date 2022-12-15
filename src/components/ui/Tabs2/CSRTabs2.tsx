@@ -17,6 +17,7 @@ export interface CSRTabs2Props {
   tabsConfig: {
     label: string;
     value: string;
+    onClick?: () => void;
   }[];
   showBorderBottom?: boolean;
   variant?: 'fullWidth' | 'standard' | 'scrollable';

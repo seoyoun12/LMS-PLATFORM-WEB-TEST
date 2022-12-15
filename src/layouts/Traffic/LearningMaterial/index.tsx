@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import {
   LearningMaterialContentWrapper,
   LearningMaterialHeaderContainer,
@@ -33,65 +33,62 @@ export function LearningMaterialLayout() {
     type: MaterialTabType;
     id?: string;
   };
-  const [tab, setTab] = useState<MaterialTabType>(type);
+  // const [tab, setTab] = useState<MaterialTabType>(type);
 
-  const tabsConfig = [
-    {
-      label: '연령별교수학습지도안',
-      onClick: () => handleClickTab('education'),
-      value: 'education',
-    },
-    {
-      label: '교육자료',
-      onClick: () => handleClickTab('learning_guide'),
-      value: 'learning_guide',
-    },
-    {
-      label: '교육영상',
-      onClick: () => handleClickTab('video'),
-      value: 'video',
-    },
-    {
-      label: '타기관자료모음',
-      onClick: () => handleClickTab('reference'),
-      value: 'reference',
-    },
-    {
-      label: '교육영상게시판',
-      onClick: () => handleClickTab('media'),
-      value: 'media',
-    },
-  ];
+  // const tabsConfig = [
+  //   {
+  //     label: '연령별교수학습지도안',
+  //     onClick: () => handleClickTab('education'),
+  //     value: 'education',
+  //   },
+  //   {
+  //     label: '교육자료',
+  //     onClick: () => handleClickTab('learning_guide'),
+  //     value: 'learning_guide',
+  //   },
+  //   {
+  //     label: '교육영상',
+  //     onClick: () => handleClickTab('video'),
+  //     value: 'video',
+  //   },
+  //   {
+  //     label: '타기관자료모음',
+  //     onClick: () => handleClickTab('reference'),
+  //     value: 'reference',
+  //   },
+  //   {
+  //     label: '교육영상게시판',
+  //     onClick: () => handleClickTab('media'),
+  //     value: 'media',
+  //   },
+  // ];
 
   const handleClickTab = (tabValue: MaterialTabType) => {
-    setTab(tabValue);
     router.push(`/traffic/learning-material/${tabValue}`);
   };
 
   const contentRender = useCallback(() => {
-    switch (tab) {
+    switch (type) {
       case 'education':
-        return <EducationLayout materialType={getMaterialType(tab)} />;
+        return <EducationLayout materialType={getMaterialType(type)} />;
       case 'learning_guide':
         if (id) {
           return <LearningGuideDetailLayout />;
         }
-        return <LearningGuideLayout materialType={getMaterialType(tab)} />;
+        return <LearningGuideLayout materialType={getMaterialType(type)} />;
       case 'reference':
-        return <ReferenceLayout materialType={getMaterialType(tab)} />;
+        return <ReferenceLayout materialType={getMaterialType(type)} />;
       case 'video':
-        return <VideoLayout materialType={getMaterialType(tab)} />;
+        return <VideoLayout materialType={getMaterialType(type)} />;
       case 'media':
         if (id) {
           return <MediaDetailLayout />;
         }
-        return <MediaLayout materialType={getMaterialType(tab)} />;
+        return <MediaLayout materialType={getMaterialType(type)} />;
       default:
         return <></>;
     }
-  }, [tab, id, type]);
-
-  // onChange={()=>setType}
+  }, [type]);
 
   return (
     <>
@@ -105,15 +102,10 @@ export function LearningMaterialLayout() {
         </LearningMaterialHeaderContainer>
         <LearningMaterialTabWrapper>
           <LearningMaterialTabs
-            tabsConfig={tabsConfig}
-            variant={'fullWidth'}
-            rendering={false}
-            value={tab}
-            showBorderBottom={true}
-            gap={3}
-            responsiveWidth={768}
-          />
-          {/* <LearningMaterialTabs value={type}>
+            variant="scrollable"
+            allowScrollButtonsMobile={true}
+            value={type}
+          >
             <LearningMaterialTabItem
               label="연령별교수학습지도안"
               onClick={() => handleClickTab('education')}
@@ -139,7 +131,7 @@ export function LearningMaterialLayout() {
               onClick={() => handleClickTab('media')}
               value="media"
             />
-          </LearningMaterialTabs> */}
+          </LearningMaterialTabs>
         </LearningMaterialTabWrapper>
       </LearningMaterialWrapper>
 

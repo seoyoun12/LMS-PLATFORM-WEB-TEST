@@ -1,3 +1,5 @@
+import { regCategoryType } from "@common/api/user";
+
 export enum businessType {
   PASSENGER = 'PASSENGER', // 여객
   FREIGHT = 'FREIGHT', // 화물
@@ -264,3 +266,32 @@ export const RoleTypeReg = [
   {en: RoleType.ROLE_TRAFFIC_SAFETY_MANAGER, ko: '도민 관리자'},
   {en: RoleType.ROLE_ADMIN, ko: '통합관리자'},
 ]
+
+export const UserListConfig = [
+  { label: '실명가입', value: regCategoryType.TYPE_TRANS_EDU },
+  { label: '핸드폰가입', value: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU },
+];
+
+export const UserRadioConfig = [
+  // {
+  //   name: '전체',
+  //   value: '',
+  // },
+  { name: '저상/운수 일반회원', value: RoleType.ROLE_TRANS_USER },
+  { name: '저상/운수 관리자', value: RoleType.ROLE_TRANS_MANAGER },
+  { name: '도민 일반회원', value: RoleType.ROLE_TRAFFIC_SAFETY_USER },
+  { name: '도민 관리자', value: RoleType.ROLE_TRAFFIC_SAFETY_MANAGER },
+  { name: '통합 관리자', value: RoleType.ROLE_ADMIN }, // 차후 도민
+];
+
+export const UserRadioExcelConfig = [
+  // {
+  //   name: '전체',
+  //   value: '',
+  // },
+  { name: '저상/운수_일반회원', value: RoleType.ROLE_TRANS_USER },
+  { name: '저상/운수_관리자', value: RoleType.ROLE_TRANS_MANAGER },
+  { name: '도민_일반회원', value: RoleType.ROLE_TRAFFIC_SAFETY_USER },
+  { name: '도민_관리자', value: RoleType.ROLE_TRAFFIC_SAFETY_MANAGER },
+  { name: '통합_관리자', value: RoleType.ROLE_ADMIN }, // 차후 도민
+];

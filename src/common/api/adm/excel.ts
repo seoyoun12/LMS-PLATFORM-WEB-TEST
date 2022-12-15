@@ -1,5 +1,6 @@
 import { YN } from '@common/constant';
 import { GET, POST } from '@common/httpClient';
+import { RoleType } from 'src/staticDataDescElements/staticType';
 import { StepsBySurveyForExcel } from '../Api';
 
 export function getExcelCourseLearning() {
@@ -15,8 +16,8 @@ export function getExcelCourseLearning() {
 // }
 
 // 회원관리 리스트 엑셀다운로드
-export function getExcelUserList() {
-  return POST(`/adm/excel/download/user`, {}, { responseType: 'blob' });
+export function getExcelUserList(roleType : RoleType) {
+  return POST(`/adm/excel/download/user`,{roleType},  { params : {roleType}, responseType: 'blob' });
 }
 
 /**

@@ -8,12 +8,8 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  Chip,
   InputBase,
   IconButton,
-  TooltipProps,
-  Tooltip,
-  tooltipClasses,
   Backdrop,
 } from '@mui/material';
 import styles from '@styles/common.module.scss';
@@ -25,36 +21,21 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 import { userList, removeUser } from '@common/api/adm/user';
 import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
-import dateFormat from 'dateformat';
 import { UserModifyModal } from '@components/admin-center/UserModifyModal';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { regCategoryType } from '@common/api/user';
-import { ProductStatus } from '@common/api/course';
-import { NumberFormat } from 'xlsx';
 import { grey } from '@mui/material/colors';
 import SearchIcon from '@mui/icons-material/Search';
 import ReplayIcon from '@mui/icons-material/Replay';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { getExcelUserList } from '@common/api/adm/excel';
-import { RoleType } from 'src/staticDataDescElements/staticType';
-
-const userConfig = [
-  { label: '실명가입', value: regCategoryType.TYPE_TRANS_EDU },
-  { label: '핸드폰가입', value: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU },
-];
-
-const radioConfig = [
-  // {
-  //   name: '전체',
-  //   value: null,
-  // },
-  { name: '저상/운수 일반회원', value: RoleType.ROLE_TRANS_USER },
-  { name: '저상/운수 관리자', value: RoleType.ROLE_TRANS_MANAGER },
-  { name: '도민 일반회원', value: RoleType.ROLE_TRAFFIC_SAFETY_USER },
-  { name: '도민 관리자', value: RoleType.ROLE_TRAFFIC_SAFETY_MANAGER },
-  { name: '통합 관리자', value: RoleType.ROLE_ADMIN }, // 차후 도민
-];
+import {
+  UserRadioConfig,
+  RoleType,
+  UserListConfig,
+  UserRadioExcelConfig,
+} from 'src/staticDataDescElements/staticType';
 
 const headRows: {
   name: string;
@@ -75,7 +56,7 @@ export function UserManagement() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const [page, setPage] = useState(0);
-  const [typeValue, setTypeValue] = useState(RoleType.ROLE_TRANS_MANAGER);
+  const [typeValue, setTypeValue] = useState(RoleType.ROLE_TRANS_USER);
   const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
   const date = new Date();
@@ -190,22 +171,26 @@ export function UserManagement() {
     setopenUserModifyModal(true);
   };
 
+  // 엑셀 파일명
+  const koFileName = UserRadioExcelConfig.filter(ur => ur.value === typeValue)[0]?.name;
+
   // 엑셀
   const onClickExcelDownload = async () => {
     const a = document.createElement('a');
     setLoading(true);
     try {
-      const data = await getExcelUserList();
+      const data = await getExcelUserList(typeValue);
       const excel = new Blob([data]);
       a.href = URL.createObjectURL(excel);
-      a.download = '충남_관리자_회원목록_리스트.xlsx';
+      // a.download = '충남_관리자_회원목록_리스트.xlsx';
+      a.download = '충남_관리자_회원목록(' + `${koFileName}` + ')_리스트.xlsx';
       a.click();
       a.remove();
       URL.revokeObjectURL(a.href);
       snackbar({ variant: 'success', message: '다운로드 완료' });
       setLoading(false);
     } catch (e) {
-      snackbar({ variant: 'error', message: e.data.message });
+      snackbar({ variant: 'error', message: '다운로드 실패' });
       setLoading(false);
     }
   };
@@ -248,7 +233,7 @@ export function UserManagement() {
       </Typography>
 
       <RadioGroup row sx={{ mb: 3 }}>
-        {radioConfig.map(({ name, value }) => (
+        {UserRadioConfig.map(({ name, value }) => (
           <FormControlLabel
             key={name}
             label={name}
@@ -256,7 +241,10 @@ export function UserManagement() {
             // control={<Radio checked={authorities == value} />}
             control={<Radio checked={typeValue == value} />}
             // onClick={() => setAuthorities(value)}
-            onClick={() => setTypeValue(value)}
+            onClick={() => {
+              setTypeValue(value);
+              setPage(0);
+            }}
           />
         ))}
       </RadioGroup>
@@ -382,7 +370,7 @@ export function UserManagement() {
               {/* <UserTableCell>{user.loginFailedCount}</UserTableCell> */}
               {/* <UserTableCell>{user.failedYn}</UserTableCell> */}
               <UserTableCell align="center">
-                {userConfig.filter(item => item.value === user.regCategory)[0].label}{' '}
+                {UserListConfig.filter(item => item.value === user.regCategory)[0].label}{' '}
               </UserTableCell>
               <UserTableCell align="center">
                 {user.createdDtime.slice(0, 10)}

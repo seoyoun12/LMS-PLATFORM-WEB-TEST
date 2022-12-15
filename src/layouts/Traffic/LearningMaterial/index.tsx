@@ -65,7 +65,7 @@ export function LearningMaterialLayout() {
 
   const handleClickTab = (tabValue: MaterialTabType) => {
     setTab(tabValue);
-    // router.push(`/traffic/learning-material/${tabValue}`);
+    router.push(`/traffic/learning-material/${tabValue}`);
   };
 
   const contentRender = useCallback(() => {
@@ -89,7 +89,7 @@ export function LearningMaterialLayout() {
       default:
         return <></>;
     }
-  }, [tab]);
+  }, [tab, id, type]);
 
   // onChange={()=>setType}
 

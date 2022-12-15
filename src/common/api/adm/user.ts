@@ -1,23 +1,18 @@
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { PaginationResult } from 'types/fetch';
-import { authoritiesType, registerType, User, UserInput } from '@common/api/user';
+import { authoritiesType, regCategoryType, User, UserInput } from '@common/api/user';
+import { RoleType } from 'src/staticDataDescElements/staticType';
 
-// export function userList({ page, elementCnt, registerType, nameOrUsername, keyword }: {
-export function userList({ page, elementCnt, registerType, keyword }: {
-// export function userList({ page, elementCnt, authorities, keyword }: {
+export function userList({ page, elementCnt, roleType, keyword }: {
   page: number,
   elementCnt?: number,
-  registerType: registerType,
-  // authorities?: authoritiesType,
-  // nameOrUsername: string,
+  roleType: RoleType,
   keyword: string
 }) {
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<User[]>>>([
     `/user/adm`, {
-      // params: { page, elementCnt, registerType, nameOrUsername, keyword }
-      params: { page, elementCnt, registerType, keyword }
-      // params: { page, elementCnt, authorities, keyword }
+      params: { page, elementCnt, roleType, keyword }
     }
   ], GET);
 
@@ -45,8 +40,6 @@ export async function removeUser(seq: number) {
 
 export function useUser(userSeq: number | null) {
   const { data, error } = useSWR<SWRResponse<User>>(userSeq ? `/user/adm/${userSeq}` : null, GET);
-
-
   return {
     user: data?.data,
     userError: error,

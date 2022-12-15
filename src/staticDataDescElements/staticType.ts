@@ -248,3 +248,19 @@ export const TargetTypeMatch = [
   { mainType : TargetMainType.TYPE_ELDERLY, subType : TargetSubType.TYPE_ELDERLY},
   { mainType : TargetMainType.TYPE_SELF_DRIVING, subType : TargetSubType.TYPE_SELF_DRIVER},
 ]
+
+export enum RoleType {
+  ROLE_TRANS_USER = 'ROLE_TRANS_USER', // 저상/운수 유저
+  ROLE_TRANS_MANAGER = 'ROLE_TRANS_MANAGER', // 저상/운수 관리자
+  ROLE_TRAFFIC_SAFETY_USER = 'ROLE_TRAFFIC_SAFETY_USER', // 도민 유저
+  ROLE_TRAFFIC_SAFETY_MANAGER = 'ROLE_TRAFFIC_SAFETY_MANAGER', // 도민 관리자
+  ROLE_ADMIN = 'ROLE_ADMIN' // 전체관리자
+}
+
+export const RoleTypeReg = [
+  {en: RoleType.ROLE_TRANS_USER, ko: '저상/운수 일반회원'},
+  {en: RoleType.ROLE_TRANS_MANAGER, ko: '저상/운수 관리자'},
+  {en: RoleType.ROLE_TRAFFIC_SAFETY_USER, ko: '도민 일반회원'},
+  {en: RoleType.ROLE_TRAFFIC_SAFETY_MANAGER, ko: '도민 관리자'},
+  {en: RoleType.ROLE_ADMIN, ko: '통합관리자'},
+]

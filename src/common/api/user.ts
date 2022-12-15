@@ -115,10 +115,11 @@ export enum regCategoryType {
   TYPE_TRAFFIC_SAFETY_EDU = 'TYPE_TRAFFIC_SAFETY_EDU',
 }
 
-export enum registerType {
-  TYPE_TRANS_EDU = 'TYPE_TRANS_EDU',
-  TYPE_TRAFFIC_SAFETY_EDU = 'TYPE_TRAFFIC_SAFETY_EDU',
-}
+// export enum registerType {
+//   TYPE_TRANS_EDU = 'TYPE_TRANS_EDU',
+//   TYPE_TRAFFIC_SAFETY_EDU = 'TYPE_TRAFFIC_SAFETY_EDU',
+// }
+
 
 export interface User {
   authorities: authoritiesType;

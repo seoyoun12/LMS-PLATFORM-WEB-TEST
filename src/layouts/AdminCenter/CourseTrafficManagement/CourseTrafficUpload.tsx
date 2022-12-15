@@ -12,6 +12,7 @@ import router from 'next/router';
 
 export function CourseTrafficUpload() {
   const snackbar = useSnackbar();
+
   const fileHandler = async (
     files: File[],
     courseTraffic: ProvincialBoardResponseDto

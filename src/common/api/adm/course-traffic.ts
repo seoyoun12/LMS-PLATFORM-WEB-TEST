@@ -47,13 +47,13 @@ export async function courseTrafficRemove(boardSeq: number) {
 }
 
 // modify
-export async function CourseTrafficModify({boardSeq, courseTrafficInput
+export async function courseTrafficModify({boardSeq, courseTrafficInput
 } : {boardSeq: number; courseTrafficInput: ProvincialBoardUpdateRequestDto}) {
   return await PUT(`/provincial/board/adm/${boardSeq}`, courseTrafficInput)
 }
 
 // detail
-export function CourseTrafficDetail(boardSeq?: number) {
+export function courseTrafficDetail(boardSeq?: number) {
   const { data, error, mutate } = useSWR<SWRResponse<ProvincialBoardResponseDto>>(
     boardSeq? `/provincial/board/adm/${boardSeq}` : null, GET
   )

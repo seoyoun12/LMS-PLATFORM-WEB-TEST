@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Tab, Tabs } from '@mui/material';
+import dynamic from 'next/dynamic';
 
 export const LearningMaterialWrapper = styled.div``;
 
@@ -43,7 +44,11 @@ export const LearningMaterialTabWrapper = styled.div`
   margin-bottom: 40px;
 `;
 
-export const LearningMaterialTabs = styled(Tabs)`
+const CSRTabs2 = dynamic(() => import('@components/ui/Tabs2/CSRTabs2'), {
+  ssr: false,
+});
+
+export const LearningMaterialTabs = styled(CSRTabs2)`
   max-width: 1200px;
   margin: 0 auto;
   display: flex;

@@ -112,7 +112,8 @@ export default function MediaDetailLayout() {
       <VideoItemContentWrapper>
         <iframe
           src={`https://www.youtube.com/embed/${
-            data.youtubeLink.split('https://www.youtube.com/watch?v=')[1]
+            data.youtubeLink.split('https://www.youtube.com/watch?v=')[1] ||
+            data.youtubeLink.split(`https://www.youtube.com/embed/`)[1]
           }`}
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

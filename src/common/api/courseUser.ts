@@ -1,6 +1,5 @@
-import { DELETE, GET, POST, PUT } from '@common/httpClient';
-import useSWR, { SWRResponse } from 'swr';
-import { CourseUserProvincialSaveRequestDto } from './Api';
+import { DELETE, GET, POST, PUT } from "@common/httpClient";
+import useSWR, { SWRResponse } from "swr";
 import {
   businessType,
   courseCategoryType,
@@ -8,8 +7,8 @@ import {
   courseType,
   RegisterType,
   userBusinessType,
-} from './courseClass';
-import { userRegistrationType } from './user';
+} from "./courseClass";
+import { userRegistrationType } from "./user";
 
 export interface CourseUserResDto {
   courseTitle: string;
@@ -23,7 +22,7 @@ export interface CourseUserResDto {
 
 export function useCourseUser() {
   const { data, error, mutate } = useSWR<SWRResponse<CourseUserResDto[]>>(
-    '/course-user',
+    "/course-user",
     GET
   );
   return {
@@ -34,8 +33,8 @@ export function useCourseUser() {
 }
 
 export enum RegType {
-  TYPE_INDIVIDUAL = 'individual',
-  TYPE_ORGANIZATION = 'organization',
+  TYPE_INDIVIDUAL = "individual",
+  TYPE_ORGANIZATION = "organization",
 }
 
 export interface FindCourseUserRes {
@@ -109,8 +108,8 @@ export function getIsExistUser(courseClassSeq: number) {
 }
 
 // 운수저상쪽 로직은 courseClass에 있음 여기로 가져와야함.
-export function enrollCourseUserProvincial(
-  requestDto: Partial<CourseUserProvincialSaveRequestDto>
-) {
-  return POST(`/course-user/enroll/provincial`, requestDto);
-}
+// export function enrollCourseUserProvincial(
+//   requestDto: Partial<CourseUserProvincialSaveRequestDto>
+// ) {
+//   return POST(`/course-user/enroll/provincial`, requestDto);
+// }

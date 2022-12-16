@@ -97,7 +97,7 @@ export default function CourseInfoManagement() {
   const [submitValue, setSubmitValue] = useState<FormType>(defaultValues);
   const { watch, setValue, reset, register } = useForm<FormType>({ defaultValues });
   const { data, error, mutate } = useLearningInfo(submitValue);
-  console.log(watch());
+  // console.log(watch());
 
   // Pagination
   const onChangePage = (page: number) => {

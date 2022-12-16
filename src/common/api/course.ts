@@ -1,12 +1,17 @@
-import { DELETE, GET, POST, PUT } from '@common/httpClient';
-import useSWR, { SWRResponse } from 'swr';
-import { YN } from '@common/constant';
-import { FetchPaginationResponse, PaginationResult } from 'types/fetch';
-import { S3Files } from 'types/file';
-import { Content } from '@common/api/content';
-import { Lesson } from '@common/api/lesson';
-import { businessType, courseCategoryType, courseType ,courseSubCategoryType } from './courseClass';
-import { CourseDetailClientResponseDto } from './Api';
+import { DELETE, GET, POST, PUT } from "@common/httpClient";
+import useSWR, { SWRResponse } from "swr";
+import { YN } from "@common/constant";
+import { FetchPaginationResponse, PaginationResult } from "types/fetch";
+import { S3Files } from "types/file";
+import { Content } from "@common/api/content";
+import { Lesson } from "@common/api/lesson";
+import {
+  businessType,
+  courseCategoryType,
+  courseType,
+  courseSubCategoryType,
+} from "./courseClass";
+import { CourseDetailClientResponseDto } from "./Api";
 
 export enum ProductStatus {
   APPROVE = 1,
@@ -45,56 +50,76 @@ export interface Course {
   courseSubCategoryType: courseSubCategoryType;
   courseType: courseType;
   createdDtime: string;
-  displayYn: YN,
+  displayYn: YN;
   fileName: string;
   lessonTime: number;
   modifiedDtime: string;
-  s3Files: S3Files
-  seq: number,
-  status: ProductStatus
+  s3Files: S3Files;
+  seq: number;
+  status: ProductStatus;
 }
 
 // 20220808 courseList
-export function courseList({ contentTitle, elementCnt, page } : {
+export function courseList({
+  contentTitle,
+  elementCnt,
+  page,
+}: {
   contentTitle?: string;
   elementCnt?: number;
   page: number;
 }) {
-  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Course[]>>> ([
-    `/course`, {
-      params: { contentTitle, elementCnt, page }
-    }
-  ], GET)
-  
+  const { data, error, mutate } = useSWR<
+    SWRResponse<PaginationResult<Course[]>>
+  >(
+    [
+      `/course`,
+      {
+        params: { contentTitle, elementCnt, page },
+      },
+    ],
+    GET
+  );
+
   return {
     data: data?.data,
     error,
-    mutate
-  }
+    mutate,
+  };
 }
 
 // 20220808 courseAdmList
-export function courseAdmList({ courseTitle, elementCnt, page } : {
+export function courseAdmList({
+  courseTitle,
+  elementCnt,
+  page,
+}: {
   courseTitle?: string;
   elementCnt?: number;
   page: number;
 }) {
-  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Course[]>>> ([
-    `/course/adm`, {
-      params: { courseTitle, elementCnt, page }
-    }
-  ], GET)
-  
+  const { data, error, mutate } = useSWR<
+    SWRResponse<PaginationResult<Course[]>>
+  >(
+    [
+      `/course/adm`,
+      {
+        params: { courseTitle, elementCnt, page },
+      },
+    ],
+    GET
+  );
+
   return {
     data: data?.data,
     error,
-    mutate
-  }
+    mutate,
+  };
 }
 
 // 20220808 courseUpload
-export async function courseUpload(courseInput : CourseInput) {
-  return await POST(`/course/adm`, courseInput)
+export async function courseUpload(courseInput: CourseInput) {
+  return await POST(`/course/adm`, courseInput);
 }
 
 // 20220808 courseRemove
@@ -104,26 +129,32 @@ export async function courseRemove(seq: number) {
 
 // 20220809 courseDetail
 export function courseDetail(seq: number | null) {
-  const { data, error, mutate } = useSWR<SWRResponse<Course>>(seq? `/course/adm/${seq}` : null, GET);
+  const { data, error, mutate } = useSWR<SWRResponse<Course>>(
+    seq ? `/course/adm/${seq}` : null,
+    GET
+  );
   return {
     data: data?.data,
     error,
-    mutate
+    mutate,
   };
 }
 
 // 20220809 courseModify
-export async function courseModify({seq, courseInput} : {
-  seq: number,
-  courseInput: CourseInput
+export async function courseModify({
+  seq,
+  courseInput,
+}: {
+  seq: number;
+  courseInput: CourseInput;
 }) {
   return await PUT(`/course/adm/${seq}`, courseInput);
 }
 
-
-
 export function useCourse(courseSeq?: number) {
-  const { data, error, mutate } = useSWR<SWRResponse<CourseDetailClientResponseDto>>(courseSeq ? `/course/${courseSeq}` : null, GET);
+  const { data, error, mutate } = useSWR<
+    SWRResponse<CourseDetailClientResponseDto>
+  >(courseSeq ? `/course/${courseSeq}` : null, GET);
   return {
     course: data?.data,
     courseError: error,
@@ -142,7 +173,9 @@ export function useCourseList({
   elementCnt?: number;
   chapter?: string;
 }) {
-  const { data, error } = useSWR<FetchPaginationResponse<CourseDetailClientResponseDto[]>>(
+  const { data, error } = useSWR<
+    FetchPaginationResponse<CourseDetailClientResponseDto[]>
+  >(
     [
       `/course`,
       {

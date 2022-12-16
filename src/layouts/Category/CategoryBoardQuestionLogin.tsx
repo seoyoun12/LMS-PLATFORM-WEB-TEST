@@ -38,7 +38,10 @@ export function CategoryBoardQuestionLogin() {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
           onClick={() =>
-            router.push({ pathname: `/sign-in`, query: { redirect: router.asPath } })
+            router.push({
+              pathname: `/sign-in`,
+              query: { redirect: router.asPath },
+            })
           }
         >
           로그인{' '}

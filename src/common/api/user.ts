@@ -115,10 +115,11 @@ export enum regCategoryType {
   TYPE_TRAFFIC_SAFETY_EDU = 'TYPE_TRAFFIC_SAFETY_EDU',
 }
 
-export enum registerType {
-  TYPE_TRANS_EDU = 'TYPE_TRANS_EDU',
-  TYPE_TRAFFIC_SAFETY_EDU = 'TYPE_TRAFFIC_SAFETY_EDU',
-}
+// export enum registerType {
+//   TYPE_TRANS_EDU = 'TYPE_TRANS_EDU',
+//   TYPE_TRAFFIC_SAFETY_EDU = 'TYPE_TRAFFIC_SAFETY_EDU',
+// }
+
 
 export interface User {
   authorities: authoritiesType;
@@ -266,6 +267,7 @@ export interface provincailTrafficSafety {
   name: string;
   phone: string;
   smsYn: YN;
+  emailYn: YN;
   // userBusinessTypeOne: businessType;
   // userBusinessTypeTwo: courseSubCategoryType;
   userRegistrationType: userRegistrationType;
@@ -276,7 +278,9 @@ export function getProvincial() {
   return GET<{ data: provincailTrafficSafety }>(`/user/provincial`);
 }
 
-export async function modifyProvincialTrafficSafety(info: provincailTrafficSafety) {
+export async function modifyProvincialTrafficSafety(
+  info: provincailTrafficSafety
+) {
   return await PUT(`/user/provincial`, info);
 }
 
@@ -297,7 +301,9 @@ export function getTransport() {
   return GET<{ data: modifTransWorker }>(`/user/transport`);
 }
 
-export async function modifTransWorker(info: Omit<modifTransWorker, 's3Files'>) {
+export async function modifTransWorker(
+  info: Omit<modifTransWorker, 's3Files'>
+) {
   return await PUT(`/user/transport`, info);
 }
 

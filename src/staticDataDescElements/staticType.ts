@@ -1,3 +1,5 @@
+import { regCategoryType } from "@common/api/user";
+
 export enum businessType {
   PASSENGER = 'PASSENGER', // 여객
   FREIGHT = 'FREIGHT', // 화물
@@ -203,4 +205,93 @@ export const businessSubTypeCategoryReg = [
   //   type: '고압가스(독성)',
   //   enType: courseSubCategoryType.HIGH_PRESSURE_GAS_TOXIC,
   // },
+];
+
+export enum TargetMainType {
+  TYPE_CHILDREN = "TYPE_CHILDREN",
+  TYPE_TEENAGER = "TYPE_TEENAGER",
+  TYPE_ELDERLY = "TYPE_ELDERLY",
+  TYPE_SELF_DRIVING = "TYPE_SELF_DRIVING",
+}
+
+export const TargetMainTypeReg = [
+  { type: TargetMainType.TYPE_CHILDREN, ko: '어린이' },
+  { type: TargetMainType.TYPE_TEENAGER, ko: '청소년' },
+  { type: TargetMainType.TYPE_ELDERLY, ko: '어르신' },
+  { type: TargetMainType.TYPE_SELF_DRIVING, ko: '자가운전자' },
+]
+
+export enum TargetSubType {
+  TYPE_KINDERGARTEN = "TYPE_KINDERGARTEN",
+  TYPE_ELEMENTARY = "TYPE_ELEMENTARY",
+  TYPE_MIDDLE = "TYPE_MIDDLE",
+  TYPE_HIGH = "TYPE_HIGH",
+  TYPE_SELF_DRIVER = "TYPE_SELF_DRIVER",
+  TYPE_ELDERLY = "TYPE_ELDERLY",
+}
+
+export const TargetSubTypeReg1 = [
+  { type: TargetSubType.TYPE_KINDERGARTEN, ko: '유치원' },
+  { type: TargetSubType.TYPE_ELEMENTARY, ko: '초등학교' },
+  { type: TargetSubType.TYPE_MIDDLE, ko: '중학교' },
+  { type: TargetSubType.TYPE_HIGH, ko: '고등학교' },
+  { type: TargetSubType.TYPE_SELF_DRIVER, ko: '자가운전자' },
+  { type: TargetSubType.TYPE_ELDERLY, ko: '어르신' },
+]
+
+export const TargetSubTypeReg2 = [
+  { type: TargetSubType.TYPE_ELEMENTARY, ko: '초등학교' },
+  { type: TargetSubType.TYPE_MIDDLE, ko: '중학교' },
+  { type: TargetSubType.TYPE_HIGH, ko: '고등학교' },
+]
+
+export const TargetTypeMatch = [
+  { mainType : TargetMainType.TYPE_CHILDREN, subType : TargetSubType.TYPE_KINDERGARTEN},
+  { mainType : TargetMainType.TYPE_ELDERLY, subType : TargetSubType.TYPE_ELDERLY},
+  { mainType : TargetMainType.TYPE_SELF_DRIVING, subType : TargetSubType.TYPE_SELF_DRIVER},
+]
+
+export enum RoleType {
+  ROLE_TRANS_USER = 'ROLE_TRANS_USER', // 저상/운수 유저
+  ROLE_TRANS_MANAGER = 'ROLE_TRANS_MANAGER', // 저상/운수 관리자
+  ROLE_TRAFFIC_SAFETY_USER = 'ROLE_TRAFFIC_SAFETY_USER', // 도민 유저
+  ROLE_TRAFFIC_SAFETY_MANAGER = 'ROLE_TRAFFIC_SAFETY_MANAGER', // 도민 관리자
+  ROLE_ADMIN = 'ROLE_ADMIN' // 전체관리자
+}
+
+export const RoleTypeReg = [
+  {en: RoleType.ROLE_TRANS_USER, ko: '저상/운수 일반회원'},
+  {en: RoleType.ROLE_TRANS_MANAGER, ko: '저상/운수 관리자'},
+  {en: RoleType.ROLE_TRAFFIC_SAFETY_USER, ko: '도민 일반회원'},
+  {en: RoleType.ROLE_TRAFFIC_SAFETY_MANAGER, ko: '도민 관리자'},
+  {en: RoleType.ROLE_ADMIN, ko: '통합관리자'},
+]
+
+export const UserListConfig = [
+  { label: '실명가입', value: regCategoryType.TYPE_TRANS_EDU },
+  { label: '핸드폰가입', value: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU },
+];
+
+export const UserRadioConfig = [
+  {
+    name: '전체',
+    value: '',
+  },
+  { name: '저상/운수 일반회원', value: RoleType.ROLE_TRANS_USER },
+  { name: '저상/운수 관리자', value: RoleType.ROLE_TRANS_MANAGER },
+  { name: '도민 일반회원', value: RoleType.ROLE_TRAFFIC_SAFETY_USER },
+  { name: '도민 관리자', value: RoleType.ROLE_TRAFFIC_SAFETY_MANAGER },
+  { name: '통합 관리자', value: RoleType.ROLE_ADMIN }, // 차후 도민
+];
+
+export const UserRadioExcelConfig = [
+  {
+    name: '전체',
+    value: '',
+  },
+  { name: '저상/운수_일반회원', value: RoleType.ROLE_TRANS_USER },
+  { name: '저상/운수_관리자', value: RoleType.ROLE_TRANS_MANAGER },
+  { name: '도민_일반회원', value: RoleType.ROLE_TRAFFIC_SAFETY_USER },
+  { name: '도민_관리자', value: RoleType.ROLE_TRAFFIC_SAFETY_MANAGER },
+  { name: '통합_관리자', value: RoleType.ROLE_ADMIN }, // 차후 도민
 ];

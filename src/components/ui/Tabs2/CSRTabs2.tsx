@@ -17,6 +17,7 @@ export interface CSRTabs2Props {
   tabsConfig: {
     label: string;
     value: string;
+    onClick?: () => void;
   }[];
   showBorderBottom?: boolean;
   variant?: 'fullWidth' | 'standard' | 'scrollable';
@@ -111,11 +112,12 @@ export default function CSRTabs2({
         allowScrollButtonsMobile={!isMobile ? true : false}
         TabIndicatorProps={{ style: { display: !showIndicator && 'none' } }}
       >
-        {tabsConfig.map(({ value, label }) => (
+        {tabsConfig.map(({ value, label, onClick }) => (
           <MuiTab
             key={value}
             className="mui-tabs-item"
             label={label}
+            onClick={onClick}
             value={value}
             sx={{ ...fontSx, flexGrow: !isMobile ? '1' : '' }}
           />

@@ -4,7 +4,6 @@ import {
   Container,
   styled,
   Table,
-  TableBody,
   TableCell,
   TableContainer,
   TableRow,
@@ -12,33 +11,19 @@ import {
 } from '@mui/material';
 import { StebHeader } from '../StebHeader';
 import { useRecoilState } from 'recoil';
-import {
-  courseClassEnrollInfo,
-  courseClassEnrollList,
-  courseClassTrafficInfo,
-} from '@common/recoil';
+import { courseClassTrafficInfo, userInfo } from '@common/recoil';
 import CheckIcon from '@mui/icons-material/Check';
 import { locationList } from '@layouts/MeEdit/MeEdit';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import { useRouter } from 'next/router';
-import {
-  businessType,
-  getSingleCourseClass,
-  useSingleCourseClass,
-} from '@common/api/courseClass';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { useSnackbar } from '@hooks/useSnackbar';
-import dateFormat from 'dateformat';
-import { courseCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
-import { Spinner } from '@components/ui';
-import { courseBusinessTypeList } from '@layouts/Calendar/Calendar';
 import { studentList } from '../Steb2/Steb2';
 import { Step3StudentList } from './Step3StudentList';
 
 export function Steb3() {
   const router = useRouter();
-  const snackbar = useSnackbar();
   const [trafficInfo, setTrafficInfo] = useRecoilState(courseClassTrafficInfo);
+  const [userInfoData, setUserInfo] = useRecoilState(userInfo);
   return (
     <Steb3Wrap>
       <StebHeader value={3} />
@@ -79,24 +64,24 @@ export function Steb3() {
                 <TableLeftCell>지역</TableLeftCell>
                 <TableCell>
                   {String(
-                    locationList.filter(fil => fil.en === trafficInfo?.province)[0]?.ko
+                    locationList.filter(fil => fil.en === trafficInfo?.region)[0]?.ko
                   )}
                 </TableCell>
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>소속</TableLeftCell>
-                <TableCell>{trafficInfo?.businessName}</TableCell>
+                <TableCell>{trafficInfo?.organization}</TableCell>
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>신청기간</TableLeftCell>
-                <TableCell>{trafficInfo?.studyStartDate}</TableCell>
+                <TableCell>{trafficInfo?.expectedToStartDtime}</TableCell>
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>교육대상자</TableLeftCell>
                 <TableCell>
                   {String(
                     studentList.filter(
-                      item => item.enType === trafficInfo?.candidateType
+                      item => item.enType === trafficInfo?.eduTargetMain
                     )[0]?.type
                   )}
                 </TableCell>
@@ -106,9 +91,9 @@ export function Steb3() {
                 <TableCell>
                   {String(
                     studentList
-                      .filter(item => item.enType === trafficInfo?.candidateType)[0]
+                      .filter(item => item.enType === trafficInfo?.eduTargetMain)[0]
                       ?.category.filter(
-                        fil => fil.enType === trafficInfo?.candidateDetailType
+                        fil => fil.enType === trafficInfo?.eduTargetSub
                       )[0].type
                   )}
                 </TableCell>
@@ -125,7 +110,7 @@ export function Steb3() {
         </StudentList>
         <BottomBox>
           <Box padding="2rem" borderBottom="2px solid #888888" mb={2} textAlign="center">
-            <Typography>홍길동님의 교육신청이 완료되었습니다.</Typography>
+            <Typography>{userInfoData.name}님의 교육신청이 완료되었습니다.</Typography>
             <Typography>알차고 실속있는 서비스로 찾아뵙겠습니다.</Typography>
           </Box>
           <Box display="flex" gap="0.5rem">
@@ -139,7 +124,7 @@ export function Steb3() {
             </Button>
             <Button
               variant="contained"
-              onClick={() => router.push(`/traffic/me`)}
+              onClick={() => router.push(`/me`)}
               fullWidth
             >
               마이페이지로 이동
@@ -156,6 +141,7 @@ const Steb3BodyWrap = styled(Box)`
   width: 700px;
   margin: auto;
   margin-top: 3rem;
+  margin-bottom: 64px;
 `;
 const HeaderTypo = styled(Typography)`
   padding-bottom: 1rem;

@@ -1,10 +1,6 @@
-import { ContentType } from '@common/api/content';
 import { QnaInput, QnaType } from '@common/api/qna';
-import { MemberType } from '@common/api/user';
 import { YN } from '@common/constant';
 import { FileUploader } from '@components/ui/FileUploader';
-import { useDialog } from '@hooks/useDialog';
-import { useInput } from '@hooks/useInput';
 import {
   Box,
   FormControl,
@@ -15,24 +11,21 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableRow,
+  TableRow as MuiTableRow,
   TextareaAutosize,
   TextField,
   Checkbox,
   Typography,
   Button,
   Chip,
-  FormLabel,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
-  SelectChangeEvent,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { useRouter } from 'next/router';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { ChangeEvent, useRef, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
+import useResponsive from '@hooks/useResponsive';
+import { Phone4Regex } from '@utils/inputRegexes';
+import { Spinner } from '@components/ui';
 
 const questionTypeList = [
   { type: '회원가입/로그인', enType: 'TYPE_SIGNUP_OR_SIGNIN' },
@@ -65,6 +58,7 @@ interface Props {
     isFileDelete: boolean;
     qnaSeq?: number;
   }) => void;
+  loading: boolean;
 }
 
 interface FormType extends QnaInput {
@@ -79,13 +73,17 @@ export function CategoryBoardQuestionForm({
   mode = 'upload',
   qna,
   onHandleSubmit,
+  loading,
 }: Props) {
   const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
+  const isTablet = !useResponsive();
 
   const [phone01, setPhone01] = useState('010');
   const [phone02, setPhone02] = useState('');
   const [phone03, setPhone03] = useState('');
+  const phone2 = useRef<string>('');
+  const phone3 = useRef<string>('');
 
   // input 숫자
 
@@ -119,6 +117,7 @@ export function CategoryBoardQuestionForm({
   };
 
   const [smsChecked, setSmsChecked] = useState(true);
+  const [individualCheck, setIndividualCheck] = useState(false);
 
   const {
     register,
@@ -127,6 +126,7 @@ export function CategoryBoardQuestionForm({
     control,
     reset,
     resetField,
+    setValue,
   } = useForm<FormType>({ defaultValues });
 
   const handleFileChange = (e: ChangeEvent) => {
@@ -143,7 +143,10 @@ export function CategoryBoardQuestionForm({
     setIsFileDelete(true);
   };
 
-  const onSubmit: SubmitHandler<FormType> = async ({ files, ...qna }, event) => {
+  const onSubmit: SubmitHandler<FormType> = async (
+    { files, ...qna },
+    event
+  ) => {
     event?.preventDefault();
     const qnaInput = {
       ...qna,
@@ -160,6 +163,7 @@ export function CategoryBoardQuestionForm({
       encType="multipart/form-data"
       onSubmit={handleSubmit(onSubmit)}
       noValidate
+      sx={{ backgroundColor: '#fff' }}
       // className={boxStyles}
     >
       <TableContainer sx={{ width: '100%' }}>
@@ -168,7 +172,10 @@ export function CategoryBoardQuestionForm({
             <TableCellLeft align="center">전화번호</TableCellLeft>
 
             <TableCellRight>
-              <FormControl sx={{ minWidth: '130px', width: '60%' }}>
+              <FormControl
+                sx={{ minWidth: '130px', width: isTablet ? '100%' : '60%' }}
+                fullWidth={isTablet}
+              >
                 <Box display={'flex'} alignItems="center" gap="1rem">
                   <Select
                     labelId="phone-type-label"
@@ -177,21 +184,37 @@ export function CategoryBoardQuestionForm({
                     onChange={onChangePhoneNum01}
                   >
                     {phoneList.map(item => (
-                      <MenuItem value={item}>{item}</MenuItem>
+                      <MenuItem key={item} value={item}>
+                        {item}
+                      </MenuItem>
                     ))}
                   </Select>
                   -
                   <TextField
+                    value={phone02}
                     onChange={e => {
-                      if (e.target.value.length > 4) return;
-                      onChangePhoneNum02(e);
+                      phone2.current = e.target.value;
+
+                      if (Phone4Regex.test(e.target.value)) {
+                        return;
+                      }
+                      onChangePhoneNum02(e.target.value.replace(/[^0-9]/g, ''));
                     }}
+                    inputProps={{ inputMode: 'numeric' }}
+                    fullWidth={isTablet}
                   />
+                  -
                   <TextField
+                    value={phone03}
                     onChange={e => {
-                      if (e.target.value.length > 4) return;
-                      onChangePhoneNum03(e);
+                      phone3.current = e.target.value;
+                      if (Phone4Regex.test(e.target.value)) {
+                        return;
+                      }
+                      onChangePhoneNum03(e.target.value.replace(/[^0-9]/g, ''));
                     }}
+                    inputProps={{ inputMode: 'numeric' }}
+                    fullWidth={isTablet}
                   />
                 </Box>
 
@@ -199,9 +222,15 @@ export function CategoryBoardQuestionForm({
                   <Checkbox
                     checked={smsChecked}
                     onChange={(e, checked) => {
-                      setSmsChecked(checked);
+                      if (checked) {
+                        setValue('smsYn', YN.YES);
+                        setSmsChecked(checked);
+                      } else if (!checked) {
+                        setValue('smsYn', YN.NO);
+                        setSmsChecked(checked);
+                      }
                     }}
-                  />{' '}
+                  />
                   <Typography>알림신청</Typography>
                 </Box>
               </FormControl>
@@ -214,12 +243,20 @@ export function CategoryBoardQuestionForm({
             <TableCellRight>
               <FormControl sx={{ minWidth: '130px' }}>
                 <InputLabel>문의유형</InputLabel>
-                <Select value={questionType} label="type" onChange={handleSelectChange}>
+                <Select
+                  value={questionType}
+                  label="type"
+                  onChange={handleSelectChange}
+                >
                   <MenuItem value={QnaType.TYPE_SIGNUP_OR_SIGNIN}>
                     회원가입/로그인
                   </MenuItem>
-                  <MenuItem value={QnaType.TYPE_EDU_OR_COMPLETE}>교육/수료</MenuItem>
-                  <MenuItem value={QnaType.TYPE_WEB_OR_APP}>홈페이지/앱</MenuItem>
+                  <MenuItem value={QnaType.TYPE_EDU_OR_COMPLETE}>
+                    교육/수료
+                  </MenuItem>
+                  <MenuItem value={QnaType.TYPE_WEB_OR_APP}>
+                    홈페이지/앱
+                  </MenuItem>
                   <MenuItem value={QnaType.TYPE_ETC}>기타</MenuItem>
                 </Select>
               </FormControl>
@@ -279,38 +316,78 @@ export function CategoryBoardQuestionForm({
         </TableBody>
       </TableContainer>
       <Typography sx={{ padding: '1rem', color: grey[500] }}>
-        수집하는 개인 정보[(필수) 문의내용, (선택) 첨부 파일]는 문의 내용 처리 및 고객
-        불만을 해결하기 위해 사용되며, 관련 법령에 따라 3년간 보관 후 삭제됩니다. 동의를
-        거부하실 수 있으며, 동의 거부 시 서비스 이용이 제한 될 수 있습니다.
+        수집하는 개인 정보[(필수) 문의내용, (선택) 첨부 파일]는 문의 내용 처리
+        및 고객 불만을 해결하기 위해 사용되며, 관련 법령에 따라 3년간 보관 후
+        삭제됩니다. 동의를 거부하실 수 있으며, 동의 거부 시 서비스 이용이 제한
+        될 수 있습니다.
       </Typography>
       <Box display={'flex'} alignItems="center">
         <Checkbox
           required
-          checked={smsChecked}
+          checked={individualCheck}
           onChange={(e, checked) => {
-            setSmsChecked(checked);
+            setIndividualCheck(checked);
           }}
         />{' '}
-        <Box display={'flex'}>
+        <Box
+          display={'flex'}
+          onClick={() => setIndividualCheck(prev => !prev)}
+          sx={{ cursor: 'pointer' }}
+        >
           <Typography>개인정보 수집 및 활용에 동의합니다.</Typography>
           <Typography color={'#2ecc71'}>(필수)</Typography>
         </Box>
       </Box>
-      <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-        등록하기
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        disabled={loading}
+        sx={{ mt: 3 }}
+      >
+        {loading ? <Spinner fit={true} /> : '등록하기'}
       </Button>
     </Box>
   );
 }
 
+const TableRow = styled(MuiTableRow)`
+  display: flex;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+  :not(:last-child) {
+    td:not(:last-child) {
+      :before {
+        content: '*';
+        color: #e46f10;
+      }
+    }
+  }
+`;
 const TableCellLeft = styled(TableCell)`
   background: #e0e0e0;
   border-top: 1px solid #b4b4b4;
   border-bottom: 1px solid #b4b4b4;
   width: 20%;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media (max-width: 768px) {
+    /* flex-direction: column; */
+    width: 100%;
+    border-bottom: none;
+    text-align: start;
+  }
 `;
 const TableCellRight = styled(TableCell)`
   border-top: 1px solid #b4b4b4;
   border-bottom: 1px solid #b4b4b4;
   width: 80%;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    width: 100%;
+    border-top: none;
+  }
 `;

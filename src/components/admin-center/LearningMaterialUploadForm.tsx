@@ -61,9 +61,11 @@ export function LearningMaterialUploadForm({
   onHandleSubmit,
 }: Props) {
   const editorRef = useRef<EditorType>(null);
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [fileName, setFileName] = useState<string[] | null>(null);
   const [subType, setSubType] = useState<boolean>(true);
   const [openOrigin, setOpenOrigin] = useState<boolean>(false);
+  const [openContent , setOpenContent] = useState<Boolean>(true);
+  const [isEducationRoute , setIsEducationRoute] = useState<boolean>(false)
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const {
@@ -90,29 +92,39 @@ export function LearningMaterialUploadForm({
     }
   }, [mode, learningMaterial, reset]);
 
-  const onClickOpenSubType = async () => {
-    setSubType(true);
-    setOpenOrigin(false);
+  const onClickOpenSubType = async (e:React.MouseEvent<HTMLLabelElement>) => {
+    setSubType(true); // 서브타입 오픈여부
+    setOpenOrigin(false); // url 오픈여부
+    setOpenContent(true) // tui 오픈여부
+    setIsEducationRoute(false) //다중 파일 업로드 사용여부
     setValue('materialSubType', MaterialSubType.TYPE_CHILDREN);
   };
 
-  const onClickCloseSubType = async () => {
+  const onClickCloseSubType = async (e:React.MouseEvent<HTMLLabelElement>) => {
     setSubType(false);
     setOpenOrigin(false);
+    setOpenContent(false)
+    setIsEducationRoute(true)
     setValue('materialSubType', null);
   };
 
-  const onClickCloseSubTypeAndOpenOrigin = async () => {
+  const onClickCloseSubTypeAndOpenOrigin = async (e:React.MouseEvent<HTMLLabelElement>) => {
     setSubType(false);
     setOpenOrigin(true);
+    setOpenContent(false) // tui 오픈여부
+    setIsEducationRoute(true) //다중 파일 업로드 사용여부
     setValue('materialSubType', null);
   };
 
   const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();
     const files = (e.target as HTMLInputElement).files;
+    console.log(files)
     if (!files?.length) return null;
-    setFileName(files[0].name);
+    const fileNames = Array.from(files).map(r=>r.name)
+    setFileName(fileNames)
+    // setFileName(files[0].name);
+    if(!isEducationRoute) return
   };
 
   const handleDeleteFile = async () => {
@@ -146,6 +158,9 @@ export function LearningMaterialUploadForm({
   ) => {
     event?.preventDefault();
 
+    console.log(files)
+    return ;
+
     if (!editorRef.current) return;
     const markdownContent = editorRef.current.getInstance().getMarkdown();
     const learningMaterialInput = {
@@ -176,25 +191,25 @@ export function LearningMaterialUploadForm({
                   value={MaterialType.TYPE_BY_AGE}
                   control={<Radio />}
                   label="연령별 교수학습 지도안"
-                  onClick={() => onClickOpenSubType()}
+                  onClick={(e) => onClickOpenSubType(e)}
                 />
                 <FormControlLabel
                   value={MaterialType.TYPE_EDUCATIONAL}
                   control={<Radio />}
                   label="교육자료"
-                  onClick={() => onClickCloseSubType()}
+                  onClick={(e) => onClickCloseSubType(e)}
                 />
                 <FormControlLabel
                   value={MaterialType.TYPE_VIDEO}
                   control={<Radio />}
                   label="교육영상"
-                  onClick={() => onClickCloseSubTypeAndOpenOrigin()}
+                  onClick={(e) => onClickCloseSubTypeAndOpenOrigin(e)}
                 />
                 <FormControlLabel
                   value={MaterialType.TYPE_OTHER_ORGAN}
                   control={<Radio />}
                   label="타기관자료모음"
-                  onClick={() => onClickOpenSubType()}
+                  onClick={(e) => onClickOpenSubType(e)}
                 />
               </RadioGroup>
             )}
@@ -261,14 +276,14 @@ export function LearningMaterialUploadForm({
           </FormControl>
         ) : null}
 
-        <TuiEditor
+        {openContent && <TuiEditor
           initialValue={(learningMaterial && learningMaterial.content) || ' '}
           previewStyle="vertical"
           height="500px"
           initialEditType="wysiwyg"
           useCommandShortcut={true}
           ref={editorRef}
-        />
+        />}
 
         <div className="board-uploader">
           <FileUploader
@@ -278,14 +293,24 @@ export function LearningMaterialUploadForm({
           >
             {}
           </FileUploader>
-          {fileName ? (
+          {fileName ? 
+          // (
+          //   <Chip
+          //     sx={{ mt: '8px' }}
+          //     icon={<OndemandVideoOutlinedIcon />}
+          //     label={fileName}
+          //     onDelete={handleDeleteFile}
+          //   />
+          // ) 
+          fileName.map(r=>
             <Chip
-              sx={{ mt: '8px' }}
-              icon={<OndemandVideoOutlinedIcon />}
-              label={fileName}
-              onDelete={handleDeleteFile}
+            sx={{ mt: '8px' }}
+            icon={<OndemandVideoOutlinedIcon />}
+            label={r}
+            onDelete={handleDeleteFile}
             />
-          ) : null}
+            )
+          : null}
         </div>
 
         <FormControl className={pt20}>

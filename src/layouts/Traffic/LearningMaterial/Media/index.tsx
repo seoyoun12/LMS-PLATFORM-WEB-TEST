@@ -84,7 +84,7 @@ export default function MediaLayout({ materialType }: MediaLayoutProps) {
           .child.map(r => (
             <MediaChipItem
               label={r.eduSubTypeKo}
-              color="primary"
+              color='success'
               variant={eduSub === r.eduSubType ? 'filled' : 'outlined'}
               onClick={() => setEduSub(r.eduSubType)}
             />
@@ -172,11 +172,11 @@ const eduArr: {
   },
   {
     eduMainType: 'TYPE_ELDERLY',
-    eduMainTypeKo: '노인',
+    eduMainTypeKo: '어르신',
     child: [
       {
         eduSubType: 'TYPE_ELDERLY',
-        eduSubTypeKo: '노인',
+        eduSubTypeKo: '어르신',
       },
     ],
   },

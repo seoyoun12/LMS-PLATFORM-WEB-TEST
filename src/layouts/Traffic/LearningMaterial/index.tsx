@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback } from 'react';
 import {
   LearningMaterialContentWrapper,
   LearningMaterialHeaderContainer,
@@ -8,23 +8,23 @@ import {
   LearningMaterialTabs,
   LearningMaterialTabWrapper,
   LearningMaterialWrapper,
-} from "@layouts/Traffic/LearningMaterial/style";
-import BackgroundImage from "public/assets/images/learning_material_background.svg";
-import { useRouter } from "next/router";
-import EducationLayout from "@layouts/Traffic/LearningMaterial/Education";
-import LearningGuideLayout from "@layouts/Traffic/LearningMaterial/LearningGuide";
-import ReferenceLayout from "@layouts/Traffic/LearningMaterial/Reference";
-import VideoLayout from "@layouts/Traffic/LearningMaterial/Video";
-import { getMaterialType } from "@layouts/Traffic/LearningMaterial/util";
-import LearningGuideDetailLayout from "@layouts/Traffic/LearningMaterial/LearningGuide/Detail";
-import MediaLayout from "./Media";
-import MediaDetailLayout from "./Media/Detail";
+} from '@layouts/Traffic/LearningMaterial/style';
+import BackgroundImage from 'public/assets/images/learning_material_background.svg';
+import { useRouter } from 'next/router';
+import EducationLayout from '@layouts/Traffic/LearningMaterial/Education';
+import LearningGuideLayout from '@layouts/Traffic/LearningMaterial/LearningGuide';
+import ReferenceLayout from '@layouts/Traffic/LearningMaterial/Reference';
+import VideoLayout from '@layouts/Traffic/LearningMaterial/Video';
+import { getMaterialType } from '@layouts/Traffic/LearningMaterial/util';
+import LearningGuideDetailLayout from '@layouts/Traffic/LearningMaterial/LearningGuide/Detail';
+import MediaLayout from './Media';
+import MediaDetailLayout from './Media/Detail';
 
 export type MaterialTabType =
-  | "education"
-  | "learning_guide"
-  | "reference"
-  | "video"
+  | 'education'
+  | 'learning_guide'
+  | 'reference'
+  | 'video'
   | 'media';
 
 export function LearningMaterialLayout() {
@@ -33,6 +33,35 @@ export function LearningMaterialLayout() {
     type: MaterialTabType;
     id?: string;
   };
+  // const [tab, setTab] = useState<MaterialTabType>(type);
+
+  // const tabsConfig = [
+  //   {
+  //     label: '연령별교수학습지도안',
+  //     onClick: () => handleClickTab('education'),
+  //     value: 'education',
+  //   },
+  //   {
+  //     label: '교육자료',
+  //     onClick: () => handleClickTab('learning_guide'),
+  //     value: 'learning_guide',
+  //   },
+  //   {
+  //     label: '교육영상',
+  //     onClick: () => handleClickTab('video'),
+  //     value: 'video',
+  //   },
+  //   {
+  //     label: '타기관자료모음',
+  //     onClick: () => handleClickTab('reference'),
+  //     value: 'reference',
+  //   },
+  //   {
+  //     label: '교육영상게시판',
+  //     onClick: () => handleClickTab('media'),
+  //     value: 'media',
+  //   },
+  // ];
 
   const handleClickTab = (tabValue: MaterialTabType) => {
     router.push(`/traffic/learning-material/${tabValue}`);
@@ -40,22 +69,22 @@ export function LearningMaterialLayout() {
 
   const contentRender = useCallback(() => {
     switch (type) {
-      case "education":
+      case 'education':
         return <EducationLayout materialType={getMaterialType(type)} />;
-      case "learning_guide":
+      case 'learning_guide':
         if (id) {
           return <LearningGuideDetailLayout />;
         }
         return <LearningGuideLayout materialType={getMaterialType(type)} />;
-      case "reference":
+      case 'reference':
         return <ReferenceLayout materialType={getMaterialType(type)} />;
-      case "video":
+      case 'video':
         return <VideoLayout materialType={getMaterialType(type)} />;
-      case "media":
-        if(id) {
-          return <MediaDetailLayout />
+      case 'media':
+        if (id) {
+          return <MediaDetailLayout />;
         }
-        return <MediaLayout materialType={getMaterialType(type)} />
+        return <MediaLayout materialType={getMaterialType(type)} />;
       default:
         return <></>;
     }
@@ -72,31 +101,35 @@ export function LearningMaterialLayout() {
           <BackgroundImage />
         </LearningMaterialHeaderContainer>
         <LearningMaterialTabWrapper>
-          <LearningMaterialTabs value={type}>
+          <LearningMaterialTabs
+            variant="scrollable"
+            allowScrollButtonsMobile={true}
+            value={type}
+          >
             <LearningMaterialTabItem
               label="연령별교수학습지도안"
-              onClick={() => handleClickTab("education")}
+              onClick={() => handleClickTab('education')}
               value="education"
             />
             <LearningMaterialTabItem
               label="교육자료"
-              onClick={() => handleClickTab("learning_guide")}
+              onClick={() => handleClickTab('learning_guide')}
               value="learning_guide"
             />
             <LearningMaterialTabItem
               label="교육영상"
-              onClick={() => handleClickTab("video")}
+              onClick={() => handleClickTab('video')}
               value="video"
             />
             <LearningMaterialTabItem
               label="타기관자료모음"
-              onClick={() => handleClickTab("reference")}
+              onClick={() => handleClickTab('reference')}
               value="reference"
             />
-            <LearningMaterialTabItem 
-              label='교육영상게시판' 
-              onClick={()=>handleClickTab('media')} 
-              value='media' 
+            <LearningMaterialTabItem
+              label="교육영상게시판"
+              onClick={() => handleClickTab('media')}
+              value="media"
             />
           </LearningMaterialTabs>
         </LearningMaterialTabWrapper>

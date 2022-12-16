@@ -100,19 +100,20 @@ export default function MediaDetailLayout() {
         </MediaDetailHeaderDateText>
         <EducationChipItem
           label={eduTargetTypes.eduTargetMain}
-          color="warning"
+          color="primary"
           variant={'filled'}
         />
         <EducationChipItem
           label={eduTargetTypes.eduTargetSub}
-          color="primary"
+          color="success"
           variant={'filled'}
         />
       </MediaDetailHeaderWrapper>
       <VideoItemContentWrapper>
         <iframe
           src={`https://www.youtube.com/embed/${
-            data.youtubeLink.split('https://www.youtube.com/watch?v=')[1]
+            data.youtubeLink.split('https://www.youtube.com/watch?v=')[1] ||
+            data.youtubeLink.split(`https://www.youtube.com/embed/`)[1]
           }`}
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

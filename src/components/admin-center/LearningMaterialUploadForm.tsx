@@ -325,17 +325,18 @@ export function LearningMaterialUploadForm({
             )}
           />
         </FormControl> */}
-
-        <SubmitBtn variant="contained" type="submit">
-          {mode === 'upload' ? '업로드하기' : '수정하기'}
-        </SubmitBtn>
-        <DeleteBtn
-          color="warning"
-          variant="contained"
-          onClick={() => onClickRemoveLM(learningMaterial.seq)}
-        >
-          삭제
-        </DeleteBtn>
+        <ButtonBox>
+          <SubmitBtn variant="contained" type="submit">
+            {mode === 'upload' ? '업로드하기' : '수정하기'}
+          </SubmitBtn>
+          <DeleteBtn
+            color="warning"
+            variant="contained"
+            onClick={() => onClickRemoveLM(learningMaterial.seq)}
+          >
+            삭제
+          </DeleteBtn>
+        </ButtonBox>
       </Box>
     </Container>
   );
@@ -365,14 +366,19 @@ const InputContainer = styled.div`
   }
 `;
 
+const ButtonBox = styled(Box)`
+  margin: 20px 0 20px 0;
+`;
+
 const SubmitBtn = styled(Button)`
-  /* margin: 30px 30px 30px 0; */
-  margin-top: 10px;
-  margin-bottom: 10px;
+  width: 15%;
+  float: right;
+  margin: 0 0 0 5px;
 `;
 
 const DeleteBtn = styled(Button)`
-  /* background-color: #dd0000; */
+  width: 15%;
+  float: right;
 `;
 
 const textField = css`

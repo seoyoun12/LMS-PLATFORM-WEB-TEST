@@ -25,22 +25,6 @@ import {
   TargetSubTypeReg1,
 } from 'src/staticDataDescElements/staticType';
 
-// const targetMainConfig = [
-//   { label: '어린이', value: TargetMainType.TYPE_CHILDREN },
-//   { label: '청소년', value: TargetMainType.TYPE_TEENAGER },
-//   { label: '어르신', value: TargetMainType.TYPE_ELDERLY },
-//   { label: '자가운전자', value: TargetMainType.TYPE_SELF_DRIVING },
-// ];
-
-// const targetSubConfig = [
-//   { label: '유치원', value: TargetSubType.TYPE_KINDERGARTEN },
-//   { label: '초등학교', value: TargetSubType.TYPE_ELEMENTARY },
-//   { label: '중학교', value: TargetSubType.TYPE_MIDDLE },
-//   { label: '고등학교', value: TargetSubType.TYPE_HIGH },
-//   { label: '자가운전자', value: TargetSubType.TYPE_SELF_DRIVER },
-//   { label: '어르신', value: TargetSubType.TYPE_ELDERLY },
-// ];
-
 const headRows: {
   name: string;
   align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
@@ -51,7 +35,6 @@ const headRows: {
   { name: '교육대상자 세부 분류', align: 'center', width: '12%' },
   { name: '제목', align: 'center', width: '54%' },
   { name: '생성날짜', align: 'center', width: '10%' },
-  // { name: "수정날짜", align: "center", width: "8.5%" },
   { name: '상태', align: 'center', width: '5%' },
 ];
 

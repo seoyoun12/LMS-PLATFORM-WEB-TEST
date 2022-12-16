@@ -16,7 +16,7 @@ export function getExcelCourseLearning() {
 // }
 
 // 회원관리 리스트 엑셀다운로드
-export function getExcelUserList(roleType : RoleType) {
+export function getExcelUserList(roleType : RoleType | string) {
   return POST(`/adm/excel/download/user`,{roleType},  { params : {roleType}, responseType: 'blob' });
 }
 

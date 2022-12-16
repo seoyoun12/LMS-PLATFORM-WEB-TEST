@@ -56,7 +56,7 @@ export function UserManagement() {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const [page, setPage] = useState(0);
-  const [typeValue, setTypeValue] = useState(RoleType.ROLE_TRANS_USER);
+  const [typeValue, setTypeValue] = useState('');
   const [userSeq, setUserSeq] = useState<number | null>(null);
   const [openUserModifyModal, setopenUserModifyModal] = useState(false);
   const date = new Date();
@@ -70,7 +70,7 @@ export function UserManagement() {
   const [nameOrUsername, setNameOrUsername] = useState<string>(''); //이름 혹은 아이디
   const { data, error, mutate } = userList({
     page,
-    roleType: typeValue,
+    roleType: typeValue || '',
     keyword,
   });
   // console.log('회원정보 Data : ', data);

@@ -7,7 +7,8 @@ import { RoleType } from 'src/staticDataDescElements/staticType';
 export function userList({ page, elementCnt, roleType, keyword }: {
   page: number,
   elementCnt?: number,
-  roleType: RoleType,
+  roleType?: RoleType | string,
+  // roleType: string ,
   keyword: string
 }) {
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<User[]>>>([

@@ -1,5 +1,12 @@
 import styled from '@emotion/styled';
-import { Box, Button, FormControl, FormHelperText, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  TextField,
+  Typography,
+} from '@mui/material';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { signUp } from '@common/api';
@@ -33,7 +40,8 @@ export function Step2({ handleStep, resName }: Props) {
     const phone = data.get('phone') as string;
 
     if (nameErr || usernameErr || passwordErr || emailErr || phoneErr) return;
-    if (password !== confirmPassword) return window.alert('비밀번호확인이 일치하지 않습니다!');
+    if (password !== confirmPassword)
+      return window.alert('비밀번호확인이 일치하지 않습니다!');
 
     if (!!resName && !!username && !!password) {
       try {
@@ -113,7 +121,9 @@ export function Step2({ handleStep, resName }: Props) {
               autoComplete="name"
               autoFocus
             />
-            <FormHelperText sx={{ color: 'red' }}>{nameErr && '올바른 형식이 아닙니다.'}</FormHelperText>
+            <FormHelperText sx={{ color: 'red' }}>
+              {nameErr && '올바른 형식이 아닙니다.'}
+            </FormHelperText>
           </FormControl>
           <FormControl>
             <TextField
@@ -128,8 +138,12 @@ export function Step2({ handleStep, resName }: Props) {
               autoComplete="username"
               autoFocus
             />
-            <FormHelperText sx={{ color: 'red' }}>{usernameErr && '올바른 형식이 아닙니다.'}</FormHelperText>
-            <FormHelperText>아이디는 영문 대소문자/숫자 2가지 이상 조합, 6~32자 입니다.</FormHelperText>
+            <FormHelperText sx={{ color: 'red' }}>
+              {usernameErr && '올바른 형식이 아닙니다.'}
+            </FormHelperText>
+            <FormHelperText>
+              아이디는 영문 대소문자/숫자 2가지 이상 조합, 6~32자 입니다.
+            </FormHelperText>
           </FormControl>
           <FormControl>
             <TextField
@@ -144,7 +158,9 @@ export function Step2({ handleStep, resName }: Props) {
               id="password"
               autoComplete="current-password"
             />
-            <FormHelperText sx={{ color: 'red' }}>{passwordErr && '올바른 형식이 아닙니다.'}</FormHelperText>
+            <FormHelperText sx={{ color: 'red' }}>
+              {passwordErr && '올바른 형식이 아닙니다.'}
+            </FormHelperText>
             <FormHelperText>
               <HelperBox>
                 <WarningAmberIcon sx={{ fontSize: '0.75rem' }} />
@@ -169,8 +185,17 @@ export function Step2({ handleStep, resName }: Props) {
             />
           </FormControl>
           <FormControl>
-            <TextField name="email" label="이메일" placeholder="이메일을 입력해주세요" onChange={onChangeEmail} error={emailErr} required />
-            <FormHelperText sx={{ color: 'red' }}>{emailErr && '올바른 형식이 아닙니다.'}</FormHelperText>
+            <TextField
+              name="email"
+              label="이메일"
+              placeholder="이메일을 입력해주세요"
+              onChange={onChangeEmail}
+              error={emailErr}
+              required
+            />
+            <FormHelperText sx={{ color: 'red' }}>
+              {emailErr && '올바른 형식이 아닙니다.'}
+            </FormHelperText>
           </FormControl>
           <FormControl>
             <TextField
@@ -182,12 +207,14 @@ export function Step2({ handleStep, resName }: Props) {
               value={phone}
               required
             />
-            <FormHelperText sx={{ color: 'red' }}>{phoneErr && '올바른 형식이 아닙니다.'}</FormHelperText>
+            <FormHelperText sx={{ color: 'red' }}>
+              {phoneErr && '올바른 형식이 아닙니다.'}
+            </FormHelperText>
           </FormControl>
           <Button variant="contained" type="submit">
             동의하고 회원가입
           </Button>
-          <Box margin="auto">
+          <FotterBox margin="auto">
             <Typography className="term-typo" component="span" color="primary.main">
               이용약관
             </Typography>
@@ -202,7 +229,7 @@ export function Step2({ handleStep, resName }: Props) {
             <Typography className="term-typo" component="span">
               내용을 확인하였고 동의합니다.
             </Typography>
-          </Box>
+          </FotterBox>
         </Box>
       </StepMain>
     </Step2Wrap>
@@ -239,4 +266,8 @@ const TitleTypo = styled(Typography)`
 const HelperBox = styled(Box)`
   display: flex;
   align-items: center;
+`;
+
+const FotterBox = styled(Box)`
+  margin-bottom: 50px;
 `;

@@ -15,7 +15,7 @@ export function CourseTrafficModify() {
   const { boardSeq } = router.query;
   const { data, error } = courseTrafficDetail(Number(boardSeq));
 
-  console.log('courseTrafficData : ', data);
+  // console.log('courseTrafficData : ', data);
 
   //
 

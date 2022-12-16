@@ -107,17 +107,17 @@ export function CourseTrafficUploadForm({
         TargetTypeMatch.filter(tm => tm.mainType === watch().eduTargetMain)[0]?.subType
       );
       setValue('disabledEduTargetSub', true);
-      console.log('나는 청소년이 아닙니다.');
-      console.log('교육 대상자 세부 타입 : ', watch().disabledEduTargetSub);
-      console.log('지금 타겟메인의 벨류는 : ', watch().eduTargetMain);
-      console.log(
-        '지금 타겟메인의 벨류는 : ',
-        TargetMainTypeReg.filter(tm => tm.type === watch().eduTargetMain)[0]?.ko
-      );
-      console.log(
-        '지금 타겟서브의 벨류는 : ',
-        TargetSubTypeReg1.filter(tm => tm.type === watch().eduTargetSub)[0]?.ko
-      );
+      // console.log('나는 청소년이 아닙니다.');
+      // console.log('교육 대상자 세부 타입 : ', watch().disabledEduTargetSub);
+      // console.log('지금 타겟메인의 벨류는 : ', watch().eduTargetMain);
+      // console.log(
+      //   '지금 타겟메인의 벨류는 : ',
+      //   TargetMainTypeReg.filter(tm => tm.type === watch().eduTargetMain)[0]?.ko
+      // );
+      // console.log(
+      //   '지금 타겟서브의 벨류는 : ',
+      //   TargetSubTypeReg1.filter(tm => tm.type === watch().eduTargetSub)[0]?.ko
+      // );
       // console.log(
       //   '지금 타겟서브의 벨류는 : ',
       //   TargetSubTypeReg1.filter(tm => tm.type === watch().eduTargetSub)?.ko
@@ -126,16 +126,16 @@ export function CourseTrafficUploadForm({
     } else {
       setValue('eduTargetSub', 'TYPE_ELEMENTARY');
       setValue('disabledEduTargetSub', false);
-      console.log('나는 청소년입니다.');
-      console.log('교육 대상자 세부 타입 : ', watch().disabledEduTargetSub);
-      console.log(
-        '지금 타겟메인의 벨류는 : ',
-        TargetMainTypeReg.filter(tm => tm.type === watch().eduTargetMain)[0]?.ko
-      );
-      console.log(
-        '지금 타겟서브의 벨류는 : ',
-        TargetSubTypeReg1.filter(tm => tm.type === watch().eduTargetSub)[0]?.ko
-      );
+      // console.log('나는 청소년입니다.');
+      // console.log('교육 대상자 세부 타입 : ', watch().disabledEduTargetSub);
+      // console.log(
+      //   '지금 타겟메인의 벨류는 : ',
+      //   TargetMainTypeReg.filter(tm => tm.type === watch().eduTargetMain)[0]?.ko
+      // );
+      // console.log(
+      //   '지금 타겟서브의 벨류는 : ',
+      //   TargetSubTypeReg1.filter(tm => tm.type === watch().eduTargetSub)[0]?.ko
+      // );
     }
   }, [courseTraffic, watch().eduTargetMain]);
   ////

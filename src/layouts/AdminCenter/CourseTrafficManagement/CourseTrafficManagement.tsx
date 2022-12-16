@@ -64,9 +64,9 @@ export function CourseTrafficManagement() {
 
   const { data, error, mutate } = courseTrafficList({ page });
 
-  console.log('data : ', data);
+  // console.log('data : ', data);
 
-  console.log('data.content : ', data?.content);
+  // console.log('data.content : ', data?.content);
 
   // pagination
   useEffect(() => {

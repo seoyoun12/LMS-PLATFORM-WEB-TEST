@@ -192,7 +192,7 @@ export function Educator({ locationList }: Props) {
     if (isConfirm) {
       const smsYn = smsChecked ? YN.YES : YN.NO;
       const emailYn = emailChecked ? YN.YES : YN.NO;
-      console.log(user, email);
+      // console.log(user, email);
       if (!user || !email) return window.alert('수정 실패하였습니다.');
       const data = {
         userSeq: user.seq,
@@ -207,11 +207,9 @@ export function Educator({ locationList }: Props) {
       };
 
       try {
-        const {
-          data: ProvincialData,
-        }: { data: UserProvincialUpdateResponseDto } =
+        const { data: ProvincialData }: { data: UserProvincialUpdateResponseDto } =
           await modifyProvincialTrafficSafety(data);
-        console.log(ProvincialData);
+        // console.log(ProvincialData);
         if (watch().files.length > 0) {
           if (watch().fileSeq) {
             await deleteFile({

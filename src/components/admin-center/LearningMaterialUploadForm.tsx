@@ -31,6 +31,7 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import router from 'next/router';
 import { ProductStatus } from '@common/api/course';
+import { Spinner } from '@components/ui';
 
 interface Props {
   mode?: 'upload' | 'modify';
@@ -66,6 +67,9 @@ export function LearningMaterialUploadForm({
   const [openOrigin, setOpenOrigin] = useState<boolean>(false);
   const snackbar = useSnackbar();
   const dialog = useDialog();
+  const [loading, setLoading] = useState(false);
+  const [openTui, setOpenmTui] = useState<boolean>(true);
+
   const {
     register,
     handleSubmit,
@@ -100,6 +104,7 @@ export function LearningMaterialUploadForm({
     setSubType(false);
     setOpenOrigin(false);
     setValue('materialSubType', null);
+    setOpenmTui(false);
   };
 
   const onClickCloseSubTypeAndOpenOrigin = async () => {
@@ -176,25 +181,37 @@ export function LearningMaterialUploadForm({
                   value={MaterialType.TYPE_BY_AGE}
                   control={<Radio />}
                   label="연령별 교수학습 지도안"
-                  onClick={() => onClickOpenSubType()}
+                  onClick={() => {
+                    onClickOpenSubType();
+                    setOpenmTui(true);
+                  }}
                 />
                 <FormControlLabel
                   value={MaterialType.TYPE_EDUCATIONAL}
                   control={<Radio />}
                   label="교육자료"
-                  onClick={() => onClickCloseSubType()}
+                  onClick={() => {
+                    onClickCloseSubType();
+                    setOpenmTui(false);
+                  }}
                 />
                 <FormControlLabel
                   value={MaterialType.TYPE_VIDEO}
                   control={<Radio />}
                   label="교육영상"
-                  onClick={() => onClickCloseSubTypeAndOpenOrigin()}
+                  onClick={() => {
+                    onClickCloseSubTypeAndOpenOrigin();
+                    setOpenmTui(false);
+                  }}
                 />
                 <FormControlLabel
                   value={MaterialType.TYPE_OTHER_ORGAN}
                   control={<Radio />}
                   label="타기관자료모음"
-                  onClick={() => onClickOpenSubType()}
+                  onClick={() => {
+                    onClickOpenSubType();
+                    setOpenmTui(false);
+                  }}
                 />
               </RadioGroup>
             )}
@@ -261,15 +278,21 @@ export function LearningMaterialUploadForm({
           </FormControl>
         ) : null}
 
-        <TuiEditor
-          initialValue={(learningMaterial && learningMaterial.content) || ' '}
-          previewStyle="vertical"
-          height="500px"
-          initialEditType="wysiwyg"
-          useCommandShortcut={true}
-          ref={editorRef}
-        />
+        {openTui ? (
+          <TuiEditor
+            initialValue={(learningMaterial && learningMaterial.content) || ' '}
+            previewStyle="vertical"
+            height="500px"
+            initialEditType="wysiwyg"
+            useCommandShortcut={true}
+            ref={editorRef}
+            autofocus={false}
+          />
+        ) : (
+          <Box></Box>
+        )}
 
+        <FormLabel sx={{ mt: 2, mb: 1 }}>첨부파일업로드</FormLabel>
         <div className="board-uploader">
           <FileUploader
             register={register}
@@ -326,16 +349,28 @@ export function LearningMaterialUploadForm({
           />
         </FormControl> */}
         <ButtonBox>
-          <SubmitBtn variant="contained" type="submit">
-            {mode === 'upload' ? '업로드하기' : '수정하기'}
+          <SubmitBtn variant="contained" type="submit" disabled={loading}>
+            {loading ? (
+              <Spinner fit={true} />
+            ) : mode === 'upload' ? (
+              '업로드하기'
+            ) : (
+              '수정하기'
+            )}
           </SubmitBtn>
-          <DeleteBtn
-            color="warning"
-            variant="contained"
-            onClick={() => onClickRemoveLM(learningMaterial.seq)}
-          >
-            삭제
-          </DeleteBtn>
+
+          {mode === 'upload' ? (
+            ''
+          ) : (
+            <DeleteBtn
+              color="warning"
+              variant="contained"
+              onClick={() => onClickRemoveLM(learningMaterial.seq)}
+              disabled={loading}
+            >
+              {loading ? <Spinner fit={true} /> : '삭제'}
+            </DeleteBtn>
+          )}
         </ButtonBox>
       </Box>
     </Container>
@@ -392,5 +427,6 @@ const boxStyles = css`
 `;
 
 const pt20 = css`
-  padding-top: 20px;
+  margin-bottom: 20px;
+  /* padding-top: 20px; */
 `;

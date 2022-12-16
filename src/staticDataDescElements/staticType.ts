@@ -273,10 +273,10 @@ export const UserListConfig = [
 ];
 
 export const UserRadioConfig = [
-  // {
-  //   name: '전체',
-  //   value: '',
-  // },
+  {
+    name: '전체',
+    value: '',
+  },
   { name: '저상/운수 일반회원', value: RoleType.ROLE_TRANS_USER },
   { name: '저상/운수 관리자', value: RoleType.ROLE_TRANS_MANAGER },
   { name: '도민 일반회원', value: RoleType.ROLE_TRAFFIC_SAFETY_USER },
@@ -285,10 +285,10 @@ export const UserRadioConfig = [
 ];
 
 export const UserRadioExcelConfig = [
-  // {
-  //   name: '전체',
-  //   value: '',
-  // },
+  {
+    name: '전체',
+    value: '',
+  },
   { name: '저상/운수_일반회원', value: RoleType.ROLE_TRANS_USER },
   { name: '저상/운수_관리자', value: RoleType.ROLE_TRANS_MANAGER },
   { name: '도민_일반회원', value: RoleType.ROLE_TRAFFIC_SAFETY_USER },

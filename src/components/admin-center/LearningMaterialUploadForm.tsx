@@ -68,7 +68,7 @@ export function LearningMaterialUploadForm({
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const [loading, setLoading] = useState(false);
-  const [openTui, setOpenmTui] = useState<boolean>(true);
+  const [openTui, setOpenTui] = useState<boolean>(true);
 
   const {
     register,
@@ -91,6 +91,18 @@ export function LearningMaterialUploadForm({
           setOpenOrigin(true);
         }
       }
+      if (learningMaterial.materialType === 'TYPE_VIDEO') {
+        setOpenTui(false);
+      }
+      if (learningMaterial.materialType === 'TYPE_BY_AGE') {
+        setOpenTui(true);
+      }
+      if (learningMaterial.materialType === 'TYPE_EDUCATIONAL') {
+        setOpenTui(false);
+      }
+      if (learningMaterial.materialType === 'TYPE_OTHER_ORGAN') {
+        setOpenTui(false);
+      }
     }
   }, [mode, learningMaterial, reset]);
 
@@ -104,7 +116,7 @@ export function LearningMaterialUploadForm({
     setSubType(false);
     setOpenOrigin(false);
     setValue('materialSubType', null);
-    setOpenmTui(false);
+    setOpenTui(false);
   };
 
   const onClickCloseSubTypeAndOpenOrigin = async () => {
@@ -183,7 +195,7 @@ export function LearningMaterialUploadForm({
                   label="연령별 교수학습 지도안"
                   onClick={() => {
                     onClickOpenSubType();
-                    setOpenmTui(true);
+                    setOpenTui(true);
                   }}
                 />
                 <FormControlLabel
@@ -192,7 +204,7 @@ export function LearningMaterialUploadForm({
                   label="교육자료"
                   onClick={() => {
                     onClickCloseSubType();
-                    setOpenmTui(false);
+                    setOpenTui(false);
                   }}
                 />
                 <FormControlLabel
@@ -201,7 +213,7 @@ export function LearningMaterialUploadForm({
                   label="교육영상"
                   onClick={() => {
                     onClickCloseSubTypeAndOpenOrigin();
-                    setOpenmTui(false);
+                    setOpenTui(false);
                   }}
                 />
                 <FormControlLabel
@@ -210,7 +222,7 @@ export function LearningMaterialUploadForm({
                   label="타기관자료모음"
                   onClick={() => {
                     onClickOpenSubType();
-                    setOpenmTui(false);
+                    setOpenTui(false);
                   }}
                 />
               </RadioGroup>
@@ -288,9 +300,7 @@ export function LearningMaterialUploadForm({
             ref={editorRef}
             autofocus={false}
           />
-        ) : (
-          <Box></Box>
-        )}
+        ) : null}
 
         <FormLabel sx={{ mt: 2, mb: 1 }}>첨부파일업로드</FormLabel>
         <div className="board-uploader">

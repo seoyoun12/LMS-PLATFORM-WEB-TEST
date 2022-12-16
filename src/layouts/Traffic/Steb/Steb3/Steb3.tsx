@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { StebHeader } from '../StebHeader';
 import { useRecoilState } from 'recoil';
-import { courseClassTrafficInfo } from '@common/recoil';
+import { courseClassTrafficInfo, userInfo } from '@common/recoil';
 import CheckIcon from '@mui/icons-material/Check';
 import { locationList } from '@layouts/MeEdit/MeEdit';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
@@ -23,6 +23,7 @@ import { Step3StudentList } from './Step3StudentList';
 export function Steb3() {
   const router = useRouter();
   const [trafficInfo, setTrafficInfo] = useRecoilState(courseClassTrafficInfo);
+  const [userInfoData, setUserInfo] = useRecoilState(userInfo);
   return (
     <Steb3Wrap>
       <StebHeader value={3} />
@@ -109,7 +110,7 @@ export function Steb3() {
         </StudentList>
         <BottomBox>
           <Box padding="2rem" borderBottom="2px solid #888888" mb={2} textAlign="center">
-            <Typography>홍길동님의 교육신청이 완료되었습니다.</Typography>
+            <Typography>{userInfoData.name}님의 교육신청이 완료되었습니다.</Typography>
             <Typography>알차고 실속있는 서비스로 찾아뵙겠습니다.</Typography>
           </Box>
           <Box display="flex" gap="0.5rem">
@@ -123,7 +124,7 @@ export function Steb3() {
             </Button>
             <Button
               variant="contained"
-              onClick={() => router.push(`/traffic/me`)}
+              onClick={() => router.push(`/me`)}
               fullWidth
             >
               마이페이지로 이동
@@ -140,6 +141,7 @@ const Steb3BodyWrap = styled(Box)`
   width: 700px;
   margin: auto;
   margin-top: 3rem;
+  margin-bottom: 64px;
 `;
 const HeaderTypo = styled(Typography)`
   padding-bottom: 1rem;

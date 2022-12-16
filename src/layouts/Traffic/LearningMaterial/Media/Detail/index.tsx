@@ -100,12 +100,12 @@ export default function MediaDetailLayout() {
         </MediaDetailHeaderDateText>
         <EducationChipItem
           label={eduTargetTypes.eduTargetMain}
-          color="warning"
+          color="primary"
           variant={'filled'}
         />
         <EducationChipItem
           label={eduTargetTypes.eduTargetSub}
-          color="primary"
+          color="success"
           variant={'filled'}
         />
       </MediaDetailHeaderWrapper>

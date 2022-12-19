@@ -365,5 +365,5 @@ const boxStyles = css`
 `;
 
 const pt20 = css`
-  padding-top: 20px;
+  margin-bottom: 20px;
 `;

@@ -31,6 +31,7 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import router from 'next/router';
 import { ProductStatus } from '@common/api/course';
+import { Spinner } from '@components/ui';
 
 interface Props {
   mode?: 'upload' | 'modify';
@@ -64,10 +65,12 @@ export function LearningMaterialUploadForm({
   const [fileName, setFileName] = useState<string[] | null>(null);
   const [subType, setSubType] = useState<boolean>(true);
   const [openOrigin, setOpenOrigin] = useState<boolean>(false);
-  const [openContent , setOpenContent] = useState<Boolean>(true);
   const [isEducationRoute , setIsEducationRoute] = useState<boolean>(false)
   const snackbar = useSnackbar();
   const dialog = useDialog();
+  const [loading, setLoading] = useState(false);
+  const [openTui, setOpenTui] = useState<boolean>(true);
+
   const {
     register,
     handleSubmit,
@@ -89,29 +92,39 @@ export function LearningMaterialUploadForm({
           setOpenOrigin(true);
         }
       }
+      if (learningMaterial.materialType === 'TYPE_VIDEO') {
+        setOpenTui(false);
+      }
+      if (learningMaterial.materialType === 'TYPE_BY_AGE') {
+        setOpenTui(true);
+      }
+      if (learningMaterial.materialType === 'TYPE_EDUCATIONAL') {
+        setOpenTui(false);
+      }
+      if (learningMaterial.materialType === 'TYPE_OTHER_ORGAN') {
+        setOpenTui(false);
+      }
     }
   }, [mode, learningMaterial, reset]);
 
-  const onClickOpenSubType = async (e:React.MouseEvent<HTMLLabelElement>) => {
+  const onClickOpenSubType = async (e?:React.MouseEvent<HTMLLabelElement>) => {
     setSubType(true); // 서브타입 오픈여부
     setOpenOrigin(false); // url 오픈여부
-    setOpenContent(true) // tui 오픈여부
     setIsEducationRoute(false) //다중 파일 업로드 사용여부
     setValue('materialSubType', MaterialSubType.TYPE_CHILDREN);
   };
 
-  const onClickCloseSubType = async (e:React.MouseEvent<HTMLLabelElement>) => {
+  const onClickCloseSubType = async (e?:React.MouseEvent<HTMLLabelElement>) => {
     setSubType(false);
     setOpenOrigin(false);
-    setOpenContent(false)
     setIsEducationRoute(true)
     setValue('materialSubType', null);
+    setOpenTui(false);
   };
 
-  const onClickCloseSubTypeAndOpenOrigin = async (e:React.MouseEvent<HTMLLabelElement>) => {
+  const onClickCloseSubTypeAndOpenOrigin = async (e?:React.MouseEvent<HTMLLabelElement>) => {
     setSubType(false);
     setOpenOrigin(true);
-    setOpenContent(false) // tui 오픈여부
     setIsEducationRoute(true) //다중 파일 업로드 사용여부
     setValue('materialSubType', null);
   };
@@ -158,14 +171,12 @@ export function LearningMaterialUploadForm({
   ) => {
     event?.preventDefault();
 
-    console.log(files)
-    return ;
-
-    if (!editorRef.current) return;
-    const markdownContent = editorRef.current.getInstance().getMarkdown();
+    // 연령별 교수학습 지도안을 제외한 교육자료, 교육영상, 타기관자료모음에서는 tui 비활성화.
+    // if (!editorRef.current) return;
+    // const markdownContent = editorRef.current.getInstance().getMarkdown();
     const learningMaterialInput = {
       ...learningMaterial,
-      content: markdownContent,
+      // content: markdownContent,
     };
     onHandleSubmit({ learningMaterialInput, files });
   };
@@ -191,25 +202,37 @@ export function LearningMaterialUploadForm({
                   value={MaterialType.TYPE_BY_AGE}
                   control={<Radio />}
                   label="연령별 교수학습 지도안"
-                  onClick={(e) => onClickOpenSubType(e)}
+                  onClick={() => {
+                    onClickOpenSubType();
+                    setOpenTui(true);
+                  }}
                 />
                 <FormControlLabel
                   value={MaterialType.TYPE_EDUCATIONAL}
                   control={<Radio />}
                   label="교육자료"
-                  onClick={(e) => onClickCloseSubType(e)}
+                  onClick={() => {
+                    onClickCloseSubType();
+                    setOpenTui(false);
+                  }}
                 />
                 <FormControlLabel
                   value={MaterialType.TYPE_VIDEO}
                   control={<Radio />}
                   label="교육영상"
-                  onClick={(e) => onClickCloseSubTypeAndOpenOrigin(e)}
+                  onClick={() => {
+                    onClickCloseSubTypeAndOpenOrigin();
+                    setOpenTui(false);
+                  }}
                 />
                 <FormControlLabel
                   value={MaterialType.TYPE_OTHER_ORGAN}
                   control={<Radio />}
                   label="타기관자료모음"
-                  onClick={(e) => onClickOpenSubType(e)}
+                  onClick={() => {
+                    onClickOpenSubType();
+                    setOpenTui(false);
+                  }}
                 />
               </RadioGroup>
             )}
@@ -276,15 +299,19 @@ export function LearningMaterialUploadForm({
           </FormControl>
         ) : null}
 
-        {openContent && <TuiEditor
-          initialValue={(learningMaterial && learningMaterial.content) || ' '}
-          previewStyle="vertical"
-          height="500px"
-          initialEditType="wysiwyg"
-          useCommandShortcut={true}
-          ref={editorRef}
-        />}
+        {openTui ? (
+          <TuiEditor
+            initialValue={(learningMaterial && learningMaterial.content) || ' '}
+            previewStyle="vertical"
+            height="500px"
+            initialEditType="wysiwyg"
+            useCommandShortcut={true}
+            ref={editorRef}
+            autofocus={false}
+          />
+        ) : null}
 
+        <FormLabel sx={{ mt: 2, mb: 1 }}>첨부파일업로드</FormLabel>
         <div className="board-uploader">
           <FileUploader
             register={register}
@@ -350,17 +377,30 @@ export function LearningMaterialUploadForm({
             )}
           />
         </FormControl> */}
+        <ButtonBox>
+          <SubmitBtn variant="contained" type="submit" disabled={loading}>
+            {loading ? (
+              <Spinner fit={true} />
+            ) : mode === 'upload' ? (
+              '업로드하기'
+            ) : (
+              '수정하기'
+            )}
+          </SubmitBtn>
 
-        <SubmitBtn variant="contained" type="submit">
-          {mode === 'upload' ? '업로드하기' : '수정하기'}
-        </SubmitBtn>
-        <DeleteBtn
-          color="warning"
-          variant="contained"
-          onClick={() => onClickRemoveLM(learningMaterial.seq)}
-        >
-          삭제
-        </DeleteBtn>
+          {mode === 'upload' ? (
+            ''
+          ) : (
+            <DeleteBtn
+              color="warning"
+              variant="contained"
+              onClick={() => onClickRemoveLM(learningMaterial.seq)}
+              disabled={loading}
+            >
+              {loading ? <Spinner fit={true} /> : '삭제'}
+            </DeleteBtn>
+          )}
+        </ButtonBox>
       </Box>
     </Container>
   );
@@ -390,14 +430,19 @@ const InputContainer = styled.div`
   }
 `;
 
+const ButtonBox = styled(Box)`
+  margin: 20px 0 20px 0;
+`;
+
 const SubmitBtn = styled(Button)`
-  /* margin: 30px 30px 30px 0; */
-  margin-top: 10px;
-  margin-bottom: 10px;
+  width: 15%;
+  float: right;
+  margin: 0 0 0 5px;
 `;
 
 const DeleteBtn = styled(Button)`
-  /* background-color: #dd0000; */
+  width: 15%;
+  float: right;
 `;
 
 const textField = css`
@@ -411,5 +456,6 @@ const boxStyles = css`
 `;
 
 const pt20 = css`
-  padding-top: 20px;
+  margin-bottom: 20px;
+  /* padding-top: 20px; */
 `;

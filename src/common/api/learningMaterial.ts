@@ -30,7 +30,7 @@ export interface LearningMaterial {
   materialSubType: MaterialSubType;
   seq: number;
   title: string;
-  content: string;
+  content?: string;
   createdDtime: string;
   modifiedDtime: string;
   origin: string;

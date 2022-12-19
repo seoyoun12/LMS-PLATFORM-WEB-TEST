@@ -1,7 +1,4 @@
-import {
-  MaterialType,
-  useGetLearningMaterial,
-} from "@common/api/learningMaterial";
+import { MaterialType, useGetLearningMaterial } from '@common/api/learningMaterial';
 import {
   LearningGuideContainer,
   LearningGuideContentContainer,
@@ -12,19 +9,17 @@ import {
   LearningGuideItemContentSubtitle,
   LearningGuideItemContentTitle,
   LearningGuideItemImageContainer,
-} from "./style";
-import { NotFound } from "@components/ui/NotFound";
-import { format } from "date-fns";
-import { useRouter } from "next/router";
+} from './style';
+import { NotFound } from '@components/ui/NotFound';
+import { format } from 'date-fns';
+import { useRouter } from 'next/router';
 
 interface LearningGuideLayout {
   materialType: MaterialType;
 }
 
-export default function LearningGuideLayout({
-  materialType,
-}: LearningGuideLayout) {
-  const { data } = useGetLearningMaterial(materialType, "");
+export default function LearningGuideLayout({ materialType }: LearningGuideLayout) {
+  const { data } = useGetLearningMaterial(materialType, '');
   const router = useRouter();
 
   const handleClickPost = (id: number) => {
@@ -60,7 +55,7 @@ export default function LearningGuideLayout({
                       {/*</LearningGuideItemContentDate>*/}
                     </LearningGuideItemContentHeaderContainer>
                     <LearningGuideItemContentSubtitle>
-                      {format(new Date(item.createdDtime), "yyyy. MM. dd")}
+                      {format(new Date(item.createdDtime), 'yyyy. MM. dd')}
                     </LearningGuideItemContentSubtitle>
                   </LearningGuideItemContentContainer>
                 </LearningGuideItemContainer>

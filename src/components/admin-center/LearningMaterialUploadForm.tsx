@@ -173,6 +173,8 @@ export function LearningMaterialUploadForm({
     onHandleSubmit({ learningMaterialInput, files });
   };
 
+  console.log('학습자료 데이터 : ', learningMaterial);
+
   return (
     <Container>
       <Box

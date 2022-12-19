@@ -163,11 +163,12 @@ export function LearningMaterialUploadForm({
   ) => {
     event?.preventDefault();
 
-    if (!editorRef.current) return;
-    const markdownContent = editorRef.current.getInstance().getMarkdown();
+    // 연령별 교수학습 지도안을 제외한 교육자료, 교육영상, 타기관자료모음에서는 tui 비활성화.
+    // if (!editorRef.current) return;
+    // const markdownContent = editorRef.current.getInstance().getMarkdown();
     const learningMaterialInput = {
       ...learningMaterial,
-      content: markdownContent,
+      // content: markdownContent,
     };
     onHandleSubmit({ learningMaterialInput, files });
   };

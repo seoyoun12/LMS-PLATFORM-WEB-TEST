@@ -1,11 +1,15 @@
 import * as React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import {
-  Box, Chip,
-  FormControl, FormControlLabel,
-  FormHelperText, FormLabel,
-  Radio, RadioGroup,
-  TextareaAutosize
+  Box,
+  Chip,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  TextareaAutosize,
 } from '@mui/material';
 import { ErrorMessage } from '@hookform/error-message';
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -36,12 +40,18 @@ const defaultValues = {
   files: [],
 };
 
-export function ForumUploadModal({ open, onClose, forumId, courseSeq, mode = 'upload' }: Props) {
+export function ForumUploadModal({
+  open,
+  onClose,
+  forumId,
+  courseSeq,
+  mode = 'upload',
+}: Props) {
   const snackbar = useSnackbar();
   const { forum, forumError, mutate } = useForum(Number(forumId));
-  const [ submitLoading, setSubmitLoading ] = useState(false);
-  const [ isFileDelete, setIsFileDelete ] = useState(false);
-  const [ fileName, setFileName ] = useState<string | null>(null);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [isFileDelete, setIsFileDelete] = useState(false);
+  const [fileName, setFileName] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -50,7 +60,7 @@ export function ForumUploadModal({ open, onClose, forumId, courseSeq, mode = 'up
     reset,
     resetField,
   } = useForm<FormType>({ defaultValues });
-  const loading = (open && mode === 'modify' && !forum);
+  const loading = open && mode === 'modify' && !forum;
 
   useEffect(() => {
     if (open) {
@@ -61,7 +71,7 @@ export function ForumUploadModal({ open, onClose, forumId, courseSeq, mode = 'up
         reset({ ...defaultValues });
       }
     }
-  }, [ mode, forum, open, reset ]);
+  }, [mode, forum, open, reset]);
 
   const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();
@@ -83,7 +93,7 @@ export function ForumUploadModal({ open, onClose, forumId, courseSeq, mode = 'up
       await uploadFile({
         fileTypeId: forum.seq,
         fileType: BbsType.TYPE_FORUM,
-        files
+        files,
       });
     } else {
       if (isFileDelete) {
@@ -154,14 +164,15 @@ export function ForumUploadModal({ open, onClose, forumId, courseSeq, mode = 'up
             >
               <FileUploader.Label>파일 업로드</FileUploader.Label>
             </FileUploader>
-            {fileName
-              ? <Chip
-                sx={{ mt: '8px' }}
+            {fileName ? (
+              <Chip
+                // sx={{ mt: '8px' }} // 파일 첨부시 여백 생기면서 늘어남. 주석처리.
                 icon={<OndemandVideoOutlinedIcon />}
                 label={fileName}
-                onDelete={handleDeleteFile} />
-              : null
-            }
+                onDelete={handleDeleteFile}
+                sx={{ pl: '5px', ml: '5px', maxWidth: '700px' }}
+              />
+            ) : null}
           </FormControl>
 
           <FormControl className="form-control">
@@ -180,12 +191,20 @@ export function ForumUploadModal({ open, onClose, forumId, courseSeq, mode = 'up
               name="status"
               render={({ field }) => (
                 <RadioGroup row {...field}>
-                  <FormControlLabel value={ProductStatus.APPROVE} control={<Radio />} label="정상" />
-                  <FormControlLabel value={ProductStatus.REJECT} control={<Radio />} label="중지" /> </RadioGroup>
+                  <FormControlLabel
+                    value={ProductStatus.APPROVE}
+                    control={<Radio />}
+                    label="정상"
+                  />
+                  <FormControlLabel
+                    value={ProductStatus.REJECT}
+                    control={<Radio />}
+                    label="중지"
+                  />{' '}
+                </RadioGroup>
               )}
             />
           </FormControl>
-
         </FormContainer>
       </Box>
     </Modal>

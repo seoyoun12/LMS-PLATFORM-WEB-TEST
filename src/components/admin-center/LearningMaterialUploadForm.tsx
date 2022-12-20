@@ -180,7 +180,7 @@ export function LearningMaterialUploadForm({
     if (!files?.length) return null;
     if (!isEducationRoute) {
       //단일파일 업로드. 기존에 서버에 저장된 파일을 제거합니다.
-      const prevServerFile = watch().s3Files.map(r=>({seq:r.seq , randomSeq:32, name:r.name, isServerFile:true}))
+      const prevServerFile = watch().s3Files?.map(r=>({seq:r.seq , randomSeq:32, name:r.name, isServerFile:true}))
       setServerFilesRemoved(prevServerFile)
       setFileArray([
         {

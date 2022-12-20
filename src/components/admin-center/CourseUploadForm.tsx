@@ -302,10 +302,11 @@ export function CourseUploadForm({ mode = 'upload', course, onHandleSubmit }: Pr
 
             {fileName ? (
               <Chip
-                sx={{ mt: '8px' }}
+                // sx={{ mt: '8px' }} // 파일 첨부시 여백 생기면서 늘어남. 주석처리.
                 icon={<OndemandVideoOutlinedIcon />}
                 label={fileName}
                 onDelete={handleDeleteFile}
+                sx={{ pl: '5px', ml: '5px', maxWidth: '700px' }}
               />
             ) : null}
           </div>

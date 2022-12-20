@@ -231,6 +231,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
               icon={<OndemandVideoOutlinedIcon />}
               label={fileName}
               onDelete={handleDeleteFile}
+              sx={{ pl: '5px', ml: '5px', maxWidth: '700px' }}
             />
           ) : null}
         </div>
@@ -365,5 +366,5 @@ const boxStyles = css`
 `;
 
 const pt20 = css`
-  padding-top: 20px;
+  margin-bottom: 20px;
 `;

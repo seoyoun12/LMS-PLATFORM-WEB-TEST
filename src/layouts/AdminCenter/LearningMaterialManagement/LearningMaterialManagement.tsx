@@ -34,11 +34,12 @@ const headRows: {
 }[] = [
   // { name: 'No1', align: 'center', width: '2.5%' }, // seq
   { name: 'No', align: 'center', width: '5%' }, // seq
-  { name: '학습자료유형', align: 'center', width: '8.5%' }, // materialType
+  { name: '학습자료유형', align: 'center', width: '12.5%' }, // materialType
   { name: '학습자료상세유형', align: 'center', width: '8.5%' }, // materialSubType
   { name: '제목', align: 'center', width: '32%' }, // title
-  { name: '작성일', align: 'center', width: '12%' }, // createdDtime
-  { name: '수정일', align: 'center', width: '12%' }, // modifiedDtime
+  { name: '작성일', align: 'center', width: '10%' }, // createdDtime
+  { name: '수정일', align: 'center', width: '10%' }, // modifiedDtime
+  // { name: '파일', align: 'center', width: '10%' }, // modifiedDtime
   { name: '상태', align: 'center', width: '5%' }, // status
 ];
 
@@ -99,6 +100,13 @@ export function LearningMaterialManagement() {
   //   }
   // };
 
+  // console.log('학습자료 데이터 : ', data);
+  // console.log('학습자료 데이터2 : ', data.content[0].s3Files);
+  // const filedata = data.content[0].s3Files
+  const fileData = data?.content.map(f => f.s3Files[0]?.name);
+  // console.log('파일 데이터 : ', fileData);
+  console.log('파일 데이터 : ', fileData);
+
   // Pagination
   useEffect(() => {
     const { page } = router.query;
@@ -123,22 +131,18 @@ export function LearningMaterialManagement() {
         학습자료 구분
       </Typography>
       <RadioGroup row sx={{ mb: 6 }}>
-        {typeTabsConfig.map(
-          ({ name, value }: { name: string; value: string }) => (
-            <FormControlLabel
-              key={name}
-              label={name}
-              value={value}
-              control={<Radio checked={typeValue == value} />}
-              onClick={() => setTypeValue(value)}
-            />
-          )
-        )}
+        {typeTabsConfig.map(({ name, value }: { name: string; value: string }) => (
+          <FormControlLabel
+            key={name}
+            label={name}
+            value={value}
+            control={<Radio checked={typeValue == value} />}
+            onClick={() => setTypeValue(value)}
+          />
+        ))}
       </RadioGroup>
 
-      <LearningMaterialTypography variant="h5">
-        학습자료 목록
-      </LearningMaterialTypography>
+      <LearningMaterialTypography variant="h5">학습자료 목록</LearningMaterialTypography>
 
       <Table
         pagination={true}
@@ -160,11 +164,7 @@ export function LearningMaterialManagement() {
                 align: string;
                 width: string;
               }) => (
-                <LearningMaterialTitleTableCell
-                  key={name}
-                  align="center"
-                  width={width}
-                >
+                <LearningMaterialTitleTableCell key={name} align="center" width={width}>
                   {name}
                 </LearningMaterialTitleTableCell>
               )
@@ -184,18 +184,13 @@ export function LearningMaterialManagement() {
                 {lm.seq}
               </LearningMaterialTableCell>
               <LearningMaterialTableCell align="center">
-                {
-                  typeTabsConfig.filter(
-                    item => item.value === lm.materialType
-                  )[0]?.name
-                }
+                {typeTabsConfig.filter(item => item.value === lm.materialType)[0]?.name}
                 {/* {lm.materialType} */}
               </LearningMaterialTableCell>
               <LearningMaterialTableCell align="center">
                 {
-                  subTypeTabsConfig.filter(
-                    item => item.value === lm.materialSubType
-                  )[0]?.name
+                  subTypeTabsConfig.filter(item => item.value === lm.materialSubType)[0]
+                    ?.name
                 }
               </LearningMaterialTableCell>
               <LearningMaterialTableCell align="center">
@@ -209,18 +204,14 @@ export function LearningMaterialManagement() {
               </LearningMaterialTableCell>
               {/* <TableCell align="center">{lm.origin}</TableCell> */}
               {/* <TableCell align="center">
-                {lm.s3Files[0] ? lm.s3Files[0].name : "파일없음"}
+                {lm.s3Files[0] ? lm.s3Files[0].name : '파일없음'}
               </TableCell> */}
               <LearningMaterialTableCell style={{ width: 10 }} align="right">
                 <Chip
                   variant="outlined"
                   size="small"
                   label={lm.status === ProductStatus.APPROVE ? '정상' : '중지'}
-                  color={
-                    lm.status === ProductStatus.APPROVE
-                      ? 'secondary'
-                      : 'default'
-                  }
+                  color={lm.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
                 />
               </LearningMaterialTableCell>
               {/* <TableCell align="center">

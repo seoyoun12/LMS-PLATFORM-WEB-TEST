@@ -6,7 +6,7 @@ export function getMaterialType(type: MaterialTabType): MaterialType {
     case "education":
       return MaterialType.TYPE_BY_AGE;
 
-    case "learning_guide":
+    case "learning-guide":
       return MaterialType.TYPE_EDUCATIONAL;
 
     case "video":

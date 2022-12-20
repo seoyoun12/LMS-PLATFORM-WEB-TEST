@@ -22,7 +22,7 @@ import MediaDetailLayout from './Media/Detail';
 
 export type MaterialTabType =
   | 'education'
-  | 'learning_guide'
+  | 'learning-guide'
   | 'reference'
   | 'video'
   | 'media';
@@ -71,7 +71,7 @@ export function LearningMaterialLayout() {
     switch (type) {
       case 'education':
         return <EducationLayout materialType={getMaterialType(type)} />;
-      case 'learning_guide':
+      case 'learning-guide':
         if (id) {
           return <LearningGuideDetailLayout />;
         }
@@ -108,13 +108,13 @@ export function LearningMaterialLayout() {
           >
             <LearningMaterialTabItem
               label="연령별교수학습지도안"
-              onClick={() => handleClickTab('education')}
-              value="education"
+              onClick={() => handleClickTab('learning-guide')}
+              value="learning-guide"
             />
             <LearningMaterialTabItem
               label="교육자료"
-              onClick={() => handleClickTab('learning_guide')}
-              value="learning_guide"
+              onClick={() => handleClickTab('education')}
+              value="education"
             />
             <LearningMaterialTabItem
               label="교육영상"

@@ -96,7 +96,6 @@ export function LearningMaterialUploadForm({
   } = useForm<FormType>({ defaultValues });
 
   useEffect(() => {
-    console.log('음??????' , mode , learningMaterial)
     if (mode === 'modify' && !!learningMaterial) {
       reset({ ...learningMaterial });
       const getFiles = learningMaterial.s3Files.map(r => ({
@@ -113,7 +112,6 @@ export function LearningMaterialUploadForm({
         // if (learningMaterial.materialType === 'TYPE_VIDEO') {
         //   setTitle('교육영상')
         //   setIsEducationRoute(true) //다중 파일 업로드 사용여부
-        //   console.log('나 되는거 맞아?' )
         // }
       }
       if (learningMaterial.materialType === 'TYPE_VIDEO') {
@@ -181,10 +179,13 @@ export function LearningMaterialUploadForm({
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     if (!isEducationRoute) {
+      //단일파일 업로드. 기존에 서버에 저장된 파일을 제거합니다.
+      const prevServerFile = watch().s3Files.map(r=>({seq:r.seq , randomSeq:32, name:r.name, isServerFile:true}))
+      setServerFilesRemoved(prevServerFile)
       setFileArray([
         {
           seq: undefined,
-          randomSeq: 32,
+          randomSeq: 32, //더미시퀀스입니다.
           name: files[0].name,
           file: files[0],
           isServerFile: false,

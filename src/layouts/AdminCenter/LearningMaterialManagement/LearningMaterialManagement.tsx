@@ -39,7 +39,7 @@ const headRows: {
   { name: '제목', align: 'center', width: '32%' }, // title
   { name: '작성일', align: 'center', width: '10%' }, // createdDtime
   { name: '수정일', align: 'center', width: '10%' }, // modifiedDtime
-  { name: '파일', align: 'center', width: '10%' }, // modifiedDtime
+  // { name: '파일', align: 'center', width: '10%' }, // modifiedDtime
   { name: '상태', align: 'center', width: '5%' }, // status
 ];
 
@@ -203,9 +203,9 @@ export function LearningMaterialManagement() {
                 {dateFormat(lm.modifiedDtime, 'isoDate')}
               </LearningMaterialTableCell>
               {/* <TableCell align="center">{lm.origin}</TableCell> */}
-              <TableCell align="center">
+              {/* <TableCell align="center">
                 {lm.s3Files[0] ? lm.s3Files[0].name : '파일없음'}
-              </TableCell>
+              </TableCell> */}
               <LearningMaterialTableCell style={{ width: 10 }} align="right">
                 <Chip
                   variant="outlined"

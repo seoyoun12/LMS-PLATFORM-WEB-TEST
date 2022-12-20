@@ -5,7 +5,10 @@ import {
   learningMaterialModify,
   learningMaterialUpload,
 } from '@common/api/learningMaterial';
-import { FileArrayType, LearningMaterialUploadForm } from '@components/admin-center/LearningMaterialUploadForm';
+import {
+  FileArrayType,
+  LearningMaterialUploadForm,
+} from '@components/admin-center/LearningMaterialUploadForm';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { Container } from '@mui/material';
 import router, { useRouter } from 'next/router';
@@ -24,17 +27,17 @@ export function LearningMaterialModify() {
   const handleSubmit = async ({
     files,
     learningMaterialInput,
-    serverFilesRemoved
+    serverFilesRemoved,
   }: {
     files: File[];
     learningMaterialInput: LearningMaterialInput;
-    serverFilesRemoved?:FileArrayType[]
+    serverFilesRemoved?: FileArrayType[];
   }) => {
     try {
       if (data?.seq) {
         setLoading(true);
         await learningMaterialModify({ seq: data?.seq, learningMaterialInput });
-        await fileHandler(files , serverFilesRemoved);
+        await fileHandler(files, serverFilesRemoved);
         snackbar({ variant: 'success', message: '수정 되었습니다.' });
         await mutate();
         router.push(`/admin-center/learning-material`);
@@ -48,7 +51,10 @@ export function LearningMaterialModify() {
     }
   };
 
-  const fileHandler = async (files: File[] , serverFilesRemoved?:FileArrayType[]) => {
+  const fileHandler = async (
+    files: File[],
+    serverFilesRemoved?: FileArrayType[]
+  ) => {
     // if (files == undefined) {
     //   await deleteFile({
     //     fileTypeId: data?.seq,
@@ -73,34 +79,31 @@ export function LearningMaterialModify() {
     //     await deleteFile({
     //       fileTypeId:r.seq,
     //       fileType:BbsType.TYPE_LEARNING_MATERIAL,
-          
+
     //     })
     //   })
     // }
-    if(serverFilesRemoved && serverFilesRemoved.length > 0){
+    if (serverFilesRemoved && serverFilesRemoved.length > 0) {
       await deleteFile({
         fileTypeId: data?.seq,
         fileType: BbsType.TYPE_LEARNING_MATERIAL,
-        fileSeqList: serverFilesRemoved.map(r=>r.seq),
+        fileSeqList: serverFilesRemoved.map(r => r.seq),
       });
     }
-    if(files && files.length > 0){
+    if (files && files.length > 0) {
       // const convertFiles = Array.from(files)
-      files.forEach(async (r, idx) =>{
-          await uploadFile({
-            fileTypeId: data?.seq,
-            fileType: BbsType.TYPE_LEARNING_MATERIAL,
-            files,
-            idx
-          });
-      })
+      files.forEach(async (r, idx) => {
+        await uploadFile({
+          fileTypeId: data?.seq,
+          fileType: BbsType.TYPE_LEARNING_MATERIAL,
+          files,
+          idx,
+        });
+      });
     }
 
-
-      await mutate();
-
+    await mutate();
   };
-  
 
   return (
     <Container className={styles.globalContainer}>

@@ -3,12 +3,15 @@ import {
   LearningMaterialInput,
   learningMaterialUpload,
 } from '@common/api/learningMaterial';
-import { FileArrayType, LearningMaterialUploadForm } from '@components/admin-center/LearningMaterialUploadForm';
+import {
+  FileArrayType,
+  LearningMaterialUploadForm,
+} from '@components/admin-center/LearningMaterialUploadForm';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { Container } from '@mui/material';
 import router from 'next/router';
 import styles from '@styles/common.module.scss';
-import React , { useState } from 'react';
+import React, { useState } from 'react';
 
 export function LearningMaterialUpload() {
   const snackbar = useSnackbar();
@@ -25,30 +28,32 @@ export function LearningMaterialUpload() {
       //   fileType: BbsType.TYPE_LEARNING_MATERIAL,
       //   files,
       // });
-      
-      files.forEach(async (r, idx) =>{
-          await uploadFile({
-            fileTypeId: learningMaterialInput.seq,
-            fileType: BbsType.TYPE_LEARNING_MATERIAL,
-            files,
-            idx
-          });
-      })
+
+      files.forEach(async (r, idx) => {
+        await uploadFile({
+          fileTypeId: learningMaterialInput.seq,
+          fileType: BbsType.TYPE_LEARNING_MATERIAL,
+          files,
+          idx,
+        });
+      });
     }
   };
 
   const handleSubmit = async ({
     files,
     learningMaterialInput,
-    serverFilesRemoved //s3에 저장된 파일 제거할때 쓰는 용입니다. 업로드에서는 사용할 필요 없습니다.
+    serverFilesRemoved, //s3에 저장된 파일 제거할때 쓰는 용입니다. 업로드에서는 사용할 필요 없습니다.
   }: {
     files: File[];
     learningMaterialInput: LearningMaterialInput;
-    serverFilesRemoved?:FileArrayType[]
+    serverFilesRemoved?: FileArrayType[];
   }) => {
     try {
       setLoading(true);
-      const learningMaterial = await learningMaterialUpload(learningMaterialInput);
+      const learningMaterial = await learningMaterialUpload(
+        learningMaterialInput
+      );
       await fileHandler(files, learningMaterial.data);
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
       router.push(`/admin-center/learning-material`);
@@ -62,7 +67,10 @@ export function LearningMaterialUpload() {
 
   return (
     <Container className={styles.globalContainer}>
-      <LearningMaterialUploadForm onHandleSubmit={handleSubmit} loading={loading} />
+      <LearningMaterialUploadForm
+        onHandleSubmit={handleSubmit}
+        loading={loading}
+      />
     </Container>
   );
 }

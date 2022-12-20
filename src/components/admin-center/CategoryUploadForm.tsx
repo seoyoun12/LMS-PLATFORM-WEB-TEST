@@ -231,6 +231,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
               icon={<OndemandVideoOutlinedIcon />}
               label={fileName}
               onDelete={handleDeleteFile}
+              sx={{ pl: '5px', ml: '5px', maxWidth: '700px' }}
             />
           ) : null}
         </div>

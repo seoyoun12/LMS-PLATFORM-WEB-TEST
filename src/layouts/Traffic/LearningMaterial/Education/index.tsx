@@ -2,6 +2,9 @@ import {
   EducationChipItem,
   EducationChipWrapper,
   EducationItemContentWrapper,
+  EducationItemFileButton,
+  EducationItemFileChip,
+  EducationItemFilesItem,
   EducationItemHeaderDateText,
   EducationItemHeaderDateWrapper,
   EducationItemHeaderWrapper,
@@ -21,6 +24,10 @@ import {
 } from '@layouts/Traffic/LearningMaterial/style';
 import ArrowDown from 'public/assets/images/ic_arrow_down.svg';
 import { format } from 'date-fns';
+import { TuiViewer } from '@components/common/TuiEditor';
+import { downloadFile } from '@common/api/file';
+import SaveIcon from '@mui/icons-material/Save';
+import { Box } from '@mui/material';
 
 interface EducationLayoutProps {
   materialType: MaterialType;
@@ -107,7 +114,44 @@ export default function EducationLayout({ materialType }: EducationLayoutProps) 
                 </EducationItemHeaderDateWrapper>
               </TableItem>
             </EducationItemHeaderWrapper>
-            <EducationItemContentWrapper>{value.content}</EducationItemContentWrapper>
+            <EducationItemContentWrapper><TuiViewer initialValue={value.content} />
+            <EducationItemFilesItem>
+            {value.s3Files[0]?.name ? (
+                    <EducationItemFileButton
+                      sx={{
+                        padding: '0px',
+                        // backgroundColor: 'red',
+                        borderRadius: '15px',
+                      }}
+                      onClick={async () => {
+                        try {
+                          const blobData = await downloadFile(value.s3Files[0].seq);
+                          const url = window.URL.createObjectURL(new Blob([blobData]));
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = `${value.s3Files[0].name}`;
+                          a.click();
+                          a.remove();
+                        } catch (e: any) {
+                          console.log(e);
+                        }
+                      }}
+                    >
+                      <EducationItemFileChip
+                        icon={<SaveIcon />}
+                        sx={{ cursor: 'pointer' }}
+                        label={
+                          <Box sx={{ display: 'flex' }}>
+                            <Box>{value.s3Files[0]?.name}</Box>
+                          </Box>
+                        }
+                      />
+                    </EducationItemFileButton>
+                  ) : (
+                    ''
+                  )}
+                  </EducationItemFilesItem>
+                  </EducationItemContentWrapper>
           </EducationItemWrapper>
         ))}
     </EducationWrapper>

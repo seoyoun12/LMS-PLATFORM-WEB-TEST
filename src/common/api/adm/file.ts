@@ -54,14 +54,24 @@ export const uploadFile = ({
   fileType,
   fileTypeId,
   files,
+  idx
 }: {
   fileType: BbsType;
   fileTypeId: number;
   files: File[];
+  idx?:number
 }) => {
   const formData = new FormData();
-  const { file, fileName } = setFileConfig(files);
-  formData.append("files", file, fileName);
+  if(idx){
+    const file = !!files?.length ? files[idx] : new Blob([]);
+    const fileName = !!files?.length ? files[idx].name : undefined;
+    formData.append("files", file, fileName);
+  }
+  else{
+    const { file, fileName } = setFileConfig(files);
+    formData.append("files", file, fileName);
+
+  }
 
   // return POST(`/file/adm/${fileType}/${fileTypeId}`, formData, {
   return POST(`/file/${fileType}/${fileTypeId}`, formData, {

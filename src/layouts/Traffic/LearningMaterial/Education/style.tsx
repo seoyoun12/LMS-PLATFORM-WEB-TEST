@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Chip } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 import { TableHeader } from "@layouts/Traffic/LearningMaterial/style";
 
 export const EducationWrapper = styled.div`
@@ -56,3 +56,13 @@ export const EducationItemContentWrapper = styled.div`
   padding: 14px 10%;
   background-color: #fbfbfb;
 `;
+
+export const EducationItemFilesItem = styled.div``
+
+
+export const EducationItemFileChip = styled(Chip)`
+  height: 36.5px;
+  padding: 0px;
+`;
+
+export const EducationItemFileButton = styled(Button)``

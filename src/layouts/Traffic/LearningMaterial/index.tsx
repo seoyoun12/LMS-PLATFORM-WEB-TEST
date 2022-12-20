@@ -68,10 +68,11 @@ export function LearningMaterialLayout() {
   };
 
   const contentRender = useCallback(() => {
+    // education(교육자료) , learning-guide(지도안) 아닌가? 바뀐것같다.
     switch (type) {
-      case 'education':
-        return <EducationLayout materialType={getMaterialType(type)} />;
       case 'learning-guide':
+        return <EducationLayout materialType={getMaterialType(type)} />;
+      case 'education':
         if (id) {
           return <LearningGuideDetailLayout />;
         }

@@ -96,6 +96,7 @@ export function LearningMaterialUploadForm({
   } = useForm<FormType>({ defaultValues });
 
   useEffect(() => {
+    console.log('음??????' , mode , learningMaterial)
     if (mode === 'modify' && !!learningMaterial) {
       reset({ ...learningMaterial });
       const getFiles = learningMaterial.s3Files.map(r=>({seq:r.seq , name:r.name}))
@@ -106,16 +107,17 @@ export function LearningMaterialUploadForm({
       setFileArray(setLocalFiles)
       if (learningMaterial.materialSubType === null) {
         setSubType(false);
-        if (learningMaterial.materialType === 'TYPE_VIDEO') {
-          setOpenOrigin(true);
-          setTitle('교육영상')
-          setIsEducationRoute(true) //다중 파일 업로드 사용여부
-        }
+        // if (learningMaterial.materialType === 'TYPE_VIDEO') {
+        //   setTitle('교육영상')
+        //   setIsEducationRoute(true) //다중 파일 업로드 사용여부
+        //   console.log('나 되는거 맞아?' )
+        // }
       }
       if (learningMaterial.materialType === 'TYPE_VIDEO') {
         setOpenTui(false);
+        setOpenOrigin(true);
         setTitle('교육영상')
-        setIsEducationRoute(true) 
+        setIsEducationRoute(false) 
       }
       if (learningMaterial.materialType === 'TYPE_BY_AGE') {
         setOpenTui(true);
@@ -125,7 +127,7 @@ export function LearningMaterialUploadForm({
       if (learningMaterial.materialType === 'TYPE_EDUCATIONAL') {
         setOpenTui(false);
         setTitle('교육자료')
-        setIsEducationRoute(false) 
+        setIsEducationRoute(true) 
       }
       if (learningMaterial.materialType === 'TYPE_OTHER_ORGAN') {
         setOpenTui(false);

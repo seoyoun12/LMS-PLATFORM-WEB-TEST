@@ -89,8 +89,7 @@ export function EnrollHistoryTrafficModal({
         console.log(e);
         snackbar({
           variant: 'error',
-          message:
-            e.data?.message || '정보를 불러오는중에 문제가 발생했습니다.',
+          message: e.data?.message || '정보를 불러오는중에 문제가 발생했습니다.',
         });
         handleClose();
       }
@@ -132,9 +131,7 @@ export function EnrollHistoryTrafficModal({
           <TableBody sx={{ display: 'table', width: '100%' }}>
             <TableDoubleRow>
               <TableDoubleParantLeftCell sx={{ width: '50%' }}>
-                <TableDoubleLeftCell className="left-cell-border">
-                  NO
-                </TableDoubleLeftCell>
+                <TableDoubleLeftCell className="left-cell-border">NO</TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
                   {enrollDetailData.seq}
                 </TableDoubleRightCell>
@@ -180,23 +177,17 @@ export function EnrollHistoryTrafficModal({
                 <TableLeftCell className="left-cell-border large-font">
                   {eduSubArr.filter(d => d.subType === r.age)[0].subKo}
                 </TableLeftCell>
-                <TableRightCell className="right-cell">
-                  {r.count}명
-                </TableRightCell>
+                <TableRightCell className="right-cell">{r.count}명</TableRightCell>
               </TableRow>
             ))}
             <TableRow>
-              <TableLeftCell className="left-cell-border">
-                교육 희망일
-              </TableLeftCell>
+              <TableLeftCell className="left-cell-border">교육 희망일</TableLeftCell>
               <TableRightCell className="right-cell">
                 {enrollDetailData.expectedToStartDtime}
               </TableRightCell>
             </TableRow>
             <TableRow>
-              <TableLeftCell className="left-cell-border">
-                교육 만료일
-              </TableLeftCell>
+              <TableLeftCell className="left-cell-border">교육 만료일</TableLeftCell>
               <TableRightCell className="right-cell">
                 {enrollDetailData.expiredDtime}
               </TableRightCell>
@@ -389,6 +380,6 @@ const eduSubArr: {
   },
   {
     subType: 'elderly',
-    subKo: '노인',
+    subKo: '어르신',
   },
 ];

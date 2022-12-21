@@ -141,7 +141,7 @@ export function useGetLearningMaterialDetail(
 export enum EduTargetMain {
   TYPE_CHILDREN = '어린이',
   TYPE_TEENAGER = '청소년',
-  TYPE_ELDERLY = '노인',
+  TYPE_ELDERLY = '어르신',
   TYPE_SELF_DRIVING = '자가운전자',
 }
 
@@ -157,7 +157,7 @@ export enum EduTargetSub {
   TYPE_MIDDLE = '중학교',
   TYPE_HIGH = '고등학교',
   TYPE_SELF_DRIVER = '자가운전자',
-  TYPE_ELDERLY = '노인',
+  TYPE_ELDERLY = '어르신',
 }
 
 export type EduTargetSubType =

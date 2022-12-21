@@ -75,8 +75,7 @@ export function LearningMaterialUploadForm({
 }: Props) {
   const editorRef = useRef<EditorType>(null);
   const [fileArray, setFileArray] = useState<FileArrayType[]>();
-  const [serverFilesRemoved, setServerFilesRemoved] =
-    useState<FileArrayType[]>();
+  const [serverFilesRemoved, setServerFilesRemoved] = useState<FileArrayType[]>();
   const [subType, setSubType] = useState<boolean>(true);
   const [openOrigin, setOpenOrigin] = useState<boolean>(false);
   const [isEducationRoute, setIsEducationRoute] = useState<boolean>(false);
@@ -117,8 +116,8 @@ export function LearningMaterialUploadForm({
       if (learningMaterial.materialType === 'TYPE_VIDEO') {
         setOpenTui(false);
         setOpenOrigin(true);
-        setTitle('교육영상')
-        setIsEducationRoute(false) 
+        setTitle('교육영상');
+        setIsEducationRoute(false);
       }
       if (learningMaterial.materialType === 'TYPE_BY_AGE') {
         setOpenTui(true);
@@ -127,8 +126,8 @@ export function LearningMaterialUploadForm({
       }
       if (learningMaterial.materialType === 'TYPE_EDUCATIONAL') {
         setOpenTui(false);
-        setTitle('교육자료')
-        setIsEducationRoute(true) 
+        setTitle('교육자료');
+        setIsEducationRoute(true);
       }
       if (learningMaterial.materialType === 'TYPE_OTHER_ORGAN') {
         setOpenTui(false);
@@ -155,9 +154,7 @@ export function LearningMaterialUploadForm({
     setValue('materialSubType', MaterialSubType.TYPE_CHILDREN);
   };
 
-  const onClickCloseSubType = async (
-    e?: React.MouseEvent<HTMLLabelElement>
-  ) => {
+  const onClickCloseSubType = async (e?: React.MouseEvent<HTMLLabelElement>) => {
     setSubType(false);
     setOpenOrigin(false);
     setIsEducationRoute(true);
@@ -180,8 +177,13 @@ export function LearningMaterialUploadForm({
     if (!files?.length) return null;
     if (!isEducationRoute) {
       //단일파일 업로드. 기존에 서버에 저장된 파일을 제거합니다.
-      const prevServerFile = watch().s3Files?.map(r=>({seq:r.seq , randomSeq:32, name:r.name, isServerFile:true}))
-      setServerFilesRemoved(prevServerFile)
+      const prevServerFile = watch().s3Files?.map(r => ({
+        seq: r.seq,
+        randomSeq: 32,
+        name: r.name,
+        isServerFile: true,
+      }));
+      setServerFilesRemoved(prevServerFile);
       setFileArray([
         {
           seq: undefined,
@@ -251,16 +253,12 @@ export function LearningMaterialUploadForm({
     }
   };
 
-  const onSubmit: SubmitHandler<FormType> = async (
-    { ...learningMaterial },
-    event
-  ) => {
+  const onSubmit: SubmitHandler<FormType> = async ({ ...learningMaterial }, event) => {
     event?.preventDefault();
 
     // 연령별 교수학습 지도안을 제외한 교육자료, 교육영상, 타기관자료모음에서는 tui 비활성화.
     // if (!editorRef.current) return;
-    const markdownContent =
-      editorRef.current?.getInstance().getMarkdown() || '';
+    const markdownContent = editorRef.current?.getInstance().getMarkdown() || '';
     const learningMaterialInput = {
       ...learningMaterial,
       content: markdownContent,
@@ -338,9 +336,7 @@ export function LearningMaterialUploadForm({
             />
           </FormControl>
         ) : (
-          <Box
-            sx={{ paddingBottom: '24px', fontWeight: 'bold', fontSize: '18px' }}
-          >
+          <Box sx={{ paddingBottom: '24px', fontWeight: 'bold', fontSize: '18px' }}>
             {title} 수정
           </Box>
         )}
@@ -391,11 +387,7 @@ export function LearningMaterialUploadForm({
               label="학습자료 제목"
               variant="outlined"
             />
-            <ErrorMessage
-              errors={errors}
-              name="subject"
-              as={<FormHelperText error />}
-            />
+            <ErrorMessage errors={errors} name="subject" as={<FormHelperText error />} />
           </FormControl>
         </InputContainer>
 
@@ -407,11 +399,7 @@ export function LearningMaterialUploadForm({
               label="URL"
               variant="outlined"
             />
-            <ErrorMessage
-              errors={errors}
-              name="subject"
-              as={<FormHelperText error />}
-            />
+            <ErrorMessage errors={errors} name="subject" as={<FormHelperText error />} />
           </FormControl>
         ) : null}
 
@@ -447,7 +435,6 @@ export function LearningMaterialUploadForm({
               // )
               fileArray.map(r => (
                 <Chip
-                  sx={{ mt: '8px' }}
                   icon={<OndemandVideoOutlinedIcon />}
                   label={r.name}
                   onDelete={() =>
@@ -457,6 +444,7 @@ export function LearningMaterialUploadForm({
                       isServerFile: r.isServerFile,
                     })
                   }
+                  sx={{ pl: '5px', ml: '5px', mb: '1px', maxWidth: '700px' }}
                 />
               ))
             : null}
@@ -500,13 +488,13 @@ export function LearningMaterialUploadForm({
           />
         </FormControl> */}
         <Box color="#2cb8e2">
-          교육 자료 외 게시판은 단일파일 업로드하셔야 합니다. 여러파일 업로드시
-          처음 파일만 인식합니다.
+          교육 자료 외 게시판은 단일파일 업로드하셔야 합니다. 여러파일 업로드시 처음
+          파일만 인식합니다.
         </Box>
         {mode === 'modify' && (
           <Box color="#f87272">
-            서버에서 파일 업로드중이여서 올린 파일이 안보일 수 있습니다. 조금만
-            기다리시고 새로고침 해주세요.
+            서버에서 파일 업로드중이여서 올린 파일이 안보일 수 있습니다. 조금만 기다리시고
+            새로고침 해주세요.
           </Box>
         )}
         <ButtonBox>

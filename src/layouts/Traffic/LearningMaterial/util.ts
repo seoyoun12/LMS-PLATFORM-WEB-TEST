@@ -15,7 +15,7 @@ export function getMaterialType(type: MaterialTabType): MaterialType {
     case "reference":
       return MaterialType.TYPE_OTHER_ORGAN;
 
-    case "media":
-      return MaterialType.TYPE_MEDIA
+    // case "media":
+    //   return MaterialType.TYPE_MEDIA
   }
 }

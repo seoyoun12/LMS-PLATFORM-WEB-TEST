@@ -17,8 +17,6 @@ import ReferenceLayout from '@layouts/Traffic/LearningMaterial/Reference';
 import VideoLayout from '@layouts/Traffic/LearningMaterial/Video';
 import { getMaterialType } from '@layouts/Traffic/LearningMaterial/util';
 import LearningGuideDetailLayout from '@layouts/Traffic/LearningMaterial/LearningGuide/Detail';
-import MediaLayout from './Media';
-import MediaDetailLayout from './Media/Detail';
 import { useRecoilState } from 'recoil';
 import { isLoginState } from '@common/recoil';
 
@@ -31,13 +29,11 @@ export type MaterialTabType =
 
 export function LearningMaterialLayout() {
   const router = useRouter();
-  console.log('test' , router.query)
   const { type, id } = router.query as {
     type: MaterialTabType;
     id?: string;
   };
-  const [isLogin , setIsLogin] = useRecoilState(isLoginState);
-  console.log('type' , type)
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   // const [tab, setTab] = useState<MaterialTabType>(type);
 
   // const tabsConfig = [
@@ -86,11 +82,6 @@ export function LearningMaterialLayout() {
         return <ReferenceLayout materialType={getMaterialType(type)} />;
       case 'video':
         return <VideoLayout materialType={getMaterialType(type)} />;
-      case 'media':
-        if (id) {
-          return <MediaDetailLayout />;
-        }
-        return <MediaLayout materialType={getMaterialType(type)} />;
       default:
         return <></>;
     }
@@ -132,20 +123,18 @@ export function LearningMaterialLayout() {
               onClick={() => handleClickTab('reference')}
               value="reference"
             />
-            {isLogin && <LearningMaterialTabItem
-              label="교육영상게시판"
-              onClick={() => handleClickTab('media')}
-              value="media"
-            />
-            }
-            
+            {/* {isLogin && (
+              <LearningMaterialTabItem
+                label="교육영상게시판"
+                onClick={() => handleClickTab('media')}
+                value="media"
+              />
+            )} */}
           </LearningMaterialTabs>
         </LearningMaterialTabWrapper>
       </LearningMaterialWrapper>
 
-      <LearningMaterialContentWrapper>
-        {contentRender()}
-      </LearningMaterialContentWrapper>
+      <LearningMaterialContentWrapper>{contentRender()}</LearningMaterialContentWrapper>
     </>
   );
 }

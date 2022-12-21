@@ -3,6 +3,14 @@ import { Chip } from '@mui/material';
 
 export const MediaDetailWrapper = styled.div`
   padding: 0 8px 150px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 62px auto 0 auto;
+  
+  @media (max-width: 768px) {
+    padding: 32px 12px;
+    margin: 0;
+  }
 `;
 
 export const MediaDetailHeaderWrapper = styled.div`

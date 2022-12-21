@@ -1,4 +1,5 @@
 import { GET } from '@common/httpClient';
+import { NicePhoneResultResponseDto } from './Api';
 
 interface niceConfirmRes {
   name: string;
@@ -7,5 +8,5 @@ interface niceConfirmRes {
 }
 
 export function niceConfirm(uuid: string) {
-  return GET<{ data: niceConfirmRes }>('/nice/phone/confirm', { params: { uuid } });
+  return GET<{ data: NicePhoneResultResponseDto }>('/nice/phone/confirm', { params: { uuid } });
 }

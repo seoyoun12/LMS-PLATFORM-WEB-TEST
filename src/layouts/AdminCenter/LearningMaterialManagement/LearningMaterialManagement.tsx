@@ -105,7 +105,6 @@ export function LearningMaterialManagement() {
   // const filedata = data.content[0].s3Files
   const fileData = data?.content.map(f => f.s3Files[0]?.name);
   // console.log('파일 데이터 : ', fileData);
-  console.log('파일 데이터 : ', fileData);
 
   // Pagination
   useEffect(() => {

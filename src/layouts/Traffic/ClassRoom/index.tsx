@@ -38,11 +38,11 @@ export default function ClassRoomLayout() {
   const [eduSub, setEduSub] = useState<EduTargetSubType>('TYPE_KINDERGARTEN');
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
 
-  if (!isLogin) return <NotFound content="로그인이 필요한 서비스입니다." />;
+  // if (!isLogin) return <NotFound content="로그인이 필요한 서비스입니다." />;
   const { data } = useTrafficMediaBoard(eduSub);
 
   const handleClickPost = (id: number) => {
-    router.push(`/traffic/learning-material/media/${id}`);
+    router.push(`/traffic/class-room/${id}`);
   };
 
   const handleMainChipClick = (eduMainType: EduTargetMainType) => {

@@ -1,7 +1,31 @@
 import styled from '@emotion/styled';
 import { ButtonBase, Chip } from '@mui/material';
 
-export const MediaContainer = styled.div``;
+export const MediaContainer = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  margin: 62px auto 0 auto;
+  
+  @media (max-width: 768px) {
+    padding: 32px 12px;
+    margin: 0;
+  }
+`;
+
+export const LearningGuideContentContainer = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 62px auto 0 auto;
+  padding: 0;
+
+  @media (max-width: 768px) {
+    padding: 32px 12px;
+    margin: 0;
+  }
+`;
 
 export const MediaMainChipWrap = styled.div`
   display: flex;

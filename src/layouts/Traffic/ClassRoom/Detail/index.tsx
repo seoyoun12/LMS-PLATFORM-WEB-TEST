@@ -42,7 +42,7 @@ export default function ClassRoomDetailLayout() {
 
   const handleBoardLinkClick = (boardSeq: number) => {
     setData(undefined);
-    router.push(`/traffic/learning-material/media/${boardSeq}`);
+    router.push(`/traffic/class-room/${boardSeq}`);
   };
 
   useEffect(() => {

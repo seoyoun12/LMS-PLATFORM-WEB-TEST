@@ -31,13 +31,11 @@ export type MaterialTabType =
 
 export function LearningMaterialLayout() {
   const router = useRouter();
-  console.log('test' , router.query)
   const { type, id } = router.query as {
     type: MaterialTabType;
     id?: string;
   };
-  const [isLogin , setIsLogin] = useRecoilState(isLoginState);
-  console.log('type' , type)
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   // const [tab, setTab] = useState<MaterialTabType>(type);
 
   // const tabsConfig = [
@@ -132,20 +130,18 @@ export function LearningMaterialLayout() {
               onClick={() => handleClickTab('reference')}
               value="reference"
             />
-            {isLogin && <LearningMaterialTabItem
-              label="교육영상게시판"
-              onClick={() => handleClickTab('media')}
-              value="media"
-            />
-            }
-            
+            {isLogin && (
+              <LearningMaterialTabItem
+                label="교육영상게시판"
+                onClick={() => handleClickTab('media')}
+                value="media"
+              />
+            )}
           </LearningMaterialTabs>
         </LearningMaterialTabWrapper>
       </LearningMaterialWrapper>
 
-      <LearningMaterialContentWrapper>
-        {contentRender()}
-      </LearningMaterialContentWrapper>
+      <LearningMaterialContentWrapper>{contentRender()}</LearningMaterialContentWrapper>
     </>
   );
 }

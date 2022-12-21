@@ -7,10 +7,12 @@ import {
   getTrafficMediaBoardRole,
 } from '@common/api/learningMaterial';
 import { GET } from '@common/httpClient';
+import { isLoginState, userInfo } from '@common/recoil';
 import { NotFound } from '@components/ui/NotFound';
 import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import {
   MediaChipItem,
   MediaMainChipWrap,
@@ -33,6 +35,9 @@ export default function MediaLayout({ materialType }: MediaLayoutProps) {
   const router = useRouter();
   const [eduMain, setEduMain] = useState<EduTargetMainType>('TYPE_CHILDREN');
   const [eduSub, setEduSub] = useState<EduTargetSubType>('TYPE_KINDERGARTEN');
+  const [isLogin , setIsLogin] = useRecoilState(isLoginState)
+  
+  if(!isLogin) return<NotFound content='로그인이 필요한 서비스입니다.' />
   const { data } = useTrafficMediaBoard(eduSub);
 
   const handleClickPost = (id: number) => {

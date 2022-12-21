@@ -19,6 +19,8 @@ import { getMaterialType } from '@layouts/Traffic/LearningMaterial/util';
 import LearningGuideDetailLayout from '@layouts/Traffic/LearningMaterial/LearningGuide/Detail';
 import MediaLayout from './Media';
 import MediaDetailLayout from './Media/Detail';
+import { useRecoilState } from 'recoil';
+import { isLoginState } from '@common/recoil';
 
 export type MaterialTabType =
   | 'education'
@@ -33,6 +35,7 @@ export function LearningMaterialLayout() {
     type: MaterialTabType;
     id?: string;
   };
+  const [isLogin , setIsLogin] = useRecoilState(isLoginState)
   // const [tab, setTab] = useState<MaterialTabType>(type);
 
   // const tabsConfig = [
@@ -127,11 +130,13 @@ export function LearningMaterialLayout() {
               onClick={() => handleClickTab('reference')}
               value="reference"
             />
-            <LearningMaterialTabItem
+            {isLogin && <LearningMaterialTabItem
               label="교육영상게시판"
               onClick={() => handleClickTab('media')}
               value="media"
             />
+            }
+            
           </LearningMaterialTabs>
         </LearningMaterialTabWrapper>
       </LearningMaterialWrapper>

@@ -5,6 +5,8 @@ import { Box, MenuItem } from '@mui/material';
 import { Link } from '@components/common';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { isLoginState } from '@common/recoil';
 
 const showRemoteList = [
   // { href: '/traffic/course/[courseSeq]' },
@@ -48,6 +50,7 @@ export function NavBarV2() {
   // // let open = true;
   // let open = Boolean(anchorEl);
   const open = Boolean(anchorEl);
+  const [isLogin , setIsLogin] = useRecoilState(isLoginState) //과정게시판 교육영상 가리기용
 
   const handleHover = (
     e: React.MouseEvent<HTMLDivElement>,
@@ -90,7 +93,9 @@ export function NavBarV2() {
               <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
                 <Box className="link-wrap">
                   {item.items.map(menuItem => {
+                    console.log('ㅎㅇ' , isLogin , menuItem)
                     if (menuItem.href === '/me') return;
+                    if(!isLogin && menuItem.href === '/traffic/learning-material/media') return;
                     return (
                       <Link
                         className="link-items"

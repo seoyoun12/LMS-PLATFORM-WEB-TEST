@@ -32,6 +32,7 @@ import { ko } from 'date-fns/locale';
 import { CourseClassTraffic } from '@common/recoil/courseClassTraffic/atom';
 import { enrollProvincial } from '@common/api/provincialEnroll';
 import { ProvincialEnrollSaveRequestDto } from '@common/api/Api';
+import { Spinner } from '@components/ui';
 // import { enrollCourseUserProvincial } from '@common/api/courseUser';
 // import { CourseUserProvincialSaveRequestDto } from '@common/api/Api';
 
@@ -48,6 +49,7 @@ export function Steb2() {
   const snackbar = useSnackbar();
   const ref = useRef<boolean>(false);
   const [trafficInfo, setTrafficInfo] = useRecoilState(courseClassTrafficInfo);
+  const [loading, setLoading] = useState(false);
 
   const [detailCounts, setDetailCounts] = useState<detailCounts>({
     HIGH_SCHOOL: { grade1: 0, grade2: 0, grade3: 0 },
@@ -84,7 +86,7 @@ export function Steb2() {
     try {
       const obj = watch();
       Object.assign(obj, detailCounts[watch().eduTargetSub]);
-
+      setLoading(true);
       const test = await enrollProvincial(obj);
       setTrafficInfo({ ...watch(), peopleCounts: { ...detailCounts } });
       router.push('steb3');
@@ -191,8 +193,8 @@ export function Steb2() {
               ))}
           </TableBody>
         </TableContainer>
-        <Button variant="contained" type="submit" fullWidth>
-          교육 신청하기
+        <Button variant="contained" type="submit" fullWidth disabled={loading}>
+          {loading ? <Spinner fit={true} /> : '교육 신청하기'}
         </Button>
       </Container>
     </Steb2Wrap>
@@ -313,7 +315,7 @@ export const studentList = [
   },
   {
     type: '자가운전자',
-    enType: 'TYPE_SELF_DRIVER',
+    enType: 'TYPE_SELF_DRIVING',
     category: [
       {
         type: '자가운전자',

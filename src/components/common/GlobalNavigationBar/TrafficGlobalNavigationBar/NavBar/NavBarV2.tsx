@@ -285,7 +285,7 @@ const RemoteWrap = styled(Box)`
 export const ProvintialHeaderList = [
   {
     category: '교육이용안내',
-    href: '',
+    href: '/traffic/guide?tab=TYPE_GUIDE_AUTH',
     items: [
       {
         title: '회원가입 및 로그인',
@@ -311,7 +311,7 @@ export const ProvintialHeaderList = [
   },
   {
     category: '온라인교육',
-    href: '',
+    href: '/traffic/stebMove/steb2',
     items: [
       { title: '온라인교육 신청', href: '/traffic/stebMove/steb2' },
       { title: '온라인교육 수정', href: '/me/enroll-history' }, // 미완
@@ -328,7 +328,7 @@ export const ProvintialHeaderList = [
   },
   {
     category: '고객센터',
-    href: '',
+    href: '/traffic/service?tab=Notice',
     items: [
       { title: '공지사항', href: '/traffic/service?tab=Notice' },
       { title: '자주묻는질문', href: '/traffic/service?tab=Faq' },

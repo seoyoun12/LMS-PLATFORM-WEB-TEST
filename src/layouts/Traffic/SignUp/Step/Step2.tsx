@@ -18,9 +18,10 @@ import { emailRegex, passwordRegex, phoneRegex } from '@utils/inputRegexes';
 interface Props {
   handleStep: (moveNumber: number) => void;
   resName: string;
+  resPhone: string;
 }
 
-export function Step2({ handleStep, resName }: Props) {
+export function Step2({ handleStep, resName, resPhone }: Props) {
   const [nameErr, setNameErr] = useState(false);
   const [usernameErr, setUserNameErr] = useState(false);
   const [passwordErr, setPasswordErr] = useState(false);
@@ -53,7 +54,7 @@ export function Step2({ handleStep, resName }: Props) {
           regCategory: regCategoryType.TYPE_TRAFFIC_SAFETY_EDU,
           emailYn: YN.NO,
           smsYn: YN.NO,
-          phone,
+          phone: resPhone,
         });
         handleStep(3);
       } catch (e: any) {
@@ -204,7 +205,8 @@ export function Step2({ handleStep, resName }: Props) {
               placeholder="전화번호를 입력해주세요"
               onChange={onChangePhone}
               error={phoneErr}
-              value={phone}
+              value={resPhone}
+              disabled
               required
             />
             <FormHelperText sx={{ color: 'red' }}>

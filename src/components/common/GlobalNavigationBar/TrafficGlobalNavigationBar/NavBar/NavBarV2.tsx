@@ -93,7 +93,6 @@ export function NavBarV2() {
               <Box className={`dropdown-box ${open ? '' : 'hidden'}`}>
                 <Box className="link-wrap">
                   {item.items.map(menuItem => {
-                    console.log('ㅎㅇ' , isLogin , menuItem)
                     if (menuItem.href === '/me') return;
                     if(!isLogin && menuItem.href === '/traffic/learning-material/media') return;
                     return (

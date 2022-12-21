@@ -62,7 +62,6 @@ export default function MediaLayout({ materialType }: MediaLayoutProps) {
           });
           return flag;
         });
-        console.log(getEduMain);
         setEduMain(getEduMain[0].eduMainType);
         setEduSub(getEduMain[0].child[0].eduSubType);
       } catch (e) {

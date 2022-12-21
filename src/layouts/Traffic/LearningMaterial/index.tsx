@@ -17,8 +17,6 @@ import ReferenceLayout from '@layouts/Traffic/LearningMaterial/Reference';
 import VideoLayout from '@layouts/Traffic/LearningMaterial/Video';
 import { getMaterialType } from '@layouts/Traffic/LearningMaterial/util';
 import LearningGuideDetailLayout from '@layouts/Traffic/LearningMaterial/LearningGuide/Detail';
-import MediaLayout from './Media';
-import MediaDetailLayout from './Media/Detail';
 import { useRecoilState } from 'recoil';
 import { isLoginState } from '@common/recoil';
 
@@ -84,11 +82,6 @@ export function LearningMaterialLayout() {
         return <ReferenceLayout materialType={getMaterialType(type)} />;
       case 'video':
         return <VideoLayout materialType={getMaterialType(type)} />;
-      case 'media':
-        if (id) {
-          return <MediaDetailLayout />;
-        }
-        return <MediaLayout materialType={getMaterialType(type)} />;
       default:
         return <></>;
     }

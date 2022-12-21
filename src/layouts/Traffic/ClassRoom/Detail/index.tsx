@@ -9,7 +9,6 @@ import { NotFound } from '@components/ui/NotFound';
 import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { MaterialTabType } from '../..';
 import {
   EducationChipItem,
   MediaDetailBoardLinkItem,
@@ -25,10 +24,10 @@ import {
   VideoItemContentWrapper,
 } from './style';
 
-export default function MediaDetailLayout() {
+export default function ClassRoomDetailLayout() {
   const router = useRouter();
   const { id } = router.query as {
-    type: MaterialTabType;
+    // type: MaterialTabType;
     id: string;
   };
   const [data, setData] = useState<ProvincialBoardResponseDto>();
@@ -93,10 +92,7 @@ export default function MediaDetailLayout() {
       <MediaDetailHeaderWrapper>
         <MediaDetailHeaderTitleText>{data.title}</MediaDetailHeaderTitleText>
         <MediaDetailHeaderDateText>
-          {format(
-            new Date(data.createdDtime.replaceAll('-', '/')),
-            'yyyy.MM.dd'
-          )}
+          {format(new Date(data.createdDtime.replaceAll('-', '/')), 'yyyy.MM.dd')}
         </MediaDetailHeaderDateText>
         <EducationChipItem
           label={eduTargetTypes.eduTargetMain}
@@ -113,7 +109,7 @@ export default function MediaDetailLayout() {
         <iframe
           src={`https://www.youtube.com/embed/${
             data.youtubeLink.split('https://www.youtube.com/watch?v=')[1] ||
-            data.youtubeLink.split(`https://www.youtube.com/embed/`)[1] || 
+            data.youtubeLink.split(`https://www.youtube.com/embed/`)[1] ||
             data.youtubeLink.split(`https://youtu.be/`)[1]
           }`}
           frameBorder="0"

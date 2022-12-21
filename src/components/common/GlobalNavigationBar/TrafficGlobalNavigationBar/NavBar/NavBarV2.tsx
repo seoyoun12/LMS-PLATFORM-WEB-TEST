@@ -50,12 +50,9 @@ export function NavBarV2() {
   // // let open = true;
   // let open = Boolean(anchorEl);
   const open = Boolean(anchorEl);
-  const [isLogin , setIsLogin] = useRecoilState(isLoginState) //과정게시판 교육영상 가리기용
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState); //과정게시판 교육영상 가리기용
 
-  const handleHover = (
-    e: React.MouseEvent<HTMLDivElement>,
-    showValue: number
-  ) => {
+  const handleHover = (e: React.MouseEvent<HTMLDivElement>, showValue: number) => {
     setAnchorEl(e.currentTarget);
     setShowIndicatorValue(showValue);
   };
@@ -94,16 +91,15 @@ export function NavBarV2() {
                 <Box className="link-wrap">
                   {item.items.map(menuItem => {
                     if (menuItem.href === '/me') return;
-                    if(!isLogin && menuItem.href === '/traffic/learning-material/media') return;
+                    if (!isLogin && menuItem.href === '/traffic/learning-material/media')
+                      return;
                     return (
                       <Link
                         className="link-items"
                         href={menuItem.href}
                         key={menuItem.title}
                       >
-                        <MenuItem className="link-item">
-                          {menuItem.title}
-                        </MenuItem>
+                        <MenuItem className="link-item">{menuItem.title}</MenuItem>
                       </Link>
                     );
                   })}
@@ -304,9 +300,8 @@ export const ProvintialHeaderList = [
         href: '/traffic/learning-material/learning-guide',
       },
       { title: '교육자료', href: '/traffic/learning-material/education' },
-      { title: '교육영상', href: '/traffic/learning-material/video' },
+      { title: '교육자료영상', href: '/traffic/learning-material/video' },
       { title: '타기관자료모음', href: '/traffic/learning-material/reference' },
-      { title: '과정게시판', href: '/traffic/learning-material/media' },
     ],
   },
   {
@@ -315,6 +310,7 @@ export const ProvintialHeaderList = [
     items: [
       { title: '온라인교육 신청', href: '/traffic/stebMove/steb2' },
       { title: '온라인교육 수정', href: '/me/enroll-history' }, // 미완
+      { title: '온라인교육 시청', href: '/traffic/class-room' },
     ],
   },
   {

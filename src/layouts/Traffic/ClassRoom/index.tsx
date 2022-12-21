@@ -31,7 +31,8 @@ interface MediaLayoutProps {
   materialType: MaterialType;
 }
 
-export default function MediaLayout({ materialType }: MediaLayoutProps) {
+// export default function MediaLayout({ materialType }: MediaLayoutProps) {
+export default function ClassRoomLayout() {
   const router = useRouter();
   const [eduMain, setEduMain] = useState<EduTargetMainType>('TYPE_CHILDREN');
   const [eduSub, setEduSub] = useState<EduTargetSubType>('TYPE_KINDERGARTEN');

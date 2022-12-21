@@ -77,7 +77,8 @@ export function Step2({ handleStep, resName, resPhone }: Props) {
   };
   const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
     setPasswordErr(false);
-    if (!passwordRegex.test(e.target.value) || e.target.value.length < 8) {
+    // if (!passwordRegex.match(e.target.value) || e.target.value.length < 8) {
+      if (!e.target.value.match(passwordRegex) || e.target.value.length < 8) {
       setPasswordErr(true);
     }
   };

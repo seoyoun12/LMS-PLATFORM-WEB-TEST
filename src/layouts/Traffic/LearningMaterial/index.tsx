@@ -31,11 +31,13 @@ export type MaterialTabType =
 
 export function LearningMaterialLayout() {
   const router = useRouter();
+  console.log('test' , router.query)
   const { type, id } = router.query as {
     type: MaterialTabType;
     id?: string;
   };
-  const [isLogin , setIsLogin] = useRecoilState(isLoginState)
+  const [isLogin , setIsLogin] = useRecoilState(isLoginState);
+  console.log('type' , type)
   // const [tab, setTab] = useState<MaterialTabType>(type);
 
   // const tabsConfig = [

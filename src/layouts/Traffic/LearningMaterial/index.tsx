@@ -123,13 +123,13 @@ export function LearningMaterialLayout() {
               onClick={() => handleClickTab('reference')}
               value="reference"
             />
-            {isLogin && (
+            {/* {isLogin && (
               <LearningMaterialTabItem
                 label="교육영상게시판"
                 onClick={() => handleClickTab('media')}
                 value="media"
               />
-            )}
+            )} */}
           </LearningMaterialTabs>
         </LearningMaterialTabWrapper>
       </LearningMaterialWrapper>

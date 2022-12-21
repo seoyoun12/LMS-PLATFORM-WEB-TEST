@@ -11,9 +11,10 @@ import { niceConfirm } from '@common/api/nice';
 interface Props {
   handleStep: (moveNumber: number) => void;
   setResName: React.Dispatch<React.SetStateAction<string>>;
+  setResPhone: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export function Step1({ handleStep, setResName }: Props) {
+export function Step1({ handleStep, setResName, setResPhone }: Props) {
   const snackbar = useSnackbar();
   const uuidRef = useRef(uuid());
   const popUpRef = useRef<Window>(null);
@@ -36,6 +37,8 @@ export function Step1({ handleStep, setResName }: Props) {
         if (popUpState.closed) {
           try {
             const { data } = await niceConfirm(uuidRef.current);
+            console.log('data is arrive!',data)
+            setResPhone(data.mobileNo);
             setResName(data.name);
             handleStep(2);
           } catch (e: any) {

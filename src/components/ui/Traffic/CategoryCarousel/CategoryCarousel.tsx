@@ -85,7 +85,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
           modules={[Navigation, Pagination, Controller, Autoplay]}
           spaceBetween={300}
           slidesPerView={1}
-          loop={true}
+          // loop={true}
           // autoplay={{
           //   delay: 4000,
           //   disableOnInteraction: false,

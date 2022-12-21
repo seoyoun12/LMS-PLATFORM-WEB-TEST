@@ -22,8 +22,9 @@ export default function LearningGuideLayout({ materialType }: LearningGuideLayou
   const { data } = useGetLearningMaterial(materialType, '');
   const router = useRouter();
 
+  console.log('넹' , materialType)
   const handleClickPost = (id: number) => {
-    router.push(`/traffic/learning-material/learning_guide/${id}`);
+    router.push(`/traffic/learning-material/education/${id}`);
   };
 
   return (

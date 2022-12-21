@@ -12,9 +12,15 @@ import { useEffect, useState } from 'react';
 import SigninIcon from '/public/assets/svgs/signin.svg';
 import SignupIcon from '/public/assets/svgs/signup.svg';
 
+
+const hideNavList = [
+  { href: '/terms' },
+];
+
 export function HeaderBar() {
   const router = useRouter();
   const isLogin = useIsLoginStatus();
+  const [isHideNavbar, setIsHideNavbar] = useState(false);
   const [user, setUser] = useState<MyUser>();
 
   useEffect(() => {
@@ -23,6 +29,17 @@ export function HeaderBar() {
       setUser(data);
     })();
   }, [router]);
+
+
+  useEffect(() => {
+    if (router.route === '/') {
+      setIsHideNavbar(true);
+    } else {
+      const hide = hideNavList.some(e => router.route.includes(e.href));
+      setIsHideNavbar(hide);
+    }
+  }, [router]);
+
   return (
     <Header className={styles.globalContainer}>
       <ContentContainer>
@@ -57,8 +74,9 @@ export function HeaderBar() {
           <Searchbar />
         </SearchbarContainer> */}
         {/* <NavBar></NavBar> */}
-        <NavBarV2 />
+        {!isHideNavbar && <NavBarV2 /> }
 
+        {!isHideNavbar && 
         <RightSection>
           {!isLogin ? (
             <SignBoxes>
@@ -107,6 +125,7 @@ export function HeaderBar() {
             </Stack>
           )}
         </RightSection>
+        } 
       </ContentContainer>
     </Header>
   );

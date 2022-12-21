@@ -3,10 +3,10 @@ import { MaterialType } from "@common/api/learningMaterial";
 
 export function getMaterialType(type: MaterialTabType): MaterialType {
   switch (type) {
-    case "education":
+    case "learning-guide":
       return MaterialType.TYPE_BY_AGE;
 
-    case "learning-guide":
+    case "education":
       return MaterialType.TYPE_EDUCATIONAL;
 
     case "video":

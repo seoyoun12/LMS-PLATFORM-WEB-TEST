@@ -10,11 +10,28 @@ import Image from 'next/image';
 import { NavBarV2 } from '../NavBar';
 import SigninIcon from '/public/assets/svgs/signin.svg';
 import SignupIcon from '/public/assets/svgs/signup.svg';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+
+
+const hideNavList = [
+  { href: '/terms' },
+];
 
 export function HeaderBar() {
-  // const router = useRouter();
+  const router = useRouter();
+  const [isHideNavbar, setIsHideNavbar] = useState(false);
   const isLogin = useIsLoginStatus();
   const { user } = useMyUser();
+  
+  useEffect(() => {
+    if (router.route === '/') {
+      setIsHideNavbar(true);
+    } else {
+      const hide = hideNavList.some(e => router.route.includes(e.href));
+      setIsHideNavbar(hide);
+    }
+  }, [router]);
 
   return (
     <Header className={styles.globalContainer}>
@@ -50,8 +67,9 @@ export function HeaderBar() {
           <Searchbar />
         </SearchbarContainer> */}
         {/* <NavBar></NavBar> */}
-        <NavBarV2 />
+        {!isHideNavbar && <NavBarV2 /> }
 
+        {!isHideNavbar && 
         <RightSection>
           {!isLogin ? (
             <SignBoxes>
@@ -100,6 +118,7 @@ export function HeaderBar() {
             </Stack>
           )}
         </RightSection>
+        }
       </ContentContainer>
     </Header>
   );

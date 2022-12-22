@@ -37,15 +37,15 @@ const categoryData = [
   {
     id: 3,
     title: '도민교통',
-    title2: '학습하기',
-    href: '/me/my-course',
+    title2: '시청하기',
+    href: '/traffic/class-room',
     // icon: <StudyIcon />,
     icon: 'assets/images/studyTransIcon.png',
     // color: '#fff',
     color: '#F1C3C1',
     // color: '#fffde2',
     // btnText: '학습하기',
-    btnText: '학습하기',
+    btnText: '시청하기',
   },
   {
     id: 4,

@@ -279,18 +279,18 @@ const RemoteWrap = styled(Box)`
 `;
 
 export const ProvintialHeaderList = [
-  {
-    category: '교육이용안내',
-    href: '/traffic/guide?tab=TYPE_GUIDE_AUTH',
-    items: [
-      {
-        title: '회원가입 및 로그인',
-        href: '/traffic/guide?tab=TYPE_GUIDE_AUTH',
-      },
-      { title: '교육신청방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_REGI' },
-      { title: '학습방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_LEARNING' },
-    ],
-  },
+  // {
+  //   category: '교육이용안내',
+  //   href: '/traffic/guide?tab=TYPE_GUIDE_AUTH',
+  //   items: [
+  //     {
+  //       title: '회원가입 및 로그인',
+  //       href: '/traffic/guide?tab=TYPE_GUIDE_AUTH',
+  //     },
+  //     { title: '교육신청방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_REGI' },
+  //     { title: '학습방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_LEARNING' },
+  //   ],
+  // },
   {
     category: '학습자료',
     href: '/traffic/learning-material/learning-guide',

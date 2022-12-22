@@ -299,3 +299,39 @@ export const UserRadioExcelConfig = [
   { name: '도민_관리자', value: RoleType.ROLE_TRAFFIC_SAFETY_MANAGER },
   { name: '통합_관리자', value: RoleType.ROLE_ADMIN }, // 차후 도민
 ];
+
+
+// 제호님 도움! 
+
+export const CourseTrafficTargetType = [
+  { 
+    type: TargetMainType.TYPE_CHILDREN, 
+    ko: '어린이' ,
+    child: [
+      { type: TargetSubType.TYPE_KINDERGARTEN, ko: '유치원' },
+      { type: TargetSubType.TYPE_ELEMENTARY, ko: '초등학교' }
+    ]
+  },
+  { 
+    type: TargetMainType.TYPE_TEENAGER, 
+    ko: '청소년' ,
+    child: [
+      { type: TargetSubType.TYPE_MIDDLE, ko: '중학교' },
+      { type: TargetSubType.TYPE_HIGH, ko: '고등학교' },
+    ]
+  },
+  { 
+    type: TargetMainType.TYPE_ELDERLY, 
+    ko: '어르신' ,
+    child: [
+      { type: TargetSubType.TYPE_ELDERLY, ko: '어르신' },
+    ]
+  },
+  { 
+    type: TargetMainType.TYPE_SELF_DRIVING, 
+    ko: '자가운전자' ,
+    child: [
+      { type: TargetSubType.TYPE_SELF_DRIVER, ko: '자가운전자' },
+    ]
+  },
+]

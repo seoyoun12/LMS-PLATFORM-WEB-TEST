@@ -3,9 +3,9 @@ import {
   CategoryBoard,
   categoryBoardList,
   removeCategoryBoard,
-} from "@common/api/categoryBoard";
-import { useDialog } from "@hooks/useDialog";
-import { useSnackbar } from "@hooks/useSnackbar";
+} from '@common/api/categoryBoard';
+import { useDialog } from '@hooks/useDialog';
+import { useSnackbar } from '@hooks/useSnackbar';
 import {
   Box,
   Button,
@@ -21,32 +21,32 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from "@mui/material";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { Spinner, Table } from "@components/ui";
-import dateFormat from "dateformat";
-import styled from "@emotion/styled";
-import { CatchingPokemonSharp } from "@mui/icons-material";
-import { ProductStatus } from "@common/api/course";
-import { downloadFile } from "@common/api/file";
-import { S3Files } from "types/file";
+} from '@mui/material';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { Spinner, Table } from '@components/ui';
+import dateFormat from 'dateformat';
+import styled from '@emotion/styled';
+import { CatchingPokemonSharp } from '@mui/icons-material';
+import { ProductStatus } from '@common/api/course';
+import { downloadFile } from '@common/api/file';
+import { S3Files } from 'types/file';
 
 const headRows: {
   name: string;
-  align: "inherit" | "left" | "center" | "right" | "justify";
+  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
   width: string;
 }[] = [
   // { name: 'No1', align: 'center', width: '2.5%' }, // seq
-  { name: "No", align: "center", width: "5%" }, // seq
-  { name: "게시판유형", align: "center", width: "8.5%" }, // boardType
-  { name: "제목", align: "center", width: "32%" }, // subject
-  { name: "작성일", align: "center", width: "12%" }, // createdDtime
-  { name: "수정일", align: "center", width: "12%" }, // modifiedDtime
-  { name: "조회수", align: "center", width: "8.5%" }, // hit
-  { name: "공지여부", align: "center", width: "8.5%" }, // noticeYn
-  { name: "공개여부", align: "center", width: "8.5%" }, // publicYn
-  { name: "상태", align: "center", width: "5%" }, // status
+  { name: 'No', align: 'center', width: '5%' }, // seq
+  { name: '게시판유형', align: 'center', width: '8.5%' }, // boardType
+  { name: '제목', align: 'center', width: '32%' }, // subject
+  { name: '작성일', align: 'center', width: '12%' }, // createdDtime
+  { name: '수정일', align: 'center', width: '12%' }, // modifiedDtime
+  { name: '조회수', align: 'center', width: '8.5%' }, // hit
+  { name: '공지여부', align: 'center', width: '8.5%' }, // noticeYn
+  { name: '공개여부', align: 'center', width: '8.5%' }, // publicYn
+  { name: '상태', align: 'center', width: '5%' }, // status
 ];
 
 // const headRows2: [
@@ -65,8 +65,8 @@ const headRows: {
 
 const tabsConfig = [
   // { name: '전체', value: '' }, // board Type이 required
-  { name: "공지사항", value: "TYPE_NOTICE" },
-  { name: "자주묻는질문", value: "TYPE_FAQ" },
+  { name: '공지사항', value: 'TYPE_NOTICE' },
+  { name: '자주묻는질문', value: 'TYPE_FAQ' },
   // { name: '회원가입 및 로그인', value: 'TYPE_GUIDE_AUTH ' },
   // { name: '교육신청방법', value: 'TYPE_GUIDE_EDU_REGI ' },
   // { name: '학습방법', value: 'TYPE_GUIDE_EDU_LEARNING ' },
@@ -78,7 +78,7 @@ export function CategoryManagement() {
   const dialog = useDialog();
   const [page, setPage] = useState(0);
   const [seq, setSeq] = useState<number | null>(null);
-  const [typeValue, setTypeValue] = useState("TYPE_NOTICE");
+  const [typeValue, setTypeValue] = useState('TYPE_NOTICE');
   const { data, error, mutate } = categoryBoardList({
     boardType: typeValue,
     page,
@@ -119,18 +119,18 @@ export function CategoryManagement() {
   const onClickRemoveCategory = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
-        title: "공지사항 삭제하기",
-        description: "정말로 삭제하시겠습니까?",
-        confirmText: "삭제하기",
-        cancelText: "취소",
+        title: '공지사항 삭제하기',
+        description: '정말로 삭제하시겠습니까?',
+        confirmText: '삭제하기',
+        cancelText: '취소',
       });
       if (dialogConfirmed) {
         await removeCategoryBoard(seq);
-        snackbar({ variant: "success", message: "성공적으로 삭제되었습니다." });
+        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
         await mutate();
       }
     } catch (e: any) {
-      snackbar({ variant: "error", message: e.data.message });
+      snackbar({ variant: 'error', message: e.data.message });
     }
   };
 
@@ -177,7 +177,7 @@ export function CategoryManagement() {
         page={data?.number}
         onChangePage={onChangePage}
         size="small"
-        sx={{ tableLayout: "fixed" }}
+        sx={{ tableLayout: 'fixed' }}
       >
         <TableHead>
           <TableRow>
@@ -200,54 +200,42 @@ export function CategoryManagement() {
         </TableHead>
 
         <TableBody>
-          {data?.content.map((category) => (
+          {data?.content.map(category => (
             <TableRow
-              sx={{ cursor: "pointer" }}
+              sx={{ cursor: 'pointer' }}
               key={category.seq}
               hover
               onClick={() => onClickmodifyCategoryBoard(category.seq)}
             >
               {/* <CategoryTableCell align="center">{category.seq}</CategoryTableCell> */}
+              <CategoryTableCell align="center">{category.postTypeSeq}</CategoryTableCell>
               <CategoryTableCell align="center">
-                {category.postTypeSeq}
-              </CategoryTableCell>
-              <CategoryTableCell align="center">
-                {
-                  tabsConfig.filter(
-                    (item) => item.value === category.boardType
-                  )[0]?.name
-                }
+                {tabsConfig.filter(item => item.value === category.boardType)[0]?.name}
               </CategoryTableCell>
               <CategoryTableCell align="center">
                 <SubjectBox>{category.subject}</SubjectBox>
               </CategoryTableCell>
               {/* <CategoryTableCell>{category.subject}</CategoryTableCell> */}
               <CategoryTableCell align="center">
-                {dateFormat(category.createdDtime, "isoDate")}
+                {dateFormat(category.createdDtime, 'isoDate')}
               </CategoryTableCell>
               <CategoryTableCell align="center">
-                {dateFormat(category.modifiedDtime, "isoDate")}
+                {dateFormat(category.modifiedDtime, 'isoDate')}
+              </CategoryTableCell>
+              <CategoryTableCell align="center">{category.hit}</CategoryTableCell>
+              <CategoryTableCell align="center">
+                {category.noticeYn === 'Y' ? '공지중' : '비공지'}
               </CategoryTableCell>
               <CategoryTableCell align="center">
-                {category.hit}
-              </CategoryTableCell>
-              <CategoryTableCell align="center">
-                {category.noticeYn === "Y" ? "공지중" : "비공지"}
-              </CategoryTableCell>
-              <CategoryTableCell align="center">
-                {category.publicYn === "Y" ? "공개중" : "비공개"}
+                {category.publicYn === 'Y' ? '공개중' : '비공개'}
               </CategoryTableCell>
               <CategoryTableCell align="center">
                 <Chip
                   variant="outlined"
                   size="small"
-                  label={
-                    category.status === ProductStatus.APPROVE ? "정상" : "중지"
-                  }
+                  label={category.status === ProductStatus.APPROVE ? '정상' : '중지'}
                   color={
-                    category.status === ProductStatus.APPROVE
-                      ? "secondary"
-                      : "default"
+                    category.status === ProductStatus.APPROVE ? 'secondary' : 'default'
                   }
                 />
               </CategoryTableCell>

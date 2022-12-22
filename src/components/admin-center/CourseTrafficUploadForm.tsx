@@ -32,8 +32,9 @@ import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined
 import Image from 'next/image';
 import {
   TargetMainTypeReg,
-  TargetSubTypeReg1,
-  TargetSubTypeReg2,
+  TargetSubTypeChildrenReg,
+  TargetSubTypeReg,
+  TargetSubTypeTeenagerReg,
   TargetTypeMatch,
 } from 'src/staticDataDescElements/staticType';
 
@@ -101,7 +102,10 @@ export function CourseTrafficUploadForm({
 
   // 교육 대상자 타입에 따른 세부 타입 지정
   useEffect(() => {
-    if (watch().eduTargetMain !== 'TYPE_TEENAGER') {
+    if (
+      watch().eduTargetMain == 'TYPE_ELDERLY' ||
+      watch().eduTargetMain == 'TYPE_SELF_DRIVING'
+    ) {
       setValue(
         'eduTargetSub',
         TargetTypeMatch.filter(tm => tm.mainType === watch().eduTargetMain)[0]?.subType
@@ -123,20 +127,27 @@ export function CourseTrafficUploadForm({
       //   TargetSubTypeReg1.filter(tm => tm.type === watch().eduTargetSub)?.ko
       // );
       // setValue('eduTargetSub');  [0] 안쓰면 고장. undefined. why? 저번에 제호님이 설명해주셨었는데..
-    } else {
-      setValue('eduTargetSub', 'TYPE_ELEMENTARY');
+    } else if (watch().eduTargetMain == 'TYPE_CHILDREN') {
       setValue('disabledEduTargetSub', false);
-      // console.log('나는 청소년입니다.');
-      // console.log('교육 대상자 세부 타입 : ', watch().disabledEduTargetSub);
-      // console.log(
-      //   '지금 타겟메인의 벨류는 : ',
-      //   TargetMainTypeReg.filter(tm => tm.type === watch().eduTargetMain)[0]?.ko
-      // );
-      // console.log(
-      //   '지금 타겟서브의 벨류는 : ',
-      //   TargetSubTypeReg1.filter(tm => tm.type === watch().eduTargetSub)[0]?.ko
-      // );
+      setValue('eduTargetSub', 'TYPE_KINDERGARTEN');
+    } else if (watch().eduTargetMain == 'TYPE_TEENAGER') {
+      setValue('disabledEduTargetSub', false);
+      setValue('eduTargetSub', 'TYPE_MIDDLE');
     }
+    // else {
+    //   setValue('eduTargetSub', 'TYPE_ELEMENTARY');
+    //   setValue('disabledEduTargetSub', false);
+    //   // console.log('나는 청소년입니다.');
+    //   // console.log('교육 대상자 세부 타입 : ', watch().disabledEduTargetSub);
+    //   // console.log(
+    //   //   '지금 타겟메인의 벨류는 : ',
+    //   //   TargetMainTypeReg.filter(tm => tm.type === watch().eduTargetMain)[0]?.ko
+    //   // );
+    //   // console.log(
+    //   //   '지금 타겟서브의 벨류는 : ',
+    //   //   TargetSubTypeReg1.filter(tm => tm.type === watch().eduTargetSub)[0]?.ko
+    //   // );
+    // }
   }, [courseTraffic, watch().eduTargetMain]);
   ////
 
@@ -221,7 +232,7 @@ export function CourseTrafficUploadForm({
               ))}
             </Select>
           </FormControl>
-          <FormControl fullWidth className="courseUploadInputBox">
+          {/* <FormControl fullWidth className="courseUploadInputBox">
             <InputLabel>교육 대상자 세부 타입</InputLabel>
             <Select
               labelId="eduTargetSub"
@@ -232,18 +243,76 @@ export function CourseTrafficUploadForm({
               disabled={watch().disabledEduTargetSub}
             >
               {watch().eduTargetMain === 'TYPE_TEENAGER'
-                ? TargetSubTypeReg2.map(item => (
+                ? TargetSubTypeTeenagerReg.map(item => (
                     <MenuItem key={item.type} value={item.type}>
                       {item.ko}
                     </MenuItem>
                   ))
-                : TargetSubTypeReg1.map(item => (
+                : TargetSubTypeReg.map(item => (
+                    <MenuItem key={item.type} value={item.type}>
+                      {item.ko}
+                    </MenuItem>
+                  ))}
+            </Select>
+          </FormControl> */}
+
+          {/* <FormControl fullWidth className="courseUploadInputBox">
+            <InputLabel>교육 대상자 세부 타입</InputLabel>
+            <Select
+              labelId="eduTargetSub"
+              id="eduTargetSub"
+              value={watch().eduTargetSub || ''}
+              label="교육 대상자 세부 타입"
+              onChange={handleEduTargetSub}
+              disabled={watch().disabledEduTargetSub}
+            >
+              {watch().eduTargetMain === 'TYPE_CHILDREN'
+                ? TargetSubTypeChildrenReg.map(item => (
+                    <MenuItem key={item.type} value={item.type}>
+                      {item.ko}
+                    </MenuItem>
+                  ))
+                : TargetSubTypeTeenagerReg.map(item => (
+                    <MenuItem key={item.type} value={item.type}>
+                      {item.ko}
+                    </MenuItem>
+                  ))}
+            </Select>
+          </FormControl> */}
+
+          {/*  */}
+
+          <FormControl fullWidth className="courseUploadInputBox">
+            <InputLabel>교육 대상자 세부 타입</InputLabel>
+            <Select
+              labelId="eduTargetSub"
+              id="eduTargetSub"
+              value={watch().eduTargetSub || ''}
+              label="교육 대상자 세부 타입"
+              onChange={handleEduTargetSub}
+              disabled={watch().disabledEduTargetSub}
+            >
+              {watch().eduTargetMain === 'TYPE_CHILDREN'
+                ? TargetSubTypeChildrenReg.map(item => (
+                    <MenuItem key={item.type} value={item.type}>
+                      {item.ko}
+                    </MenuItem>
+                  ))
+                : watch().eduTargetMain === 'TYPE_TEENAGER'
+                ? TargetSubTypeTeenagerReg.map(item => (
+                    <MenuItem key={item.type} value={item.type}>
+                      {item.ko}
+                    </MenuItem>
+                  ))
+                : TargetSubTypeReg.map(item => (
                     <MenuItem key={item.type} value={item.type}>
                       {item.ko}
                     </MenuItem>
                   ))}
             </Select>
           </FormControl>
+
+          {/*  */}
 
           <FormControl className={textField}>
             <TextField

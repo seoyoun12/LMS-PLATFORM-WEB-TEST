@@ -51,6 +51,8 @@ export default function ClassRoomLayout() {
     setEduSub(getFirstChild.eduSubType);
   };
 
+  console.log('신청한 과정 확인 : ', data);
+
   useEffect(() => {
     (async function () {
       try {
@@ -149,6 +151,10 @@ const eduArr: {
         eduSubType: 'TYPE_KINDERGARTEN',
         eduSubTypeKo: '유치원',
       },
+      {
+        eduSubType: 'TYPE_ELEMENTARY',
+        eduSubTypeKo: '초등학교',
+      },
     ],
   },
   {
@@ -156,16 +162,12 @@ const eduArr: {
     eduMainTypeKo: '청소년',
     child: [
       {
-        eduSubType: 'TYPE_ELEMENTARY',
-        eduSubTypeKo: '초등학생',
-      },
-      {
         eduSubType: 'TYPE_MIDDLE',
-        eduSubTypeKo: '중학생',
+        eduSubTypeKo: '중학교',
       },
       {
         eduSubType: 'TYPE_HIGH',
-        eduSubTypeKo: '고등학생',
+        eduSubTypeKo: '고등학교',
       },
     ],
   },

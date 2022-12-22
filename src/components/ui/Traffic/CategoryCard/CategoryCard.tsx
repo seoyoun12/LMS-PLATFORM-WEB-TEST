@@ -50,15 +50,15 @@ const categoryData = [
   {
     id: 4,
     title: '도민교통',
-    title2: '수료확인',
-    href: '/me/certificate',
+    title2: '학습자료',
+    href: '/traffic/learning-material/learning-guide',
     // icon: <CertificateIcon />,
     icon: 'assets/images/certificateTransIcon.png',
     // color: '#fff',
     color: '#BDB8F3',
     // color: '#f8ffe2',
     // btnText: '수료확인',
-    btnText: '수료확인',
+    btnText: '학습자료',
   },
 ];
 

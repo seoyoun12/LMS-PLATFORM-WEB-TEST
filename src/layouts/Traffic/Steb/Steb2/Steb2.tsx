@@ -263,12 +263,6 @@ export const studentList = [
           { age: '만5세', enAge: 'age5' },
         ],
       },
-    ],
-  },
-  {
-    type: '청소년',
-    enType: 'TYPE_TEENAGER',
-    category: [
       {
         type: '초등학교',
         enType: 'TYPE_ELEMENTARY',
@@ -287,6 +281,12 @@ export const studentList = [
           { age: '6학년', enAge: 'grade6' },
         ],
       },
+    ],
+  },
+  {
+    type: '청소년',
+    enType: 'TYPE_TEENAGER',
+    category: [
       {
         type: '중학교',
         enType: 'TYPE_MIDDLE',

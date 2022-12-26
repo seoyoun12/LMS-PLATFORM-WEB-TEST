@@ -29,6 +29,8 @@ import { courseType } from '@common/api/courseClass';
 import { logout } from '@common/api';
 import useResponsive from '@hooks/useResponsive';
 
+// 메인 3개의 카드
+
 const LinkList = [
   {
     mainDisplayType: MainDisplayType.EDUCATION_TRANSPORT_WORKER,
@@ -87,7 +89,7 @@ const LinkList = [
   {
     mainDisplayType: MainDisplayType.EDUCATION_PROVINCIAL_TRAFFIC_SAFETY,
     pageType: pageRegType.TYPE_TRAFFIC_SAFETY_EDU,
-    displayWord: '도민교통',
+    displayWord: '도민교통안전',
     textColor: '#711D14',
     color: '#FEC901',
     lineColor: '#57242b',

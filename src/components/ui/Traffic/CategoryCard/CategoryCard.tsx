@@ -9,46 +9,64 @@ import Image from 'next/image';
 import { courseType } from '@common/api/courseClass';
 import useResponsive from '@hooks/useResponsive';
 
+// 도민교육 3개의 카드
+
+// const categoryData = [
+//   {
+//     id: 1,
+//     title: '도민교통',
+//     href: '/traffic/stebMove/steb2',
+//     // icon: <CalendarIcon />,
+//     icon: 'assets/images/calendarTransIcon.png',
+//     // color: '#fff',
+//     color: '#F4DB83',
+//     // color: '#ffede9',
+//     // btnText: '확인하기',
+//     btnText: '예약하기',
+//   },
+//   {
+//     id: 2,
+//     title: '도민교통',
+//     href: '/me/enroll-history',
+//     // icon: <PromiseIcon />,
+//     icon: 'assets/images/promiseTransIcon.png',
+//     // color: '#fff',
+//     color: '#84B9EE',
+//     // color: '#fff6e7',
+//     // btnText: '예약하기',
+//     btnText: '내역확인',
+//   },
+//   {
+//     id: 3,
+//     title: '도민교통',
+//     title2: '시청하기',
+//     href: '/traffic/class-room',
+//     // icon: <StudyIcon />,
+//     icon: 'assets/images/studyTransIcon.png',
+//     // color: '#fff',
+//     color: '#F1C3C1',
+//     // color: '#fffde2',
+//     // btnText: '학습하기',
+//     btnText: '시청하기',
+//   },
+//   {
+//     id: 4,
+//     title: '도민교통',
+//     title2: '학습자료',
+//     href: '/traffic/learning-material/learning-guide',
+//     // icon: <CertificateIcon />,
+//     icon: 'assets/images/certificateTransIcon.png',
+//     // color: '#fff',
+//     color: '#BDB8F3',
+//     // color: '#f8ffe2',
+//     // btnText: '수료확인',
+//     btnText: '학습자료',
+//   },
+// ];
+
 const categoryData = [
   {
     id: 1,
-    title: '도민교통',
-    href: '/traffic/stebMove/steb2',
-    // icon: <CalendarIcon />,
-    icon: 'assets/images/calendarTransIcon.png',
-    // color: '#fff',
-    color: '#F4DB83',
-    // color: '#ffede9',
-    // btnText: '확인하기',
-    btnText: '예약하기',
-  },
-  {
-    id: 2,
-    title: '도민교통',
-    href: '/me/enroll-history',
-    // icon: <PromiseIcon />,
-    icon: 'assets/images/promiseTransIcon.png',
-    // color: '#fff',
-    color: '#84B9EE',
-    // color: '#fff6e7',
-    // btnText: '예약하기',
-    btnText: '내역확인',
-  },
-  {
-    id: 3,
-    title: '도민교통',
-    title2: '시청하기',
-    href: '/traffic/class-room',
-    // icon: <StudyIcon />,
-    icon: 'assets/images/studyTransIcon.png',
-    // color: '#fff',
-    color: '#F1C3C1',
-    // color: '#fffde2',
-    // btnText: '학습하기',
-    btnText: '시청하기',
-  },
-  {
-    id: 4,
     title: '도민교통',
     title2: '학습자료',
     href: '/traffic/learning-material/learning-guide',
@@ -59,6 +77,30 @@ const categoryData = [
     // color: '#f8ffe2',
     // btnText: '수료확인',
     btnText: '학습자료',
+  },
+  {
+    id: 2,
+    title: '도민안전교육',
+    href: '/traffic/stebMove/steb2',
+    // icon: <CalendarIcon />,
+    icon: 'assets/images/calendarTransIcon.png',
+    // color: '#fff',
+    color: '#F4DB83',
+    // color: '#ffede9',
+    // btnText: '확인하기',
+    btnText: '교육신청하기',
+  },
+  {
+    id: 3,
+    title: '도민안전교육',
+    title2: '학습하기',
+    href: '/traffic/class-room',
+    // icon: <StudyIcon />,
+    icon: 'assets/images/studyTransIcon.png',
+    // color: '#fff',
+    color: '#F1C3C1',
+    // color: '#fffde2',
+    btnText: '학습하기',
   },
 ];
 
@@ -75,6 +117,7 @@ export function CategoryCard() {
           columns={{ xs: 2, sm: 2, md: 2, lg: 4, xl: 4 }}
           columnSpacing={2}
           rowSpacing={2}
+          justifyContent="center"
         >
           {categoryData.map(categoryData => (
             <GridItem
@@ -86,13 +129,13 @@ export function CategoryCard() {
               key={categoryData.id}
               cardcolor={categoryData.color}
             >
-              <GridLink href={categoryData.href} width="100px  " underline="none">
+              <GridLink href={categoryData.href} width="100px" underline="none">
                 <Box
                   sx={{
                     border: `5px solid ${categoryData.color}`,
                     // width: 'fit-content',
                     margin: 'auto',
-                    padding: `${!isTablet ? '8px  32px' : ' 32px 58px'}`,
+                    padding: `${!isTablet ? '8px  32px' : '32px 58px'}`,
                     borderRadius: '12px',
                     background: 'white',
                   }}

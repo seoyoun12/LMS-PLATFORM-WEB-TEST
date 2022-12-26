@@ -53,13 +53,17 @@ export function SiteMap() {
     }
   }, [router]);
 
-  const onClickMoveSite = async (item: { name: string; href: string; type: courseType; regCategory: regCategoryType }) => {
+  const onClickMoveSite = async (item: {
+    name: string;
+    href: string;
+    type: courseType;
+    regCategory: regCategoryType;
+  }) => {
     const isEqual = userInfoData.regCategory.includes(item.regCategory);
 
     if (userInfoData.role.includes(UserRole.ROLE_ADMIN)) return router.push(item.href);
 
     if (isLogin && !isEqual) {
-
       const isConfirm = window.confirm('정말로 이동하시겠습니까? 로그아웃됩니다.');
       try {
         if (!isConfirm) return;

@@ -128,6 +128,10 @@ export function CategoryCard() {
               lg={1}
               key={categoryData.id}
               cardcolor={categoryData.color}
+              // maxWidth="100%"
+              // flexGrow={1}
+              // style={{ maxWidth: '100%', flexGrow: 1 }}
+              // isTablet이 적용안된다.
             >
               <GridLink href={categoryData.href} width="100px" underline="none">
                 <Box

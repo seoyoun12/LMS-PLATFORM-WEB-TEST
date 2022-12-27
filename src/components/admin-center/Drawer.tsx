@@ -65,7 +65,23 @@ export function Drawer({ children }: { children: ReactNode }) {
       icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
     },
     {
-      name: '게시판관리',
+      name: '게시판관리(운수/저상)',
+      children: [
+        {
+          name: '게시판 목록',
+          href: '/admin-center/category',
+          isActive: router.pathname === '/admin-center/category',
+        },
+        {
+          name: '게시판 등록',
+          href: '/admin-center/category/upload',
+          isActive: router.pathname === '/admin-center/category/upload',
+        },
+      ],
+      icon: <ListAltIcon sx={{ mr: '32px', color: grey[700] }} />,
+    },
+    {
+      name: '게시판관리(도민)',
       children: [
         {
           name: '게시판 목록',

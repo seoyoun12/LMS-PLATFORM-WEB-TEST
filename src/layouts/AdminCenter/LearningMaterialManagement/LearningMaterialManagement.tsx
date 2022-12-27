@@ -47,7 +47,7 @@ const typeTabsConfig = [
   { name: '전체', value: '' },
   { name: '연령별 교수학습 지도안', value: 'TYPE_BY_AGE' },
   { name: '교육자료', value: 'TYPE_EDUCATIONAL' },
-  { name: '교육영상', value: 'TYPE_VIDEO' },
+  // { name: '교육영상', value: 'TYPE_VIDEO' },
   { name: '타기관자료모음', value: 'TYPE_OTHER_ORGAN' },
 ];
 

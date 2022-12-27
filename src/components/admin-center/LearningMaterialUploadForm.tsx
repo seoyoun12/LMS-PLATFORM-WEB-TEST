@@ -113,12 +113,12 @@ export function LearningMaterialUploadForm({
         //   setIsEducationRoute(true) //다중 파일 업로드 사용여부
         // }
       }
-      if (learningMaterial.materialType === 'TYPE_VIDEO') {
-        setOpenTui(false);
-        setOpenOrigin(true);
-        setTitle('교육영상');
-        setIsEducationRoute(false);
-      }
+      // if (learningMaterial.materialType === 'TYPE_VIDEO') {
+      //   setOpenTui(false);
+      //   setOpenOrigin(true);
+      //   setTitle('교육영상');
+      //   setIsEducationRoute(false);
+      // }
       if (learningMaterial.materialType === 'TYPE_BY_AGE') {
         setOpenTui(true);
         setTitle('연령별 교수학습 지도안');
@@ -313,7 +313,7 @@ export function LearningMaterialUploadForm({
                       setOpenTui(false);
                     }}
                   />
-                  <FormControlLabel
+                  {/* <FormControlLabel
                     value={MaterialType.TYPE_VIDEO}
                     control={<Radio />}
                     label="교육영상"
@@ -321,7 +321,7 @@ export function LearningMaterialUploadForm({
                       onClickCloseSubTypeAndOpenOrigin();
                       setOpenTui(false);
                     }}
-                  />
+                  /> */}
                   <FormControlLabel
                     value={MaterialType.TYPE_OTHER_ORGAN}
                     control={<Radio />}

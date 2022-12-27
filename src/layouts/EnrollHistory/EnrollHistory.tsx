@@ -27,10 +27,10 @@ export function EnrollHistory() {
     enrollOrganization: string;
   }>();
 
-  const handleClose = () => {
+  const handleClose = async () => {
     setOpen(false);
     setTrafficOpen(false);
-    mutate();
+    await enrollMutate();
   };
   if (!data) return <Spinner />;
   if (!enrollData) return <Spinner />;
@@ -39,9 +39,7 @@ export function EnrollHistory() {
     <Box>
       <MyCourseContainer>
         <MyCourseTitle>온라인 교육 신청내역</MyCourseTitle>
-        <MyCourseSubTitle>
-          온라인 교육 신청내역을 확인하실 수 있습니다.
-        </MyCourseSubTitle>
+        <MyCourseSubTitle>온라인 교육 신청내역을 확인하실 수 있습니다.</MyCourseSubTitle>
       </MyCourseContainer>
       <EnrollHistoryWrap>
         {data.length <= 0 && enrollData.length <= 0 && (

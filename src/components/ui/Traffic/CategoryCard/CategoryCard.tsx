@@ -140,6 +140,7 @@ export function CategoryCard() {
                     // width: 'fit-content',
                     margin: 'auto',
                     padding: `${!isTablet ? '8px  32px' : '32px 58px'}`,
+                    // padding: '32px 58px',
                     borderRadius: '12px',
                     background: 'white',
                   }}

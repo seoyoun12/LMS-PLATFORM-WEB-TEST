@@ -279,18 +279,18 @@ const RemoteWrap = styled(Box)`
 `;
 
 export const ProvintialHeaderList = [
-  {
-    category: '교육이용안내',
-    href: '/traffic/guide?tab=TYPE_GUIDE_AUTH',
-    items: [
-      {
-        title: '회원가입 및 로그인',
-        href: '/traffic/guide?tab=TYPE_GUIDE_AUTH',
-      },
-      { title: '교육신청방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_REGI' },
-      { title: '학습방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_LEARNING' },
-    ],
-  },
+  // {
+  //   category: '교육이용안내',
+  //   href: '/traffic/guide?tab=TYPE_GUIDE_AUTH',
+  //   items: [
+  //     {
+  //       title: '회원가입 및 로그인',
+  //       href: '/traffic/guide?tab=TYPE_GUIDE_AUTH',
+  //     },
+  //     { title: '교육신청방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_REGI' },
+  //     { title: '학습방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_LEARNING' },
+  //   ],
+  // },
   {
     category: '학습자료',
     href: '/traffic/learning-material/learning-guide',
@@ -300,7 +300,7 @@ export const ProvintialHeaderList = [
         href: '/traffic/learning-material/learning-guide',
       },
       { title: '교육자료', href: '/traffic/learning-material/education' },
-      { title: '교육자료영상', href: '/traffic/learning-material/video' },
+      // { title: '교육자료영상', href: '/traffic/learning-material/video' }, // 20221226 비활성화 처리
       { title: '타기관자료모음', href: '/traffic/learning-material/reference' },
     ],
   },
@@ -308,18 +308,19 @@ export const ProvintialHeaderList = [
     category: '온라인교육',
     href: '/traffic/stebMove/steb2',
     items: [
-      { title: '온라인교육 신청', href: '/traffic/stebMove/steb2' },
-      { title: '온라인교육 수정', href: '/me/enroll-history' }, // 미완
-      { title: '온라인교육 시청', href: '/traffic/class-room' },
+      { title: '신청하기', href: '/traffic/stebMove/steb2' },
+      // { title: '온라인교육 수정', href: '/me/enroll-history' },  // 20221226 비활성화 처리
+      { title: '학습하기', href: '/traffic/class-room' },
     ],
   },
   {
-    category: '나의강의실',
-    href: '/me',
+    category: '마이페이지',
+    // href: '/me', // 20221226 변경
+    href: '/me/enroll-history',
     items: [
-      { title: '정보보기', href: '/me' },
-      { title: '정보수정', href: '/me/edit' },
-      { title: '온라인 교육 신청내역', href: '/me/enroll-history' },
+      // { title: '정보보기', href: '/me' }, // 20221226 비활성화 처리
+      // { title: '정보수정', href: '/me/edit' }, // 20221226 비활성화 처리
+      { title: '교육 신청내역', href: '/me/enroll-history' },
     ],
   },
   {

@@ -12,10 +12,18 @@ import { Spinner } from '@components/ui';
 import styled from '@emotion/styled';
 import { Table } from '@components/ui';
 import dateFormat from 'dateformat';
+import { YN } from '@common/constant';
+import { useSnackbar } from '@hooks/useSnackbar';
 import { useEffect, useState } from 'react';
+import { useDialog } from '@hooks/useDialog';
 import { useRouter } from 'next/router';
 import { courseTrafficList } from '@common/api/adm/course-traffic';
-import { CourseTrafficTargetType } from 'src/staticDataDescElements/staticType';
+import {
+  TargetMainType,
+  TargetMainTypeReg,
+  TargetSubType,
+  TargetSubTypeReg,
+} from 'src/staticDataDescElements/staticType';
 
 const headRows: {
   name: string;
@@ -31,6 +39,8 @@ const headRows: {
 ];
 
 export function CourseTrafficManagement() {
+  const snackbar = useSnackbar();
+  const dialog = useDialog();
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [seq, setSeq] = useState<number | null>(null);
@@ -103,32 +113,18 @@ export function CourseTrafficManagement() {
               </CourseTrafficTableCell>
               <CourseTrafficTableCell align="center">
                 {
-                  CourseTrafficTargetType.filter(
+                  TargetMainTypeReg.filter(
                     item => item.type === courseTraffic.eduTargetMain
                   )[0].ko
                 }
               </CourseTrafficTableCell>
-              {/* <CourseTrafficTableCell align="center">
-                {
-                  CourseTrafficTargetType.filter(item =>
-                    item.child.filter(item => item.type === courseTraffic.eduTargetSub)
-                  )[0].ko
-                }
-              </CourseTrafficTableCell> */}
               <CourseTrafficTableCell align="center">
                 {
-                  CourseTrafficTargetType.filter(
-                    item => item.type === courseTraffic.eduTargetMain
-                  )[0].child.filter(r => r.type === courseTraffic.eduTargetSub)[0].ko
-                }
-              </CourseTrafficTableCell>
-              {/* <CourseTrafficTableCell align="center">
-                {
-                  CourseTrafficTargetType.filter(item =>
-                    item.child.filter(item => item.type === courseTraffic.eduTargetSub)
+                  TargetSubTypeReg.filter(
+                    item => item.type === courseTraffic.eduTargetSub
                   )[0].ko
                 }
-              </CourseTrafficTableCell> */}
+              </CourseTrafficTableCell>
               <CourseTrafficTableCell align="center">
                 <SubjectBox>{courseTraffic.title}</SubjectBox>
               </CourseTrafficTableCell>

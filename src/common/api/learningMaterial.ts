@@ -181,6 +181,18 @@ export function useTrafficMediaBoard(eduTargetSub: EduTargetSubType) {
   };
 }
 
+// 20221227 추가. 권한조회
+export function useCheckProvincialRoles() {
+  const { data, error, mutate } = useSWR<
+    SWRResponse<ProvincialBoardResponseDto[]>
+  >(`/provincial/board/roles`, GET);
+  return {
+    roleCheck: data?.data,
+    roleError: error,
+    roleMutate: mutate,
+  };
+}
+
 export function getTrafficMediaBoard(eduTargetSub: EduTargetSubType) {
   return GET<{ data: ProvincialBoardResponseDto[] }>(
     `/provincial/board/all/${eduTargetSub}`
@@ -197,3 +209,6 @@ export function getTrafficMediaBoardDetail(boardSeq: number) {
 export function getTrafficMediaBoardRole() {
   return GET<{ data: ProvincialRoleResponseDto }>(`/provincial/board/roles`);
 }
+
+
+// 

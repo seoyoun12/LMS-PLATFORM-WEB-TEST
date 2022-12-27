@@ -29,3 +29,4 @@ export function getEnrollProvincialDetail(enrollSeq: number) {
 export function cancelEnrollProvincial(enrollSeq: number) {
   return DELETE(`/provincial/enroll/${enrollSeq}`);
 }
+

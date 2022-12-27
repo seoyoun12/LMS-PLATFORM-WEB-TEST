@@ -5,6 +5,7 @@ import {
   EduTargetMain,
   EduTargetMainType,
   getTrafficMediaBoardRole,
+  useCheckProvincialRoles,
 } from '@common/api/learningMaterial';
 import { GET } from '@common/httpClient';
 import { isLoginState, userInfo } from '@common/recoil';
@@ -27,9 +28,9 @@ import {
   MediaSubChipWrap,
 } from './style';
 
-interface MediaLayoutProps {
-  materialType: MaterialType;
-}
+// interface MediaLayoutProps {
+//   materialType: MaterialType;
+// }
 
 // export default function MediaLayout({ materialType }: MediaLayoutProps) {
 export default function ClassRoomLayout() {
@@ -40,6 +41,7 @@ export default function ClassRoomLayout() {
 
   // if (!isLogin) return <NotFound content="로그인이 필요한 서비스입니다." />;
   const { data } = useTrafficMediaBoard(eduSub);
+  const { roleCheck } = useCheckProvincialRoles();
 
   const handleClickPost = (id: number) => {
     router.push(`/traffic/class-room/${id}`);
@@ -52,6 +54,9 @@ export default function ClassRoomLayout() {
   };
 
   console.log('신청한 과정 확인 : ', data);
+
+  // 권한
+  console.log('roles : ', roleCheck);
 
   useEffect(() => {
     (async function () {

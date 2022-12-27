@@ -3,6 +3,7 @@ export { ContentCard } from './ContentCard';
 export { AccountMenu } from './AccountMenu';
 export { Menubar } from './Menubar';
 export { Accordion } from './Accordion';
+export { AccordionTest } from './AccordionTest';
 export { CategoryCarousel } from './CategoryCarousel';
 export { Table } from './Table';
 export { Tabs } from './Tabs';

@@ -17,6 +17,7 @@ import {
 import { ProvincialEnrollResponseDto } from '@common/api/Api';
 import { EduTargetMain, EduTargetSub } from '@common/api/learningMaterial';
 import { useSnackbar } from '@hooks/useSnackbar';
+import { useDialog } from '@hooks/useDialog';
 
 const filterEnrollPeoples = [
   'age3',
@@ -51,12 +52,27 @@ export function EnrollHistoryTrafficModal({
 }: Props) {
   const snackbar = useSnackbar();
   const [enrollDetailData, setEnrollDetailData] = useState<EnrollData>();
+  const dialog = useDialog();
 
   const handleEnrollCancel = async (enrollSeq: number) => {
     try {
-      await cancelEnrollProvincial(enrollSeq);
-      snackbar({ variant: 'success', message: '취소가 완료되었습니다.' });
-      handleClose();
+      const dialogConfirmed = await dialog({
+        title: '과정 취소하기',
+        description: (
+          <div>
+            <div>취소시 교육과정을 다시 신청하셔야 합니다.</div>
+            <div>정말로 취소하시겠습니까?</div>
+            {/* <div style={{ color: 'red', fontSize: '14px' }}>*복구가 불가능합니다.*</div> */}
+          </div>
+        ),
+        confirmText: '확인',
+        cancelText: '취소',
+      });
+      if (dialogConfirmed) {
+        await cancelEnrollProvincial(enrollSeq);
+        snackbar({ variant: 'success', message: '취소가 완료되었습니다.' });
+        handleClose();
+      }
     } catch (e) {
       console.log(e);
       snackbar({

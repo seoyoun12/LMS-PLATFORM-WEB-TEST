@@ -30,7 +30,7 @@ export function EnrollHistory() {
   const handleClose = async () => {
     setOpen(false);
     setTrafficOpen(false);
-    await enrollMutate();
+    await enrollMutate(); // provincialEnroll.ts에 enrullMutate로 되어있다. 20221227 변경
   };
   if (!data) return <Spinner />;
   if (!enrollData) return <Spinner />;

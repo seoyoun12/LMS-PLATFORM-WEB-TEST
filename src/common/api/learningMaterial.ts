@@ -182,9 +182,21 @@ export function useTrafficMediaBoard(eduTargetSub: EduTargetSubType) {
 }
 
 // 20221227 추가. 권한조회
+// export function useCheckProvincialRoles() {
+//   const { data, error, mutate } = useSWR<
+//     SWRResponse<ProvincialBoardResponseDto[]>
+//   >(`/provincial/board/roles`, GET);
+//   return {
+//     roleCheck: data?.data,
+//     roleError: error,
+//     roleMutate: mutate,
+//   };
+// }
+
+// 20221227 수정. 권한조회
 export function useCheckProvincialRoles() {
   const { data, error, mutate } = useSWR<
-    SWRResponse<ProvincialBoardResponseDto[]>
+    SWRResponse<ProvincialRoleResponseDto>
   >(`/provincial/board/roles`, GET);
   return {
     roleCheck: data?.data,

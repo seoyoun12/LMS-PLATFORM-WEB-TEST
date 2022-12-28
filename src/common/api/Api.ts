@@ -4145,8 +4145,10 @@ export interface FileMultipartCompleteRequestDto {
     | "RESOURCE_LIBRARY_FILE"
     | "RESOURCE_LESSON_FILE"
     | "RESOURCE_POST_NOTICE_FILE"
+    | "RESOURCE_POST_NOTICE_PROVINCIAL_FILE"
     | "RESOURCE_POST_QUESTION_FILE"
     | "RESOURCE_POST_FAQ_FILE"
+    | "RESOURCE_POST_FAQ_PROVINCIAL_FILE"
     | "RESOURCE_POST_REVIEW_FILE"
     | "RESOURCE_POST_GUIDE_AUTH"
     | "RESOURCE_POST_GUIDE_EDU_REG"
@@ -4179,8 +4181,10 @@ export interface FileMultipartCreateRequestDto {
     | "RESOURCE_LIBRARY_FILE"
     | "RESOURCE_LESSON_FILE"
     | "RESOURCE_POST_NOTICE_FILE"
+    | "RESOURCE_POST_NOTICE_PROVINCIAL_FILE"
     | "RESOURCE_POST_QUESTION_FILE"
     | "RESOURCE_POST_FAQ_FILE"
+    | "RESOURCE_POST_FAQ_PROVINCIAL_FILE"
     | "RESOURCE_POST_REVIEW_FILE"
     | "RESOURCE_POST_GUIDE_AUTH"
     | "RESOURCE_POST_GUIDE_EDU_REG"
@@ -5598,8 +5602,10 @@ export interface PostDetailResponseDto {
   /** 타입 구분 */
   boardType?:
     | "TYPE_NOTICE"
+    | "TYPE_NOTICE_PROVINCIAL"
     | "TYPE_REVIEW"
     | "TYPE_FAQ"
+    | "TYPE_FAQ_PROVINCIAL"
     | "TYPE_GUIDE_AUTH"
     | "TYPE_GUIDE_EDU_REGI"
     | "TYPE_GUIDE_EDU_LEARNING";
@@ -5678,8 +5684,10 @@ export interface PostResponseDto {
   /** 타입 구분 */
   boardType?:
     | "TYPE_NOTICE"
+    | "TYPE_NOTICE_PROVINCIAL"
     | "TYPE_REVIEW"
     | "TYPE_FAQ"
+    | "TYPE_FAQ_PROVINCIAL"
     | "TYPE_GUIDE_AUTH"
     | "TYPE_GUIDE_EDU_REGI"
     | "TYPE_GUIDE_EDU_LEARNING";
@@ -5761,8 +5769,10 @@ export interface PostSaveRequestDto {
   /** 타입 구분 */
   boardType?:
     | "TYPE_NOTICE"
+    | "TYPE_NOTICE_PROVINCIAL"
     | "TYPE_REVIEW"
     | "TYPE_FAQ"
+    | "TYPE_FAQ_PROVINCIAL"
     | "TYPE_GUIDE_AUTH"
     | "TYPE_GUIDE_EDU_REGI"
     | "TYPE_GUIDE_EDU_LEARNING";
@@ -6406,7 +6416,16 @@ export interface ProvincialEnrollUpdateRequestDto {
 
 export interface ProvincialRoleResponseDto {
   /**
-   * 권한
+   * 메인 권한
+   *  *     TYPE_CHILDREN: 어린이
+   *  *     TYPE_TEENAGER: 청소년
+   *  *     TYPE_ELDERLY: 노인
+   *  *     TYPE_SELF_DRIVING: 자가운전자
+   */
+  mainRoles?: string[];
+
+  /**
+   * 서브 권한
    *  * TYPE_KINDERGARTEN: 유치원
    *  * TYPE_ELEMENTARY: 초등학교
    *  * TYPE_MIDDLE: 중학교
@@ -6414,7 +6433,7 @@ export interface ProvincialRoleResponseDto {
    *  * TYPE_SELF_DRIVER: 자가운전자
    *  * TYPE_ELDERLY: 노인
    */
-  roles?: string[];
+  subRoles?: string[];
 
   /**
    * 유저 시퀀스
@@ -11119,8 +11138,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           | "RESOURCE_LIBRARY_FILE"
           | "RESOURCE_LESSON_FILE"
           | "RESOURCE_POST_NOTICE_FILE"
+          | "RESOURCE_POST_NOTICE_PROVINCIAL_FILE"
           | "RESOURCE_POST_QUESTION_FILE"
           | "RESOURCE_POST_FAQ_FILE"
+          | "RESOURCE_POST_FAQ_PROVINCIAL_FILE"
           | "RESOURCE_POST_REVIEW_FILE"
           | "RESOURCE_POST_GUIDE_AUTH"
           | "RESOURCE_POST_GUIDE_EDU_REG"
@@ -11280,8 +11301,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       bbsType:
         | "TYPE_FORUM"
         | "TYPE_POST_FAQ"
+        | "TYPE_POST_FAQ_PROVINCIAL"
         | "TYPE_POST_REVIEW"
         | "TYPE_POST_NOTICE"
+        | "TYPE_POST_NOTICE_PROVINCIAL"
         | "TYPE_POST_GUIDE_AUTH"
         | "TYPE_POST_GUIDE_EDU_REG"
         | "TYPE_POST_GUIDE_EDU_LEARNING"
@@ -11318,8 +11341,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       bbsType:
         | "TYPE_FORUM"
         | "TYPE_POST_FAQ"
+        | "TYPE_POST_FAQ_PROVINCIAL"
         | "TYPE_POST_REVIEW"
         | "TYPE_POST_NOTICE"
+        | "TYPE_POST_NOTICE_PROVINCIAL"
         | "TYPE_POST_GUIDE_AUTH"
         | "TYPE_POST_GUIDE_EDU_REG"
         | "TYPE_POST_GUIDE_EDU_LEARNING"
@@ -11960,8 +11985,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query: {
         boardType:
           | "TYPE_NOTICE"
+          | "TYPE_NOTICE_PROVINCIAL"
           | "TYPE_REVIEW"
           | "TYPE_FAQ"
+          | "TYPE_FAQ_PROVINCIAL"
           | "TYPE_GUIDE_AUTH"
           | "TYPE_GUIDE_EDU_REGI"
           | "TYPE_GUIDE_EDU_LEARNING";
@@ -12005,8 +12032,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query: {
         boardType:
           | "TYPE_NOTICE"
+          | "TYPE_NOTICE_PROVINCIAL"
           | "TYPE_REVIEW"
           | "TYPE_FAQ"
+          | "TYPE_FAQ_PROVINCIAL"
           | "TYPE_GUIDE_AUTH"
           | "TYPE_GUIDE_EDU_REGI"
           | "TYPE_GUIDE_EDU_LEARNING";

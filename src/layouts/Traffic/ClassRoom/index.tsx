@@ -57,6 +57,7 @@ export default function ClassRoomLayout() {
 
   // 권한
   console.log('roles : ', roleCheck);
+  console.log('roles 자세히 : ', roleCheck.mainRoles);
 
   useEffect(() => {
     (async function () {
@@ -65,7 +66,7 @@ export default function ClassRoomLayout() {
         const getEduMain = eduArr.filter(r => {
           let flag = false;
           r.child.forEach(c => {
-            if (c.eduSubType === roleData.data.roles[0]) flag = true;
+            if (c.eduSubType === roleData.data.subRoles[0]) flag = true;
           });
           return flag;
         });

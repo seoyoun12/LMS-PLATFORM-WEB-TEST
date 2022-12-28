@@ -30,7 +30,6 @@ import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
 import { useRouter } from 'next/router';
 import { Accordion } from '@components/ui';
-// import { AccordionTest } from '@components/ui';
 import { logout } from '@common/api';
 import Logo from 'public/assets/svgs/logo.svg';
 import Image from 'next/image';
@@ -330,7 +329,6 @@ export function Drawer({ children }: { children: ReactNode }) {
               </ListItem>
             </Link> */}
             <Accordion accordionList={accordionList} />
-            {/* <AccordionTest accordionList={accordionList} /> */}
           </List>
         </Box>
       </MuiDrawer>

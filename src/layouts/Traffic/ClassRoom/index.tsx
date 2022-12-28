@@ -5,7 +5,6 @@ import {
   EduTargetMain,
   EduTargetMainType,
   getTrafficMediaBoardRole,
-  useCheckProvincialRoles,
 } from '@common/api/learningMaterial';
 import { GET } from '@common/httpClient';
 import { isLoginState, userInfo } from '@common/recoil';

@@ -36,6 +36,7 @@ export default function ClassRoomLayout() {
   const router = useRouter();
   const [eduMain, setEduMain] = useState<EduTargetMainType>('TYPE_CHILDREN');
   const [eduSub, setEduSub] = useState<EduTargetSubType>('TYPE_KINDERGARTEN');
+  const [chipAllowed , setChipAllowed] = useState<{eduTargetMain:EduTargetMainType[], eduTargetSub:EduTargetSubType[]}>()
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
 
   // if (!isLogin) return <NotFound content="로그인이 필요한 서비스입니다." />;
@@ -46,26 +47,32 @@ export default function ClassRoomLayout() {
   };
 
   const handleMainChipClick = (eduMainType: EduTargetMainType) => {
-    const getFirstChild = eduArr.filter(r => r.eduMainType === eduMainType)[0].child[0];
+    const getChildAllowedSub = eduArr.filter(f=>f.eduMainType === eduMainType)[0].child.filter(f=>chipAllowed.eduTargetSub.includes(f.eduSubType))
     setEduMain(eduMainType);
-    setEduSub(getFirstChild.eduSubType);
+    setEduSub(getChildAllowedSub[0].eduSubType);
   };
 
-  console.log('신청한 과정 확인 : ', data);
 
   useEffect(() => {
     (async function () {
       try {
         const roleData = await getTrafficMediaBoardRole();
+        const roleDataMainRoles = roleData.data.mainRoles
+        const roleDataSubRoles = roleData.data.subRoles
+        //indexOf의 첫 아이템의 위치가 반환됩니다. 필터의 idx가 계속 돌면 첫 아이템 위치랑 같을 경우에만 반환하므로 결국엔 중복이 제거됩니다.
+        const eduMainRemoveDuplication = roleDataMainRoles.filter((f, idx)=> roleDataMainRoles.indexOf(f) === idx) as EduTargetMainType[]
+        const eduSubRemoveDeplication = roleDataSubRoles.filter((f,idx)=> roleDataSubRoles.indexOf(f) === idx) as EduTargetSubType[]
+        setChipAllowed({ eduTargetMain:eduMainRemoveDuplication, eduTargetSub:eduSubRemoveDeplication })
         const getEduMain = eduArr.filter(r => {
           let flag = false;
           r.child.forEach(c => {
-            if (c.eduSubType === roleData.data.roles[0]) flag = true;
+            if (c.eduSubType === roleData.data.subRoles[0]) flag = true;
           });
           return flag;
         });
+        const getChildAllowedSub = getEduMain[0].child.filter(f=> roleDataSubRoles.includes(f.eduSubType))
         setEduMain(getEduMain[0].eduMainType);
-        setEduSub(getEduMain[0].child[0].eduSubType);
+        setEduSub(getChildAllowedSub[0].eduSubType);
       } catch (e) {
         console.log(e);
       }
@@ -75,7 +82,7 @@ export default function ClassRoomLayout() {
   return (
     <MediaContainer>
       <MediaMainChipWrap>
-        {eduArr.map(r => (
+        {eduArr.filter(f=>chipAllowed?.eduTargetMain.includes(f.eduMainType) ).map(r => (
           <MediaChipItem
             label={r.eduMainTypeKo}
             color="primary"
@@ -86,8 +93,10 @@ export default function ClassRoomLayout() {
       </MediaMainChipWrap>
       <MediaSubChipWrap>
         {eduArr
-          .filter(r => r.eduMainType === eduMain)[0]
-          .child.map(r => (
+        .filter(f => f.eduMainType === eduMain)[0]
+        .child
+        .filter(f=> chipAllowed?.eduTargetSub.includes(f.eduSubType))
+        .map(r => (
             <MediaChipItem
               label={r.eduSubTypeKo}
               color="success"

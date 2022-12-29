@@ -1,15 +1,16 @@
 import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
 import {
+  CategoryBoard,
   CategoryBoardInput,
   modifyCategoryBoard,
   useCategoryBoard,
 } from '@common/api/categoryBoard';
+import { CategoryUploadForm } from '@components/admin-center';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import styles from '@styles/common.module.scss';
 import { Spinner } from '@components/ui';
-import { CategoryTrafficUploadForm } from '@components/admin-center/CategoryTrafficUploadForm';
 
 export function CategoryModify() {
   const router = useRouter();
@@ -83,7 +84,7 @@ export function CategoryModify() {
 
   return (
     <Container className={styles.globalContainer}>
-      <CategoryTrafficUploadForm
+      <CategoryUploadForm
         mode="modify"
         category={data}
         courseSeq={data?.courseSeq}

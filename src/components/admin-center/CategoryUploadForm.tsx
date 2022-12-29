@@ -32,8 +32,6 @@ import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import router from 'next/router';
 import { Spinner } from '@components/ui';
-import { Label } from '@mui/icons-material';
-import { flexbox } from '@mui/system';
 
 interface Props {
   mode?: 'upload' | 'modify';

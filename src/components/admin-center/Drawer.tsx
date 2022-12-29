@@ -85,13 +85,13 @@ export function Drawer({ children }: { children: ReactNode }) {
       children: [
         {
           name: '게시판 목록',
-          href: '/admin-center/category',
-          isActive: router.pathname === '/admin-center/category',
+          href: '/admin-center/category-traffic',
+          isActive: router.pathname === '/admin-center/category-traffic',
         },
         {
           name: '게시판 등록',
-          href: '/admin-center/category/upload',
-          isActive: router.pathname === '/admin-center/category/upload',
+          href: '/admin-center/category-traffic/upload',
+          isActive: router.pathname === '/admin-center/category-traffic/upload',
         },
       ],
       icon: <ListAltIcon sx={{ mr: '32px', color: grey[700] }} />,

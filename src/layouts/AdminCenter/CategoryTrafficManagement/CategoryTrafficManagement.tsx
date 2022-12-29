@@ -169,7 +169,7 @@ export function CategoryTrafficManagement() {
         ))}
       </RadioGroup>
 
-      <CategoryTypography variant="h5">게시판 목록</CategoryTypography>
+      <CategoryTypography variant="h5">게시판 (도민) 목록</CategoryTypography>
 
       <Table
         pagination={true}

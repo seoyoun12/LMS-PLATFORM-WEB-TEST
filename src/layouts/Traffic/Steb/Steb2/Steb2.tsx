@@ -33,6 +33,7 @@ import { CourseClassTraffic } from '@common/recoil/courseClassTraffic/atom';
 import { enrollProvincial } from '@common/api/provincialEnroll';
 import { ProvincialEnrollSaveRequestDto } from '@common/api/Api';
 import { Spinner } from '@components/ui';
+import { EduTargetMainType } from '@common/api/learningMaterial';
 // import { enrollCourseUserProvincial } from '@common/api/courseUser';
 // import { CourseUserProvincialSaveRequestDto } from '@common/api/Api';
 
@@ -55,16 +56,22 @@ export function Steb2() {
     HIGH_SCHOOL: { grade1: 0, grade2: 0, grade3: 0 },
   });
 
-  const { register, setValue, watch, reset } = useForm<ProvincialEnrollSaveRequestDto>({
-    defaultValues: {
-      expectedToStartDtime: dateFormat(new Date(), 'yyyy-mm-dd'),
-    },
-  });
+  const { register, setValue, watch, reset } =
+    useForm<ProvincialEnrollSaveRequestDto>({
+      defaultValues: {
+        expectedToStartDtime: dateFormat(new Date(), 'yyyy-mm-dd'),
+      },
+    });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { region, organization, expectedToStartDtime, eduTargetMain, eduTargetSub } =
-      watch();
+    const {
+      region,
+      organization,
+      expectedToStartDtime,
+      eduTargetMain,
+      eduTargetSub,
+    } = watch();
 
     let isPeople = null;
     for (let [key, obj] of Object.entries(detailCounts)) {
@@ -81,7 +88,8 @@ export function Steb2() {
       !eduTargetSub
     )
       return window.alert('모두 입력해 주세요!');
-    if (!isPeople || isPeople <= 0) return window.alert('교육생 명수를 기입해주세요!');
+    if (!isPeople || isPeople <= 0)
+      return window.alert('교육생 명수를 기입해주세요!');
 
     try {
       const obj = watch();
@@ -92,12 +100,17 @@ export function Steb2() {
       router.push('steb3');
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    setValue('eduTargetMain', router.query.eduTargetMain as EduTargetMainType);
+  }, []);
+
   return (
     <Steb2Wrap>
-      <StebHeader value={1} />
+      <StebHeader value={2} />
       <Container
         component="form"
         onSubmit={handleSubmit}
@@ -126,7 +139,10 @@ export function Steb2() {
           </Select>
         </FormControl>
         <FormControl fullWidth>
-          <TextField label="소속(학교, 기관, 단체)" {...register('organization')} />
+          <TextField
+            label="소속(학교, 기관, 단체)"
+            {...register('organization')}
+          />
           <FormHelperText sx={{ color: 'red' }}></FormHelperText>
         </FormControl>
         <DatePicker
@@ -140,7 +156,9 @@ export function Steb2() {
           onChange={date =>
             setValue(
               'expectedToStartDtime',
-              date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd')
+              date
+                ? dateFormat(date, 'yyyy-mm-dd')
+                : dateFormat(new Date(), 'yyyy-mm-dd')
             )
           }
         />
@@ -150,6 +168,8 @@ export function Steb2() {
             labelId="student"
             id="student"
             {...register('eduTargetMain')}
+            value={router.query.eduTargetMain}
+            disabled
             // label="student"
           >
             {studentList.map((item, index) => (
@@ -167,7 +187,9 @@ export function Steb2() {
             {...register('eduTargetSub')}
           >
             {studentList
-              .filter(studentList => watch().eduTargetMain === studentList.enType)[0]
+              .filter(
+                studentList => watch().eduTargetMain === studentList.enType
+              )[0]
               ?.category.map(({ type, enType, ageList }) => (
                 <MenuItem key={enType} value={enType}>
                   {type}

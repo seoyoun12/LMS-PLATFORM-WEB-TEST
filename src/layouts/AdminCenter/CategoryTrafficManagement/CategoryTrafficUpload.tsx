@@ -1,11 +1,10 @@
 import styles from '@styles/common.module.scss';
 import { Container } from '@mui/material';
-import { CategoryUploadForm } from '@layouts/AdminCenter';
+import { CategoryTrafficUploadForm } from '@layouts/AdminCenter';
 import {
   CategoryBoard,
   CategoryBoardInput,
   uploadCategoryBoard,
-  useCategoryBoard,
 } from '@common/api/categoryBoard';
 import { BbsType, uploadFile } from '@common/api/adm/file';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -19,12 +18,7 @@ export function CategoryTrafficUpload() {
     if (isFileUpload) {
       await uploadFile({
         fileTypeId: category.seq,
-        fileType:
-          BbsType.TYPE_POST_NOTICE ||
-          BbsType.TYPE_POST_FAQ ||
-          BbsType.TYPE_POST_GUIDE_AUTH ||
-          BbsType.TYPE_POST_GUIDE_EDU_REGI ||
-          BbsType.TYPE_POST_GUIDE_EDU_LEARNING, // Type Setting 필요
+        fileType: BbsType.TYPE_POST_NOTICE_PROVINCIAL || BbsType.TYPE_POST_FAQ_PROVINCIAL,
         files,
       });
     }
@@ -44,7 +38,7 @@ export function CategoryTrafficUpload() {
       const category = await uploadCategoryBoard(categoryBoardInput); // 게시판 내용 업로드. 파일보다 먼저
       await fileHandler(files, category.data); // 파일업로드. 게시판 뒤
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
-      router.push(`/admin-center/category`);
+      router.push(`/admin-center/category-traffic`);
       setLoading(false);
     } catch (e: any) {
       console.error(e);
@@ -55,7 +49,7 @@ export function CategoryTrafficUpload() {
 
   return (
     <Container className={styles.globalContainer}>
-      <CategoryUploadForm
+      <CategoryTrafficUploadForm
         // mode = { seq ? "modify" : "upload" }
         onHandleSubmit={handleSubmit}
       />

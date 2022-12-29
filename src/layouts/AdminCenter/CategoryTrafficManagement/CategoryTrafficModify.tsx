@@ -1,16 +1,15 @@
 import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
 import {
-  CategoryBoard,
   CategoryBoardInput,
   modifyCategoryBoard,
   useCategoryBoard,
 } from '@common/api/categoryBoard';
-import { CategoryUploadForm } from '@components/admin-center';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import styles from '@styles/common.module.scss';
 import { Spinner } from '@components/ui';
+import { CategoryTrafficUploadForm } from '@components/admin-center/CategoryTrafficUploadForm';
 
 export function CategoryTrafficModify() {
   const router = useRouter();
@@ -33,7 +32,7 @@ export function CategoryTrafficModify() {
         await modifyCategoryBoard({ seq: data?.seq, categoryBoardInput });
         await fileHandler(files);
         snackbar({ variant: 'success', message: '수정 되었습니다.' });
-        router.push(`/admin-center/category`);
+        router.push(`/admin-center/category-traffic`);
         setLoading(false);
       }
     } catch (e: any) {
@@ -47,33 +46,19 @@ export function CategoryTrafficModify() {
     if (files == undefined) {
       await deleteFile({
         fileTypeId: data?.seq,
-        fileType:
-          BbsType.TYPE_POST_NOTICE ||
-          BbsType.TYPE_POST_FAQ ||
-          BbsType.TYPE_POST_GUIDE_AUTH ||
-          BbsType.TYPE_POST_GUIDE_EDU_REGI ||
-          BbsType.TYPE_POST_GUIDE_EDU_LEARNING, // Type Setting 필요
+        fileType: BbsType.TYPE_POST_NOTICE_PROVINCIAL || BbsType.TYPE_POST_FAQ_PROVINCIAL,
         fileSeqList: data.s3Files.map(v => v.seq),
       });
     } else if (files.length > 0) {
       await deleteFile({
         fileTypeId: data?.seq,
-        fileType:
-          BbsType.TYPE_POST_NOTICE ||
-          BbsType.TYPE_POST_FAQ ||
-          BbsType.TYPE_POST_GUIDE_AUTH ||
-          BbsType.TYPE_POST_GUIDE_EDU_REGI ||
-          BbsType.TYPE_POST_GUIDE_EDU_LEARNING, // Type Setting 필요
+        fileType: BbsType.TYPE_POST_NOTICE_PROVINCIAL || BbsType.TYPE_POST_FAQ_PROVINCIAL,
+
         fileSeqList: data.s3Files.map(v => v.seq),
       });
       await uploadFile({
         fileTypeId: data?.seq,
-        fileType:
-          BbsType.TYPE_POST_NOTICE ||
-          BbsType.TYPE_POST_FAQ ||
-          BbsType.TYPE_POST_GUIDE_AUTH ||
-          BbsType.TYPE_POST_GUIDE_EDU_REGI ||
-          BbsType.TYPE_POST_GUIDE_EDU_LEARNING, // Type Setting 필요
+        fileType: BbsType.TYPE_POST_NOTICE_PROVINCIAL || BbsType.TYPE_POST_FAQ_PROVINCIAL,
         files,
       });
     }
@@ -84,7 +69,7 @@ export function CategoryTrafficModify() {
 
   return (
     <Container className={styles.globalContainer}>
-      <CategoryUploadForm
+      <CategoryTrafficUploadForm
         mode="modify"
         category={data}
         courseSeq={data?.courseSeq}

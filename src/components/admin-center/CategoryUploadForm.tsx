@@ -155,7 +155,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
         className={boxStyles}
       >
         <FormControl className={pt20}>
-          <FormLabel focused={false}>게시판타입</FormLabel>
+          <FormLabel focused={false}>게시판타입(운수/저상)</FormLabel>
           <Controller
             rules={{ required: true }}
             control={control}

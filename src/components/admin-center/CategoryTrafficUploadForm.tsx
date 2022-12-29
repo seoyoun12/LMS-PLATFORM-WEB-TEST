@@ -19,7 +19,6 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  Typography,
 } from '@mui/material';
 import { TuiEditor } from '@components/common/TuiEditor';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -32,14 +31,11 @@ import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import router from 'next/router';
 import { Spinner } from '@components/ui';
-import { Label } from '@mui/icons-material';
-import { flexbox } from '@mui/system';
 
 interface Props {
   mode?: 'upload' | 'modify';
   category?: CategoryBoardInput;
   courseSeq?: number;
-  // onHandleSubmit: ({ categoryBoardInput, files, categorySeq, isFileDelete , courseSeq } :{
   onHandleSubmit: ({
     categoryBoardInput,
     files,
@@ -49,7 +45,6 @@ interface Props {
   }: {
     categoryBoardInput: CategoryBoardInput;
     files?: File[];
-    // isFileDelete: boolean;
     categorySeq?: number;
     courseSeq?: number;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -61,12 +56,7 @@ interface FormType extends CategoryBoardInput {
 }
 
 const defaultValues = {
-  boardType: BoardType.TYPE_NOTICE,
-  // TYPE_NOTICE -> 공지사항
-  // TYPE_FAQ -> 자주묻는질문
-  // TYPE_GUIDE_AUTH -> 회원가입 및 로그인
-  // TYPE_GUIDE_EDU_REGI -> 교육신청방법
-  // TYPE_GUIDE_EDU_LEARNING -> 학습방법
+  boardType: BoardType.TYPE_NOTICE_PROVINCIAL,
   noticeYn: YN.YES,
   publicYn: YN.YES,
   status: ProductStatus.APPROVE,
@@ -79,7 +69,6 @@ export function CategoryTrafficUploadForm({
   onHandleSubmit,
 }: Props) {
   const editorRef = useRef<EditorType>(null);
-  // const [ isFileDelete, setIsFileDelete ] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const dialog = useDialog();
   const snackbar = useSnackbar();
@@ -106,28 +95,25 @@ export function CategoryTrafficUploadForm({
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setFileName(files[0].name);
-    // setIsFileDelete(false);
   };
 
   const handleDeleteFile = async () => {
     resetField('files');
     setFileName(null);
-    // setIsFileDelete(true);
   };
 
-  const onClickRemoveCategory = async (seq: number) => {
+  const onClickRemoveCategoryTraffic = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
-        title: '공지사항 삭제하기',
+        title: '삭제하기',
         description: '정말로 삭제하시겠습니까?',
-        confirmText: '삭제하기',
+        confirmText: '확인',
         cancelText: '취소',
       });
       if (dialogConfirmed) {
         await removeCategoryBoard(seq);
         snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-        router.push(`/admin-center/category`);
-        // await mutate();
+        router.push(`/admin-center/category-traffic`);
       }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -145,7 +131,6 @@ export function CategoryTrafficUploadForm({
       content: markdownContent,
       contentHtml: contentHtml,
     };
-    // onHandleSubmit({ categoryBoardInput, files, isFileDelete });
     onHandleSubmit({ categoryBoardInput, files, setLoading });
   };
 
@@ -159,7 +144,7 @@ export function CategoryTrafficUploadForm({
         className={boxStyles}
       >
         <FormControl className={pt20}>
-          <FormLabel focused={false}>게시판타입</FormLabel>
+          <FormLabel focused={false}>게시판타입(도민)</FormLabel>
           <Controller
             rules={{ required: true }}
             control={control}
@@ -167,32 +152,15 @@ export function CategoryTrafficUploadForm({
             render={({ field }) => (
               <RadioGroup row {...field}>
                 <FormControlLabel
-                  value={'TYPE_NOTICE'}
+                  value={'TYPE_NOTICE_PROVINCIAL'}
                   control={<Radio />}
                   label="공지사항"
                 />
                 <FormControlLabel
-                  value={'TYPE_FAQ'}
+                  value={'TYPE_FAQ_PROVINCIAL'}
                   control={<Radio />}
                   label="자주묻는질문"
                 />
-                {/* <FormControlLabel
-                  value={'TYPE_GUIDE_AUTH'}
-                  control={<Radio />}
-                  label="회원가입 및 로그인"
-                />
-                <FormControlLabel
-                  value={'TYPE_GUIDE_EDU_REGI'}
-                  control={<Radio />}
-                  label="교육신청방법"
-                />
-                <FormControlLabel
-                  value={'TYPE_GUIDE_EDU_LEARNING'}
-                  control={<Radio />}
-                  label="학습방법"
-                /> */}
-                {/* <FormControlLabel value={"TYPE_REVIEW"} control={<Radio />} label="문의 내역" /> */}
-                {/* <FormControlLabel value={YN.NO} control={<Radio />} label="공개N" /> */}
               </RadioGroup>
             )}
           />
@@ -220,7 +188,6 @@ export function CategoryTrafficUploadForm({
         />
 
         <FormLabel sx={{ mt: 2, mb: 1 }}>첨부파일업로드</FormLabel>
-        {/* <div className="board-uploader" style={{ border: '1px solid black' }}> */}
         <div className="board-uploader">
           <FileUploader
             register={register}
@@ -231,7 +198,6 @@ export function CategoryTrafficUploadForm({
           </FileUploader>
           {fileName ? (
             <Chip
-              // sx={{ mt: '8px' }}
               icon={<OndemandVideoOutlinedIcon />}
               label={fileName}
               onDelete={handleDeleteFile}
@@ -270,28 +236,6 @@ export function CategoryTrafficUploadForm({
           />
         </FormControl>
 
-        {/* <FormControl className={pt20}>
-          <FormLabel focused={false}>상태</FormLabel>
-          <Controller
-            rules={{ required: true }}
-            control={control}
-            name="status"
-            render={({ field }) => (
-              <RadioGroup row {...field}>
-                <FormControlLabel
-                  value={ProductStatus.APPROVE}
-                  control={<Radio />}
-                  label="정상"
-                />
-                <FormControlLabel
-                  value={ProductStatus.REJECT}
-                  control={<Radio />}
-                  label="중지"
-                />{' '}
-              </RadioGroup>
-            )}
-          />
-        </FormControl> */}
         <ButtonBox>
           <SubmitBtn variant="contained" type="submit" disabled={loading}>
             {loading ? (
@@ -308,7 +252,7 @@ export function CategoryTrafficUploadForm({
             <DeleteBtn
               color="warning"
               variant="contained"
-              onClick={() => onClickRemoveCategory(category.seq)}
+              onClick={() => onClickRemoveCategoryTraffic(category.seq)}
               disabled={loading}
             >
               {loading ? <Spinner fit={true} /> : '삭제'}

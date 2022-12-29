@@ -197,7 +197,7 @@ export function useTrafficMediaBoard(eduTargetSub: EduTargetSubType) {
 export function getTrafficMediaBoard(eduTargetSub: EduTargetSubType) {
   return GET<{ data: ProvincialBoardResponseDto[] }>(
     `/provincial/board/all/${eduTargetSub}`
-  );
+  ); 
 }
 
 //교육 영상 게시판 상세 불러오기
@@ -211,5 +211,3 @@ export function getTrafficMediaBoardRole() {
   return GET<{ data: ProvincialRoleResponseDto }>(`/provincial/board/roles`);
 }
 
-
-// 

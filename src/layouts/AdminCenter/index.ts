@@ -20,11 +20,17 @@ export { ContentModify } from "./ContentManagement/ContentModify";
 export { ContentUploadForm } from "@components/admin-center/ContentUploadForm";
 
 export { UserManagement } from "./UserManagement/UserManagement";
-
+// 운수 / 저상 게시판
 export { CategoryManagement } from "./CategoryManagement/CategoryManagement";
 export { CategoryUpload } from "./CategoryManagement/CategoryUpload";
 export { CategoryModify } from "./CategoryManagement/CategoryModify";
 export { CategoryUploadForm } from "@components/admin-center/CategoryUploadForm";
+// 도민 게시판
+export { CategoryTrafficManagement } from "./CategoryTrafficManagement/CategoryTrafficManagement";
+export { CategoryTrafficUpload } from "./CategoryTrafficManagement/CategoryTrafficUpload";
+export { CategoryTrafficModify } from "./CategoryTrafficManagement/CategoryTrafficModify";
+export { CategoryTrafficUploadForm } from "@components/admin-center/CategoryTrafficUploadForm";
+
 export { CalendarManagement } from "./CalendarManagement/CalendarManagement";
 export { CalendarUpload } from "./CalendarManagement/CalendarUpload";
 export { CalendarModify } from "./CalendarManagement/CalendarModify";

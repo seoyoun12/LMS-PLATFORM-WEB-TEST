@@ -303,7 +303,12 @@ export function CourseInformation({
     setValue('carNumber', carNumber);
     // console.log('차량번호 carNumber : ', carNumber);
     // console.log('차량번호 watch().carNumber : ', watch().carNumber);
-  }, [watch().firstNum, watch().firstStr, watch().secondNum, watch().secondStr]);
+  }, [
+    watch().firstNum,
+    watch().firstStr,
+    watch().secondNum,
+    watch().secondStr,
+  ]);
 
   // 차량번호 disabled
   // useEffect(() => {
@@ -321,7 +326,10 @@ export function CourseInformation({
   ) => {
     if (!carNumberRegex.test(watch().carNumber) && !disabledCarNumber) {
       // 정규표현식 적용
-      return snackbar({ variant: 'error', message: '차량번호를 정확히 기입해주십시오.' });
+      return snackbar({
+        variant: 'error',
+        message: '차량번호를 정확히 기입해주십시오.',
+      });
     }
     if (watch().carNumber.length < 9) {
       setValue('carNumber', ''); // 차후 null처리 요망
@@ -383,7 +391,10 @@ export function CourseInformation({
         </TableRow>
       </TableBody>
 
-      <TableHeadFull colSpan={4} sx={{ display: 'table', width: '100%', mt: '10px' }}>
+      <TableHeadFull
+        colSpan={4}
+        sx={{ display: 'table', width: '100%', mt: '10px' }}
+      >
         업체정보
       </TableHeadFull>
 
@@ -415,7 +426,9 @@ export function CourseInformation({
           <TableRightCell>
             <FormControl fullWidth>
               <TextField
-                {...register('businessName', { required: '회사명을 입력해주세요.' })}
+                {...register('businessName', {
+                  required: '회사명을 입력해주세요.',
+                })}
                 value={watch().businessName || ''}
                 label="회사명"
                 variant="outlined"
@@ -522,7 +535,10 @@ export function CourseInformation({
         </TableRow>
       </TableBody>
 
-      <TableHeadFull colSpan={4} sx={{ display: 'table', width: '100%', mt: '3px' }}>
+      <TableHeadFull
+        colSpan={4}
+        sx={{ display: 'table', width: '100%', mt: '3px' }}
+      >
         교육신청자 정보
       </TableHeadFull>
 
@@ -566,7 +582,11 @@ export function CourseInformation({
                 // type="number"
                 value={watch().phone || ''}
               />
-              <ErrorMessage errors={errors} name="phone" as={<FormHelperText error />} />
+              <ErrorMessage
+                errors={errors}
+                name="phone"
+                as={<FormHelperText error />}
+              />
             </FormControl>
           </TableRightCell>
         </TableRow>

@@ -104,7 +104,7 @@ const categoryData = [
   },
 ];
 
-export function CategoryCard() {
+export default function CategoryCard() {
   const isTablet = useResponsive(1028);
   return (
     // <ContentContainer className={styles.globalContainer}>

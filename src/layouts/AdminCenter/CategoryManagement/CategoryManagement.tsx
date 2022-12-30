@@ -119,9 +119,9 @@ export function CategoryManagement() {
   const onClickRemoveCategory = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
-        title: '공지사항 삭제하기',
+        title: '삭제하기',
         description: '정말로 삭제하시겠습니까?',
-        confirmText: '삭제하기',
+        confirmText: '확인',
         cancelText: '취소',
       });
       if (dialogConfirmed) {
@@ -155,7 +155,7 @@ export function CategoryManagement() {
   return (
     <Box>
       <Typography fontSize={30} fontWeight="bold">
-        게시판 구분
+        게시판 구분 (운수/저상)
       </Typography>
       <RadioGroup row sx={{ mb: 6 }}>
         {tabsConfig.map(({ name, value }: { name: string; value: string }) => (

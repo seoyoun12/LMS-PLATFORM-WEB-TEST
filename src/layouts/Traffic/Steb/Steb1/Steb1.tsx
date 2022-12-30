@@ -5,20 +5,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { StebHeader } from '../StebHeader';
 
+// 도민교통교육 교육대상자 선택 card 화면
 export function Steb1() {
   return (
     <Steb1Wrap>
       <StebHeader value={1} />
       <EduTargetCardsWrap>
         {eduTargetList.map(r => (
-          <Link
-            key={r.title}
-            href={`/traffic/stebMove/steb2?eduTargetMain=${r.target}`}
-          >
+          <Link key={r.title} href={`/traffic/stebMove/steb2?eduTargetMain=${r.target}`}>
             <a>
-              <EduTargetCard
-                sx={{ borderBottom: `2px solid ${r.borderBottomColor}` }}
-              >
+              <EduTargetCard sx={{ borderBottom: `2px solid ${r.borderBottomColor}` }}>
                 <EduTargetCardImgWrap>
                   {/* <NotFound
                     content="이미지가 존재하지 않습니다."

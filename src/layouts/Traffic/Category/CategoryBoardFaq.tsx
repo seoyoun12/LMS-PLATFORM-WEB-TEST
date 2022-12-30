@@ -8,6 +8,7 @@ import { Spinner } from '@components/ui';
 
 export function CategoryBoardFaq() {
   const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_FAQ');
+  // const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_FAQ_PROVINCIAL');
   const accordianInfo: {
     seq: number;
     date: string;

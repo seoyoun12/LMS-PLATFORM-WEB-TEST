@@ -112,9 +112,9 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
   const onClickRemoveCategory = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
-        title: '공지사항 삭제하기',
+        title: '삭제하기',
         description: '정말로 삭제하시겠습니까?',
-        confirmText: '삭제하기',
+        confirmText: '확인',
         cancelText: '취소',
       });
       if (dialogConfirmed) {

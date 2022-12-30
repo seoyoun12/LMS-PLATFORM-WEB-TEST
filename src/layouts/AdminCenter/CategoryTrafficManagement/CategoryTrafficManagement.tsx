@@ -76,7 +76,7 @@ export function CategoryTrafficManagement() {
   return (
     <Box>
       <Typography fontSize={30} fontWeight="bold">
-        게시판 구분
+        게시판 구분 (도민)
       </Typography>
       <RadioGroup row sx={{ mb: 6 }}>
         {tabsConfig.map(({ name, value }: { name: string; value: string }) => (
@@ -90,9 +90,7 @@ export function CategoryTrafficManagement() {
         ))}
       </RadioGroup>
 
-      <CategoryTrafficTypography variant="h5">
-        게시판(도민) 목록
-      </CategoryTrafficTypography>
+      <CategoryTrafficTypography variant="h5">게시판 목록</CategoryTrafficTypography>
 
       <Table
         pagination={true}

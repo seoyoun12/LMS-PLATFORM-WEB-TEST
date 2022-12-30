@@ -37,6 +37,8 @@ import { EduTargetMainType } from '@common/api/learningMaterial';
 // import { enrollCourseUserProvincial } from '@common/api/courseUser';
 // import { CourseUserProvincialSaveRequestDto } from '@common/api/Api';
 
+// 도민과정 교육신청 steb2
+
 interface detailCounts {
   [prop: string]: { [prop: string]: number };
 }
@@ -56,22 +58,16 @@ export function Steb2() {
     HIGH_SCHOOL: { grade1: 0, grade2: 0, grade3: 0 },
   });
 
-  const { register, setValue, watch, reset } =
-    useForm<ProvincialEnrollSaveRequestDto>({
-      defaultValues: {
-        expectedToStartDtime: dateFormat(new Date(), 'yyyy-mm-dd'),
-      },
-    });
+  const { register, setValue, watch, reset } = useForm<ProvincialEnrollSaveRequestDto>({
+    defaultValues: {
+      expectedToStartDtime: dateFormat(new Date(), 'yyyy-mm-dd'),
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const {
-      region,
-      organization,
-      expectedToStartDtime,
-      eduTargetMain,
-      eduTargetSub,
-    } = watch();
+    const { region, organization, expectedToStartDtime, eduTargetMain, eduTargetSub } =
+      watch();
 
     let isPeople = null;
     for (let [key, obj] of Object.entries(detailCounts)) {
@@ -88,8 +84,7 @@ export function Steb2() {
       !eduTargetSub
     )
       return window.alert('모두 입력해 주세요!');
-    if (!isPeople || isPeople <= 0)
-      return window.alert('교육생 명수를 기입해주세요!');
+    if (!isPeople || isPeople <= 0) return window.alert('교육생 명수를 기입해주세요!');
 
     try {
       const obj = watch();
@@ -139,29 +134,30 @@ export function Steb2() {
           </Select>
         </FormControl>
         <FormControl fullWidth>
-          <TextField
-            label="소속(학교, 기관, 단체)"
-            {...register('organization')}
-          />
+          <TextField label="소속(학교, 기관, 단체)" {...register('organization')} />
           <FormHelperText sx={{ color: 'red' }}></FormHelperText>
         </FormControl>
-        <DatePicker
-          locale={ko}
-          dateFormat="yyyy-MM-dd"
-          showPopperArrow={false}
-          minDate={new Date()}
-          customInput={<TextField fullWidth />}
-          selected={new Date(watch().expectedToStartDtime)}
-          onSelect={() => {}}
-          onChange={date =>
-            setValue(
-              'expectedToStartDtime',
-              date
-                ? dateFormat(date, 'yyyy-mm-dd')
-                : dateFormat(new Date(), 'yyyy-mm-dd')
-            )
-          }
-        />
+        <FormControl fullWidth>
+          <Typography>신청날짜</Typography>
+          <DatePicker
+            locale={ko}
+            dateFormat="yyyy-MM-dd"
+            showPopperArrow={false}
+            minDate={new Date()}
+            customInput={<TextField fullWidth />}
+            selected={new Date(watch().expectedToStartDtime)}
+            onSelect={() => {}}
+            onChange={date =>
+              setValue(
+                'expectedToStartDtime',
+                date
+                  ? dateFormat(date, 'yyyy-mm-dd')
+                  : dateFormat(new Date(), 'yyyy-mm-dd')
+              )
+            }
+          />
+        </FormControl>
+
         <FormControl fullWidth>
           <Typography id="student">교육 대상자</Typography>
           <Select
@@ -187,9 +183,7 @@ export function Steb2() {
             {...register('eduTargetSub')}
           >
             {studentList
-              .filter(
-                studentList => watch().eduTargetMain === studentList.enType
-              )[0]
+              .filter(studentList => watch().eduTargetMain === studentList.enType)[0]
               ?.category.map(({ type, enType, ageList }) => (
                 <MenuItem key={enType} value={enType}>
                   {type}

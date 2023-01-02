@@ -335,3 +335,30 @@ export const CourseTrafficTargetType = [
     ]
   },
 ]
+
+// 1대1 문의 타입
+export enum QnaType {
+  TYPE_DEFAULT = 'TYPE_DEFAULT', // 저상/운수 1대1문의
+  TYPE_PROVINCIAL = 'TYPE_PROVINCIAL', // 도민 1대1문의
+}
+
+export enum QnaSubType {
+  TYPE_SIGNUP_OR_SIGNIN = 'TYPE_SIGNUP_OR_SIGNIN',
+  TYPE_EDU_OR_COMPLETE = 'TYPE_EDU_OR_COMPLETE',
+  TYPE_WEB_OR_APP = 'TYPE_WEB_OR_APP',
+  TYPE_ETC = 'TYPE_ETC',
+}
+
+
+export const QnaTypeTabsConfig = [
+  { name: '전체', value: '' },
+  { name: '운수/저상', value: QnaType.TYPE_DEFAULT },
+  { name: '도민', value: QnaType.TYPE_PROVINCIAL },
+];
+
+export const QnaSubTypeTabsConfig = [
+  { name: '회원가입/로그인', value: 'TYPE_SIGNUP_OR_SIGNIN' },
+  { name: '교육/수료', value: 'TYPE_EDU_OR_COMPLETE' },
+  { name: '홈페이지/앱', value: 'TYPE_WEB_OR_APP' },
+  { name: '기타', value: 'TYPE_ETC' },
+];

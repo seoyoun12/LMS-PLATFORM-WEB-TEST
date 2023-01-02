@@ -130,18 +130,25 @@ export function LearningMaterialManagement() {
         학습자료 구분
       </Typography>
       <RadioGroup row sx={{ mb: 6 }}>
-        {typeTabsConfig.map(({ name, value }: { name: string; value: string }) => (
-          <FormControlLabel
-            key={name}
-            label={name}
-            value={value}
-            control={<Radio checked={typeValue == value} />}
-            onClick={() => setTypeValue(value)}
-          />
-        ))}
+        {typeTabsConfig.map(
+          ({ name, value }: { name: string; value: string }) => (
+            <FormControlLabel
+              key={name}
+              label={name}
+              value={value}
+              control={<Radio checked={typeValue == value} />}
+              onClick={() => {
+                setTypeValue(value);
+                setPage(0);
+              }}
+            />
+          )
+        )}
       </RadioGroup>
 
-      <LearningMaterialTypography variant="h5">학습자료 목록</LearningMaterialTypography>
+      <LearningMaterialTypography variant="h5">
+        학습자료 목록
+      </LearningMaterialTypography>
 
       <Table
         pagination={true}
@@ -163,7 +170,11 @@ export function LearningMaterialManagement() {
                 align: string;
                 width: string;
               }) => (
-                <LearningMaterialTitleTableCell key={name} align="center" width={width}>
+                <LearningMaterialTitleTableCell
+                  key={name}
+                  align="center"
+                  width={width}
+                >
                   {name}
                 </LearningMaterialTitleTableCell>
               )
@@ -183,13 +194,18 @@ export function LearningMaterialManagement() {
                 {lm.seq}
               </LearningMaterialTableCell>
               <LearningMaterialTableCell align="center">
-                {typeTabsConfig.filter(item => item.value === lm.materialType)[0]?.name}
+                {
+                  typeTabsConfig.filter(
+                    item => item.value === lm.materialType
+                  )[0]?.name
+                }
                 {/* {lm.materialType} */}
               </LearningMaterialTableCell>
               <LearningMaterialTableCell align="center">
                 {
-                  subTypeTabsConfig.filter(item => item.value === lm.materialSubType)[0]
-                    ?.name
+                  subTypeTabsConfig.filter(
+                    item => item.value === lm.materialSubType
+                  )[0]?.name
                 }
               </LearningMaterialTableCell>
               <LearningMaterialTableCell align="center">
@@ -210,7 +226,11 @@ export function LearningMaterialManagement() {
                   variant="outlined"
                   size="small"
                   label={lm.status === ProductStatus.APPROVE ? '정상' : '중지'}
-                  color={lm.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
+                  color={
+                    lm.status === ProductStatus.APPROVE
+                      ? 'secondary'
+                      : 'default'
+                  }
                 />
               </LearningMaterialTableCell>
               {/* <TableCell align="center">

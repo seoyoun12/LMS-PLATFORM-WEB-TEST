@@ -23,6 +23,10 @@ import dateFormat from 'dateformat';
 import styled from '@emotion/styled';
 import { AnsweredYn, qnaAdmList } from '@common/api/qna';
 import { ProductStatus } from '@common/api/course';
+import {
+  QnaSubTypeTabsConfig,
+  QnaTypeTabsConfig,
+} from 'src/staticDataDescElements/staticType';
 
 const headRows: {
   name: string;
@@ -38,20 +42,14 @@ const headRows: {
   { name: '상태', align: 'center', width: '5%' },
 ];
 
-const tabsConfig = [
-  { name: '회원가입/로그인', value: 'TYPE_SIGNUP_OR_SIGNIN' },
-  { name: '교육/수료', value: 'TYPE_EDU_OR_COMPLETE' },
-  { name: '홈페이지/앱', value: 'TYPE_WEB_OR_APP' },
-  { name: '기타', value: 'TYPE_ETC' },
-];
-
 export function QnaManagement() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const [page, setPage] = useState(0);
   const [seq, setSeq] = useState<number | null>(null);
-  const { data, error, mutate } = qnaAdmList({ page });
+  const [typeValue, setTypeValue] = useState('');
+  const { data, error, mutate } = qnaAdmList({ boardType: typeValue, page });
 
   // console.log('1대1문의 리스트 데이터 : ', data);
   // 답변
@@ -79,6 +77,26 @@ export function QnaManagement() {
   if (!data) return <Spinner />;
   return (
     <Box>
+      <Typography fontSize={30} fontWeight="bold">
+        1대1 문의 구분
+      </Typography>
+      <RadioGroup row sx={{ mb: 6 }}>
+        {QnaTypeTabsConfig.map(
+          ({ name, value }: { name: string; value: string }) => (
+            <FormControlLabel
+              key={name}
+              label={name}
+              value={value}
+              control={<Radio checked={typeValue == value} />}
+              onClick={() => {
+                setTypeValue(value);
+                setPage(0);
+              }}
+            />
+          )
+        )}
+      </RadioGroup>
+
       <QnaTitleTypography variant="h5">1대1 문의 목록</QnaTitleTypography>
       <Table
         pagination={true}
@@ -108,14 +126,22 @@ export function QnaManagement() {
             >
               <QnaTableCell align="center">{qna.seq}</QnaTableCell>
               <QnaTableCell align="center">
-                {tabsConfig.filter(item => item.value === qna.type)[0]?.name}
+                {
+                  QnaSubTypeTabsConfig.filter(
+                    item => item.value === qna.type
+                  )[0]?.name
+                }
               </QnaTableCell>
               {/* <QnaTableCell align="center">
                 {qna.username}({qna.name})
               </QnaTableCell> */}
 
               <QnaTableCell align="center">
-                <NameBox title={qna.username ? `${qna.username}(${qna.name})` : qna.name}>
+                <NameBox
+                  title={
+                    qna.username ? `${qna.username}(${qna.name})` : qna.name
+                  }
+                >
                   {qna.username ? `${qna.username}(${qna.name})` : qna.name}
                 </NameBox>
               </QnaTableCell>
@@ -164,10 +190,14 @@ export function QnaManagement() {
                   // variant="outlined"
                   size="small"
                   label={
-                    qna.answeredYn === AnsweredYn.ANSWEREDY ? '답변 완료' : '답변 대기'
+                    qna.answeredYn === AnsweredYn.ANSWEREDY
+                      ? '답변 완료'
+                      : '답변 대기'
                   }
                   color={
-                    qna.answeredYn === AnsweredYn.ANSWEREDY ? 'secondary' : 'warning'
+                    qna.answeredYn === AnsweredYn.ANSWEREDY
+                      ? 'secondary'
+                      : 'warning'
                   }
                 />
               </QnaTableCell>
@@ -176,7 +206,11 @@ export function QnaManagement() {
                   variant="outlined"
                   size="small"
                   label={qna.status === ProductStatus.APPROVE ? '정상' : '중지'}
-                  color={qna.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
+                  color={
+                    qna.status === ProductStatus.APPROVE
+                      ? 'secondary'
+                      : 'default'
+                  }
                 />
               </QnaTableCell>
               {/* <TableCell align="center">

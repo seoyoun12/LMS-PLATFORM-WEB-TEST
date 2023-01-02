@@ -164,7 +164,10 @@ export function CategoryManagement() {
             label={name}
             value={value}
             control={<Radio checked={typeValue == value} />}
-            onClick={() => setTypeValue(value)}
+            onClick={() => {
+              setTypeValue(value);
+              setPage(0);
+            }}
           />
         ))}
       </RadioGroup>
@@ -208,9 +211,15 @@ export function CategoryManagement() {
               onClick={() => onClickmodifyCategoryBoard(category.seq)}
             >
               {/* <CategoryTableCell align="center">{category.seq}</CategoryTableCell> */}
-              <CategoryTableCell align="center">{category.postTypeSeq}</CategoryTableCell>
               <CategoryTableCell align="center">
-                {tabsConfig.filter(item => item.value === category.boardType)[0]?.name}
+                {category.postTypeSeq}
+              </CategoryTableCell>
+              <CategoryTableCell align="center">
+                {
+                  tabsConfig.filter(
+                    item => item.value === category.boardType
+                  )[0]?.name
+                }
               </CategoryTableCell>
               <CategoryTableCell align="center">
                 <SubjectBox>{category.subject}</SubjectBox>
@@ -222,7 +231,9 @@ export function CategoryManagement() {
               <CategoryTableCell align="center">
                 {dateFormat(category.modifiedDtime, 'isoDate')}
               </CategoryTableCell>
-              <CategoryTableCell align="center">{category.hit}</CategoryTableCell>
+              <CategoryTableCell align="center">
+                {category.hit}
+              </CategoryTableCell>
               <CategoryTableCell align="center">
                 {category.noticeYn === 'Y' ? '공지중' : '비공지'}
               </CategoryTableCell>
@@ -233,9 +244,13 @@ export function CategoryManagement() {
                 <Chip
                   variant="outlined"
                   size="small"
-                  label={category.status === ProductStatus.APPROVE ? '정상' : '중지'}
+                  label={
+                    category.status === ProductStatus.APPROVE ? '정상' : '중지'
+                  }
                   color={
-                    category.status === ProductStatus.APPROVE ? 'secondary' : 'default'
+                    category.status === ProductStatus.APPROVE
+                      ? 'secondary'
+                      : 'default'
                   }
                 />
               </CategoryTableCell>

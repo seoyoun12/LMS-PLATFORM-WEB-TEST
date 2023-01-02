@@ -123,3 +123,4 @@ export async function uploadQnaAnswer(
 ) {
   return await POST(`/qna/adm/${seq}`, qnaAnswerInput);
 }
+

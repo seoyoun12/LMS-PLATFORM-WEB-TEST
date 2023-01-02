@@ -18,6 +18,7 @@ import {
   Typography,
   Button,
   Chip,
+  SelectChangeEvent,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { ChangeEvent, useRef, useState } from 'react';
@@ -26,7 +27,7 @@ import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined
 import useResponsive from '@hooks/useResponsive';
 import { Phone4Regex } from '@utils/inputRegexes';
 import { Spinner } from '@components/ui';
-import { QnaSubType } from 'src/staticDataDescElements/staticType';
+import { QnaSubType, QnaType } from 'src/staticDataDescElements/staticType';
 
 const phoneList = ['010', '032', '02', '031'];
 
@@ -84,8 +85,9 @@ export function CategoryBoardQuestionForm({
   //   // }
   // }
 
-  const onChangePhoneNum01 = (value: string) => {
-    setPhone01(value);
+  // sangam question
+  const onChangePhoneNum01 = (e: SelectChangeEvent<string>) => {
+    setPhone01(e.target.value);
   };
   const onChangePhoneNum02 = (value: string) => {
     setPhone02(value);
@@ -139,6 +141,7 @@ export function CategoryBoardQuestionForm({
       ...qna,
       phone: phone01 + phone02 + phone03,
       type: questionType,
+      connectType: QnaType.TYPE_PROVINCIAL,
     };
     if (
       qnaInput.title === '' ||

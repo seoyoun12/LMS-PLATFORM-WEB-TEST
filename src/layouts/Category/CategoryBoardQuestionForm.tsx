@@ -26,7 +26,7 @@ import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined
 import { Spinner } from '@components/ui';
 import { Phone4Regex } from '@utils/inputRegexes';
 import useResponsive from '@hooks/useResponsive';
-import { QnaSubType } from 'src/staticDataDescElements/staticType';
+import { QnaSubType, QnaType } from 'src/staticDataDescElements/staticType';
 
 const phoneList = ['010', '011'];
 
@@ -139,6 +139,7 @@ export function CategoryBoardQuestionForm({
       ...qna,
       phone: phone01 + phone02 + phone03,
       type: questionType,
+      connectType: QnaType.TYPE_DEFAULT,
     };
     if (
       qnaInput.title === '' ||

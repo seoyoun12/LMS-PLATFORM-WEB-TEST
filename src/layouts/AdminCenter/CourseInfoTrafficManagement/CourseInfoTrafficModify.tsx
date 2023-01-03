@@ -11,7 +11,11 @@ import { EnrollInformation } from '@components/admin-center/CourseInfo/EnrollInf
 import { LearningStatus } from '@components/admin-center/CourseInfo/LearningStatus';
 import { ProgressStatus } from '@components/admin-center/CourseInfo/ProgressStatus';
 import { Spinner } from '@components/ui';
-import { useCourseInfoTrafficDetail } from '@common/api/adm/courseInfoTraffic';
+import {
+  updateCourseInfoTrafficDetail,
+  useCourseInfoTrafficDetail,
+} from '@common/api/adm/courseInfoTraffic';
+import { ProvincialEnrollUpdateRequestDto } from '@common/api/Api';
 
 export function CourseInfoTrafficModify() {
   const router = useRouter();
@@ -21,23 +25,28 @@ export function CourseInfoTrafficModify() {
   const { data, error, mutate } = useCourseInfoTrafficDetail(Number(enrollSeq));
 
   const handleSubmit = async ({
-    courseLearningInfoInput,
+    enrollInput,
+    provincialEnrollSeq,
     setLoading,
   }: {
-    courseLearningInfoInput: CourseLearningInfoInput;
+    enrollInput: ProvincialEnrollUpdateRequestDto;
+    provincialEnrollSeq: number;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   }) => {
     // console.log('courseLearningInfoInput 부모 : ', courseLearningInfoInput);
+
+    console.log('최종', enrollInput);
+
     try {
       setLoading(true);
       if (Number(enrollSeq)) {
-        // await modifyLearningInfo({
-        //   enrollSeq: Number(enrollSeq),
-        //   courseLearningInfoInput,
-        // });
+        await updateCourseInfoTrafficDetail({
+          enrollSeq: Number(provincialEnrollSeq),
+          enrollInput,
+        });
         snackbar({ variant: 'success', message: '수정 되었습니다.' });
         await mutate();
-        router.push(`/admin-center/course-info`);
+        router.push(`/admin-center/course-info-traffic`);
         // router.push(`/admin-center/course-info/modify/${courseUserSeq}`);
         setLoading(false);
       }

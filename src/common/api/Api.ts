@@ -6486,6 +6486,9 @@ export interface QnaResponseDto {
   /** 답변 여부 */
   answeredYn?: string;
 
+  /** 문의 구분 Enum */
+  connectType?: "TYPE_DEFAULT" | "TYPE_PROVINCIAL";
+
   /** 문의 내용 */
   content?: string;
 
@@ -6545,6 +6548,9 @@ export interface QnaResponseDto {
 }
 
 export interface QnaSaveRequestDto {
+  /** 문의 구분 Enum */
+  connectType?: "TYPE_DEFAULT" | "TYPE_PROVINCIAL";
+
   /**
    * 문의 내용
    * @example 1:1 문의 내용입니다.
@@ -12478,9 +12484,30 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary [관리자] 1:1 문의 전체 조회 - JWT, Pagination
      * @request GET:/qna/adm
      */,
-    admFindAllQnaUsingGet: (query?: { elementCnt?: number; page?: number }, params: RequestParams = {}) =>
+    admFindAllQnaUsingGet: (
+      query?: { boardType?: "TYPE_DEFAULT" | "TYPE_PROVINCIAL"; elementCnt?: number; page?: number },
+      params: RequestParams = {},
+    ) =>
       this.request<ApiResponseWrapper<QnaResponseDto[]>, any>({
         path: `/qna/adm`,
+        method: "GET",
+        query: query,
+        ...params,
+      })
+    /**
+     * @description 클라이언트로부터 현재 유저의 Access Token 을 Header 로 전달받아 해당하는 사용자의 1:1 문의 내역을 전체 조회한다.
+     *
+     * @tags [App & 관리자] 1:1 문의 API
+     * @name FindByConnectTypeAllQnaUsingGet
+     * @summary [App] 1:1 문의 내역 전체 조회 API - JWT
+     * @request GET:/qna/adm/connectType
+     */,
+    findByConnectTypeAllQnaUsingGet: (
+      query: { boardType: "TYPE_DEFAULT" | "TYPE_PROVINCIAL"; elementCnt?: number; page: number },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<QnaResponseDto[]>, any>({
+        path: `/qna/adm/connectType`,
         method: "GET",
         query: query,
         ...params,

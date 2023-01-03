@@ -326,7 +326,7 @@ const TableRightCell = styled(TableCell)`
   width: 80%;
 `;
 
-const eduSubArr: {
+export const eduSubArr: {
   subType: string;
   subKo: string;
 }[] = [

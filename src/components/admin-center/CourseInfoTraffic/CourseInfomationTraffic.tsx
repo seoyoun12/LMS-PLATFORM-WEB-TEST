@@ -19,6 +19,7 @@ import { css } from '@emotion/css';
 import styled from '@emotion/styled';
 import {
   ProvincialEnrollResponseDto,
+  ProvincialEnrollUpdateRequestDto,
   UserCourseInfoDetailCourseInfoDto,
 } from '@common/api/Api';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -36,31 +37,41 @@ import {
   TargetSubTypeReg,
 } from 'src/staticDataDescElements/staticType';
 import { carNumberRegex } from '@utils/inputRegexes';
+import { eduSubArr } from '@layouts/EnrollHistory/EnrollHistoryTrafficModal/EnrollHistoryTrafficModal';
 
-interface FormType extends UserCourseInfoDetailCourseInfoDto {
-  firstStr?: string;
-  firstNum?: string;
-  secondStr?: string;
-  secondNum?: string;
-}
+interface FormType extends ProvincialEnrollUpdateRequestDto {}
 
-const localList = [
-  { title: '충남', type: 'NAM' },
-  { title: '세종', type: 'SEJONG' },
+const filterEnrollPeoples = [
+  'age3',
+  'age4',
+  'age5',
+  'grade1',
+  'grade2',
+  'grade3',
+  'grade4',
+  'grade5',
+  'grade6',
+  'elderly',
+  'selfDriver',
 ];
-const oneWordList = ['아', '바', '사', '자', '배'];
 
-const defaultValues = {
-  // 처음 undefined면 value 가 변경되어도 적용이 안된다. 그래서 초기값 defaultValues 로 빈 스트링을 넣어준다.
-  // businessSubType: '',
-  businessName: '',
-  firstStr: '',
-  firstNum: '',
-  secondStr: '',
-  secondNum: '',
-  // carRegistrationRegion: '',
-  // residence: '',
-  phone: '',
+const defaultValues: ProvincialEnrollUpdateRequestDto = {
+  age3: 0,
+  age4: 0,
+  age5: 0,
+  eduTargetMain: 'TYPE_CHILDREN',
+  eduTargetSub: 'TYPE_KINDERGARTEN',
+  elderly: 0,
+  expectedToStartDtime: 'yyyy-MM-dd',
+  grade1: 0,
+  grade2: 0,
+  grade3: 0,
+  grade4: 0,
+  grade5: 0,
+  grade6: 0,
+  organization: 'string',
+  region: 'CHEONAN',
+  selfDriver: 0,
 };
 
 export function CourseInfomationTraffic({
@@ -68,13 +79,14 @@ export function CourseInfomationTraffic({
   onHandleSubmit,
 }: {
   enrollInfo?: ProvincialEnrollResponseDto;
+
   onHandleSubmit: ({
-    courseLearningInfoInput,
-    courseUserSeq,
+    enrollInput,
+    provincialEnrollSeq,
     setLoading,
   }: {
-    courseLearningInfoInput: CourseLearningInfoInput;
-    courseUserSeq: number;
+    enrollInput: ProvincialEnrollUpdateRequestDto;
+    provincialEnrollSeq: number;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   }) => void;
 }) {
@@ -84,27 +96,74 @@ export function CourseInfomationTraffic({
   const [loading, setLoading] = useState(false);
 
   const {
-    register,
     handleSubmit,
     formState: { errors },
     reset,
     watch,
     setValue,
-  } = useForm<FormType>({ defaultValues });
+  } = useForm<ProvincialEnrollUpdateRequestDto>({ defaultValues });
+
+  const handleEduPersonCount = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+    console.log('안ㅁ암', value);
+    if (value.length > 6) return;
+    if (value === '') return setValue(e.target.name as any, Number(value));
+    if (value.length === 0 || value === '0') {
+      console.log('왜여기임', value);
+      return setValue(e.target.name as any, Number(value));
+    }
+    console.log('tq', value, e.target.name, watch(e.target.name as any));
+
+    if (!Number(e.target.value)) return;
+    setValue(e.target.name as any, Number(value.replace(/[^0-9]/g, '')));
+  };
+
+  const onSubmit: SubmitHandler<FormType> = async (formData, event) => {
+    const resetEduTargets = {
+      age3: 0,
+      age4: 0,
+      age5: 0,
+      grade1: 0,
+      grade2: 0,
+      grade3: 0,
+      grade4: 0,
+      grade5: 0,
+      grade6: 0,
+      elderly: 0,
+      selfDriver: 0,
+    };
+    CourseTrafficTargetType.filter(f => f.type === watch().eduTargetMain)[0]
+      .child.filter(f => f.type === watch().eduTargetSub)[0]
+      .applicants.forEach(fo => (resetEduTargets[fo] = watch(fo as any)));
+
+    const enrollInput = {
+      ...formData,
+      ...resetEduTargets,
+    };
+
+    console.log('하이요 ', enrollInput);
+
+    onHandleSubmit({
+      enrollInput: enrollInput,
+      provincialEnrollSeq: Number(enrollSeq),
+      setLoading,
+    });
+  };
+  console.log(watch());
+  //초기화
+  useEffect(() => {
+    reset(enrollInfo);
+  }, []);
 
   return (
-    <CourseInfomationBox component="form">
+    <CourseInfomationBox component="form" onSubmit={handleSubmit(onSubmit)}>
       {/* <CourseInfomationBox component="form" onSubmit={onSubmit}> useForm을 사용하지 않을때.*/}
       <TableHeadFull colSpan={4} sx={{ display: 'table', width: '100%' }}>
         수강정보
       </TableHeadFull>
       <TableBody sx={{ display: 'table', width: '100%' }}>
-        <TableRow>
-          <TableLeftCell align="center">소속</TableLeftCell>
-          <TableRightCell>{enrollInfo?.organization}</TableRightCell>
-          <TableLeftCell align="center">신청희망날짜</TableLeftCell>
-          <TableRightCell>{enrollInfo?.expectedToStartDtime}</TableRightCell>
-        </TableRow>
         <TableRow>
           <TableLeftCell align="center">회원명</TableLeftCell>
           <TableRightCell>{enrollInfo?.userInfo?.name}</TableRightCell>
@@ -116,10 +175,16 @@ export function CourseInfomationTraffic({
           </TableRightCell>
         </TableRow>
         <TableRow>
-          <TableLeftCell align="center">만료기간</TableLeftCell>
-          <TableRightCell>{enrollInfo?.expiredDtime}</TableRightCell>
+          <TableLeftCell align="center">소속</TableLeftCell>
+          <TableRightCell>{enrollInfo?.organization}</TableRightCell>
           <TableLeftCell align="center">등록일</TableLeftCell>
           <TableRightCell>{enrollInfo?.createdDtime}</TableRightCell>
+        </TableRow>
+        <TableRow>
+          <TableLeftCell align="center">신청희망날짜</TableLeftCell>
+          <TableRightCell>{enrollInfo?.expectedToStartDtime}</TableRightCell>
+          <TableLeftCell align="center">수강 종료기간</TableLeftCell>
+          <TableRightCell>{enrollInfo?.expiredDtime}</TableRightCell>
         </TableRow>
       </TableBody>
 
@@ -144,13 +209,40 @@ export function CourseInfomationTraffic({
         <TableRow>
           <TableLeftCell align="center">교육대상자 세부</TableLeftCell>
           <TableRightCell>
-            {
-              TargetSubTypeReg.filter(
-                f => f.type === enrollInfo.eduTargetSub
-              )[0].ko
-            }
+            <Select
+              onChange={e => setValue('eduTargetSub', e.target.value as any)}
+              value={watch().eduTargetSub}
+            >
+              {CourseTrafficTargetType.filter(
+                f => f.type === enrollInfo.eduTargetMain
+              )[0].child.map(m => (
+                <MenuItem key={m.type} value={m.type}>
+                  {m.ko}
+                </MenuItem>
+              ))}
+            </Select>
           </TableRightCell>
         </TableRow>
+        {CourseTrafficTargetType.filter(
+          f => f.type === watch().eduTargetMain
+        )[0]
+          .child.filter(f => f.type === watch().eduTargetSub)[0]
+          .applicants.map(m => (
+            <TableRow key={m}>
+              <TableLeftCell align="center">
+                {eduSubArr.filter(f => f.subType === m)[0].subKo}
+              </TableLeftCell>
+              <TableRightCell>
+                <TextField
+                  onChange={handleEduPersonCount}
+                  name={m}
+                  defaultValue={enrollInfo[m] || 0}
+                  value={watch(m as any) || 0}
+                  InputProps={{ endAdornment: <Box>명</Box> }}
+                />
+              </TableRightCell>
+            </TableRow>
+          ))}
       </TableBody>
 
       <ButtonBox>

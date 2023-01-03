@@ -33,7 +33,7 @@ import { HeadRowsBottom } from '@components/admin-center/CourseInfo/HeadRowsBott
 import { useForm } from 'react-hook-form';
 import { HeadRowsTop } from '@components/admin-center/CourseInfo/HeadRowsTop';
 import { useCourseInfoTraffic } from '@common/api/adm/courseInfoTraffic';
-import { CourseTrafficTargetType, TargetSubTypeReg } from 'src/staticDataDescElements/staticType';
+import { CourseTrafficTargetType, residenceList, TargetSubTypeReg } from 'src/staticDataDescElements/staticType';
 
 const headRows: {
   name: string;
@@ -332,7 +332,7 @@ export default function CourseInfoTrafficManagement() {
                   <SubjectBox>{TargetSubTypeReg.filter(f=>f.type === user.eduTargetSub)[0].ko}</SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
-                  <SubjectBox>{user.region}</SubjectBox>
+                  <SubjectBox>{residenceList.filter(f=>f.en === user.region )[0].ko }</SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
                   {user.organization}

@@ -1,7 +1,10 @@
-import { GET } from '@common/httpClient';
+import { GET, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { PaginationResult } from 'types/fetch';
-import { ProvincialEnrollResponseDto } from '../Api';
+import {
+  ProvincialEnrollResponseDto,
+  ProvincialEnrollUpdateRequestDto,
+} from '../Api';
 
 export function useCourseInfoTraffic(elementCnt: number, page: number) {
   const { data, error, mutate } = useSWR<
@@ -33,4 +36,14 @@ export function getCourseInfoTrafficDetail(enrollSeq: number) {
   return GET<{ data: ProvincialEnrollResponseDto }>(
     `/provincial/enroll/adm/${enrollSeq}`
   );
+}
+
+export function updateCourseInfoTrafficDetail({
+  enrollSeq,
+  enrollInput,
+}: {
+  enrollSeq: number;
+  enrollInput: ProvincialEnrollUpdateRequestDto;
+}) {
+  return PUT(`/provincial/enroll/adm/${enrollSeq}`, enrollInput);
 }

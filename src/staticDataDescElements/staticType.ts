@@ -308,31 +308,31 @@ export const CourseTrafficTargetType = [
     type: TargetMainType.TYPE_CHILDREN, 
     ko: '어린이' ,
     child: [
-      { type: TargetSubType.TYPE_KINDERGARTEN, ko: '유치원' },
-      { type: TargetSubType.TYPE_ELEMENTARY, ko: '초등학교' }
-    ]
+      { type: TargetSubType.TYPE_KINDERGARTEN, ko: '유치원', applicants: [ 'age3', 'age4', 'age5' ] },
+      { type: TargetSubType.TYPE_ELEMENTARY, ko: '초등학교', applicants: [ 'grade1', 'grade2', 'grade3', 'grade4', 'grade5', 'grade6' ] }
+    ],
   },
   { 
     type: TargetMainType.TYPE_TEENAGER, 
     ko: '청소년' ,
     child: [
-      { type: TargetSubType.TYPE_MIDDLE, ko: '중학교' },
-      { type: TargetSubType.TYPE_HIGH, ko: '고등학교' },
-    ]
+      { type: TargetSubType.TYPE_MIDDLE, ko: '중학교', applicants: [ 'grade1', 'grade2', 'grade3' ] },
+      { type: TargetSubType.TYPE_HIGH, ko: '고등학교', applicants: [ 'grade1', 'grade2', 'grade3' ] },
+    ],
   },
   { 
     type: TargetMainType.TYPE_ELDERLY, 
     ko: '어르신' ,
     child: [
-      { type: TargetSubType.TYPE_ELDERLY, ko: '어르신' },
-    ]
+      { type: TargetSubType.TYPE_ELDERLY, ko: '어르신', applicants: [ 'elderly' ] },
+    ],
   },
   { 
     type: TargetMainType.TYPE_SELF_DRIVING, 
     ko: '자가운전자' ,
     child: [
-      { type: TargetSubType.TYPE_SELF_DRIVER, ko: '자가운전자' },
-    ]
+      { type: TargetSubType.TYPE_SELF_DRIVER, ko: '자가운전자', applicants: [ 'selfDriver' ] },
+    ],
   },
 ]
 

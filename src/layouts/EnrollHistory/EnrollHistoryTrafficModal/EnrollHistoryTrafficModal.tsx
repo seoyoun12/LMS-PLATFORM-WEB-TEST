@@ -219,8 +219,8 @@ export function EnrollHistoryTrafficModal({
               </TableDoubleParantRightCell>
             </TableDoubleRow>
 
-            <TableRow>
-              <TableDoubleParantLeftCell>
+            {/* <TableRow> */}
+            {/* <TableDoubleParantLeftCell>
                 <TableDoubleLeftCell className="left-cell-border">
                   대상자 세부
                 </TableDoubleLeftCell>
@@ -235,13 +235,13 @@ export function EnrollHistoryTrafficModal({
                       value={watch().eduTargetSub || ''}
                       onChange={onChangeEduTargetSub}
                     >
-                      {/* {TargetSubTypeReg.filter(
+                      {TargetSubTypeReg.filter(
                       item => item.type === enrollDetailData?.eduTargetSub
                     ).map(item => (
                       <MenuItem key={item.type} value={item.type}>
                         {item.ko}
                       </MenuItem>
-                    ))} */}
+                    ))}
                       {CourseTrafficTargetType.filter(
                         item => item.type === enrollDetailData?.eduTargetSub
                       ).map(item => (
@@ -252,14 +252,14 @@ export function EnrollHistoryTrafficModal({
                     </Select>
                   </FormControl>
                 </TableDoubleRightCell>
-              </TableDoubleParantLeftCell>
+              </TableDoubleParantLeftCell> */}
 
-              <TableDoubleParantRightCell>
+            {/* <TableDoubleParantRightCell>
                 <TableDoubleLeftCell className="left-cell-border">
                   대상자 세부
-                </TableDoubleLeftCell>
+                </TableDoubleLeftCell> */}
 
-                {/* <TableDoubleRightCell className="right-cell">
+            {/* <TableDoubleRightCell className="right-cell">
                   <FormControl fullWidth>
                     <Select
                       sx={{ marginLeft: '-10px', mr: '10px' }}
@@ -280,8 +280,8 @@ export function EnrollHistoryTrafficModal({
                     </Select>
                   </FormControl>
                 </TableDoubleRightCell> */}
-              </TableDoubleParantRightCell>
-            </TableRow>
+            {/* </TableDoubleParantRightCell>
+            </TableRow> */}
 
             {enrollDetailData.persons.map(r => (
               <TableRow>

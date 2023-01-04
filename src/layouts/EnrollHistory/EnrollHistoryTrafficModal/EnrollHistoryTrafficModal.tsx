@@ -23,10 +23,7 @@ import { EduTargetMain, EduTargetSub } from '@common/api/learningMaterial';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { useForm } from 'react-hook-form';
-import {
-  CourseTrafficTargetType,
-  TargetSubTypeReg,
-} from 'src/staticDataDescElements/staticType';
+import { CourseTrafficTargetType } from 'src/staticDataDescElements/staticType';
 
 const filterEnrollPeoples = [
   'age3',
@@ -53,6 +50,8 @@ interface EnrollData extends ProvincialEnrollResponseDto {
   persons: { age: string; count: number }[];
 }
 
+const defaultValues = {};
+
 export function EnrollHistoryTrafficModal({
   open,
   handleClose,
@@ -62,10 +61,19 @@ export function EnrollHistoryTrafficModal({
   const snackbar = useSnackbar();
   const [enrollDetailData, setEnrollDetailData] = useState<EnrollData>();
   const dialog = useDialog();
-  const { register, setValue, reset, watch } =
-    useForm<ProvincialEnrollResponseDto>();
+  const {
+    register,
+    setValue,
+    reset,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProvincialEnrollResponseDto>({ defaultValues });
+  const [loading, setLoading] = useState(false);
 
   console.log('enrollDetailData : ', enrollDetailData);
+  console.log('watch().eduTargetSub : ', watch().eduTargetSub);
+  console.log('watch().eduTargetMain : ', watch().eduTargetMain);
 
   const handleEnrollCancel = async (enrollSeq: number) => {
     try {
@@ -140,6 +148,50 @@ export function EnrollHistoryTrafficModal({
     })();
   }, []);
 
+  // 수정
+  const onSubmit = async () => {
+    // try {
+    //   setLoading(true);
+    //   const dialogConfirmed = await dialog({
+    //     title: '정보 수정하기',
+    //     description: '정말로 수정하시겠습니까?',
+    //     confirmText: '수정하기',
+    //     cancelText: '취소',
+    //   });
+    //   if (!dialogConfirmed) {
+    //     setLoading(false);
+    //   }
+    //   if (dialogConfirmed) {
+    //     const dataValue = {
+    //       businessName: watch().userCompanyName,
+    //       businessSubType: watch().userSubBusinessType,
+    //       businessType: watch().userBusinessType,
+    //       carNumber: watch().carNumber,
+    //       carRegisteredRegion: watch().carRegisteredRegion,
+    //       courseClassSeq: stepSeq,
+    //       residence: watch().residence,
+    //       phone:
+    //         watchPhone().phone1 + watchPhone().phone2 + watchPhone().phone3,
+    //     };
+    //     if (regType === RegisterType.TYPE_INDIVIDUAL) {
+    //       const data = await modifyCourseUserIndi(courseUserSeq, dataValue);
+    //     }
+    //     if (regType === RegisterType.TYPE_ORGANIZATION) {
+    //       const data = await modifyCourseUserOrga(courseUserSeq, dataValue);
+    //     }
+    //     snackbar({
+    //       variant: 'success',
+    //       message: '성공적으로 수정완료 했습니다.',
+    //     });
+    //     handleClose();
+    //   }
+    //   setLoading(false);
+    // } catch (e: any) {
+    //   setLoading(false);
+    //   snackbar({ variant: 'error', message: e.data.message });
+    // }
+  };
+
   if (!enrollDetailData)
     return (
       <Backdrop open={open}>
@@ -166,6 +218,13 @@ export function EnrollHistoryTrafficModal({
             onClick={() => handleEnrollCancel(enrollDetailData.seq)}
           >
             신청 취소
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ width: '100px' }}
+            onClick={onSubmit}
+          >
+            신청 수정
           </Button>
         </>
       }
@@ -246,7 +305,7 @@ export function EnrollHistoryTrafficModal({
                       labelId="eduTargetSub"
                       id="eduTargetSub"
                       placeholder="세부 선택"
-                      value={watch().eduTargetSub || ''}
+                      value={watch().eduTargetSub}
                       onChange={onChangeEduTargetSub}
                     >
                       {CourseTrafficTargetType.filter(

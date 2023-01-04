@@ -91,8 +91,9 @@ export function EnrollHistoryModal({
         setGetDataLoading(true);
         const { data } = await getSingleCourseUser(
           courseUserSeq,
-          (regType === RegisterType.TYPE_INDIVIDUAL ? 'individual' : 'organization') ===
-            RegType.TYPE_INDIVIDUAL
+          (regType === RegisterType.TYPE_INDIVIDUAL
+            ? 'individual'
+            : 'organization') === RegType.TYPE_INDIVIDUAL
             ? RegType.TYPE_INDIVIDUAL
             : RegType.TYPE_ORGANIZATION
         );
@@ -109,7 +110,7 @@ export function EnrollHistoryModal({
           new Date().getTime();
         setIsAfterStudyDate(isAfter);
 
-        onChangeBusinessSubType(data.userSubBusinessType , data.userCompanyName);
+        onChangeBusinessSubType(data.userSubBusinessType, data.userCompanyName);
 
         setPhone('phone1', data.phone.slice(0, 3));
         setPhone('phone2', data.phone.slice(3, 7));
@@ -225,7 +226,8 @@ export function EnrollHistoryModal({
           carRegisteredRegion: watch().carRegisteredRegion,
           courseClassSeq: stepSeq,
           residence: watch().residence,
-          phone: watchPhone().phone1 + watchPhone().phone2 + watchPhone().phone3,
+          phone:
+            watchPhone().phone1 + watchPhone().phone2 + watchPhone().phone3,
         };
 
         if (regType === RegisterType.TYPE_INDIVIDUAL) {
@@ -234,7 +236,10 @@ export function EnrollHistoryModal({
         if (regType === RegisterType.TYPE_ORGANIZATION) {
           const data = await modifyCourseUserOrga(courseUserSeq, dataValue);
         }
-        snackbar({ variant: 'success', message: '성공적으로 수정완료 했습니다.' });
+        snackbar({
+          variant: 'success',
+          message: '성공적으로 수정완료 했습니다.',
+        });
         handleClose();
       }
       setLoading(false);
@@ -260,7 +265,10 @@ export function EnrollHistoryModal({
       if (regType === RegisterType.TYPE_ORGANIZATION) {
         await delelteCourseUserOrga(courseUserSeq);
       }
-      snackbar({ variant: 'success', message: '성공적으로 신청취소 했습니다.' });
+      snackbar({
+        variant: 'success',
+        message: '성공적으로 신청취소 했습니다.',
+      });
       handleClose();
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -268,7 +276,7 @@ export function EnrollHistoryModal({
   };
 
   //인풋 잠금처리를 위한 change
-  const onChangeBusinessSubType = (value: string , userCompanyName?: string) => {
+  const onChangeBusinessSubType = (value: string, userCompanyName?: string) => {
     // const {
     //   target: { value },
     // } = e;
@@ -320,7 +328,8 @@ export function EnrollHistoryModal({
         'userCompanyName',
         userBusinessTypeTwo.filter(item => item.enType === value)[0].type
       );
-      if (courseSubCategoryType.PRIVATE_TAXI === value) setDisabledCompany(false); //개인택시 보이게
+      if (courseSubCategoryType.PRIVATE_TAXI === value)
+        setDisabledCompany(false); //개인택시 보이게
       return setValue('userSubBusinessType', value);
     }
     setDisabledCompany(false);
@@ -370,7 +379,11 @@ export function EnrollHistoryModal({
                 >
                   신청 취소
                 </Button>
-                <Button variant="contained" sx={{ width: '100px' }} onClick={onSubmit}>
+                <Button
+                  variant="contained"
+                  sx={{ width: '100px' }}
+                  onClick={onSubmit}
+                >
                   신청 수정
                 </Button>
               </>
@@ -384,7 +397,9 @@ export function EnrollHistoryModal({
           <TableBody sx={{ display: 'table', width: '100%' }}>
             <TableDoubleRow>
               <TableDoubleParantLeftCell sx={{ width: '50%' }}>
-                <TableDoubleLeftCell className="left-cell-border">NO</TableDoubleLeftCell>
+                <TableDoubleLeftCell className="left-cell-border">
+                  NO
+                </TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
                   {watch().seq}
                 </TableDoubleRightCell>
@@ -409,12 +424,18 @@ export function EnrollHistoryModal({
               </TableRightCell>
             </TableRow>
             <TableRow>
-              <TableLeftCell className="left-cell-border">예약신청일</TableLeftCell>
-              <TableRightCell className="right-cell">{watch().regDate}</TableRightCell>
+              <TableLeftCell className="left-cell-border">
+                예약신청일
+              </TableLeftCell>
+              <TableRightCell className="right-cell">
+                {watch().regDate}
+              </TableRightCell>
             </TableRow>
             <TableRow>
               <TableLeftCell className="left-cell-border">교육일</TableLeftCell>
-              <TableRightCell className="right-cell">{watch().studyDate}</TableRightCell>
+              <TableRightCell className="right-cell">
+                {watch().studyDate}
+              </TableRightCell>
             </TableRow>
             <TableDoubleRow>
               <TableDoubleParantLeftCell>
@@ -436,7 +457,9 @@ export function EnrollHistoryModal({
             </TableDoubleRow>
 
             <TableRow>
-              <TableLeftCell className="left-cell-border">온라인과정</TableLeftCell>
+              <TableLeftCell className="left-cell-border">
+                온라인과정
+              </TableLeftCell>
 
               <TableRightCell className="right-cell">
                 {watch().courseType === 'TYPE_LOW_FLOOR_BUS'
@@ -472,7 +495,10 @@ export function EnrollHistoryModal({
                         disabled={isStudyPeriod || isAfterStudyDate}
                       >
                         {userBusinessTypeTwo
-                          .filter(filter => filter.TYPE_BUSINESS === watch().businessType)
+                          .filter(
+                            filter =>
+                              filter.TYPE_BUSINESS === watch().businessType
+                          )
                           .map(item => (
                             <MenuItem key={item.enType} value={item.enType}>
                               {item.type}
@@ -491,14 +517,18 @@ export function EnrollHistoryModal({
               <TableRightCell className="right-cell">
                 <TextField
                   {...register('userCompanyName')}
-                  disabled={isStudyPeriod || isAfterStudyDate || disabledCompany}
+                  disabled={
+                    isStudyPeriod || isAfterStudyDate || disabledCompany
+                  }
                   fullWidth
                 />
               </TableRightCell>
             </TableRow>
             {hideCarNumber === false && (
               <TableRow>
-                <TableLeftCell className="left-cell-border">차량번호</TableLeftCell>
+                <TableLeftCell className="left-cell-border">
+                  차량번호
+                </TableLeftCell>
 
                 <TableRightCell className="right-cell">
                   <EnrollHistoryCarNumberBox
@@ -514,7 +544,9 @@ export function EnrollHistoryModal({
             )}
 
             <TableRow>
-              <TableLeftCell className="left-cell-border">차량등록지</TableLeftCell>
+              <TableLeftCell className="left-cell-border">
+                차량등록지
+              </TableLeftCell>
 
               <TableRightCell className="right-cell">
                 <FormControl fullWidth>
@@ -552,7 +584,9 @@ export function EnrollHistoryModal({
               </TableRightCell>
             </TableRow>
             <TableRow>
-              <TableLeftCell className="left-cell-border">휴대번호</TableLeftCell>
+              <TableLeftCell className="left-cell-border">
+                휴대번호
+              </TableLeftCell>
 
               <TableRightCell className="right-cell">
                 <FormControl fullWidth>
@@ -618,7 +652,8 @@ export function EnrollHistoryModal({
                     {stepsRes.map(item => {
                       return (
                         <MenuItem key={item.step} value={item.seq}>
-                          {item.step}기 / {item.studyStartDate} ~ {item.studyEndDate} (
+                          {item.step}기 / {item.studyStartDate} ~{' '}
+                          {item.studyEndDate} (
                           {item.limitPeople === 0
                             ? '제한없음'
                             : `${item.enrolledPeopleCnt} / ${item.limitPeople}`}

@@ -219,13 +219,13 @@ export function EnrollHistoryTrafficModal({
           >
             신청 취소
           </Button>
-          <Button
+          {/* <Button
             variant="contained"
             sx={{ width: '100px' }}
             onClick={onSubmit}
           >
             신청 수정
-          </Button>
+          </Button> */}
         </>
       }
     >
@@ -289,12 +289,12 @@ export function EnrollHistoryTrafficModal({
                   대상자 세부
                 </TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
-                  {/* {
+                  {
                     Object.entries(EduTargetSub).filter(
                       r => r[0] === enrollDetailData.eduTargetSub
                     )[0][1]
-                  } */}
-                  {/*  */}
+                  }
+{/*                   
                   <FormControl fullWidth>
                     <Select
                       sx={{
@@ -322,7 +322,7 @@ export function EnrollHistoryTrafficModal({
                         ))
                       )}
                     </Select>
-                  </FormControl>
+                  </FormControl> */}
                   {/*  */}
                 </TableDoubleRightCell>
               </TableDoubleParantRightCell>

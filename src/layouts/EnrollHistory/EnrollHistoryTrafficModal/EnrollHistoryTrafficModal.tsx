@@ -96,7 +96,7 @@ export function EnrollHistoryTrafficModal({
   };
 
   // 대상자 - 세부 변경을 위한 onChange
-  const onChangeEduTargetSub = async (e: any) => {
+  const onChangeEduTargetSub = async (e: { target: { value: any } }) => {
     setValue('eduTargetSub', e.target.value);
   };
 
@@ -176,7 +176,7 @@ export function EnrollHistoryTrafficModal({
             <TableDoubleRow>
               <TableDoubleParantLeftCell sx={{ width: '50%' }}>
                 <TableDoubleLeftCell className="left-cell-border">
-                  NO
+                  No
                 </TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
                   {enrollDetailData.seq}
@@ -195,6 +195,25 @@ export function EnrollHistoryTrafficModal({
             <TableDoubleRow>
               <TableDoubleParantLeftCell>
                 <TableDoubleLeftCell className="left-cell-border">
+                  교육 희망일
+                </TableDoubleLeftCell>
+                <TableDoubleRightCell className="right-cell">
+                  {enrollDetailData.expectedToStartDtime}
+                </TableDoubleRightCell>
+              </TableDoubleParantLeftCell>
+              <TableDoubleParantRightCell>
+                <TableDoubleLeftCell className="left-cell-border">
+                  교육 만료일
+                </TableDoubleLeftCell>
+                <TableDoubleRightCell className="right-cell">
+                  {enrollDetailData.expiredDtime}
+                </TableDoubleRightCell>
+              </TableDoubleParantRightCell>
+            </TableDoubleRow>
+
+            <TableDoubleRow>
+              <TableDoubleParantLeftCell>
+                <TableDoubleLeftCell className="left-cell-border">
                   교육 대상자
                 </TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
@@ -205,83 +224,99 @@ export function EnrollHistoryTrafficModal({
                   }
                 </TableDoubleRightCell>
               </TableDoubleParantLeftCell>
+
               <TableDoubleParantRightCell>
                 <TableDoubleLeftCell className="left-cell-border">
                   대상자 세부
                 </TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
-                  {
+                  {/* {
                     Object.entries(EduTargetSub).filter(
                       r => r[0] === enrollDetailData.eduTargetSub
                     )[0][1]
-                  }
-                </TableDoubleRightCell>
-              </TableDoubleParantRightCell>
-            </TableDoubleRow>
-
-            {/* <TableRow> */}
-            {/* <TableDoubleParantLeftCell>
-                <TableDoubleLeftCell className="left-cell-border">
-                  대상자 세부
-                </TableDoubleLeftCell>
-
-                <TableDoubleRightCell className="right-cell">
+                  } */}
+                  {/*  */}
                   <FormControl fullWidth>
                     <Select
-                      sx={{ marginLeft: '-10px', mr: '10px' }}
+                      sx={{
+                        marginLeft: '-10px',
+                        mr: '10px',
+                        fontWeight: 'bold',
+                      }}
                       labelId="eduTargetSub"
                       id="eduTargetSub"
                       placeholder="세부 선택"
                       value={watch().eduTargetSub || ''}
                       onChange={onChangeEduTargetSub}
                     >
-                      {TargetSubTypeReg.filter(
-                      item => item.type === enrollDetailData?.eduTargetSub
-                    ).map(item => (
-                      <MenuItem key={item.type} value={item.type}>
-                        {item.ko}
-                      </MenuItem>
-                    ))}
                       {CourseTrafficTargetType.filter(
-                        item => item.type === enrollDetailData?.eduTargetSub
-                      ).map(item => (
-                        <MenuItem key={item.type} value={item.type}>
-                          {item.ko}
-                        </MenuItem>
-                      ))}
+                        item => item.type === enrollDetailData?.eduTargetMain
+                      ).map(item =>
+                        item.child.map(item => (
+                          <MenuItem
+                            key={item.type}
+                            value={item.type}
+                            sx={{ fontWeight: 'bold' }}
+                          >
+                            {item.ko}
+                          </MenuItem>
+                        ))
+                      )}
                     </Select>
                   </FormControl>
+                  {/*  */}
                 </TableDoubleRightCell>
-              </TableDoubleParantLeftCell> */}
+              </TableDoubleParantRightCell>
+            </TableDoubleRow>
 
-            {/* <TableDoubleParantRightCell>
+            {/* <TableDoubleRow>
+              <TableDoubleParantLeftCell>
                 <TableDoubleLeftCell className="left-cell-border">
                   대상자 세부
-                </TableDoubleLeftCell> */}
+                </TableDoubleLeftCell>
 
-            {/* <TableDoubleRightCell className="right-cell">
+                <TableDoubleRightCell className="right-cell">
                   <FormControl fullWidth>
                     <Select
-                      sx={{ marginLeft: '-10px', mr: '10px' }}
-                      labelId="businessSubType"
-                      id="businessSubType"
+                      sx={{
+                        marginLeft: '-10px',
+                        mr: '10px',
+                        fontWeight: 'bold',
+                      }}
+                      labelId="eduTargetSub"
+                      id="eduTargetSub"
                       placeholder="세부 선택"
-                      // value={businessSubTypeState || ''}
                       value={watch().eduTargetSub || ''}
                       onChange={onChangeEduTargetSub}
                     >
                       {CourseTrafficTargetType.filter(
-                        item => item.type === enrollDetailData?.eduTargetSub
-                      ).map(item => (
-                        <MenuItem key={item.type} value={item.type}>
-                          {item.ko}
-                        </MenuItem>
-                      ))}
+                        item => item.type === enrollDetailData?.eduTargetMain
+                      ).map(item =>
+                        item.child.map(item => (
+                          <MenuItem
+                            key={item.type}
+                            value={item.type}
+                            sx={{ fontWeight: 'bold' }}
+                          >
+                            {item.ko}
+                          </MenuItem>
+                        ))
+                      )}
                     </Select>
                   </FormControl>
-                </TableDoubleRightCell> */}
-            {/* </TableDoubleParantRightCell>
-            </TableRow> */}
+                </TableDoubleRightCell>
+              </TableDoubleParantLeftCell>
+
+              <TableDoubleParantRightCell>
+                <TableDoubleLeftCell className="left-cell-border">
+                  123
+                </TableDoubleLeftCell>
+
+                <TableDoubleRightCell className="right-cell">
+                  1234
+                </TableDoubleRightCell>
+              </TableDoubleParantRightCell>
+            </TableDoubleRow> */}
 
             {enrollDetailData.persons.map(r => (
               <TableRow>
@@ -293,22 +328,6 @@ export function EnrollHistoryTrafficModal({
                 </TableRightCell>
               </TableRow>
             ))}
-            <TableRow>
-              <TableLeftCell className="left-cell-border">
-                교육 희망일
-              </TableLeftCell>
-              <TableRightCell className="right-cell">
-                {enrollDetailData.expectedToStartDtime}
-              </TableRightCell>
-            </TableRow>
-            <TableRow>
-              <TableLeftCell className="left-cell-border">
-                교육 만료일
-              </TableLeftCell>
-              <TableRightCell className="right-cell">
-                {enrollDetailData.expiredDtime}
-              </TableRightCell>
-            </TableRow>
           </TableBody>
         </Table>
       </ModalWrap>

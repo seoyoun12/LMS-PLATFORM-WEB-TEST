@@ -60,6 +60,7 @@ interface FormType extends ProvincialBoardSaveRequestDto {
 }
 
 const defaultValues = {
+  disabledEduTargetSub: true,
   files: [],
 };
 
@@ -108,7 +109,8 @@ export function CourseTrafficUploadForm({
     ) {
       setValue(
         'eduTargetSub',
-        TargetTypeMatch.filter(tm => tm.mainType === watch().eduTargetMain)[0]?.subType
+        TargetTypeMatch.filter(tm => tm.mainType === watch().eduTargetMain)[0]
+          ?.subType
       );
       setValue('disabledEduTargetSub', true);
       // console.log('나는 청소년이 아닙니다.');
@@ -323,7 +325,11 @@ export function CourseTrafficUploadForm({
               label="과정명"
               variant="outlined"
             />
-            <ErrorMessage errors={errors} name="title" as={<FormHelperText error />} />
+            <ErrorMessage
+              errors={errors}
+              name="title"
+              as={<FormHelperText error />}
+            />
           </FormControl>
 
           <FormControl className={textField}>

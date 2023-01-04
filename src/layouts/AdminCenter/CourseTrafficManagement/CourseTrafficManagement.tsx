@@ -83,7 +83,11 @@ export function CourseTrafficManagement() {
         <TableHead>
           <TableRow>
             {headRows.map(({ name, align, width }) => (
-              <CourseTrafficTitleTableCell key={name} align={align} width={width}>
+              <CourseTrafficTitleTableCell
+                key={name}
+                align={align}
+                width={width}
+              >
                 {name}
               </CourseTrafficTitleTableCell>
             ))}
@@ -119,7 +123,9 @@ export function CourseTrafficManagement() {
                 {
                   CourseTrafficTargetType.filter(
                     item => item.type === courseTraffic.eduTargetMain
-                  )[0].child.filter(r => r.type === courseTraffic.eduTargetSub)[0].ko
+                  )[0].child.filter(
+                    r => r.type === courseTraffic.eduTargetSub
+                  )[0].ko
                 }
               </CourseTrafficTableCell>
               {/* <CourseTrafficTableCell align="center">

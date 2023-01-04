@@ -19,7 +19,11 @@ import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
 import dateFormat from 'dateformat';
 import { UserModifyModal } from '@components/admin-center/UserModifyModal';
-import { CompleteType, StatusType, useLearningInfo } from '@common/api/adm/learningInfo';
+import {
+  CompleteType,
+  StatusType,
+  useLearningInfo,
+} from '@common/api/adm/learningInfo';
 import { grey } from '@mui/material/colors';
 import { CourseType } from '@common/api/adm/courseClass';
 import { NotFound } from '@components/ui/NotFound';
@@ -33,7 +37,11 @@ import { HeadRowsBottom } from '@components/admin-center/CourseInfo/HeadRowsBott
 import { useForm } from 'react-hook-form';
 import { HeadRowsTop } from '@components/admin-center/CourseInfo/HeadRowsTop';
 import { useCourseInfoTraffic } from '@common/api/adm/courseInfoTraffic';
-import { CourseTrafficTargetType, residenceList, TargetSubTypeReg } from 'src/staticDataDescElements/staticType';
+import {
+  CourseTrafficTargetType,
+  residenceList,
+  TargetSubTypeReg,
+} from 'src/staticDataDescElements/staticType';
 
 const headRows: {
   name: string;
@@ -97,8 +105,10 @@ export default function CourseInfoTrafficManagement() {
   // const [notFound, setNotFound] = useState(false);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const [submitValue, setSubmitValue] = useState<FormType>(defaultValues);
-  const { watch, setValue, reset, register } = useForm<FormType>({ defaultValues });
-  const { data, error, mutate } = useCourseInfoTraffic(10 , 0);
+  const { watch, setValue, reset, register } = useForm<FormType>({
+    defaultValues,
+  });
+  const { data, error, mutate } = useCourseInfoTraffic(10, 0);
   // console.log(watch());
 
   // Pagination
@@ -155,8 +165,10 @@ export default function CourseInfoTrafficManagement() {
     const value = e.target.value;
     setValue('notFound', false);
     if (!value) return setValue('completeType', null);
-    if (value === CompleteType.TYPE_COMPLETE) return setValue('completeType', value);
-    if (value === CompleteType.TYPE_INCOMPLETE) return setValue('completeType', value);
+    if (value === CompleteType.TYPE_COMPLETE)
+      return setValue('completeType', value);
+    if (value === CompleteType.TYPE_INCOMPLETE)
+      return setValue('completeType', value);
   };
 
   //퇴교여부
@@ -203,7 +215,8 @@ export default function CourseInfoTrafficManagement() {
     }
 
     const { phone, identityNumber } = watch();
-    if (phone === '' || phone?.replaceAll(' ', '') === '') setValue('phone', null);
+    if (phone === '' || phone?.replaceAll(' ', '') === '')
+      setValue('phone', null);
     if (identityNumber === '' || identityNumber?.replaceAll(' ', '') === '')
       setValue('identityNumber', null);
 
@@ -230,7 +243,9 @@ export default function CourseInfoTrafficManagement() {
   // user/adm/course-info/detail/{courseUserSeq}
   return (
     <Box>
-      <CourseInfoTypography variant="h5">전체 수강생 학습현황(도민)</CourseInfoTypography>
+      <CourseInfoTypography variant="h5">
+        전체 수강생 학습현황(도민)
+      </CourseInfoTypography>
       {/* <HeadRowsTop
         courseType={watch().courseType}
         onChangeCourseType={onChangeCourseType}
@@ -288,7 +303,11 @@ export default function CourseInfoTrafficManagement() {
                   align: string;
                   width: string;
                 }) => (
-                  <CourseInfoTitleTableCell key={name} align="center" width={width}>
+                  <CourseInfoTitleTableCell
+                    key={name}
+                    align="center"
+                    width={width}
+                  >
                     {name}
                   </CourseInfoTitleTableCell>
                 )
@@ -308,7 +327,9 @@ export default function CourseInfoTrafficManagement() {
                   {user.userSeq}
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
-                  <NameBox title={user.userInfo.name}>{user.userInfo.name}</NameBox>
+                  <NameBox title={user.userInfo.name}>
+                    {user.userInfo.name}
+                  </NameBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
                   {user.userInfo.username}
@@ -317,7 +338,13 @@ export default function CourseInfoTrafficManagement() {
                   <SubjectBox>{convertBirth(user.userInfo.birth)}</SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
-                  <SubjectBox>{ CourseTrafficTargetType.filter(f=>f.type=== user.eduTargetMain)[0].ko}</SubjectBox>
+                  <SubjectBox>
+                    {
+                      CourseTrafficTargetType.filter(
+                        f => f.type === user.eduTargetMain
+                      )[0].ko
+                    }
+                  </SubjectBox>
                 </CourseInfoTableCell>
                 {/* <CourseInfoTableCell align="center">
                   <SubjectBox>
@@ -329,15 +356,25 @@ export default function CourseInfoTrafficManagement() {
                   </SubjectBox>
                 </CourseInfoTableCell> */}
                 <CourseInfoTableCell align="center">
-                  <SubjectBox>{TargetSubTypeReg.filter(f=>f.type === user.eduTargetSub)[0].ko}</SubjectBox>
+                  <SubjectBox>
+                    {
+                      TargetSubTypeReg.filter(
+                        f => f.type === user.eduTargetSub
+                      )[0].ko
+                    }
+                  </SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
-                  <SubjectBox>{residenceList.filter(f=>f.en === user.region )[0].ko }</SubjectBox>
+                  <SubjectBox>
+                    {residenceList.filter(f => f.en === user.region)[0].ko}
+                  </SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
                   {user.organization}
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">{user.expectedToStartDtime}</CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  {user.expectedToStartDtime}
+                </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
                   {user.expiredDtime}
                 </CourseInfoTableCell>

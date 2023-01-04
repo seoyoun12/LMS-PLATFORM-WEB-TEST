@@ -33,8 +33,11 @@ import { CourseClassTraffic } from '@common/recoil/courseClassTraffic/atom';
 import { enrollProvincial } from '@common/api/provincialEnroll';
 import { ProvincialEnrollSaveRequestDto } from '@common/api/Api';
 import { Spinner } from '@components/ui';
+import { EduTargetMainType } from '@common/api/learningMaterial';
 // import { enrollCourseUserProvincial } from '@common/api/courseUser';
 // import { CourseUserProvincialSaveRequestDto } from '@common/api/Api';
+
+// 도민과정 교육신청 steb2
 
 interface detailCounts {
   [prop: string]: { [prop: string]: number };
@@ -92,12 +95,17 @@ export function Steb2() {
       router.push('steb3');
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    setValue('eduTargetMain', router.query.eduTargetMain as EduTargetMainType);
+  }, []);
+
   return (
     <Steb2Wrap>
-      <StebHeader value={1} />
+      <StebHeader value={2} />
       <Container
         component="form"
         onSubmit={handleSubmit}
@@ -129,27 +137,35 @@ export function Steb2() {
           <TextField label="소속(학교, 기관, 단체)" {...register('organization')} />
           <FormHelperText sx={{ color: 'red' }}></FormHelperText>
         </FormControl>
-        <DatePicker
-          locale={ko}
-          dateFormat="yyyy-MM-dd"
-          showPopperArrow={false}
-          minDate={new Date()}
-          customInput={<TextField fullWidth />}
-          selected={new Date(watch().expectedToStartDtime)}
-          onSelect={() => {}}
-          onChange={date =>
-            setValue(
-              'expectedToStartDtime',
-              date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd')
-            )
-          }
-        />
+        <FormControl fullWidth>
+          <Typography>신청날짜</Typography>
+          <DatePicker
+            locale={ko}
+            dateFormat="yyyy-MM-dd"
+            showPopperArrow={false}
+            minDate={new Date()}
+            customInput={<TextField fullWidth />}
+            selected={new Date(watch().expectedToStartDtime)}
+            onSelect={() => {}}
+            onChange={date =>
+              setValue(
+                'expectedToStartDtime',
+                date
+                  ? dateFormat(date, 'yyyy-mm-dd')
+                  : dateFormat(new Date(), 'yyyy-mm-dd')
+              )
+            }
+          />
+        </FormControl>
+
         <FormControl fullWidth>
           <Typography id="student">교육 대상자</Typography>
           <Select
             labelId="student"
             id="student"
             {...register('eduTargetMain')}
+            value={router.query.eduTargetMain}
+            disabled
             // label="student"
           >
             {studentList.map((item, index) => (

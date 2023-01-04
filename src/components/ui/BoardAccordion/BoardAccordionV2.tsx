@@ -139,6 +139,7 @@ export function BoardAccordionV2({
                         padding: '0px',
                         // backgroundColor: 'red',
                         borderRadius: '15px',
+                        maxWidth: '700px',
                       }}
                       onClick={async () => {
                         try {
@@ -159,7 +160,7 @@ export function BoardAccordionV2({
                         sx={{ cursor: 'pointer' }}
                         label={
                           <Box sx={{ display: 'flex' }}>
-                            <Box>{s3Files[0]?.name}</Box>
+                            <FileBox>{s3Files[0]?.name}</FileBox>
                           </Box>
                         }
                       />
@@ -247,4 +248,11 @@ const BoardContent = styled(Box)`
 const FileChip = styled(Chip)`
   height: 36.5px;
   padding: 0px;
+`;
+// 파일명. ellipsis 적용.
+const FileBox = styled(Box)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 700px;
 `;

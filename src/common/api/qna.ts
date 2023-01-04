@@ -1,15 +1,10 @@
 import { YN } from '@common/constant';
 import { GET, POST } from '@common/httpClient';
+import { QnaSubType, QnaType } from 'src/staticDataDescElements/staticType';
 import useSWR, { SWRResponse } from 'swr';
 import { PaginationResult } from 'types/fetch';
 import { S3Files } from 'types/file';
 
-export enum QnaType {
-  TYPE_SIGNUP_OR_SIGNIN = 'TYPE_SIGNUP_OR_SIGNIN',
-  TYPE_EDU_OR_COMPLETE = 'TYPE_EDU_OR_COMPLETE',
-  TYPE_WEB_OR_APP = 'TYPE_WEB_OR_APP',
-  TYPE_ETC = 'TYPE_ETC',
-}
 
 export enum smsYn {
   SMSY = 'Y',
@@ -32,12 +27,13 @@ export interface Qna {
   seq: number;
   status: number;
   title: string;
-  type: QnaType;
+  type: QnaSubType;
   userSeq: number;
   username: string;
   name: string;
   smsYn: string;
   phone: string;
+  connectType: QnaType;
 }
 
 export type QnaInput = Partial<Qna>;
@@ -76,12 +72,20 @@ export function qnaList({ page, elementCnt }: { page: number; elementCnt?: numbe
 }
 
 // qna adm list
-export function qnaAdmList({ page, elementCnt }: { page: number; elementCnt?: number }) {
+export function qnaAdmList({ 
+  page, 
+  elementCnt, 
+  boardType
+}: { 
+  page: number; 
+  elementCnt?: number; 
+  boardType: string
+}) {
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Qna[]>>>(
     [
       `/qna/adm`,
       {
-        params: { page, elementCnt },
+        params: { page, elementCnt, boardType },
       },
     ],
     GET
@@ -119,3 +123,4 @@ export async function uploadQnaAnswer(
 ) {
   return await POST(`/qna/adm/${seq}`, qnaAnswerInput);
 }
+

@@ -81,7 +81,7 @@ const categoryData = [
   {
     id: 2,
     title: '도민안전교육',
-    href: '/traffic/stebMove/steb2',
+    href: '/traffic/stebMove/steb1',
     // icon: <CalendarIcon />,
     icon: 'assets/images/calendarTransIcon.png',
     // color: '#fff',
@@ -104,7 +104,7 @@ const categoryData = [
   },
 ];
 
-export function CategoryCard() {
+export default function CategoryCard() {
   const isTablet = useResponsive(1028);
   return (
     // <ContentContainer className={styles.globalContainer}>
@@ -145,9 +145,17 @@ export function CategoryCard() {
                     background: 'white',
                   }}
                 >
-                  <Box display="flex" alignItems="center" justifyContent="center">
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
                     {/* {categoryData.icon} */}
-                    <Image src={'/' + categoryData.icon} width={100} height={100} />
+                    <Image
+                      src={'/' + categoryData.icon}
+                      width={100}
+                      height={100}
+                    />
                   </Box>
                   <Box mt={2}>
                     {/* <div className='categoryIcon'/> */}

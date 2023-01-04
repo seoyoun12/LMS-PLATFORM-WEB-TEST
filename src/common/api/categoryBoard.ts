@@ -8,7 +8,8 @@ import { ProductStatus } from './course';
 export enum BoardType {
   TYPE_NOTICE = 'TYPE_NOTICE',
   TYPE_REVIEW = 'TYPE_REVIEW',
-  TYPE_FAQ = 'TYPE_FAQ',
+  TYPE_NOTICE_PROVINCIAL = "TYPE_NOTICE_PROVINCIAL",
+  TYPE_FAQ_PROVINCIAL = "TYPE_FAQ_PROVINCIAL"
 }
 
 export interface CategoryBoard {

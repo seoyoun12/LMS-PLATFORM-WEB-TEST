@@ -14,7 +14,9 @@ import { EnrollHistoryTrafficModal } from './EnrollHistoryTrafficModal/EnrollHis
 export function EnrollHistory() {
   const router = useRouter();
   const { data, error, mutate } = useCourseUser();
+  // 리스트
   const { enrollData, enrollError, enrollMutate } = useEnrollProvincialList();
+
   const [open, setOpen] = useState(false);
   const [trafficOpen, setTrafficOpen] = useState(false);
   const [modalData, setModalData] = useState<{
@@ -30,8 +32,9 @@ export function EnrollHistory() {
   const handleClose = async () => {
     setOpen(false);
     setTrafficOpen(false);
-    await enrollMutate(); // provincialEnroll.ts에 enrullMutate로 되어있다. 20221227 변경
+    await enrollMutate(); // provincialEnroll.ts에 enrolllMutate로 되어있다. 20221227 변경
   };
+
   if (!data) return <Spinner />;
   if (!enrollData) return <Spinner />;
 

@@ -65,7 +65,7 @@ export function Drawer({ children }: { children: ReactNode }) {
       icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
     },
     {
-      name: '게시판관리',
+      name: '게시판관리(운수/저상)',
       children: [
         {
           name: '게시판 목록',
@@ -76,6 +76,22 @@ export function Drawer({ children }: { children: ReactNode }) {
           name: '게시판 등록',
           href: '/admin-center/category/upload',
           isActive: router.pathname === '/admin-center/category/upload',
+        },
+      ],
+      icon: <ListAltIcon sx={{ mr: '32px', color: grey[700] }} />,
+    },
+    {
+      name: '게시판관리(도민)',
+      children: [
+        {
+          name: '게시판 목록',
+          href: '/admin-center/category-traffic',
+          isActive: router.pathname === '/admin-center/category-traffic',
+        },
+        {
+          name: '게시판 등록',
+          href: '/admin-center/category-traffic/upload',
+          isActive: router.pathname === '/admin-center/category-traffic/upload',
         },
       ],
       icon: <ListAltIcon sx={{ mr: '32px', color: grey[700] }} />,
@@ -217,12 +233,23 @@ export function Drawer({ children }: { children: ReactNode }) {
       icon: <SourceOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
     },
     {
-      name: '학습현황',
+      name: '학습현황(운수/저상)',
       children: [
         {
           name: '전체 수강생 학습현황',
           href: '/admin-center/course-info',
           isActive: router.pathname === '/admin-center/course-info',
+        },
+      ],
+      icon: <MenuBookIcon sx={{ mr: '32px', color: grey[700] }} />,
+    },
+    {
+      name: '학습현황(도민)',
+      children: [
+        {
+          name: '전체 수강생 학습현황',
+          href: '/admin-center/course-info-traffic',
+          isActive: router.pathname === '/admin-center/course-info-traffic',
         },
       ],
       icon: <MenuBookIcon sx={{ mr: '32px', color: grey[700] }} />,

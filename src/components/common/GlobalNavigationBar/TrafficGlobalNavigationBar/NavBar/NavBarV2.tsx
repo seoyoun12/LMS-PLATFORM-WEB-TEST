@@ -52,7 +52,10 @@ export function NavBarV2() {
   const open = Boolean(anchorEl);
   const [isLogin, setIsLogin] = useRecoilState(isLoginState); //과정게시판 교육영상 가리기용
 
-  const handleHover = (e: React.MouseEvent<HTMLDivElement>, showValue: number) => {
+  const handleHover = (
+    e: React.MouseEvent<HTMLDivElement>,
+    showValue: number
+  ) => {
     setAnchorEl(e.currentTarget);
     setShowIndicatorValue(showValue);
   };
@@ -91,7 +94,10 @@ export function NavBarV2() {
                 <Box className="link-wrap">
                   {item.items.map(menuItem => {
                     if (menuItem.href === '/me') return;
-                    if (!isLogin && menuItem.href === '/traffic/learning-material/media')
+                    if (
+                      !isLogin &&
+                      menuItem.href === '/traffic/learning-material/media'
+                    )
                       return;
                     return (
                       <Link
@@ -99,7 +105,9 @@ export function NavBarV2() {
                         href={menuItem.href}
                         key={menuItem.title}
                       >
-                        <MenuItem className="link-item">{menuItem.title}</MenuItem>
+                        <MenuItem className="link-item">
+                          {menuItem.title}
+                        </MenuItem>
                       </Link>
                     );
                   })}
@@ -308,7 +316,7 @@ export const ProvintialHeaderList = [
     category: '온라인교육',
     href: '/traffic/stebMove/steb2',
     items: [
-      { title: '신청하기', href: '/traffic/stebMove/steb2' },
+      { title: '신청하기', href: '/traffic/stebMove/steb1' },
       // { title: '온라인교육 수정', href: '/me/enroll-history' },  // 20221226 비활성화 처리
       { title: '학습하기', href: '/traffic/class-room' },
     ],

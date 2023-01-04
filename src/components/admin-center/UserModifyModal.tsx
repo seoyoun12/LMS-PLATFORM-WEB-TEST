@@ -140,11 +140,11 @@ export function UserModifyModal({
         await removeUser(userData?.seq);
         snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
         // await mutate();
+        handleClose(true);
       }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
     }
-    handleClose(true);
   };
 
   const onSubmit: SubmitHandler<UserInput> = async userInput => {

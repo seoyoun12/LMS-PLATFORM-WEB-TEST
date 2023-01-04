@@ -57,9 +57,15 @@ export function CourseInfoModify() {
 
   return (
     <Box>
-      <CourseInformation courseInfo={data?.courseInfo} onHandleSubmit={handleSubmit} />
+      <CourseInformation
+        courseInfo={data?.courseInfo}
+        onHandleSubmit={handleSubmit}
+      />
       <LearningStatus learningStatusList={data?.learningStatusList} />
-      <ProgressStatus progressList={data.progressStatusList} onMutate={onMutate} />
+      <ProgressStatus
+        progressList={data.progressStatusList}
+        onMutate={onMutate}
+      />
     </Box>
   );
 }

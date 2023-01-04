@@ -1,4 +1,4 @@
-import { QnaInput, QnaType } from '@common/api/qna';
+import { QnaInput } from '@common/api/qna';
 import { YN } from '@common/constant';
 import { FileUploader } from '@components/ui/FileUploader';
 import {
@@ -18,6 +18,7 @@ import {
   Typography,
   Button,
   Chip,
+  SelectChangeEvent,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { ChangeEvent, useRef, useState } from 'react';
@@ -26,20 +27,7 @@ import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined
 import useResponsive from '@hooks/useResponsive';
 import { Phone4Regex } from '@utils/inputRegexes';
 import { Spinner } from '@components/ui';
-
-const questionTypeList = [
-  { type: '회원가입/로그인', enType: 'TYPE_SIGNUP_OR_SIGNIN' },
-  { type: '교육/수료', enType: 'TYPE_EDU_OR_COMPLETE' },
-  { type: '홈페이지/앱', enType: 'TYPE_WEB_OR_APP' },
-  { type: '기타', enType: 'TYPE_ETC' },
-];
-
-const emailList = [
-  { email: '직접입력', isHandmade: true },
-  { email: 'naver.com', isHandmade: false },
-  { email: 'gamil.com', isHandmade: false },
-  { email: 'daum.net', isHandmade: false },
-];
+import { QnaSubType, QnaType } from 'src/staticDataDescElements/staticType';
 
 const phoneList = ['010', '032', '02', '031'];
 
@@ -97,19 +85,20 @@ export function CategoryBoardQuestionForm({
   //   // }
   // }
 
-  const onChangePhoneNum01 = (e: any) => {
+  // sangam question
+  const onChangePhoneNum01 = (e: SelectChangeEvent<string>) => {
     setPhone01(e.target.value);
   };
-  const onChangePhoneNum02 = (e: any) => {
-    setPhone02(e.target.value);
+  const onChangePhoneNum02 = (value: string) => {
+    setPhone02(value);
   };
-  const onChangePhoneNum03 = (e: any) => {
-    setPhone03(e.target.value);
+  const onChangePhoneNum03 = (value: string) => {
+    setPhone03(value);
   };
 
   // select
-  const [questionType, setQuestionType] = useState<QnaType>(
-    QnaType.TYPE_SIGNUP_OR_SIGNIN
+  const [questionType, setQuestionType] = useState<QnaSubType>(
+    QnaSubType.TYPE_SIGNUP_OR_SIGNIN
   );
 
   const handleSelectChange = (e: any) => {
@@ -143,13 +132,27 @@ export function CategoryBoardQuestionForm({
     setIsFileDelete(true);
   };
 
-  const onSubmit: SubmitHandler<FormType> = async ({ files, ...qna }, event) => {
+  const onSubmit: SubmitHandler<FormType> = async (
+    { files, ...qna },
+    event
+  ) => {
     event?.preventDefault();
     const qnaInput = {
       ...qna,
       phone: phone01 + phone02 + phone03,
       type: questionType,
+      connectType: QnaType.TYPE_PROVINCIAL,
     };
+    if (
+      qnaInput.title === '' ||
+      qnaInput.content === '' ||
+      qnaInput.phone.length < 11
+    )
+      return window.alert('제목, 내용, 휴대번호, 문의유형 모두 입력해주세요!');
+    if (!individualCheck)
+      return window.alert('개인정보 수집 및 활용에 동의하셔야 합니다!');
+
+    // console.log('qnaInput : ', qnaInput);
 
     onHandleSubmit({ qnaInput, files, isFileDelete });
   };
@@ -166,7 +169,7 @@ export function CategoryBoardQuestionForm({
       <TableContainer sx={{ width: '100%' }}>
         <TableBody sx={{ display: 'table', width: '100%' }}>
           <TableRow>
-            <TableCellLeft align="center">전화번호</TableCellLeft>
+            <TableCellLeft align="center">휴대번호</TableCellLeft>
 
             <TableCellRight>
               <FormControl
@@ -205,6 +208,7 @@ export function CategoryBoardQuestionForm({
                     value={phone03}
                     onChange={e => {
                       phone3.current = e.target.value;
+
                       if (Phone4Regex.test(e.target.value)) {
                         return;
                       }
@@ -240,13 +244,21 @@ export function CategoryBoardQuestionForm({
             <TableCellRight>
               <FormControl sx={{ minWidth: '130px' }}>
                 <InputLabel>문의유형</InputLabel>
-                <Select value={questionType} label="type" onChange={handleSelectChange}>
-                  <MenuItem value={QnaType.TYPE_SIGNUP_OR_SIGNIN}>
+                <Select
+                  value={questionType}
+                  label="문의유형"
+                  onChange={handleSelectChange}
+                >
+                  <MenuItem value={QnaSubType.TYPE_SIGNUP_OR_SIGNIN}>
                     회원가입/로그인
                   </MenuItem>
-                  <MenuItem value={QnaType.TYPE_EDU_OR_COMPLETE}>교육/수료</MenuItem>
-                  <MenuItem value={QnaType.TYPE_WEB_OR_APP}>홈페이지/앱</MenuItem>
-                  <MenuItem value={QnaType.TYPE_ETC}>기타</MenuItem>
+                  <MenuItem value={QnaSubType.TYPE_EDU_OR_COMPLETE}>
+                    교육/수료
+                  </MenuItem>
+                  <MenuItem value={QnaSubType.TYPE_WEB_OR_APP}>
+                    홈페이지/앱
+                  </MenuItem>
+                  <MenuItem value={QnaSubType.TYPE_ETC}>기타</MenuItem>
                 </Select>
               </FormControl>
             </TableCellRight>
@@ -306,9 +318,10 @@ export function CategoryBoardQuestionForm({
         </TableBody>
       </TableContainer>
       <Typography sx={{ padding: '1rem', color: grey[500] }}>
-        수집하는 개인 정보[(필수) 문의내용, (선택) 첨부 파일]는 문의 내용 처리 및 고객
-        불만을 해결하기 위해 사용되며, 관련 법령에 따라 3년간 보관 후 삭제됩니다. 동의를
-        거부하실 수 있으며, 동의 거부 시 서비스 이용이 제한 될 수 있습니다.
+        수집하는 개인 정보[(필수) 문의내용, (선택) 첨부 파일]는 문의 내용 처리
+        및 고객 불만을 해결하기 위해 사용되며, 관련 법령에 따라 3년간 보관 후
+        삭제됩니다. 동의를 거부하실 수 있으며, 동의 거부 시 서비스 이용이 제한
+        될 수 있습니다.
       </Typography>
       <Box display={'flex'} alignItems="center">
         <Checkbox

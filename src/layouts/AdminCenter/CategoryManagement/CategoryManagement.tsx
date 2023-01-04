@@ -119,9 +119,9 @@ export function CategoryManagement() {
   const onClickRemoveCategory = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
-        title: '공지사항 삭제하기',
+        title: '삭제하기',
         description: '정말로 삭제하시겠습니까?',
-        confirmText: '삭제하기',
+        confirmText: '확인',
         cancelText: '취소',
       });
       if (dialogConfirmed) {
@@ -155,7 +155,7 @@ export function CategoryManagement() {
   return (
     <Box>
       <Typography fontSize={30} fontWeight="bold">
-        게시판 구분
+        게시판 구분 (운수/저상)
       </Typography>
       <RadioGroup row sx={{ mb: 6 }}>
         {tabsConfig.map(({ name, value }: { name: string; value: string }) => (
@@ -164,7 +164,10 @@ export function CategoryManagement() {
             label={name}
             value={value}
             control={<Radio checked={typeValue == value} />}
-            onClick={() => setTypeValue(value)}
+            onClick={() => {
+              setTypeValue(value);
+              setPage(0);
+            }}
           />
         ))}
       </RadioGroup>
@@ -208,9 +211,15 @@ export function CategoryManagement() {
               onClick={() => onClickmodifyCategoryBoard(category.seq)}
             >
               {/* <CategoryTableCell align="center">{category.seq}</CategoryTableCell> */}
-              <CategoryTableCell align="center">{category.postTypeSeq}</CategoryTableCell>
               <CategoryTableCell align="center">
-                {tabsConfig.filter(item => item.value === category.boardType)[0]?.name}
+                {category.postTypeSeq}
+              </CategoryTableCell>
+              <CategoryTableCell align="center">
+                {
+                  tabsConfig.filter(
+                    item => item.value === category.boardType
+                  )[0]?.name
+                }
               </CategoryTableCell>
               <CategoryTableCell align="center">
                 <SubjectBox>{category.subject}</SubjectBox>
@@ -222,7 +231,9 @@ export function CategoryManagement() {
               <CategoryTableCell align="center">
                 {dateFormat(category.modifiedDtime, 'isoDate')}
               </CategoryTableCell>
-              <CategoryTableCell align="center">{category.hit}</CategoryTableCell>
+              <CategoryTableCell align="center">
+                {category.hit}
+              </CategoryTableCell>
               <CategoryTableCell align="center">
                 {category.noticeYn === 'Y' ? '공지중' : '비공지'}
               </CategoryTableCell>
@@ -233,9 +244,13 @@ export function CategoryManagement() {
                 <Chip
                   variant="outlined"
                   size="small"
-                  label={category.status === ProductStatus.APPROVE ? '정상' : '중지'}
+                  label={
+                    category.status === ProductStatus.APPROVE ? '정상' : '중지'
+                  }
                   color={
-                    category.status === ProductStatus.APPROVE ? 'secondary' : 'default'
+                    category.status === ProductStatus.APPROVE
+                      ? 'secondary'
+                      : 'default'
                   }
                 />
               </CategoryTableCell>

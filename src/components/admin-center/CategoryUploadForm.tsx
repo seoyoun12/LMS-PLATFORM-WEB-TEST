@@ -32,8 +32,6 @@ import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import router from 'next/router';
 import { Spinner } from '@components/ui';
-import { Label } from '@mui/icons-material';
-import { flexbox } from '@mui/system';
 
 interface Props {
   mode?: 'upload' | 'modify';
@@ -114,9 +112,9 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
   const onClickRemoveCategory = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
-        title: '공지사항 삭제하기',
+        title: '삭제하기',
         description: '정말로 삭제하시겠습니까?',
-        confirmText: '삭제하기',
+        confirmText: '확인',
         cancelText: '취소',
       });
       if (dialogConfirmed) {
@@ -155,7 +153,7 @@ export function CategoryUploadForm({ mode = 'upload', category, onHandleSubmit }
         className={boxStyles}
       >
         <FormControl className={pt20}>
-          <FormLabel focused={false}>게시판타입</FormLabel>
+          <FormLabel focused={false}>게시판타입(운수/저상)</FormLabel>
           <Controller
             rules={{ required: true }}
             control={control}

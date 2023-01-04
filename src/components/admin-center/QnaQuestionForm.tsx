@@ -15,6 +15,7 @@ import dateFormat from 'dateformat';
 import { useRouter } from 'next/router';
 import SaveIcon from '@mui/icons-material/Save';
 import { useState } from 'react';
+import { QnaTypeTabsConfig } from 'src/staticDataDescElements/staticType';
 
 const tabsConfig = [
   { name: '회원가입/로그인', value: 'TYPE_SIGNUP_OR_SIGNIN' },
@@ -33,7 +34,12 @@ export function QnaQuestionForm() {
   return (
     <QnaQuestionBox>
       <TableHeadFull colSpan={4} sx={{ display: 'table', width: '100%' }}>
-        1대1문의 상세보기
+        1대1문의 상세보기 (
+        {
+          QnaTypeTabsConfig.filter(item => item.value === data.connectType)[0]
+            ?.name
+        }
+        )
       </TableHeadFull>
       <TableBody sx={{ display: 'table', width: '100%' }}>
         <TableRow>
@@ -42,7 +48,9 @@ export function QnaQuestionForm() {
             {data.username ? `${data.username}(${data.name})` : data.name}
           </TableRightCell>
           <TableLeftCell align="center">전화번호</TableLeftCell>
-          <TableRightCell>{data.phone ? `${data.phone}` : '번호없음'}</TableRightCell>
+          <TableRightCell>
+            {data.phone ? `${data.phone}` : '번호없음'}
+          </TableRightCell>
 
           {/* <TableRightCell>
             {data?.s3Files[0] ? (
@@ -106,7 +114,9 @@ export function QnaQuestionForm() {
                 onClick={async () => {
                   try {
                     const blobData = await downloadFile(data.s3Files[0].seq);
-                    const url = window.URL.createObjectURL(new Blob([blobData]));
+                    const url = window.URL.createObjectURL(
+                      new Blob([blobData])
+                    );
                     const a = document.createElement('a');
                     a.href = url;
                     a.download = `${data.s3Files[0].name}`;

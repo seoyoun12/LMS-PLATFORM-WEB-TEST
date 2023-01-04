@@ -9,6 +9,7 @@ import { S3Files } from 'types/file';
 
 export function CategoryBoardNotice() {
   const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_NOTICE');
+  // const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_NOTICE_PROVINCIAL');
   const accordianInfo: {
     seq: number;
     date: string;

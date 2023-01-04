@@ -107,14 +107,11 @@ export function CourseInfomationTraffic({
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     const value = e.target.value;
-    console.log('안ㅁ암', value);
     if (value.length > 6) return;
     if (value === '') return setValue(e.target.name as any, Number(value));
     if (value.length === 0 || value === '0') {
-      console.log('왜여기임', value);
       return setValue(e.target.name as any, Number(value));
     }
-    console.log('tq', value, e.target.name, watch(e.target.name as any));
 
     if (!Number(e.target.value)) return;
     setValue(e.target.name as any, Number(value.replace(/[^0-9]/g, '')));
@@ -143,7 +140,6 @@ export function CourseInfomationTraffic({
       ...resetEduTargets,
     };
 
-    console.log('하이요 ', enrollInput);
 
     onHandleSubmit({
       enrollInput: enrollInput,
@@ -151,7 +147,6 @@ export function CourseInfomationTraffic({
       setLoading,
     });
   };
-  console.log(watch());
   //초기화
   useEffect(() => {
     reset(enrollInfo);

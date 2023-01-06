@@ -110,7 +110,7 @@ export function EnrollHistoryTrafficModal({
 
   //
 
-  console.log('enrollDetailData.persons[ap] : ', enrollDetailData?.persons);
+  console.log('enrollDetailData.persons : ', enrollDetailData?.persons);
 
   //
 

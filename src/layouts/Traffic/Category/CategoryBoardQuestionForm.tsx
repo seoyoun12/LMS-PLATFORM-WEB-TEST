@@ -27,7 +27,21 @@ import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined
 import useResponsive from '@hooks/useResponsive';
 import { Phone4Regex } from '@utils/inputRegexes';
 import { Spinner } from '@components/ui';
-import { QnaSubType, QnaType } from 'src/staticDataDescElements/staticType';
+import { QnaType, QnaSubType } from 'src/staticDataDescElements/staticType';
+
+const questionTypeList = [
+  { type: '회원가입/로그인', enType: 'TYPE_SIGNUP_OR_SIGNIN' },
+  { type: '교육/수료', enType: 'TYPE_EDU_OR_COMPLETE' },
+  { type: '홈페이지/앱', enType: 'TYPE_WEB_OR_APP' },
+  { type: '기타', enType: 'TYPE_ETC' },
+];
+
+const emailList = [
+  { email: '직접입력', isHandmade: true },
+  { email: 'naver.com', isHandmade: false },
+  { email: 'gamil.com', isHandmade: false },
+  { email: 'daum.net', isHandmade: false },
+];
 
 const phoneList = ['010', '032', '02', '031'];
 
@@ -85,7 +99,6 @@ export function CategoryBoardQuestionForm({
   //   // }
   // }
 
-  // sangam question
   const onChangePhoneNum01 = (e: SelectChangeEvent<string>) => {
     setPhone01(e.target.value);
   };
@@ -143,16 +156,6 @@ export function CategoryBoardQuestionForm({
       type: questionType,
       connectType: QnaType.TYPE_PROVINCIAL,
     };
-    if (
-      qnaInput.title === '' ||
-      qnaInput.content === '' ||
-      qnaInput.phone.length < 11
-    )
-      return window.alert('제목, 내용, 휴대번호, 문의유형 모두 입력해주세요!');
-    if (!individualCheck)
-      return window.alert('개인정보 수집 및 활용에 동의하셔야 합니다!');
-
-    // console.log('qnaInput : ', qnaInput);
 
     onHandleSubmit({ qnaInput, files, isFileDelete });
   };
@@ -169,7 +172,7 @@ export function CategoryBoardQuestionForm({
       <TableContainer sx={{ width: '100%' }}>
         <TableBody sx={{ display: 'table', width: '100%' }}>
           <TableRow>
-            <TableCellLeft align="center">휴대번호</TableCellLeft>
+            <TableCellLeft align="center">전화번호</TableCellLeft>
 
             <TableCellRight>
               <FormControl
@@ -208,7 +211,6 @@ export function CategoryBoardQuestionForm({
                     value={phone03}
                     onChange={e => {
                       phone3.current = e.target.value;
-
                       if (Phone4Regex.test(e.target.value)) {
                         return;
                       }
@@ -246,7 +248,7 @@ export function CategoryBoardQuestionForm({
                 <InputLabel>문의유형</InputLabel>
                 <Select
                   value={questionType}
-                  label="문의유형"
+                  label="type"
                   onChange={handleSelectChange}
                 >
                   <MenuItem value={QnaSubType.TYPE_SIGNUP_OR_SIGNIN}>

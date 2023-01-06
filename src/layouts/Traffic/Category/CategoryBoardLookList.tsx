@@ -2,7 +2,14 @@ import { NotFound } from '@components/ui/NotFound';
 import { QnaAccordion, QnaAccordionV2 } from '@components/ui/QnaAccordion.tsx';
 import { useInfiniteScrollQna } from '@hooks/useInfiniteScrollQna';
 import useResponsive from '@hooks/useResponsive';
-import { Box, Container, Table, TableCell, TableHead, TableRow } from '@mui/material';
+import {
+  Box,
+  Container,
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import dateFormat from 'dateformat';
 import styled from 'styled-components';
 

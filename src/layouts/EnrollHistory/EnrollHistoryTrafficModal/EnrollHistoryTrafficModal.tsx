@@ -74,6 +74,7 @@ const defaultValues = {
   // selfDriver: 0,
 };
 
+
 export function EnrollHistoryTrafficModal({
   open,
   handleClose,
@@ -179,6 +180,7 @@ export function EnrollHistoryTrafficModal({
         setValue('eduTargetSub', data.eduTargetSub);
         //최종적으로 별도의 로컬 상태에 넣어줍니다.
         //(변경을 고려하지 않았기 때문에 use hook form으로 변경하여 사용하면 편할것 같습니다.)
+        reset(enrollData)
         setEnrollDetailData(enrollData);
       } catch (e) {
         console.log(e);
@@ -387,8 +389,10 @@ export function EnrollHistoryTrafficModal({
                           onChange={handleEduPersonCount}
                           name={ap}
                           // defaultValue={enrollDetailData.persons[ap] || 0}
-                          defaultValue={enrollDetailData.persons[ap] || 0}
-                          value={watch(ap as any) || 0}
+                          defaultValue={enrollDetailData.persons.filter(f=>f?.age === ap)[0]?.count || 0}
+                          // 하기의 코드가 문제였습니다. watch(ap as any)를 하면 enrollData.[ap]로 동작하기때문에 맞지 않습니다. 그래서 데이터를 넣는 중 없는 속성 오류가 발생하여 or의 다음값인 0이 들어간 것입니다.
+                          // 따라서 아래와 같이 바꿔주면 정상동작합니다.
+                          value={watch('persons').filter(f=>f?.age === ap)[0]?.count || 0}
                           InputProps={{ endAdornment: <Box>명</Box> }}
                           sx={{
                             marginLeft: '-10px',

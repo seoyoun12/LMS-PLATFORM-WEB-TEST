@@ -157,7 +157,8 @@ export function EnrollHistoryTrafficModal({
         console.log(e);
         snackbar({
           variant: 'error',
-          message: e.data?.message || '정보를 불러오는중에 문제가 발생했습니다.',
+          message:
+            e.data?.message || '정보를 불러오는중에 문제가 발생했습니다.',
         });
         handleClose();
       }
@@ -186,7 +187,9 @@ export function EnrollHistoryTrafficModal({
     const filteredSubType = filteredMainType.child.filter(
       f => f.type === watch().eduTargetSub
     )[0];
-    filteredSubType.applicants.forEach(fo => (resetEduTargets[fo] = watch(fo as any)));
+    filteredSubType.applicants.forEach(
+      fo => (resetEduTargets[fo] = watch(fo as any))
+    );
 
     const enrollInput = {
       ...watch(),
@@ -208,7 +211,10 @@ export function EnrollHistoryTrafficModal({
     try {
       setLoading(true);
       await updateEnrollProvincial(enrollSeq, enrollInput);
-      snackbar({ variant: 'success', message: '성공적으로 수정완료 했습니다.' });
+      snackbar({
+        variant: 'success',
+        message: '성공적으로 수정완료 했습니다.',
+      });
       setLoading(false);
       handleClose();
     } catch (e) {
@@ -261,7 +267,9 @@ export function EnrollHistoryTrafficModal({
           <TableBody sx={{ display: 'table', width: '100%' }}>
             <TableDoubleRow>
               <TableDoubleParantLeftCell sx={{ width: '50%' }}>
-                <TableDoubleLeftCell className="left-cell-border">No</TableDoubleLeftCell>
+                <TableDoubleLeftCell className="left-cell-border">
+                  No
+                </TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
                   {watch().seq}
                 </TableDoubleRightCell>
@@ -348,41 +356,42 @@ export function EnrollHistoryTrafficModal({
             </TableDoubleRow>
 
             {/* 도민 온라인교육신청내역 수정폼 - 인원 */}
-            {CourseTrafficTargetType.filter(mt => mt.type === watch()?.eduTargetMain).map(
-              item =>
-                item.child
-                  .filter(st => st.type === watch().eduTargetSub)
-                  .map(item =>
-                    item.applicants.map(ap => (
-                      <TableDoubleParantLeftCell key={ap}>
-                        <TableDoubleLeftCell
-                          className="left-cell-border"
-                          key={ap}
-                          sx={{ mb: '4px' }}
-                        >
-                          {eduSubArr.filter(f => f.subType === ap)[0].subKo}
-                        </TableDoubleLeftCell>
-                        <TableDoubleRightCell className="right-cell">
-                          <TextField
-                            onChange={handleEduPersonCount}
-                            name={ap}
-                            // defaultValue={enrollDetailData.persons[ap] || 0}
-                            // defaultValue={watch(ap as any)|| 0}
-                            // 하기의 코드가 문제였습니다. watch(ap as any)를 하면 enrollData.[ap]로 동작하기때문에 맞지 않습니다. 그래서 데이터를 넣는 중 없는 속성 오류가 발생하여 or의 다음값인 0이 들어간 것입니다.
-                            // 따라서 아래와 같이 바꿔주면 정상동작합니다.
-                            value={watch(ap as any) || 0}
-                            InputProps={{ endAdornment: <Box>명</Box> }}
-                            sx={{
-                              marginLeft: '-10px',
-                              mr: '10px',
-                              fontWeight: 'bold',
-                              mb: '4px',
-                            }}
-                          />
-                        </TableDoubleRightCell>
-                      </TableDoubleParantLeftCell>
-                    ))
-                  )
+            {CourseTrafficTargetType.filter(
+              mt => mt.type === watch()?.eduTargetMain
+            ).map(item =>
+              item.child
+                .filter(st => st.type === watch().eduTargetSub)
+                .map(item =>
+                  item.applicants.map(ap => (
+                    <TableDoubleParantLeftCell key={ap}>
+                      <TableDoubleLeftCell
+                        className="left-cell-border"
+                        key={ap}
+                        sx={{ mb: '4px' }}
+                      >
+                        {eduSubArr.filter(f => f.subType === ap)[0].subKo}
+                      </TableDoubleLeftCell>
+                      <TableDoubleRightCell className="right-cell">
+                        <TextField
+                          onChange={handleEduPersonCount}
+                          name={ap}
+                          // defaultValue={enrollDetailData.persons[ap] || 0}
+                          // defaultValue={watch(ap as any)|| 0}
+                          // 하기의 코드가 문제였습니다. watch(ap as any)를 하면 enrollData.[ap]로 동작하기때문에 맞지 않습니다. 그래서 데이터를 넣는 중 없는 속성 오류가 발생하여 or의 다음값인 0이 들어간 것입니다.
+                          // 따라서 아래와 같이 바꿔주면 정상동작합니다.
+                          value={watch(ap as any) || 0}
+                          InputProps={{ endAdornment: <Box>명</Box> }}
+                          sx={{
+                            marginLeft: '-10px',
+                            mr: '10px',
+                            fontWeight: 'bold',
+                            mb: '4px',
+                          }}
+                        />
+                      </TableDoubleRightCell>
+                    </TableDoubleParantLeftCell>
+                  ))
+                )
             )}
           </TableBody>
         </Table>

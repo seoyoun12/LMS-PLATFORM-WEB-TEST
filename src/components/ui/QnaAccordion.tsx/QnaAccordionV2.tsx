@@ -54,7 +54,10 @@ export function QnaAccordionV2({ loadedItem }: { loadedItem: Qna[] }) {
     <Wrap>
       <TableContainer sx={{ width: '100%' }}>
         {loadedItem.map(
-          ({ seq, title, createdDtimeYmd, createdDtime, answeredYn, ...rest }, idx) => (
+          (
+            { seq, title, createdDtimeYmd, createdDtime, answeredYn, ...rest },
+            idx
+          ) => (
             <MuiAccordion
               key={title}
               disableGutters
@@ -71,7 +74,9 @@ export function QnaAccordionV2({ loadedItem }: { loadedItem: Qna[] }) {
               <AccordionSummary
                 className="Asdasd"
                 expandIcon={
-                  <ExpandMoreIcon sx={{ position: 'absolute', width: '50px' }} />
+                  <ExpandMoreIcon
+                    sx={{ position: 'absolute', width: '50px' }}
+                  />
                 }
                 aria-controls="panel1a-content"
                 sx={{
@@ -87,17 +92,28 @@ export function QnaAccordionV2({ loadedItem }: { loadedItem: Qna[] }) {
                     {/* <Typography className="QnaBoardTwo" width="55%">
                     {title}
                   </Typography> */}
-                    <TitleBox className="QnaBoardTwo">{title.slice(0, 16)}</TitleBox>
+                    <TitleBox className="QnaBoardTwo">
+                      <SubjectBox>{title}</SubjectBox>
+                      {/* {title.slice(0, 32)} */}
+                    </TitleBox>
                     <StatusBox className="QnaBoardThird">
                       <Chip
-                        sx={{ width: '80px', marginLeft: '10px', marginBottom: '3px' }}
+                        sx={{
+                          width: '80px',
+                          marginLeft: '10px',
+                          marginBottom: '3px',
+                        }}
                         // variant="outlined"
                         size="small"
                         label={
-                          answeredYn === AnsweredYn.ANSWEREDY ? '답변 완료' : '답변 대기'
+                          answeredYn === AnsweredYn.ANSWEREDY
+                            ? '답변 완료'
+                            : '답변 대기'
                         }
                         color={
-                          answeredYn === AnsweredYn.ANSWEREDY ? 'secondary' : 'warning'
+                          answeredYn === AnsweredYn.ANSWEREDY
+                            ? 'secondary'
+                            : 'warning'
                         }
                       />
                     </StatusBox>
@@ -138,7 +154,11 @@ export function QnaAccordionV2({ loadedItem }: { loadedItem: Qna[] }) {
                                 </QuestContentBox>
                                 <Box>
                                   {rest.s3Files.length > 0 && (
-                                    <Box display="flex" alignItems="center" mt={4}>
+                                    <Box
+                                      display="flex"
+                                      alignItems="center"
+                                      mt={4}
+                                    >
                                       {' '}
                                       <FileDownloadIcon />
                                       첨부파일
@@ -210,9 +230,15 @@ export function QnaAccordionV2({ loadedItem }: { loadedItem: Qna[] }) {
                               /> */}
                                 <AnswerContentBoxWrap>
                                   <AnswerContentBox>
-                                    <TuiViewer initialValue={rest.qnaAnswer?.content} />
+                                    <TuiViewer
+                                      initialValue={rest.qnaAnswer?.content}
+                                    />
                                   </AnswerContentBox>
-                                  <Box display="flex" alignItems="center" mt={4}>
+                                  <Box
+                                    display="flex"
+                                    alignItems="center"
+                                    mt={4}
+                                  >
                                     {' '}
                                     <FileDownloadIcon />
                                     첨부파일
@@ -245,7 +271,9 @@ export function QnaAccordionV2({ loadedItem }: { loadedItem: Qna[] }) {
                                   />
                                 </AnswerContentBoxWrap>
                                 <AnswerCreatedBox
-                                  primary={rest.qnaAnswer?.createdDtime.split(' ')[0]}
+                                  primary={
+                                    rest.qnaAnswer?.createdDtime.split(' ')[0]
+                                  }
                                   className="FourthContent"
                                 />
                                 {/* <AnswerContentBox primary={rest.qnaAnswer?.content} className="FifthContent" /> */}
@@ -453,4 +481,11 @@ const AnswerCreatedBox = styled(ListItemText)`
   @media (max-width: 768px) {
     width: 100%;
   }
+`;
+
+const SubjectBox = styled(Box)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 `;

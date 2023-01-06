@@ -23,12 +23,7 @@ import { EduTargetMain, EduTargetSub } from '@common/api/learningMaterial';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { useForm } from 'react-hook-form';
-import {
-  CourseTrafficTargetType,
-  locationList,
-  TargetMainType,
-  TargetSubType,
-} from 'src/staticDataDescElements/staticType';
+import { CourseTrafficTargetType } from 'src/staticDataDescElements/staticType';
 
 const filterEnrollPeoples = [
   'age3',
@@ -55,26 +50,6 @@ interface EnrollData extends ProvincialEnrollResponseDto {
   persons: { age: string; count: number }[];
 }
 
-const defaultValues = {
-  // age3: 0,
-  // age4: 0,
-  // age5: 0,
-  // eduTargetMain: 'TYPE_CHILDREN',
-  // eduTargetSub: 'TYPE_KINDERGARTEN',
-  // elderly: 0,
-  // expectedToStartDtime: 'yyyy-MM-dd',
-  // grade1: 0,
-  // grade2: 0,
-  // grade3: 0,
-  // grade4: 0,
-  // grade5: 0,
-  // grade6: 0,
-  // organization: 'string',
-  // region: 'CHEONAN',
-  // selfDriver: 0,
-};
-
-
 export function EnrollHistoryTrafficModal({
   open,
   handleClose,
@@ -91,7 +66,7 @@ export function EnrollHistoryTrafficModal({
     watch,
     handleSubmit,
     formState: { errors },
-  } = useForm<EnrollData>({ defaultValues });
+  } = useForm<EnrollData>();
   const [loading, setLoading] = useState(false);
 
   //
@@ -108,12 +83,6 @@ export function EnrollHistoryTrafficModal({
     if (!Number(e.target.value)) return;
     setValue(e.target.name as any, Number(value.replace(/[^0-9]/g, '')));
   };
-
-  //
-
-  console.log('enrollDetailData.persons : ', enrollDetailData?.persons);
-
-  //
 
   const handleEnrollCancel = async (enrollSeq: number) => {
     try {
@@ -152,8 +121,6 @@ export function EnrollHistoryTrafficModal({
     (async function () {
       try {
         const { data } = await getEnrollProvincialDetail(enrollSeq);
-        console.log('Enroll-history Modal Data : ', data);
-        console.log('useEffect 안의 data.eduTargetSub : ', data.eduTargetSub);
 
         //신청자 grade1 , grade2...속성의 키와 값만 가져옵니다.
         const filteredPeople = Object.entries(data).filter(r =>
@@ -175,12 +142,10 @@ export function EnrollHistoryTrafficModal({
           Object.assign(enrollData, { [r[0]]: r[1] });
         });
         // 수정하기 전 기존 데이터 setValue 해주기
-        console.log('useEffect 안의 data.eduTargetSub : ', data.eduTargetSub);
-
         setValue('eduTargetSub', data.eduTargetSub);
         //최종적으로 별도의 로컬 상태에 넣어줍니다.
         //(변경을 고려하지 않았기 때문에 use hook form으로 변경하여 사용하면 편할것 같습니다.)
-        reset(enrollData)
+        reset(enrollData);
         setEnrollDetailData(enrollData);
       } catch (e) {
         console.log(e);
@@ -195,48 +160,7 @@ export function EnrollHistoryTrafficModal({
   }, []);
 
   // 수정
-  const onSubmit = async () => {
-    // try {
-    //   setLoading(true);
-    //   const dialogConfirmed = await dialog({
-    //     title: '정보 수정하기',
-    //     description: '정말로 수정하시겠습니까?',
-    //     confirmText: '수정하기',
-    //     cancelText: '취소',
-    //   });
-    //   if (!dialogConfirmed) {
-    //     setLoading(false);
-    //   }
-    //   if (dialogConfirmed) {
-    //     const dataValue = {
-    //       businessName: watch().userCompanyName,
-    //       businessSubType: watch().userSubBusinessType,
-    //       businessType: watch().userBusinessType,
-    //       carNumber: watch().carNumber,
-    //       carRegisteredRegion: watch().carRegisteredRegion,
-    //       courseClassSeq: stepSeq,
-    //       residence: watch().residence,
-    //       phone:
-    //         watchPhone().phone1 + watchPhone().phone2 + watchPhone().phone3,
-    //     };
-    //     if (regType === RegisterType.TYPE_INDIVIDUAL) {
-    //       const data = await modifyCourseUserIndi(courseUserSeq, dataValue);
-    //     }
-    //     if (regType === RegisterType.TYPE_ORGANIZATION) {
-    //       const data = await modifyCourseUserOrga(courseUserSeq, dataValue);
-    //     }
-    //     snackbar({
-    //       variant: 'success',
-    //       message: '성공적으로 수정완료 했습니다.',
-    //     });
-    //     handleClose();
-    //   }
-    //   setLoading(false);
-    // } catch (e: any) {
-    //   setLoading(false);
-    //   snackbar({ variant: 'error', message: e.data.message });
-    // }
-  };
+  const onSubmit = async () => {};
 
   if (!enrollDetailData)
     return (
@@ -389,10 +313,18 @@ export function EnrollHistoryTrafficModal({
                           onChange={handleEduPersonCount}
                           name={ap}
                           // defaultValue={enrollDetailData.persons[ap] || 0}
-                          defaultValue={enrollDetailData.persons.filter(f=>f?.age === ap)[0]?.count || 0}
-                          // 하기의 코드가 문제였습니다. watch(ap as any)를 하면 enrollData.[ap]로 동작하기때문에 맞지 않습니다. 그래서 데이터를 넣는 중 없는 속성 오류가 발생하여 or의 다음값인 0이 들어간 것입니다.
+                          defaultValue={
+                            enrollDetailData.persons.filter(
+                              f => f?.age === ap
+                            )[0]?.count || 0
+                          }
+                          // 하기의 코드가 문제였습니다. watch(ap as any)를 하면 enrollData.[ap]로 동작하기때문에 맞지 않습니다.
+                          // 그래서 데이터를 넣는 중 없는 속성 오류가 발생하여 or의 다음값인 0이 들어간 것입니다.
                           // 따라서 아래와 같이 바꿔주면 정상동작합니다.
-                          value={watch('persons').filter(f=>f?.age === ap)[0]?.count || 0}
+                          value={
+                            watch('persons').filter(f => f?.age === ap)[0]
+                              ?.count || 0
+                          }
                           InputProps={{ endAdornment: <Box>명</Box> }}
                           sx={{
                             marginLeft: '-10px',

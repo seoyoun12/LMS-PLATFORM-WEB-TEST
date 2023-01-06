@@ -1,8 +1,9 @@
-import { DELETE, GET, POST } from '@common/httpClient';
+import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import {
   ProvincialEnrollResponseDto,
   ProvincialEnrollSaveRequestDto,
+  ProvincialEnrollUpdateRequestDto,
 } from './Api';
 
 export function enrollProvincial(requestDto: ProvincialEnrollSaveRequestDto) {
@@ -30,3 +31,10 @@ export function cancelEnrollProvincial(enrollSeq: number) {
   return DELETE(`/provincial/enroll/${enrollSeq}`);
 }
 
+// 도민 과정신청 수정(유저)
+export function modiftyEnrollProvincial(
+  enrollSeq: number,
+  requestDto: ProvincialEnrollUpdateRequestDto
+) {
+  return PUT(`/course-user/modify/organization/${enrollSeq}`, requestDto);
+}

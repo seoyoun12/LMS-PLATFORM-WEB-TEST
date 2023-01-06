@@ -4,7 +4,13 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Box, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import {
+  Box,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+} from '@mui/material';
 import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
@@ -19,10 +25,19 @@ interface AccordionList {
     name: string;
     href?: string | null;
     isActive?: boolean;
+    grandChildren?: {
+      name: string;
+      href?: string | null;
+      isActive?: boolean;
+    }[];
   }[];
 }
 
-export function AccordionTest({ accordionList }: { accordionList: AccordionList[] }) {
+export function AccordionTest({
+  accordionList,
+}: {
+  accordionList: AccordionList[];
+}) {
   return (
     <>
       {accordionList.map(({ date, name, icon, children }, idx) => (
@@ -51,11 +66,16 @@ export function AccordionTest({ accordionList }: { accordionList: AccordionList[
               <Typography className="CategoryBoardTwo">{name}</Typography>
             </Box>
           </AccordionSummary>
-          <AccordionDetails sx={{ background: grey[100] }}>
+          {/* <AccordionDetails sx={{ background: grey[100] }}> */}
+          <AccordionDetails sx={{ background: 'gray' }}>
             <nav aria-label="secondary mailbox folders">
               <List disablePadding={true}>
                 {children.map(({ name, href, isActive }, idx) => (
-                  <Link href={href ? href : ''} color={grey[900]} key={name}>
+                  <ListItem
+                    // href={href ? href : ''}
+                    color={grey[900]}
+                    key={name}
+                  >
                     <ListItem
                       disablePadding
                       sx={{
@@ -63,10 +83,19 @@ export function AccordionTest({ accordionList }: { accordionList: AccordionList[
                       }}
                     >
                       <ListItemButton>
-                        <ListItemText primary={name} />
+                        {/* <ListItemText primary={name} /> */}
+                        {/*  */}
+
+                        {children.map(item =>
+                          item.grandChildren.map(({ name, href, isActive }) => (
+                            <ListItem>{name}</ListItem>
+                          ))
+                        )}
+
+                        {/*  */}
                       </ListItemButton>
                     </ListItem>
-                  </Link>
+                  </ListItem>
                 ))}
               </List>
             </nav>

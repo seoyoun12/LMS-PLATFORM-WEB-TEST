@@ -29,19 +29,19 @@ import { Phone4Regex } from '@utils/inputRegexes';
 import { Spinner } from '@components/ui';
 import { QnaType, QnaSubType } from 'src/staticDataDescElements/staticType';
 
-const questionTypeList = [
-  { type: '회원가입/로그인', enType: 'TYPE_SIGNUP_OR_SIGNIN' },
-  { type: '교육/수료', enType: 'TYPE_EDU_OR_COMPLETE' },
-  { type: '홈페이지/앱', enType: 'TYPE_WEB_OR_APP' },
-  { type: '기타', enType: 'TYPE_ETC' },
-];
+// const questionTypeList = [
+//   { type: '회원가입/로그인', enType: 'TYPE_SIGNUP_OR_SIGNIN' },
+//   { type: '교육/수료', enType: 'TYPE_EDU_OR_COMPLETE' },
+//   { type: '홈페이지/앱', enType: 'TYPE_WEB_OR_APP' },
+//   { type: '기타', enType: 'TYPE_ETC' },
+// ];
 
-const emailList = [
-  { email: '직접입력', isHandmade: true },
-  { email: 'naver.com', isHandmade: false },
-  { email: 'gamil.com', isHandmade: false },
-  { email: 'daum.net', isHandmade: false },
-];
+// const emailList = [
+//   { email: '직접입력', isHandmade: true },
+//   { email: 'naver.com', isHandmade: false },
+//   { email: 'gamil.com', isHandmade: false },
+//   { email: 'daum.net', isHandmade: false },
+// ];
 
 const phoneList = ['010', '032', '02', '031'];
 
@@ -255,7 +255,8 @@ export function CategoryBoardQuestionForm({
                     회원가입/로그인
                   </MenuItem>
                   <MenuItem value={QnaSubType.TYPE_EDU_OR_COMPLETE}>
-                    교육/수료
+                    {/* 교육/수료 */}
+                    교육
                   </MenuItem>
                   <MenuItem value={QnaSubType.TYPE_WEB_OR_APP}>
                     홈페이지/앱

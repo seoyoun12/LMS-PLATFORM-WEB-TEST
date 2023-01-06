@@ -108,6 +108,12 @@ export function EnrollHistoryTrafficModal({
     setValue(e.target.name as any, Number(value.replace(/[^0-9]/g, '')));
   };
 
+  //
+
+  console.log('enrollDetailData.persons[ap] : ', enrollDetailData?.persons);
+
+  //
+
   const handleEnrollCancel = async (enrollSeq: number) => {
     try {
       const dialogConfirmed = await dialog({
@@ -372,6 +378,7 @@ export function EnrollHistoryTrafficModal({
                       <TableDoubleLeftCell
                         className="left-cell-border"
                         key={ap}
+                        sx={{ mb: '4px' }}
                       >
                         {eduSubArr.filter(f => f.subType === ap)[0].subKo}
                       </TableDoubleLeftCell>
@@ -379,6 +386,7 @@ export function EnrollHistoryTrafficModal({
                         <TextField
                           onChange={handleEduPersonCount}
                           name={ap}
+                          // defaultValue={enrollDetailData.persons[ap] || 0}
                           defaultValue={enrollDetailData.persons[ap] || 0}
                           value={watch(ap as any) || 0}
                           InputProps={{ endAdornment: <Box>명</Box> }}
@@ -386,6 +394,7 @@ export function EnrollHistoryTrafficModal({
                             marginLeft: '-10px',
                             mr: '10px',
                             fontWeight: 'bold',
+                            mb: '4px',
                           }}
                         />
                       </TableDoubleRightCell>

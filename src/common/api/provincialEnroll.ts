@@ -1,8 +1,9 @@
-import { DELETE, GET, POST } from '@common/httpClient';
+import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import {
   ProvincialEnrollResponseDto,
   ProvincialEnrollSaveRequestDto,
+  ProvincialEnrollUpdateRequestDto,
 } from './Api';
 
 export function enrollProvincial(requestDto: ProvincialEnrollSaveRequestDto) {
@@ -28,5 +29,9 @@ export function getEnrollProvincialDetail(enrollSeq: number) {
 
 export function cancelEnrollProvincial(enrollSeq: number) {
   return DELETE(`/provincial/enroll/${enrollSeq}`);
+}
+
+export function updateEnrollProvincial(enrollSeq: number, enrollDto: ProvincialEnrollUpdateRequestDto) {
+  return PUT(`/provincial/enroll/${enrollSeq}`, enrollDto);
 }
 

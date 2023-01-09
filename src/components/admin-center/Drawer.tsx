@@ -55,10 +55,6 @@ export function Drawer({ children }: { children: ReactNode }) {
           name: '회원 목록',
           href: '/admin-center/user',
           isActive: router.pathname === '/admin-center/user',
-          // grandChildren: [
-          //   { name: '손자 목록', href: '/admin-center/user' },
-          //   { name: '손자 목록', href: '/admin-center/user' },
-          // ],
         },
         // {
         //   name: '회원 생성',

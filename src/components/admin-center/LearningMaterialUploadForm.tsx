@@ -33,6 +33,12 @@ import router from 'next/router';
 import { ProductStatus } from '@common/api/course';
 import { Spinner } from '@components/ui';
 
+const LearningMaterialTypeReg = [
+  { type: MaterialType.TYPE_BY_AGE, ko: '연령별 교수학습 지도안' },
+  { type: MaterialType.TYPE_EDUCATIONAL, ko: '교육자료' },
+  { type: MaterialType.TYPE_OTHER_ORGAN, ko: '타기관자료 모음' },
+];
+
 export interface FileArrayType {
   seq?: number; //서버용 seq , 로컬파일은 가지고있지 않기 때문에 ?:
   randomSeq: number; //삭제용 seq , 해당페이지에서 임시로 갖는 seq
@@ -330,7 +336,7 @@ export function LearningMaterialUploadForm({
                   <FormControlLabel
                     value={MaterialType.TYPE_OTHER_ORGAN}
                     control={<Radio />}
-                    label="타기관자료모음"
+                    label="타기관자료 모음"
                     onClick={() => {
                       onClickOpenSubType();
                       setOpenTui(false);
@@ -388,10 +394,18 @@ export function LearningMaterialUploadForm({
           <FormControl className={textField}>
             <TextField
               {...register('title', {
-                required: '학습자료 제목을 입력해주세요.',
+                required: `${
+                  LearningMaterialTypeReg.filter(
+                    item => item.type === watch().materialType
+                  )[0].ko
+                }  제목을 입력해주세요.`,
               })}
               size="small"
-              label="학습자료 제목"
+              label={`${
+                LearningMaterialTypeReg.filter(
+                  item => item.type === watch().materialType
+                )[0].ko
+              } 제목`}
               variant="outlined"
             />
             <ErrorMessage
@@ -436,6 +450,7 @@ export function LearningMaterialUploadForm({
             register={register}
             regName="files"
             onFileChange={handleFileChange}
+            // accept=".jpg, .jpeg, .png"
           >
             {}
           </FileUploader>

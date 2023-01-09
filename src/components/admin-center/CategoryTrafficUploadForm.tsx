@@ -32,6 +32,11 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import router from 'next/router';
 import { Spinner } from '@components/ui';
 
+const BoardTypeReg = [
+  { type: BoardType.TYPE_NOTICE_PROVINCIAL, ko: '공지사항' },
+  { type: BoardType.TYPE_FAQ_PROVINCIAL, ko: '자주묻는질문' },
+];
+
 interface Props {
   mode?: 'upload' | 'modify';
   category?: CategoryBoardInput;
@@ -81,6 +86,7 @@ export function CategoryTrafficUploadForm({
     control,
     reset,
     resetField,
+    watch,
   } = useForm<FormType>({ defaultValues });
 
   useEffect(() => {
@@ -120,7 +126,10 @@ export function CategoryTrafficUploadForm({
     }
   };
 
-  const onSubmit: SubmitHandler<FormType> = async ({ files, ...category }, event) => {
+  const onSubmit: SubmitHandler<FormType> = async (
+    { files, ...category },
+    event
+  ) => {
     event?.preventDefault();
 
     if (!editorRef.current) return;
@@ -169,12 +178,26 @@ export function CategoryTrafficUploadForm({
         <InputContainer>
           <FormControl className={textField}>
             <TextField
-              {...register('subject', { required: '공지사항 제목을 입력해주세요.' })}
+              {...register('subject', {
+                required: `${
+                  BoardTypeReg.filter(
+                    item => item.type === watch().boardType
+                  )[0].ko
+                }  제목을 입력해주세요.`,
+              })}
               size="small"
-              label="공지사항 제목"
+              // label="공지사항 제목"
+              label={`${
+                BoardTypeReg.filter(item => item.type === watch().boardType)[0]
+                  .ko
+              } 제목`}
               variant="outlined"
             />
-            <ErrorMessage errors={errors} name="subject" as={<FormHelperText error />} />
+            <ErrorMessage
+              errors={errors}
+              name="subject"
+              as={<FormHelperText error />}
+            />
           </FormControl>
         </InputContainer>
 
@@ -214,8 +237,16 @@ export function CategoryTrafficUploadForm({
             name="noticeYn"
             render={({ field }) => (
               <RadioGroup row {...field}>
-                <FormControlLabel value={YN.YES} control={<Radio />} label="공지Y" />
-                <FormControlLabel value={YN.NO} control={<Radio />} label="공지N" />
+                <FormControlLabel
+                  value={YN.YES}
+                  control={<Radio />}
+                  label="공지Y"
+                />
+                <FormControlLabel
+                  value={YN.NO}
+                  control={<Radio />}
+                  label="공지N"
+                />
               </RadioGroup>
             )}
           />
@@ -229,8 +260,16 @@ export function CategoryTrafficUploadForm({
             name="publicYn"
             render={({ field }) => (
               <RadioGroup row {...field}>
-                <FormControlLabel value={YN.YES} control={<Radio />} label="공개Y" />
-                <FormControlLabel value={YN.NO} control={<Radio />} label="공개N" />
+                <FormControlLabel
+                  value={YN.YES}
+                  control={<Radio />}
+                  label="공개Y"
+                />
+                <FormControlLabel
+                  value={YN.NO}
+                  control={<Radio />}
+                  label="공개N"
+                />
               </RadioGroup>
             )}
           />

@@ -14,6 +14,7 @@ import { regCategoryType } from '@common/api/user';
 import { YN } from '@common/constant';
 import { ChangeEvent, useState } from 'react';
 import { emailRegex, passwordRegex, phoneRegex } from '@utils/inputRegexes';
+import { Spinner } from '@components/ui';
 
 interface Props {
   handleStep: (moveNumber: number) => void;
@@ -30,6 +31,8 @@ export function Step2({ handleStep, resName, resPhone }: Props) {
   const [phoneErr, setPhoneErr] = useState(false);
   const [phone, setPhone] = useState<string>();
   const snackbar = useSnackbar();
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -45,6 +48,7 @@ export function Step2({ handleStep, resName, resPhone }: Props) {
       return window.alert('비밀번호확인이 일치하지 않습니다!');
 
     if (!!resName && !!username && !!password) {
+      setLoading(true);
       try {
         await signUp({
           name: resName,
@@ -57,8 +61,10 @@ export function Step2({ handleStep, resName, resPhone }: Props) {
           phone: resPhone,
         });
         handleStep(3);
+        setLoading(false);
       } catch (e: any) {
         snackbar({ variant: 'error', message: e.data.message });
+        setLoading(false);
       }
     }
   };
@@ -78,7 +84,7 @@ export function Step2({ handleStep, resName, resPhone }: Props) {
   const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
     setPasswordErr(false);
     // if (!passwordRegex.match(e.target.value) || e.target.value.length < 8) {
-      if (!e.target.value.match(passwordRegex) || e.target.value.length < 8) {
+    if (!e.target.value.match(passwordRegex) || e.target.value.length < 8) {
       setPasswordErr(true);
     }
   };
@@ -214,8 +220,8 @@ export function Step2({ handleStep, resName, resPhone }: Props) {
               {phoneErr && '올바른 형식이 아닙니다.'}
             </FormHelperText>
           </FormControl>
-          <Button variant="contained" type="submit">
-            동의하고 회원가입
+          <Button variant="contained" type="submit" disabled={loading}>
+            {loading ? <Spinner fit={true} /> : '동의하고 회원가입'}
           </Button>
           <FotterBox margin="auto">
             <Typography className="term-typo" component="span" color="primary.main">

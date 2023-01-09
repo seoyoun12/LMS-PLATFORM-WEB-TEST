@@ -119,11 +119,10 @@ const LinkList = [
     textColor: '#711D14',
     color: '#FEC901',
     lineColor: '#57242b',
-    // href: 'traffic/category',
-    href: '',
+    href: 'traffic/category',
+    // href: '',
     imgPath: '/assets/images/domin.jpg',
     onClickCard: async () => {
-      alert('점검중입니다.');
       if (
         typeof window !== 'undefined' &&
         !localStorage.getItem('site_course_type')
@@ -315,10 +314,11 @@ const MainPage: NextPage = () => {
                       <Box
                         sx={{ cursor: 'pointer' }}
                         onClick={() => {
-                          setUserPageType(pageType);
+                          // setUserPageType(pageType);
                           // if (displayWord === '도민교통' || displayWord === '저상버스')
-                          if (displayWord === '도민교통')
+                          if (displayWord === '도민교통안전') {
                             return window.alert('준비중 입니다.');
+                          }
                           onClickCard();
                           router.push(href);
                         }}

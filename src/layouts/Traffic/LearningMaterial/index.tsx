@@ -113,11 +113,12 @@ export function LearningMaterialLayout() {
               onClick={() => handleClickTab('education')}
               value="education"
             />
-            <LearningMaterialTabItem
+            {/* <LearningMaterialTabItem
               label="교육영상"
               onClick={() => handleClickTab('video')}
               value="video"
-            />
+            /> */}
+            {/* 비활성화 */}
             <LearningMaterialTabItem
               label="타기관자료모음"
               onClick={() => handleClickTab('reference')}
@@ -134,7 +135,9 @@ export function LearningMaterialLayout() {
         </LearningMaterialTabWrapper>
       </LearningMaterialWrapper>
 
-      <LearningMaterialContentWrapper>{contentRender()}</LearningMaterialContentWrapper>
+      <LearningMaterialContentWrapper>
+        {contentRender()}
+      </LearningMaterialContentWrapper>
     </>
   );
 }

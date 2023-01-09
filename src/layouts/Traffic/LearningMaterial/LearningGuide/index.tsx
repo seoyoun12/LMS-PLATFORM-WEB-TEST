@@ -1,4 +1,7 @@
-import { MaterialType, useGetLearningMaterial } from '@common/api/learningMaterial';
+import {
+  MaterialType,
+  useGetLearningMaterial,
+} from '@common/api/learningMaterial';
 import {
   LearningGuideContainer,
   LearningGuideContentContainer,
@@ -18,7 +21,9 @@ interface LearningGuideLayout {
   materialType: MaterialType;
 }
 
-export default function LearningGuideLayout({ materialType }: LearningGuideLayout) {
+export default function LearningGuideLayout({
+  materialType,
+}: LearningGuideLayout) {
   const { data } = useGetLearningMaterial(materialType, '');
   const router = useRouter();
 
@@ -30,7 +35,7 @@ export default function LearningGuideLayout({ materialType }: LearningGuideLayou
     <LearningGuideContainer>
       <LearningGuideContentContainer>
         {data?.data.length <= 0 ? (
-          <NotFound content="신청한 과정이 존재하지 않습니다!" />
+          <NotFound content="자료가 존재하지 않습니다!" />
         ) : (
           <>
             {data?.data &&

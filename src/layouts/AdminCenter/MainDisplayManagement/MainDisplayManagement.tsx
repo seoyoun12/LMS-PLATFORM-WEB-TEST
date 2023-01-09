@@ -56,7 +56,10 @@ export function MainDisplayManagement() {
     }
   };
 
-  const handleStatusChange = async (checked: boolean, dto: mainDisplayModifyDto) => {
+  const handleStatusChange = async (
+    checked: boolean,
+    dto: mainDisplayModifyDto
+  ) => {
     try {
       const data: mainDisplayModifyDto = {
         mainDisplayType: dto.mainDisplayType,
@@ -95,7 +98,11 @@ export function MainDisplayManagement() {
                 align: string;
                 width: string;
               }) => (
-                <MainDisplayTitleTableCell key={name} align="center" width={width}>
+                <MainDisplayTitleTableCell
+                  key={name}
+                  align="center"
+                  width={width}
+                >
                   {name}
                 </MainDisplayTitleTableCell>
               )
@@ -105,7 +112,9 @@ export function MainDisplayManagement() {
         <TableBody>
           {data?.map(item => (
             <TableRow>
-              <MainDisplayTableCell align="center">{item.seq}</MainDisplayTableCell>
+              <MainDisplayTableCell align="center">
+                {item.seq}
+              </MainDisplayTableCell>
               <MainDisplayTableCell align="center">
                 {
                   mainDisplayList.filter(
@@ -125,8 +134,14 @@ export function MainDisplayManagement() {
                 <Chip
                   variant="outlined"
                   size="small"
-                  label={item.status === ProductStatus.APPROVE ? '정상' : '중지'}
-                  color={item.status === ProductStatus.APPROVE ? 'secondary' : 'default'}
+                  label={
+                    item.status === ProductStatus.APPROVE ? '정상' : '중지'
+                  }
+                  color={
+                    item.status === ProductStatus.APPROVE
+                      ? 'secondary'
+                      : 'default'
+                  }
                 />
               </MainDisplayTableCell>
             </TableRow>

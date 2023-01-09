@@ -3,6 +3,7 @@ import useSWR, { SWRResponse } from 'swr';
 import { YN } from '@common/constant';
 import { businessType, courseSubCategoryType } from './courseClass';
 import { S3Files } from 'types/file';
+import { UserFindPasswordRequestDto } from './Api';
 
 export enum MemberType {
   TYPE_MEMBER = 'TYPE_MEMBER',
@@ -181,6 +182,13 @@ export async function userLoginHistory() {
 
 export async function findUserId(phone: string) {
   return await POST(`/user/find-id`, { phone });
+}
+/**
+ * 받아온 정보로 유저가 있는지 확인합니다 (패스워드를 알려주는게 아닙니다.) 
+ * 패스워드는 반환하지 않습니다.(패스워드는 단방향 해싱되어있어 받아도 의미가 없습니다)
+ */
+export function findUserPw(findPwDto: UserFindPasswordRequestDto) {
+  return POST(`/user/find-password`, findPwDto);
 }
 export async function existsUserId(username: string) {
   return await POST(`/user/exists-id`, { username });

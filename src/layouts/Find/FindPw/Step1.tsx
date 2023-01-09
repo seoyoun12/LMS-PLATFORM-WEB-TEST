@@ -1,10 +1,7 @@
 import { logout } from '@common/api';
-import {
-  checkingSignin,
-  loginType,
-  SignInResponse,
-} from '@common/api/auth/signIn';
-import { existsUserId } from '@common/api/user';
+import { checkingSignin, loginType, SignInResponse } from '@common/api/auth/signIn';
+import { existsUserId, findUserPw } from '@common/api/user';
+import { Spinner } from '@components/ui';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
@@ -29,27 +26,23 @@ export function Step1({ handleStepChange, handleUsernameChange }: Props) {
   const [usernameErr, setUsernameErr] = useState(false);
   const [password, setPassword] = useState<string>('');
   const [passwordErr, setPasswordErr] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   //api가 바뀌었습니다. 작동하지 않습니다.
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (usernameErr) return window.alert('올바른 아이디를 입력해 주세요!');
     try {
-      const userData = await checkingSignin(
-        username,
-        password,
-        loginType.TYPE_TRAFFIC_SAFETY_EDU
-      );
-      if (!userData || !userData.data)
-        return window.alert('오류가 발생했습니다.');
-      // logout();
-      // const {
-      //   data,
-      // }: { data: { name: string; phone: string; username: string } } =
-      //   await existsUserId(username);
+      setLoading(true);
+      const userData = await findUserPw({ username });
+      if (!userData || !userData.data) return window.alert('오류가 발생했습니다.');
+
       handleUsernameChange(userData.data.username);
       handleStepChange(2);
+      setLoading(false);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
+      setLoading(false);
     }
   };
 
@@ -81,7 +74,7 @@ export function Step1({ handleStepChange, handleUsernameChange }: Props) {
             {usernameErr && `올바른 형식으로 입력해주세요`}
           </FormHelperText>
         </FormControl>
-        <FormControl>
+        {/* <FormControl>
           <TextField
             placeholder="현재 비밀번호를 입력해 주세요"
             type="password"
@@ -92,9 +85,9 @@ export function Step1({ handleStepChange, handleUsernameChange }: Props) {
           <FormHelperText sx={{ color: 'red' }}>
             {usernameErr && `올바른 형식으로 입력해주세요`}
           </FormHelperText>
-        </FormControl>
-        <Button variant="contained" type="submit">
-          찾기
+        </FormControl> */}
+        <Button variant="contained" type="submit" disabled={loading}>
+          {loading ? <Spinner fit={true} /> : '비민번호 찾기'}
         </Button>
       </Box>
     </Step1Wrap>

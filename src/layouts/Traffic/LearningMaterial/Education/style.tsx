@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
-import { Button, Chip } from "@mui/material";
-import { TableHeader } from "@layouts/Traffic/LearningMaterial/style";
+import styled from '@emotion/styled';
+import { Button, Chip } from '@mui/material';
+import { TableHeader } from '@layouts/Traffic/LearningMaterial/style';
 
 export const EducationWrapper = styled.div`
   padding: 0 0 230px 0;
@@ -43,7 +43,7 @@ export const EducationItemHeaderDateWrapper = styled.div<EducationItemHeaderDate
   height: 100%;
 
   > svg {
-    transform: rotate(${({ open }) => (open ? 0 : "180deg")});
+    transform: rotate(${({ open }) => (open ? 0 : '180deg')});
   }
 `;
 
@@ -57,12 +57,11 @@ export const EducationItemContentWrapper = styled.div`
   background-color: #fbfbfb;
 `;
 
-export const EducationItemFilesItem = styled.div``
-
+export const EducationItemFilesItem = styled.div``;
 
 export const EducationItemFileChip = styled(Chip)`
   height: 36.5px;
   padding: 0px;
 `;
 
-export const EducationItemFileButton = styled(Button)``
+export const EducationItemFileButton = styled(Button)``;

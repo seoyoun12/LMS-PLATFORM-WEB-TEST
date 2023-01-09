@@ -93,7 +93,7 @@ export function LearningMaterialLayout() {
         <LearningMaterialHeaderContainer>
           <LearningMaterialHeaderTitle>학습자료</LearningMaterialHeaderTitle>
           <LearningMaterialHeaderSubtitle>
-            학습에 필요한것을 도와드립니다!
+            학습에 필요한 것을 도와드립니다!
           </LearningMaterialHeaderSubtitle>
           <BackgroundImage />
         </LearningMaterialHeaderContainer>

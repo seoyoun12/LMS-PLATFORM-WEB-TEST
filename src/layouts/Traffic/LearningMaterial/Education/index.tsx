@@ -33,7 +33,9 @@ interface EducationLayoutProps {
   materialType: MaterialType;
 }
 
-export default function EducationLayout({ materialType }: EducationLayoutProps) {
+export default function EducationLayout({
+  materialType,
+}: EducationLayoutProps) {
   const [tabType, setTabType] = useState<MaterialSubType | ''>('');
   const { data } = useGetLearningMaterial(materialType, tabType);
   // console.log(data);
@@ -51,7 +53,7 @@ export default function EducationLayout({ materialType }: EducationLayoutProps) 
   const handleClickPost = (id: number) => {
     if (id === selectedPost) {
       setSelectedPost(null);
-      return;
+      // return;
     }
     setSelectedPost(id);
   };
@@ -62,25 +64,35 @@ export default function EducationLayout({ materialType }: EducationLayoutProps) 
         <EducationChipItem
           label="어린이"
           color="primary"
-          variant={tabType === MaterialSubType.TYPE_CHILDREN ? 'filled' : 'outlined'}
+          variant={
+            tabType === MaterialSubType.TYPE_CHILDREN ? 'filled' : 'outlined'
+          }
           onClick={() => handleClickChip(MaterialSubType.TYPE_CHILDREN)}
         />
         <EducationChipItem
           label="청소년"
           color="primary"
-          variant={tabType === MaterialSubType.TYPE_TEENAGER ? 'filled' : 'outlined'}
+          variant={
+            tabType === MaterialSubType.TYPE_TEENAGER ? 'filled' : 'outlined'
+          }
           onClick={() => handleClickChip(MaterialSubType.TYPE_TEENAGER)}
         />
         <EducationChipItem
           label="어르신"
           color="primary"
-          variant={tabType === MaterialSubType.TYPE_ELDERLY ? 'filled' : 'outlined'}
+          variant={
+            tabType === MaterialSubType.TYPE_ELDERLY ? 'filled' : 'outlined'
+          }
           onClick={() => handleClickChip(MaterialSubType.TYPE_ELDERLY)}
         />
         <EducationChipItem
           label="자가운전자"
           color="primary"
-          variant={tabType === MaterialSubType.TYPE_SELF_DRIVING ? 'filled' : 'outlined'}
+          variant={
+            tabType === MaterialSubType.TYPE_SELF_DRIVING
+              ? 'filled'
+              : 'outlined'
+          }
           onClick={() => handleClickChip(MaterialSubType.TYPE_SELF_DRIVING)}
         />
       </EducationChipWrapper>
@@ -106,7 +118,9 @@ export default function EducationLayout({ materialType }: EducationLayoutProps) 
                 {value.title}
               </TableItem>
               <TableItem width="25%">
-                <EducationItemHeaderDateWrapper open={selectedPost === value.seq}>
+                <EducationItemHeaderDateWrapper
+                  open={selectedPost === value.seq}
+                >
                   <EducationItemHeaderDateText>
                     {format(new Date(value.createdDtime), 'yyyy. MM. dd')}
                   </EducationItemHeaderDateText>
@@ -114,44 +128,49 @@ export default function EducationLayout({ materialType }: EducationLayoutProps) 
                 </EducationItemHeaderDateWrapper>
               </TableItem>
             </EducationItemHeaderWrapper>
-            <EducationItemContentWrapper><TuiViewer initialValue={value.content} />
-            <EducationItemFilesItem>
-            {value.s3Files[0]?.name ? (
-                    <EducationItemFileButton
-                      sx={{
-                        padding: '0px',
-                        // backgroundColor: 'red',
-                        borderRadius: '15px',
-                      }}
-                      onClick={async () => {
-                        try {
-                          const blobData = await downloadFile(value.s3Files[0].seq);
-                          const url = window.URL.createObjectURL(new Blob([blobData]));
-                          const a = document.createElement('a');
-                          a.href = url;
-                          a.download = `${value.s3Files[0].name}`;
-                          a.click();
-                          a.remove();
-                        } catch (e: any) {
-                          console.log(e);
-                        }
-                      }}
-                    >
-                      <EducationItemFileChip
-                        icon={<SaveIcon />}
-                        sx={{ cursor: 'pointer' }}
-                        label={
-                          <Box sx={{ display: 'flex' }}>
-                            <Box>{value.s3Files[0]?.name}</Box>
-                          </Box>
-                        }
-                      />
-                    </EducationItemFileButton>
-                  ) : (
-                    ''
-                  )}
-                  </EducationItemFilesItem>
-                  </EducationItemContentWrapper>
+            <EducationItemContentWrapper>
+              <TuiViewer initialValue={value.content} />
+              <EducationItemFilesItem>
+                {value.s3Files[0]?.name ? (
+                  <EducationItemFileButton
+                    sx={{
+                      padding: '0px',
+                      // backgroundColor: 'red',
+                      borderRadius: '15px',
+                    }}
+                    onClick={async () => {
+                      try {
+                        const blobData = await downloadFile(
+                          value.s3Files[0].seq
+                        );
+                        const url = window.URL.createObjectURL(
+                          new Blob([blobData])
+                        );
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `${value.s3Files[0].name}`;
+                        a.click();
+                        a.remove();
+                      } catch (e: any) {
+                        console.log(e);
+                      }
+                    }}
+                  >
+                    <EducationItemFileChip
+                      icon={<SaveIcon />}
+                      sx={{ cursor: 'pointer' }}
+                      label={
+                        <Box sx={{ display: 'flex' }}>
+                          <Box>{value.s3Files[0]?.name}</Box>
+                        </Box>
+                      }
+                    />
+                  </EducationItemFileButton>
+                ) : (
+                  ''
+                )}
+              </EducationItemFilesItem>
+            </EducationItemContentWrapper>
           </EducationItemWrapper>
         ))}
     </EducationWrapper>

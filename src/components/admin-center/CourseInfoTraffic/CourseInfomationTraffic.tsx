@@ -131,9 +131,13 @@ export function CourseInfomationTraffic({
       elderly: 0,
       selfDriver: 0,
     };
-    CourseTrafficTargetType.filter(f => f.type === watch().eduTargetMain)[0]
-      .child.filter(f => f.type === watch().eduTargetSub)[0]
-      .applicants.forEach(fo => (resetEduTargets[fo] = watch(fo as any)));
+
+    const filteredMainType = CourseTrafficTargetType.filter(f => f.type === watch().eduTargetMain)[0]
+    const filteredSubType = filteredMainType.child.filter(f => f.type === watch().eduTargetSub)[0]
+    filteredSubType.applicants.forEach(fo => (resetEduTargets[fo] = watch(fo as any)));
+    // CourseTrafficTargetType.filter(f => f.type === watch().eduTargetMain)[0]
+    //   .child.filter(f => f.type === watch().eduTargetSub)[0]
+    //   .applicants.forEach(fo => (resetEduTargets[fo] = watch(fo as any)));
 
     const enrollInput = {
       ...formData,

@@ -105,7 +105,9 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/qna',
         },
       ],
-      icon: <QuestionAnswerOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+      icon: (
+        <QuestionAnswerOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />
+      ),
     },
     {
       name: '학습자료관리',
@@ -118,10 +120,13 @@ export function Drawer({ children }: { children: ReactNode }) {
         {
           name: '학습자료 등록',
           href: '/admin-center/learning-material/upload',
-          isActive: router.pathname === '/admin-center/learning-material/upload',
+          isActive:
+            router.pathname === '/admin-center/learning-material/upload',
         },
       ],
-      icon: <ChromeReaderModeOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />,
+      icon: (
+        <ChromeReaderModeOutlinedIcon sx={{ mr: '32px', color: grey[700] }} />
+      ),
     },
     {
       name: '과정관리(운수/저상)',
@@ -314,7 +319,11 @@ export function Drawer({ children }: { children: ReactNode }) {
           <List>
             <Box display="flex" gap="8px" flexDirection="column" padding="1rem">
               {/* <Logo /> */}
-              <Image src="/assets/images/ctsoecLogo.png" height={40} width={230} />
+              <Image
+                src="/assets/images/ctsoecLogo.png"
+                height={40}
+                width={230}
+              />
               <Typography fontWeight="bold" fontSize="18px" textAlign="center">
                 학습관리센터
               </Typography>

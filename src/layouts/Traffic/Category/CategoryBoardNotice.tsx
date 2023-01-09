@@ -1,5 +1,15 @@
-import { Container, Box, Table, TableHead, TableRow, TableCell } from '@mui/material';
-import { BoardAccordion, BoardAccordionV2 } from '@components/ui/BoardAccordion';
+import {
+  Container,
+  Box,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+} from '@mui/material';
+import {
+  BoardAccordion,
+  BoardAccordionV2,
+} from '@components/ui/BoardAccordion';
 import React from 'react';
 import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
 import styled from '@emotion/styled';
@@ -8,8 +18,11 @@ import { Spinner } from '@components/ui';
 import { S3Files } from 'types/file';
 
 export function CategoryBoardNotice() {
-  const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_NOTICE');
-  // const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_NOTICE_PROVINCIAL');
+  // const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_NOTICE');
+  const [target, loadedItem, loading] = useInfiniteScroll(
+    `/post`,
+    'TYPE_NOTICE_PROVINCIAL'
+  );
   const accordianInfo: {
     seq: number;
     date: string;

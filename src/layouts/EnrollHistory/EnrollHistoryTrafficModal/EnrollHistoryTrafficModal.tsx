@@ -17,9 +17,10 @@ import { useEffect, useState } from 'react';
 import {
   cancelEnrollProvincial,
   getEnrollProvincialDetail,
+  updateEnrollProvincial,
 } from '@common/api/provincialEnroll';
 import { ProvincialEnrollResponseDto } from '@common/api/Api';
-import { EduTargetMain, EduTargetSub } from '@common/api/learningMaterial';
+import { EduTargetMain } from '@common/api/learningMaterial';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { useForm } from 'react-hook-form';
@@ -46,12 +47,6 @@ interface Props {
   enrollOrganization: string;
 }
 
-interface EnrollData extends ProvincialEnrollResponseDto {
-  persons: { age: string; count: number }[];
-}
-
-const defaultValues = {};
-
 export function EnrollHistoryTrafficModal({
   open,
   handleClose,
@@ -59,7 +54,7 @@ export function EnrollHistoryTrafficModal({
   enrollOrganization,
 }: Props) {
   const snackbar = useSnackbar();
-  const [enrollDetailData, setEnrollDetailData] = useState<EnrollData>();
+  // const [enrollDetailData, setEnrollDetailData] = useState<ProvincialEnrollResponseDto>();
   const dialog = useDialog();
   const {
     register,
@@ -68,12 +63,29 @@ export function EnrollHistoryTrafficModal({
     watch,
     handleSubmit,
     formState: { errors },
-  } = useForm<ProvincialEnrollResponseDto>({ defaultValues });
+  } = useForm<ProvincialEnrollResponseDto | null>({ defaultValues: null });
   const [loading, setLoading] = useState(false);
 
-  console.log('enrollDetailData : ', enrollDetailData);
-  console.log('watch().eduTargetSub : ', watch().eduTargetSub);
-  console.log('watch().eduTargetMain : ', watch().eduTargetMain);
+  //
+  const handleEduPersonCount = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+    if (value.length > 6) return;
+    if (value === '') return setValue(e.target.name as any, Number(value));
+    if (value.length === 0 || value === '0') {
+      return setValue(e.target.name as any, Number(value));
+    }
+
+    if (!Number(e.target.value)) return;
+    setValue(e.target.name as any, Number(value.replace(/[^0-9]/g, '')));
+  };
+
+  //
+
+  // console.log('enrollDetailData.persons : ', enrollDetailData?.persons);
+
+  //
 
   const handleEnrollCancel = async (enrollSeq: number) => {
     try {
@@ -112,30 +124,35 @@ export function EnrollHistoryTrafficModal({
     (async function () {
       try {
         const { data } = await getEnrollProvincialDetail(enrollSeq);
-        console.log('Enroll-history Modal Data : ', data);
+        // console.log('Enroll-history Modal Data : ', data);
+        // console.log('useEffect 안의 data.eduTargetSub : ', data.eduTargetSub);
 
-        //신청자 grade1 , grade2...속성의 키와 값만 가져옵니다.
-        const filteredPeople = Object.entries(data).filter(r =>
-          filterEnrollPeoples.includes(r[0])
-        );
-        //그 외의 속성만 가져옵니다(대상자 , 대상자세부 , 교육만료일 등등...)
-        const notFilteredPeople = Object.entries(data).filter(
-          r => !filterEnrollPeoples.includes(r[0])
-        );
-        //신청자 grade1... 속성들중 값이 있는, 0 || null || undefined가 아닌 속성들만 필터링합니다.
-        const getExistPeople = filteredPeople.filter(r => r[1]);
-        //최종적으로 데이터를 가공하는 단계입니다. map메서드를 사용하여 편하게 코드작성하도록 모든 신청대상자들을
-        //persons에 넣어주고 나머지 정보는 서버에서 받아온 그대로 속성을 그대로 넣어줍니다.
-        const enrollData = { persons: [] };
-        getExistPeople.forEach(r => {
-          enrollData.persons.push({ age: r[0], count: r[1] });
-        });
-        notFilteredPeople.forEach(r => {
-          Object.assign(enrollData, { [r[0]]: r[1] });
-        });
+        // //신청자 grade1 , grade2...속성의 키와 값만 가져옵니다.
+        // const filteredPeople = Object.entries(data).filter(r =>
+        //   filterEnrollPeoples.includes(r[0])
+        // );
+        // //그 외의 속성만 가져옵니다(대상자 , 대상자세부 , 교육만료일 등등...)
+        // const notFilteredPeople = Object.entries(data).filter(
+        //   r => !filterEnrollPeoples.includes(r[0])
+        // );
+        // //신청자 grade1... 속성들중 값이 있는, 0 || null || undefined가 아닌 속성들만 필터링합니다.
+        // const getExistPeople = filteredPeople.filter(r => r[1]);
+        // //최종적으로 데이터를 가공하는 단계입니다. map메서드를 사용하여 편하게 코드작성하도록 모든 신청대상자들을
+        // //persons에 넣어주고 나머지 정보는 서버에서 받아온 그대로 속성을 그대로 넣어줍니다.
+        // const enrollData = { persons: [] };
+        // getExistPeople.forEach(r => {
+        //   enrollData.persons.push({ age: r[0], count: r[1] });
+        // });
+        // notFilteredPeople.forEach(r => {
+        //   Object.assign(enrollData, { [r[0]]: r[1] });
+        // });
+        // // 수정하기 전 기존 데이터 setValue 해주기
+        // console.log('useEffect 안의 data.eduTargetSub : ', data.eduTargetSub);
+
+        // setValue('eduTargetSub', data.eduTargetSub);
         //최종적으로 별도의 로컬 상태에 넣어줍니다.
         //(변경을 고려하지 않았기 때문에 use hook form으로 변경하여 사용하면 편할것 같습니다.)
-        setEnrollDetailData(enrollData);
+        reset(data);
       } catch (e) {
         console.log(e);
         snackbar({
@@ -150,49 +167,64 @@ export function EnrollHistoryTrafficModal({
 
   // 수정
   const onSubmit = async () => {
-    // try {
-    //   setLoading(true);
-    //   const dialogConfirmed = await dialog({
-    //     title: '정보 수정하기',
-    //     description: '정말로 수정하시겠습니까?',
-    //     confirmText: '수정하기',
-    //     cancelText: '취소',
-    //   });
-    //   if (!dialogConfirmed) {
-    //     setLoading(false);
-    //   }
-    //   if (dialogConfirmed) {
-    //     const dataValue = {
-    //       businessName: watch().userCompanyName,
-    //       businessSubType: watch().userSubBusinessType,
-    //       businessType: watch().userBusinessType,
-    //       carNumber: watch().carNumber,
-    //       carRegisteredRegion: watch().carRegisteredRegion,
-    //       courseClassSeq: stepSeq,
-    //       residence: watch().residence,
-    //       phone:
-    //         watchPhone().phone1 + watchPhone().phone2 + watchPhone().phone3,
-    //     };
-    //     if (regType === RegisterType.TYPE_INDIVIDUAL) {
-    //       const data = await modifyCourseUserIndi(courseUserSeq, dataValue);
-    //     }
-    //     if (regType === RegisterType.TYPE_ORGANIZATION) {
-    //       const data = await modifyCourseUserOrga(courseUserSeq, dataValue);
-    //     }
-    //     snackbar({
-    //       variant: 'success',
-    //       message: '성공적으로 수정완료 했습니다.',
-    //     });
-    //     handleClose();
-    //   }
-    //   setLoading(false);
-    // } catch (e: any) {
-    //   setLoading(false);
-    //   snackbar({ variant: 'error', message: e.data.message });
-    // }
+    const resetEduTargets = {
+      age3: 0,
+      age4: 0,
+      age5: 0,
+      grade1: 0,
+      grade2: 0,
+      grade3: 0,
+      grade4: 0,
+      grade5: 0,
+      grade6: 0,
+      elderly: 0,
+      selfDriver: 0,
+    };
+
+    const filteredMainType = CourseTrafficTargetType.filter(
+      f => f.type === watch().eduTargetMain
+    )[0];
+    const filteredSubType = filteredMainType.child.filter(
+      f => f.type === watch().eduTargetSub
+    )[0];
+    filteredSubType.applicants.forEach(
+      fo => (resetEduTargets[fo] = watch(fo as any))
+    );
+
+    const enrollInput = {
+      ...watch(),
+      ...resetEduTargets,
+    };
+
+    const dialogConfirmed = await dialog({
+      title: '과정 수정하기',
+      description: (
+        <div>
+          <div>정말로 과정을 수정하시겠습니까?</div>
+        </div>
+      ),
+      confirmText: '확인',
+      cancelText: '취소',
+    });
+    if (!dialogConfirmed) return;
+
+    try {
+      setLoading(true);
+      await updateEnrollProvincial(enrollSeq, enrollInput);
+      snackbar({
+        variant: 'success',
+        message: '성공적으로 수정완료 했습니다.',
+      });
+      setLoading(false);
+      handleClose();
+    } catch (e) {
+      setLoading(false);
+      console.log(e);
+      snackbar({ variant: 'error', message: e.data.message });
+    }
   };
 
-  if (!enrollDetailData)
+  if (!Object.keys(watch())[0])
     return (
       <Backdrop open={open}>
         <Spinner />
@@ -215,17 +247,18 @@ export function EnrollHistoryTrafficModal({
               background: 'red',
               '&:hover': { background: '#cc0000' },
             }}
-            onClick={() => handleEnrollCancel(enrollDetailData.seq)}
+            onClick={() => handleEnrollCancel(watch().seq)}
           >
             신청 취소
           </Button>
-          {/* <Button
+          <Button
             variant="contained"
             sx={{ width: '100px' }}
             onClick={onSubmit}
+            disabled={loading}
           >
-            신청 수정
-          </Button> */}
+            {loading ? <Spinner fit={true} /> : '신청 수정'}
+          </Button>
         </>
       }
     >
@@ -238,7 +271,7 @@ export function EnrollHistoryTrafficModal({
                   No
                 </TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
-                  {enrollDetailData.seq}
+                  {watch().seq}
                 </TableDoubleRightCell>
               </TableDoubleParantLeftCell>
               <TableDoubleParantRightCell sx={{ width: '50%' }}>
@@ -246,7 +279,7 @@ export function EnrollHistoryTrafficModal({
                   예약자
                 </TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
-                  {enrollDetailData.userInfo.name}
+                  {watch().userInfo.name}
                 </TableDoubleRightCell>
               </TableDoubleParantRightCell>
             </TableDoubleRow>
@@ -257,7 +290,7 @@ export function EnrollHistoryTrafficModal({
                   교육 희망일
                 </TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
-                  {enrollDetailData.expectedToStartDtime}
+                  {watch().expectedToStartDtime}
                 </TableDoubleRightCell>
               </TableDoubleParantLeftCell>
               <TableDoubleParantRightCell>
@@ -265,7 +298,7 @@ export function EnrollHistoryTrafficModal({
                   교육 만료일
                 </TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
-                  {enrollDetailData.expiredDtime}
+                  {watch().expiredDtime}
                 </TableDoubleRightCell>
               </TableDoubleParantRightCell>
             </TableDoubleRow>
@@ -278,7 +311,7 @@ export function EnrollHistoryTrafficModal({
                 <TableDoubleRightCell className="right-cell">
                   {
                     Object.entries(EduTargetMain).filter(
-                      r => r[0] === enrollDetailData.eduTargetMain
+                      r => r[0] === watch().eduTargetMain
                     )[0][1]
                   }
                 </TableDoubleRightCell>
@@ -289,12 +322,6 @@ export function EnrollHistoryTrafficModal({
                   대상자 세부
                 </TableDoubleLeftCell>
                 <TableDoubleRightCell className="right-cell">
-                  {
-                    Object.entries(EduTargetSub).filter(
-                      r => r[0] === enrollDetailData.eduTargetSub
-                    )[0][1]
-                  }
-{/*                   
                   <FormControl fullWidth>
                     <Select
                       sx={{
@@ -309,47 +336,7 @@ export function EnrollHistoryTrafficModal({
                       onChange={onChangeEduTargetSub}
                     >
                       {CourseTrafficTargetType.filter(
-                        item => item.type === enrollDetailData?.eduTargetMain
-                      ).map(item =>
-                        item.child.map(item => (
-                          <MenuItem
-                            key={item.type}
-                            value={item.type}
-                            sx={{ fontWeight: 'bold' }}
-                          >
-                            {item.ko}
-                          </MenuItem>
-                        ))
-                      )}
-                    </Select>
-                  </FormControl> */}
-                  {/*  */}
-                </TableDoubleRightCell>
-              </TableDoubleParantRightCell>
-            </TableDoubleRow>
-
-            {/* <TableDoubleRow>
-              <TableDoubleParantLeftCell>
-                <TableDoubleLeftCell className="left-cell-border">
-                  대상자 세부
-                </TableDoubleLeftCell>
-
-                <TableDoubleRightCell className="right-cell">
-                  <FormControl fullWidth>
-                    <Select
-                      sx={{
-                        marginLeft: '-10px',
-                        mr: '10px',
-                        fontWeight: 'bold',
-                      }}
-                      labelId="eduTargetSub"
-                      id="eduTargetSub"
-                      placeholder="세부 선택"
-                      value={watch().eduTargetSub || ''}
-                      onChange={onChangeEduTargetSub}
-                    >
-                      {CourseTrafficTargetType.filter(
-                        item => item.type === enrollDetailData?.eduTargetMain
+                        item => item.type === watch()?.eduTargetMain
                       ).map(item =>
                         item.child.map(item => (
                           <MenuItem
@@ -363,30 +350,49 @@ export function EnrollHistoryTrafficModal({
                       )}
                     </Select>
                   </FormControl>
-                </TableDoubleRightCell>
-              </TableDoubleParantLeftCell>
-
-              <TableDoubleParantRightCell>
-                <TableDoubleLeftCell className="left-cell-border">
-                  123
-                </TableDoubleLeftCell>
-
-                <TableDoubleRightCell className="right-cell">
-                  1234
+                  {/* ------------------------------------------------------------------- */}
                 </TableDoubleRightCell>
               </TableDoubleParantRightCell>
-            </TableDoubleRow> */}
+            </TableDoubleRow>
 
-            {enrollDetailData.persons.map(r => (
-              <TableRow>
-                <TableLeftCell className="left-cell-border large-font">
-                  {eduSubArr.filter(d => d.subType === r.age)[0].subKo}
-                </TableLeftCell>
-                <TableRightCell className="right-cell">
-                  {r.count}명
-                </TableRightCell>
-              </TableRow>
-            ))}
+            {/* 도민 온라인교육신청내역 수정폼 - 인원 */}
+            {CourseTrafficTargetType.filter(
+              mt => mt.type === watch()?.eduTargetMain
+            ).map(item =>
+              item.child
+                .filter(st => st.type === watch().eduTargetSub)
+                .map(item =>
+                  item.applicants.map(ap => (
+                    <TableDoubleParantLeftCell key={ap}>
+                      <TableDoubleLeftCell
+                        className="left-cell-border"
+                        key={ap}
+                        sx={{ mb: '4px' }}
+                      >
+                        {eduSubArr.filter(f => f.subType === ap)[0].subKo}
+                      </TableDoubleLeftCell>
+                      <TableDoubleRightCell className="right-cell">
+                        <TextField
+                          onChange={handleEduPersonCount}
+                          name={ap}
+                          // defaultValue={enrollDetailData.persons[ap] || 0}
+                          // defaultValue={watch(ap as any)|| 0}
+                          // 하기의 코드가 문제였습니다. watch(ap as any)를 하면 enrollData.[ap]로 동작하기때문에 맞지 않습니다. 그래서 데이터를 넣는 중 없는 속성 오류가 발생하여 or의 다음값인 0이 들어간 것입니다.
+                          // 따라서 아래와 같이 바꿔주면 정상동작합니다.
+                          value={watch(ap as any) || 0}
+                          InputProps={{ endAdornment: <Box>명</Box> }}
+                          sx={{
+                            marginLeft: '-10px',
+                            mr: '10px',
+                            fontWeight: 'bold',
+                            mb: '4px',
+                          }}
+                        />
+                      </TableDoubleRightCell>
+                    </TableDoubleParantLeftCell>
+                  ))
+                )
+            )}
           </TableBody>
         </Table>
       </ModalWrap>

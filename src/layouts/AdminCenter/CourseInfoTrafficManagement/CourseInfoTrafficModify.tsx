@@ -33,10 +33,6 @@ export function CourseInfoTrafficModify() {
     provincialEnrollSeq: number;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   }) => {
-    // console.log('courseLearningInfoInput 부모 : ', courseLearningInfoInput);
-
-    console.log('최종', enrollInput);
-
     try {
       setLoading(true);
       if (Number(enrollSeq)) {

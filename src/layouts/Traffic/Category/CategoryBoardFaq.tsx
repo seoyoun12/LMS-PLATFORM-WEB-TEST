@@ -1,5 +1,15 @@
-import { Box, Container, Table, TableCell, TableHead, TableRow } from '@mui/material';
-import { BoardAccordion, BoardAccordionV2 } from '@components/ui/BoardAccordion';
+import {
+  Box,
+  Container,
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@mui/material';
+import {
+  BoardAccordion,
+  BoardAccordionV2,
+} from '@components/ui/BoardAccordion';
 import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
 import styled from '@emotion/styled';
 import { S3Files } from 'types/file';
@@ -7,8 +17,10 @@ import { NotFound } from '@components/ui/NotFound';
 import { Spinner } from '@components/ui';
 
 export function CategoryBoardFaq() {
-  const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_FAQ');
-  // const [target, loadedItem, loading] = useInfiniteScroll(`/post`, 'TYPE_FAQ_PROVINCIAL');
+  const [target, loadedItem, loading] = useInfiniteScroll(
+    `/post`,
+    'TYPE_FAQ_PROVINCIAL'
+  );
   const accordianInfo: {
     seq: number;
     date: string;

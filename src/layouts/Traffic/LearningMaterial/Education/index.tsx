@@ -42,9 +42,10 @@ export default function EducationLayout({
 
   const [selectedPost, setSelectedPost] = useState<number | null>(null);
 
+  // 학습현황 - 연령별 교수학습 지도안 첨부파일 다운로드시 아코디언 닫히는 코드. 차후 수정
   const handleClickChip = (value: MaterialSubType) => {
     if (value === tabType) {
-      setTabType('');
+      setTabType(null);
       return;
     }
     setTabType(value);
@@ -53,7 +54,7 @@ export default function EducationLayout({
   const handleClickPost = (id: number) => {
     if (id === selectedPost) {
       setSelectedPost(null);
-      // return;
+      return;
     }
     setSelectedPost(id);
   };

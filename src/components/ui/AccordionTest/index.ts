@@ -1,1 +1,0 @@
-export { AccordionTest } from './AccordionTest';

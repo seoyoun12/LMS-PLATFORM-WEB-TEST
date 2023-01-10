@@ -121,7 +121,6 @@ export enum regCategoryType {
 //   TYPE_TRAFFIC_SAFETY_EDU = 'TYPE_TRAFFIC_SAFETY_EDU',
 // }
 
-
 export interface User {
   authorities: authoritiesType;
   birth: string;
@@ -184,7 +183,7 @@ export async function findUserId(phone: string) {
   return await POST(`/user/find-id`, { phone });
 }
 /**
- * 받아온 정보로 유저가 있는지 확인합니다 (패스워드를 알려주는게 아닙니다.) 
+ * 받아온 정보로 유저가 있는지 확인합니다 (패스워드를 알려주는게 아닙니다.)
  * 패스워드는 반환하지 않습니다.(패스워드는 단방향 해싱되어있어 받아도 의미가 없습니다)
  */
 export function findUserPw(findPwDto: UserFindPasswordRequestDto) {
@@ -194,13 +193,17 @@ export async function existsUserId(username: string) {
   return await POST(`/user/exists-id`, { username });
 }
 export async function changeUserPW({
+  name,
+  phone,
   username,
   password,
 }: {
+  name: string;
+  phone: string;
   username: string;
   password: string;
 }) {
-  return await PUT(`/user/change-password`, { username, password });
+  return await PUT(`/user/change-password`, { phone, name, username, password });
 }
 
 export async function modifyMyUser({
@@ -286,9 +289,7 @@ export function getProvincial() {
   return GET<{ data: provincailTrafficSafety }>(`/user/provincial`);
 }
 
-export async function modifyProvincialTrafficSafety(
-  info: provincailTrafficSafety
-) {
+export async function modifyProvincialTrafficSafety(info: provincailTrafficSafety) {
   return await PUT(`/user/provincial`, info);
 }
 
@@ -309,9 +310,7 @@ export function getTransport() {
   return GET<{ data: modifTransWorker }>(`/user/transport`);
 }
 
-export async function modifTransWorker(
-  info: Omit<modifTransWorker, 's3Files'>
-) {
+export async function modifTransWorker(info: Omit<modifTransWorker, 's3Files'>) {
   return await PUT(`/user/transport`, info);
 }
 

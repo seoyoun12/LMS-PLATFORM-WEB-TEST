@@ -19,7 +19,11 @@ import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
 import dateFormat from 'dateformat';
 import { UserModifyModal } from '@components/admin-center/UserModifyModal';
-import { CompleteType, StatusType, useLearningInfo } from '@common/api/adm/learningInfo';
+import {
+  CompleteType,
+  StatusType,
+  useLearningInfo,
+} from '@common/api/adm/learningInfo';
 import { grey } from '@mui/material/colors';
 import { CourseType } from '@common/api/adm/courseClass';
 import { NotFound } from '@components/ui/NotFound';
@@ -162,8 +166,10 @@ export default function CourseInfoTrafficManagement() {
     const value = e.target.value;
     setValue('notFound', false);
     if (!value) return setValue('completeType', null);
-    if (value === CompleteType.TYPE_COMPLETE) return setValue('completeType', value);
-    if (value === CompleteType.TYPE_INCOMPLETE) return setValue('completeType', value);
+    if (value === CompleteType.TYPE_COMPLETE)
+      return setValue('completeType', value);
+    if (value === CompleteType.TYPE_INCOMPLETE)
+      return setValue('completeType', value);
   };
 
   //퇴교여부
@@ -210,7 +216,8 @@ export default function CourseInfoTrafficManagement() {
     }
 
     const { phone, identityNumber } = watch();
-    if (phone === '' || phone?.replaceAll(' ', '') === '') setValue('phone', null);
+    if (phone === '' || phone?.replaceAll(' ', '') === '')
+      setValue('phone', null);
     if (identityNumber === '' || identityNumber?.replaceAll(' ', '') === '')
       setValue('identityNumber', null);
 
@@ -237,7 +244,9 @@ export default function CourseInfoTrafficManagement() {
   // user/adm/course-info/detail/{courseUserSeq}
   return (
     <Box>
-      <CourseInfoTypography variant="h5">전체 수강생 학습현황(도민)</CourseInfoTypography>
+      <CourseInfoTypography variant="h5">
+        전체 수강생 학습현황(도민)
+      </CourseInfoTypography>
       {/* <HeadRowsTop
         courseType={watch().courseType}
         onChangeCourseType={onChangeCourseType}
@@ -295,7 +304,11 @@ export default function CourseInfoTrafficManagement() {
                   align: string;
                   width: string;
                 }) => (
-                  <CourseInfoTitleTableCell key={name} align="center" width={width}>
+                  <CourseInfoTitleTableCell
+                    key={name}
+                    align="center"
+                    width={width}
+                  >
                     {name}
                   </CourseInfoTitleTableCell>
                 )
@@ -311,9 +324,13 @@ export default function CourseInfoTrafficManagement() {
                 hover
                 onClick={() => onClickmodifyCourseInfo(user.seq)}
               >
-                <CourseInfoTableCell align="center">{user.userSeq}</CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
-                  <NameBox title={user.userInfo.name}>{user.userInfo.name}</NameBox>
+                  {user.userSeq}
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  <NameBox title={user.userInfo.name}>
+                    {user.userInfo.name}
+                  </NameBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
                   {user.userInfo.username}
@@ -341,7 +358,11 @@ export default function CourseInfoTrafficManagement() {
                 </CourseInfoTableCell> */}
                 <CourseInfoTableCell align="center">
                   <SubjectBox>
-                    {TargetSubTypeReg.filter(f => f.type === user.eduTargetSub)[0].ko}
+                    {
+                      TargetSubTypeReg.filter(
+                        f => f.type === user.eduTargetSub
+                      )[0].ko
+                    }
                   </SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
@@ -449,6 +470,7 @@ const CourseInfoTableCell = styled(TableCell)`
   margin: 0;
   border-right: 1px solid #f0f0f0;
   padding: 4px 4px;
+  height: 10px;
 
   &:first-of-type {
     background: #f5f5f5;

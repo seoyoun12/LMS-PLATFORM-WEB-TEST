@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import { changeUserPW } from '@common/api/user';
+import { changeUserPW, findUserPw } from '@common/api/user';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
 import { logout } from '@common/api';
@@ -22,17 +22,21 @@ import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 const passwordRegex = /[a-zA-z0-9\[\]\{\}\/,.<>;:\'\"`~!@#$%^&*\(\)-_=+\\]/;
 
 interface Props {
-  username: string | undefined;
   handleStepChange: (stepNumber: number) => void;
+  resPhone: string;
+  resName: string;
 }
 
-export function Step2({ username, handleStepChange }: Props) {
+export function Step2({ handleStepChange, resPhone, resName }: Props) {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const isLogin = useIsLoginStatus();
   const [userPageType, setUserPageType] = useRecoilState(pageType);
+  const [username, setUsername] = useState<string>('');
+  const [usernameErr, setUsernameErr] = useState(false);
   const [passwordErr, setPasswordErr] = useState(false);
   const [confirmPassErr, setConfirmPassErr] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,18 +53,37 @@ export function Step2({ username, handleStepChange }: Props) {
       });
 
     try {
+      setLoading(true);
+      const userData = await findUserPw({ username });
+      if (!userData || !userData.data)
+        return snackbar({
+          variant: 'error',
+          message: '사용자를 찾을 수 없습니다. 회원가입을 진행해주세요.',
+        });
+
       const confirm = await dialog({
         title: '변경확인',
         description: '정말로 패스워드를 변경하시겠습니까?',
       });
       if (confirm) {
+        if (!resName || !resPhone)
+          return snackbar({
+            variant: 'error',
+            message: '휴대폰 본인인증값이 올바르지 않습니다. 다시 인증을 해주세요.',
+          });
         if (isLogin) await logout();
-        await changeUserPW({ username, password });
+        await changeUserPW({ phone: resPhone, name: resName, username, password });
         handleStepChange(3);
       }
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
     }
+  };
+
+  const handleUsername = (e: ChangeEvent<HTMLInputElement>) => {
+    setUsernameErr(false);
+    setUsername(e.target.value);
+    if (e.target.value === '') return setUsernameErr(true);
   };
 
   const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
@@ -73,13 +96,31 @@ export function Step2({ username, handleStepChange }: Props) {
   return (
     <Step2Wrap>
       <Typo>PW 변경</Typo>
-      <Typography fontWeight="bold">
-        해당 계정의 비밀번호를 변경합니다.
-      </Typography>
+      <Typography fontWeight="bold">해당 계정의 비밀번호를 변경합니다.</Typography>
       <Box className="find-form" component="form" onSubmit={handleSubmit}>
         <FormControl>
           <TextField
-            placeholder="비밀번호를 입력해주세요"
+            placeholder="이름을 입력해주세요"
+            value={resName}
+            disabled
+            sx={{ marginBottom: '18px' }}
+          />
+          <TextField placeholder="전화번호를 입력해주세요" value={resPhone} disabled />
+        </FormControl>
+        <FormControl>
+          <TextField
+            placeholder="아이디를 입력해 주세요"
+            onChange={handleUsername}
+            error={usernameErr}
+            value={username}
+          />
+          <FormHelperText sx={{ color: 'red' }}>
+            {usernameErr && `올바른 형식으로 입력해주세요`}
+          </FormHelperText>
+        </FormControl>
+        <FormControl>
+          <TextField
+            placeholder="변경할 비밀번호를 입력해주세요"
             required
             fullWidth
             name="password"
@@ -104,7 +145,7 @@ export function Step2({ username, handleStepChange }: Props) {
         </FormControl>
         <FormControl>
           <TextField
-            placeholder="비밀번호확인을 입력해주세요"
+            placeholder="변경할 비밀번호확인을 입력해주세요"
             required
             fullWidth
             name="confirmPass"

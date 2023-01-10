@@ -11,39 +11,37 @@ import { FindHeader } from '../FindHeader/FindHeader';
 import { Step3 } from './Step3';
 
 const headers = [
-  { title: 'ID 입력', value: 1, icon: <Filter1Icon fontSize="large" /> },
+  { title: '본인인증', value: 1, icon: <Filter1Icon fontSize="large" /> },
   { title: 'PW 변경', value: 2, icon: <Filter2Icon fontSize="large" /> },
   { title: '완료', value: 3, icon: <Filter3Icon fontSize="large" /> },
 ];
 
 export function FindPw() {
   const [stepNumber, setStepNumber] = useState(1);
-  const [username, setUsername] = useState<string>();
+  const [phone, setPhone] = useState<string>();
+  const [name, setName] = useState<string>(); //유저의 이름(ex. 홍길동)
+
+  const handleNiceChange = (nicePhone: string, niceName: string) => {
+    setPhone(nicePhone);
+    setName(niceName);
+  };
 
   const handleStepChange = (stepNumber: number) => {
     setStepNumber(stepNumber);
   };
 
-  const handleUsernameChange = (username: string) => {
-    setUsername(username);
-  };
-
   return (
     <FindPwWrap>
-      <FindHeader
-        value={stepNumber}
-        title={'비밀번호 찾기'}
-        headers={headers}
-      />
+      <FindHeader value={stepNumber} title={'비밀번호 변경'} headers={headers} />
       <FIndPwStepsWrap>
         {stepNumber === 1 && (
           <Step1
             handleStepChange={handleStepChange}
-            handleUsernameChange={handleUsernameChange}
+            handleNiceChange={handleNiceChange}
           />
         )}
         {stepNumber === 2 && (
-          <Step2 handleStepChange={handleStepChange} username={username} />
+          <Step2 handleStepChange={handleStepChange} resPhone={phone} resName={name} />
         )}
         {stepNumber === 3 && <Step3 />}
       </FIndPwStepsWrap>

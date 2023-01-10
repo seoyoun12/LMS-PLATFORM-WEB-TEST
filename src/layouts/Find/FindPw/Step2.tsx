@@ -100,12 +100,12 @@ export function Step2({ handleStepChange, resPhone, resName }: Props) {
       <Box className="find-form" component="form" onSubmit={handleSubmit}>
         <FormControl>
           <TextField
-            placeholder="이름을 입력해주세요"
+            placeholder="인증된 이름입니다"
             value={resName}
             disabled
             sx={{ marginBottom: '18px' }}
           />
-          <TextField placeholder="전화번호를 입력해주세요" value={resPhone} disabled />
+          <TextField placeholder="인증된 번호입니다" value={resPhone} disabled />
         </FormControl>
         <FormControl>
           <TextField
@@ -162,7 +162,7 @@ export function Step2({ handleStepChange, resPhone, resName }: Props) {
 
         <Box display="flex" justifyContent="center" mt={4}>
           <Button variant="contained" type="submit" sx={{ width: '400px' }}>
-            비밀번호 찾기
+            비밀번호 변경
           </Button>
         </Box>
       </Box>

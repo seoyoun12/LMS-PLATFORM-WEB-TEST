@@ -105,14 +105,15 @@ export default function CourseInfoTrafficManagement() {
   const { watch, setValue, reset, register } = useForm<FormType>({
     defaultValues,
   });
-  const { data, error, mutate } = useCourseInfoTraffic(10, 0);
-  // console.log(watch());
+  const [page, setPage] = useState<number>(0);
+  const { data, error, mutate } = useCourseInfoTraffic(10, page);
 
   // Pagination
   const onChangePage = (page: number) => {
     setSubmitValue(prev => {
       return { ...prev, page };
     });
+    setPage(page);
   };
 
   const onChangeCourseType = (
@@ -311,7 +312,7 @@ export default function CourseInfoTrafficManagement() {
                 hover
                 onClick={() => onClickmodifyCourseInfo(user.seq)}
               >
-                <CourseInfoTableCell align="center">{user.userSeq}</CourseInfoTableCell>
+                <CourseInfoTableCell align="center">{user.seq}</CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
                   <NameBox title={user.userInfo.name}>{user.userInfo.name}</NameBox>
                 </CourseInfoTableCell>

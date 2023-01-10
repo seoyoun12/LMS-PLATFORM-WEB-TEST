@@ -124,7 +124,7 @@ export function Steb2() {
             labelId="location"
             id="location"
             {...register('region', { required: true })}
-            label="location"
+            label="지역"
           >
             {locationList.map(item => (
               <MenuItem key={item.en} value={item.en}>

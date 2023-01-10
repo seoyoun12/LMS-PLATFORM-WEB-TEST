@@ -156,6 +156,14 @@ export function CategoryBoardQuestionForm({
       type: questionType,
       connectType: QnaType.TYPE_PROVINCIAL,
     };
+    if (
+      qnaInput.title === '' ||
+      qnaInput.content === '' ||
+      qnaInput.phone.length < 11
+    )
+      return window.alert('제목, 내용, 휴대번호, 문의유형 모두 입력해주세요!');
+    if (!individualCheck)
+      return window.alert('개인정보 수집 및 활용에 동의하셔야 합니다!');
 
     onHandleSubmit({ qnaInput, files, isFileDelete });
   };

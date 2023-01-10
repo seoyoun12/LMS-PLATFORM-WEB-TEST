@@ -1,57 +1,63 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import { Link } from "@components/common";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { signIn } from "@common/api/auth";
-import { useSetRecoilState } from "recoil";
-import { isLoginState } from "@common/recoil";
-import { useIsLoginStatus } from "@hooks/useIsLoginStatus";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useSnackbar } from "@hooks/useSnackbar";
-import { regCategory } from "@common/api/auth/signUp";
-import { userInfo } from "@common/recoil/user";
-import { loginType } from "@common/api/auth/signIn";
-import { UserRole } from "@common/api/user";
-
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import { Link } from '@components/common';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { signIn } from '@common/api/auth';
+import { useSetRecoilState } from 'recoil';
+import { isLoginState } from '@common/recoil';
+import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { regCategory } from '@common/api/auth/signUp';
+import { userInfo } from '@common/recoil/user';
+import { loginType } from '@common/api/auth/signIn';
+import { UserRole } from '@common/api/user';
 
 export function SignIn() {
   const router = useRouter();
   const isLogin = useIsLoginStatus();
   const setIsLoginState = useSetRecoilState(isLoginState);
-  const setUsetInfo = useSetRecoilState(userInfo)
+  const setUsetInfo = useSetRecoilState(userInfo);
   // const [loginType , setLoginType] = React.useState<regCategory>("TYPE_TRANS_EDU")
   const snackbar = useSnackbar();
 
   useEffect(() => {
     if (isLogin) {
-      router.push("/");
+      router.push('/');
     }
   }, [isLogin]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const username = data.get("username") as string;
-    const password = data.get("password") as string;
+    const username = data.get('username') as string;
+    const password = data.get('password') as string;
 
     try {
-      const res = await signIn(username, password, loginType.TYPE_TRAFFIC_SAFETY_EDU);
+      const res = await signIn(
+        username,
+        password,
+        loginType.TYPE_TRAFFIC_SAFETY_EDU
+      );
       if (res.success) {
         setIsLoginState(true);
-        setUsetInfo({name:res.data.username , role:[...res.data.roles as unknown as UserRole[]] }) // api가 있었음 필요없을듯
-        snackbar({ variant: "success", message: "로그인이 완료되었습니다." });
-        return router.push("/");
+        setUsetInfo({
+          name: res.data.username,
+          role: [...(res.data.roles as unknown as UserRole[])],
+        }); // api가 있었음 필요없을듯
+        snackbar({ variant: 'success', message: '로그인이 완료되었습니다.' });
+        return router.push('/');
       }
     } catch (e: any) {
-      snackbar({ variant: "error", message: e.data.message });
+      snackbar({ variant: 'error', message: e.data.message });
     }
   };
 
@@ -67,12 +73,12 @@ export function SignIn() {
       <Box
         sx={{
           marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -117,7 +123,7 @@ export function SignIn() {
             </Grid>
             <Grid item>
               <Link href="/sign-up" variant="body2">
-                {"회원 가입하기"}
+                {'회원 가입하기'}
               </Link>
             </Grid>
           </Grid>

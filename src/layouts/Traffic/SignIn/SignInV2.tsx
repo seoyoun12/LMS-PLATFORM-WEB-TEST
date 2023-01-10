@@ -48,7 +48,11 @@ export function SignInV2() {
     loadingRef.current = true;
     setLoading(true);
     try {
-      const res = await signIn(username, password, loginType.TYPE_TRAFFIC_SAFETY_EDU);
+      const res = await signIn(
+        username,
+        password,
+        loginType.TYPE_TRAFFIC_SAFETY_EDU
+      );
       if (res.success) {
         setIsLoginState(true);
         setUsetInfo({
@@ -61,7 +65,11 @@ export function SignInV2() {
       loadingRef.current = false;
       setLoading(false);
     } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
+      // snackbar({ variant: 'error', message: e.data.message });
+      snackbar({
+        variant: 'error',
+        message: '아이디 또는 비밀번호를 확인해주세요.',
+      });
       loadingRef.current = false;
       setLoading(false);
     }
@@ -90,7 +98,9 @@ export function SignInV2() {
         {/* <Typography component="h1" variant="h5">
           로그인엊머엉
         </Typography> */}
-        <Typography fontSize="1rem">로그인 후 서비스를 이용하실수 있습니다.</Typography>
+        <Typography fontSize="1rem">
+          로그인 후 서비스를 이용하실수 있습니다.
+        </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             placeholder="아이디를 입력해주세요"

@@ -256,7 +256,7 @@ export function CategoryBoardQuestionForm({
                 <InputLabel>문의유형</InputLabel>
                 <Select
                   value={questionType}
-                  label="type"
+                  label="문의유형"
                   onChange={handleSelectChange}
                 >
                   <MenuItem value={QnaSubType.TYPE_SIGNUP_OR_SIGNIN}>

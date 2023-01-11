@@ -13,6 +13,11 @@ export interface MainDisplayRes {
   status: number | null;
 }
 
+export interface FaceCheckRes {
+  seq: number;
+  status: number | null;
+}
+
 export function useMainDisplay() {
   const { data, error, mutate } = useSWR<SWRResponse<MainDisplayRes[]>>(
     '/main-display',
@@ -31,4 +36,15 @@ export function useMainDisplay() {
     error,
     mutate,
   };
+}
+
+export function useFaceCheck() {
+  const { data, error, mutate } = useSWR<SWRResponse<FaceCheckRes[]>>(
+    `/face-check`, GET,
+  );
+  return {
+    faceData: data?.data,
+    faceError: error,
+    faceMutate: mutate
+  }
 }

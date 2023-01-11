@@ -4093,6 +4093,28 @@ export interface ExampleSaveRequestDto {
   title?: string;
 }
 
+export interface FaceCheckResponseDto {
+  /**
+   * 상태 여부
+   * @format int32
+   */
+  status?: 1 | -1;
+}
+
+export interface FaceCheckUpdateRequestDto {
+  /**
+   * 시퀀스
+   * @format int64
+   */
+  seq?: number;
+
+  /**
+   * 상태 여부
+   * @format int32
+   */
+  status?: 1 | -1;
+}
+
 export interface File {
   /** @format date-time */
   createdDtime?: string;
@@ -11203,6 +11225,42 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
   };
+  faceCheck = {
+    /**
+     * @description 유저페이지나 관리자페이지에서의 얼굴 인증 상태 조회
+     *
+     * @tags [App & 관리자] 얼굴 인증 상태관리 API
+     * @name FindMainDisplayUsingGet
+     * @summary [App & 관리자] 얼굴 인증 상태 조회 API
+     * @request GET:/face-check
+     */
+    findMainDisplayUsingGet: (params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<FaceCheckResponseDto>, void>({
+        path: `/face-check`,
+        method: "GET",
+        ...params,
+      })
+    /**
+     * @description 관리자 페이지에서 얼굴 인증에 대한 상태 수정 한다.
+     *
+     * @tags [App & 관리자] 얼굴 인증 상태관리 API
+     * @name UpdateMainDisplayUsingPut
+     * @summary [관리자] 얼굴인증 상태 수정 API
+     * @request PUT:/face-check/adm/{faceCheckSeq}
+     */,
+    updateMainDisplayUsingPut: (
+      faceCheckSeq: string,
+      faceCheckUpdateRequestDto: FaceCheckUpdateRequestDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<FaceCheckUpdateRequestDto>, void>({
+        path: `/face-check/adm/${faceCheckSeq}`,
+        method: "PUT",
+        body: faceCheckUpdateRequestDto,
+        type: ContentType.Json,
+        ...params,
+      }),
+  };
   file = {
     /**
      * No description
@@ -11930,11 +11988,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description 유저페이지나 관리자페이지에서의 화면 조회
      *
      * @tags [App & 관리자] 메인 화면 API
-     * @name FindMainDisplayUsingGet
+     * @name FindMainDisplayUsingGet1
      * @summary [App & 관리자] 메인 화면 조회 API
      * @request GET:/main-display
      */
-    findMainDisplayUsingGet: (params: RequestParams = {}) =>
+    findMainDisplayUsingGet1: (params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<MainDisplayResponseDto[]>, void>({
         path: `/main-display`,
         method: "GET",
@@ -11944,11 +12002,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description 관리자 페이지에서 해당 화면에 상태 수정 한다.
      *
      * @tags [App & 관리자] 메인 화면 API
-     * @name UpdateMainDisplayUsingPut
+     * @name UpdateMainDisplayUsingPut1
      * @summary [관리자] 메인 화면 수정 API
      * @request PUT:/main-display/adm/{mainDisplaySeq}
      */,
-    updateMainDisplayUsingPut: (
+    updateMainDisplayUsingPut1: (
       mainDisplaySeq: string,
       mainDisplayUpdateRequestDto: MainDisplayUpdateRequestDto,
       params: RequestParams = {},
@@ -13203,7 +13261,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 받아온 인증정보로 유저가 있는지 확인한다. <b>도민 전용 API 일단 보류 쓰지마세요</b>
+     * @description 받아온 인증정보로 유저가 있는지 확인한다. <b>도민 전용 API 일단 보류 쓰지마세요? 젠킨스?</b>
      *
      * @tags [관리자 & App] 유저 API
      * @name ExistsIdUsingPost

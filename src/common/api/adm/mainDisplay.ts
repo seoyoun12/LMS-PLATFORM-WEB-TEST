@@ -1,5 +1,6 @@
 import { GET, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
+import { FaceCheckUpdateRequestDto } from '../Api';
 import { MainDisplayRes } from '../mainDisplay';
 
 export enum MainDisplayType {
@@ -14,6 +15,11 @@ export interface mainDisplayModifyDto {
   status: number;
 }
 
+
 export function mainDisplayModify(mainDisplayModifyDto: mainDisplayModifyDto) {
   return PUT(`/main-display/adm/${mainDisplayModifyDto.seq}`, mainDisplayModifyDto);
+}
+
+export function faceCheckModify(faceCheckModifyDto : FaceCheckUpdateRequestDto ) {
+  return PUT(`//face-check/adm/${faceCheckModifyDto.seq}`, faceCheckModifyDto)
 }

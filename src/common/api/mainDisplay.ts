@@ -1,5 +1,6 @@
 import { GET } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
+import { ProductStatus } from './course';
 
 export enum MainDisplayType {
   EDUCATION_TRANSPORT_WORKER = 'EDUCATION_TRANSPORT_WORKER',
@@ -15,7 +16,8 @@ export interface MainDisplayRes {
 
 export interface FaceCheckRes {
   seq: number;
-  status: number | null;
+  status: ProductStatus;
+
 }
 
 export function useMainDisplay() {
@@ -39,7 +41,7 @@ export function useMainDisplay() {
 }
 
 export function useFaceCheck() {
-  const { data, error, mutate } = useSWR<SWRResponse<FaceCheckRes[]>>(
+  const { data, error, mutate } = useSWR<SWRResponse<FaceCheckRes>>(
     `/face-check`, GET,
   );
   return {

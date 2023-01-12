@@ -48,7 +48,7 @@ export function Step1({ handleStepChange, handleNiceChange }: Props) {
         if (popUpState.closed) {
           try {
             const { data } = await niceConfirm(uuidRef.current);
-            console.log('data is arrive!', data);
+            // console.log('data is arrive!', data);
             handleNiceChange(data.mobileNo, data.name);
             handleStepChange(2);
           } catch (e: any) {

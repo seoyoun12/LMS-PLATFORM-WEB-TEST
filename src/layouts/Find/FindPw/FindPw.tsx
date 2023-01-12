@@ -17,7 +17,7 @@ const headers = [
 ];
 
 export function FindPw() {
-  const [stepNumber, setStepNumber] = useState(2);
+  const [stepNumber, setStepNumber] = useState(1);
   const [phone, setPhone] = useState<string>();
   const [name, setName] = useState<string>(); //유저의 이름(ex. 홍길동)
 

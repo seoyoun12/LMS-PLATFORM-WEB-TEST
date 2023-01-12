@@ -95,7 +95,7 @@ export function Step2({ handleStepChange, resPhone, resName }: Props) {
 
   return (
     <Step2Wrap>
-      <Typo>PW 변경</Typo>
+      <Typo>패스워드 변경</Typo>
       <Typography fontWeight="bold">해당 계정의 비밀번호를 변경합니다.</Typography>
       <Box className="find-form" component="form" onSubmit={handleSubmit}>
         <FormControl>

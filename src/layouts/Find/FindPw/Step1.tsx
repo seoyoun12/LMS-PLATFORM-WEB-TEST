@@ -99,13 +99,14 @@ export function Step1({ handleStepChange, handleNiceChange }: Props) {
         </ContentBoxes>
         <SpaceBox mt={2} />
 
-        <ContentBoxes component="li">본인인증은 휴대폰으로 가능합니다.</ContentBoxes>
-        <ContentBoxes component="li">
-          본인인증 절차가 정상적으로 이루어지지 않을 경우 휴대폰 본인인증은
-          한국모바일인증(주)
+        <ContentBoxes component="li" style={{ margin: 0, marginBottom: 12 }}>
+          본인인증은 휴대폰으로 가능합니다.
         </ContentBoxes>
-        <ContentBoxes>☎ 02-2033-8500으로 문의하시기 바랍니다.</ContentBoxes>
-        <ContentBoxes component="li">
+        <ContentBoxes component="li" style={{ margin: 0, marginBottom: 12 }}>
+          본인인증 절차가 정상적으로 이루어지지 않을 경우 휴대폰 본인인증은
+          한국모바일인증(주) ☎ 02-2033-8500으로 문의하시기 바랍니다.
+        </ContentBoxes>
+        <ContentBoxes component="li" style={{ margin: 0, marginBottom: 12 }}>
           비밀번호변경에 대한 다른 궁금한 사항은 고객센터로 문의하여 주시기 바랍니다.
         </ContentBoxes>
       </StepMain>

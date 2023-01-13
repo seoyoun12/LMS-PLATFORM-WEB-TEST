@@ -37,7 +37,7 @@ export function Step1({ handleStep, setResName, setResPhone }: Props) {
         if (popUpState.closed) {
           try {
             const { data } = await niceConfirm(uuidRef.current);
-            console.log('data is arrive!',data)
+            console.log('data is arrive!', data);
             setResPhone(data.mobileNo);
             setResName(data.name);
             handleStep(2);
@@ -89,13 +89,14 @@ export function Step1({ handleStep, setResName, setResPhone }: Props) {
         </ContentBoxes>
         <SpaceBox mt={2} />
 
-        <ContentBoxes component="li">본인인증은 휴대폰으로 가능합니다.</ContentBoxes>
-        <ContentBoxes component="li">
-          본인인증 절차가 정상적으로 이루어지지 않을 경우 휴대폰 본인인증은
-          한국모바일인증(주)
+        <ContentBoxes component="li" style={{ margin: 0, marginBottom: 12 }}>
+          본인인증은 휴대폰으로 가능합니다.
         </ContentBoxes>
-        <ContentBoxes>☎ 02-2033-8500으로 문의하시기 바랍니다.</ContentBoxes>
-        <ContentBoxes component="li">
+        <ContentBoxes component="li" style={{ margin: 0, marginBottom: 12 }}>
+          본인인증 절차가 정상적으로 이루어지지 않을 경우 휴대폰 본인인증은
+          한국모바일인증(주) ☎ 02-2033-8500으로 문의하시기 바랍니다.
+        </ContentBoxes>
+        <ContentBoxes component="li" style={{ margin: 0, marginBottom: 12 }}>
           회원가입에 대한 다른 궁금한 사항은 고객센터로 문의하여 주시기 바랍니다.
         </ContentBoxes>
       </StepMain>
@@ -105,6 +106,7 @@ export function Step1({ handleStep, setResName, setResPhone }: Props) {
 
 const Step1Wrap = styled(Box)`
   list-style-type: '•';
+  padding: 0 24px;
 `;
 const StepMain = styled(Box)`
   max-width: 700px;

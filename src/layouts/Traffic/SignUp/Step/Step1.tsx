@@ -23,7 +23,6 @@ export function Step1({ handleStep, setResName, setResPhone }: Props) {
   const onClickPop = () => {
     const scheme = process.env.NEXT_PUBLIC_SCHEME;
     const domain = process.env.NEXT_PUBLIC_HOST;
-    console.log('sch', scheme, 'domin', domain);
     const popUp = document.open(
       `${scheme}://${domain}/api/v1/nice?uuid=` + uuidRef.current,
       '_parant',
@@ -38,8 +37,7 @@ export function Step1({ handleStep, setResName, setResPhone }: Props) {
         if (popUpState.closed) {
           try {
             const { data } = await niceConfirm(uuidRef.current);
-            console.log('data is arrive!', data);
-            console.log('u', uuidRef.current);
+            // console.log('data is arrive!', data);
             setResPhone(data.mobileNo);
             setResName(data.name);
             handleStep(2);

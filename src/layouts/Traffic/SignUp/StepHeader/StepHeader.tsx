@@ -17,7 +17,8 @@ export function StepHeader({
     <StebHeaderWrap>
       <Box
         sx={{
-          background: '#256aef',
+          // background: '#256aef',
+          backgroundImage: `url('/assets/images/domin-signup-banner.png')`,
           color: 'white',
           textAlign: 'center',
           paddingTop: '6rem',
@@ -50,4 +51,6 @@ export function StepHeader({
   );
 }
 
-const StebHeaderWrap = styled(Box)``;
+const StebHeaderWrap = styled(Box)`
+/* background-image: url('/assets/images/domin-signup-banner.png'); */
+`;

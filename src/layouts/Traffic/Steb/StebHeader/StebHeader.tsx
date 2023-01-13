@@ -6,7 +6,7 @@ import Filter3Icon from '@mui/icons-material/Filter3';
 
 const headers = [
   { title: '교육대상자 선택', value: 1 },
-  { title: '교육신청', value: 2 },
+  { title: '대상자 정보입력', value: 2 },
   { title: '신청완료', value: 3 },
 ];
 
@@ -43,6 +43,7 @@ export function StebHeader({ value }: { value: number }) {
                 display="flex"
                 flexDirection="column"
                 alignItems={'center'}
+                width='33.3%'
                 sx={{ opacity: 1 === value ? 1 : 0.5 }}
               >
                 <Filter1Icon fontSize="large" />
@@ -52,15 +53,17 @@ export function StebHeader({ value }: { value: number }) {
                 display="flex"
                 flexDirection="column"
                 alignItems={'center'}
+                width='33.3%'
                 sx={{ opacity: 2 === value ? 1 : 0.5 }}
               >
                 <Filter2Icon fontSize="large" />
-                <span>교육신청</span>
+                <span>대상자 정보입력</span>
               </Box>
               <Box
                 display="flex"
                 flexDirection="column"
                 alignItems={'center'}
+                width='33.3%'
                 sx={{ opacity: 3 === value ? 1 : 0.5 }}
               >
                 <Filter3Icon fontSize="large" />
@@ -78,6 +81,7 @@ export function StebHeader({ value }: { value: number }) {
 }
 
 const StebHeaderWrap = styled(Box)`
-  background: #246aef;
+  background-image: url('/assets/images/eduSchedule.png');
+  /* background: #246aef; */
   padding: 0 12px;
 `;

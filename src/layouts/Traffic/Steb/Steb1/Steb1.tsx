@@ -20,7 +20,7 @@ export function Steb1() {
                     content="이미지가 존재하지 않습니다."
                     style={{ height: '100%' }}
                   /> */}
-                  <Image src={r.imgPath || ''} alt="ㅎㅇ" layout="fill" />
+                  <Image src={r.imgPath || ''} alt="eduImg" layout="fill" />
                 </EduTargetCardImgWrap>
                 <EduTargetCardTitleWrap>
                   <Typography sx={{ fontWeight: 'bold', fontSize: '18px' }}>

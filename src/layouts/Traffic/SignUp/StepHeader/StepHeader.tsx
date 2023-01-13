@@ -30,13 +30,14 @@ export function StepHeader({
           {title}
         </Typography>
 
-        <Box display="flex" gap="8rem" width="fit-content" margin={'auto'} mt={4}>
+        <StebHeaderStepList mt={4}>
           {headers.map(item => (
             <Box
               key={item.value}
               display="flex"
               flexDirection="column"
               alignItems={'center'}
+              width={'100px'}
               sx={{ opacity: item.value === value ? 1 : 0.5 }}
             >
               {item.value === 1 && <Filter1Icon fontSize="large" />}
@@ -45,12 +46,25 @@ export function StepHeader({
               <span>{item.title}</span>
             </Box>
           ))}
-        </Box>
+        </StebHeaderStepList>
       </Box>
     </StebHeaderWrap>
   );
 }
 
 const StebHeaderWrap = styled(Box)`
-/* background-image: url('/assets/images/domin-signup-banner.png'); */
+  /* background-image: url('/assets/images/domin-signup-banner.png'); */
+`;
+
+const StebHeaderStepList = styled(Box)`
+  display: flex;
+  gap: 6rem;
+  margin: auto;
+  margin: 24px auto 0 auto;
+  justify-content: center;
+  width: 400px;
+  @media (max-width: 500px) {
+    width: 320px;
+    gap: 4rem;
+  }
 `;

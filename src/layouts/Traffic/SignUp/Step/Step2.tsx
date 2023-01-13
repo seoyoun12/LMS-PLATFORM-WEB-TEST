@@ -15,6 +15,7 @@ import { YN } from '@common/constant';
 import { ChangeEvent, useState } from 'react';
 import { emailRegex, passwordRegex, phoneRegex } from '@utils/inputRegexes';
 import { Spinner } from '@components/ui';
+import Link from 'next/link';
 
 interface Props {
   handleStep: (moveNumber: number) => void;
@@ -225,16 +226,18 @@ export function Step2({ handleStep, resName, resPhone }: Props) {
           </Button>
           <FotterBox margin="auto">
             <Typography className="term-typo" component="span" color="primary.main">
-              이용약관
+              <Link href="/terms?termType=CONDITIONS_TERMS">이용약관</Link>
             </Typography>
             ,
             <Typography className="term-typo" component="span" color="primary.main">
-              개인정보 수집 및 이용
+              <Link href="/terms?termType=PERSONAL_INFORMATION_TERMS">
+                개인정보 수집 및 이용
+              </Link>
             </Typography>
-            ,
+            {/* ,
             <Typography className="term-typo" component="span" color="primary.main">
-              개인정보 제공{' '}
-            </Typography>
+              <Link href='/terms?termType=CONDITIONS_TERMS' >개인정보 제공</Link>
+            </Typography> */}
             <Typography className="term-typo" component="span">
               내용을 확인하였고 동의합니다.
             </Typography>
@@ -246,6 +249,7 @@ export function Step2({ handleStep, resName, resPhone }: Props) {
 }
 
 const Step2Wrap = styled(Box)`
+  padding: 0 24px;
   .content-box {
     max-width: 450px;
     margin: auto;

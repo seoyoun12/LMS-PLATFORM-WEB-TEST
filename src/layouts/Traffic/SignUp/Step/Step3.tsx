@@ -60,6 +60,7 @@ export function Step3({ handleStep, resName }: Props) {
 }
 
 const Step3Wrap = styled(Box)`
+  padding: 0 24px;
   button {
     padding: 0.75rem;
   }

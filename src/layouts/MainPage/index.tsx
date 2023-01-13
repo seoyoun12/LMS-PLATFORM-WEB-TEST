@@ -42,30 +42,17 @@ const LinkList = [
     href: '/category',
     imgPath: '/assets/images/unsu.jpg',
     onClickCard: async () => {
+      if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
+        return localStorage.setItem('site_course_type', courseType.TYPE_TRANS_WORKER);
       if (
         typeof window !== 'undefined' &&
-        !localStorage.getItem('site_course_type')
-      )
-        return localStorage.setItem(
-          'site_course_type',
-          courseType.TYPE_TRANS_WORKER
-        );
-      if (
-        typeof window !== 'undefined' &&
-        localStorage.getItem('site_course_type') ===
-          courseType.TYPE_TRANS_WORKER
+        localStorage.getItem('site_course_type') === courseType.TYPE_TRANS_WORKER
       )
         return;
-      if (
-        localStorage.getItem('site_course_type') !==
-        courseType.TYPE_TRANS_WORKER
-      ) {
+      if (localStorage.getItem('site_course_type') !== courseType.TYPE_TRANS_WORKER) {
         if (!!localStorage.getItem('ACCESS_TOKEN')) {
           await logout();
-          localStorage.setItem(
-            'site_course_type',
-            courseType.TYPE_TRANS_WORKER
-          );
+          localStorage.setItem('site_course_type', courseType.TYPE_TRANS_WORKER);
         } else {
         }
       }
@@ -82,30 +69,17 @@ const LinkList = [
     href: '/category',
     imgPath: '/assets/images/lowFloor.jpg',
     onClickCard: async () => {
+      if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
+        return localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
       if (
         typeof window !== 'undefined' &&
-        !localStorage.getItem('site_course_type')
-      )
-        return localStorage.setItem(
-          'site_course_type',
-          courseType.TYPE_LOW_FLOOR_BUS
-        );
-      if (
-        typeof window !== 'undefined' &&
-        localStorage.getItem('site_course_type') ===
-          courseType.TYPE_LOW_FLOOR_BUS
+        localStorage.getItem('site_course_type') === courseType.TYPE_LOW_FLOOR_BUS
       )
         return;
-      if (
-        localStorage.getItem('site_course_type') !==
-        courseType.TYPE_LOW_FLOOR_BUS
-      ) {
+      if (localStorage.getItem('site_course_type') !== courseType.TYPE_LOW_FLOOR_BUS) {
         if (!!localStorage.getItem('ACCESS_TOKEN')) {
           await logout();
-          localStorage.setItem(
-            'site_course_type',
-            courseType.TYPE_LOW_FLOOR_BUS
-          );
+          localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
         } else {
         }
       }
@@ -123,29 +97,18 @@ const LinkList = [
     // href: '',
     imgPath: '/assets/images/domin.jpg',
     onClickCard: async () => {
-      if (
-        typeof window !== 'undefined' &&
-        !localStorage.getItem('site_course_type')
-      )
-        return localStorage.setItem(
-          'site_course_type',
-          courseType.TYPE_PROVINCIAL
-        );
+      if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
+        return localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
       if (
         typeof window !== 'undefined' &&
         localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL
       )
         return;
-      if (
-        localStorage.getItem('site_course_type') !== courseType.TYPE_PROVINCIAL
-      ) {
+      if (localStorage.getItem('site_course_type') !== courseType.TYPE_PROVINCIAL) {
         if (!!localStorage.getItem('ACCESS_TOKEN')) {
           await logout();
         } else {
-          return localStorage.setItem(
-            'site_course_type',
-            courseType.TYPE_PROVINCIAL
-          );
+          return localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
         }
       }
       localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
@@ -269,19 +232,14 @@ const MainPage: NextPage = () => {
                     으로 타시‧도 차량은 교육을 이수 할 수 없습니다.
                   </li>
                   <li>
-                    <span style={{ color: '#c92f2f' }}>
-                      운전 중 교육을 진행할 경우
-                    </span>{' '}
-                    안전을 위해{' '}
-                    <span style={{ color: '#c92f2f' }}>교육이 중단</span>
+                    <span style={{ color: '#c92f2f' }}>운전 중 교육을 진행할 경우</span>{' '}
+                    안전을 위해 <span style={{ color: '#c92f2f' }}>교육이 중단</span>
                     됩니다.
                   </li>
                   <li>
-                    온라인교육은 네트워크 상태에 따라 데이터 요금이 발생할 수
-                    있습니다.
+                    온라인교육은 네트워크 상태에 따라 데이터 요금이 발생할 수 있습니다.
                     <span>
-                      (<span style={{ color: '#c92f2f' }}>Wi-Fi 사용 권장</span>
-                      )
+                      (<span style={{ color: '#c92f2f' }}>Wi-Fi 사용 권장</span>)
                     </span>
                   </li>
                 </ul>
@@ -382,10 +340,10 @@ const MainPage: NextPage = () => {
       <FooterContainer sx={{ color: 'black' }}>
         <FooterWord>CTTI</FooterWord>
         <SecretTrafficTunnel
-          onClick={async () => {
-            await LinkList[2].onClickCard();
-            router.push(LinkList[2].href);
-          }}
+        // onClick={async () => {
+        //   await LinkList[2].onClickCard();
+        //   router.push(LinkList[2].href);
+        // }}
         />
       </FooterContainer>
     </WrapMainContainer>

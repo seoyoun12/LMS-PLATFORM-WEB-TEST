@@ -211,10 +211,10 @@ export function Drawer({ children }: { children: ReactNode }) {
       icon: <ViewCarouselOutlinedIcon sx={{ mr: '32px', color: grey[900] }} />,
     },
     {
-      name: '메인화면관리',
+      name: '사이트 관리',
       children: [
         {
-          name: '메인화면 목록',
+          name: '사이트 관리 목록',
           href: '/admin-center/main-display',
           isActive: router.pathname === '/admin-center/main-display',
         },

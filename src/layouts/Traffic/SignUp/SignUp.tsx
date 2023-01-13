@@ -52,7 +52,7 @@ export function SignUp() {
 
   return (
     <SignUpWrap>
-      <StepHeader value={stepNumber} title={'충남교통연수원'} headers={headers} />
+      <StepHeader value={stepNumber} title={'회원가입'} headers={headers} />
       {stepNumber === 1 && <Step1 handleStep={handleStep} setResName={setResName} setResPhone={setResPhone} />}
       {stepNumber === 2 && <Step2 handleStep={handleStep} resName={resName} resPhone={resPhone} />}
       {stepNumber === 3 && <Step3 handleStep={handleStep} resName={resName} />}

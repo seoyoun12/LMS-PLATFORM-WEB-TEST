@@ -24,7 +24,10 @@ export function AdminSignin() {
 
       const { data } = await getMyUser();
       if (data && data.roles.some(item => item === UserRole.ROLE_ADMIN)) {
-        snackbar({ variant: 'success', message: '관리자 로그인이 완료되었습니다' });
+        snackbar({
+          variant: 'success',
+          message: '관리자 로그인이 완료되었습니다',
+        });
         router.push('/admin-center/user');
       } else {
         snackbar({ variant: 'error', message: '일치하지 않는 정보입니다.' });
@@ -33,7 +36,11 @@ export function AdminSignin() {
       }
       setLoading(false);
     } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
+      // snackbar({ variant: 'error', message: e.data.message });
+      snackbar({
+        variant: 'error',
+        message: '아이디 또는 비밀번호를 확인해주세요.',
+      });
       setLoading(false);
       await logout();
     }
@@ -46,7 +53,10 @@ export function AdminSignin() {
         setLoading(true);
         const { data } = await getMyUser();
         if (data && data.roles.some(item => item === UserRole.ROLE_ADMIN)) {
-          snackbar({ variant: 'success', message: '관리자 로그인이 완료되었습니다' });
+          snackbar({
+            variant: 'success',
+            message: '관리자 로그인이 완료되었습니다',
+          });
           router.push('/admin-center/user');
         }
         setLoading(false);
@@ -63,14 +73,22 @@ export function AdminSignin() {
       <SigninBox>
         <Box className="form-box" component="form" onSubmit={onSubmitLogin}>
           <ImageBox>
-            <Image src={'/assets/images/cttsLogo.png'} width="320" height="48" />
+            <Image
+              src={'/assets/images/cttsLogo.png'}
+              width="320"
+              height="48"
+            />
           </ImageBox>
           <TextField name="username" type="username" placeholder="아이디" />
           <TextField name="password" type="password" placeholder="패스워드" />
           <Button variant="contained" type="submit" disabled={loading}>
             {loading ? <Spinner fit={true} /> : '로그인'}
           </Button>
-          <Button variant="outlined" type="button" onClick={() => router.push('/')}>
+          <Button
+            variant="outlined"
+            type="button"
+            onClick={() => router.push('/')}
+          >
             홈으로
           </Button>
         </Box>

@@ -17,7 +17,8 @@ export function FindHeader({
     <FindHeaderWrap>
       <Box
         sx={{
-          background: '#246aef',
+          // background: '#246aef',
+          backgroundImage: `url('/assets/images/domin-signup-banner.png')`,
           color: 'white',
           textAlign: 'center',
           paddingTop: '6rem',
@@ -36,6 +37,7 @@ export function FindHeader({
               display="flex"
               flexDirection="column"
               alignItems={'center'}
+              width='33.3%'
               sx={{ opacity: item.value === value ? 1 : 0.5 }}
             >
               {item.icon}
@@ -56,7 +58,10 @@ const FindHeaderStepsWrap = styled(Box)`
   width: fit-content;
   margin: auto;
   margin-top: 24px;
+  width:400px;
+  justify-content:space-between;
   @media (max-width: 500px) {
-    gap: 4rem;
+  width:300px;
+    gap: 3rem;
   }
 `;

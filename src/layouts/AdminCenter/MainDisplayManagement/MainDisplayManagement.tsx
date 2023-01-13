@@ -1,10 +1,12 @@
 import {
+  faceCheckModify,
   mainDisplayModify,
   mainDisplayModifyDto,
   MainDisplayType,
 } from '@common/api/adm/mainDisplay';
+import { FaceCheckUpdateRequestDto } from '@common/api/Api';
 import { ProductStatus } from '@common/api/course';
-import { useMainDisplay } from '@common/api/mainDisplay';
+import { useFaceCheck, useMainDisplay } from '@common/api/mainDisplay';
 import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -21,13 +23,22 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 
 const mainDisplayList = [
   { title: '운수종사자', type: MainDisplayType.EDUCATION_TRANSPORT_WORKER },
   { title: '저상버스', type: MainDisplayType.EDUCATION_GROUND_BUS_DRIVER },
   {
     title: '도민교통안전교육',
+    type: MainDisplayType.EDUCATION_PROVINCIAL_TRAFFIC_SAFETY,
+  },
+];
+
+const faceCheckList = [
+  { title: '안면인식', type: MainDisplayType.EDUCATION_TRANSPORT_WORKER },
+  { title: '', type: MainDisplayType.EDUCATION_GROUND_BUS_DRIVER },
+  {
+    title: '',
     type: MainDisplayType.EDUCATION_PROVINCIAL_TRAFFIC_SAFETY,
   },
 ];
@@ -46,6 +57,7 @@ const headRows: {
 export function MainDisplayManagement() {
   const snackbar = useSnackbar();
   const { data, error, mutate } = useMainDisplay();
+  const { faceData, faceError, faceMutate } = useFaceCheck();
   const [openMainModifyModal, setopenMainModifyModal] = useState(false);
   const [displaySeq, setDisplaySeq] = useState<number>();
 
@@ -67,6 +79,28 @@ export function MainDisplayManagement() {
         status: checked ? ProductStatus.APPROVE : ProductStatus.REJECT,
       };
       await mainDisplayModify(data);
+      snackbar({
+        variant: 'success',
+        message: `${dto.seq}번 변경완료 (${
+          ProductStatus.APPROVE === dto.status ? '비활성화' : '활성화'
+        })`,
+      });
+      mutate();
+    } catch (e: any) {
+      snackbar({ variant: 'error', message: e.data.message });
+    }
+  };
+
+  const handleFaceStatusChange = async (
+    checked: boolean,
+    dto: FaceCheckUpdateRequestDto
+  ) => {
+    try {
+      const faceData: FaceCheckUpdateRequestDto = {
+        seq: dto.seq,
+        status: checked ? ProductStatus.APPROVE : ProductStatus.REJECT,
+      };
+      await faceCheckModify(faceData);
       snackbar({
         variant: 'success',
         message: `${dto.seq}번 변경완료 (${
@@ -154,6 +188,13 @@ export function MainDisplayManagement() {
 
 // 메인화면 목록 글자
 const MainDisplayTypography = styled(Typography)`
+  margin-bottom: 30px;
+  font-weight: 700;
+`;
+
+// 안면인식 ON / OFF 글자
+const FaceCheckTypography = styled(Typography)`
+  margin-top: 60px;
   margin-bottom: 30px;
   font-weight: 700;
 `;

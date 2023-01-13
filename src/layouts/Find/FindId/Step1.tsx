@@ -64,6 +64,8 @@ export function Step1({ handleStepChange, handleIdsChange }: Props) {
 const Step1Wrap = styled(Box)`
   max-width: 700px;
   margin: auto;
+  padding:0 12px;
+  margin-bottom:120px;
   .find-form {
     max-width: 450px;
     margin: auto;

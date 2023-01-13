@@ -316,9 +316,9 @@ const MainPage: NextPage = () => {
                         onClick={() => {
                           // setUserPageType(pageType);
                           // if (displayWord === '도민교통' || displayWord === '저상버스')
-                          if (displayWord === '도민교통안전') {
-                            return window.alert('준비중 입니다.');
-                          }
+                          // if (displayWord === '도민교통안전') {
+                          //   return window.alert('준비중 입니다.');
+                          // }
                           onClickCard();
                           router.push(href);
                         }}

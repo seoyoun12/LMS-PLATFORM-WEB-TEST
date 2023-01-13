@@ -26,7 +26,7 @@ const headers = [
 
 export function SignUp() {
   const snackbar = useSnackbar();
-  const [stepNumber, setStepNumber] = React.useState(2);
+  const [stepNumber, setStepNumber] = React.useState(1);
   const [resName, setResName] = React.useState<string>();
   const [resPhone, setResPhone] = React.useState<string>();
 

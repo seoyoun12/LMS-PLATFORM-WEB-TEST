@@ -39,6 +39,7 @@ export function Step1({ handleStep, setResName, setResPhone }: Props) {
           try {
             const { data } = await niceConfirm(uuidRef.current);
             console.log('data is arrive!', data);
+            console.log('u', uuidRef.current);
             setResPhone(data.mobileNo);
             setResName(data.name);
             handleStep(2);

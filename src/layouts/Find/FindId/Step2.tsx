@@ -42,7 +42,8 @@ export function Step2({ idArr }: Props) {
             비밀번호 찾기
           </Button>
         </Link>
-        <Link href={`/${userPageType === pageRegType.TYPE_TRANS_EDU ? 'sign-in' : 'traffic/sign-in'}`}>
+        {/* <Link href={`/${userPageType === pageRegType.TYPE_TRANS_EDU ? 'sign-in' : 'traffic/sign-in'}`}> */}
+        <Link href={`/traffic/sign-in`}>
           <Button variant="contained" fullWidth>
             로그인
           </Button>
@@ -55,6 +56,8 @@ export function Step2({ idArr }: Props) {
 const Step2Wrap = styled(Box)`
   max-width: 700px;
   margin: auto;
+  padding:0 12px;
+  margin-bottom:120px;
   .find-form {
     max-width: 450px;
     margin: auto;

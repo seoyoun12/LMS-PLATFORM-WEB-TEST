@@ -58,7 +58,10 @@ const FindHeaderStepsWrap = styled(Box)`
   width: fit-content;
   margin: auto;
   margin-top: 24px;
+  width:400px;
+  justify-content:space-between;
   @media (max-width: 500px) {
-    gap: 4rem;
+  width:300px;
+    gap: 3rem;
   }
 `;

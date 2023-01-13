@@ -81,6 +81,7 @@ export function SignInV2() {
       maxWidth="xs"
       sx={{
         marginBottom: 8,
+        padding:'0 12px'
       }}
     >
       <CssBaseline />
@@ -136,7 +137,7 @@ export function SignInV2() {
           <Grid container>
             <Grid item>
               <Link href="/find/id" variant="body2" color="black">
-                아이디를 잊으셨나요?
+                아이디 찾기
               </Link>
             </Grid>
             <Box ml={1} mr={1}>
@@ -144,7 +145,7 @@ export function SignInV2() {
             </Box>
             <Grid item xs>
               <Link href="/find/pw" variant="body2" color="black">
-                비밀번호를 잊으셨나요?
+                비밀번호 찾기
               </Link>
             </Grid>
             <Grid item>

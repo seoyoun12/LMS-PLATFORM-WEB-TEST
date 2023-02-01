@@ -2,12 +2,12 @@ import {
   BoardType,
   CategoryBoardInput,
   removeCategoryBoard,
-} from '@common/api/categoryBoard';
-import { YN } from '@common/constant';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { Editor as EditorType } from '@toast-ui/react-editor';
-import styled from '@emotion/styled';
-import '@toast-ui/editor/dist/toastui-editor.css';
+} from "@common/api/categoryBoard";
+import { YN } from "@common/constant";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { Editor as EditorType } from "@toast-ui/react-editor";
+import styled from "@emotion/styled";
+import "@toast-ui/editor/dist/toastui-editor.css";
 import {
   Box,
   Button,
@@ -19,26 +19,26 @@ import {
   Radio,
   RadioGroup,
   TextField,
-} from '@mui/material';
-import { TuiEditor } from '@components/common/TuiEditor';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { css } from '@emotion/css';
-import { ErrorMessage } from '@hookform/error-message';
-import { FileUploader } from '@components/ui/FileUploader';
-import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
-import { ProductStatus } from '@common/api/course';
-import { useDialog } from '@hooks/useDialog';
-import { useSnackbar } from '@hooks/useSnackbar';
-import router from 'next/router';
-import { Spinner } from '@components/ui';
+} from "@mui/material";
+import { TuiEditor } from "@components/common/TuiEditor";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { css } from "@emotion/css";
+import { ErrorMessage } from "@hookform/error-message";
+import { FileUploader } from "@components/ui/FileUploader";
+import OndemandVideoOutlinedIcon from "@mui/icons-material/OndemandVideoOutlined";
+import { ProductStatus } from "@common/api/course";
+import { useDialog } from "@hooks/useDialog";
+import { useSnackbar } from "@hooks/useSnackbar";
+import router from "next/router";
+import { Spinner } from "@components/ui";
 
 const BoardTypeReg = [
-  { type: BoardType.TYPE_NOTICE_PROVINCIAL, ko: '공지사항' },
-  { type: BoardType.TYPE_FAQ_PROVINCIAL, ko: '자주묻는질문' },
+  { type: BoardType.TYPE_NOTICE_PROVINCIAL, ko: "공지사항" },
+  { type: BoardType.TYPE_FAQ_PROVINCIAL, ko: "자주묻는질문" },
 ];
 
 interface Props {
-  mode?: 'upload' | 'modify';
+  mode?: "upload" | "modify";
   category?: CategoryBoardInput;
   courseSeq?: number;
   onHandleSubmit: ({
@@ -69,7 +69,7 @@ const defaultValues = {
 };
 
 export function CategoryTrafficUploadForm({
-  mode = 'upload',
+  mode = "upload",
   category,
   onHandleSubmit,
 }: Props) {
@@ -90,7 +90,7 @@ export function CategoryTrafficUploadForm({
   } = useForm<FormType>({ defaultValues });
 
   useEffect(() => {
-    if (mode === 'modify' && !!category) {
+    if (mode === "modify" && !!category) {
       reset({ ...category });
       setFileName(category.s3Files[0]?.name || null);
     }
@@ -104,25 +104,25 @@ export function CategoryTrafficUploadForm({
   };
 
   const handleDeleteFile = async () => {
-    resetField('files');
+    resetField("files");
     setFileName(null);
   };
 
   const onClickRemoveCategoryTraffic = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
-        title: '삭제하기',
-        description: '정말로 삭제하시겠습니까?',
-        confirmText: '확인',
-        cancelText: '취소',
+        title: "삭제하기",
+        description: "정말로 삭제하시겠습니까?",
+        confirmText: "확인",
+        cancelText: "취소",
       });
       if (dialogConfirmed) {
         await removeCategoryBoard(seq);
-        snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
+        snackbar({ variant: "success", message: "성공적으로 삭제되었습니다." });
         router.push(`/admin-center/category-traffic`);
       }
     } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
+      snackbar({ variant: "error", message: e.data.message });
     }
   };
 
@@ -161,12 +161,12 @@ export function CategoryTrafficUploadForm({
             render={({ field }) => (
               <RadioGroup row {...field}>
                 <FormControlLabel
-                  value={'TYPE_NOTICE_PROVINCIAL'}
+                  value={"TYPE_NOTICE_PROVINCIAL"}
                   control={<Radio />}
                   label="공지사항"
                 />
                 <FormControlLabel
-                  value={'TYPE_FAQ_PROVINCIAL'}
+                  value={"TYPE_FAQ_PROVINCIAL"}
                   control={<Radio />}
                   label="자주묻는질문"
                 />
@@ -178,18 +178,19 @@ export function CategoryTrafficUploadForm({
         <InputContainer>
           <FormControl className={textField}>
             <TextField
-              {...register('subject', {
+              {...register("subject", {
                 required: `${
                   BoardTypeReg.filter(
-                    item => item.type === watch().boardType
+                    (item) => item.type === watch().boardType
                   )[0].ko
                 }  제목을 입력해주세요.`,
               })}
               size="small"
               // label="공지사항 제목"
               label={`${
-                BoardTypeReg.filter(item => item.type === watch().boardType)[0]
-                  .ko
+                BoardTypeReg.filter(
+                  (item) => item.type === watch().boardType
+                )[0].ko
               } 제목`}
               variant="outlined"
             />
@@ -202,7 +203,7 @@ export function CategoryTrafficUploadForm({
         </InputContainer>
 
         <TuiEditor
-          initialValue={(category && category.content) || ' '}
+          initialValue={(category && category.content) || " "}
           previewStyle="vertical"
           height="600px"
           initialEditType="wysiwyg"
@@ -224,7 +225,7 @@ export function CategoryTrafficUploadForm({
               icon={<OndemandVideoOutlinedIcon />}
               label={fileName}
               onDelete={handleDeleteFile}
-              sx={{ pl: '5px', ml: '5px', maxWidth: '700px' }}
+              sx={{ pl: "5px", ml: "5px", maxWidth: "700px" }}
             />
           ) : null}
         </div>
@@ -279,14 +280,14 @@ export function CategoryTrafficUploadForm({
           <SubmitBtn variant="contained" type="submit" disabled={loading}>
             {loading ? (
               <Spinner fit={true} />
-            ) : mode === 'upload' ? (
-              '업로드하기'
+            ) : mode === "upload" ? (
+              "업로드하기"
             ) : (
-              '수정하기'
+              "수정하기"
             )}
           </SubmitBtn>
-          {mode === 'upload' ? (
-            ''
+          {mode === "upload" ? (
+            ""
           ) : (
             <DeleteBtn
               color="warning"
@@ -294,7 +295,7 @@ export function CategoryTrafficUploadForm({
               onClick={() => onClickRemoveCategoryTraffic(category.seq)}
               disabled={loading}
             >
-              {loading ? <Spinner fit={true} /> : '삭제'}
+              {loading ? <Spinner fit={true} /> : "삭제"}
             </DeleteBtn>
           )}
         </ButtonBox>

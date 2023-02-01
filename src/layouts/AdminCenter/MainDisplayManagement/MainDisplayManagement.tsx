@@ -3,13 +3,13 @@ import {
   mainDisplayModify,
   mainDisplayModifyDto,
   MainDisplayType,
-} from '@common/api/adm/mainDisplay';
-import { FaceCheckUpdateRequestDto } from '@common/api/Api';
-import { ProductStatus } from '@common/api/course';
-import { useFaceCheck, useMainDisplay } from '@common/api/mainDisplay';
-import styled from '@emotion/styled';
-import { useDialog } from '@hooks/useDialog';
-import { useSnackbar } from '@hooks/useSnackbar';
+} from "@common/api/adm/mainDisplay";
+import { FaceCheckUpdateRequestDto } from "@common/api/Api";
+import { ProductStatus } from "@common/api/course";
+import { useFaceCheck, useMainDisplay } from "@common/api/mainDisplay";
+import styled from "@emotion/styled";
+import { useDialog } from "@hooks/useDialog";
+import { useSnackbar } from "@hooks/useSnackbar";
 import {
   Box,
   Button,
@@ -22,36 +22,36 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@mui/material';
-import { useState } from 'react';
+} from "@mui/material";
+import { useState } from "react";
 
 const mainDisplayList = [
-  { title: '운수종사자', type: MainDisplayType.EDUCATION_TRANSPORT_WORKER },
-  { title: '저상버스', type: MainDisplayType.EDUCATION_GROUND_BUS_DRIVER },
+  { title: "운수종사자", type: MainDisplayType.EDUCATION_TRANSPORT_WORKER },
+  { title: "저상버스", type: MainDisplayType.EDUCATION_GROUND_BUS_DRIVER },
   {
-    title: '도민교통안전교육',
+    title: "도민교통안전교육",
     type: MainDisplayType.EDUCATION_PROVINCIAL_TRAFFIC_SAFETY,
   },
 ];
 
 const faceCheckList = [
-  { title: '안면인식', type: MainDisplayType.EDUCATION_TRANSPORT_WORKER },
-  { title: '', type: MainDisplayType.EDUCATION_GROUND_BUS_DRIVER },
+  { title: "안면인식", type: MainDisplayType.EDUCATION_TRANSPORT_WORKER },
+  { title: "", type: MainDisplayType.EDUCATION_GROUND_BUS_DRIVER },
   {
-    title: '',
+    title: "",
     type: MainDisplayType.EDUCATION_PROVINCIAL_TRAFFIC_SAFETY,
   },
 ];
 
 const headRows: {
   name: string;
-  align: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  align: "inherit" | "left" | "center" | "right" | "justify";
   width: string;
 }[] = [
-  { name: 'No', align: 'center', width: '5%' },
-  { name: 'display타입', align: 'center', width: '75%' },
-  { name: '변경', align: 'center', width: '15%' },
-  { name: '상태', align: 'center', width: '5%' },
+  { name: "No", align: "center", width: "5%" },
+  { name: "display타입", align: "center", width: "75%" },
+  { name: "변경", align: "center", width: "15%" },
+  { name: "상태", align: "center", width: "5%" },
 ];
 
 export function MainDisplayManagement() {
@@ -68,10 +68,7 @@ export function MainDisplayManagement() {
     }
   };
 
-  const handleStatusChange = async (
-    checked: boolean,
-    dto: mainDisplayModifyDto
-  ) => {
+  const handleStatusChange = async (checked: boolean, dto: mainDisplayModifyDto) => {
     try {
       const data: mainDisplayModifyDto = {
         mainDisplayType: dto.mainDisplayType,
@@ -80,21 +77,18 @@ export function MainDisplayManagement() {
       };
       await mainDisplayModify(data);
       snackbar({
-        variant: 'success',
+        variant: "success",
         message: `${dto.seq}번 변경완료 (${
-          ProductStatus.APPROVE === dto.status ? '비활성화' : '활성화'
+          ProductStatus.APPROVE === dto.status ? "비활성화" : "활성화"
         })`,
       });
       mutate();
     } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
+      snackbar({ variant: "error", message: e.data.message });
     }
   };
 
-  const handleFaceStatusChange = async (
-    checked: boolean,
-    dto: FaceCheckUpdateRequestDto
-  ) => {
+  const handleFaceStatusChange = async (checked: boolean, dto: FaceCheckUpdateRequestDto) => {
     try {
       const faceData: FaceCheckUpdateRequestDto = {
         seq: dto.seq,
@@ -102,14 +96,14 @@ export function MainDisplayManagement() {
       };
       await faceCheckModify(faceData);
       snackbar({
-        variant: 'success',
+        variant: "success",
         message: `${dto.seq}번 변경완료 (${
-          ProductStatus.APPROVE === dto.status ? '비활성화' : '활성화'
+          ProductStatus.APPROVE === dto.status ? "비활성화" : "활성화"
         })`,
       });
       mutate();
     } catch (e: any) {
-      snackbar({ variant: 'error', message: e.data.message });
+      snackbar({ variant: "error", message: e.data.message });
     }
   };
 
@@ -123,20 +117,8 @@ export function MainDisplayManagement() {
         <TableHead>
           <TableRow>
             {headRows.map(
-              ({
-                name,
-                align,
-                width,
-              }: {
-                name: string;
-                align: string;
-                width: string;
-              }) => (
-                <MainDisplayTitleTableCell
-                  key={name}
-                  align="center"
-                  width={width}
-                >
+              ({ name, align, width }: { name: string; align: string; width: string }) => (
+                <MainDisplayTitleTableCell key={name} align="center" width={width}>
                   {name}
                 </MainDisplayTitleTableCell>
               )
@@ -144,17 +126,11 @@ export function MainDisplayManagement() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data?.map(item => (
+          {data?.map((item) => (
             <TableRow>
+              <MainDisplayTableCell align="center">{item.seq}</MainDisplayTableCell>
               <MainDisplayTableCell align="center">
-                {item.seq}
-              </MainDisplayTableCell>
-              <MainDisplayTableCell align="center">
-                {
-                  mainDisplayList.filter(
-                    filter => filter.type === item.mainDisplayType
-                  )[0].title
-                }
+                {mainDisplayList.filter((filter) => filter.type === item.mainDisplayType)[0].title}
               </MainDisplayTableCell>
 
               <MainDisplayTableCell style={{ width: 120 }} align="center">
@@ -168,14 +144,8 @@ export function MainDisplayManagement() {
                 <Chip
                   variant="outlined"
                   size="small"
-                  label={
-                    item.status === ProductStatus.APPROVE ? '정상' : '중지'
-                  }
-                  color={
-                    item.status === ProductStatus.APPROVE
-                      ? 'secondary'
-                      : 'default'
-                  }
+                  label={item.status === ProductStatus.APPROVE ? "정상" : "중지"}
+                  color={item.status === ProductStatus.APPROVE ? "secondary" : "default"}
                 />
               </MainDisplayTableCell>
             </TableRow>

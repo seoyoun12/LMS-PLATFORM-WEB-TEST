@@ -1,7 +1,18 @@
 import styled from "@emotion/styled";
-import { ButtonBase } from "@mui/material";
+import { ButtonBase, Chip } from "@mui/material";
 
 export const LearningGuideContainer = styled.div``;
+
+export const LearningGuideChipWrapper = styled.div`
+  display: flex;
+  margin-bottom: 62px;
+`;
+
+export const LearningGuideChipItem = styled(Chip)`
+  &:not(:last-of-type) {
+    margin-right: 8px;
+  }
+`;
 
 export const LearningGuideContentContainer = styled.div`
   width: 100%;

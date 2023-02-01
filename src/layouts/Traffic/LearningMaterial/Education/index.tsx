@@ -63,6 +63,14 @@ export default function EducationLayout({
     <EducationWrapper>
       <EducationChipWrapper>
         <EducationChipItem
+          label="전체"
+          color="primary"
+          variant={
+            !tabType ? 'filled' : 'outlined'
+          }
+          onClick={() => handleClickChip(null)}
+        />
+        <EducationChipItem
           label="어린이"
           color="primary"
           variant={

@@ -104,11 +104,11 @@ export function LearningMaterialUploadForm({
   useEffect(() => {
     if (mode === 'modify' && !!learningMaterial) {
       reset({ ...learningMaterial });
-      const getFiles = learningMaterial.s3Files.map(r => ({
+      const getFiles = learningMaterial.s3Files.map((r) => ({
         seq: r.seq,
         name: r.name,
       }));
-      const setLocalFiles = getFiles.map(r => {
+      const setLocalFiles = getFiles.map((r) => {
         const randomSeq = Math.round(Math.random() * 10000);
         return { ...r, randomSeq, isServerFile: true };
       });
@@ -186,7 +186,7 @@ export function LearningMaterialUploadForm({
     if (!files?.length) return null;
     if (!isEducationRoute) {
       //단일파일 업로드. 기존에 서버에 저장된 파일을 제거합니다.
-      const prevServerFile = watch().s3Files?.map(r => ({
+      const prevServerFile = watch().s3Files?.map((r) => ({
         seq: r.seq,
         randomSeq: 32,
         name: r.name,
@@ -204,7 +204,7 @@ export function LearningMaterialUploadForm({
       ]);
       return;
     }
-    const processingFile = Array.from(files).map(file => {
+    const processingFile = Array.from(files).map((file) => {
       const randomSeq = Math.round(Math.random() * 10000);
       return {
         randomSeq,
@@ -229,15 +229,15 @@ export function LearningMaterialUploadForm({
   }) => {
     if (isServerFile) {
       //삭제하고자 하는 파일이 서버 파일인경우 (기존 s3에 저장된 파일)
-      const fileFiltered = fileArray.filter(r => r.randomSeq !== randomSeq); //삭제한 것 외의 파일
-      const fileRemoved = fileArray.filter(r => r.randomSeq === randomSeq); // 삭제된 하나의 파일
+      const fileFiltered = fileArray.filter((r) => r.randomSeq !== randomSeq); //삭제한 것 외의 파일
+      const fileRemoved = fileArray.filter((r) => r.randomSeq === randomSeq); // 삭제된 하나의 파일
       setFileArray(fileFiltered);
 
       const prevServerFilesRemoved = serverFilesRemoved || [];
       setServerFilesRemoved([...prevServerFilesRemoved, ...fileRemoved]); //삭제된 서버파일
     } else {
       //삭제하고자 하는 파일이 로컬추가 파일인경우(새로운 파일)
-      const fileFiltered = fileArray.filter(r => r.randomSeq !== randomSeq);
+      const fileFiltered = fileArray.filter((r) => r.randomSeq !== randomSeq);
       setFileArray(fileFiltered);
     }
   };
@@ -277,8 +277,8 @@ export function LearningMaterialUploadForm({
       content: markdownContent,
     };
     //로컬에서 사용자가 추가한 파일 배열
-    const localFileAdded = fileArray.filter(r => !r.isServerFile);
-    const fileArrayConvert = localFileAdded.map(r => r.file);
+    const localFileAdded = fileArray.filter((r) => !r.isServerFile);
+    const fileArrayConvert = localFileAdded.map((r) => r.file);
 
     //파일 업로드 할 경우 백앤드에서 파일 크기가 크면 s3업로드가 오래 걸립니다. 그래서 업로드하고 바로 확인하면 파일리스트에 안뜰수 있습니다.
     onHandleSubmit({
@@ -291,8 +291,8 @@ export function LearningMaterialUploadForm({
   return (
     <Container>
       <Box
-        component="form"
-        encType="multipart/form-data"
+        component='form'
+        encType='multipart/form-data'
         onSubmit={handleSubmit(onSubmit)}
         noValidate
         className={boxStyles}
@@ -303,13 +303,13 @@ export function LearningMaterialUploadForm({
             <Controller
               rules={{ required: true }}
               control={control}
-              name="materialType"
+              name='materialType'
               render={({ field }) => (
                 <RadioGroup row {...field}>
                   <FormControlLabel
                     value={MaterialType.TYPE_BY_AGE}
                     control={<Radio />}
-                    label="연령별 교수학습 지도안"
+                    label='연령별 교수학습 지도안'
                     onClick={() => {
                       onClickOpenSubType();
                       setOpenTui(true);
@@ -318,9 +318,10 @@ export function LearningMaterialUploadForm({
                   <FormControlLabel
                     value={MaterialType.TYPE_EDUCATIONAL}
                     control={<Radio />}
-                    label="교육자료"
+                    label='교육자료'
                     onClick={() => {
-                      onClickCloseSubType();
+                      // onClickCloseSubType();
+                      onClickOpenSubType();
                       setOpenTui(false);
                     }}
                   />
@@ -336,7 +337,7 @@ export function LearningMaterialUploadForm({
                   <FormControlLabel
                     value={MaterialType.TYPE_OTHER_ORGAN}
                     control={<Radio />}
-                    label="타기관자료 모음"
+                    label='타기관자료 모음'
                     onClick={() => {
                       onClickOpenSubType();
                       setOpenTui(false);
@@ -361,28 +362,28 @@ export function LearningMaterialUploadForm({
             <Controller
               rules={{ required: true }}
               control={control}
-              name="materialSubType"
+              name='materialSubType'
               render={({ field }) => (
                 <RadioGroup row {...field}>
                   <FormControlLabel
                     value={MaterialSubType.TYPE_CHILDREN}
                     control={<Radio />}
-                    label="어린이"
+                    label='어린이'
                   />
                   <FormControlLabel
                     value={MaterialSubType.TYPE_TEENAGER}
                     control={<Radio />}
-                    label="청소년"
+                    label='청소년'
                   />
                   <FormControlLabel
                     value={MaterialSubType.TYPE_ELDERLY}
                     control={<Radio />}
-                    label="어르신"
+                    label='어르신'
                   />
                   <FormControlLabel
                     value={MaterialSubType.TYPE_SELF_DRIVING}
                     control={<Radio />}
-                    label="자가운전자"
+                    label='자가운전자'
                   />
                 </RadioGroup>
               )}
@@ -396,21 +397,21 @@ export function LearningMaterialUploadForm({
               {...register('title', {
                 required: `${
                   LearningMaterialTypeReg.filter(
-                    item => item.type === watch().materialType
+                    (item) => item.type === watch().materialType
                   )[0].ko
                 }  제목을 입력해주세요.`,
               })}
-              size="small"
+              size='small'
               label={`${
                 LearningMaterialTypeReg.filter(
-                  item => item.type === watch().materialType
+                  (item) => item.type === watch().materialType
                 )[0].ko
               } 제목`}
-              variant="outlined"
+              variant='outlined'
             />
             <ErrorMessage
               errors={errors}
-              name="subject"
+              name='subject'
               as={<FormHelperText error />}
             />
           </FormControl>
@@ -420,13 +421,13 @@ export function LearningMaterialUploadForm({
           <FormControl className={textField}>
             <TextField
               {...register('origin', { required: 'URL을 입력해주세요.' })}
-              size="small"
-              label="URL"
-              variant="outlined"
+              size='small'
+              label='URL'
+              variant='outlined'
             />
             <ErrorMessage
               errors={errors}
-              name="subject"
+              name='subject'
               as={<FormHelperText error />}
             />
           </FormControl>
@@ -435,9 +436,9 @@ export function LearningMaterialUploadForm({
         {openTui ? (
           <TuiEditor
             initialValue={(learningMaterial && learningMaterial.content) || ' '}
-            previewStyle="vertical"
-            height="500px"
-            initialEditType="wysiwyg"
+            previewStyle='vertical'
+            height='500px'
+            initialEditType='wysiwyg'
             useCommandShortcut={true}
             ref={editorRef}
             autofocus={false}
@@ -445,10 +446,10 @@ export function LearningMaterialUploadForm({
         ) : null}
 
         <FormLabel sx={{ mt: 2, mb: 1 }}>첨부파일업로드</FormLabel>
-        <div className="board-uploader">
+        <div className='board-uploader'>
           <FileUploader
             register={register}
-            regName="files"
+            regName='files'
             onFileChange={handleFileChange}
             // accept=".jpg, .jpeg, .png"
           >
@@ -463,7 +464,7 @@ export function LearningMaterialUploadForm({
               //     onDelete={handleDeleteFile}
               //   />
               // )
-              fileArray.map(r => (
+              fileArray.map((r) => (
                 <Chip
                   icon={<OndemandVideoOutlinedIcon />}
                   label={r.name}
@@ -485,18 +486,18 @@ export function LearningMaterialUploadForm({
           <Controller
             rules={{ required: true }}
             control={control}
-            name="status"
+            name='status'
             render={({ field }) => (
               <RadioGroup row {...field}>
                 <FormControlLabel
                   value={ProductStatus.APPROVE}
                   control={<Radio />}
-                  label="정상"
+                  label='정상'
                 />
                 <FormControlLabel
                   value={ProductStatus.REJECT}
                   control={<Radio />}
-                  label="중지"
+                  label='중지'
                 />{' '}
               </RadioGroup>
             )}
@@ -517,18 +518,18 @@ export function LearningMaterialUploadForm({
             )}
           />
         </FormControl> */}
-        <Box color="#2cb8e2">
+        <Box color='#2cb8e2'>
           교육 자료 외 게시판은 단일파일 업로드하셔야 합니다. 여러파일 업로드시
           처음 파일만 인식합니다.
         </Box>
         {mode === 'modify' && (
-          <Box color="#f87272">
+          <Box color='#f87272'>
             서버에서 파일 업로드중이여서 올린 파일이 안보일 수 있습니다. 조금만
             기다리시고 새로고침 해주세요.
           </Box>
         )}
         <ButtonBox>
-          <SubmitBtn variant="contained" type="submit" disabled={loading}>
+          <SubmitBtn variant='contained' type='submit' disabled={loading}>
             {loading ? (
               <Spinner fit={true} />
             ) : mode === 'upload' ? (
@@ -542,8 +543,8 @@ export function LearningMaterialUploadForm({
             ''
           ) : (
             <DeleteBtn
-              color="warning"
-              variant="contained"
+              color='warning'
+              variant='contained'
               onClick={() => onClickRemoveLM(learningMaterial.seq)}
               disabled={loading}
             >

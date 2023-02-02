@@ -60,6 +60,12 @@ export default function ReferenceLayout({ materialType }: ReferenceLayoutProps) 
     <ReferenceWrapper>
       <ReferenceChipWrapper>
         <ReferenceChipItem
+          label="전체"
+          color="primary"
+          variant={!tabType ? 'filled' : 'outlined'}
+          onClick={() => handleClickChip(null)}
+        />
+        <ReferenceChipItem
           label="어린이"
           color="primary"
           variant={tabType === MaterialSubType.TYPE_CHILDREN ? 'filled' : 'outlined'}

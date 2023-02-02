@@ -3,8 +3,8 @@ import { ButtonBase, Chip } from '@mui/material';
 
 export const MediaContainer = styled.div`
   width: 100%;
-  max-width: 1200px;
-  margin: 62px auto 0 auto;
+  /* max-width: 1200px; */
+  /* margin: 62px auto 0 auto; */
   
   @media (max-width: 768px) {
     padding: 32px 12px;
@@ -12,12 +12,47 @@ export const MediaContainer = styled.div`
   }
 `;
 
-export const LearningGuideContentContainer = styled.div`
+export const MediaHeaderContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 262px;
+  position: relative;
+  overflow: hidden;
+
+  > svg {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, 0);
+    z-index: -1;
+  }
+`;
+
+export const MediaHeaderTitle = styled.p`
+  font-size: 48px;
+  font-weight: 500;
+  color: #fff;
+  line-height: 42px;
+  margin-bottom: 10px;
+`;
+
+export const MediaHeaderSubtitle = styled.p`
+  font-size: 17px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0 30px;
+  word-break: break-word;
+`;
+
+
+export const MediaBodyContainer = styled.div`
   width: 100%;
   max-width: 1200px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   margin: 62px auto 0 auto;
   padding: 0;
 
@@ -26,6 +61,10 @@ export const LearningGuideContentContainer = styled.div`
     margin: 0;
   }
 `;
+
+export const MediaChipsWrap = styled.div`
+
+`
 
 export const MediaMainChipWrap = styled.div`
   display: flex;

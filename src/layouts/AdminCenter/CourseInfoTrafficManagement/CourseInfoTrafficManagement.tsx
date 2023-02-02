@@ -329,15 +329,12 @@ export default function CourseInfoTrafficManagement() {
                   {user.seq}
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align='center'>
-                  {user.userSeq}
+                  {user.userInfo.name}
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align='center'>
                   <NameBox title={user.userInfo.name}>
-                    {user.userInfo.name}
+                    {user.userInfo.username}
                   </NameBox>
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align='center'>
-                  {user.userInfo.username}
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align='center'>
                   <SubjectBox>{convertBirth(user.userInfo.birth)}</SubjectBox>

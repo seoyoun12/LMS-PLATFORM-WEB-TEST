@@ -53,20 +53,20 @@ export function EnrollHistoryCard({
   return (
     <Box sx={{ maxWidth, minWidth }}>
       <CardActionArea>
-        <Box ref={divRef} borderRadius="4px" overflow="hidden">
+        <Box ref={divRef} borderRadius='4px' overflow='hidden'>
           <CardMedia
-            component="img"
-            height="140"
+            component='img'
+            height='140'
             image={image || 'https://picsum.photos/276'}
             sx={{ height: `calc((${width}  / 16) * 9)` }}
-            alt="green iguana"
+            alt='green iguana'
           />
         </Box>
-        <Title gutterBottom variant="h5" mt={1}>
+        <Title gutterBottom variant='h5' mt={1}>
           {title}
         </Title>
         {/* <Divider sx={{ borderBottom: `1px solid #D4D4D4` }} /> */}
-        <Typography mt={1} mb={2} color="primary.main">
+        <Typography mt={1} mb={2} color='primary.main'>
           {content1}
         </Typography>
       </CardActionArea>

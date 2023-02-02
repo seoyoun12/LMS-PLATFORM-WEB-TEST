@@ -19,7 +19,11 @@ import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
 import dateFormat from 'dateformat';
 import { UserModifyModal } from '@components/admin-center/UserModifyModal';
-import { CompleteType, StatusType, useLearningInfo } from '@common/api/adm/learningInfo';
+import {
+  CompleteType,
+  StatusType,
+  useLearningInfo,
+} from '@common/api/adm/learningInfo';
 import { grey } from '@mui/material/colors';
 import { CourseType } from '@common/api/adm/courseClass';
 import { NotFound } from '@components/ui/NotFound';
@@ -110,7 +114,7 @@ export default function CourseInfoTrafficManagement() {
 
   // Pagination
   const onChangePage = (page: number) => {
-    setSubmitValue(prev => {
+    setSubmitValue((prev) => {
       return { ...prev, page };
     });
     setPage(page);
@@ -163,8 +167,10 @@ export default function CourseInfoTrafficManagement() {
     const value = e.target.value;
     setValue('notFound', false);
     if (!value) return setValue('completeType', null);
-    if (value === CompleteType.TYPE_COMPLETE) return setValue('completeType', value);
-    if (value === CompleteType.TYPE_INCOMPLETE) return setValue('completeType', value);
+    if (value === CompleteType.TYPE_COMPLETE)
+      return setValue('completeType', value);
+    if (value === CompleteType.TYPE_INCOMPLETE)
+      return setValue('completeType', value);
   };
 
   //퇴교여부
@@ -211,7 +217,8 @@ export default function CourseInfoTrafficManagement() {
     }
 
     const { phone, identityNumber } = watch();
-    if (phone === '' || phone?.replaceAll(' ', '') === '') setValue('phone', null);
+    if (phone === '' || phone?.replaceAll(' ', '') === '')
+      setValue('phone', null);
     if (identityNumber === '' || identityNumber?.replaceAll(' ', '') === '')
       setValue('identityNumber', null);
 
@@ -238,7 +245,9 @@ export default function CourseInfoTrafficManagement() {
   // user/adm/course-info/detail/{courseUserSeq}
   return (
     <Box>
-      <CourseInfoTypography variant="h5">전체 수강생 학습현황(도민)</CourseInfoTypography>
+      <CourseInfoTypography variant='h5'>
+        전체 수강생 학습현황(도민)
+      </CourseInfoTypography>
       {/* <HeadRowsTop
         courseType={watch().courseType}
         onChangeCourseType={onChangeCourseType}
@@ -274,14 +283,14 @@ export default function CourseInfoTrafficManagement() {
       </Box> */}
       {/* <HeadRowsBottom search={watch().nameOrUsername} handleSubmit={handleSubmit} /> */}
       {watch().notFound ? (
-        <NotFound content="학습현황이 존재하지 않습니다!" />
+        <NotFound content='학습현황이 존재하지 않습니다!' />
       ) : (
         <Table
           pagination={true}
           totalNum={data?.totalElements}
           page={data?.number}
           onChangePage={onChangePage}
-          size="small"
+          size='small'
           sx={{ tableLayout: 'fixed' }}
         >
           <TableHead>
@@ -296,7 +305,11 @@ export default function CourseInfoTrafficManagement() {
                   align: string;
                   width: string;
                 }) => (
-                  <CourseInfoTitleTableCell key={name} align="center" width={width}>
+                  <CourseInfoTitleTableCell
+                    key={name}
+                    align='center'
+                    width={width}
+                  >
                     {name}
                   </CourseInfoTitleTableCell>
                 )
@@ -305,29 +318,35 @@ export default function CourseInfoTrafficManagement() {
           </TableHead>
 
           <TableBody>
-            {data.content.map(user => (
+            {data.content.map((user) => (
               <TableRow
                 sx={{ cursor: 'pointer' }}
                 key={user.seq}
                 hover
                 onClick={() => onClickmodifyCourseInfo(user.seq)}
               >
-                <CourseInfoTableCell align="center">{user.seq}</CourseInfoTableCell>
-                <CourseInfoTableCell align="center">{user.userSeq}</CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  <NameBox title={user.userInfo.name}>{user.userInfo.name}</NameBox>
+                <CourseInfoTableCell align='center'>
+                  {user.seq}
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
+                  {user.userSeq}
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align='center'>
+                  <NameBox title={user.userInfo.name}>
+                    {user.userInfo.name}
+                  </NameBox>
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align='center'>
                   {user.userInfo.username}
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   <SubjectBox>{convertBirth(user.userInfo.birth)}</SubjectBox>
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   <SubjectBox>
                     {
                       CourseTrafficTargetType.filter(
-                        f => f.type === user.eduTargetMain
+                        (f) => f.type === user.eduTargetMain
                       )[0].ko
                     }
                   </SubjectBox>
@@ -341,29 +360,33 @@ export default function CourseInfoTrafficManagement() {
                     }
                   </SubjectBox>
                 </CourseInfoTableCell> */}
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   <SubjectBox>
-                    {TargetSubTypeReg.filter(f => f.type === user.eduTargetSub)[0].ko}
+                    {
+                      TargetSubTypeReg.filter(
+                        (f) => f.type === user.eduTargetSub
+                      )[0].ko
+                    }
                   </SubjectBox>
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   <SubjectBox>
-                    {locationList.filter(f => f.en === user.region)[0].ko}
+                    {locationList.filter((f) => f.en === user.region)[0].ko}
                   </SubjectBox>
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   {user.organization}
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   {user.expectedToStartDtime}
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   {user.expiredDtime}
                 </CourseInfoTableCell>
                 {/* <CourseInfoTableCell align="center">
                   {user.displayCompleteYn}
                 </CourseInfoTableCell> */}
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   {user.status === 1 ? '정상' : '비활성'}
                 </CourseInfoTableCell>
               </TableRow>

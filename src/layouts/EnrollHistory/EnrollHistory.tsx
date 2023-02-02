@@ -42,11 +42,13 @@ export function EnrollHistory() {
     <Box>
       <MyCourseContainer>
         <MyCourseTitle>온라인 교육 신청내역</MyCourseTitle>
-        <MyCourseSubTitle>온라인 교육 신청내역을 확인하실 수 있습니다.</MyCourseSubTitle>
+        <MyCourseSubTitle>
+          온라인 교육 신청내역을 확인하실 수 있습니다.
+        </MyCourseSubTitle>
       </MyCourseContainer>
       <EnrollHistoryWrap>
         {data.length <= 0 && enrollData.length <= 0 && (
-          <NotFound content="신청한 과정이 존재하지 않습니다!" />
+          <NotFound content='신청한 과정이 존재하지 않습니다!' />
         )}
         <Grid
           container
@@ -56,7 +58,7 @@ export function EnrollHistory() {
           mt={1}
         >
           {data.length > 0 &&
-            data.map(item => (
+            data.map((item) => (
               <Grid item xs={1} sm={1} md={1} lg={1} key={item.seq}>
                 <Box
                   onClick={() => {
@@ -81,7 +83,7 @@ export function EnrollHistory() {
                 </Box>
               </Grid>
             ))}
-          {enrollData.map(r => (
+          {enrollData.map((r) => (
             <Grid item xs={1} sm={1} md={1} lg={1} key={r.seq}>
               <Box
                 onClick={() => {

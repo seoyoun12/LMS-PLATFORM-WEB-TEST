@@ -313,12 +313,9 @@ export default function CourseInfoTrafficManagement() {
                 onClick={() => onClickmodifyCourseInfo(user.seq)}
               >
                 <CourseInfoTableCell align="center">{user.seq}</CourseInfoTableCell>
-                <CourseInfoTableCell align="center">{user.userSeq}</CourseInfoTableCell>
+                <CourseInfoTableCell align="center">{user.userInfo.name}</CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
-                  <NameBox title={user.userInfo.name}>{user.userInfo.name}</NameBox>
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  {user.userInfo.username}
+                  <NameBox title={user.userInfo.name}>{user.userInfo.username}</NameBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
                   <SubjectBox>{convertBirth(user.userInfo.birth)}</SubjectBox>

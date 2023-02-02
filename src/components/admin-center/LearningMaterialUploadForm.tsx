@@ -154,12 +154,20 @@ export function LearningMaterialUploadForm({
     if (mode === 'upload') setFileArray([]);
   }, [watch().materialSubType]);
 
-  const onClickOpenSubType = async (e?: React.MouseEvent<HTMLLabelElement>) => {
+  const onClickOpenSubType = async () => {
     setSubType(true); // 서브타입 오픈여부
     setOpenOrigin(false); // url 오픈여부
     setIsEducationRoute(false); //다중 파일 업로드 사용여부
+   
     setValue('materialSubType', MaterialSubType.TYPE_CHILDREN);
   };
+
+  const onClickImOnlyEducationSubType = () => {
+    setSubType(true); // 서브타입 오픈여부
+    setOpenOrigin(false); // url 오픈여부
+    setIsEducationRoute(true); //다중 파일 업로드 사용여부
+    setValue('materialSubType', MaterialSubType.TYPE_CHILDREN);
+  }
 
   const onClickCloseSubType = async (
     e?: React.MouseEvent<HTMLLabelElement>
@@ -318,10 +326,9 @@ export function LearningMaterialUploadForm({
                   <FormControlLabel
                     value={MaterialType.TYPE_EDUCATIONAL}
                     control={<Radio />}
-                    label='교육자료'
-                    onClick={() => {
-                      // onClickCloseSubType();
-                      onClickOpenSubType();
+                    label="교육자료"
+                    onClick={(e) => {
+                      onClickImOnlyEducationSubType()
                       setOpenTui(false);
                     }}
                   />

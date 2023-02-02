@@ -59,37 +59,6 @@ export function EnrollHistory() {
       if(eduTargetSub === 'TYPE_ELDERLY') return '어르신'
     }
   }
-  // const eduTargetList: {
-  //   title: string;
-  //   borderBottomColor: string;
-  //   target: EduTargetMainType;
-  //   imgPath: string;
-  // }[] = [
-  //   {
-  //     title: '어린이',
-  //     borderBottomColor: '#f1c40f',
-  //     target: 'TYPE_CHILDREN',
-  //     imgPath: '/assets/images/domin.jpg',
-  //   },
-  //   {
-  //     title: '청소년',
-  //     borderBottomColor: '#2980b9',
-  //     target: 'TYPE_TEENAGER',
-  //     imgPath: '/assets/images/teen.jpg',
-  //   },
-  //   {
-  //     title: '자가운전자',
-  //     borderBottomColor: '#27ae60',
-  //     target: 'TYPE_SELF_DRIVING',
-  //     imgPath: '/assets/images/self.jpg',
-  //   },
-  //   {
-  //     title: '어르신',
-  //     borderBottomColor: '#c0392b',
-  //     target: 'TYPE_ELDERLY',
-  //     imgPath: '/assets/images/old.png',
-  //   },
-  // ];
 
   if (!data) return <Spinner />;
   if (!enrollData) return <Spinner />;

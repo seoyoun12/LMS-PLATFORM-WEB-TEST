@@ -109,7 +109,7 @@ export function CourseTrafficUploadForm({
     ) {
       setValue(
         'eduTargetSub',
-        TargetTypeMatch.filter(tm => tm.mainType === watch().eduTargetMain)[0]
+        TargetTypeMatch.filter((tm) => tm.mainType === watch().eduTargetMain)[0]
           ?.subType
       );
       setValue('disabledEduTargetSub', true);
@@ -206,23 +206,23 @@ export function CourseTrafficUploadForm({
   return (
     <Container>
       <Box
-        component="form"
-        encType="multipart/form-data"
+        component='form'
+        encType='multipart/form-data'
         onSubmit={handleSubmit(onSubmit)}
         noValidate
         className={boxStyles}
       >
         <InputContainer>
-          <FormControl fullWidth className="courseUploadInputBox">
+          <FormControl fullWidth className='courseUploadInputBox'>
             <InputLabel>교육 대상자 타입</InputLabel>
             <Select
-              labelId="eduTargetMain"
-              id="eduTargetMain"
+              labelId='eduTargetMain'
+              id='eduTargetMain'
               value={watch().eduTargetMain || ''}
-              label="교육 대상자 타입"
+              label='교육 대상자 타입'
               onChange={handleEduTargetMain}
             >
-              {TargetMainTypeReg.map(item => (
+              {TargetMainTypeReg.map((item) => (
                 <MenuItem key={item.type} value={item.type}>
                   {item.ko}
                 </MenuItem>
@@ -279,29 +279,29 @@ export function CourseTrafficUploadForm({
 
           {/*  */}
 
-          <FormControl fullWidth className="courseUploadInputBox">
+          <FormControl fullWidth className='courseUploadInputBox'>
             <InputLabel>교육 대상자 세부 타입</InputLabel>
             <Select
-              labelId="eduTargetSub"
-              id="eduTargetSub"
+              labelId='eduTargetSub'
+              id='eduTargetSub'
               value={watch().eduTargetSub || ''}
-              label="교육 대상자 세부 타입"
+              label='교육 대상자 세부 타입'
               onChange={handleEduTargetSub}
               disabled={watch().disabledEduTargetSub}
             >
               {watch().eduTargetMain === 'TYPE_CHILDREN'
-                ? TargetSubTypeChildrenReg.map(item => (
+                ? TargetSubTypeChildrenReg.map((item) => (
                     <MenuItem key={item.type} value={item.type}>
                       {item.ko}
                     </MenuItem>
                   ))
                 : watch().eduTargetMain === 'TYPE_TEENAGER'
-                ? TargetSubTypeTeenagerReg.map(item => (
+                ? TargetSubTypeTeenagerReg.map((item) => (
                     <MenuItem key={item.type} value={item.type}>
                       {item.ko}
                     </MenuItem>
                   ))
-                : TargetSubTypeReg.map(item => (
+                : TargetSubTypeReg.map((item) => (
                     <MenuItem key={item.type} value={item.type}>
                       {item.ko}
                     </MenuItem>
@@ -316,13 +316,13 @@ export function CourseTrafficUploadForm({
               {...register('title', {
                 required: '과정 명을 입력해주세요.',
               })}
-              size="small"
-              label="과정명"
-              variant="outlined"
+              size='small'
+              label='과정명'
+              variant='outlined'
             />
             <ErrorMessage
               errors={errors}
-              name="title"
+              name='title'
               as={<FormHelperText error />}
             />
           </FormControl>
@@ -332,24 +332,24 @@ export function CourseTrafficUploadForm({
               {...register('youtubeLink', {
                 required: '유튜브 링크를 입력해주세요.',
               })}
-              size="small"
-              label="유튜브 링크"
-              variant="outlined"
+              size='small'
+              label='유튜브 링크'
+              variant='outlined'
             />
             <ErrorMessage
               errors={errors}
-              name="youtubeLink"
+              name='youtubeLink'
               as={<FormHelperText error />}
             />
           </FormControl>
 
-          <div className="thumbnail-uploader">
+          <div className='thumbnail-uploader'>
             <FormLabel sx={{ mt: 1, mb: 1 }}>썸네일 이미지</FormLabel>
             <FileUploader
               register={register}
-              regName="files"
+              regName='files'
               onFileChange={handleFileChange}
-              accept=".jpg, .jpeg, .png"
+              accept='.jpg, .jpeg, .png'
               children={''}
             />
 
@@ -377,18 +377,18 @@ export function CourseTrafficUploadForm({
           <ThumbnailImg>
             {courseTraffic?.s3Files ? (
               <Image
-                className="thumbnailImg"
+                className='thumbnailImg'
                 src={courseTraffic.s3Files[0]?.path || ''}
-                layout="fill"
+                layout='fill'
               />
             ) : (
-              <Image src={thumbnail} layout="fill" />
+              <Image src={thumbnail} layout='fill' />
             )}
           </ThumbnailImg>
         </InputContainer>
 
         <ButtonBox>
-          <SubmitBtn variant="contained" type="submit" disabled={loading}>
+          <SubmitBtn variant='contained' type='submit' disabled={loading}>
             {loading ? (
               <Spinner fit={true} />
             ) : mode === 'upload' ? (
@@ -401,8 +401,8 @@ export function CourseTrafficUploadForm({
             ''
           ) : (
             <DeleteBtn
-              color="warning"
-              variant="contained"
+              color='warning'
+              variant='contained'
               onClick={() => onClickRemoveCourseTraffic(courseTraffic.seq)}
               disabled={loading}
             >

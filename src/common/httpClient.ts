@@ -64,11 +64,10 @@ export const POST_TO_ALL_DATA = async <T = any>(
   try {
     const response = await api.post<T>(url, data, config);
     return response;
-  }
-  catch (error: any) {
+  } catch (error: any) {
     return handleError(error);
   }
-}
+};
 
 export const PUT = async <T = any>(
   url: string,

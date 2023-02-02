@@ -36,7 +36,7 @@ export function HeadRowsBottom({ search, handleSubmit }: Props) {
       const data = await getExcelCourseLearning();
       const excel = new Blob([data]);
       a.href = URL.createObjectURL(excel);
-      a.download = '충남_관리자_학습현황_모든데이터.xlsx';
+      a.download = '충남_관리자_학습현황(운수/저상)_데이터.xlsx';
       a.click();
       a.remove();
       URL.revokeObjectURL(a.href);
@@ -50,32 +50,32 @@ export function HeadRowsBottom({ search, handleSubmit }: Props) {
   return (
     <HeadRowsBottomWrap>
       {/* <Button variant="contained">검색하기</Button> */}
-      <Box mb={2} fontSize={18} fontWeight="bold">
+      <Box mb={2} fontSize={18} fontWeight='bold'>
         {search !== '' && `검색어 : ${search}`}
       </Box>
       <BoxRow sx={{ flexDirection: 'row' }}>
         <Button
-          variant="contained"
-          onClick={e => handleSubmit(false)}
+          variant='contained'
+          onClick={(e) => handleSubmit(false)}
           sx={{ width: '20%' }}
         >
           검색하기
         </Button>
         <ReloadButton
-          size="small"
-          color="neutral"
-          variant="text"
+          size='small'
+          color='neutral'
+          variant='text'
           endIcon={<ReplayIcon htmlColor={grey[700]} />}
           sx={{ marginLeft: '12px' }}
-          onClick={e => handleSubmit(true)}
+          onClick={(e) => handleSubmit(true)}
         >
           전체 다시 불러오기
         </ReloadButton>
       </BoxRow>
       <BoxRow sx={{ flexDirection: 'row-reverse' }}>
         <Button
-          variant="contained"
-          color="success"
+          variant='contained'
+          color='success'
           disabled={loading}
           onClick={onClickExcelDownload}
         >
@@ -91,12 +91,12 @@ export function HeadRowsBottom({ search, handleSubmit }: Props) {
       </BoxRow>
       <Backdrop open={loading}>
         <Box
-          display="flex"
-          flexDirection="column"
+          display='flex'
+          flexDirection='column'
           sx={{ background: 'white', borderRadius: '4px', padding: '12px' }}
         >
           <Spinner fit={true} />
-          <Box color="#246def" fontWeight="bold">
+          <Box color='#246def' fontWeight='bold'>
             다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
           </Box>
         </Box>

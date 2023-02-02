@@ -8,6 +8,7 @@ import {
   InputBase,
   IconButton,
   Radio,
+  Backdrop,
 } from '@mui/material';
 import styles from '@styles/common.module.scss';
 import { Table } from '@components/ui';
@@ -19,7 +20,11 @@ import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
 import dateFormat from 'dateformat';
 import { UserModifyModal } from '@components/admin-center/UserModifyModal';
-import { CompleteType, StatusType, useLearningInfo } from '@common/api/adm/learningInfo';
+import {
+  CompleteType,
+  StatusType,
+  useLearningInfo,
+} from '@common/api/adm/learningInfo';
 import { grey } from '@mui/material/colors';
 import { CourseType } from '@common/api/adm/courseClass';
 import { NotFound } from '@components/ui/NotFound';
@@ -38,7 +43,11 @@ import {
   locationList,
   residenceList,
   TargetSubTypeReg,
+  UserRadioExcelConfig,
 } from 'src/staticDataDescElements/staticType';
+import { getExcelCourseTrafficLearning } from '@common/api/adm/excel';
+import { useSnackbar } from '@hooks/useSnackbar';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 
 const headRows: {
   name: string;
@@ -107,10 +116,38 @@ export default function CourseInfoTrafficManagement() {
   });
   const [page, setPage] = useState<number>(0);
   const { data, error, mutate } = useCourseInfoTraffic(10, page);
+  const [loading, setLoading] = useState(false);
+  const snackbar = useSnackbar();
+
+  // // 엑셀 파일명
+  // const koFileName = UserRadioExcelConfig.filter(
+  //   (ur) => ur.value === typeValue
+  // )[0]?.name;
+
+  // 엑셀
+  const onClickExcelDownload = async () => {
+    const a = document.createElement('a');
+    setLoading(true);
+    try {
+      const data = await getExcelCourseTrafficLearning();
+      const excel = new Blob([data]);
+      a.href = URL.createObjectURL(excel);
+      // a.download = '충남_관리자_회원목록_리스트.xlsx';
+      a.download = '충남_관리자_학습현황(도민)_데이터.xlsx';
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(a.href);
+      snackbar({ variant: 'success', message: '다운로드 완료' });
+      setLoading(false);
+    } catch (e) {
+      snackbar({ variant: 'error', message: '다운로드 실패' });
+      setLoading(false);
+    }
+  };
 
   // Pagination
   const onChangePage = (page: number) => {
-    setSubmitValue(prev => {
+    setSubmitValue((prev) => {
       return { ...prev, page };
     });
     setPage(page);
@@ -163,8 +200,10 @@ export default function CourseInfoTrafficManagement() {
     const value = e.target.value;
     setValue('notFound', false);
     if (!value) return setValue('completeType', null);
-    if (value === CompleteType.TYPE_COMPLETE) return setValue('completeType', value);
-    if (value === CompleteType.TYPE_INCOMPLETE) return setValue('completeType', value);
+    if (value === CompleteType.TYPE_COMPLETE)
+      return setValue('completeType', value);
+    if (value === CompleteType.TYPE_INCOMPLETE)
+      return setValue('completeType', value);
   };
 
   //퇴교여부
@@ -211,7 +250,8 @@ export default function CourseInfoTrafficManagement() {
     }
 
     const { phone, identityNumber } = watch();
-    if (phone === '' || phone?.replaceAll(' ', '') === '') setValue('phone', null);
+    if (phone === '' || phone?.replaceAll(' ', '') === '')
+      setValue('phone', null);
     if (identityNumber === '' || identityNumber?.replaceAll(' ', '') === '')
       setValue('identityNumber', null);
 
@@ -238,7 +278,9 @@ export default function CourseInfoTrafficManagement() {
   // user/adm/course-info/detail/{courseUserSeq}
   return (
     <Box>
-      <CourseInfoTypography variant="h5">전체 수강생 학습현황(도민)</CourseInfoTypography>
+      <CourseInfoTypography variant='h5'>
+        전체 수강생 학습현황(도민)
+      </CourseInfoTypography>
       {/* <HeadRowsTop
         courseType={watch().courseType}
         onChangeCourseType={onChangeCourseType}
@@ -273,15 +315,47 @@ export default function CourseInfoTrafficManagement() {
         />
       </Box> */}
       {/* <HeadRowsBottom search={watch().nameOrUsername} handleSubmit={handleSubmit} /> */}
+
+      <Box display='flex' mb={2}>
+        <Button
+          variant='contained'
+          color='success'
+          sx={{ marginLeft: 'auto' }}
+          // onClick={() => snackbar({ variant: 'info', message: '준비중입니다.' })}
+          onClick={onClickExcelDownload}
+        >
+          {loading ? (
+            <Spinner fit={true} />
+          ) : (
+            <>
+              <FileCopyIcon sx={{ marginRight: '4px' }} />
+              회원목록 엑셀다운로드
+            </>
+          )}
+        </Button>
+      </Box>
+
+      <Backdrop open={loading}>
+        <Box
+          display='flex'
+          flexDirection='column'
+          sx={{ background: 'white', borderRadius: '4px', padding: '12px' }}
+        >
+          <Spinner fit={true} />
+          <Box color='#246def' fontWeight='bold'>
+            다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
+          </Box>
+        </Box>
+      </Backdrop>
       {watch().notFound ? (
-        <NotFound content="학습현황이 존재하지 않습니다!" />
+        <NotFound content='학습현황이 존재하지 않습니다!' />
       ) : (
         <Table
           pagination={true}
           totalNum={data?.totalElements}
           page={data?.number}
           onChangePage={onChangePage}
-          size="small"
+          size='small'
           sx={{ tableLayout: 'fixed' }}
         >
           <TableHead>
@@ -296,7 +370,11 @@ export default function CourseInfoTrafficManagement() {
                   align: string;
                   width: string;
                 }) => (
-                  <CourseInfoTitleTableCell key={name} align="center" width={width}>
+                  <CourseInfoTitleTableCell
+                    key={name}
+                    align='center'
+                    width={width}
+                  >
                     {name}
                   </CourseInfoTitleTableCell>
                 )
@@ -305,29 +383,32 @@ export default function CourseInfoTrafficManagement() {
           </TableHead>
 
           <TableBody>
-            {data.content.map(user => (
+            {data.content.map((user) => (
               <TableRow
                 sx={{ cursor: 'pointer' }}
                 key={user.seq}
                 hover
                 onClick={() => onClickmodifyCourseInfo(user.seq)}
               >
-                <CourseInfoTableCell align="center">{user.seq}</CourseInfoTableCell>
-                <CourseInfoTableCell align="center">{user.userSeq}</CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  <NameBox title={user.userInfo.name}>{user.userInfo.name}</NameBox>
+                <CourseInfoTableCell align='center'>
+                  {user.seq}
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  {user.userInfo.username}
+                <CourseInfoTableCell align='center'>
+                  {user.userInfo.name}
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
+                  <NameBox title={user.userInfo.name}>
+                    {user.userInfo.username}
+                  </NameBox>
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align='center'>
                   <SubjectBox>{convertBirth(user.userInfo.birth)}</SubjectBox>
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   <SubjectBox>
                     {
                       CourseTrafficTargetType.filter(
-                        f => f.type === user.eduTargetMain
+                        (f) => f.type === user.eduTargetMain
                       )[0].ko
                     }
                   </SubjectBox>
@@ -341,29 +422,33 @@ export default function CourseInfoTrafficManagement() {
                     }
                   </SubjectBox>
                 </CourseInfoTableCell> */}
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   <SubjectBox>
-                    {TargetSubTypeReg.filter(f => f.type === user.eduTargetSub)[0].ko}
+                    {
+                      TargetSubTypeReg.filter(
+                        (f) => f.type === user.eduTargetSub
+                      )[0].ko
+                    }
                   </SubjectBox>
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   <SubjectBox>
-                    {locationList.filter(f => f.en === user.region)[0].ko}
+                    {locationList.filter((f) => f.en === user.region)[0].ko}
                   </SubjectBox>
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   {user.organization}
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   {user.expectedToStartDtime}
                 </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   {user.expiredDtime}
                 </CourseInfoTableCell>
                 {/* <CourseInfoTableCell align="center">
                   {user.displayCompleteYn}
                 </CourseInfoTableCell> */}
-                <CourseInfoTableCell align="center">
+                <CourseInfoTableCell align='center'>
                   {user.status === 1 ? '정상' : '비활성'}
                 </CourseInfoTableCell>
               </TableRow>

@@ -25,7 +25,13 @@ import {
   MediaItemContentTitle,
   MediaItemImageContainer,
   MediaSubChipWrap,
+  MediaHeaderContainer,
+  MediaHeaderTitle,
+  MediaHeaderSubtitle,
+  MediaBodyContainer,
+  MediaChipsWrap
 } from './style';
+import BackgroundImage from 'public/assets/images/learning_material_background.svg';
 
 // interface MediaLayoutProps {
 //   materialType: MaterialType;
@@ -64,7 +70,7 @@ export default function ClassRoomLayout() {
         const roleData = await getTrafficMediaBoardRole();
         const roleDataMainRoles = roleData.data.mainRoles;
         const roleDataSubRoles = roleData.data.subRoles;
-        //indexOf의 첫 아이템의 위치가 반환됩니다. 필터의 idx가 계속 돌면 첫 아이템 위치랑 같을 경우에만 반환하므로 결국엔 중복이 제거됩니다.
+        //indexOf의 첫 아이템의 위치가 반환됩니다. 필터의 idx가 계속 돌면 첫 아이템 위치랑 같을 경우에만 반환하므로 결국엔 중복이 제거됩니다. new Set()을 사용해도 동일한 결과를 줍니다.
         const eduMainRemoveDuplication = roleDataMainRoles.filter(
           (f, idx) => roleDataMainRoles.indexOf(f) === idx
         ) as EduTargetMainType[];
@@ -95,69 +101,79 @@ export default function ClassRoomLayout() {
 
   return (
     <MediaContainer>
-      <MediaMainChipWrap>
-        {eduArr
-          .filter(f => chipAllowed?.eduTargetMain.includes(f.eduMainType))
-          .map(r => (
-            <MediaChipItem
-              label={r.eduMainTypeKo}
-              color="primary"
-              variant={eduMain === r.eduMainType ? 'filled' : 'outlined'}
-              onClick={() => handleMainChipClick(r.eduMainType)}
-            />
-          ))}
-      </MediaMainChipWrap>
-      <MediaSubChipWrap>
-        {eduArr
-          .filter(f => f.eduMainType === eduMain)[0]
-          .child.filter(f => chipAllowed?.eduTargetSub.includes(f.eduSubType))
-          .map(r => (
-            <MediaChipItem
-              label={r.eduSubTypeKo}
-              color="success"
-              variant={eduSub === r.eduSubType ? 'filled' : 'outlined'}
-              onClick={() => setEduSub(r.eduSubType)}
-            />
-          ))}
-      </MediaSubChipWrap>
-      <MediaContentContainer>
-        {!data || data.length <= 0 ? (
-          <NotFound
+      
+      <MediaHeaderContainer>
+        <MediaHeaderTitle>학습하기</MediaHeaderTitle>
+        <MediaHeaderSubtitle>온라인 교육을 학습할 수 있습니다.</MediaHeaderSubtitle>
+        <BackgroundImage />
+      </MediaHeaderContainer>
+      <MediaBodyContainer>
+        <MediaChipsWrap>
+          <MediaMainChipWrap>
+            {eduArr
+              .filter(f => chipAllowed?.eduTargetMain.includes(f.eduMainType))
+              .map(r => (
+                <MediaChipItem
+                label={r.eduMainTypeKo}
+                color="primary"
+                variant={eduMain === r.eduMainType ? 'filled' : 'outlined'}
+                onClick={() => handleMainChipClick(r.eduMainType)}
+                />
+                ))}
+          </MediaMainChipWrap>
+          <MediaSubChipWrap>
+            {eduArr
+              .filter(f => f.eduMainType === eduMain)[0]
+              .child.filter(f => chipAllowed?.eduTargetSub.includes(f.eduSubType))
+              .map(r => (
+                <MediaChipItem
+                label={r.eduSubTypeKo}
+                color="success"
+                variant={eduSub === r.eduSubType ? 'filled' : 'outlined'}
+                onClick={() => setEduSub(r.eduSubType)}
+                />
+                ))}
+          </MediaSubChipWrap>
+        </MediaChipsWrap>
+        <MediaContentContainer>
+          {!data || data.length <= 0 ? (
+            <NotFound
             style={{ height: '300px' }}
             content="권한이 없거나 신청한 과정이 존재하지 않습니다!"
-          />
-        ) : (
-          <>
-            {data &&
-              data.map((item, index) => (
-                <MediaItemContainer key={index} onClick={() => handleClickPost(item.seq)}>
-                  <MediaItemImageContainer>
-                    {(item.s3Files && item.s3Files.length > 0 && (
-                      <img src={item.s3Files[0].path} alt="course thumbnail" />
-                    )) || (
-                      <NotFound
-                        style={{ height: '100%' }}
-                        content="이미지를 찾을 수 없음."
-                      />
-                    )}
-                  </MediaItemImageContainer>
+            />
+            ) : (
+              <>
+              {data &&
+                data.map((item, index) => (
+                  <MediaItemContainer key={index} onClick={() => handleClickPost(item.seq)}>
+                    <MediaItemImageContainer>
+                      {(item.s3Files && item.s3Files.length > 0 && (
+                        <img src={item.s3Files[0].path} alt="course thumbnail" />
+                        )) || (
+                          <NotFound
+                          style={{ height: '100%' }}
+                          content="이미지를 찾을 수 없음."
+                          />
+                          )}
+                    </MediaItemImageContainer>
 
-                  <MediaItemContentContainer>
-                    <MediaItemContentHeaderContainer>
-                      <MediaItemContentTitle>{item.title}</MediaItemContentTitle>
-                      {/*<LearningGuideItemContentDate>*/}
-                      {/*  조회수: 0*/}
-                      {/*</LearningGuideItemContentDate>*/}
-                    </MediaItemContentHeaderContainer>
-                    <MediaItemContentSubtitle>
-                      {format(new Date(item.createdDtime), 'yyyy. MM. dd')}
-                    </MediaItemContentSubtitle>
-                  </MediaItemContentContainer>
-                </MediaItemContainer>
-              ))}
-          </>
-        )}
-      </MediaContentContainer>
+                    <MediaItemContentContainer>
+                      <MediaItemContentHeaderContainer>
+                        <MediaItemContentTitle>{item.title}</MediaItemContentTitle>
+                        {/*<LearningGuideItemContentDate>*/}
+                        {/*  조회수: 0*/}
+                        {/*</LearningGuideItemContentDate>*/}
+                      </MediaItemContentHeaderContainer>
+                      <MediaItemContentSubtitle>
+                        {format(new Date(item.createdDtime), 'yyyy. MM. dd')}
+                      </MediaItemContentSubtitle>
+                    </MediaItemContentContainer>
+                  </MediaItemContainer>
+                ))}
+            </>
+          )}
+        </MediaContentContainer>
+      </MediaBodyContainer>
     </MediaContainer>
   );
 }

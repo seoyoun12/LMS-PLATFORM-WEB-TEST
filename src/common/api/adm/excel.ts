@@ -3,8 +3,22 @@ import { GET, POST } from '@common/httpClient';
 import { RoleType } from 'src/staticDataDescElements/staticType';
 import { StepsBySurveyForExcel } from '../Api';
 
+// 학습현황(운수/저상) 엑셀 다운로드
 export function getExcelCourseLearning() {
-  return POST(`/adm/excel/download/course-learning-user`, {}, { responseType: 'blob' });
+  return POST(
+    `/adm/excel/download/course-learning-user`,
+    {},
+    { responseType: 'blob' }
+  );
+}
+
+// 학습현황(도민) 엑셀 다운로드
+export function getExcelCourseTrafficLearning() {
+  return POST(
+    `/adm/excel/download/provincial-learning-status`,
+    {},
+    { responseType: 'blob' }
+  );
 }
 
 // export function getExcelSurveyDetail(surveySeq: number) {
@@ -16,8 +30,12 @@ export function getExcelCourseLearning() {
 // }
 
 // 회원관리 리스트 엑셀다운로드
-export function getExcelUserList(roleType : RoleType | string) {
-  return POST(`/adm/excel/download/user`,{roleType},  { params : {roleType}, responseType: 'blob' });
+export function getExcelUserList(roleType: RoleType | string) {
+  return POST(
+    `/adm/excel/download/user`,
+    { roleType },
+    { params: { roleType }, responseType: 'blob' }
+  );
 }
 
 /**
@@ -45,7 +63,9 @@ export function downloadExcelSurveyDetail({
   courseClassSeq?: number | null;
   isZipFile: YN;
 }) {
-  const courseClassSeqPath = courseClassSeq ? `&courseClassSeq=${courseClassSeq}` : '';
+  const courseClassSeqPath = courseClassSeq
+    ? `&courseClassSeq=${courseClassSeq}`
+    : '';
   return POST(
     `/adm/excel/download/survey-detail/${surveySeq}?zipYn=${isZipFile}${courseClassSeqPath}`,
     {},

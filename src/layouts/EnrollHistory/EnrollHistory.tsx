@@ -1,5 +1,6 @@
 import { RegisterType } from '@common/api/courseClass';
 import { useCourseUser } from '@common/api/courseUser';
+import { EduTargetMainType, EduTargetSubType } from '@common/api/learningMaterial';
 import { useEnrollProvincialList } from '@common/api/provincialEnroll';
 import { Modal, Spinner } from '@components/ui';
 import { NotFound } from '@components/ui/NotFound';
@@ -35,6 +36,30 @@ export function EnrollHistory() {
     await enrollMutate(); // provincialEnroll.ts에 enrolllMutate로 되어있다. 20221227 변경
   };
 
+  const imageRenderer = (eduTargetMain: EduTargetMainType) => {
+    if (eduTargetMain === "TYPE_CHILDREN")return `/assets/images/domin.jpg`
+    if (eduTargetMain === "TYPE_TEENAGER") return `/assets/images/teen.jpg`
+    if (eduTargetMain === "TYPE_SELF_DRIVING") return `/assets/images/self.jpg`
+    if (eduTargetMain === "TYPE_ELDERLY") return `/assets/images/old.png`
+  }
+
+  const titleRenderer = (eduTargetMain: EduTargetMainType, eduTargetSub: EduTargetSubType) => {
+    if (eduTargetMain === "TYPE_CHILDREN"){
+      if(eduTargetSub === 'TYPE_KINDERGARTEN') return '어린이 - 유치원'
+      if(eduTargetSub === 'TYPE_ELEMENTARY') return '어린이 - 초등학교'
+    }
+    if (eduTargetMain === "TYPE_TEENAGER") {
+      if(eduTargetSub === 'TYPE_MIDDLE') return '청소년 - 중학교'
+      if(eduTargetSub === 'TYPE_HIGH') return '청소년 - 고등학교'
+    }
+    if (eduTargetMain === "TYPE_SELF_DRIVING") {
+      if(eduTargetSub === 'TYPE_SELF_DRIVER') return '자가운전자'
+    }
+    if (eduTargetMain === "TYPE_ELDERLY") {
+      if(eduTargetSub === 'TYPE_ELDERLY') return '어르신'
+    }
+  }
+
   if (!data) return <Spinner />;
   if (!enrollData) return <Spinner />;
 
@@ -42,11 +67,13 @@ export function EnrollHistory() {
     <Box>
       <MyCourseContainer>
         <MyCourseTitle>온라인 교육 신청내역</MyCourseTitle>
-        <MyCourseSubTitle>온라인 교육 신청내역을 확인하실 수 있습니다.</MyCourseSubTitle>
+        <MyCourseSubTitle>
+          온라인 교육 신청내역을 확인하실 수 있습니다.
+        </MyCourseSubTitle>
       </MyCourseContainer>
       <EnrollHistoryWrap>
         {data.length <= 0 && enrollData.length <= 0 && (
-          <NotFound content="신청한 과정이 존재하지 않습니다!" />
+          <NotFound content='신청한 과정이 존재하지 않습니다!' />
         )}
         <Grid
           container
@@ -56,7 +83,7 @@ export function EnrollHistory() {
           mt={1}
         >
           {data.length > 0 &&
-            data.map(item => (
+            data.map((item) => (
               <Grid item xs={1} sm={1} md={1} lg={1} key={item.seq}>
                 <Box
                   onClick={() => {
@@ -81,7 +108,7 @@ export function EnrollHistory() {
                 </Box>
               </Grid>
             ))}
-          {enrollData.map(r => (
+          {enrollData.map((r) => (
             <Grid item xs={1} sm={1} md={1} lg={1} key={r.seq}>
               <Box
                 onClick={() => {
@@ -101,8 +128,8 @@ export function EnrollHistory() {
                 }}
               >
                 <EnrollHistoryCard
-                  title={r.organization}
-                  image={''}
+                  title={titleRenderer(r.eduTargetMain , r.eduTargetSub)}
+                  image={imageRenderer(r.eduTargetMain)}
                   content1={'자세히보기'}
                   seq={r.seq}
                   item={{}}

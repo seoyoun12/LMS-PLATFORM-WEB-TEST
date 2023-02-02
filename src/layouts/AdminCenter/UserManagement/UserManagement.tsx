@@ -172,7 +172,9 @@ export function UserManagement() {
   };
 
   // 엑셀 파일명
-  const koFileName = UserRadioExcelConfig.filter(ur => ur.value === typeValue)[0]?.name;
+  const koFileName = UserRadioExcelConfig.filter(
+    (ur) => ur.value === typeValue
+  )[0]?.name;
 
   // 엑셀
   const onClickExcelDownload = async () => {
@@ -228,7 +230,7 @@ export function UserManagement() {
 
   return (
     <Box>
-      <Typography fontSize={30} fontWeight="bold">
+      <Typography fontSize={30} fontWeight='bold'>
         회원구분
       </Typography>
 
@@ -253,29 +255,29 @@ export function UserManagement() {
         <SearchContainer onSubmit={handleSearch}>
           <SearchInput
             inputRef={searchInputRef}
-            placeholder="이름 또는 핸드폰번호 검색"
-            size="small"
-            type="search"
+            placeholder='이름 또는 핸드폰번호 검색'
+            size='small'
+            type='search'
           />
-          <IconButton type="submit">
+          <IconButton type='submit'>
             <SearchIcon />
           </IconButton>
         </SearchContainer>
         <ReloadButton
-          size="small"
-          color="neutral"
-          variant="text"
+          size='small'
+          color='neutral'
+          variant='text'
           endIcon={<ReplayIcon htmlColor={grey[700]} />}
-          onClick={e => handleSearch(e, true)}
+          onClick={(e) => handleSearch(e, true)}
         >
           전체 다시 불러오기
         </ReloadButton>
       </SearchBox>
 
-      <Box display="flex">
+      <Box display='flex'>
         <Button
-          variant="contained"
-          color="success"
+          variant='contained'
+          color='success'
           sx={{ marginLeft: 'auto' }}
           // onClick={() => snackbar({ variant: 'info', message: '준비중입니다.' })}
           onClick={onClickExcelDownload}
@@ -291,30 +293,30 @@ export function UserManagement() {
         </Button>
       </Box>
 
-      <Box mt={2} mb={2} fontSize={18} fontWeight="bold">
+      <Box mt={2} mb={2} fontSize={18} fontWeight='bold'>
         {keyword !== '' && `검색어 : ${keyword}`}
       </Box>
       <Backdrop open={loading}>
         <Box
-          display="flex"
-          flexDirection="column"
+          display='flex'
+          flexDirection='column'
           sx={{ background: 'white', borderRadius: '4px', padding: '12px' }}
         >
           <Spinner fit={true} />
-          <Box color="#246def" fontWeight="bold">
+          <Box color='#246def' fontWeight='bold'>
             다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
           </Box>
         </Box>
       </Backdrop>
 
-      <UserTypography variant="h5">회원 목록</UserTypography>
+      <UserTypography variant='h5'>회원 목록</UserTypography>
 
       <Table
         pagination={true}
         totalNum={data.totalElements}
         page={data.number}
         onChangePage={onChangePage}
-        size="small"
+        size='small'
         sx={{ tableLayout: 'fixed' }}
       >
         <TableHead>
@@ -329,7 +331,7 @@ export function UserManagement() {
                 align: string;
                 width: string;
               }) => (
-                <UserTitleTableCell key={name} align="center" width={width}>
+                <UserTitleTableCell key={name} align='center' width={width}>
                   {name}
                 </UserTitleTableCell>
               )
@@ -338,25 +340,25 @@ export function UserManagement() {
         </TableHead>
 
         <TableBody>
-          {data.content.map(user => (
+          {data.content.map((user) => (
             <TableRow
               key={user.seq}
               hover
               onClick={() => onClickModifyUser(user.seq)}
               sx={{ cursor: 'pointer' }}
             >
-              <UserTableCell align="center">{user.seq}</UserTableCell>
-              <UserTableCell align="center">
+              <UserTableCell align='center'>{user.seq}</UserTableCell>
+              <UserTableCell align='center'>
                 {regCategoryType.TYPE_TRANS_EDU === user.regCategory
                   ? '실명가입'
                   : user.username}
               </UserTableCell>
 
-              <UserTableCell align="center">
+              <UserTableCell align='center'>
                 <NameBox title={user.name}>{user.name}</NameBox>
               </UserTableCell>
 
-              <UserTableCell align="center">
+              <UserTableCell align='center'>
                 {/* 주민번호 뒷자리의 첫번째 번호 백엔드에서 줬으니 차후 수정할것. */}
                 {Number(user.birth?.split('-', 1)) < 1000
                   ? Number(user.birth?.slice(0, 2)) + Number(2000) > year
@@ -364,15 +366,19 @@ export function UserManagement() {
                     : 20 + user.birth
                   : user.birth}
               </UserTableCell>
-              <UserTableCell align="center">{user.phone}</UserTableCell>
+              <UserTableCell align='center'>{user.phone}</UserTableCell>
               {/* <UserTableCell>{user.smsYn}</UserTableCell> */}
               {/* <UserTableCell>{user.emailYn}</UserTableCell> */}
               {/* <UserTableCell>{user.loginFailedCount}</UserTableCell> */}
               {/* <UserTableCell>{user.failedYn}</UserTableCell> */}
-              <UserTableCell align="center">
-                {UserListConfig.filter(item => item.value === user.regCategory)[0].label}{' '}
+              <UserTableCell align='center'>
+                {
+                  UserListConfig.filter(
+                    (item) => item.value === user.regCategory
+                  )[0].label
+                }{' '}
               </UserTableCell>
-              <UserTableCell align="center">
+              <UserTableCell align='center'>
                 {user.createdDtime.slice(0, 10)}
               </UserTableCell>
               {/* <UserTableCell>
@@ -412,8 +418,8 @@ export function UserManagement() {
 
       <UserModifyModal
         open={openUserModifyModal}
-        handleClose={isSubmit => handleModalClose(isSubmit)}
-        userData={data.content.find(item => item.seq === userSeq)!}
+        handleClose={(isSubmit) => handleModalClose(isSubmit)}
+        userData={data.content.find((item) => item.seq === userSeq)!}
         error={error}
       />
     </Box>

@@ -355,36 +355,36 @@ export function CourseInformation({
   //////////////////////////////////////////////////////////////////////////////////////////
 
   return (
-    <CourseInfomationBox component="form" onSubmit={handleSubmit(onSubmit)}>
+    <CourseInfomationBox component='form' onSubmit={handleSubmit(onSubmit)}>
       {/* <CourseInfomationBox component="form" onSubmit={onSubmit}> useForm을 사용하지 않을때.*/}
       <TableHeadFull colSpan={4} sx={{ display: 'table', width: '100%' }}>
         수강정보
       </TableHeadFull>
       <TableBody sx={{ display: 'table', width: '100%' }}>
         <TableRow>
-          <TableLeftCell align="center">과정명</TableLeftCell>
+          <TableLeftCell align='center'>과정명</TableLeftCell>
           <TableRightCell>{courseInfo?.courseName}</TableRightCell>
-          <TableLeftCell align="center">년도 / 차수</TableLeftCell>
+          <TableLeftCell align='center'>년도 / 차수</TableLeftCell>
           <TableRightCell>{courseInfo?.yearAndStep}</TableRightCell>
         </TableRow>
         <TableRow>
-          <TableLeftCell align="center">회원명</TableLeftCell>
+          <TableLeftCell align='center'>회원명</TableLeftCell>
           <TableRightCell>{courseInfo?.name}</TableRightCell>
-          <TableLeftCell align="center">회원아이디</TableLeftCell>
+          <TableLeftCell align='center'>회원아이디</TableLeftCell>
           <TableRightCell>
             {courseInfo?.username ? courseInfo?.username : '-'}
           </TableRightCell>
         </TableRow>
         <TableRow>
-          <TableLeftCell align="center">학습기간</TableLeftCell>
+          <TableLeftCell align='center'>학습기간</TableLeftCell>
           <TableRightCell>{courseInfo?.studyDate}</TableRightCell>
-          <TableLeftCell align="center">등록일</TableLeftCell>
+          <TableLeftCell align='center'>등록일</TableLeftCell>
           <TableRightCell>{courseInfo?.regDate}</TableRightCell>
         </TableRow>
         <TableRow>
-          <TableLeftCell align="center">상태</TableLeftCell>
+          <TableLeftCell align='center'>상태</TableLeftCell>
           <TableRightCell>{courseInfo?.classLearningStatus}</TableRightCell>
-          <TableLeftCell align="center">수료여부</TableLeftCell>
+          <TableLeftCell align='center'>수료여부</TableLeftCell>
           <TableRightCell>
             {courseInfo?.completeYn === 'Y' ? '수료' : '미수료'}
           </TableRightCell>
@@ -400,20 +400,20 @@ export function CourseInformation({
 
       <TableBody sx={{ display: 'table', width: '100%' }}>
         <TableRow>
-          <TableLeftCell align="center">업종구분</TableLeftCell>
+          <TableLeftCell align='center'>업종구분</TableLeftCell>
           <TableRightCell>
             <FormControl fullWidth>
               <Select
-                labelId="businessSubType"
-                id="businessSubType"
-                placeholder="업종 유형선택"
+                labelId='businessSubType'
+                id='businessSubType'
+                placeholder='업종 유형선택'
                 // value={businessSubTypeState || ''}
                 value={watch().businessSubType || ''}
                 onChange={handleBusinessSubType}
               >
                 {businessSubTypeCategoryReg
-                  .filter(item => item.category === courseInfo?.businessType)
-                  .map(item => (
+                  .filter((item) => item.category === courseInfo?.businessType)
+                  .map((item) => (
                     <MenuItem key={item.enType} value={item.enType}>
                       {item.type}
                     </MenuItem>
@@ -422,7 +422,7 @@ export function CourseInformation({
             </FormControl>
           </TableRightCell>
 
-          <TableLeftCell align="center">회사명</TableLeftCell>
+          <TableLeftCell align='center'>회사명</TableLeftCell>
           <TableRightCell>
             <FormControl fullWidth>
               <TextField
@@ -430,13 +430,13 @@ export function CourseInformation({
                   required: '회사명을 입력해주세요.',
                 })}
                 value={watch().businessName || ''}
-                label="회사명"
-                variant="outlined"
+                label='회사명'
+                variant='outlined'
                 disabled={disabledBusinessName}
               />
               <ErrorMessage
                 errors={errors}
-                name="businessName"
+                name='businessName'
                 as={<FormHelperText error />}
               />
             </FormControl>
@@ -444,20 +444,20 @@ export function CourseInformation({
         </TableRow>
         {/* ============================================================================================= */}
         <TableRow>
-          <TableLeftCell align="center">차량번호</TableLeftCell>
+          <TableLeftCell align='center'>차량번호</TableLeftCell>
           <TableRightCell>
-            <Box display="flex" width="100%" gap={1}>
+            <Box display='flex' width='100%' gap={1}>
               {/* 차량번호 첫번째 */}
               <FormControl fullWidth>
                 <Select
-                  labelId="firstStr"
-                  id="firstStr"
-                  placeholder="지역명"
+                  labelId='firstStr'
+                  id='firstStr'
+                  placeholder='지역명'
                   value={watch().firstStr || ''}
                   onChange={handleFirstStr}
                   disabled={disabledCarNumber}
                 >
-                  {localList.map(item => (
+                  {localList.map((item) => (
                     <MenuItem key={item.title} value={item.title}>
                       {item.title}
                     </MenuItem>
@@ -468,27 +468,27 @@ export function CourseInformation({
               <TextField
                 // {...register('firstNum', { required: '앞 두자리 번호를 입력해주세요.' })}
                 {...register('firstNum')}
-                onChange={e => {
+                onChange={(e) => {
                   if (e.target.value.length > 2) return;
                   setValue('firstNum', e.target.value.replace(/[^0-9]/g, ''));
                 }}
                 value={watch().firstNum || ''}
-                label="차종번호 2자리"
-                variant="outlined"
+                label='차종번호 2자리'
+                variant='outlined'
                 fullWidth
                 disabled={disabledCarNumber}
               />
               {/* 차량번호 세번째 */}
               <FormControl fullWidth>
                 <Select
-                  labelId="secondStr"
-                  id="secondStr"
-                  placeholder="용도기호 한글자"
+                  labelId='secondStr'
+                  id='secondStr'
+                  placeholder='용도기호 한글자'
                   value={watch().secondStr || ''}
                   onChange={handleSecondStr}
                   disabled={disabledCarNumber}
                 >
-                  {oneWordList.map(item => (
+                  {oneWordList.map((item) => (
                     <MenuItem key={item} value={item}>
                       {item}
                     </MenuItem>
@@ -499,32 +499,32 @@ export function CourseInformation({
               <TextField
                 // {...register('secondNum', { required: '뒤 네자리 번호를 입력해주세요.' })}
                 {...register('secondNum')}
-                onChange={e => {
+                onChange={(e) => {
                   if (e.target.value.length > 4) return;
                   setValue('secondNum', e.target.value.replace(/[^0-9]/g, ''));
                 }}
                 value={watch().secondNum || ''}
-                label="차량번호 4자리"
-                variant="outlined"
+                label='차량번호 4자리'
+                variant='outlined'
                 fullWidth
                 disabled={disabledCarNumber}
               />
             </Box>
           </TableRightCell>
 
-          <TableLeftCell align="center">차량등록지</TableLeftCell>
+          <TableLeftCell align='center'>차량등록지</TableLeftCell>
 
           <TableRightCell>
             <FormControl fullWidth>
               <Select
-                labelId="carRegistrationRegion"
-                id="carRegistrationRegion"
-                placeholder="차량등록지 선택"
+                labelId='carRegistrationRegion'
+                id='carRegistrationRegion'
+                placeholder='차량등록지 선택'
                 // value={carRegistrationRegionState || ''}
                 value={watch().carRegistrationRegion || ''}
                 onChange={handleCarRegistrationRegion}
               >
-                {locationList.map(item => (
+                {locationList.map((item) => (
                   <MenuItem key={item.en} value={item.en}>
                     {item.ko}
                   </MenuItem>
@@ -544,18 +544,18 @@ export function CourseInformation({
 
       <TableBody sx={{ display: 'table', width: '100%' }}>
         <TableRow>
-          <TableLeftCell align="center">거주지</TableLeftCell>
+          <TableLeftCell align='center'>거주지</TableLeftCell>
           <TableRightCell>
             <FormControl fullWidth>
               <Select
-                labelId="residence"
-                id="residence"
-                placeholder="거주지 선택"
+                labelId='residence'
+                id='residence'
+                placeholder='거주지 선택'
                 // value={residenceState || ''}
                 value={watch().residence || ''}
                 onChange={handleResidence}
               >
-                {residenceList.map(item => (
+                {residenceList.map((item) => (
                   <MenuItem key={item.en} value={item.en}>
                     {item.ko}
                   </MenuItem>
@@ -564,7 +564,7 @@ export function CourseInformation({
             </FormControl>
           </TableRightCell>
 
-          <TableLeftCell align="center">휴대전화</TableLeftCell>
+          <TableLeftCell align='center'>휴대전화</TableLeftCell>
           <TableRightCell>
             <FormControl fullWidth sx={{ height: '100%' }}>
               <TextField
@@ -572,19 +572,19 @@ export function CourseInformation({
                   // pattern: /^[1][3,4,5,7,8][0-9]{9}$/,
                   required: '핸드폰번호 입력해주세요.',
                 })}
-                onChange={e => {
+                onChange={(e) => {
                   if (e.target.value.length > 11) return;
                   setValue('phone', e.target.value.replace(/[^0-9]/g, ''));
                   // setValue('phone', e.target.value.replace(/^\d{3}-\d{3,4}-\d{4}$/, ''));
                 }}
-                label="핸드폰번호"
-                variant="outlined"
+                label='핸드폰번호'
+                variant='outlined'
                 // type="number"
                 value={watch().phone || ''}
               />
               <ErrorMessage
                 errors={errors}
-                name="phone"
+                name='phone'
                 as={<FormHelperText error />}
               />
             </FormControl>
@@ -593,7 +593,7 @@ export function CourseInformation({
       </TableBody>
 
       <ButtonBox>
-        <SubmitBtn variant="contained" type="submit" disabled={loading}>
+        <SubmitBtn variant='contained' type='submit' disabled={loading}>
           {loading ? <Spinner fit={true} /> : '수정하기'}
         </SubmitBtn>
       </ButtonBox>
@@ -601,7 +601,9 @@ export function CourseInformation({
   );
 }
 
-const CourseInfomationBox = styled(Box)``;
+const CourseInfomationBox = styled(Box)`
+  border: 5px solid red;
+`;
 
 const TableHeadFull = styled(TableCell)`
   width: 100%;

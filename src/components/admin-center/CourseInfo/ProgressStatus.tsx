@@ -102,9 +102,9 @@ export function ProgressStatus({ progressList, onMutate }: Props) {
         >
           진도현황
         </TableTopHeadCell>
-        <TableTopHeadCell colSpan={4} align="center">
+        <TableTopHeadCell colSpan={4} align='center'>
           <Button
-            variant="contained"
+            variant='contained'
             onClick={onClickForcedProcessCompleteAll}
             disabled={allLoading}
           >
@@ -112,8 +112,8 @@ export function ProgressStatus({ progressList, onMutate }: Props) {
             전체 이수처리
           </Button>
           <Button
-            variant="contained"
-            color="error"
+            variant='contained'
+            color='error'
             onClick={onClickForcedProcessCancelAll}
             disabled={allLoading}
             sx={{ marginLeft: '4px' }}
@@ -129,7 +129,7 @@ export function ProgressStatus({ progressList, onMutate }: Props) {
       </TableHead>
       <TableHead sx={{ display: 'table', width: '100%', marginTop: '4px' }}>
         <TableHeaderRow>
-          {headRows.map(item => (
+          {headRows.map((item) => (
             <TableHeadercell align={item.align} sx={{ width: item.width }}>
               {item.name}
             </TableHeadercell>
@@ -138,7 +138,7 @@ export function ProgressStatus({ progressList, onMutate }: Props) {
       </TableHead>
       {/* <TableBody className={pt20} sx={{ display: 'table', width: '100%' }}> */}
       <TableBody>
-        {progressList.map(item => (
+        {progressList.map((item) => (
           <ProgressStatusItem
             courseUserSeq={Number(courseUserSeq)}
             item={item}
@@ -155,6 +155,7 @@ export function ProgressStatus({ progressList, onMutate }: Props) {
 }
 
 const ProgressStatusBox = styled(Box)`
+  border: 5px solid blue;
   margin-top: 10px;
   .MuiTableRow-root:first-of-type {
     td {

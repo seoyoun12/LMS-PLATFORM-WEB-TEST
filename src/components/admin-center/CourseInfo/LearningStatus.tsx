@@ -1,6 +1,13 @@
 import { detailCourseInfo } from '@common/api/adm/learningInfo';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { Box, Tab, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import {
+  Box,
+  Tab,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import { css } from '@emotion/css';
 import styled from '@emotion/styled';
@@ -44,9 +51,11 @@ export function LearningStatus({ learningStatusList }: Props) {
       </TableBody>
 
       <TableBody sx={{ display: 'table', width: '100%' }}>
-        {learningStatusList?.map(item => (
+        {learningStatusList?.map((item) => (
           <TableRow key={item.elementName}>
-            <TableLeftCell>{item.elementName ? item.elementName : '-'}</TableLeftCell>
+            <TableLeftCell>
+              {item.elementName ? item.elementName : '-'}
+            </TableLeftCell>
             <TableLineCell>
               {item.threshold === 'Y'
                 ? '제출필요'
@@ -56,7 +65,9 @@ export function LearningStatus({ learningStatusList }: Props) {
             </TableLineCell>
             {/* <TableLineCell>{Number(item.threshold.slice(0, 1))}</TableLineCell> */}
             <TableLineCell>{item.point ? item.point : '-'}</TableLineCell>
-            <TableLineCell>{item.submitDate ? item.submitDate : '-'}</TableLineCell>
+            <TableLineCell>
+              {item.submitDate ? item.submitDate : '-'}
+            </TableLineCell>
             <TableLineCell>
               {item.submitYn
                 ? item.submitYn === 'Y'
@@ -74,6 +85,7 @@ export function LearningStatus({ learningStatusList }: Props) {
 }
 
 const LearningStatusBox = styled(Box)`
+  border: 5px solid green;
   margin-top: 10px;
 `;
 

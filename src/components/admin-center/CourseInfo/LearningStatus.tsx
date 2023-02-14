@@ -85,7 +85,6 @@ export function LearningStatus({ learningStatusList }: Props) {
 }
 
 const LearningStatusBox = styled(Box)`
-  border: 5px solid green;
   margin-top: 10px;
 `;
 

@@ -602,7 +602,6 @@ export function CourseInformation({
 }
 
 const CourseInfomationBox = styled(Box)`
-  border: 5px solid red;
 `;
 
 const TableHeadFull = styled(TableCell)`

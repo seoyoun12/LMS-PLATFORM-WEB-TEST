@@ -85,9 +85,9 @@ export function LearningStatus({ learningStatusList }: Props) {
 }
 
 const LearningStatusBox = styled(Box)`
-  border: 5px solid green;
   margin-top: 10px;
 `;
+// border: 5px solid green;
 
 const TableHeadFull = styled(TableCell)`
   width: 100%;

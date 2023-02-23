@@ -130,7 +130,9 @@ export function UserModifyModal({
           <div>
             <div>삭제시 회원의 모든 정보가 영구적으로 삭제됩니다.</div>
             <div>정말로 삭제하시겠습니까?</div>
-            <div style={{ color: 'red', fontSize: '14px' }}>*복구가 불가능합니다.*</div>
+            <div style={{ color: 'red', fontSize: '14px' }}>
+              *복구가 불가능합니다.*
+            </div>
           </div>
         ),
         confirmText: '삭제하기',
@@ -147,7 +149,7 @@ export function UserModifyModal({
     }
   };
 
-  const onSubmit: SubmitHandler<UserInput> = async userInput => {
+  const onSubmit: SubmitHandler<UserInput> = async (userInput) => {
     try {
       // console.log('userData : ', userData);
       // console.log('userInput : ', userInput);
@@ -174,64 +176,72 @@ export function UserModifyModal({
       action={
         <>
           <DeleteBtn
-            variant="contained"
-            color="warning"
+            variant='contained'
+            color='warning'
             onClick={() => onClickRemoveUser(userData.seq)}
-            size="small"
+            size='small'
           >
             삭제
           </DeleteBtn>
           <SubmitBtn
-            variant="contained"
-            color="secondary"
+            variant='contained'
+            color='secondary'
             onClick={handleSubmit(onSubmit)}
-            size="small"
+            size='small'
           >
             저장
           </SubmitBtn>
         </>
       }
-      title="유저 수정"
-      maxWidth="sm"
+      title='유저 수정'
+      maxWidth='sm'
       fullWidth
       open={open}
       actionLoading={submitLoading}
       onSubmit={handleSubmit(onSubmit)}
       onCloseModal={() => handleClose(false)}
     >
-      <Box component="form">
+      <Box component='form'>
         <FormContainer>
-          <FormControl className="form-control">
+          <FormControl className='form-control'>
             <TextField
               value={userData?.seq}
               disabled
-              type="text"
-              size="small"
-              variant="outlined"
-              label="회원번호"
+              type='text'
+              size='small'
+              variant='outlined'
+              label='회원번호'
             />
           </FormControl>
-          <FormControl className="form-control">
+          <FormControl className='form-control'>
             <TextField
               {...register('name')}
-              type="text"
-              size="small"
-              variant="outlined"
-              label="이름"
+              type='text'
+              size='small'
+              variant='outlined'
+              label='이름'
               disabled
             />
-            <ErrorMessage errors={errors} name="name" as={<FormHelperText error />} />
+            <ErrorMessage
+              errors={errors}
+              name='name'
+              as={<FormHelperText error />}
+            />
           </FormControl>
 
-          <FormControl className="form-control">
+          <FormControl className='form-control'>
             <TextField
               {...register('phone')}
-              type="text"
-              size="small"
-              variant="outlined"
-              label="핸드폰번호"
+              type='text'
+              size='small'
+              variant='outlined'
+              label='핸드폰번호'
             />
-            <ErrorMessage errors={errors} name="phone" as={<FormHelperText error />} />
+            <ErrorMessage
+              errors={errors}
+              name='phone'
+              as={<FormHelperText error />}
+            />
           </FormControl>
 
           {/* <FormControl className="form-control">
@@ -273,7 +283,7 @@ export function UserModifyModal({
             />
           </FormControl> */}
 
-          <FormControl className="form-control">
+          <FormControl className='form-control'>
             <TextField
               // {...register('printBirth')}
               // {...register('birth')}
@@ -302,12 +312,16 @@ export function UserModifyModal({
               }
               disabled
               // value={watch().printBirth}
-              type="date"
-              size="small"
-              variant="outlined"
-              label="생년월일"
+              type='date'
+              size='small'
+              variant='outlined'
+              label='생년월일'
             />
-            <ErrorMessage errors={errors} name="birth" as={<FormHelperText error />} />
+            <ErrorMessage
+              errors={errors}
+              name='birth'
+              as={<FormHelperText error />}
+            />
           </FormControl>
           {/* <FormControl className="form-control">
             <FormLabel focused={false}>성별</FormLabel>
@@ -324,35 +338,59 @@ export function UserModifyModal({
             />
             <ErrorMessage errors={errors} name="gender" as={<FormHelperText error />} />
           </FormControl> */}
-          <FormControl className="form-control">
+          <FormControl className='form-control'>
             <FormLabel focused={false}>문자수신</FormLabel>
             <Controller
               rules={{ required: true }}
               control={control}
-              name="smsYn"
+              name='smsYn'
               render={({ field }) => (
                 <RadioGroup row {...field}>
-                  <FormControlLabel value={'Y'} control={<Radio />} label="동의" />
-                  <FormControlLabel value={'N'} control={<Radio />} label="거부" />
+                  <FormControlLabel
+                    value={'Y'}
+                    control={<Radio />}
+                    label='동의'
+                  />
+                  <FormControlLabel
+                    value={'N'}
+                    control={<Radio />}
+                    label='거부'
+                  />
                 </RadioGroup>
               )}
             />
-            <ErrorMessage errors={errors} name="smsYn" as={<FormHelperText error />} />
+            <ErrorMessage
+              errors={errors}
+              name='smsYn'
+              as={<FormHelperText error />}
+            />
           </FormControl>
-          <FormControl className="form-control">
+          <FormControl className='form-control'>
             <FormLabel focused={false}>이메일수신</FormLabel>
             <Controller
               rules={{ required: true }}
               control={control}
-              name="emailYn"
+              name='emailYn'
               render={({ field }) => (
                 <RadioGroup row {...field}>
-                  <FormControlLabel value={'Y'} control={<Radio />} label="동의" />
-                  <FormControlLabel value={'N'} control={<Radio />} label="거부" />
+                  <FormControlLabel
+                    value={'Y'}
+                    control={<Radio />}
+                    label='동의'
+                  />
+                  <FormControlLabel
+                    value={'N'}
+                    control={<Radio />}
+                    label='거부'
+                  />
                 </RadioGroup>
               )}
             />
-            <ErrorMessage errors={errors} name="emailYn" as={<FormHelperText error />} />
+            <ErrorMessage
+              errors={errors}
+              name='emailYn'
+              as={<FormHelperText error />}
+            />
           </FormControl>
         </FormContainer>
       </Box>

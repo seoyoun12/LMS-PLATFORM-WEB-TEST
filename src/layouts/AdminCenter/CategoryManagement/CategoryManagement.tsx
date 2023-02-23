@@ -149,12 +149,14 @@ export function CategoryManagement() {
     });
   };
 
+  console.log('data category : ', data);
+
   if (error) return <div>...ERROR</div>;
   if (!data) return <Spinner />;
 
   return (
     <Box>
-      <Typography fontSize={30} fontWeight="bold">
+      <Typography fontSize={30} fontWeight='bold'>
         게시판 구분 (운수/저상)
       </Typography>
       <RadioGroup row sx={{ mb: 6 }}>
@@ -172,14 +174,14 @@ export function CategoryManagement() {
         ))}
       </RadioGroup>
 
-      <CategoryTypography variant="h5">게시판 목록</CategoryTypography>
+      <CategoryTypography variant='h5'>게시판 목록</CategoryTypography>
 
       <Table
         pagination={true}
         totalNum={data?.totalElements}
         page={data?.number}
         onChangePage={onChangePage}
-        size="small"
+        size='small'
         sx={{ tableLayout: 'fixed' }}
       >
         <TableHead>
@@ -194,7 +196,7 @@ export function CategoryManagement() {
                 align: string;
                 width: string;
               }) => (
-                <CategoryTitleTableCell key={name} align="center" width={width}>
+                <CategoryTitleTableCell key={name} align='center' width={width}>
                   {name}
                 </CategoryTitleTableCell>
               )
@@ -203,7 +205,7 @@ export function CategoryManagement() {
         </TableHead>
 
         <TableBody>
-          {data?.content.map(category => (
+          {data?.content.map((category) => (
             <TableRow
               sx={{ cursor: 'pointer' }}
               key={category.seq}
@@ -211,39 +213,39 @@ export function CategoryManagement() {
               onClick={() => onClickmodifyCategoryBoard(category.seq)}
             >
               {/* <CategoryTableCell align="center">{category.seq}</CategoryTableCell> */}
-              <CategoryTableCell align="center">
+              <CategoryTableCell align='center'>
                 {category.postTypeSeq}
               </CategoryTableCell>
-              <CategoryTableCell align="center">
+              <CategoryTableCell align='center'>
                 {
                   tabsConfig.filter(
-                    item => item.value === category.boardType
+                    (item) => item.value === category.boardType
                   )[0]?.name
                 }
               </CategoryTableCell>
-              <CategoryTableCell align="center">
+              <CategoryTableCell align='center'>
                 <SubjectBox>{category.subject}</SubjectBox>
               </CategoryTableCell>
               {/* <CategoryTableCell>{category.subject}</CategoryTableCell> */}
-              <CategoryTableCell align="center">
+              <CategoryTableCell align='center'>
                 {dateFormat(category.createdDtime, 'isoDate')}
               </CategoryTableCell>
-              <CategoryTableCell align="center">
+              <CategoryTableCell align='center'>
                 {dateFormat(category.modifiedDtime, 'isoDate')}
               </CategoryTableCell>
-              <CategoryTableCell align="center">
+              <CategoryTableCell align='center'>
                 {category.hit}
               </CategoryTableCell>
-              <CategoryTableCell align="center">
+              <CategoryTableCell align='center'>
                 {category.noticeYn === 'Y' ? '공지중' : '비공지'}
               </CategoryTableCell>
-              <CategoryTableCell align="center">
+              <CategoryTableCell align='center'>
                 {category.publicYn === 'Y' ? '공개중' : '비공개'}
               </CategoryTableCell>
-              <CategoryTableCell align="center">
+              <CategoryTableCell align='center'>
                 <Chip
-                  variant="outlined"
-                  size="small"
+                  variant='outlined'
+                  size='small'
                   label={
                     category.status === ProductStatus.APPROVE ? '정상' : '중지'
                   }

@@ -117,6 +117,7 @@ export function LessonBulkUploadModal({
       await uploadLessons({ contentSeq, lessonInput });
       snackbar({ variant: 'success', message: '성공적으로 업로드 되었습니다.' });
       setLoading(false);
+      // console.log(xlsxData);
     } catch (e: any) {
       snackbar({ variant: 'error', message: e.data.message });
       setLoading(false);

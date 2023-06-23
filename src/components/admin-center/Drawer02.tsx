@@ -36,7 +36,7 @@ import Image from 'next/image';
 
 const drawerWidth = 290;
 
-export function Drawer({ children }: { children: ReactNode }) {
+export function Drawer02({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   const onClickToMain = () => {
@@ -52,14 +52,9 @@ export function Drawer({ children }: { children: ReactNode }) {
       name: '회원관리',
       children: [
         {
-          name: '회원목록1',
-          grandChildren: [
-            {
-              name: '회원목록목록목록',
-              href: '/admin-center/user',
-              isActive: router.pathname === '/admin-center/user',
-            },
-          ],
+          name: '회원목록',
+          href: '/admin-center/user',
+          isActive: router.pathname === '/admin-center/user',
         },
       ],
       icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,

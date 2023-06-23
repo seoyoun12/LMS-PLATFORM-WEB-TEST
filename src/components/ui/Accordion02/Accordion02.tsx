@@ -28,7 +28,7 @@ interface AccordionList {
   }[];
 }
 
-export function Accordion({
+export function Accordion02({
   accordionList,
 }: {
   accordionList: AccordionList[];

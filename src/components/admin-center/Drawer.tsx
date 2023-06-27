@@ -50,14 +50,38 @@ export function Drawer({ children }: { children: ReactNode }) {
   const accordionList = [
     {
       name: '도민관리',
+      icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
       children: [
         {
           name: '도민회원관리',
+          icon: (
+            <QuestionAnswerOutlinedIcon sx={{ mr: '32px', color: grey[900] }} />
+          ),
           grandChildren: [
             {
-              name: '회원목록',
+              name: '회원목록1',
               href: '/admin-center/user',
               isActive: router.pathname === '/admin-center/user',
+              // icon: <ListAltIcon sx={{ mr: '32px', color: grey[900] }} />,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: '운수/저상관리',
+      children: [
+        {
+          name: '운수/저상회원관리',
+          icon: (
+            <QuestionAnswerOutlinedIcon sx={{ mr: '32px', color: grey[900] }} />
+          ),
+          grandChildren: [
+            {
+              name: '회원목록2',
+              href: '/admin-center/user',
+              isActive: router.pathname === '/admin-center/user',
+              icon: <ListAltIcon sx={{ mr: '32px', color: grey[900] }} />,
             },
           ],
         },

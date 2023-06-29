@@ -70,69 +70,67 @@ export function Accordion({
           <AccordionDetails sx={{ background: grey[100] }}>
             <nav aria-label='secondary mailbox folders'>
               {children.map(({ name, icon, grandChildren }) => (
-                <>
-                  <MuiAccordion
-                    key={name}
-                    disableGutters
-                    elevation={0}
+                <MuiAccordion
+                  key={name}
+                  disableGutters
+                  elevation={0}
+                  sx={{
+                    '&:before': {
+                      display: 'none',
+                    },
+                  }}
+                >
+                  <AccordionSummary
+                    className='Asdasd'
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls='panel1a-content'
                     sx={{
-                      '&:before': {
-                        display: 'none',
+                      '&:hover': {
+                        backgroundColor: grey[50],
                       },
                     }}
                   >
-                    <AccordionSummary
-                      className='Asdasd'
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls='panel1a-content'
-                      sx={{
-                        '&:hover': {
-                          backgroundColor: grey[50],
-                        },
-                      }}
-                    >
-                      {icon}
-                      <Box display='flex' flexDirection={'column'} width='100%'>
-                        <Typography className='CategoryBoardTwo'>
-                          {name}
-                        </Typography>
-                      </Box>
-                    </AccordionSummary>
-                    <AccordionDetails sx={{ background: grey[100] }}>
-                      <nav aria-label='secondary mailbox folders'>
-                        <List disablePadding={true}>
-                          {grandChildren.map(
-                            ({
-                              name,
-                              href,
-                              // icon,
-                              isActive,
-                            }) => (
-                              <Link
-                                href={href ? href : ''}
-                                color={grey[900]}
-                                key={name}
+                    {icon}
+                    <Box display='flex' flexDirection={'column'} width='100%'>
+                      <Typography className='CategoryBoardTwo'>
+                        {name}
+                      </Typography>
+                    </Box>
+                  </AccordionSummary>
+                  <AccordionDetails sx={{ background: grey[100] }}>
+                    <nav aria-label='secondary mailbox folders'>
+                      <List disablePadding={true}>
+                        {grandChildren.map(
+                          ({
+                            name,
+                            href,
+                            // icon,
+                            isActive,
+                          }) => (
+                            <Link
+                              href={href ? href : ''}
+                              color={grey[900]}
+                              key={name}
+                            >
+                              <ListItem
+                                disablePadding
+                                sx={{
+                                  backgroundColor: `${
+                                    isActive ? grey[50] : 'inherit'
+                                  }`,
+                                }}
                               >
-                                <ListItem
-                                  disablePadding
-                                  sx={{
-                                    backgroundColor: `${
-                                      isActive ? grey[50] : 'inherit'
-                                    }`,
-                                  }}
-                                >
-                                  <ListItemButton>
-                                    <ListItemText primary={name} />
-                                  </ListItemButton>
-                                </ListItem>
-                              </Link>
-                            )
-                          )}
-                        </List>
-                      </nav>
-                    </AccordionDetails>
-                  </MuiAccordion>
-                </>
+                                <ListItemButton>
+                                  <ListItemText primary={name} />
+                                </ListItemButton>
+                              </ListItem>
+                            </Link>
+                          )
+                        )}
+                      </List>
+                    </nav>
+                  </AccordionDetails>
+                </MuiAccordion>
               ))}
             </nav>
           </AccordionDetails>

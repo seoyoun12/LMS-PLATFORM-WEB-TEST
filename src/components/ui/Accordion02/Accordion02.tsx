@@ -18,13 +18,18 @@ import dateFormat from 'dateformat';
 import styled from '@emotion/styled';
 
 interface AccordionList {
-  date?: string | undefined;
+  // date?: string | undefined;
   name: string;
   icon?: EmotionJSX.Element;
   children: {
     name: string;
-    href?: string | null;
-    isActive?: boolean;
+    icon?: EmotionJSX.Element;
+    grandChildren?: {
+      name: string;
+      href?: string | null;
+      isActive?: boolean;
+      icon?: EmotionJSX.Element;
+    }[];
   }[];
 }
 
@@ -35,7 +40,7 @@ export function Accordion02({
 }) {
   return (
     <>
-      {accordionList.map(({ date, name, icon, children }, idx) => (
+      {accordionList.map(({ name, icon, children }) => (
         <MuiAccordion
           key={name}
           disableGutters
@@ -61,24 +66,72 @@ export function Accordion02({
               <Typography className='CategoryBoardTwo'>{name}</Typography>
             </Box>
           </AccordionSummary>
+
           <AccordionDetails sx={{ background: grey[100] }}>
             <nav aria-label='secondary mailbox folders'>
-              <List disablePadding={true}>
-                {children.map(({ name, href, isActive }, idx) => (
-                  <Link href={href ? href : ''} color={grey[900]} key={name}>
-                    <ListItem
-                      disablePadding
-                      sx={{
-                        backgroundColor: `${isActive ? grey[50] : 'inherit'}`,
-                      }}
-                    >
-                      <ListItemButton>
-                        <ListItemText primary={name} />
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
-                ))}
-              </List>
+              {children.map(({ name, icon, grandChildren }) => (
+                <MuiAccordion
+                  key={name}
+                  disableGutters
+                  elevation={0}
+                  sx={{
+                    '&:before': {
+                      display: 'none',
+                    },
+                  }}
+                >
+                  <AccordionSummary
+                    className='Asdasd'
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls='panel1a-content'
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: grey[50],
+                      },
+                    }}
+                  >
+                    {icon}
+                    <Box display='flex' flexDirection={'column'} width='100%'>
+                      <Typography className='CategoryBoardTwo'>
+                        {name}
+                      </Typography>
+                    </Box>
+                  </AccordionSummary>
+                  <AccordionDetails sx={{ background: grey[100] }}>
+                    <nav aria-label='secondary mailbox folders'>
+                      <List disablePadding={true}>
+                        {grandChildren.map(
+                          ({
+                            name,
+                            href,
+                            // icon,
+                            isActive,
+                          }) => (
+                            <Link
+                              href={href ? href : ''}
+                              color={grey[900]}
+                              key={name}
+                            >
+                              <ListItem
+                                disablePadding
+                                sx={{
+                                  backgroundColor: `${
+                                    isActive ? grey[50] : 'inherit'
+                                  }`,
+                                }}
+                              >
+                                <ListItemButton>
+                                  <ListItemText primary={name} />
+                                </ListItemButton>
+                              </ListItem>
+                            </Link>
+                          )
+                        )}
+                      </List>
+                    </nav>
+                  </AccordionDetails>
+                </MuiAccordion>
+              ))}
             </nav>
           </AccordionDetails>
         </MuiAccordion>

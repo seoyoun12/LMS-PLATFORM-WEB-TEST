@@ -1,5 +1,5 @@
-
 export { Drawer } from './Drawer';
+export { Drawer02 } from './Drawer02';
 export { LessonBulkUploadModal } from './LessonBulkUploadModal';
 export { CourseUploadForm } from './CourseUploadForm';
 export { ContentUploadForm } from './ContentUploadForm';

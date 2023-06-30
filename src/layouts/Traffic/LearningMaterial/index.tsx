@@ -99,19 +99,19 @@ export function LearningMaterialLayout() {
         </LearningMaterialHeaderContainer>
         <LearningMaterialTabWrapper>
           <LearningMaterialTabs
-            variant="scrollable"
+            variant='scrollable'
             allowScrollButtonsMobile={true}
             value={type}
           >
             <LearningMaterialTabItem
-              label="연령별교수학습지도안"
+              label='연령별교수학습지도안'
               onClick={() => handleClickTab('learning-guide')}
-              value="learning-guide"
+              value='learning-guide'
             />
             <LearningMaterialTabItem
-              label="교육자료"
+              label='교육자료'
               onClick={() => handleClickTab('education')}
-              value="education"
+              value='education'
             />
             {/* <LearningMaterialTabItem
               label="교육영상"
@@ -120,9 +120,9 @@ export function LearningMaterialLayout() {
             /> */}
             {/* 비활성화 */}
             <LearningMaterialTabItem
-              label="타기관자료모음"
+              label='타기관자료모음'
               onClick={() => handleClickTab('reference')}
-              value="reference"
+              value='reference'
             />
             {/* {isLogin && (
               <LearningMaterialTabItem

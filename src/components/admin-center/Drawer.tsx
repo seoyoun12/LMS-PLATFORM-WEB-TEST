@@ -33,12 +33,21 @@ import { Accordion } from '@components/ui';
 import { logout } from '@common/api';
 import Logo from 'public/assets/svgs/logo.svg';
 import Image from 'next/image';
+import {
+  LearningMaterialTabItem,
+  LearningMaterialTabs,
+} from '@layouts/Traffic/LearningMaterial/style';
+
+export type TabType = 'normal' | 'traffic';
 
 const drawerWidth = 290;
 
 export function Drawer({ children }: { children: ReactNode }) {
   const router = useRouter();
-
+  const { type, id } = router.query as {
+    type: TabType;
+    id?: string;
+  };
   const onClickToMain = () => {
     router.push('/');
   };
@@ -46,7 +55,9 @@ export function Drawer({ children }: { children: ReactNode }) {
     await logout();
     router.push('/admin-center/signin');
   };
-
+  const handleClickTab = (tabValue: TabType) => {
+    router.push(`/admin-center/${tabValue}`);
+  };
   const accordionList = [
     {
       name: '회원관리',
@@ -343,6 +354,22 @@ export function Drawer({ children }: { children: ReactNode }) {
                 <ListItemText primary="대시보드" />
               </ListItem>
             </Link> */}
+            <LearningMaterialTabs
+              variant='scrollable'
+              allowScrollButtonsMobile={true}
+              value={type}
+            >
+              <LearningMaterialTabItem
+                label='저상/운수'
+                onClick={() => handleClickTab('normal')}
+                value='learning-guide'
+              />
+              <LearningMaterialTabItem
+                label='도민'
+                onClick={() => handleClickTab('traffic')}
+                value='education'
+              />
+            </LearningMaterialTabs>
             <Accordion accordionList={accordionList} />
           </List>
         </Box>

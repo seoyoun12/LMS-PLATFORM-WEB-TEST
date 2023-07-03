@@ -244,6 +244,13 @@ export default function LessonContentVideo(props: Props) {
   const onTimeChange = React.useCallback(
     (time: number) => {
       if (time === videoCurrentSeconds.current) return;
+
+      if (time === 5) {
+        alert('5초가 됐다 이말이야');
+        // videoRef.current?.pause();
+        onPause();
+        // 일시정지 하는 코드를 넣어줘
+      }
       if (
         time !== videoCurrentSeconds.current + 1 ||
         videoIsPaused.current ||
@@ -268,6 +275,7 @@ export default function LessonContentVideo(props: Props) {
         stopTimer('CURRENT');
       }
 
+      // console.log('빠아빠ㅣㅇ빠아ㅃ아 : ', time);
       updateProgress();
     },
     [
@@ -327,6 +335,8 @@ export default function LessonContentVideo(props: Props) {
     updateProgress,
   ]);
 
+  // console.log('시간확인 : ', prevCourseProgress.current);
+
   // 렌더링.
 
   if (props.loading)
@@ -340,6 +350,7 @@ export default function LessonContentVideo(props: Props) {
 
   return (
     <VideoContainer>
+      {/* 비디오플레이어위치 */}
       <VideoContentPlayerWrapper>
         <VideoPlayer
           playlist={props.lesson.s3Files[0]?.path}

@@ -246,9 +246,10 @@ export default function LessonContentVideo(props: Props) {
       if (time === videoCurrentSeconds.current) return;
 
       if (time === 5) {
+        // onPause();
         alert('5초가 됐다 이말이야');
         // videoRef.current?.pause();
-        onPause();
+
         // 일시정지 하는 코드를 넣어줘
       }
       if (
@@ -369,6 +370,7 @@ export default function LessonContentVideo(props: Props) {
           onTimeChange={onTimeChange}
           onEnded={onEnded}
           onReady={(v) => (videoPlayer.current = v)}
+          // videoIsPaused={videoIsPaused.current}
         />
       </VideoContentPlayerWrapper>
       <ContentInfoContainer>

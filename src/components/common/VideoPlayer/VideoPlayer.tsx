@@ -16,6 +16,7 @@ interface Props extends Events {
   showControl?: boolean;
   onReady?: (player: Ncplayer) => void;
   onTimeChange?: (time: number) => void;
+  // videoIsPaused?: boolean;
 }
 
 export function VideoPlayer(props: Props) {
@@ -77,6 +78,9 @@ export function VideoPlayer(props: Props) {
       });
       player.current.currentTime(props.seconds);
       player.current._corePlayer.onCurrentTimeChange = props.onTimeChange;
+
+      // console.log('구아악 : ', player.current._corePlayer);
+      // player.current._corePlayer.player.current.on('canplay', () => {
       player.current.on('canplay', () => {
         player.current._corePlayer._setDuration(
           player.current._corePlayer.player.duration
@@ -155,6 +159,12 @@ export function VideoPlayer(props: Props) {
   console.log('1 : ', props.onTimeChange);
   console.log('2 : ', props.onTimeupdate);
   console.log('3 : ', props.seconds);
+
+  // React.useEffect(() => {
+  //   if (player.current && props.videoIsPaused) {
+  //     player.current._corePlayer = props.videoIsPaused;
+  //   }
+  // }, [props.videoIsPaused, player.current]);
 
   // 렌더링.
 

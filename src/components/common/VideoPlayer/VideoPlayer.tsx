@@ -16,6 +16,7 @@ interface Props extends Events {
   showControl?: boolean;
   onReady?: (player: Ncplayer) => void;
   onTimeChange?: (time: number) => void;
+  // onPause?: (player: Ncplayer) => void;
   // videoIsPaused?: boolean;
 }
 

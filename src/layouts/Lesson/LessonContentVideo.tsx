@@ -200,6 +200,20 @@ export default function LessonContentVideo(props: Props) {
     stopTimer,
   ]);
 
+  // 모달창
+  // 상태(state) 정의
+  const [showModal, setShowModal] = React.useState(false);
+
+  // 모달 열기 이벤트 핸들러
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  // 모달 닫기 이벤트 핸들러
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   // 콜백 - 이벤트.
   // 일시정지
   const onPause = React.useCallback(() => {
@@ -245,11 +259,12 @@ export default function LessonContentVideo(props: Props) {
     (time: number) => {
       if (time === videoCurrentSeconds.current) return;
 
-      if (time === 5) {
+      if (time === 3) {
+        // Ncplayer.pause();
         // onPause();
-        alert('5초가 됐다 이말이야');
-        // videoRef.current?.pause();
-
+        videoPlayer.current?.pause();
+        // alert('3초가 됐다 이말이야');
+        openModal();
         // 일시정지 하는 코드를 넣어줘
       }
       if (
@@ -350,46 +365,55 @@ export default function LessonContentVideo(props: Props) {
     return <VideoContentWrapper>강의가 존재하지 않습니다.</VideoContentWrapper>;
 
   return (
-    <VideoContainer>
-      {/* 비디오플레이어위치 */}
-      <VideoContentPlayerWrapper>
-        <VideoPlayer
-          playlist={props.lesson.s3Files[0]?.path}
-          initialPlayerId={PLAYER_ELEMENT_ID}
-          initialConfig={{ autostart: !props.coursePlayFirst }}
-          seconds={
-            props.courseProgress.studyLastTime === props.lesson.totalTime
-              ? props.lesson.totalTime + 1
-              : props.courseProgress.studyLastTime
-          }
-          showControl={props.lessonCompleted}
-          onPause={onPause}
-          onPlaying={onPlaying}
-          onSeeking={onSeeking}
-          onSeeked={onSeeked}
-          onTimeChange={onTimeChange}
-          onEnded={onEnded}
-          onReady={(v) => (videoPlayer.current = v)}
-          // videoIsPaused={videoIsPaused.current}
-        />
-      </VideoContentPlayerWrapper>
-      <ContentInfoContainer>
-        <ContentInfoTitle variant='h6'>
-          {props.lesson.lessonNm}
-        </ContentInfoTitle>
-        <ContentInfoProgressContainer>
-          <Typography fontWeight='bold' color='#ff5600' fontSize='inherit'>
-            {Math.floor(progress * 100)}% 수강 완료
-          </Typography>
-          <Box sx={{ width: '100%', mr: 1 }}>
-            <LinearProgress
-              variant='determinate'
-              value={Math.floor(progress * 100)}
-            />
-          </Box>
-        </ContentInfoProgressContainer>
-      </ContentInfoContainer>
-    </VideoContainer>
+    <>
+      <VideoContainer>
+        {/* 비디오플레이어위치 */}
+        <VideoContentPlayerWrapper>
+          <VideoPlayer
+            playlist={props.lesson.s3Files[0]?.path}
+            initialPlayerId={PLAYER_ELEMENT_ID}
+            initialConfig={{ autostart: !props.coursePlayFirst }}
+            seconds={
+              props.courseProgress.studyLastTime === props.lesson.totalTime
+                ? props.lesson.totalTime + 1
+                : props.courseProgress.studyLastTime
+            }
+            showControl={props.lessonCompleted}
+            onPause={onPause}
+            onPlaying={onPlaying}
+            onSeeking={onSeeking}
+            onSeeked={onSeeked}
+            onTimeChange={onTimeChange}
+            onEnded={onEnded}
+            onReady={(v) => (videoPlayer.current = v)}
+            // videoIsPaused={videoIsPaused.current}
+          />
+        </VideoContentPlayerWrapper>
+        <ContentInfoContainer>
+          <ContentInfoTitle variant='h6'>
+            {props.lesson.lessonNm}
+          </ContentInfoTitle>
+          <ContentInfoProgressContainer>
+            <Typography fontWeight='bold' color='#ff5600' fontSize='inherit'>
+              {Math.floor(progress * 100)}% 수강 완료
+            </Typography>
+            <Box sx={{ width: '100%', mr: 1 }}>
+              <LinearProgress
+                variant='determinate'
+                value={Math.floor(progress * 100)}
+              />
+            </Box>
+          </ContentInfoProgressContainer>
+        </ContentInfoContainer>
+      </VideoContainer>
+      {showModal ? (
+        <ImsiModal>
+          <div>하이하이하이히</div>
+        </ImsiModal>
+      ) : (
+        <div>놉</div>
+      )}
+    </>
   );
 }
 
@@ -440,3 +464,4 @@ const ContentInfoTitle = styled(Typography)`
 `;
 
 const ContentInfoProgressContainer = styled(Box)``;
+const ImsiModal = styled(Box)``;

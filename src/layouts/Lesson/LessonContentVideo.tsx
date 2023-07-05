@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import {
   Box,
@@ -16,6 +16,7 @@ import type {
 import ApiClient from '@common/api/ApiClient';
 import { useRecoilState } from 'recoil';
 import { learningStatus } from '@common/recoil';
+import { ModalModal } from './LessonContentVideoModal';
 
 const PLAYER_ELEMENT_ID = 'lesson-player' as const;
 
@@ -203,16 +204,20 @@ export default function LessonContentVideo(props: Props) {
   // 모달창
   // 상태(state) 정의
   const [showModal, setShowModal] = React.useState(false);
-
+  const [openModal, setOpenModal] = useState(false);
+  const handleCloseModal = async () => {
+    setOpenModal(false);
+    // await mutate();
+  };
   // 모달 열기 이벤트 핸들러
-  const openModal = () => {
-    setShowModal(true);
-  };
+  // const openModal = () => {
+  //   setShowModal(true);
+  // };
 
-  // 모달 닫기 이벤트 핸들러
-  const closeModal = () => {
-    setShowModal(false);
-  };
+  // // 모달 닫기 이벤트 핸들러
+  // const closeModal = () => {
+  //   setShowModal(false);
+  // };
 
   // 콜백 - 이벤트.
   // 일시정지
@@ -264,8 +269,8 @@ export default function LessonContentVideo(props: Props) {
         // onPause();
         videoPlayer.current?.pause();
         // alert('3초가 됐다 이말이야');
-        openModal();
         // 일시정지 하는 코드를 넣어줘
+        setOpenModal(true);
       }
       if (
         time !== videoCurrentSeconds.current + 1 ||
@@ -406,13 +411,8 @@ export default function LessonContentVideo(props: Props) {
           </ContentInfoProgressContainer>
         </ContentInfoContainer>
       </VideoContainer>
-      {showModal ? (
-        <ImsiModal>
-          <div>하이하이하이히</div>
-        </ImsiModal>
-      ) : (
-        <div>놉</div>
-      )}
+
+      <ModalModal open={openModal} handleClose={handleCloseModal} />
     </>
   );
 }

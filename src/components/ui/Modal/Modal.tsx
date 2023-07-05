@@ -34,13 +34,13 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
       {children}
       {onClose ? (
         <IconButton
-          aria-label="close"
+          aria-label='close'
           onClick={onClose}
           sx={{
             position: 'absolute',
             right: 8,
             top: 8,
-            color: theme => theme.palette.grey[500],
+            color: (theme) => theme.palette.grey[500],
           }}
         >
           <CloseIcon />
@@ -65,7 +65,7 @@ export function Modal({
   return (
     <DialogBox
       onClose={onCloseModal}
-      aria-labelledby="modal-title"
+      aria-labelledby='modal-title'
       open={open}
       {...dialogProps}
     >
@@ -73,7 +73,7 @@ export function Modal({
         <Spinner />
       ) : (
         <>
-          <BootstrapDialogTitle id="modal-title" onClose={onCloseModal}>
+          <BootstrapDialogTitle id='modal-title' onClose={onCloseModal}>
             {title}
           </BootstrapDialogTitle>
           <DialogContent>{children}</DialogContent>
@@ -100,6 +100,12 @@ export function Modal({
 }
 
 const DialogBox = styled(Dialog)`
+  border: 1px solid red;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  opacity: 0.5;
+  z-index: 1000;
   .MuiPaper-root {
     margin: 0;
     /* width: fit-content; */

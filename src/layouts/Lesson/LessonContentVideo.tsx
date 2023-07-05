@@ -378,7 +378,11 @@ export default function LessonContentVideo(props: Props) {
       <VideoContainer>
         {/* 비디오플레이어위치 */}
         <VideoContentPlayerWrapper>
-          <Imsi></Imsi>
+          {/* <Imsi></Imsi> */}
+          <LessonContentVideoModal
+            open={openModal}
+            handleClose={handleCloseModal}
+          />
           <VideoPlayer
             playlist={props.lesson.s3Files[0]?.path}
             initialPlayerId={PLAYER_ELEMENT_ID}
@@ -397,7 +401,7 @@ export default function LessonContentVideo(props: Props) {
             onEnded={onEnded}
             onReady={(v) => (videoPlayer.current = v)}
             // videoIsPaused={videoIsPaused.current}
-          />
+          ></VideoPlayer>
         </VideoContentPlayerWrapper>
         <ContentInfoContainer>
           <ContentInfoTitle variant='h6'>
@@ -417,10 +421,10 @@ export default function LessonContentVideo(props: Props) {
         </ContentInfoContainer>
       </VideoContainer>
 
-      <LessonContentVideoModal
+      {/* <LessonContentVideoModal
         open={openModal}
         handleClose={handleCloseModal}
-      />
+      /> */}
     </>
   );
 }
@@ -478,7 +482,7 @@ const Imsi = styled(Box)`
   border: 1px solid red;
   width: 100%;
   height: 100%;
-  background-color: red;
-  position: absolute;
-  opacity: 0.5;
+  /* background-color: red; */
+  /* position: absolute; */
+  /* opacity: 0.5; */
 `;

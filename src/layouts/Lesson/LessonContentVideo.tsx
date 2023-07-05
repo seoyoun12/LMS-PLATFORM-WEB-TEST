@@ -16,7 +16,7 @@ import type {
 import ApiClient from '@common/api/ApiClient';
 import { useRecoilState } from 'recoil';
 import { learningStatus } from '@common/recoil';
-import { ModalModal } from './LessonContentVideoModal';
+import { LessonContentVideoModal } from './LessonContentVideoModal';
 
 const PLAYER_ELEMENT_ID = 'lesson-player' as const;
 
@@ -207,6 +207,9 @@ export default function LessonContentVideo(props: Props) {
   const [openModal, setOpenModal] = useState(false);
   const handleCloseModal = async () => {
     setOpenModal(false);
+    // 모달 종료시 다시
+    videoPlayer.current?.play();
+
     // await mutate();
   };
   // 모달 열기 이벤트 핸들러
@@ -264,6 +267,7 @@ export default function LessonContentVideo(props: Props) {
     (time: number) => {
       if (time === videoCurrentSeconds.current) return;
 
+      // 시간되면 정지 후 모달
       if (time === 3) {
         // Ncplayer.pause();
         // onPause();
@@ -374,6 +378,7 @@ export default function LessonContentVideo(props: Props) {
       <VideoContainer>
         {/* 비디오플레이어위치 */}
         <VideoContentPlayerWrapper>
+          <Imsi></Imsi>
           <VideoPlayer
             playlist={props.lesson.s3Files[0]?.path}
             initialPlayerId={PLAYER_ELEMENT_ID}
@@ -412,7 +417,10 @@ export default function LessonContentVideo(props: Props) {
         </ContentInfoContainer>
       </VideoContainer>
 
-      <ModalModal open={openModal} handleClose={handleCloseModal} />
+      <LessonContentVideoModal
+        open={openModal}
+        handleClose={handleCloseModal}
+      />
     </>
   );
 }
@@ -431,6 +439,7 @@ const VideoContentWrapper = styled.div`
 
 const VideoContentPlayerWrapper = styled(VideoContentWrapper)`
   background-color: #000;
+  position: relative;
 
   @media (max-width: 1024px) {
     order: 1;
@@ -464,4 +473,12 @@ const ContentInfoTitle = styled(Typography)`
 `;
 
 const ContentInfoProgressContainer = styled(Box)``;
-const ImsiModal = styled(Box)``;
+const Imsi = styled(Box)`
+  z-index: 1000;
+  border: 1px solid red;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  position: absolute;
+  opacity: 0.5;
+`;

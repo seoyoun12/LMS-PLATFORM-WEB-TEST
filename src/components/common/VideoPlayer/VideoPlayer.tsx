@@ -2,6 +2,7 @@ import * as React from 'react';
 import Script from 'next/script';
 import { Config, EventType, Ncplayer } from 'types/ncplayer';
 import styled from '@emotion/styled';
+import { Box } from '@mui/material';
 
 const CDN_URL =
   'https://cn-lms-storage.cdn.gov-ntruss.com/common/js/ncplayer-1.2.5.umd.min-c808bb53.js';
@@ -180,7 +181,9 @@ export function VideoPlayer(props: Props) {
         id={initialPlayerId.current}
         ref={playerElement}
         showControl={props.showControl}
-      ></Player>
+      >
+        <Imsi>asd</Imsi>
+      </Player>
     </>
   );
 }
@@ -189,6 +192,7 @@ const Player = styled.div<{ showControl?: boolean }>`
   width: 100%;
   aspect-ratio: 16/9;
   overflow: hidden;
+  z-index: 1;
 
   & .webplayer-internal-core-shadow {
     width: 100% !important;
@@ -203,4 +207,15 @@ const Player = styled.div<{ showControl?: boolean }>`
   & .ncplayer-progress {
     display: ${({ showControl }) => (showControl ? 'block' : 'none')};
   }
+`;
+
+const Imsi = styled(Box)`
+  display: flex;
+  margin-left: auto;
+  margin-bottom: 20px;
+  z-index: 1000;
+  border: 1px solid red;
+  width: 100px;
+  height: 100px;
+  background-color: red;
 `;

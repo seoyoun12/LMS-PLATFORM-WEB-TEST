@@ -13,7 +13,11 @@ const headRows: {
   { name: '연결된 과정 ID', align: 'right' },
   { name: '연결된 과정명', align: 'right' },
 ];
-export function ModalModal({ open, handleClose, courseSeq }: Props) {
+export function LessonContentVideoModal({
+  open,
+  handleClose,
+  courseSeq,
+}: Props) {
   //모달이어라~
 
   return (

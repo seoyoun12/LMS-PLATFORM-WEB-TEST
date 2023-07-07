@@ -22,7 +22,7 @@ export function LessonContentVideoModal({
 
   return (
     <Modal
-      title='전체화면..어케하냐..'
+      title='살려주세오'
       maxWidth='md'
       // loading={!data}
       open={open}

@@ -217,5 +217,5 @@ const Imsi = styled(Box)`
   border: 1px solid red;
   width: 100px;
   height: 100px;
-  background-color: red;
+  /* background-color: red; */
 `;

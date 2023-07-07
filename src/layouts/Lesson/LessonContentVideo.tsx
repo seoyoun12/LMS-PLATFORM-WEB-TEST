@@ -272,11 +272,11 @@ export default function LessonContentVideo(props: Props) {
         // Ncplayer.pause();
         // onPause();
         videoPlayer.current?.pause();
-        // videoPlayer.current?.fullscreen(false);
         // 전체화면에서 모달이 뜰시 전체화면 해제
         // 동작안함
         // alert('3초가 됐다 이말이야');
         // 일시정지 하는 코드를 넣어줘
+        videoPlayer.current?.fullscreen(false);
         setOpenModal(true);
       }
       if (

@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Spinner } from '@components/ui';
 import styled from '@emotion/styled';
+import { Box } from '@mui/material';
 
 type ModalProps = {
   open: boolean;
@@ -72,26 +73,28 @@ export function ModalQuiz({
         <Spinner />
       ) : (
         <>
-          <BootstrapDialogTitle id='modal-title' onClose={onCloseModal}>
-            {title}
-          </BootstrapDialogTitle>
-          <DialogContent>{children}</DialogContent>
-          {action ? (
-            <DialogActions>
-              {typeof action !== 'string' ? (
-                action
-              ) : (
-                <LoadingButton
-                  autoFocus
-                  onClick={onSubmit}
-                  disabled={actionDisabled}
-                  loading={actionLoading || false}
-                >
-                  {action}
-                </LoadingButton>
-              )}
-            </DialogActions>
-          ) : null}
+          <ModalBox>
+            <BootstrapDialogTitle id='modal-title' onClose={onCloseModal}>
+              {title}
+            </BootstrapDialogTitle>
+            <DialogContent>{children}</DialogContent>
+            {action ? (
+              <DialogActions>
+                {typeof action !== 'string' ? (
+                  action
+                ) : (
+                  <LoadingButton
+                    autoFocus
+                    onClick={onSubmit}
+                    disabled={actionDisabled}
+                    loading={actionLoading || false}
+                  >
+                    {action}
+                  </LoadingButton>
+                )}
+              </DialogActions>
+            ) : null}
+          </ModalBox>
         </>
       )}
     </DialogBox>
@@ -105,6 +108,11 @@ const DialogBox = styled(Dialog)`
   background-color: red;
   opacity: 0.5;
   z-index: 1000; */
+
+  margin: 0;
+  padding: 0;
+  float: left;
+
   .MuiPaper-root {
     margin: 0;
     /* width: fit-content; */
@@ -145,4 +153,8 @@ const DialogBox = styled(Dialog)`
       padding: 0;
     }
   }
+`;
+
+const ModalBox = styled(Box)`
+  border: 1px solid red;
 `;

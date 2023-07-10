@@ -181,9 +181,7 @@ export function VideoPlayer(props: Props) {
         id={initialPlayerId.current}
         ref={playerElement}
         showControl={props.showControl}
-      >
-        <Imsi>asd</Imsi>
-      </Player>
+      ></Player>
     </>
   );
 }

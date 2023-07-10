@@ -49,7 +49,6 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
     </DialogTitle>
   );
 };
-
 export function Modal({
   open,
   children,

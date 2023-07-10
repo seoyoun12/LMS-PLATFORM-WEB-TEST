@@ -7,6 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Spinner } from '@components/ui';
+import styled from '@emotion/styled';
 
 type ModalProps = {
   open: boolean;
@@ -48,8 +49,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
     </DialogTitle>
   );
 };
-
-export function Modal({
+export function ModalQuiz({
   open,
   children,
   title,
@@ -62,7 +62,7 @@ export function Modal({
   ...dialogProps
 }: ModalProps) {
   return (
-    <Dialog
+    <DialogBox
       onClose={onCloseModal}
       aria-labelledby='modal-title'
       open={open}
@@ -94,6 +94,55 @@ export function Modal({
           ) : null}
         </>
       )}
-    </Dialog>
+    </DialogBox>
   );
 }
+
+const DialogBox = styled(Dialog)`
+  /* border: 1px solid red;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  opacity: 0.5;
+  z-index: 1000; */
+  .MuiPaper-root {
+    margin: 0;
+    /* width: fit-content; */
+  }
+  .MuiDialog-container {
+    justify-content: none;
+    width: 100%;
+  }
+  //온라인 교육 신청쪽 테이블 박살남.
+  @media (max-width: 820px) {
+    .MuiDialogContent-root {
+      padding: 0;
+    }
+  }
+  @media (max-width: 768px) {
+    .MuiPaper-root {
+      margin: 0;
+      width: 100%;
+    }
+    .MuiDialog-container {
+      justify-content: none;
+      width: 100%;
+    }
+    .MuiDialogContent-root {
+      padding: 0;
+    }
+  }
+  @media (max-width: 500px) {
+    .MuiPaper-root {
+      margin: 0;
+      width: 100%;
+    }
+    .MuiDialog-container {
+      justify-content: none;
+      width: 100%;
+    }
+    .MuiDialogContent-root {
+      padding: 0;
+    }
+  }
+`;

@@ -1,4 +1,4 @@
-import { Modal } from '@components/ui/Modal/Modal';
+import { ModalQuiz } from '@components/ui/Modal';
 interface Props {
   open: boolean;
   courseSeq?: number;
@@ -21,8 +21,8 @@ export function LessonContentVideoModal({
   //모달이어라~
 
   return (
-    <Modal
-      title='살려주세오'
+    <ModalQuiz
+      title='헬로'
       maxWidth='md'
       // loading={!data}
       open={open}

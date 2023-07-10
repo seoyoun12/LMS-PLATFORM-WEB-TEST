@@ -209,6 +209,7 @@ export default function LessonContentVideo(props: Props) {
     setOpenModal(false);
     // 모달 종료시 다시
     videoPlayer.current?.play();
+    videoPlayer.current?.fullscreen(true);
 
     // await mutate();
   };

@@ -157,10 +157,10 @@ export function VideoPlayer(props: Props) {
     }
   }, [scriptLoaded, playlist, props]);
 
-  console.log('시간체크좀 해보자 : ', playerElement);
-  console.log('1 : ', props.onTimeChange);
-  console.log('2 : ', props.onTimeupdate);
-  console.log('3 : ', props.seconds);
+  // console.log('시간체크좀 해보자 : ', playerElement);
+  // console.log('1 : ', props.onTimeChange);
+  // console.log('2 : ', props.onTimeupdate);
+  // console.log('3 : ', props.seconds);
 
   // React.useEffect(() => {
   //   if (player.current && props.videoIsPaused) {

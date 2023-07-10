@@ -205,14 +205,28 @@ export default function LessonContentVideo(props: Props) {
   // 상태(state) 정의
   const [showModal, setShowModal] = React.useState(false);
   const [openModal, setOpenModal] = useState(false);
+
+  // 전체화면이었는지 아닌지
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const handleCloseModal = async () => {
     setOpenModal(false);
     // 모달 종료시 다시
     videoPlayer.current?.play();
-    videoPlayer.current?.fullscreen(true);
-
+    console.log('비디오 상태 : ', videoPlayer.current);
+    // videoPlayer.current?.fullscreen(true);
     // await mutate();
+    if (isFullScreen === true) {
+      // 전체화면일때 null, null이면 작은화면. 즉 if 전체화면이라면?
+      // 이미 전체화면에서 나가지면서 모달을 띄우기때문에 의미가 없는 코드
+      // 그러면 전체화면인지 아닌지 확인은 어떻게 해야할까. 상태관리?
+      videoPlayer.current?.fullscreen(true);
+      setIsFullScreen(false);
+    }
   };
+  console.log('화면은 : ', document.fullscreenElement);
+  console.log('화면상태 : ', isFullScreen);
+  // console.log('비디오 상태 : ', videoPlayer.current?.play());
+
   // 모달 열기 이벤트 핸들러
   // const openModal = () => {
   //   setShowModal(true);
@@ -277,7 +291,10 @@ export default function LessonContentVideo(props: Props) {
         // 동작안함
         // alert('3초가 됐다 이말이야');
         // 일시정지 하는 코드를 넣어줘
-        videoPlayer.current?.fullscreen(false);
+        if (document.fullscreenElement !== null) {
+          videoPlayer.current?.fullscreen(false);
+          setIsFullScreen(true);
+        }
         setOpenModal(true);
       }
       if (

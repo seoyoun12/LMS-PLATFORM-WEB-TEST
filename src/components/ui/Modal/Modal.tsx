@@ -99,12 +99,6 @@ export function Modal({
 }
 
 const DialogBox = styled(Dialog)`
-  /* border: 1px solid red;
-  width: 100%;
-  height: 100%;
-  background-color: red;
-  opacity: 0.5;
-  z-index: 1000; */
   .MuiPaper-root {
     margin: 0;
     /* width: fit-content; */

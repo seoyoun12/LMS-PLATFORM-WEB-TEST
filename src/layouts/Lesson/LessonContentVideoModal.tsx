@@ -18,8 +18,6 @@ export function LessonContentVideoModal({
   handleClose,
   courseSeq,
 }: Props) {
-  //모달이어라~
-
   return (
     <ModalQuiz
       title='헬로'

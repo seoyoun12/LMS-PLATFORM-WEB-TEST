@@ -213,29 +213,11 @@ export default function LessonContentVideo(props: Props) {
     // 모달 종료시 다시
     videoPlayer.current?.play();
     console.log('비디오 상태 : ', videoPlayer.current);
-    // videoPlayer.current?.fullscreen(true);
-    // await mutate();
     if (isFullScreen === true) {
-      // 전체화면일때 null, null이면 작은화면. 즉 if 전체화면이라면?
-      // 이미 전체화면에서 나가지면서 모달을 띄우기때문에 의미가 없는 코드
-      // 그러면 전체화면인지 아닌지 확인은 어떻게 해야할까. 상태관리?
       videoPlayer.current?.fullscreen(true);
       setIsFullScreen(false);
     }
   };
-  console.log('화면은 : ', document.fullscreenElement);
-  console.log('화면상태 : ', isFullScreen);
-  // console.log('비디오 상태 : ', videoPlayer.current?.play());
-
-  // 모달 열기 이벤트 핸들러
-  // const openModal = () => {
-  //   setShowModal(true);
-  // };
-
-  // // 모달 닫기 이벤트 핸들러
-  // const closeModal = () => {
-  //   setShowModal(false);
-  // };
 
   // 콜백 - 이벤트.
   // 일시정지
@@ -321,7 +303,6 @@ export default function LessonContentVideo(props: Props) {
         stopTimer('CURRENT');
       }
 
-      // console.log('빠아빠ㅣㅇ빠아ㅃ아 : ', time);
       updateProgress();
     },
     [
@@ -381,8 +362,6 @@ export default function LessonContentVideo(props: Props) {
     updateProgress,
   ]);
 
-  // console.log('시간확인 : ', prevCourseProgress.current);
-
   // 렌더링.
 
   if (props.loading)
@@ -399,7 +378,6 @@ export default function LessonContentVideo(props: Props) {
       <VideoContainer>
         {/* 비디오플레이어위치 */}
         <VideoContentPlayerWrapper>
-          {/* <Imsi></Imsi> */}
           <LessonContentVideoModal
             open={openModal}
             handleClose={handleCloseModal}
@@ -421,7 +399,6 @@ export default function LessonContentVideo(props: Props) {
             onTimeChange={onTimeChange}
             onEnded={onEnded}
             onReady={(v) => (videoPlayer.current = v)}
-            // videoIsPaused={videoIsPaused.current}
           ></VideoPlayer>
         </VideoContentPlayerWrapper>
         <ContentInfoContainer>
@@ -441,11 +418,6 @@ export default function LessonContentVideo(props: Props) {
           </ContentInfoProgressContainer>
         </ContentInfoContainer>
       </VideoContainer>
-
-      {/* <LessonContentVideoModal
-        open={openModal}
-        handleClose={handleCloseModal}
-      /> */}
     </>
   );
 }
@@ -498,12 +470,3 @@ const ContentInfoTitle = styled(Typography)`
 `;
 
 const ContentInfoProgressContainer = styled(Box)``;
-const Imsi = styled(Box)`
-  z-index: 1000;
-  border: 1px solid red;
-  width: 100%;
-  height: 100%;
-  /* background-color: red; */
-  /* position: absolute; */
-  /* opacity: 0.5; */
-`;

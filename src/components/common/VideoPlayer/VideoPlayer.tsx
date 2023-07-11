@@ -81,7 +81,6 @@ export function VideoPlayer(props: Props) {
       player.current.currentTime(props.seconds);
       player.current._corePlayer.onCurrentTimeChange = props.onTimeChange;
 
-      // console.log('구아악 : ', player.current._corePlayer);
       // player.current._corePlayer.player.current.on('canplay', () => {
       player.current.on('canplay', () => {
         player.current._corePlayer._setDuration(
@@ -157,11 +156,6 @@ export function VideoPlayer(props: Props) {
     }
   }, [scriptLoaded, playlist, props]);
 
-  // console.log('시간체크좀 해보자 : ', playerElement);
-  // console.log('1 : ', props.onTimeChange);
-  // console.log('2 : ', props.onTimeupdate);
-  // console.log('3 : ', props.seconds);
-
   // React.useEffect(() => {
   //   if (player.current && props.videoIsPaused) {
   //     player.current._corePlayer = props.videoIsPaused;
@@ -205,15 +199,4 @@ const Player = styled.div<{ showControl?: boolean }>`
   & .ncplayer-progress {
     display: ${({ showControl }) => (showControl ? 'block' : 'none')};
   }
-`;
-
-const Imsi = styled(Box)`
-  display: flex;
-  margin-left: auto;
-  margin-bottom: 20px;
-  z-index: 1000;
-  border: 1px solid red;
-  width: 100px;
-  height: 100px;
-  background-color: red;
 `;

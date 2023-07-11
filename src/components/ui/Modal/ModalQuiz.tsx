@@ -72,47 +72,34 @@ export function ModalQuiz({
       {loading ? (
         <Spinner />
       ) : (
-        <>
-          <ModalBox>
-            <BootstrapDialogTitle id='modal-title' onClose={onCloseModal}>
-              {title}
-            </BootstrapDialogTitle>
-            <DialogContent>{children}</DialogContent>
-            {action ? (
-              <DialogActions>
-                {typeof action !== 'string' ? (
-                  action
-                ) : (
-                  <LoadingButton
-                    autoFocus
-                    onClick={onSubmit}
-                    disabled={actionDisabled}
-                    loading={actionLoading || false}
-                  >
-                    {action}
-                  </LoadingButton>
-                )}
-              </DialogActions>
-            ) : null}
-          </ModalBox>
-        </>
+        <ModalBox>
+          <BootstrapDialogTitle id='modal-title' onClose={onCloseModal}>
+            {title}
+          </BootstrapDialogTitle>
+          <DialogContent>{children}</DialogContent>
+          {action ? (
+            <DialogActions>
+              {typeof action !== 'string' ? (
+                action
+              ) : (
+                <LoadingButton
+                  autoFocus
+                  onClick={onSubmit}
+                  disabled={actionDisabled}
+                  loading={actionLoading || false}
+                >
+                  {action}
+                </LoadingButton>
+              )}
+            </DialogActions>
+          ) : null}
+        </ModalBox>
       )}
     </DialogBox>
   );
 }
 
 const DialogBox = styled(Dialog)`
-  /* border: 1px solid red;
-  width: 100%;
-  height: 100%;
-  background-color: red;
-  opacity: 0.5;
-  z-index: 1000; */
-
-  margin: 0;
-  padding: 0;
-  float: left;
-
   .MuiPaper-root {
     margin: 0;
     /* width: fit-content; */
@@ -156,5 +143,5 @@ const DialogBox = styled(Dialog)`
 `;
 
 const ModalBox = styled(Box)`
-  border: 1px solid red;
+  /* border: 1px solid red; */
 `;

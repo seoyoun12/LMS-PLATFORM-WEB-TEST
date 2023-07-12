@@ -59,34 +59,9 @@ export function Tabs3() {
     }
   };
 
-  const CustomTab = (props: TabProps) => {
-    const { deletable, ...other } = props;
-
-    const handleTabDelete = (event: React.MouseEvent) => {
-      event.stopPropagation();
-      const tabId = Number(event.currentTarget.getAttribute('data-tab-id'));
-      handleDeleteTab(tabId);
-    };
-
-    return (
-      <StyledTab
-        {...other}
-        value={props.value}
-        label={
-          <TabLabelWrapper>
-            {props.label}
-            {deletable && (
-              <TabDeleteButton
-                onClick={handleTabDelete}
-                data-tab-id={props.value}
-              >
-                x
-              </TabDeleteButton>
-            )}
-          </TabLabelWrapper>
-        }
-      />
-    );
+  const handleTabDelete = (event: React.MouseEvent, id: number) => {
+    event.stopPropagation();
+    handleDeleteTab(id);
   };
 
   return (
@@ -125,6 +100,13 @@ export function Tabs3() {
           deletable={tab.deletable}
         >
           <TabContent>{tab.content}</TabContent>
+          {tab.deletable && (
+            <TabDeleteButton
+              onClick={(event) => handleTabDelete(event, tab.id)}
+            >
+              X
+            </TabDeleteButton>
+          )}
         </CustomTabPanel>
       ))}
     </Box>
@@ -153,23 +135,12 @@ const StyledTabs = styled(Tabs)`
   }
 `;
 
-const StyledTab = styled(Tab)`
-  position: relative;
+const CustomTab = styled((props: TabProps & { deletable?: boolean }) => (
+  <Tab {...props} />
+))`
   display: flex;
   align-items: center;
-`;
-
-const TabLabelWrapper = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const TabDeleteButton = styled.button`
-  border: none;
-  background-color: transparent;
-  font-size: 16px;
-  color: #999;
-  cursor: pointer;
+  justify-content: space-between; // 탭 이름과 X 아이콘을 옆에 정렬
 `;
 
 const AddTabButton = styled(Button)`
@@ -184,4 +155,12 @@ const AddTabButton = styled(Button)`
 const TabContent = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const TabDeleteButton = styled.button`
+  border: none;
+  background-color: transparent;
+  font-size: 16px;
+  color: #999;
+  cursor: pointer;
 `;

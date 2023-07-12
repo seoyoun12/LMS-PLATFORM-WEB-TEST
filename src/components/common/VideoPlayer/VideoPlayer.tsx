@@ -3,6 +3,7 @@ import Script from 'next/script';
 import { Config, EventType, Ncplayer } from 'types/ncplayer';
 import styled from '@emotion/styled';
 import { Box } from '@mui/material';
+import { ModalQuiz } from '@components/ui/Modal';
 
 const CDN_URL =
   'https://cn-lms-storage.cdn.gov-ntruss.com/common/js/ncplayer-1.2.5.umd.min-c808bb53.js';

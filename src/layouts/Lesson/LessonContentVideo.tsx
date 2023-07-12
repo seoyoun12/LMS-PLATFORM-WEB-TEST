@@ -201,24 +201,6 @@ export default function LessonContentVideo(props: Props) {
     stopTimer,
   ]);
 
-  // 모달창
-  // 상태(state) 정의
-  // const [showModal, setShowModal] = React.useState(false);
-  const [openModal, setOpenModal] = useState(false);
-
-  // 전체화면이었는지 아닌지
-  const [isFullScreen, setIsFullScreen] = useState(false);
-  const handleCloseModal = async () => {
-    setOpenModal(false);
-    // 모달 종료시 다시
-    videoPlayer.current?.play();
-    console.log('비디오 상태 : ', videoPlayer.current);
-    if (isFullScreen === true) {
-      videoPlayer.current?.fullscreen(true);
-      setIsFullScreen(false);
-    }
-  };
-
   // 콜백 - 이벤트.
   // 일시정지
   const onPause = React.useCallback(() => {
@@ -260,25 +242,42 @@ export default function LessonContentVideo(props: Props) {
     videoIsSeeking.current = false;
   }, []);
 
+  // 모달창
+  // 상태(state) 정의
+  // const [showModal, setShowModal] = React.useState(false);
+  const [openModal, setOpenModal] = useState(false);
+
+  // 전체화면이었는지 아닌지
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const handleCloseModal = async () => {
+    setOpenModal(false);
+    // 모달 종료시 다시
+    videoPlayer.current?.play();
+    console.log('비디오 상태 : ', videoPlayer.current);
+    if (isFullScreen === true) {
+      videoPlayer.current?.fullscreen(true);
+      setIsFullScreen(false);
+    }
+  };
   const onTimeChange = React.useCallback(
     (time: number) => {
       if (time === videoCurrentSeconds.current) return;
 
       // 시간되면 정지 후 모달
-      // if (time === 3) {
-      //   // Ncplayer.pause();
-      //   // onPause();
-      //   videoPlayer.current?.pause();
-      //   // 전체화면에서 모달이 뜰시 전체화면 해제
-      //   // 동작안함
-      //   // alert('3초');
-      //   // 일시정지 하는 코드를 넣어줘
-      //   if (document.fullscreenElement !== null) {
-      //     videoPlayer.current?.fullscreen(false);
-      //     setIsFullScreen(true);
-      //   }
-      //   setOpenModal(true);
-      // }
+      if (time === 3) {
+        // Ncplayer.pause();
+        // onPause();
+        videoPlayer.current?.pause();
+        // 전체화면에서 모달이 뜰시 전체화면 해제
+        // 동작안함
+        // alert('3초');
+        // 일시정지 하는 코드를 넣어줘
+        if (document.fullscreenElement !== null) {
+          videoPlayer.current?.fullscreen(false);
+          setIsFullScreen(true);
+        }
+        setOpenModal(true);
+      }
       if (
         time !== videoCurrentSeconds.current + 1 ||
         videoIsPaused.current ||

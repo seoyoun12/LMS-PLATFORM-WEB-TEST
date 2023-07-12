@@ -1,110 +1,187 @@
-import MuiTabs from '@mui/material/Tabs';
-import MuiTab from '@mui/material/Tab';
+import * as React from 'react';
+import Tabs from '@mui/material/Tabs';
+import Tab, { TabProps } from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { useRouter } from 'next/router';
-import React, { SyntheticEvent, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
 
-interface Props {
-  tabsConfig: {
-    label: string;
-    value: string;
-  }[];
-  showBorderBottom?: boolean;
-  variant?: 'fullWidth' | 'standard' | 'scrollable';
-  gap?: number;
-  rendering?: boolean;
-  onChange?: (newValue: string) => void;
-  value?: string;
-  orientation?: 'vertical' | 'horizontal' | undefined;
+interface TabData {
+  id: number;
+  label: string;
+  content: string;
+  deletable?: boolean;
 }
 
-export function Tabs3({
-  tabsConfig,
-  showBorderBottom = true,
-  variant = 'standard',
-  gap,
-  rendering = true,
-  onChange,
-  value,
-  orientation,
-  ...props
-}: Props) {
-  const router = useRouter();
-  const { pathname, query } = router;
+interface TabPanelProps {
+  children?: React.ReactNode;
+  value: number;
+  index: number;
+}
 
-  useEffect(() => {
-    if (!router.query.tab && rendering) {
-      router.replace({
-        pathname,
-        query: {
-          ...router.query,
-          tab: tabsConfig[0].value,
-        },
-      });
-    }
-  }, [pathname, router]);
-
-  const handleChange = useCallback(
-    (event: SyntheticEvent, newValue: string) => {
-      if (!rendering && onChange) {
-        onChange(newValue);
-      } else {
-        router.push({
-          pathname,
-          query: {
-            ...router.query,
-            tab: newValue,
-          },
-        });
-      }
+export function Tabs3() {
+  const [value, setValue] = React.useState(0);
+  const [tabs, setTabs] = React.useState<TabData[]>([
+    {
+      id: 1,
+      label: '첫번째 탭',
+      content: '첫번째 탭 페이지입니다.',
+      deletable: false,
     },
-    [pathname, router]
-  );
+  ]);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
+  const handleAddTab = () => {
+    const newTab: TabData = {
+      id: tabs.length + 1,
+      label: `새로운 탭 ${tabs.length + 1}`,
+      content: `새로운 탭 ${tabs.length + 1} 페이지입니다.`,
+      deletable: true,
+    };
+    setTabs([...tabs, newTab]);
+    setValue(newTab.id);
+  };
+
+  const handleDeleteTab = (id: number) => {
+    if (tabs.length === 1) {
+      return; // 마지막 탭은 삭제하지 않음
+    }
+
+    const updatedTabs = tabs.filter((tab) => tab.id !== id);
+    setTabs(updatedTabs);
+
+    if (value === id) {
+      setValue(updatedTabs[0].id); // 첫 번째 탭으로 이동
+    }
+  };
+
+  const CustomTab = (props: TabProps) => {
+    const { deletable, ...other } = props;
+
+    const handleTabDelete = (event: React.MouseEvent) => {
+      event.stopPropagation();
+      const tabId = Number(event.currentTarget.getAttribute('data-tab-id'));
+      handleDeleteTab(tabId);
+    };
+
+    return (
+      <StyledTab
+        {...other}
+        value={props.value}
+        label={
+          <TabLabelWrapper>
+            {props.label}
+            {deletable && (
+              <TabDeleteButton
+                onClick={handleTabDelete}
+                data-tab-id={props.value}
+              >
+                x
+              </TabDeleteButton>
+            )}
+          </TabLabelWrapper>
+        }
+      />
+    );
+  };
 
   return (
-    <TabBox
-      sx={
-        showBorderBottom
-          ? {
-              width: '100%',
-              borderBottom: 1,
-              borderColor: 'divider',
-            }
-          : null
-      }
-      variant={variant}
-      gap={gap}
-      {...props}
-    >
-      <MuiTabs
-        className='mui-tabs'
-        value={query.tab || value || tabsConfig[0].value}
-        onChange={handleChange}
-        aria-label='basic tabs example'
-        variant={variant}
-        orientation={orientation}
+    <Box sx={{ width: '100%' }}>
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: 'divider',
+          display: 'flex',
+          alignItems: 'center',
+        }}
       >
-        {tabsConfig.map(({ value, label }) => (
-          <MuiTab
-            key={value}
-            className='mui-tabs-item'
-            label={label}
-            value={value}
-          />
-        ))}
-      </MuiTabs>
-    </TabBox>
+        <StyledTabs
+          value={value}
+          onChange={handleChange}
+          aria-label='basic tabs example'
+        >
+          {tabs.map((tab) => (
+            <CustomTab
+              key={tab.id}
+              label={tab.label}
+              deletable={tab.deletable}
+              value={tab.id}
+            />
+          ))}
+        </StyledTabs>
+        <AddTabButton onClick={handleAddTab}>
+          <AddIcon />
+        </AddTabButton>
+      </Box>
+      {tabs.map((tab) => (
+        <CustomTabPanel
+          key={tab.id}
+          value={value}
+          index={tab.id}
+          deletable={tab.deletable}
+        >
+          <TabContent>{tab.content}</TabContent>
+        </CustomTabPanel>
+      ))}
+    </Box>
   );
 }
 
-const TabBox = styled(Box)<{ variant: string; gap?: number }>`
-  .mui-tabs {
-    display: flex;
-  }
+function CustomTabPanel(props: TabPanelProps & { deletable?: boolean }) {
+  const { children, value, index, deletable, ...other } = props;
 
-  .mui-tabs-item {
-    margin: ${({ variant, gap }) =>
-      variant === 'fullWidth' && gap ? `0 ${gap}rem` : '0'};
+  return (
+    <div
+      role='tabpanel'
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && children}
+    </div>
+  );
+}
+
+const StyledTabs = styled(Tabs)`
+  & .MuiTabs-flexContainer {
+    gap: 8px;
   }
+`;
+
+const StyledTab = styled(Tab)`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
+const TabLabelWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const TabDeleteButton = styled.button`
+  border: none;
+  background-color: transparent;
+  font-size: 16px;
+  color: #999;
+  cursor: pointer;
+`;
+
+const AddTabButton = styled(Button)`
+  min-width: unset;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  padding: 0;
+  margin-left: 8px;
+`;
+
+const TabContent = styled.div`
+  display: flex;
+  align-items: center;
 `;

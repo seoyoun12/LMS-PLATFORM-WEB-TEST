@@ -29,7 +29,7 @@ interface DialogTitleProps {
   onClose: () => void;
 }
 enum TabValue {
-  One = 'one',
+  One = 'one1',
   Two = 'two',
 }
 

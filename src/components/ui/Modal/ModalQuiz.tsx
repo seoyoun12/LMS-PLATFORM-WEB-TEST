@@ -46,8 +46,7 @@ export function ModalQuiz({
         <Spinner />
       ) : (
         <ModalBox>
-          <div>탭</div>
-          <div>1</div>
+          <Tabs3></Tabs3>
         </ModalBox>
       )}
     </DialogBox>

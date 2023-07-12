@@ -23,6 +23,44 @@ type ModalProps = {
   action?: string | React.ReactNode;
 } & Omit<DialogProps, 'title'>;
 
+interface DialogTitleProps {
+  id: string;
+  children?: React.ReactNode;
+  onClose: () => void;
+}
+enum TabValue {
+  One = 'one',
+  Two = 'two',
+}
+
+const tabsConfig = [
+  { label: '1', value: TabValue.One },
+  { label: '2', value: TabValue.Two },
+];
+const BootstrapDialogTitle = (props: DialogTitleProps) => {
+  const { children, onClose, ...other } = props;
+
+  return (
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label='close'
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  );
+};
+
 export function ModalQuiz({
   open,
   children,
@@ -35,6 +73,10 @@ export function ModalQuiz({
   loading = false,
   ...dialogProps
 }: ModalProps) {
+  //
+  const router = useRouter();
+  const { contentSeq, tab } = router.query;
+  //
   return (
     <DialogBox
       onClose={onCloseModal}
@@ -46,8 +88,39 @@ export function ModalQuiz({
         <Spinner />
       ) : (
         <ModalBox>
-          <div>탭</div>
-          <div>1</div>
+          {/*  */}
+
+          {/* <Box sx={{ mb: '30px' }}>
+            <Tabs3 tabsConfig={tabsConfig} variant={'standard'} />
+          </Box>
+          {
+            {
+              [TabValue.One]: <div>1</div>,
+              [TabValue.Two]: <div>2</div>,
+            }[tab as string]
+          } */}
+
+          {/*  */}
+          <BootstrapDialogTitle id='modal-title' onClose={onCloseModal}>
+            {title}
+          </BootstrapDialogTitle>
+          <DialogContent>{children}</DialogContent>
+          {action ? (
+            <DialogActions>
+              {typeof action !== 'string' ? (
+                action
+              ) : (
+                <LoadingButton
+                  autoFocus
+                  onClick={onSubmit}
+                  disabled={actionDisabled}
+                  loading={actionLoading || false}
+                >
+                  {action}
+                </LoadingButton>
+              )}
+            </DialogActions>
+          ) : null}
         </ModalBox>
       )}
     </DialogBox>

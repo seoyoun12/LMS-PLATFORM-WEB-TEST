@@ -2,11 +2,11 @@ import * as React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Tabs from '@mui/material/Tabs';
 import Tab, { TabProps } from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface TabData {
   id: string;
@@ -37,7 +37,7 @@ export function Tabs3() {
   };
 
   const handleAddTab = () => {
-    const newLabel = generateUniqueLabel(); // 중복되지 않는 고유한 label 생성
+    const newLabel = generateUniqueLabel();
     const newTab: TabData = {
       id: uuidv4(),
       label: newLabel,
@@ -65,6 +65,7 @@ export function Tabs3() {
 
     return label;
   };
+
   const handleDeleteTab = (id: string) => {
     if (tabs.length === 1) {
       return; // 마지막 탭은 삭제하지 않음
@@ -101,9 +102,18 @@ export function Tabs3() {
           {tabs.map((tab) => (
             <CustomTab
               key={tab.id}
-              label={tab.label}
-              deletable={tab.deletable}
               value={tab.id}
+              deletable={tab.deletable}
+              label={tab.label}
+              icon={
+                tab.deletable ? (
+                  <TabDeleteButton
+                    onClick={(event) => handleTabDelete(event, tab.id)}
+                  >
+                    <CloseIcon />
+                  </TabDeleteButton>
+                ) : null
+              }
             />
           ))}
         </StyledTabs>
@@ -112,28 +122,16 @@ export function Tabs3() {
         </AddTabButton>
       </Box>
       {tabs.map((tab) => (
-        <CustomTabPanel
-          key={tab.id}
-          value={value}
-          index={tab.id}
-          deletable={tab.deletable}
-        >
+        <CustomTabPanel key={tab.id} value={value} index={tab.id}>
           <TabContent>{tab.content}</TabContent>
-          {tab.deletable && (
-            <TabDeleteButton
-              onClick={(event) => handleTabDelete(event, tab.id)}
-            >
-              X
-            </TabDeleteButton>
-          )}
         </CustomTabPanel>
       ))}
     </Box>
   );
 }
 
-function CustomTabPanel(props: TabPanelProps & { deletable?: boolean }) {
-  const { children, value, index, deletable, ...other } = props;
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index } = props;
 
   return (
     <div
@@ -141,7 +139,6 @@ function CustomTabPanel(props: TabPanelProps & { deletable?: boolean }) {
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
-      {...other}
     >
       {value === index && children}
     </div>
@@ -159,7 +156,34 @@ const CustomTab = styled((props: TabProps & { deletable?: boolean }) => (
 ))`
   display: flex;
   align-items: center;
-  justify-content: space-between; // 탭 이름과 X 아이콘을 옆에 정렬
+  justify-content: center;
+  gap: 4px;
+  padding: 8px;
+  position: relative;
+  /* height: 40px; */
+  white-space: nowrap;
+  width: auto;
+  flex: none;
+  overflow: hidden;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  /* 추가된 스타일 */
+  & .MuiTab-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+  }
+`;
+const TabDeleteButton = styled.button`
+  border: none;
+  background-color: transparent;
+  font-size: 16px;
+  color: #999;
+  cursor: pointer;
 `;
 
 const AddTabButton = styled(Button)`
@@ -174,12 +198,4 @@ const AddTabButton = styled(Button)`
 const TabContent = styled.div`
   display: flex;
   align-items: center;
-`;
-
-const TabDeleteButton = styled.button`
-  border: none;
-  background-color: transparent;
-  font-size: 16px;
-  color: #999;
-  cursor: pointer;
 `;

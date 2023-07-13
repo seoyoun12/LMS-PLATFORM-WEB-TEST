@@ -42,7 +42,7 @@ export function Tabs3() {
       content: `새로운 탭 ${tabs.length + 1} 페이지입니다.`,
       deletable: true,
     };
-    setTabs([...tabs, newTab]);
+    setTabs((prevTabs) => [...prevTabs, newTab]);
     setValue(newTab.id);
   };
 

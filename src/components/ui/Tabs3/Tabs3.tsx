@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import Tabs from '@mui/material/Tabs';
 import Tab, { TabProps } from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
@@ -8,7 +9,7 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 
 interface TabData {
-  id: number;
+  id: string;
   label: string;
   content: string;
   deletable?: boolean;
@@ -16,37 +17,55 @@ interface TabData {
 
 interface TabPanelProps {
   children?: React.ReactNode;
-  value: number;
-  index: number;
+  value: string;
+  index: string;
 }
 
 export function Tabs3() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState('1');
   const [tabs, setTabs] = React.useState<TabData[]>([
     {
-      id: 1,
+      id: '1',
       label: '첫번째 탭',
       content: '첫번째 탭 페이지입니다.',
       deletable: false,
     },
   ]);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
   const handleAddTab = () => {
+    const newLabel = generateUniqueLabel(); // 중복되지 않는 고유한 label 생성
     const newTab: TabData = {
-      id: tabs.length + 1,
-      label: `새로운 탭 ${tabs.length + 1}`,
-      content: `새로운 탭 ${tabs.length + 1} 페이지입니다.`,
+      id: uuidv4(),
+      label: newLabel,
+      content: `새로운 탭 ${newLabel} 페이지입니다.`,
       deletable: true,
     };
     setTabs((prevTabs) => [...prevTabs, newTab]);
     setValue(newTab.id);
   };
 
-  const handleDeleteTab = (id: number) => {
+  const generateUniqueLabel = () => {
+    let label = `새로운 탭 ${tabs.length + 1}`;
+    let isUnique = false;
+    let index = 1;
+
+    while (!isUnique) {
+      const existingLabel = tabs.find((tab) => tab.label === label);
+      if (!existingLabel) {
+        isUnique = true;
+      } else {
+        index++;
+        label = `새로운 탭 ${tabs.length + index}`;
+      }
+    }
+
+    return label;
+  };
+  const handleDeleteTab = (id: string) => {
     if (tabs.length === 1) {
       return; // 마지막 탭은 삭제하지 않음
     }
@@ -59,7 +78,7 @@ export function Tabs3() {
     }
   };
 
-  const handleTabDelete = (event: React.MouseEvent, id: number) => {
+  const handleTabDelete = (event: React.MouseEvent, id: string) => {
     event.stopPropagation();
     handleDeleteTab(id);
   };

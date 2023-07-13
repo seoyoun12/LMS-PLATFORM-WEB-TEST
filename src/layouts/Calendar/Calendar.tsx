@@ -160,9 +160,11 @@ export function CNCalendar() {
   //Month changer
   const onChangeMonth = (type: MonthClickType, value: number) => {
     if (type === MonthClickType.BTN_CLICK)
-      return setDate(prev => new Date(prev.setMonth(prev.getMonth() + value)));
+      return setDate(
+        (prev) => new Date(prev.setMonth(prev.getMonth() + value))
+      );
     if (type === MonthClickType.MONTH_CLICK)
-      return setDate(prev => new Date(prev.setMonth(value - 1)));
+      return setDate((prev) => new Date(prev.setMonth(value - 1)));
   };
 
   //fullcalendar changer

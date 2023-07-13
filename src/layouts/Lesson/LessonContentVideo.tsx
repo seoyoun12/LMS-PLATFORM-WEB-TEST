@@ -264,20 +264,20 @@ export default function LessonContentVideo(props: Props) {
       if (time === videoCurrentSeconds.current) return;
 
       // 시간되면 정지 후 모달
-      if (time === 3) {
-        // Ncplayer.pause();
-        // onPause();
-        videoPlayer.current?.pause();
-        // 전체화면에서 모달이 뜰시 전체화면 해제
-        // 동작안함
-        // alert('3초');
-        // 일시정지 하는 코드를 넣어줘
-        if (document.fullscreenElement !== null) {
-          videoPlayer.current?.fullscreen(false);
-          setIsFullScreen(true);
-        }
-        setOpenModal(true);
-      }
+      // if (time === 3) {
+      //   // Ncplayer.pause();
+      //   // onPause();
+      //   videoPlayer.current?.pause();
+      //   // 전체화면에서 모달이 뜰시 전체화면 해제
+      //   // 동작안함
+      //   // alert('3초');
+      //   // 일시정지 하는 코드를 넣어줘
+      //   if (document.fullscreenElement !== null) {
+      //     videoPlayer.current?.fullscreen(false);
+      //     setIsFullScreen(true);
+      //   }
+      //   setOpenModal(true);
+      // }
       if (
         time !== videoCurrentSeconds.current + 1 ||
         videoIsPaused.current ||

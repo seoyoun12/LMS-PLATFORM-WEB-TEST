@@ -45,10 +45,10 @@ export function EduOverview({
   watch: UseFormWatch<UserTransSaveInputDataType>;
   setFixedBusinessType: React.Dispatch<React.SetStateAction<userBusinessType>>;
 }) {
-  const [courseCategoryType, setCourseCategoryType] = useState<courseCategoryType | null>(
-    null
-  ); //교육과정
-  const [courseBusinessType, setCourseBusinessType] = useState<businessType | null>(null); //업종구분
+  const [courseCategoryType, setCourseCategoryType] =
+    useState<courseCategoryType | null>(null); //교육과정
+  const [courseBusinessType, setCourseBusinessType] =
+    useState<businessType | null>(null); //업종구분
   const [stepSeq, setStepSeq] = useState<number | null>(null); //업종구분
   const [values, setValues] = useState<{
     step: number;
@@ -56,7 +56,12 @@ export function EduOverview({
     studyEndDate: string;
   }>();
   const [stepsRes, setStepsRes] = useState<
-    { seq: number; step: number; studyStartDate: string; studyEndDate: string }[]
+    {
+      seq: number;
+      step: number;
+      studyStartDate: string;
+      studyEndDate: string;
+    }[]
   >([]); //기수 교육시작 교육끝
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo); //전역에 교육정보 저장
   const router = useRouter();
@@ -66,18 +71,22 @@ export function EduOverview({
   const getSingleCourse = async (courseClassSeq: number) => {
     try {
       const { data } = await getSingleCourseClass(courseClassSeq);
-      // console.log('data', data);
+      console.log('교육신청 data', data);
 
-      setCourseCategoryType(data.course.courseCategoryType as courseCategoryType);
+      setCourseCategoryType(
+        data.course.courseCategoryType as courseCategoryType
+      );
       setCourseBusinessType(data.course.courseBusinessType as businessType); //임시타입
       setValue(
         'businessType',
-        data.course.courseBusinessType?.split('_')[1] === userBusinessType.PASSENGER
+        data.course.courseBusinessType?.split('_')[1] ===
+          userBusinessType.PASSENGER
           ? userBusinessType.PASSENGER
           : userBusinessType.FREIGHT
       ); //
       setFixedBusinessType(
-        data.course.courseBusinessType.split('_')[1] === userBusinessType.PASSENGER
+        data.course.courseBusinessType.split('_')[1] ===
+          userBusinessType.PASSENGER
           ? userBusinessType.PASSENGER
           : userBusinessType.FREIGHT
       ); //업체정보 운수구분 고정용(ALL안씀)
@@ -127,7 +136,12 @@ export function EduOverview({
   return (
     <EduOverviewWrap>
       <Box>
-        <Typography variant="h5" fontWeight="bold" display="flex" alignItems="center">
+        <Typography
+          variant='h5'
+          fontWeight='bold'
+          display='flex'
+          alignItems='center'
+        >
           {/* <HorizontalRuleRoundedIcon sx={{ transform: 'scale(1,2)', color: '#3498db' }} /> */}
           <span>교육개요</span>
         </Typography>
@@ -161,12 +175,15 @@ export function EduOverview({
                     ))}
                   </Select>
                 </FormControl> */}
-                {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS'
+                {localStorage.getItem('site_course_type') ===
+                'TYPE_LOW_FLOOR_BUS'
                   ? '저상버스 운전자교육'
                   : '보수일반'}
               </TableRightCell>
             </TableCustomRow>
-            {!(localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS') && (
+            {!(
+              localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS'
+            ) && (
               <TableCustomRow>
                 <TableLeftCell>운수구분</TableLeftCell>
                 <TableRightCell>
@@ -200,8 +217,10 @@ export function EduOverview({
                     })}
                   </Select>
                 </FormControl> */}
-                  {(watch('businessType') === userBusinessType.PASSENGER && '여객') ||
-                    (watch('businessType') === userBusinessType.FREIGHT && '화물')}
+                  {(watch('businessType') === userBusinessType.PASSENGER &&
+                    '여객') ||
+                    (watch('businessType') === userBusinessType.FREIGHT &&
+                      '화물')}
                 </TableRightCell>
               </TableCustomRow>
             )}
@@ -236,9 +255,9 @@ export function EduOverview({
                   </Select>
                 </FormControl> */}
                 {stepsRes
-                  .filter(filter => filter.seq === stepSeq)
+                  .filter((filter) => filter.seq === stepSeq)
                   .map(
-                    item =>
+                    (item) =>
                       `${item.step}기 / ${item.studyStartDate} ~ ${item.studyEndDate}`
                   )}
               </TableRightCell>

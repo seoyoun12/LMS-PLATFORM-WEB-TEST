@@ -8,6 +8,9 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Spinner } from '@components/ui';
 import styled from '@emotion/styled';
+import { Box } from '@mui/material';
+import router, { useRouter } from 'next/router';
+import { Tabs3 } from '../Tabs3';
 
 type ModalProps = {
   open: boolean;
@@ -20,36 +23,7 @@ type ModalProps = {
   action?: string | React.ReactNode;
 } & Omit<DialogProps, 'title'>;
 
-interface DialogTitleProps {
-  id: string;
-  children?: React.ReactNode;
-  onClose: () => void;
-}
-
-const BootstrapDialogTitle = (props: DialogTitleProps) => {
-  const { children, onClose, ...other } = props;
-
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label='close'
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-};
-export function Modal({
+export function ModalQuiz({
   open,
   children,
   title,
@@ -71,28 +45,9 @@ export function Modal({
       {loading ? (
         <Spinner />
       ) : (
-        <>
-          <BootstrapDialogTitle id='modal-title' onClose={onCloseModal}>
-            {title}
-          </BootstrapDialogTitle>
-          <DialogContent>{children}</DialogContent>
-          {action ? (
-            <DialogActions>
-              {typeof action !== 'string' ? (
-                action
-              ) : (
-                <LoadingButton
-                  autoFocus
-                  onClick={onSubmit}
-                  disabled={actionDisabled}
-                  loading={actionLoading || false}
-                >
-                  {action}
-                </LoadingButton>
-              )}
-            </DialogActions>
-          ) : null}
-        </>
+        <ModalBox>
+          <Tabs3></Tabs3>
+        </ModalBox>
       )}
     </DialogBox>
   );
@@ -101,10 +56,14 @@ export function Modal({
 const DialogBox = styled(Dialog)`
   .MuiPaper-root {
     margin: 0;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     /* width: fit-content; */
   }
   .MuiDialog-container {
-    justify-content: none;
+    justify-content: center;
     width: 100%;
   }
   //온라인 교육 신청쪽 테이블 박살남.
@@ -139,4 +98,11 @@ const DialogBox = styled(Dialog)`
       padding: 0;
     }
   }
+`;
+
+const ModalBox = styled(Box)`
+  /* border: 1px solid red; */
+  width: 98%;
+  height: 95%;
+  /* border: 1px solid red; */
 `;

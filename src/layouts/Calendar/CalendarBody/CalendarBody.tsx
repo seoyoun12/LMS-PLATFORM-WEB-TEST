@@ -47,7 +47,9 @@ import { CheckBeforeEnrollDialog } from '@components/ui/Calendar';
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   openModal: boolean;
-  setModalInfo: React.Dispatch<React.SetStateAction<ClickedPlanInfo | undefined>>;
+  setModalInfo: React.Dispatch<
+    React.SetStateAction<ClickedPlanInfo | undefined>
+  >;
   modalInfo: ClickedPlanInfo | undefined;
   calendarRef: React.RefObject<FullCalendar>;
   // CalendarEvent: CalendarEvent[];
@@ -85,7 +87,10 @@ export const courseSubCategory = [
   { type: courseSubCategoryType.DANGEROUS_GOODS, ko: '위험물' },
   { type: courseSubCategoryType.DESIGNATED_WASTE, ko: '지정폐기물' },
   { type: courseSubCategoryType.HAZARDOUS_CHEMICALS, ko: '유해화학물질' },
-  { type: courseSubCategoryType.HIGH_PRESSURE_GAS_FLAMMABLE, ko: '고압가스(가연성)' },
+  {
+    type: courseSubCategoryType.HIGH_PRESSURE_GAS_FLAMMABLE,
+    ko: '고압가스(가연성)',
+  },
   { type: courseSubCategoryType.HIGH_PRESSURE_GAS_TOXIC, ko: '고압가스(독성)' },
 ];
 
@@ -110,7 +115,7 @@ export function CalendarBody({
     setDialogOpen(false);
   };
 
-  const scheduleList = schedule?.map(item => {
+  const scheduleList = schedule?.map((item) => {
     //정원이 다 찼을경우
     const isFullPeople =
       item.limitPeople !== 0 && item.enrolledPeopleCnt === item.limitPeople;
@@ -142,9 +147,13 @@ export function CalendarBody({
     //오늘이 교육의 마지막날짜일경우
     const TodayDate = new Date();
     //마지막 교육일의 이전날짜
-    const prevDate = new Date(new Date(item.studyEndDate.replaceAll('-', '/')).getTime());
+    const prevDate = new Date(
+      new Date(item.studyEndDate.replaceAll('-', '/')).getTime()
+    );
     //마지막 교육일의 다음날짜
-    const nextDate = new Date(new Date(item.studyEndDate.replaceAll('-', '/')).getTime());
+    const nextDate = new Date(
+      new Date(item.studyEndDate.replaceAll('-', '/')).getTime()
+    );
     prevDate.setHours(0);
     prevDate.setMinutes(0);
     prevDate.setSeconds(0);
@@ -181,10 +190,10 @@ export function CalendarBody({
       lessonTime: item.course.lessonTime,
       mediaType: '동영상(VOD)',
       courseCategoryType: courseCategory.filter(
-        categoryItem => categoryItem.type === item.course.courseCategoryType
+        (categoryItem) => categoryItem.type === item.course.courseCategoryType
       )[0], //eduType
       courseSubCategoryType: courseSubCategory.filter(
-        sub => sub.type === item.course.courseSubCategoryType
+        (sub) => sub.type === item.course.courseSubCategoryType
       )[0], //업종
       // courseCategoryType: courseCategoryType.TYPE_SUP_COMMON, //보수일반 고정 2022-08-31 변경,
       // courseSubCategoryType: courseSubCategoryType.BUS, //업종 버스고정 2022-08-31 변경, 버스(여객) , 개별화물(화물)
@@ -219,18 +228,26 @@ export function CalendarBody({
         // locale="ko"
         // dayCellContent={['😁', '😂', '😁', '😂', '😁', '😂']}
         // dayCellClassNames={date => ['fc-day-header-sun', '월', '화', '수', '목', '금', 'fc-day-header-sat'][date.dow]}
-        dayHeaderClassNames={date =>
-          ['fc-day-header-sun', '월', '화', '수', '목', '금', 'fc-day-header-sat'][
-            date.dow
-          ]
+        dayHeaderClassNames={(date) =>
+          [
+            'fc-day-header-sun',
+            '월',
+            '화',
+            '수',
+            '목',
+            '금',
+            'fc-day-header-sat',
+          ][date.dow]
         }
-        dayHeaderContent={date => ['일', '월', '화', '수', '목', '금', '토'][date.dow]}
+        dayHeaderContent={(date) =>
+          ['일', '월', '화', '수', '목', '금', '토'][date.dow]
+        }
         // showNonCurrentDates={false}
 
-        contentHeight="auto" //스크롤 제거
+        contentHeight='auto' //스크롤 제거
         eventContent={renderEventContent}
         events={scheduleList}
-        eventClick={e => {
+        eventClick={(e) => {
           const {
             event: {
               _def: { extendedProps },
@@ -298,7 +315,7 @@ export function CalendarBody({
             }}
           >
             <JoinButton
-              variant="contained"
+              variant='contained'
               onClick={async () => {
                 setEnrollInfo({
                   // courseCategoryType: modalInfo ? modalInfo.courseCategoryType.type : courseCategoryType.TYPE_NONE,
@@ -310,6 +327,7 @@ export function CalendarBody({
                   return router.push({
                     pathname: '/sign-in',
                     query: { redirect: `stebMove/steb2` },
+                    // query: { redirect: `stebMove/step2` },
                   });
                 }
 
@@ -328,13 +346,17 @@ export function CalendarBody({
                   return window.alert('오류입니다! 관리자에게 문의해주세요.');
                 }
                 router.push('/stebMove/steb2');
+                // router.push('/stebMove/step2');
                 setLoading(false);
               }}
               disabled={loading}
             >
               {loading ? <Spinner fit={true} /> : '교육신청'}
             </JoinButton>
-            <CloseButton variant="contained" onClick={() => setOpenModal(false)}>
+            <CloseButton
+              variant='contained'
+              onClick={() => setOpenModal(false)}
+            >
               닫기
             </CloseButton>
           </Box>
@@ -352,7 +374,11 @@ export function CalendarBody({
             <span>교육개요</span>
           </EduSummury> */}
           <TableBody
-            sx={{ display: 'table', width: '100%', borderTop: '1px solid #c4c4c4' }}
+            sx={{
+              display: 'table',
+              width: '100%',
+              borderTop: '1px solid #c4c4c4',
+            }}
           >
             {modalInfo && (
               <>
@@ -364,12 +390,14 @@ export function CalendarBody({
                   <TableLeftCell>온라인과정</TableLeftCell>
                   <TableRightCell>
                     {/* {modalInfo.courseCategoryType ? modalInfo.courseCategoryType.ko : '오류'} */}
-                    {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS'
+                    {localStorage.getItem('site_course_type') ===
+                    'TYPE_LOW_FLOOR_BUS'
                       ? '저상버스 운전자교육'
                       : '보수일반'}
                   </TableRightCell>
                 </TableRow>
-                {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS' ? (
+                {localStorage.getItem('site_course_type') ===
+                'TYPE_LOW_FLOOR_BUS' ? (
                   ''
                 ) : (
                   <TableRow>
@@ -377,7 +405,7 @@ export function CalendarBody({
                     <TableRightCell>
                       {
                         courseBusinessTypeList.filter(
-                          item => item.enType === modalInfo.courseBusinessType
+                          (item) => item.enType === modalInfo.courseBusinessType
                         )[0]?.type
                       }
                       {/* 여객 / 화물 */}
@@ -455,17 +483,18 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
   // @ts-ignore
   return (
     <Box sx={{ color: 'black', fontSize: '1rem' }}>
-      <Box display="flex">
+      <Box display='flex'>
         <Box
           sx={{
             color:
-              extendedProps.prevSchedule && extendedProps.enableToEnrollYn === YN.YES
+              extendedProps.prevSchedule &&
+              extendedProps.enableToEnrollYn === YN.YES
                 ? extendedProps.isFullPeople
                   ? '#7a7a7a'
                   : '#df280a'
                 : '#7a7a7a',
           }}
-          fontWeight="bold"
+          fontWeight='bold'
         >
           [{title}]&nbsp;
         </Box>
@@ -484,7 +513,8 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
             item => item.enType === extendedProps.course.courseBusinessType
           )[0]?.type */}
 
-          {extendedProps.courseSubCategoryType.type === courseSubCategoryType.BUS
+          {extendedProps.courseSubCategoryType.type ===
+          courseSubCategoryType.BUS
             ? '여객'
             : extendedProps.courseSubCategoryType.type ===
               courseSubCategoryType.INDIVIDUAL_CARGO

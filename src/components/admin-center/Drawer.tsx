@@ -33,12 +33,21 @@ import { Accordion } from '@components/ui';
 import { logout } from '@common/api';
 import Logo from 'public/assets/svgs/logo.svg';
 import Image from 'next/image';
+import {
+  LearningMaterialTabItem,
+  LearningMaterialTabs,
+} from '@layouts/Traffic/LearningMaterial/style';
+
+export type TabType = 'normal' | 'traffic';
 
 const drawerWidth = 290;
 
 export function Drawer({ children }: { children: ReactNode }) {
   const router = useRouter();
-
+  const { type, id } = router.query as {
+    type: TabType;
+    id?: string;
+  };
   const onClickToMain = () => {
     router.push('/');
   };
@@ -46,21 +55,18 @@ export function Drawer({ children }: { children: ReactNode }) {
     await logout();
     router.push('/admin-center/signin');
   };
-
+  const handleClickTab = (tabValue: TabType) => {
+    router.push(`/admin-center/${tabValue}`);
+  };
   const accordionList = [
     {
       name: '회원관리',
       children: [
         {
-          name: '회원 목록',
+          name: '회원목록',
           href: '/admin-center/user',
           isActive: router.pathname === '/admin-center/user',
         },
-        // {
-        //   name: '회원 생성',
-        //   href: '/admin-center/user/create-user',
-        //   isActive: router.pathname === '/admin-center/user/create-user',
-        // },
       ],
       icon: <PeopleOutlineIcon sx={{ mr: '32px', color: grey[900] }} />,
     },
@@ -297,7 +303,7 @@ export function Drawer({ children }: { children: ReactNode }) {
   return (
     <Box sx={{ display: 'flex' }}>
       <MuiDrawer
-        variant="permanent"
+        variant='permanent'
         sx={{
           width: drawerWidth,
           flexShrink: 0,
@@ -317,21 +323,21 @@ export function Drawer({ children }: { children: ReactNode }) {
           }}
         >
           <List>
-            <Box display="flex" gap="8px" flexDirection="column" padding="1rem">
+            <Box display='flex' gap='8px' flexDirection='column' padding='1rem'>
               {/* <Logo /> */}
               <Image
-                src="/assets/images/ctsoecLogo.png"
+                src='/assets/images/ctsoecLogo.png'
                 height={40}
                 width={230}
               />
-              <Typography fontWeight="bold" fontSize="18px" textAlign="center">
+              <Typography fontWeight='bold' fontSize='18px' textAlign='center'>
                 학습관리센터
               </Typography>
               <Divider sx={{ marginTop: '12px', marginBottom: '12px' }} />
-              <Button variant="contained" onClick={onClickToMain}>
+              <Button variant='contained' onClick={onClickToMain}>
                 메인사이트로
               </Button>
-              <Button variant="contained" onClick={onClickLogout}>
+              <Button variant='contained' onClick={onClickLogout}>
                 로그아웃
               </Button>
             </Box>
@@ -348,11 +354,27 @@ export function Drawer({ children }: { children: ReactNode }) {
                 <ListItemText primary="대시보드" />
               </ListItem>
             </Link> */}
+            {/* <LearningMaterialTabs
+              variant='scrollable'
+              allowScrollButtonsMobile={true}
+              value={type}
+            >
+              <LearningMaterialTabItem
+                label='저상/운수'
+                onClick={() => handleClickTab('normal')}
+                value='learning-guide'
+              />
+              <LearningMaterialTabItem
+                label='도민'
+                onClick={() => handleClickTab('traffic')}
+                value='education'
+              />
+            </LearningMaterialTabs> */}
             <Accordion accordionList={accordionList} />
           </List>
         </Box>
       </MuiDrawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
         {children}
       </Box>
     </Box>

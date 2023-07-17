@@ -49,20 +49,22 @@ export function CarNumberBox({ parantSetValue }: Props) {
   }, [watch().localName, watch().digit2, watch().digit4, watch().oneWord]);
 
   const Placeholder = ({ children }) => {
-    return <Box color="#bababa">{children}</Box>;
+    return <Box color='#bababa'>{children}</Box>;
   };
 
   return (
-    <Box display="flex" width="100%" gap={1}>
+    <Box display='flex' width='100%' gap={1}>
       <FormControl fullWidth>
         <Select
           {...register('localName')}
           displayEmpty
           renderValue={
-            watch().localName === '' ? () => <Placeholder>지역명</Placeholder> : undefined
+            watch().localName === ''
+              ? () => <Placeholder>지역명</Placeholder>
+              : undefined
           }
         >
-          {localList.map(item => (
+          {localList.map((item) => (
             <MenuItem key={item.type} value={item.title}>
               {item.title}
             </MenuItem>
@@ -71,13 +73,13 @@ export function CarNumberBox({ parantSetValue }: Props) {
       </FormControl>
       <TextField
         {...register('digit2')}
-        onChange={e => {
+        onChange={(e) => {
           // if (!regex4.test(e.target.value)) return;
           if (e.target.value.length > 2) return;
           setValue('digit2', e.target.value.replace(/[^0-9]/g, ''));
         }}
         value={watch().digit2}
-        placeholder="차종 번호2자리"
+        placeholder='차종 번호2자리'
         inputProps={{ inputMode: 'numeric' }}
         fullWidth
       />
@@ -90,9 +92,9 @@ export function CarNumberBox({ parantSetValue }: Props) {
               ? () => <Placeholder>용도기호 한글자</Placeholder>
               : undefined
           }
-          placeholder="용도 기호 한글 한글자"
+          placeholder='용도 기호 한글 한글자'
         >
-          {oneWordList.map(item => (
+          {oneWordList.map((item) => (
             <MenuItem key={item} value={item}>
               {item}
             </MenuItem>
@@ -101,13 +103,13 @@ export function CarNumberBox({ parantSetValue }: Props) {
       </FormControl>
       <TextField
         {...register('digit4')}
-        onChange={e => {
+        onChange={(e) => {
           // if (!regex4.test(e.target.value)) return;
           if (e.target.value.length > 4) return;
           setValue('digit4', e.target.value.replace(/[^0-9]/g, ''));
         }}
         value={watch().digit4}
-        placeholder="차량번호 4자리"
+        placeholder='차량번호 4자리'
         inputProps={{ inputMode: 'numeric' }}
         fullWidth
       />

@@ -4,7 +4,13 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Box, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import {
+  Box,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+} from '@mui/material';
 import { Link } from '@components/common';
 import { grey } from '@mui/material/colors';
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
@@ -22,42 +28,44 @@ interface AccordionList {
   }[];
 }
 
-export function Accordion({ accordionList }: { accordionList: AccordionList[] }) {
+export function Accordion({
+  accordionList,
+}: {
+  accordionList: AccordionList[];
+}) {
   return (
     <>
       {accordionList.map(({ date, name, icon, children }, idx) => (
         <MuiAccordion
           key={name}
-          disableGutters elevation={0}
+          disableGutters
+          elevation={0}
           sx={{
             '&:before': {
               display: 'none',
             },
           }}
         >
-          <AccordionSummary className='Asdasd'
+          <AccordionSummary
+            className='Asdasd'
             expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
+            aria-controls='panel1a-content'
             sx={{
               '&:hover': {
-                backgroundColor: grey[50]
-              }
+                backgroundColor: grey[50],
+              },
             }}
           >
             {icon}
-            <Box display="flex" flexDirection={"column"} width="100%" >
+            <Box display='flex' flexDirection={'column'} width='100%'>
               <Typography className='CategoryBoardTwo'>{name}</Typography>
             </Box>
           </AccordionSummary>
-          <AccordionDetails sx={{background:grey[100]}} >
-            <nav aria-label="secondary mailbox folders">
+          <AccordionDetails sx={{ background: grey[100] }}>
+            <nav aria-label='secondary mailbox folders'>
               <List disablePadding={true}>
                 {children.map(({ name, href, isActive }, idx) => (
-                  <Link
-                    href={href ? href : ''}
-                    color={grey[900]}
-                    key={name}
-                  >
+                  <Link href={href ? href : ''} color={grey[900]} key={name}>
                     <ListItem
                       disablePadding
                       sx={{
@@ -78,5 +86,3 @@ export function Accordion({ accordionList }: { accordionList: AccordionList[] })
     </>
   );
 }
-
-

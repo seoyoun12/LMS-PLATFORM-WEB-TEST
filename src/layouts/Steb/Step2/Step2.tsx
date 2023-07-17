@@ -44,10 +44,10 @@ interface Props {
 }
 
 interface FormType {
-  a: string;
-  b: string;
-  c: string;
-  d: string;
+  test01: string;
+  test02: string;
+  test03: string;
+  test04: string;
 }
 
 export default function Steb2({
@@ -223,6 +223,7 @@ export default function Steb2({
                 sx={{
                   width: '400px',
                 }}
+                aria-readonly
               ></TextField>
               <Typography sx={{ color: 'red' }}>
                 ※선택하신 교육과 일정을 확인해주세요.

@@ -28,51 +28,17 @@ import { courseClassEnrollInfo } from '@common/recoil';
 import { useRouter } from 'next/router';
 import { useSnackbar } from '@hooks/useSnackbar';
 
-interface Props {
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  openModal: boolean;
-  setModalInfo: React.Dispatch<
-    React.SetStateAction<ClickedPlanInfo | undefined>
-  >;
-  modalInfo: ClickedPlanInfo | undefined;
-  calendarRef: React.RefObject<FullCalendar>;
-  // CalendarEvent: CalendarEvent[];
-  filter: string;
-  schedule?: CourseClassRes[];
-  setValue: UseFormSetValue<UserTransSaveInputDataType>;
-  setFixedBusinessType: React.Dispatch<React.SetStateAction<userBusinessType>>;
-}
+// interface FormType {
+//   test01: string;
+//   test02: string;
+//   test03: string;
+//   test04: string;
+// }
 
-interface FormType {
-  test01: string;
-  test02: string;
-  test03: string;
-  test04: string;
-}
-
-export default function Steb2({
-  setOpenModal,
-  setModalInfo,
-  setValue,
-  setFixedBusinessType,
-  openModal,
-  modalInfo,
-  calendarRef,
-  filter,
-  schedule,
-}: Props) {
+export default function Steb2() {
   const [step, setStep] = useState(1);
 
-  const {
-    register,
-    handleSubmit,
-    // setValue,
-    formState: { errors },
-    control,
-    reset,
-    resetField,
-    watch,
-  } = useForm<FormType>();
+  // const {} = useForm<FormType>();
 
   // EduOverview.tsx 에서 가져온 코드
   // const enrollInfo = useRecoilValue(courseClassEnrollInfo);
@@ -98,45 +64,45 @@ export default function Steb2({
   const router = useRouter();
   const snackbar = useSnackbar();
   // const { data, error, mutate } = useSingleCourseClass(Number(enrollInfo && enrollInfo.seq));
-  const getSingleCourse = async (courseClassSeq: number) => {
-    try {
-      const { data } = await getSingleCourseClass(courseClassSeq);
-      console.log('교육신청 data', data);
-      console.log('교육시작일자 : ', data?.cancelAvailStartDate);
-      console.log('교육종료일자 : ', data?.cancelAvailEndDate);
+  // const getSingleCourse = async (courseClassSeq: number) => {
+  //   try {
+  //     const { data } = await getSingleCourseClass(courseClassSeq);
+  //     // console.log('교육신청 data', data);
+  //     // console.log('교육시작일자 : ', data?.cancelAvailStartDate);
+  //     // console.log('교육종료일자 : ', data?.cancelAvailEndDate);
 
-      setCourseCategoryType(
-        data.course.courseCategoryType as courseCategoryType
-      );
-      setCourseBusinessType(data.course.courseBusinessType as businessType); //임시타입
-      setValue(
-        'businessType',
-        data.course.courseBusinessType?.split('_')[1] ===
-          userBusinessType.PASSENGER
-          ? userBusinessType.PASSENGER
-          : userBusinessType.FREIGHT
-      ); //
-      setFixedBusinessType(
-        data.course.courseBusinessType.split('_')[1] ===
-          userBusinessType.PASSENGER
-          ? userBusinessType.PASSENGER
-          : userBusinessType.FREIGHT
-      ); //업체정보 운수구분 고정용(ALL안씀)
-      setStepSeq(data.seq);
-      setValues({
-        step: data.step,
-        studyStartDate: data.studyStartDate,
-        studyEndDate: data.studyEndDate,
-      }); //작동안하는듯한 코드확인필요
-      // setValue('businessType', data.course.courseCategoryType);
-    } catch (e: any) {
-      // snackbar({ variant: 'error', message: e.data.message });
-    }
-  };
+  //     setCourseCategoryType(
+  //       data.course.courseCategoryType as courseCategoryType
+  //     );
+  //     setCourseBusinessType(data.course.courseBusinessType as businessType); //임시타입
+  //     setValue(
+  //       'businessType',
+  //       data.course.courseBusinessType?.split('_')[1] ===
+  //         userBusinessType.PASSENGER
+  //         ? userBusinessType.PASSENGER
+  //         : userBusinessType.FREIGHT
+  //     ); //
+  //     setFixedBusinessType(
+  //       data.course.courseBusinessType.split('_')[1] ===
+  //         userBusinessType.PASSENGER
+  //         ? userBusinessType.PASSENGER
+  //         : userBusinessType.FREIGHT
+  //     ); //업체정보 운수구분 고정용(ALL안씀)
+  //     setStepSeq(data.seq);
+  //     setValues({
+  //       step: data.step,
+  //       studyStartDate: data.studyStartDate,
+  //       studyEndDate: data.studyEndDate,
+  //     }); //작동안하는듯한 코드확인필요
+  //     // setValue('businessType', data.course.courseCategoryType);
+  //   } catch (e: any) {
+  //     // snackbar({ variant: 'error', message: e.data.message });
+  //   }
+  // };
 
-  useEffect(() => {
-    if (enrollInfo) getSingleCourse(enrollInfo.seq);
-  }, [enrollInfo]);
+  // useEffect(() => {
+  //   if (enrollInfo) getSingleCourse(enrollInfo.seq);
+  // }, [enrollInfo]);
 
   // useEffect(() => {
   //   if (data) {

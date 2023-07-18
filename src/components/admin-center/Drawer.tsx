@@ -354,7 +354,7 @@ export function Drawer({ children }: { children: ReactNode }) {
                 <ListItemText primary="대시보드" />
               </ListItem>
             </Link> */}
-            <LearningMaterialTabs
+            {/* <LearningMaterialTabs
               variant='scrollable'
               allowScrollButtonsMobile={true}
               value={type}
@@ -369,7 +369,7 @@ export function Drawer({ children }: { children: ReactNode }) {
                 onClick={() => handleClickTab('traffic')}
                 value='education'
               />
-            </LearningMaterialTabs>
+            </LearningMaterialTabs> */}
             <Accordion accordionList={accordionList} />
           </List>
         </Box>

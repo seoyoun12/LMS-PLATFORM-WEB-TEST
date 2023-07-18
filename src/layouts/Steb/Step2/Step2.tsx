@@ -209,8 +209,9 @@ export default function Steb2() {
         return (
           <FormControl fullWidth>
             <StebTwoBox>
-              <Typography>운수 업종을 선택해주세요.</Typography>
-            </StebTwoBox>
+              <Typography>운수요.</Typography>
+            </StebTwoBox>{' '}
+            업종을 선택해주세
           </FormControl>
         );
       case 3:

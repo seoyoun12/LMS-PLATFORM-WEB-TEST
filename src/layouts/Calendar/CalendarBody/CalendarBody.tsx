@@ -326,8 +326,8 @@ export function CalendarBody({
                   window.alert('로그인이 필요한 서비스입니다.');
                   return router.push({
                     pathname: '/sign-in',
-                    query: { redirect: `stebMove/steb2` },
-                    // query: { redirect: `stebMove/step2` },
+                    // query: { redirect: `stebMove/steb2` },
+                    query: { redirect: `stebMove/step2` },
                   });
                 }
 
@@ -345,8 +345,8 @@ export function CalendarBody({
                   setLoading(false);
                   return window.alert('오류입니다! 관리자에게 문의해주세요.');
                 }
-                router.push('/stebMove/steb2');
-                // router.push('/stebMove/step2');
+                // router.push('/stebMove/steb2');
+                router.push('/stebMove/step2');
                 setLoading(false);
               }}
               disabled={loading}

@@ -133,7 +133,7 @@ export default function Steb2() {
   //
 
   const handleStepIncrease = () => {
-    if (step < 3) {
+    if (step < 8) {
       setStep(step + 1);
     }
   };
@@ -215,6 +215,17 @@ export default function Steb2() {
         );
       case 3:
         return <StebThreeBox>여긴스탭2-3이야</StebThreeBox>;
+      case 4:
+        return <StebThreeBox>여긴스탭2-4이야</StebThreeBox>;
+      case 5:
+        return <StebThreeBox>여긴스탭2-5이야</StebThreeBox>;
+      case 6:
+        return <StebThreeBox>여긴스탭2-6이야</StebThreeBox>;
+      case 7:
+        return <StebThreeBox>여긴스탭2-7이야</StebThreeBox>;
+      case 8:
+        return <StebThreeBox>여긴스탭2-8이야</StebThreeBox>;
+
       default:
         return null;
     }

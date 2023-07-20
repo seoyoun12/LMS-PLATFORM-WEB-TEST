@@ -36,7 +36,6 @@
     "date-fns": "^2.29.2",
     "dateformat": "^5.0.3",
     "embla-carousel-react": "^7.0.3",
-    "expo": "^49.0.3",
     "intersection-observer": "^0.12.2",
     "next": "^12.2.3",
     "next-transpile-modules": "^9.0.0",

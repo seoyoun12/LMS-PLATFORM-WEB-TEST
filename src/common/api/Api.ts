@@ -3027,20 +3027,6 @@ export interface ExamDetailResponseDto {
   subScore?: number;
 }
 
-export interface ExamExamSubjectiveResultUpdateRequestDto {
-  /** 평가 의견 */
-  feedback?: string;
-
-  /**
-   * 점수
-   * @format double
-   */
-  score?: number;
-
-  /** 임시 저장 상태 */
-  temporaryYn?: string;
-}
-
 export interface ExamFindUserDetailResponseDto {
   /** 정답 */
   answer?: string;
@@ -3762,6 +3748,20 @@ export interface ExamSubjectiveResultResponseDto {
    * @format int32
    */
   status?: number;
+
+  /** 임시 저장 상태 */
+  temporaryYn?: string;
+}
+
+export interface ExamSubjectiveResultUpdateRequestDto {
+  /** 평가 의견 */
+  feedback?: string;
+
+  /**
+   * 점수
+   * @format double
+   */
+  score?: number;
 
   /** 임시 저장 상태 */
   temporaryYn?: string;
@@ -4888,8 +4888,17 @@ export interface LessonDetailResponseDto {
   /** 파일 이름 */
   fileName?: string;
 
+  /**
+   * 퀴즈를 보여줄지 말지
+   * @example true
+   */
+  interaction?: boolean;
+
   /** 레슨 이름 */
   lessonNm?: string;
+
+  /** 레슨에 붙어있는 퀴즈들 */
+  lessonQuizs?: LessonQuizResponseDto[];
 
   /**
    * 총 시간 분 단위 파트
@@ -4945,6 +4954,180 @@ export interface LessonDetailResponseDto {
   totalTime?: number;
 }
 
+export interface LessonQuizResponseDto {
+  /** 알람 기능 본문 */
+  alarmContent?: string;
+
+  /** 정답 */
+  answer?: string;
+
+  /** 퀴즈 정답 풀이 */
+  feedback?: string;
+
+  /** 보기 1 */
+  item1?: string;
+
+  /** 보기 2 */
+  item2?: string;
+
+  /** 보기 3 */
+  item3?: string;
+
+  /** 보기 4 */
+  item4?: string;
+
+  /** OX 퀴즈 O */
+  itemO?: string;
+
+  /** OX 퀴즈 X */
+  itemX?: string;
+
+  /**
+   * 레슨 퀴즈 시퀀스
+   * @format int64
+   */
+  lessonQuizSeq?: number;
+
+  /** 레슨 퀴즈 타입 */
+  lessonQuizTypeEnum?: "ALARM" | "MULTIPLE_CHOICE" | "OX_QUIZ";
+
+  /**
+   * 레슨 시퀀스
+   * @format int64
+   */
+  lessonSeq?: number;
+
+  /** 퀴즈 본문 데이터 */
+  quizContent?: string;
+
+  /** 무작위 시간 설정 */
+  randomTime?: boolean;
+
+  /**
+   * 시간 설정(min)
+   * @format int32
+   */
+  setTimeMin?: number;
+
+  /**
+   * 시간 설정(second)
+   * @format int32
+   */
+  setTimeSecond?: number;
+}
+
+export interface LessonQuizSaveRequestDto {
+  /** 알람 기능 본문 */
+  alarmContent?: string;
+
+  /** 정답 */
+  answer?: string;
+
+  /** 퀴즈 정답 풀이 */
+  feedback?: string;
+
+  /** 보기 1 */
+  item1?: string;
+
+  /** 보기 2 */
+  item2?: string;
+
+  /** 보기 3 */
+  item3?: string;
+
+  /** 보기 4 */
+  item4?: string;
+
+  /** OX 퀴즈 O */
+  itemO?: string;
+
+  /** OX 퀴즈 X */
+  itemX?: string;
+
+  /** 레슨 퀴즈 타입 */
+  lessonQuizTypeEnum?: "ALARM" | "MULTIPLE_CHOICE" | "OX_QUIZ";
+
+  /**
+   * 레슨 시퀀스
+   * @format int64
+   */
+  lessonSeq?: number;
+
+  /** 퀴즈 본문 데이터 */
+  quizContent?: string;
+
+  /** 무작위 시간 설정 */
+  randomTime?: boolean;
+
+  /**
+   * 시간 설정(min)
+   * @format int32
+   */
+  setTimeMin?: number;
+
+  /**
+   * 시간 설정(second)
+   * @format int32
+   */
+  setTimeSecond?: number;
+}
+
+export interface LessonQuizUpdateRequestDto {
+  /** 알람 기능 본문 */
+  alarmContent?: string;
+
+  /** 정답 */
+  answer?: string;
+
+  /** 퀴즈 정답 풀이 */
+  feedback?: string;
+
+  /** 보기 1 */
+  item1?: string;
+
+  /** 보기 2 */
+  item2?: string;
+
+  /** 보기 3 */
+  item3?: string;
+
+  /** 보기 4 */
+  item4?: string;
+
+  /** OX 퀴즈 O */
+  itemO?: string;
+
+  /** OX 퀴즈 X */
+  itemX?: string;
+
+  /** 레슨 퀴즈 타입 */
+  lessonQuizTypeEnum?: "ALARM" | "MULTIPLE_CHOICE" | "OX_QUIZ";
+
+  /**
+   * 레슨 시퀀스
+   * @format int64
+   */
+  lessonSeq?: number;
+
+  /** 퀴즈 본문 데이터 */
+  quizContent?: string;
+
+  /** 무작위 시간 설정 */
+  randomTime?: boolean;
+
+  /**
+   * 시간 설정(min)
+   * @format int32
+   */
+  setTimeMin?: number;
+
+  /**
+   * 시간 설정(second)
+   * @format int32
+   */
+  setTimeSecond?: number;
+}
+
 export interface LessonResponseDto {
   /**
    * 정렬 (1차시, 2차시 ... N차시)
@@ -4978,8 +5161,17 @@ export interface LessonResponseDto {
   /** 파일 이름 */
   fileName?: string;
 
+  /**
+   * 퀴즈를 보여줄지 말지
+   * @example true
+   */
+  interaction?: boolean;
+
   /** 레슨 이름 */
   lessonNm?: string;
+
+  /** 레슨에 붙어있는 퀴즈들 */
+  lessonQuizs?: LessonQuizResponseDto[];
 
   /**
    * 총 시간 분 단위 파트
@@ -5059,6 +5251,12 @@ export interface LessonSaveRequestDto {
   /** 레슨 타입 */
   contentType?: "CONTENT_HTML" | "CONTENT_MP4" | "CONTENT_EXTERNAL";
 
+  /**
+   * 퀴즈를 보여줄지 말지
+   * @example true
+   */
+  interaction?: boolean;
+
   /** 레슨 이름 */
   lessonNm?: string;
 
@@ -5113,6 +5311,12 @@ export interface LessonUpdateRequestDto {
   /** 레슨 타입 */
   contentType?: "CONTENT_HTML" | "CONTENT_MP4" | "CONTENT_EXTERNAL";
   file?: File[];
+
+  /**
+   * 퀴즈를 보여줄지 말지
+   * @example true
+   */
+  interaction?: boolean;
 
   /** 레슨 이름 */
   lessonNm?: string;
@@ -9251,6 +9455,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
+     * @description 관리자페이지에서 학습 현황(도민) 탭에 대한 데이터를 엑셀로 다운로드한다. 현재 전체회원(도민)에 대한 엑셀다운로드이다. 추후에 필터기능이들어가서 부분적인 회원(도민)에대한 학습현황 엑셀다운로드를하고 싶다면 <b>추가 개발요망</b>
+     *
+     * @tags [관리자] Excel 파일 다운로드 API
+     * @name DownloadExcelOfProvincialLearningStatusUsingPost
+     * @summary [관리자] 도민 학습현황 엑셀 다운로드
+     * @request POST:/adm/excel/download/provincial-learning-status
+     */,
+    downloadExcelOfProvincialLearningStatusUsingPost: (params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<void>, any>({
+        path: `/adm/excel/download/provincial-learning-status`,
+        method: "POST",
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
      * @description 특정 설문에 대한 설문 결과를 엑셀로 다운로드한다. 이때, 해당 설문에 대하여 등록된 과정들의 기수를 조회하는 API 를 통해 얻은 과정 클래스 시퀀스를 활용하여 특정 기수에 대한 설문 결과를 조회할 수 있다. <b>courseClassSeq 가 null 이거나, 없을 경우 전체 조회로 동작한다.</b> 이때, courseClassSeq 가 null 이 아니나, zipYn 은 Y 일 경우 400 예외를 발생시킨다.
      *
      * @tags [관리자] Excel 파일 다운로드 API
@@ -10678,13 +10897,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */,
     updateExamSubjectUsingPut: (
       examSubjectSeq: number,
-      examExamSubjectiveResultUpdateRequestDto: ExamExamSubjectiveResultUpdateRequestDto,
+      examSubjectiveResultUpdateRequestDto: ExamSubjectiveResultUpdateRequestDto,
       params: RequestParams = {},
     ) =>
       this.request<ApiResponseWrapper<ExamMultipleChoiceResultResponseDto>, void>({
         path: `/exam-subject/${examSubjectSeq}`,
         method: "PUT",
-        body: examExamSubjectiveResultUpdateRequestDto,
+        body: examSubjectiveResultUpdateRequestDto,
         type: ContentType.Json,
         ...params,
       }),
@@ -11099,6 +11318,67 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     indexUsingGet: (params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<string>, any>({
         path: `/example/pdf/index`,
+        method: "GET",
+        ...params,
+      })
+    /**
+     * @description React Query Post 테스트
+     *
+     * @tags 실험장 API
+     * @name QueryPostUsingPost
+     * @summary [실험] React Query Post Test API
+     * @request POST:/example/reactquery/test
+     */,
+    queryPostUsingPost: (testext: string, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<InputStream>, any>({
+        path: `/example/reactquery/test`,
+        method: "POST",
+        body: testext,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description React Query Put 테스트
+     *
+     * @tags 실험장 API
+     * @name QueryPutUsingPut
+     * @summary [실험] React Query Put Test API
+     * @request PUT:/example/reactquery/test
+     */,
+    queryPutUsingPut: (testext: string, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<InputStream>, any>({
+        path: `/example/reactquery/test`,
+        method: "PUT",
+        body: testext,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description React Query Delete 테스트
+     *
+     * @tags 실험장 API
+     * @name QueryDeleteUsingDelete
+     * @summary [실험] React Query Delete Test API
+     * @request DELETE:/example/reactquery/test
+     */,
+    queryDeleteUsingDelete: (testext: string, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<InputStream>, any>({
+        path: `/example/reactquery/test`,
+        method: "DELETE",
+        body: testext,
+        ...params,
+      })
+    /**
+     * @description React Query Get 테스트
+     *
+     * @tags 실험장 API
+     * @name QueryGetUsingGet
+     * @summary [실험] React Query Get Test API
+     * @request GET:/example/reactquery/test/{data}
+     */,
+    queryGetUsingGet: (data: string, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<InputStream>, any>({
+        path: `/example/reactquery/test/${data}`,
         method: "GET",
         ...params,
       })
@@ -11835,20 +12115,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 관리자 권한으로 Lesson 의 시퀀스를 전달받아 해당 Lesson 을 단건 조회한다.
-     *
-     * @tags [관리자] 레슨 API
-     * @name FindLessonUsingGet
-     * @summary [관리자] 레슨 단건 조회 API
-     * @request GET:/lesson/adm/detail/{lessonSeq}
-     */,
-    findLessonUsingGet: (lessonSeq: number, params: RequestParams = {}) =>
-      this.request<ApiResponseWrapper<LessonDetailResponseDto>, void>({
-        path: `/lesson/adm/detail/${lessonSeq}`,
-        method: "GET",
-        ...params,
-      })
-    /**
      * @description 관리자 권한으로 Lesson 의 시퀀스를 Path Variable 로 전달받아 해당 Lesson 을 수정한다.{ "completeTime": 1532 -> 수료시간, "lessonNm": "string" -> 레슨 이름, "lessonType": 0 -> 레슨 타입 Enum, "chapter": 3 -> 차시, "status": 1 -> 사용 여부, "totalPage": 12 -> 전체 페이지, "totalTime": 1532 -> 총 시간 }
      *
      * @tags [관리자] 레슨 API
@@ -11869,20 +12135,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 관리자 권한으로 콘텐트의 seq 를 Path Variable 로 전달받아 해당 콘텐트에 해당하는 전체 Lesson 을 chapter(차시) 순으로 조회한다.
-     *
-     * @tags [관리자] 레슨 API
-     * @name FindLessonsUsingGet
-     * @summary [관리자] 레슨 전체 조회 API
-     * @request GET:/lesson/adm/{contentSeq}
-     */,
-    findLessonsUsingGet: (contentSeq: number, params: RequestParams = {}) =>
-      this.request<ApiResponseWrapper<LessonResponseDto[]>, void>({
-        path: `/lesson/adm/${contentSeq}`,
-        method: "GET",
-        ...params,
-      })
-    /**
      * @description 관리자 권한으로 contentSeq 를 PathVar 로, DTO를 Body 로 전달받아 Lesson 을 일괄 생성한다.<br/><b>일괄 생성의 경우, DTO 내의 contentSeq 는 비우거나 삭제해도 무관하다.</b> 만일, 운영되고 있는(courseuser 가 존재하는 경우) 과정에 대한 콘텐츠라면 등록이 불가능하다.
      *
      * @tags [관리자] 레슨 API
@@ -11900,6 +12152,118 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "POST",
         body: lessonSaveRequestDtoList,
         type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 관리자 권한으로 Lesson 의 시퀀스를 전달받아 해당 Lesson 을 단건 조회한다.
+     *
+     * @tags [관리자] 레슨 API
+     * @name FindLessonUsingGet
+     * @summary [관리자] 레슨 단건 조회 API
+     * @request GET:/lesson/detail/{lessonSeq}
+     */,
+    findLessonUsingGet: (lessonSeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<LessonDetailResponseDto>, void>({
+        path: `/lesson/detail/${lessonSeq}`,
+        method: "GET",
+        ...params,
+      })
+    /**
+     * @description 관리자 권한으로 Lesson 의 시퀀스를 전달받아 해당 Lesson 을 단건 조회 후 해당 Lesson 에 퀴즈를 등록한다.
+     *
+     * @tags [관리자] 레슨 퀴즈 API
+     * @name CreateLessonQuizUsingPost
+     * @summary [관리자] 레슨 퀴즈 생성 API
+     * @request POST:/lesson/quiz/adm
+     */,
+    createLessonQuizUsingPost: (
+      query: { lessonSeq: number },
+      lessonQuizSaveRequestDto: LessonQuizSaveRequestDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<InputStream>, void>({
+        path: `/lesson/quiz/adm`,
+        method: "POST",
+        query: query,
+        body: lessonQuizSaveRequestDto,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 퀴즈 시퀀스를 전달 받아 퀴즈 정보를 삭제한다.
+     *
+     * @tags [관리자] 레슨 퀴즈 API
+     * @name DeleteQuizUsingDelete
+     * @summary [관리자] 퀴즈 삭제 API
+     * @request DELETE:/lesson/quiz/adm
+     */,
+    deleteQuizUsingDelete: (query: { lessonQuizSeq: number }, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<LessonQuizResponseDto>, void>({
+        path: `/lesson/quiz/adm`,
+        method: "DELETE",
+        query: query,
+        ...params,
+      })
+    /**
+     * @description 퀴즈 시퀀스 및 수정 DTO 를 전달 받아 퀴즈 정보를 수정한다.
+     *
+     * @tags [관리자] 레슨 퀴즈 API
+     * @name UpdateQuizUsingPut
+     * @summary [관리자] 퀴즈 수정 API
+     * @request PUT:/lesson/quiz/adm/{lessonQuizSeq}
+     */,
+    updateQuizUsingPut: (
+      lessonQuizSeq: number,
+      lessonQuizUpdateRequestDto: LessonQuizUpdateRequestDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<LessonQuizResponseDto>, void>({
+        path: `/lesson/quiz/adm/${lessonQuizSeq}`,
+        method: "PUT",
+        body: lessonQuizUpdateRequestDto,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 퀴즈 시퀀스를 전달받아 퀴즈를 단건 조회 한다.
+     *
+     * @tags [관리자] 레슨 퀴즈 API
+     * @name FindQuizUsingGet
+     * @summary [관리자] 퀴즈 단건 조회 API
+     * @request GET:/lesson/quiz/{lessonQuizSeq}
+     */,
+    findQuizUsingGet: (lessonQuizSeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<LessonQuizResponseDto>, void>({
+        path: `/lesson/quiz/${lessonQuizSeq}`,
+        method: "GET",
+        ...params,
+      })
+    /**
+     * @description lesson 의 시퀀스를 전달받아 해당 lesson 에 등록된 퀴즈들을 조회한다.
+     *
+     * @tags [관리자] 레슨 퀴즈 API
+     * @name FindQuizOfLessonUsingGet
+     * @summary [관리자] 레슨에 관한 퀴즈 전체 조회 API
+     * @request GET:/lesson/quiz/{lessonSeq}
+     */,
+    findQuizOfLessonUsingGet: (lessonSeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<LessonQuizResponseDto[]>, void>({
+        path: `/lesson/quiz/${lessonSeq}`,
+        method: "GET",
+        ...params,
+      })
+    /**
+     * @description 관리자 권한으로 콘텐트의 seq 를 Path Variable 로 전달받아 해당 콘텐트에 해당하는 전체 Lesson 을 chapter(차시) 순으로 조회한다.
+     *
+     * @tags [관리자] 레슨 API
+     * @name FindLessonsUsingGet
+     * @summary [관리자] 레슨 전체 조회 API
+     * @request GET:/lesson/{contentSeq}
+     */,
+    findLessonsUsingGet: (contentSeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<LessonResponseDto[]>, void>({
+        path: `/lesson/${contentSeq}`,
+        method: "GET",
         ...params,
       }),
   };

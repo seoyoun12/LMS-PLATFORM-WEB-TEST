@@ -20,6 +20,42 @@ import { LessonContentVideoModal } from './LessonContentVideoModal';
 
 const PLAYER_ELEMENT_ID = 'lesson-player' as const;
 
+export interface IQuiz {
+  alarmContent: string;
+  answer: string;
+  feedback: string;
+  item1: string;
+  item2: string;
+  item3: string;
+  item4: string;
+  itemO: string;
+  itemX: string;
+  lessonQuizTypeEnum: string;
+  lessonSeq: number;
+  quizContent: string;
+  randomTime: boolean;
+  setTimeMin: number;
+  setTimeSecond: number;
+}
+
+const dummy_quiz: IQuiz[] = [{
+  "alarmContent": "고속도로 1차선은 OO차선이다.",
+  "answer": "추월",
+  "feedback": "고속도로 1차선에서 정속주행금지",
+  "item1": "정지",
+  "item2": "추월",
+  "item3": "정속",
+  "item4": "급행",
+  "itemO": "O",
+  "itemX": "X",
+  "lessonQuizTypeEnum": "ALARM",
+  "lessonSeq": 420,
+  "quizContent": "고속도로 1차선은 OO차선이다.",
+  "randomTime": true,
+  "setTimeMin": 0,
+  "setTimeSecond": 0
+}]
+
 interface Props {
   coursePlayFirst?: boolean;
   courseUserSeq: number;
@@ -36,19 +72,16 @@ export default function LessonContentVideo(props: Props) {
   const [lessonVideoInfo, setLessonVideoInfo] = useRecoilState(learningStatus); //헤더 학습종료를 위한 리코일
 
   // 스테이트.
-
   const [progress, setProgress] = React.useState<number>(0);
 
   // 레퍼런스.
-
   const prevCourseUserSeq = React.useRef<number | null>(null);
   const prevCourseProgress = React.useRef<CourseProgressResponseDto | null>(
     null
   );
+
   const prevLesson = React.useRef<LessonDetailClientResponseDto | null>(null);
-
   const currentLessonSeq = React.useRef<number | null>(null);
-
   const apiTimer = React.useRef<number | null>(null);
   const apiSeconds = React.useRef<number>(0);
   const apiVideoSeconds = React.useRef<number>(0);
@@ -63,7 +96,6 @@ export default function LessonContentVideo(props: Props) {
   const videoIsFinished = React.useRef<boolean>(false);
 
   // 콜백
-
   const updateProgress = React.useCallback(() => {
     const seconds = props.courseProgress.studyTime + videoPlayedSeconds.current;
     setProgress(
@@ -83,14 +115,8 @@ export default function LessonContentVideo(props: Props) {
         window.clearInterval(apiTimer.current);
 
         if (mode !== 'RESET') {
-          if (
-            (mode === 'CURRENT' &&
-              (props.lesson === null ||
-                props.courseProgress.courseProgressSeq === null)) ||
-            (mode === 'PREV' &&
-              props.courseUserSeq === prevCourseUserSeq.current &&
-              props.lesson.seq === prevLesson.current.seq)
-          )
+          if ((mode === 'CURRENT' && (props.lesson === null || props.courseProgress.courseProgressSeq === null))
+            ||(mode === 'PREV' && props.courseUserSeq === prevCourseUserSeq.current && props.lesson.seq === prevLesson.current.seq))
             return;
 
           if (mode === 'CURRENT') {
@@ -136,10 +162,10 @@ export default function LessonContentVideo(props: Props) {
       apiTimer.current = null;
       apiSeconds.current = 0;
       apiVideoSeconds.current = 0;
-    },
-    [props]
-  );
+    },[props]);
 
+
+    
   const startTimer = React.useCallback(() => {
     stopTimer('RESET');
 
@@ -208,11 +234,7 @@ export default function LessonContentVideo(props: Props) {
   }, []);
   // 재생
   const onPlaying = React.useCallback(() => {
-    if (
-      props.lesson === null ||
-      props.courseProgress.courseProgressSeq === null
-    )
-      return;
+    if ( props.lesson === null || props.courseProgress.courseProgressSeq === null) return;
 
     if (videoIsFirst.current) {
       ApiClient.courseLog.createCourseModulesUsingPost1({
@@ -222,7 +244,6 @@ export default function LessonContentVideo(props: Props) {
       });
 
       videoIsFirst.current = false;
-
       startTimer();
     }
 
@@ -249,6 +270,8 @@ export default function LessonContentVideo(props: Props) {
 
   // 전체화면이었는지 아닌지
   const [isFullScreen, setIsFullScreen] = useState(false);
+
+
   const handleCloseModal = async () => {
     setOpenModal(false);
     // 모달 종료시 다시
@@ -264,20 +287,20 @@ export default function LessonContentVideo(props: Props) {
       if (time === videoCurrentSeconds.current) return;
 
       // 시간되면 정지 후 모달
-      // if (time === 3) {
-      //   // Ncplayer.pause();
-      //   // onPause();
-      //   videoPlayer.current?.pause();
-      //   // 전체화면에서 모달이 뜰시 전체화면 해제
-      //   // 동작안함
-      //   // alert('3초');
-      //   // 일시정지 하는 코드를 넣어줘
-      //   if (document.fullscreenElement !== null) {
-      //     videoPlayer.current?.fullscreen(false);
-      //     setIsFullScreen(true);
-      //   }
-      //   setOpenModal(true);
-      // }
+      if (time === 3) {
+        // videoPlayer.current.pause();
+        // onPause();
+        videoPlayer.current?.pause();
+        // 전체화면에서 모달이 뜰시 전체화면 해제
+        // 동작안함
+        // alert('3초');
+        // 일시정지 하는 코드를 넣어줘
+        if (document.fullscreenElement !== null) {
+          videoPlayer.current?.fullscreen(false);
+          setIsFullScreen(true);
+        }
+        setOpenModal(true);
+      }
       if (
         time !== videoCurrentSeconds.current + 1 ||
         videoIsPaused.current ||
@@ -324,6 +347,7 @@ export default function LessonContentVideo(props: Props) {
 
   React.useEffect(() => {
     if (!props.coursePlayFirst && videoPlayer.current)
+    
       videoPlayer.current.play();
   }, [props.coursePlayFirst]);
 
@@ -345,11 +369,9 @@ export default function LessonContentVideo(props: Props) {
     videoIsPaused.current = true;
     videoIsFirst.current = true;
     videoIsFinished.current = false;
-
     prevCourseUserSeq.current = props.courseUserSeq;
     prevCourseProgress.current = props.courseProgress;
     prevLesson.current = props.lesson;
-
     currentLessonSeq.current = props.lesson.seq;
 
     updateProgress();
@@ -378,8 +400,9 @@ export default function LessonContentVideo(props: Props) {
         {/* 비디오플레이어위치 */}
         <VideoContentPlayerWrapper>
           <LessonContentVideoModal
-            open={openModal}
+            open={openModal} // openModal  
             handleClose={handleCloseModal}
+            dummy_quiz={dummy_quiz}
           />
           <VideoPlayer
             playlist={props.lesson.s3Files[0]?.path}

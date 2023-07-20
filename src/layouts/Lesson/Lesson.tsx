@@ -243,7 +243,6 @@ export default function Lesson(props: LessonProps) {
           </DialogActions>
         </Dialog>
       );
-
       break;
     }
     case 'SURVEY': {

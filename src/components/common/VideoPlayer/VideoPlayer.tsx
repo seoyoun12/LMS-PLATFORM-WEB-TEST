@@ -56,7 +56,7 @@ export function VideoPlayer(props: Props) {
   );
 
   // 이펙트.
-
+  
   React.useLayoutEffect(() => {
     if (!scriptLoaded || !window.ncplayer) return;
 
@@ -138,13 +138,9 @@ export function VideoPlayer(props: Props) {
             const minutes = parseInt(timeSplit[timeSplit.length - 2]);
             const seconds = parseInt(timeSplit[timeSplit.length - 2 + 1]);
 
-            if (
-              !Number.isNaN(hours) &&
-              !Number.isNaN(minutes) &&
-              !Number.isNaN(seconds)
-            )
+            if (!Number.isNaN(hours) &&!Number.isNaN(minutes) &&!Number.isNaN(seconds))
               props.onTimeChange(hours * 60 * 60 + minutes * 60 + seconds);
-            console.log('현재 동영상 시간:', currentTimeNode);
+              console.log('현재 동영상 시간:', currentTimeNode);
           });
         });
         playerTimeObserver.current.observe(currentTimeNode, {
@@ -164,7 +160,7 @@ export function VideoPlayer(props: Props) {
   // }, [props.videoIsPaused, player.current]);
 
   // 렌더링.
-
+  // console.log(window.ncplayer);
   return (
     <>
       <Script
@@ -180,6 +176,7 @@ export function VideoPlayer(props: Props) {
     </>
   );
 }
+
 
 const Player = styled.div<{ showControl?: boolean }>`
   width: 100%;

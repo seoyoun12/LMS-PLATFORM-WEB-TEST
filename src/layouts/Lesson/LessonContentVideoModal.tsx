@@ -1,8 +1,10 @@
 import { ModalQuiz } from '@components/ui/Modal';
+import { IQuiz } from './LessonContentVideo';
 interface Props {
   open: boolean;
   courseSeq?: number;
   handleClose: () => void;
+  dummy_quiz: IQuiz[]
 }
 const headRows: {
   name: string;
@@ -17,6 +19,7 @@ export function LessonContentVideoModal({
   open,
   handleClose,
   courseSeq,
+  dummy_quiz
 }: Props) {
   return (
     <ModalQuiz
@@ -26,6 +29,7 @@ export function LessonContentVideoModal({
       open={open}
       onClose={handleClose}
       onCloseModal={handleClose}
+      dummy_quiz={dummy_quiz}
       fullWidth
     />
   );

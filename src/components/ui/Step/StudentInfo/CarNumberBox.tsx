@@ -28,11 +28,9 @@ interface FormType {
 }
 
 export function CarNumberBox({ parantSetValue }: Props) {
-  const { watch, setValue, register } = useForm<FormType>({
-    defaultValues: { localName: '', digit2: '', oneWord: '', digit4: '' },
-  });
-  const [err, setErr] = useState(false);
+  const { watch, setValue, getValues, register } = useForm<FormType>();
 
+  const [err, setErr] = useState(false);
   const regFunc = () => {
     const { localName, digit2, oneWord, digit4 } = watch();
     const carNumber = localName + digit2 + oneWord + digit4;
@@ -43,7 +41,6 @@ export function CarNumberBox({ parantSetValue }: Props) {
     setErr(false);
     parantSetValue('carNumber', carNumber);
   };
-
   useEffect(() => {
     regFunc();
   }, [watch().localName, watch().digit2, watch().digit4, watch().oneWord]);
@@ -58,11 +55,12 @@ export function CarNumberBox({ parantSetValue }: Props) {
         <Select
           {...register('localName')}
           displayEmpty
-          renderValue={
-            watch().localName === ''
-              ? () => <Placeholder>지역명</Placeholder>
-              : undefined
-          }
+          renderValue={ !watch().localName && (() => <Placeholder>지역명</Placeholder>) }
+          placeholder='지역명'
+          onChange={e => {
+            setValue('localName',e.target.value)
+            console.log('watch is',watch())
+          }}
         >
           {localList.map((item) => (
             <MenuItem key={item.type} value={item.title}>
@@ -87,12 +85,9 @@ export function CarNumberBox({ parantSetValue }: Props) {
         <Select
           {...register('oneWord')}
           displayEmpty
-          renderValue={
-            watch().oneWord === ''
-              ? () => <Placeholder>용도기호 한글자</Placeholder>
-              : undefined
-          }
+          renderValue={ !watch().oneWord && (() => <Placeholder>지역명</Placeholder>) }
           placeholder='용도 기호 한글 한글자'
+          value={watch().oneWord}
         >
           {oneWordList.map((item) => (
             <MenuItem key={item} value={item}>

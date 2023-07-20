@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { transIndividualSummary } from '@utils/individualSummaries';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { getTerms } from '@common/api/terms';
@@ -27,8 +26,8 @@ export function IndividualSummary({ setIsIndividualCheck, isIndividualCheck }: P
   return (
     <IndividualSummaryWrap mt={2}>
       <SummaryBox>
-        {data.split('\n').map(item => (
-          <Box>{item}</Box>
+        {data.split('\n').map((item,index) => (
+          <Box key={index}>{item}</Box>
         ))}
       </SummaryBox>
       <Box
@@ -41,11 +40,11 @@ export function IndividualSummary({ setIsIndividualCheck, isIndividualCheck }: P
         sx={{ cursor: 'pointer' }}
         className="scroll-to-box"
       >
-        {isIndividualCheck ? (
-          <RadioButtonCheckedIcon sx={{ color: '#3498db' }} />
-        ) : (
-          <RadioButtonUncheckedIcon sx={{ color: '#b1b1b1' }} />
-        )}
+        {
+        isIndividualCheck
+        ? <RadioButtonCheckedIcon sx={{ color: '#3498db' }} />
+        : <RadioButtonUncheckedIcon sx={{ color: '#b1b1b1' }} />
+        }
         <Typography ml={1}>개인정보 수집 및 이용 동의합니다</Typography>
         <EssentialWord ml={0.5}>(필수)</EssentialWord>
       </Box>

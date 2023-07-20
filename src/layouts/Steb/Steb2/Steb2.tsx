@@ -71,8 +71,9 @@ export default function Steb2() {
   const [secondIdentityNumber, setSecondidentityNumber] = useState<string>(); //주민뒷
   const [err, setErr] = useState(false);
   const { user, error } = useMyUser();
+
   const { register, setValue, getValues, watch } = useForm<UserTransSaveInputDataType>({
-    defaultValues: { firstIdentityNumber: '', secondIdentityNumber: '', smsYn: YN.YES },
+    defaultValues: { firstIdentityNumber: '', secondIdentityNumber: '', smsYn: YN.YES,firstPhone:'',secondPhone:'',thirdPhone:'' },
   });
   const { watch:carWatch, setValue:carSetValue, getValues:carGetValues, register: carRegister } = useForm<FormType>({
     defaultValues: { digit2:'', digit4:'', localName:'', oneWord:'' }
@@ -186,7 +187,7 @@ export default function Steb2() {
         return snackbar({ variant: 'error', message: '업종구분을 선택해주세요!' });
       }
     }
-    if (rest.businessName === '' || !rest.businessName) {
+    if (!disabledCompany && !rest.businessName) {
       setCurrentIndex(3);
       return snackbar({ variant: 'error', message: '회사명을 입력해주세요!' });
     }
@@ -635,52 +636,52 @@ export default function Steb2() {
         { currentIndex === 7 &&
           <StepCard nextStepAbled={getValues().firstPhone?.length + getValues().secondPhone?.length + getValues().thirdPhone?.length > 10} comment='휴대전화 번호를 입력해주세요' index={currentIndex} nextStep={nextStep} prevStep={prevStep}>
             <Box display='flex' gap='1rem' justifyContent='flex-start'>
-                   <FormControl sx={{ width:'90%' }}>
-                  <Select
-                    labelId="phone-type-label"
-                    id="phone-type"
-                    {...register('firstPhone')}
-                    onChange={e => setValue('firstPhone', e.target.value)}
-                    value={getValues().firstPhone || ''}
-                  >
-                    {phoneList.map(item => (
-                      <MenuItem key={item} value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <TextField
-                  // {...register('secondPhone')}
-                  value={getValues().secondPhone || ''}
-                  onChange={e => {
-                    if (Phone4Regex.test(e.target.value)) return;
-                    setValue('secondPhone', e.target.value.replace(/[^0-9]/g, ''));
-                  }}
-                  inputProps={{ inputMode: 'numeric' }}
-                  fullWidth
-                  placeholder='가운데 번호 4자리'
-                />
-                
-                <TextField
-                  {...register('thirdPhone')}
-                  onChange={e => {
-                    if (Phone4Regex.test(e.target.value)) return;
-                    setValue('thirdPhone', e.target.value.replace(/[^0-9]/g, ''));
-                  }}
-                  value={getValues().thirdPhone}
-                  inputProps={{ inputMode: 'numeric' }}
-                  placeholder='끝 번호 4자리'
-                  fullWidth
-                />
-              </Box>
+              <FormControl sx={{ width:'90%' }}>
+                <Select
+                  labelId="phone-type-label"
+                  id="phone-type"
+                  {...register('firstPhone')}
+                  onChange={e => setValue('firstPhone', e.target.value)}
+                  value={getValues().firstPhone || ''}
+                >
+                {phoneList.map(item => (
+                  <MenuItem key={item} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+                </Select>
+              </FormControl>
+              <TextField
+                // {...register('secondPhone')}
+                value={getValues().secondPhone || ''}
+                onChange={e => {
+                  if (Phone4Regex.test(e.target.value)) return;
+                  setValue('secondPhone', e.target.value.replace(/[^0-9]/g, ''));
+                }}
+                inputProps={{ inputMode: 'numeric' }}
+                fullWidth
+                placeholder='가운데 번호 4자리'
+              />
+              
+              <TextField
+                {...register('thirdPhone')}
+                onChange={e => {
+                  if (Phone4Regex.test(e.target.value)) return;
+                  setValue('thirdPhone', e.target.value.replace(/[^0-9]/g, ''));
+                }}
+                value={getValues().thirdPhone}
+                inputProps={{ inputMode: 'numeric' }}
+                placeholder='끝 번호 4자리'
+                fullWidth
+              />
+            </Box>
           </StepCard>
         }
         {
           currentIndex === 8 && 
           <StepCard nextStepAbled comment='' index={currentIndex} nextStep={nextStep} prevStep={prevStep}>
             <Box paddingLeft='1rem' width='100%' display='flex' flexDirection='column' alignItems='flex-start' justifyContent='center'>
-              <Typography display='flex'>SMS 문자 수신 동의 <Typography sx={{color:'#f41',fontWeight:'bold'}}>(선택)</Typography></Typography>
+              <Typography display='flex'>SMS 문자 수신 동의 <Typography component='span' sx={{color:'#f41',fontWeight:'bold'}}>(선택)</Typography></Typography>
               <Typography>※ 교육접수 완료 시 예약완료 문자가 발송됩니다.</Typography>
               <Typography>※ 신청인 본인의 휴대폰 번호를 입력하셔야 합니다.</Typography>
               <AccentedWord> ※ 휴대혼번호 입력후 SMS 동의시 교육관련 문자메시지를 받으실 수 있습니다.</AccentedWord>

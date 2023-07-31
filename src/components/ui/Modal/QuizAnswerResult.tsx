@@ -23,7 +23,7 @@ function QuizAnswerResult({onChoiceAnswer, userSelectedAnswer, quiz, quizAnswer,
     <>
     <Box
     sx={{
-      boxShadow:`2px 2px 2px ${isCorrectColor}`,
+      boxShadow:`1px 1px 2px rgba(0,0,0,0.5)`,
       display:'flex',
       alignItems:'center',
       justifyContent:'center',
@@ -34,7 +34,8 @@ function QuizAnswerResult({onChoiceAnswer, userSelectedAnswer, quiz, quizAnswer,
       borderRadius: '6px',
       fontSize:'22px',
       backgroundColor: isCorrectColor,
-      color:'#fff'
+      color:'#fff',
+      border:'1px solid #c7c7c7c7'
     }}
     >
       <Typography align='center' sx={{fontWeight:'bold',fontSize:'20px'}} >
@@ -45,9 +46,11 @@ function QuizAnswerResult({onChoiceAnswer, userSelectedAnswer, quiz, quizAnswer,
       width='90%'
       margin='1rem'
       padding='1rem'
-      boxShadow='1px 0px 1px 2px rgb(194,51,51)91'
+      boxShadow='1px 1px 2px rgba(0,0,0,0.5)'
       minHeight='180px'
       borderRadius='2px'
+      border='1px solid #c7c7c7c7'
+      
       >
       <Typography
       color={isCorrectColor}

@@ -416,7 +416,7 @@ export default function LessonContentVideo(props: Props) {
             handleClose={handleCloseModal}
             quiz={currentQuiz}
           />}
-          {'<----- DEV TEST ----->'}
+          
           <VideoPlayer
             playlist={props.lesson.s3Files[0]?.path}
             initialPlayerId={PLAYER_ELEMENT_ID}

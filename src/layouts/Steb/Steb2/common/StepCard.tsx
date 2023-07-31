@@ -37,7 +37,7 @@ function StepCard({index, comment, children,nextStepAbled, nextStep, prevStep}:P
         </Box>
         {(index !== 9 && nextStepAbled) && <Box position='absolute' sx={{top:'30%',right:'-2.5%'}} >
           <Button onClick={nextStep} fullWidth size="small" variant='text' sx={{':hover' : {backgroundColor:'transparent',border:'none'}}}>
-            <ArrowForwardIosIcon sx={{fontSize:'120px',color:'#007bcd'}} />
+            <ArrowForwardIosIcon sx={{fontSize:'120px',color:'rgb(194,51,51)'}} />
           </Button>
         </Box>}
         {index !== 1 && <Box position='absolute' sx={{top:'30%',left:'-2.5%'}} >

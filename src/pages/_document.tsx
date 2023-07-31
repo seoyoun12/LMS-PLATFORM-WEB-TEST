@@ -43,18 +43,3 @@ class MyDocument extends Document {
 
 export default MyDocument;
 
-// MyDocument.getInitialProps = async ctx => {
-//   const materialSheets = new ServerStyleSheets();
-//   const originalRenderPage = ctx.renderPage;
-
-//   ctx.renderPage = () =>
-//     originalRenderPage({
-//       enhanceApp: App => props => materialSheets.collect(<App {...props} />),
-//     });
-
-//   const initialProps = await Document.getInitialProps(ctx);
-//   return {
-//     ...initialProps,
-//     styles: <>{initialProps.styles}</>,
-//   };
-// };

@@ -12230,11 +12230,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags [관리자] 레슨 퀴즈 API
      * @name FindQuizUsingGet
      * @summary [관리자] 퀴즈 단건 조회 API
-     * @request GET:/lesson/quiz/{lessonQuizSeq}
+     * @request GET:/lesson/quiz/detail/{lessonQuizSeq}
      */,
     findQuizUsingGet: (lessonQuizSeq: number, params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<LessonQuizResponseDto>, void>({
-        path: `/lesson/quiz/${lessonQuizSeq}`,
+        path: `/lesson/quiz/detail/${lessonQuizSeq}`,
         method: "GET",
         ...params,
       })

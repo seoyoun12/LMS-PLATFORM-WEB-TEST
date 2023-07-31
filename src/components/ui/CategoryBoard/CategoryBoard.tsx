@@ -1,4 +1,4 @@
-import { Container } from '@mui/system';
+
 import styled from '@emotion/styled';
 import { Box } from '@mui/material';
 import { useState } from 'react';
@@ -6,7 +6,7 @@ import { CategoryBoardNotice } from '@layouts/Category/CategoryBoardNotice';
 import { CategoryBoardFaq } from '@layouts/Category/CategoryBoardFaq';
 import { CategoryBoardQuestion } from '@layouts/Category/CategoryBoardQuestion';
 import { CategoryBoardLook } from '@layouts/Category/CategoryBoardLook';
-import { useRouter } from 'next/router';
+
 import { CSRTabs2Props } from '@components/ui/Tabs2/CSRTabs2';
 import dynamic from 'next/dynamic';
 
@@ -23,15 +23,11 @@ const tabsConfig = [
 
 export function CategoryBoard() {
   const [value, setValue] = useState(tabsConfig[0].value);
-  const router = useRouter();
+  
 
   const onChange = (newValue: string) => {
     setValue(newValue);
   };
-
-  // useLayoutEffect(()=>{
-  //   setValue(router.route.split('/traffic/')[1])
-  // },[])
 
   return (
     <NoticeWrap>
@@ -72,8 +68,11 @@ const NoticeWrap = styled(Box)`
   background: #e6edf3;
 
   .Mui-selected {
-    color: black !important;
+    color: rgb(194,51,51) !important;
     font-weight: bold;
+  }
+  .MuiTabs-indicator {
+    background-color: rgb(194, 51, 51);
   }
 `;
 const NoticeContainer = styled(Box)``;

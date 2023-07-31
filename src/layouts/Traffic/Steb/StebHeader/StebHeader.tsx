@@ -82,6 +82,6 @@ export function StebHeader({ value }: { value: number }) {
 
 const StebHeaderWrap = styled(Box)`
   background-image: url('/assets/images/eduSchedule.png');
-  /* background: #246aef; */
+  /* background: rgb(194,51,51); */
   padding: 0 12px;
 `;

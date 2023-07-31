@@ -1,21 +1,14 @@
-import { useRouter } from 'next/router';
-import {
-  LearningStatusRes,
-  ProgressStatus,
-  useLearningStatus,
-  useMyUser,
-} from '@common/api/user';
+import { LearningStatusRes,ProgressStatus,useLearningStatus } from '@common/api/user';
 import { Spinner } from '@components/ui';
 import { ContentCardV2 } from '@components/ui/ContentCard';
 import styled from '@emotion/styled';
-import { Box, Grid, Link } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { NotFound } from '@components/ui/NotFound';
 import { useSnackbar } from '@hooks/useSnackbar';
 
 export function LearningCourse() {
   const snackbar = useSnackbar();
-  const router = useRouter();
-  const { data, error, mutate } = useLearningStatus();
+  const { data } = useLearningStatus();
 
   const onClickEnterCourseLesson = (res: LearningStatusRes) => {
     const isStartStudy =
@@ -26,28 +19,10 @@ export function LearningCourse() {
       return snackbar({ variant: 'error', message: '아직 학습이 시작되지 않았습니다!' });
     if (res.progressStatus === ProgressStatus.TYPE_ENDED || isEndedStudy)
       return snackbar({ variant: 'error', message: '종료된 학습입니다!' });
-
-    if (res.progressStatus === ProgressStatus.TYPE_PROGRESSING) {
-      // router.push(
-      //   `/course/${res.courseUserSeq}/lesson/${
-      //     !res.recentLessonSeq ? 1 : res.recentLessonSeq
-      //   }`
-      // );
-      let newTab = window.open(
-        `/course/${res.courseUserSeq}/lesson/${
-          !res.recentLessonSeq ? 1 : res.recentLessonSeq
-        }`,
-        // '',
-        '_blank'
-      );
-      // newTab.onbeforeunload = function (e) {
-      //   e.preventDefault();
-      //   window.alert('테스트입니다.');
-      // };
-    }
   };
 
   if (!data) return <Spinner />;
+
   return (
     <LearningCourseWrap>
       {data.length <= 0 ? (

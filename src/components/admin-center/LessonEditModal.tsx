@@ -344,7 +344,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
             sx={{
               width: `${uploadPercentage}%`,
               height: '25px',
-              background: '#256def',
+              background: 'rgb(194,51,51)',
               borderRadius: '8px',
               transition: 'width 0.2s ease-in',
             }}

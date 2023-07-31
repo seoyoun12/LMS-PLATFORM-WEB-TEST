@@ -7,12 +7,18 @@
 // import router, { useRouter } from 'next/router';
 // import { Tabs3 } from '../Tabs3';
 
-import * as React from 'react';
+
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import { Spinner } from '@components/ui';
 import styled from '@emotion/styled';
 import { Box, Button, Typography } from '@mui/material';
-import { IQuiz } from '@layouts/Lesson/LessonContentVideo';
+import { IQuiz, IQuizTime } from '@layouts/Lesson/LessonContentVideo';
+import MultipleChoiceQuiz from './MultipleChoiceQuiz';
+import { useCallback, useEffect, useState } from 'react';
+import QuizAnswerResult from './QuizAnswerResult';
+import OXQuiz from './OXQuiz';
+import OXAnswerResult from './OXAnswerResult';
+import Alarm from './Alarm';
 
 type ModalProps = {
   open: boolean;
@@ -23,28 +29,8 @@ type ModalProps = {
   actionDisabled?: boolean;
   loading?: boolean;
   action?: string | React.ReactNode;
-  dummy_quiz: IQuiz[]
+  quiz: IQuizTime
 } & Omit<DialogProps, 'title'>;
-
-
-// Quiz
-// {
-//   alarmContent: string;
-//   answer: string;
-//   feedback: string;
-//   item1: string;
-//   item2: string;
-//   item3: string;
-//   item4: string;
-//   itemO: string;
-//   itemX: string;
-//   lessonQuizTypeEnum: string; // 퀴즈의 종류 "ALARM" | "MULTIPLE_CHOICE" | "OX_QUIZ"
-//   lessonSeq: number;
-//   quizContent: string;
-//   randomTime: boolean;
-//   setTimeMin: number;
-//   setTimeSecond: number;
-// }
 
 
 export function ModalQuiz({
@@ -56,25 +42,44 @@ export function ModalQuiz({
   onSubmit,
   actionLoading,
   actionDisabled,
-  dummy_quiz,
+  quiz,
   loading = false,
   ...dialogProps
 }: ModalProps) {
+  
+  const [userSelectedAnswer, setUserSelectedAnswer] = useState('await');
+  const [quizItem, setQuizItem] = useState<string[]>([]);
+  const [quizAnswer, setQuizAnswer] = useState('');
+
+
+  const onChoiceAnswer = useCallback((answer: string) => {
+    setUserSelectedAnswer(answer);
+  },[])
+
+  useEffect(() => {
+    if(!quiz) return;
+    const { item1 = '',item2 = '',item3 = '',item4 = '',answer } = quiz;
+    const temp = [`1. ${item1}`,`2. ${item2}`,`3. ${item3}`,`4. ${item4}`];
+    const quizAnswerNumber =  temp.find((item) => item.includes(answer) && item);
+    setQuizAnswer(quizAnswerNumber)
+    setQuizItem(temp)
+  },[quiz])
+
+  
+   
   return (
-    <DialogBox
-      onClose={onCloseModal}
-      aria-labelledby='modal-title'
-      open={open}
-      {...dialogProps}
-    >
-      {loading ? (
-        <Spinner />
-      ) : (
+    <DialogBox aria-labelledby='modal-title' open={open}>
+      {loading || !quiz
+      ? <Spinner />
+      : (
         <ModalBox>
           <Box display='flex' flexDirection='column' alignItems='center' justifyContent='center'>
             {/* <button onClick={onCloseModal}>테스트 close</button> */}
-            {dummy_quiz.map((quiz) => (
-              <Box key={quiz.alarmContent} sx={{
+            
+              
+              <Box
+                key={quiz.alarmContent}
+                sx={{
                 width:'100%',
                 display:'flex',
                 flexDirection:'column',
@@ -82,9 +87,10 @@ export function ModalQuiz({
                 alignItems:'center',
                 padding:0,
                 margin:0,
-                background:'linear-gradient(#007bcd 10%, #fff 10%)'}}>
+                background:'linear-gradient(rgb(194,51,51) 10%, #fff 10%)'
+                }}
+                >
                 <Box
-                  key={quiz.alarmContent}
                   sx={{
                     display:'flex',
                     flexDirection:'column',
@@ -97,49 +103,41 @@ export function ModalQuiz({
                     marginTop:'4rem'
                   }}
                 >
-                  <Typography variant='h6' align='center' sx={{fontSize:'18px',fontWeight:'bold',padding:'1rem 0 0 1rem',whiteSpace:'pre-line'}}>
+                  <Typography variant='h6' align='center' sx={{fontSize:'18px',fontWeight:'bold',padding:'1rem 0 0 1rem',whiteSpace:'pre-line',lineHeight: 2}}>
                     {quiz.alarmContent} {'\n'}
+                    {quiz.quizContent}
                   </Typography>
-                  <Typography align='center' fontWeight='bold' marginBottom='1rem'>
-                    다음 중 맞는 보기를 고르세요.
-                  </Typography>
+                  {
+                  (userSelectedAnswer === 'await' && quiz.lessonQuizTypeEnum === "MULTIPLE_CHOICE")
+                  && <Typography align='center' fontWeight='bold' marginBottom='1rem'>
+                      다음 중 맞는 보기를 고르세요.
+                     </Typography>
+                  }
                 </Box>
-                <Box sx={{display:'flex',flexDirection:'column',gap:'.75rem',width:'90%',alignItems:'center',justifyContent:'center',marginTop:'1rem'}}>
-                  <Button sx={{':hover':{
-                    backgroundColor:'#fff',
-                    color:'#007bcd'
-                  },boxShadow:'2px 2px 2px #007bcd',display:'flex',alignItems:'center',justifyContent:'center',width:'100%',padding:'0 1rem', height:'42px',borderRadius: '8px', fontSize:'20px',backgroundColor:'#007bcd',color:'#fff'}}>
-                    <Typography align='center' sx={{fontWeight:'bold',fontSize:'20px'}} >
-                      1. {quiz.item1}
-                    </Typography>
-                  </Button>
-                  <Button sx={{':hover':{
-                    backgroundColor:'#fff',
-                    color:'#007bcd'
-                  },boxShadow:'2px 2px 2px #007bcd',display:'flex',alignItems:'center',justifyContent:'center',width:'100%',padding:'0 1rem', height:'42px',borderRadius: '8px', fontSize:'20px',backgroundColor:'#007bcd',color:'#fff'}}>
-                    <Typography align='center' sx={{fontWeight:'bold',fontSize:'20px'}} >
-                      2. {quiz.item2}
-                    </Typography>
-                  </Button>
-                  <Button sx={{':hover':{
-                    backgroundColor:'#fff',
-                    color:'#007bcd'
-                  },boxShadow:'2px 2px 2px #007bcd',display:'flex',alignItems:'center',justifyContent:'center',width:'100%',padding:'0 1rem', height:'42px',borderRadius: '8px', fontSize:'20px',backgroundColor:'#007bcd',color:'#fff'}}>
-                    <Typography align='center' sx={{fontWeight:'bold',fontSize:'20px'}} >
-                      3. {quiz.item3}
-                    </Typography>
-                  </Button>
-                  <Button sx={{':hover':{
-                    backgroundColor:'#fff',
-                    color:'#007bcd'
-                  },boxShadow:'2px 2px 2px #007bcd',display:'flex',alignItems:'center',justifyContent:'center',width:'100%',padding:'0 1rem', height:'42px',borderRadius: '8px', fontSize:'20px',backgroundColor:'#007bcd',color:'#fff'}}>
-                    <Typography align='center' sx={{fontWeight:'bold',fontSize:'20px'}} >
-                      4. {quiz.item4}
-                    </Typography>
-                  </Button>
-                </Box>
+              { (quiz.lessonQuizTypeEnum === 'ALARM' && userSelectedAnswer === 'await')
+                && <Alarm onClick={onCloseModal} />
+              }
+              {
+                (quiz.lessonQuizTypeEnum === "MULTIPLE_CHOICE" && userSelectedAnswer === 'await')
+                && <MultipleChoiceQuiz quizItem={quizItem} onCloseModal={onCloseModal} onChoiceAnswer={onChoiceAnswer} />
+              }
+
+              {
+                (quiz.lessonQuizTypeEnum === "MULTIPLE_CHOICE" && userSelectedAnswer !== 'await')
+                && <QuizAnswerResult quizAnswer={quizAnswer} userSelectedAnswer={userSelectedAnswer} quiz={quiz} onCloseModal={onCloseModal} onChoiceAnswer={onChoiceAnswer} />
+              }
+               
+              {
+                (quiz.lessonQuizTypeEnum === "OX_QUIZ" && userSelectedAnswer === 'await')
+                && <OXQuiz quizAnswer={quiz.answer} itemO={quiz.itemO} itemX={quiz.itemX} onChoiceAnswer={onChoiceAnswer}  />
+              }
+              {
+                (quiz.lessonQuizTypeEnum === "OX_QUIZ" && userSelectedAnswer !== 'await')
+                && <QuizAnswerResult quizAnswer={quiz.answer} userSelectedAnswer={userSelectedAnswer} quiz={quiz} onCloseModal={onCloseModal} onChoiceAnswer={onChoiceAnswer}  />
+              }
+               
               </Box>
-            ))}
+            
           </Box>
           {/* <Tabs3></Tabs3> */}
         </ModalBox>
@@ -151,7 +149,7 @@ export function ModalQuiz({
 const DialogBox = styled(Dialog)`
   .MuiPaper-root {
     margin: 0;
-    height: 500px;
+    width: 80%;
     display: flex;
     justify-content: center;
     align-items: center;

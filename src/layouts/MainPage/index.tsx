@@ -1,33 +1,25 @@
 import type { NextPage } from 'next';
-import styles from '@styles/common.module.scss';
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
-import cn from 'clsx';
-import { Link } from '@components/common';
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Grid,
-  Typography,
-} from '@mui/material';
-import { useState } from 'react';
+import { Box,Button,Grid,Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import Head from 'next/head';
 import Image from 'next/image';
 import { MainDisplayType, useMainDisplay } from '@common/api/mainDisplay';
-import { useRecoilState } from 'recoil';
-import { pageType } from '@common/recoil';
 import { pageRegType } from '@common/recoil/pageType/atom';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
-import { regCategoryType, useMyUser, UserRole } from '@common/api/user';
+import {  useMyUser } from '@common/api/user';
 import { useRouter } from 'next/router';
 import { courseType } from '@common/api/courseClass';
 import { logout } from '@common/api';
 import useResponsive from '@hooks/useResponsive';
+// import styles from '@styles/common.module.scss';
+// import cn from 'clsx';
+// import { Link } from '@components/common';
+// import { useState } from 'react';
+// import { useRecoilState } from 'recoil';
+// import { pageType } from '@common/recoil';
 
 // 메인 3개의 카드
 
@@ -40,7 +32,7 @@ const LinkList = [
     color: '#0A9A4E',
     lineColor: '#179b52',
     href: '/category',
-    imgPath: '/assets/images/unsu.jpg',
+    imgPath: '/assets/images/hub001.png',
     onClickCard: async () => {
       if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
         return localStorage.setItem('site_course_type', courseType.TYPE_TRANS_WORKER);
@@ -67,7 +59,7 @@ const LinkList = [
     color: '#256AEF',
     lineColor: '#2a6fe8',
     href: '/category',
-    imgPath: '/assets/images/lowFloor.jpg',
+    imgPath: '/assets/images/hub002.png',
     onClickCard: async () => {
       if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
         return localStorage.setItem('site_course_type', courseType.TYPE_LOW_FLOOR_BUS);
@@ -95,7 +87,7 @@ const LinkList = [
     lineColor: '#57242b',
     href: 'traffic/category',
     // href: '',
-    imgPath: '/assets/images/domin.jpg',
+    imgPath: '/assets/images/hub003.png',
     onClickCard: async () => {
       if (typeof window !== 'undefined' && !localStorage.getItem('site_course_type'))
         return localStorage.setItem('site_course_type', courseType.TYPE_PROVINCIAL);
@@ -117,12 +109,12 @@ const LinkList = [
 ];
 const MainPage: NextPage = () => {
   const router = useRouter();
-  const [screenHeight, setScreenHeight] = useState<number>();
-  const [userPageType, setUserPageType] = useRecoilState(pageType);
+  // const [screenHeight, setScreenHeight] = useState<number>();
+  // const [userPageType, setUserPageType] = useRecoilState(pageType);
   const isLogin = useIsLoginStatus();
   const isDesktop = useResponsive(1100);
-  const { user, error: userError } = useMyUser();
-  const { data, error } = useMainDisplay();
+  const { user } = useMyUser();
+  const { data } = useMainDisplay();
   const wrapRef = React.useRef<HTMLDivElement>();
   React.useEffect(() => {
     // if (isLogin && user) {
@@ -175,7 +167,7 @@ const MainPage: NextPage = () => {
       <Head>
         <title>충남교통연수원</title>
       </Head>
-      <MainContainer>
+      
         <ContentBox>
           <LogoBox>
             <Image
@@ -183,69 +175,22 @@ const MainPage: NextPage = () => {
               height={48}
               width={320}
               alt="Your Name"
-              style={{ margin: 'auto' }}
             />
           </LogoBox>
           <SubTitle>
             <Box>충남 교통안전&nbsp;</Box>
             <Box color="#236cef">온라인교육센터</Box>
           </SubTitle>
-          <NoticeContainer>
-            {/* <NoticeTitle>
-              <NoticeTitleTypography>{`충남교통연수원 알림판`}</NoticeTitleTypography>
-            </NoticeTitle> */}
-            <NoticeContent>
-              <NoticeContentTypography>
-                {/* <Box display="flex">
-                  <Box>-&nbsp;</Box>
-                  <Box>
-                    본 온라인 과정은{' '}
-                    <span style={{ color: '#fc4719' }}>
-                      차량등록지가 충남 또는 세종시 운수종사자에 해당되는 교육
-                    </span>
-                    으로 타시‧도 차량은 교육을 이수 할 수 없습니다.
-                  </Box>
-                </Box>
-                <Box display="flex">
-                  <Box>-&nbsp;</Box>
-                  <Box>
-                    <span style={{ color: '#fc4719' }}>운전 중 교육을 진행할 경우</span>{' '}
-                    안전을 위해 <span style={{ color: '#fc4719' }}>교육이 중단</span>
-                    됩니다.
-                  </Box>
-                </Box>
-                <Box display="flex">
-                  <Box>-&nbsp;</Box>
-                  <Box display="flex" flexWrap="wrap">
-                    온라인교육은 네트워크 상태에 따라 데이터 요금이 발생할 수 있습니다.
-                    <span>
-                      (<span style={{ color: '#fc4719' }}>Wi-Fi 사용 권장</span>)
-                    </span>
-                  </Box>
-                </Box> */}
-                <ul>
-                  <li>
-                    본 온라인 과정은{' '}
-                    <span style={{ color: '#c92f2f' }}>
-                      차량등록지가 충남 또는 세종시 운수종사자에 해당되는 교육
-                    </span>
-                    으로 타시‧도 차량은 교육을 이수 할 수 없습니다.
-                  </li>
-                  <li>
-                    <span style={{ color: '#c92f2f' }}>운전 중 교육을 진행할 경우</span>{' '}
-                    안전을 위해 <span style={{ color: '#c92f2f' }}>교육이 중단</span>
-                    됩니다.
-                  </li>
-                  <li>
-                    온라인교육은 네트워크 상태에 따라 데이터 요금이 발생할 수 있습니다.
-                    <span>
-                      (<span style={{ color: '#c92f2f' }}>Wi-Fi 사용 권장</span>)
-                    </span>
-                  </li>
-                </ul>
-              </NoticeContentTypography>
-            </NoticeContent>
-          </NoticeContainer>
+                <MainInfoBannerBox>
+                  <Image
+                    src='/assets/images/main_center_info.png'
+                    alt='중앙 안내문'
+                    layout='responsive'
+                    width={1200}
+                    height={280}
+                    priority
+                  />
+                </MainInfoBannerBox>
           <Box position="relative">
             <CategoryGrid
               container={true}
@@ -255,18 +200,8 @@ const MainPage: NextPage = () => {
             >
               {data.map(item => {
                 if (item.status === 1) {
-                  const {
-                    href,
-                    color,
-                    textColor,
-                    displayWord,
-                    imgPath,
-                    pageType,
-                    lineColor,
-                    onClickCard,
-                  } = LinkList.filter(
-                    filter => filter.mainDisplayType === item.mainDisplayType
-                  )[0];
+                  const { href,color,textColor,displayWord,imgPath,lineColor,onClickCard } =
+                  LinkList.filter(filter => filter.mainDisplayType === item.mainDisplayType)[0];
                   return (
                     <MainCategoryCard sx={{ borderTop: `7px solid ${color}` }}>
                       <Box
@@ -282,42 +217,44 @@ const MainPage: NextPage = () => {
                         }}
                       >
                         <Box
-                          width="270px"
-                          height="150px"
+                          width='100%'
                           borderRadius="8px 8px 0 0"
                           overflow="hidden"
                           className="gg"
                         >
                           <Image
                             src={imgPath}
-                            // width="270"
-                            // height="184"
+                            width="270"
+                            height="184"
                             style={{ aspectRatio: '16 / 9', zIndex: -19999 }}
-                            layout="fill"
+                            
                             objectFit="fill"
+                            alt='메인 카드 이미지'
                           />
                         </Box>
                         <CardInContainer>
                           <Box>
                             <Typography
                               component="span"
-                              fontSize={25}
+                              fontSize={24}
                               fontWeight="bold"
                               color={textColor}
+                              className='category-card-title'
                             >
                               {displayWord}
                             </Typography>
                             <Typography
                               component="span"
-                              fontSize={25}
+                              fontSize={24}
                               fontWeight="bold"
                               color="#000"
+                              className='category-card-title'
                             >
                               교육
                             </Typography>
                           </Box>
                           <Button color="neutral" sx={{ position: 'relative' }}>
-                            <Typography fontWeight="bold">바로가기</Typography>
+                            <Typography className='category-card-title' fontWeight="bold">바로가기</Typography>
                             <Box
                               className="button-bot-line"
                               borderBottom={`2px solid ${lineColor}`}
@@ -336,41 +273,79 @@ const MainPage: NextPage = () => {
             </CategoryGrid>
           </Box>
         </ContentBox>
-      </MainContainer>
-      <FooterContainer sx={{ color: 'black' }}>
+      
+      <FooterContainer>
         <FooterWord>CTTI</FooterWord>
-        <SecretTrafficTunnel
-        // onClick={async () => {
-        //   await LinkList[2].onClickCard();
-        //   router.push(LinkList[2].href);
-        // }}
-        />
       </FooterContainer>
     </WrapMainContainer>
   );
 };
 // Wrap
 const WrapMainContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  height: 100%;
+  height: auto;
+  min-height:100vh;
   .MuiButton-root.MuiButton-textNeutral:hover {
     background-color: #fff;
   }
   .MuiButton-root.MuiButton-textNeutral {
     width: 100%;
   }
+  .category-card-title {
+    font-size: 2.5rem;
+    @media (max-width: 1500px) {
+      font-size: 2rem;
+    }
+    @media (max-width: 1080px) {
+      font-size: 1.5rem;
+    }
+    @media (max-width: 868px) {
+      font-size: 1.25rem;
+    }
+    @media (max-width: 658px) {
+      font-size: 1rem;
+    }
+    @media (max-width: 514px) {
+      font-size: 2rem;
+    }
+  }
   .gg {
     position: relative;
+    width: 100%;
+    height: 180px;
+    margin: 0 auto;
+    
+    @media (max-width: 1500px) {
+      width: 100%;
+      height: 180px;
+    }
+    @media (max-width: 1080px) {
+      width: 100%;
+      height: 180px;
+    }
+    @media (max-width: 868px) {
+      width: 100%;
+      height: 150px;
+    }
+    @media (max-width: 658px) {
+      width: 100%;
+      height: 90px;
+    }
+    @media (max-width: 514px) {
+      width: 90%;
+      height: 180px;
+    }
   }
 `;
+
+
 // MainContainer
-const MainContainer = styled(Box)`
-  height: 80%;
-  /* min-height: 719px; */
-  padding-top: 80px;
+const MainInfoBannerBox = styled(Box)`
+  
 `;
 const ContentBox = styled(Box)`
   width: 80%;
@@ -398,143 +373,108 @@ const SubTitle = styled(Box)`
   display: flex;
 `;
 
-// Notice
-const NoticeContainer = styled(Box)`
-  max-width: 930px;
-  position: relative;
-  height: 25%;
-  margin: auto;
-  margin-top: 40px;
-  border-radius: 1rem;
-  border: 2px solid #d7d7d7;
-  // 알림판 중앙 정렬
-`;
-
-const NoticeTitle = styled(Box)`
-  position: absolute;
-  width: 236px;
-  height: 46px;
-  right: 50%;
-  color: black;
-  background: #f9f9f9;
-  box-sizing: border-box;
-  border-radius: 1rem;
-  border: 1px solid #d7d7d7;
-  padding: 0.5rem 0.25rem;
-  transform: translate(50%, -50%);
-`;
-const NoticeTitleTypography = styled(Typography)`
-  width: 100%;
-  font-size: 1.15rem;
-  font-weight: bold;
-  text-align: center;
-`;
-const NoticeContent = styled(Box)`
-  height: 100%;
-  margin: 2rem;
-  text-align: center;
-  border-radius: 0 30px 30px 0;
-  background-color: white;
-`;
-// line-break
-const NoticeContentTypography = styled(Typography)`
-  /* padding-top: 30px; */
-  word-break: keep-all;
-  font-weight: bold;
-  text-align: start;
-  /* white-space: pre-wrap; */
-  li {
-    list-style: disc;
-  }
-`;
-
-// Category Grid
 const CategoryGrid = styled(Grid)`
   /* position: relative; */
-  height: 100%;
   display: flex;
   justify-content: center;
-  gap: 13px;
-`;
-// Three section
-const MainCategoryCard = styled(Container)`
-  display: flex;
-  width: 328px;
-  height: 386px;
-  background: #fff;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  margin-top: 60px;
-  box-shadow: 2px 2px 12px 3px rgba(0, 0, 0, 0.2);
-  z-index: 11;
+  margin-top: 2rem;
+  margin-bottom: 10rem;
+
+  @media (max-width: 514px) {
+      gap: 2rem;
+    }
 `;
 
+
+const MainCategoryCard = styled(Container)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(30% + .5rem);
+  height: auto;
+  background: #fff;
+  box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  padding: 2rem 1rem;
+  
+    @media (max-width: 514px) {
+      width:86%;
+    }
+`;
+
+
 const CardInContainer = styled(Box)`
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 185px;
-  height: 130px;
-  border-radius: 0 0 30px 30px;
   background-color: white;
-  margin: auto;
   padding-top: 2rem;
-
+  
   .button-bot-line {
     position: absolute;
     left: 0;
-    top: 2rem;
+    bottom: 0;
     width: 100%;
-    /* border-bottom: 2px solid #dadada; */
   }
   .button-right-line {
     position: absolute;
-    right: 9px;
-    top: 0.5rem;
+    right:4.5%;
+    bottom:-8.15%;
     height: 75%;
-    /* border-right: 2px solid #dadada; */
     transform: rotate(-40deg);
   }
 `;
 const FooterContainer = styled(Box)`
-  position: relative;
+  position: absolute;
+  bottom:0;
   width: 100%;
-  height: 250px;
-  background: #144aaa;
+  height: 300px;
+  background: #c53736;
   overflow: hidden;
+
+  //23.07.26 **미디어 쿼리 기준**
+  @media (max-width: 1500px) {
+    height: 270px;
+    }
+  @media (max-width: 1080px) { 
+    height: 240px;
+    }
+  @media (max-width: 868px) { 
+    height: 210px;
+    }
+    @media (max-width: 658px) {
+      height: 180px;
+    }
+    @media (max-width: 514px) {
+      height: 120px;
+    }
 `;
 const FooterWord = styled(Box)`
   position: absolute;
-  width: 435px;
-  height: 214px;
   right: 10%;
-  bottom: 1rem;
-  font-size: 13rem;
+  bottom: 0%;
+  font-size: 15rem;
   font-weight: bold;
-  color: #1a53ba;
+  color: #e34546;
   transform: rotate(-15deg);
-
-  /* @media (max-width: 1230px) {
-    right: 10rem;
-  } */
-  @media (max-width: 768px) {
-    width: fit-content;
-    height: fit-content;
-    right: 2%;
-    bottom: -10%;
-    font-size: 8rem;
-  }
+  @media (max-width: 1500px) {
+   font-size: 12rem;
+    }
+  @media (max-width: 1080px) { 
+   font-size: 10rem;
+    }
+  @media (max-width: 868px) { 
+   font-size: 8rem;
+    }
+    @media (max-width: 658px) {
+     font-size: 6rem;
+    }
+    @media (max-width: 514px) {
+     font-size: 5rem;
+    }
 `;
 
-const SecretTrafficTunnel = styled(Box)`
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  left: 0px;
-  bottom: 0px;
-  /* border: 1px solid red; */
-`;
 
 export default MainPage;

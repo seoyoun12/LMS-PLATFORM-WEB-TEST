@@ -71,6 +71,7 @@ export default function MobileNav() {
       : TransHeaderList
     ).map(item => {
       return {
+        key: item.category,
         name: item.category,
         children: item.items.map(menuitem => {
           return { name: menuitem.title, href: menuitem.href };
@@ -103,6 +104,7 @@ export default function MobileNav() {
         : TransHeaderList
       ).map(item => {
         return {
+          key: item.category,
           name: item.category,
           children: item.items.map(menuitem => {
             return { name: menuitem.title, href: menuitem.href };
@@ -222,11 +224,11 @@ export default function MobileNav() {
             onClick={() => setOpen(true)}
           />
           <Drawer open={open} anchor="right" onClose={handleClose} sx={{ zIndex: 1202 }}>
-            <DrawerTopBox topBoxBgColor={topBoxBgColor}>
+            <DrawerTopBox topboxbgcolor={topBoxBgColor}>
               <Box />
               <CloseIcon fontSize="large" onClick={() => handleClose()} />
             </DrawerTopBox>
-            <DrawerTopBox topBoxBgColor={topBoxBgColor} style={{ height: '100px' }}>
+            <DrawerTopBox topboxbgcolor={topBoxBgColor} style={{ height: '100px' }}>
               {isLoginStatus ? (
                 <Box display="flex" alignContent="center">
                   <Avatar sx={{ width: 40, height: 40 }}>
@@ -264,8 +266,8 @@ export default function MobileNav() {
                     <Box onClick={() => onClickSitemap(item)}>
                       <SiteMapIconWrap>{item.icon}</SiteMapIconWrap>
                       <SiteMapName>
-                        {item.name.split(' ').map(item => (
-                          <Box lineHeight={1.2}>{item}</Box>
+                        {item.name.split(' ').map((item, index) => (
+                          <Box key={index} lineHeight={1.2}>{item}</Box>
                         ))}
                       </SiteMapName>
                     </Box>
@@ -278,6 +280,7 @@ export default function MobileNav() {
               <CategoryLeftBox>
                 {list.map(item => (
                   <CategoryLeftItem
+                    key={item.name}
                     onClick={() => handleChangeCategory(item.name)}
                     sx={{
                       background: item.name === categoryValue && '#fff',
@@ -292,7 +295,9 @@ export default function MobileNav() {
                 {list
                   .filter(fill => fill.name === categoryValue)[0]
                   ?.children.map(item => (
-                    <Link href={item.href} sx={{ padding: '12px' }} color="black">
+                    <Link
+                    key={item.name}
+                    href={item.href} sx={{ padding: '12px' }} color="black">
                       {item.name}
                     </Link>
                   ))}
@@ -327,14 +332,14 @@ const MobileContentContainer = styled.div`
   }
 `;
 
-const DrawerTopBox = styled(Box)<{ topBoxBgColor: string }>`
+const DrawerTopBox = styled(Box)<{ topboxbgcolor: string }>`
   display: flex;
   width: 360px;
   height: 64px;
   padding: 0 1rem;
   align-items: center;
   justify-content: space-between;
-  background: ${({ topBoxBgColor }) => topBoxBgColor};
+  background: ${({ topboxbgcolor }) => topboxbgcolor};
   color: white;
 `;
 

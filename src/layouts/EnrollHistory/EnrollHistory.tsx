@@ -11,6 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { EnrollHistoryCard } from './EnrollHistoryCard/EnrollHistoryCard';
 import { EnrollHistoryModal } from './EnrollHistoryModal/EnrollHistoryModal';
 import { EnrollHistoryTrafficModal } from './EnrollHistoryTrafficModal/EnrollHistoryTrafficModal';
+import Image from 'next/image';
 
 export function EnrollHistory() {
   const router = useRouter();
@@ -65,12 +66,7 @@ export function EnrollHistory() {
 
   return (
     <Box>
-      <MyCourseContainer>
-        <MyCourseTitle>온라인 교육 신청내역</MyCourseTitle>
-        <MyCourseSubTitle>
-          온라인 교육 신청내역을 확인하실 수 있습니다.
-        </MyCourseSubTitle>
-      </MyCourseContainer>
+      <Image src={'/assets/images/main_edu_application.png'} alt='신청내역' width={1920} height={282} layout='intrinsic'/>
       <EnrollHistoryWrap>
         {data.length <= 0 && enrollData.length <= 0 && (
           <NotFound content='신청한 과정이 존재하지 않습니다!' />

@@ -1,9 +1,10 @@
-import * as React from 'react';
+
 import Script from 'next/script';
 import { Config, EventType, Ncplayer } from 'types/ncplayer';
 import styled from '@emotion/styled';
-import { Box } from '@mui/material';
-import { ModalQuiz } from '@components/ui/Modal';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+// import { Box } from '@mui/material';
+// import { ModalQuiz } from '@components/ui/Modal';
 
 const CDN_URL =
   'https://cn-lms-storage.cdn.gov-ntruss.com/common/js/ncplayer-1.2.5.umd.min-c808bb53.js';
@@ -22,42 +23,30 @@ interface Props extends Events {
   // videoIsPaused?: boolean;
 }
 
+// 정신병자코드2
 export function VideoPlayer(props: Props) {
-  // 최대한 이 컴포넌트가 다시 렌더링 되지 않도록 해주세요.
-  // 거의 모든 것을 useRef를 사용하여 막아보았지만,
-  // 정말 필요한 것도 있어서 어쩔 수 없이...
-  //
-  // Lesson 컴포넌트 전체를 바꾼 이유 중 하나이기도 해요.
-  // 어찌 낑겨 맞추려고 이렇게까지 한게 좀 웃기네요ㅋㅋㅋ
-  //
-  // 되도록이면 건들이지 말아주세요.
 
-  // 스테이트.
-
-  const [scriptLoaded, setScriptLoaded] = React.useState<boolean>(false);
-  const [playlist, setPlaylist] = React.useState<Config['playlist'] | null>(
+  const [scriptLoaded, setScriptLoaded] = useState<boolean>(false);
+  const [playlist, setPlaylist] = useState<Config['playlist'] | null>(
     null
   );
 
-  // 레퍼런스.
+  const player = useRef<Ncplayer | null>(null);
+  const playerTimeObserver = useRef<MutationObserver | null>(null);
+  const playerElement = useRef(null);
+  
 
-  const player = React.useRef<Ncplayer | null>(null);
-  const playerTimeObserver = React.useRef<MutationObserver | null>(null);
-  const playerElement = React.useRef(null);
-  const playerKeydownEvent = React.useRef(null);
-
-  const needUpdate = React.useRef<boolean>(false);
-  const initialConfig = React.useRef<Omit<Config, 'playlist'>>(
+  const needUpdate = useRef<boolean>(false);
+  const initialConfig = useRef<Omit<Config, 'playlist'>>(
     props.initialConfig
   );
-  const initialPlayerId = React.useRef<string>(props.initialPlayerId);
-  const eventsPrev = React.useRef<Parameters<Ncplayer['_detachEvent']>[0][]>(
+  const initialPlayerId = useRef<string>(props.initialPlayerId);
+  const eventsPrev = useRef<Parameters<Ncplayer['_detachEvent']>[0][]>(
     []
   );
 
-  // 이펙트.
   
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (!scriptLoaded || !window.ncplayer) return;
 
     if (
@@ -87,26 +76,8 @@ export function VideoPlayer(props: Props) {
         player.current._corePlayer._setDuration(
           player.current._corePlayer.player.duration
         );
-
-        playerKeydownEvent.current =
-          player.current._view.$el.__vue__.controlKeydownEvent;
-        player.current._view.$el.__vue__.controlKeydownEvent =
-          !props.showControl ? () => undefined : playerKeydownEvent.current;
-
-        // 위 두 줄은 플레이어 방향키로 시간 조절하는 것을 막는 코드에요.
-        // 일단 막아보았지만, 영상이 로드 되기 전에 방향키를 막 누르면 5초정도 이동되긴 해요.
-        // 완전히 막는 방법을 모르겠어요...
-        //
-        // 이게 vue로 제작된 것 같더라고요.
-        // 아마 생성될 때 한번, 그 후에 한번 새로 생기는 것 같네요.
-        //
-        // 코드를 여기에 넣으면 뒤에 생기는 것을 막을 수 있지만,
-        // 처음 만들어질 때 생성되는 것은 막을 수 없어요.
-        // 어느 함수가 먼저 불러내는지 도무지 못 찾겠네요...
       });
-
       eventsPrev.current = [];
-
       if (props.onReady) props.onReady(player.current);
     }
 
@@ -140,7 +111,7 @@ export function VideoPlayer(props: Props) {
 
             if (!Number.isNaN(hours) &&!Number.isNaN(minutes) &&!Number.isNaN(seconds))
               props.onTimeChange(hours * 60 * 60 + minutes * 60 + seconds);
-              console.log('현재 동영상 시간:', currentTimeNode);
+              // console.log('현재 동영상 시간:', currentTimeNode);
           });
         });
         playerTimeObserver.current.observe(currentTimeNode, {
@@ -153,14 +124,16 @@ export function VideoPlayer(props: Props) {
     }
   }, [scriptLoaded, playlist, props]);
 
-  // React.useEffect(() => {
-  //   if (player.current && props.videoIsPaused) {
-  //     player.current._corePlayer = props.videoIsPaused;
-  //   }
-  // }, [props.videoIsPaused, player.current]);
+  useEffect(() => {
+    const flag = (e) => {
+      if (e.keyCode < 36 && e.keyCode < 40) {
+        e.preventDefault();
+      }
+    }
+    window.addEventListener('keydown', flag)
+    return () => window.removeEventListener('keydown', flag);
+  }, [player]);
 
-  // 렌더링.
-  // console.log(window.ncplayer);
   return (
     <>
       <Script
@@ -177,13 +150,12 @@ export function VideoPlayer(props: Props) {
   );
 }
 
-
 const Player = styled.div<{ showControl?: boolean }>`
   width: 100%;
   aspect-ratio: 16/9;
   overflow: hidden;
   z-index: 1;
-
+  
   & .webplayer-internal-core-shadow {
     width: 100% !important;
     height: auto !important;

@@ -211,7 +211,7 @@ const CntCards = styled(Box)`
 
 const CardLeft = styled(Box)`
   padding: 0px 8px;
-  background: #256def;
+  background: rgb(194,51,51);
   color: white;
   width: 50%;
   display: flex;

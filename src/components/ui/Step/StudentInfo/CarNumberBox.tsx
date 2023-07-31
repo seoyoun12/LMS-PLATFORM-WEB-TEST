@@ -57,10 +57,7 @@ export function CarNumberBox({ parantSetValue }: Props) {
           displayEmpty
           renderValue={ !watch().localName && (() => <Placeholder>지역명</Placeholder>) }
           placeholder='지역명'
-          onChange={e => {
-            setValue('localName',e.target.value)
-            console.log('watch is',watch())
-          }}
+          onChange={e =>  setValue('localName',e.target.value as string)}
         >
           {localList.map((item) => (
             <MenuItem key={item.type} value={item.title}>

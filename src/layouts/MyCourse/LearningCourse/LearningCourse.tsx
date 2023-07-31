@@ -11,14 +11,14 @@ export function LearningCourse() {
   const { data } = useLearningStatus();
 
   const onClickEnterCourseLesson = (res: LearningStatusRes) => {
-    const isStartStudy =
-      new Date(res.studyStartDate.replaceAll('-', '/')).getTime() < new Date().getTime(); //현재시간이 크면 true 아니면 false
-    const isEndedStudy =
-      new Date(res.studyEndDate.replaceAll('-', '/')).getTime() < new Date().getTime(); //현재시간이 크면 true 아니면 false
-    if (res.progressStatus === ProgressStatus.TYPE_BEFORE || !isStartStudy)
-      return snackbar({ variant: 'error', message: '아직 학습이 시작되지 않았습니다!' });
-    if (res.progressStatus === ProgressStatus.TYPE_ENDED || isEndedStudy)
-      return snackbar({ variant: 'error', message: '종료된 학습입니다!' });
+    // console.log('hello world');
+    const isStartStudy = new Date(res.studyStartDate.replaceAll('-', '/')).getTime() < new Date().getTime(); //현재시간이 크면 true 아니면 false
+    const isEndedStudy = new Date(res.studyEndDate.replaceAll('-', '/')).getTime() < new Date().getTime(); //현재시간이 크면 true 아니면 false
+    if (res.progressStatus === ProgressStatus.TYPE_BEFORE || !isStartStudy) return snackbar({ variant: 'error', message: '아직 학습이 시작되지 않았습니다!' });
+    if (res.progressStatus === ProgressStatus.TYPE_ENDED || isEndedStudy) return snackbar({ variant: 'error', message: '종료된 학습입니다!' });
+
+    // 이코드 왜 빼놓은거...?
+    window.open(`/course/${res.courseUserSeq}/lesson/${!res.recentLessonSeq ? 1 : res.recentLessonSeq}`,'_blank');
   };
 
   if (!data) return <Spinner />;
@@ -68,7 +68,6 @@ export function LearningCourse() {
                     //     ? `지금바로 학습하기!(${startDate}~${endDate})`
                     //     : `${item.startLeftDays}일 남음(${startDate}~${endDate})`
                     // }
-
                     // content1={
                     //   res.progress > 0
                     //     ? `현재 진도율 ${res.progress}%`

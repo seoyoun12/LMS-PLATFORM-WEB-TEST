@@ -84,6 +84,8 @@ export function CategoryBoardQuestionForm({
   //   // }
   // }
 
+
+  // 역대급 코드
   const onChangePhoneNum01 = (e: any) => {
     setPhone01(e.target.value);
   };

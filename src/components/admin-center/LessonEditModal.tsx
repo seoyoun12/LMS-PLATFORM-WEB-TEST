@@ -1,26 +1,11 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import {
-  Backdrop,
-  Box,
-  Button,
-  Chip,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  FormLabel,
-  InputAdornment,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  Select,
-} from '@mui/material';
+import { Backdrop,Box,Button,Chip,FormControl,FormControlLabel,FormHelperText,FormLabel,InputAdornment,Radio,RadioGroup } from '@mui/material';
 import { ErrorMessage } from '@hookform/error-message';
 import { ContentType } from '@common/api/content';
 import { ChangeEvent, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { CustomInputLabel } from '@components/ui/InputLabel';
 import { Modal, Spinner } from '@components/ui';
 import { Lesson } from '@common/api/lesson';
 import { modifyLesson, removeLesson, useLessonList } from '@common/api/adm/lesson';
@@ -34,6 +19,8 @@ import { FileUploader } from '@components/ui/FileUploader';
 import { BbsType, deleteFile } from '@common/api/adm/file';
 import { useDialog } from '@hooks/useDialog';
 import router from 'next/router';
+import useToggle from '@hooks/useToggle';
+
 
 interface Props {
   open: boolean;
@@ -65,17 +52,16 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   const [fileName, setFileName] = useState<string | null>(null);
   const { handleUpload, handleProgressStatus, uploadPercentage } = useFileUpload();
   const { contentSeq } = router.query;
-  const { lessonList, lessonListError, mutate } = useLessonList(Number(contentSeq));
+  const { mutate } = useLessonList(Number(contentSeq));
   const dialog = useDialog();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-    reset,
-    resetField,
-  } = useForm<FormType>({ defaultValues });
+  const {register, handleSubmit, formState: { errors }, control, reset,watch, resetField, setValue} = useForm<FormType>({ defaultValues });
+  const {onToggle: onToggleAddQuizModal, toggle: isAddQuizModalOpen} = useToggle();
 
+  const onInteractionRadioChange = React.useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const { target: { value } } = e;
+    setValue('interaction', value === 'on');
+  },[setValue]);
+  
   useEffect(() => {
     if (!!lesson && open) {
       reset({ ...lesson });
@@ -120,11 +106,11 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
         handleClose(true);
         await mutate();
       }
-    } catch (e: any) {
+    } catch (e) {
       snackbar({ variant: 'error', message: e.data.message });
     }
   };
-
+  
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...lessonWatch }) => {
     setSubmitLoading(true);
     const lesson = {
@@ -146,7 +132,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
         snackbar({ variant: 'error', message: '파일을 첨부하셔야합니다.' });
         setSubmitLoading(false);
       }
-    } catch (e: any) {
+    } catch (e) {
       snackbar({ variant: 'error', message: e.message || e.data?.message });
       setSubmitLoading(false);
     }
@@ -167,7 +153,40 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   };
 
   if (error) return <div>error</div>;
+
   return (
+    <>
+      <Modal
+      open={isAddQuizModalOpen}
+      onCloseModal={onToggleAddQuizModal}
+      sx={{
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+        width:'100%',
+        height:'100%',
+        borderRadius:'10px',
+        margin: 'auto',
+        background: 'rgba(0,0,0,0.2)',
+        
+      }}
+      fullWidth
+      title="퀴즈상태 변경"
+      
+      >
+      <Box 
+        sx={{
+          width:'100%',
+          minHeight:'590px',
+          padding: '1rem',
+          border: '1px solid red',
+          marginTop:'1rem'
+        }}
+      >
+        <Typography fontSize={40} fontWeight={900}>Hello world!!</Typography>
+      </Box>
+    </Modal>
+
     <Modal
       // action="저장"
       action={
@@ -189,18 +208,19 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
             저장
           </SubmitBtn>
         </>
-      }
-      title="강의 업로드"
-      maxWidth="sm"
-      fullWidth
-      loading={!lesson}
-      open={open}
-      actionLoading={submitLoading}
-      onCloseModal={() => handleClose(true)}
-      onSubmit={handleSubmit(onSubmit)}
-    >
+        }
+        title="강의 업로드"
+        maxWidth="sm"
+        fullWidth
+        loading={!lesson}
+        open={open}
+        actionLoading={submitLoading}
+        onCloseModal={() => handleClose(true)}
+        onSubmit={handleSubmit(onSubmit)}
+      >
       <Box component="form">
         <FormContainer>
+          {/* FormControl은 인풋당 하나씩 박는게 아닙니다... 제발요 */}
           <FormControl className="form-control">
             <TextField
               {...register('chapter', { required: '차시를 입력해주세요.' })}
@@ -209,9 +229,6 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
               variant="outlined"
             />
             <ErrorMessage errors={errors} name="chapter" as={<FormHelperText error />} />
-          </FormControl>
-
-          <FormControl className="form-control">
             <TextField
               {...register('lessonNm', { required: '강의명을 입력해주세요.' })}
               size="small"
@@ -223,9 +240,10 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
               name="contentName"
               as={<FormHelperText error />}
             />
-          </FormControl>
+          
 
-          <FormControl className="form-control" sx={{ display: 'none' }}>
+          {/* 닌자코드  */}
+          {/* <FormControl className="form-control" sx={{ display: 'none' }}>
             <CustomInputLabel size="small">콘텐츠 타입</CustomInputLabel>
             <Controller
               rules={{ required: '콘텐츠 유형을 선택해주세요.' }}
@@ -246,9 +264,9 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
               name="contentType"
               as={<FormHelperText error />}
             />
-          </FormControl>
+          </FormControl> */}
 
-          <FormControl className="form-control">
+          
             <FileUploader
               register={register}
               regName="files"
@@ -259,16 +277,16 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
             </FileUploader>
             {fileName ? (
               <Chip
-                // sx={{ mt: '8px' }} // 파일 첨부시 여백 생기면서 늘어남. 주석처리.
+                // sx={{ mt: '8px' }} // 파일 첨부시 여백 생기면서 늘어남. 주석처리. < 이런건 주석을 달지 말고 그냥 지웠으면 좋겠습니다.
                 icon={<OndemandVideoOutlinedIcon />}
                 label={fileName}
                 onDelete={handleDeleteFile}
                 sx={{ pl: '5px', ml: '5px', maxWidth: '700px' }}
               />
             ) : null}
-          </FormControl>
+          
 
-          <FormControl className="form-control">
+          
             <CompleteTimeControl>
               <Label variant="body2">학습시간</Label>
               <InputContainer>
@@ -290,9 +308,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                 />
               </InputContainer>
             </CompleteTimeControl>
-          </FormControl>
-
-          <FormControl className="form-control">
+          
             <FormLabel focused={false}>상태</FormLabel>
             <Controller
               rules={{ required: true }}
@@ -313,18 +329,93 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                 </RadioGroup>
               )}
             />
-          </FormControl>
-
-          {/* <DeleteBtn
-            variant="contained"
-            color="warning"
-            onClick={() => onRemoveLesson(lesson.seq)}
-            size="small"
+            <FormLabel focused={false}>상호작용</FormLabel>
+            <Controller
+              rules={{ required: true }}
+              control={control}
+              name="interaction"
+              render={({ field }) => (
+                <RadioGroup
+                  row
+                  {...field}
+                  value={watch().interaction ? 'on' : 'off'}
+                  onChange={onInteractionRadioChange}
+                >
+                  <FormControlLabel
+                    value='on'
+                    control={<Radio />}
+                    label="켬"
+                  />
+                  <FormControlLabel
+                    value='off'
+                    control={<Radio />}
+                    label="끔"
+                  />
+                </RadioGroup>
+              )}
+            />
+            {watch().interaction
+            ? <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mt: 2,
+                  backgroundColor: '#d7d7d7c7',
+                  borderRadius: '4px',
+                  padding: '1rem'
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%'
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    sx={{
+                      boxShadow: '1px 1px 2px #222',
+                    }}
+                    onClick={onToggleAddQuizModal}
+                  >
+                    <Typography> + 추가 / 수정 하기 (총 0개)</Typography>
+                  </Button>
+                </Box>
+            </Box>
+            : <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              mt: 2,
+              backgroundColor: '#d7d7d7c7',
+              borderRadius: '4px',
+              padding: '1rem'
+            }}
           >
-            삭제
-          </DeleteBtn> */}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%'
+              }}
+            >
+                <Typography>
+                  상호작용이 꺼져있으므로 퀴즈가 나타나지 않습니다.
+                </Typography>
+              </Box>
+            </Box>
+            }
+          </FormControl>
         </FormContainer>
       </Box>
+        
       <Backdrop
         open={submitLoading}
         sx={{ zIndex: 9999, display: 'flex', flexDirection: 'column' }}
@@ -365,17 +456,19 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
         </Box>
       </Backdrop>
     </Modal>
+    </>
   );
 }
 
 const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
   padding-top: 20px;
 
   .form-control {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 
     &:not(:last-child) {
       margin-bottom: 30px;
@@ -395,7 +488,6 @@ const InputContainer = styled.div`
 
   > * {
     width: 40%;
-
     &:first-of-type {
       margin-right: 12px;
     }

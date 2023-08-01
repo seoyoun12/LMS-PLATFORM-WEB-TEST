@@ -35,6 +35,7 @@ export interface Lesson {
   totalTime: number;
   min: number;
   sec: number;
+  interaction: boolean
 }
 
 export type LessonInput = Partial<Lesson>;

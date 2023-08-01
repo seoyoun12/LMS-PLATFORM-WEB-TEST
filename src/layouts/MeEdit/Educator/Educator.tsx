@@ -126,9 +126,13 @@ const defaultValues = {
 };
 
 export function Educator({ locationList }: Props) {
-  const [openPromptDialog, setOpenPromptDialog] = useState(false);
+  
   const { user, error } = useMyUser();
   const [phone, setPhone, onChangePhone] = useInput('');
+
+
+
+  const [openPromptDialog, setOpenPromptDialog] = useState(false);
   const [email, setEmail] = useState<string>();
   const [location, setLocation] = useState<userRegistrationType>();
   const [company, setCompany] = useState<string>();
@@ -152,16 +156,25 @@ export function Educator({ locationList }: Props) {
 
   useEffect(() => {
     (async function () {
-      const { data } = await getProvincial();
-      setCompany(data.company);
-      // setPhone(data.phone.slice(0, 3));
-      // setPhone2(data.phone.slice(3, 7));
-      // setPhone3(data.phone.slice(7, 11));
-      setEmail(data.email);
-      setLocation(data.userRegistrationType);
-      setSmsChecked(data.smsYn === YN.YES ? true : false);
-      setEmailChecked(data.emailYn === YN.YES ? true : false);
-      setPhone(data.phone);
+      try {
+        const { data } = await getProvincial();
+
+        if(data){
+          setCompany(data.company);
+          // setPhone(data.phone.slice(0, 3));
+          // setPhone2(data.phone.slice(3, 7));
+          // setPhone3(data.phone.slice(7, 11));
+          setEmail(data.email);
+          setLocation(data.userRegistrationType);
+          setSmsChecked(data.smsYn === YN.YES ? true : false);
+          setEmailChecked(data.emailYn === YN.YES ? true : false);
+          setPhone(data.phone);
+        }
+        
+      } catch (error) {
+        console.error(error);
+      }
+      
     })();
   }, []);
 

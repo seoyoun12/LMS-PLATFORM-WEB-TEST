@@ -158,7 +158,7 @@ export function TransWorker({ type, locationList }: Props) {
   const [company, setCompany, onChangeComp] = useInput('');
   const [vehicleNumber, setVehicleNumber, onChangeVehicleNum] = useInput('');
   const [vehicleRegi, setVehicleRegi, onChangeVehicleRegi] = useInput('');
-  const [phone, setPhone, onChangePhone1] = useInput('');
+  const [phone, setPhone, onChangePhone1] = useInput(null);
   const [phone2, setPhone2, onChangePhone2] = useInput('');
   const [phone3, setPhone3, onChangePhone3] = useInput('');
   const [smsChecked, setSmsChecked] = useState(false);
@@ -191,7 +191,7 @@ export function TransWorker({ type, locationList }: Props) {
         setPhone2(isStringInPhone(data.phone) ? data.phone.slice(3, 7) : '');
         setPhone3(isStringInPhone(data.phone) ? data.phone.slice(7, 11) : '');
         setSmsChecked(data.smsYn === YN.YES ? true : false);
-        setOccupation1(data.userBusinessTypeOne);
+        setOccupation1(data.userBusinessTypeOne as string);
         setOccupation2(data.userBusinessTypeTwo);
         setVehicleRegi(data.userRegistrationType);
         setBackdropLoading(false);
@@ -444,6 +444,7 @@ export function TransWorker({ type, locationList }: Props) {
                       labelId="phone-type-label"
                       id="phone-type"
                       onChange={onChangePhone1}
+
                       displayEmpty
                       renderValue={
                         phone === '' ? () => <Placeholder>지역명</Placeholder> : undefined

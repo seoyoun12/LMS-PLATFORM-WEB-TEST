@@ -151,16 +151,16 @@ const defaultValues = {
 
 export function TransWorker({ type, locationList }: Props) {
   const { user, error } = useMyUser();
-  const [occupation1, setOccupation1, onChangeOcc1] = useInput();
-  const [occupation2, setOccupation2, onChangeOcc2] = useInput();
+  const [occupation1, setOccupation1, onChangeOcc1] = useInput('');
+  const [occupation2, setOccupation2, onChangeOcc2] = useInput('');
   const [showCompany, setShowCompany] = useState(false);
   // const [companyOption, setCompanyOption, onCompanyOpt] = useInput(false);
-  const [company, setCompany, onChangeComp] = useInput();
-  const [vehicleNumber, setVehicleNumber, onChangeVehicleNum] = useInput();
-  const [vehicleRegi, setVehicleRegi, onChangeVehicleRegi] = useInput();
-  const [phone, setPhone, onChangePhone1] = useInput();
-  const [phone2, setPhone2, onChangePhone2] = useInput();
-  const [phone3, setPhone3, onChangePhone3] = useInput();
+  const [company, setCompany, onChangeComp] = useInput('');
+  const [vehicleNumber, setVehicleNumber, onChangeVehicleNum] = useInput('');
+  const [vehicleRegi, setVehicleRegi, onChangeVehicleRegi] = useInput('');
+  const [phone, setPhone, onChangePhone1] = useInput('');
+  const [phone2, setPhone2, onChangePhone2] = useInput('');
+  const [phone3, setPhone3, onChangePhone3] = useInput('');
   const [smsChecked, setSmsChecked] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const { register, reset, resetField, setValue, watch } = useForm<FormType>({

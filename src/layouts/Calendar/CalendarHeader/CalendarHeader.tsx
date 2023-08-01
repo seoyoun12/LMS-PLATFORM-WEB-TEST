@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
-import { Box, Button, Radio, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
-import { eduLegendList, FilterType, MonthClickType } from '../Calendar';
+import { eduLegendList, MonthClickType } from '../Calendar';
 import { grey } from '@mui/material/colors';
-import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import ArrowLeftRoundedIcon from '@mui/icons-material/ArrowLeftRounded';
 import ArrowRightRoundedIcon from '@mui/icons-material/ArrowRightRounded';
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded';

@@ -14,7 +14,7 @@ import {
   courseType,
   useCourseClass,
 } from '@common/api/courseClass';
-import { Spinner } from '@components/ui';
+
 import { YN } from '@common/constant';
 
 export interface ClickedPlanInfo {

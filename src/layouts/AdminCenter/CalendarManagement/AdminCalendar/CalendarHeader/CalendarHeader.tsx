@@ -1,13 +1,13 @@
 import styled from '@emotion/styled';
-import { Box, Button, Radio, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
-import { eduLegendList, FilterType, MonthClickType } from '../Calendar';
+import { eduLegendList, MonthClickType } from '../Calendar';
 import { grey } from '@mui/material/colors';
-import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
+
 import ArrowLeftRoundedIcon from '@mui/icons-material/ArrowLeftRounded';
 import ArrowRightRoundedIcon from '@mui/icons-material/ArrowRightRounded';
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
-import { CourseType } from '@common/api/adm/courseClass';
+
 
 interface Props {
   onChangeMonth: (type: MonthClickType, value: number) => void;
@@ -71,6 +71,7 @@ export function CalendarHeader({
         <MonthWrap>
           {Months.map(month => (
             <Box
+              key={month.value}
               sx={{ height: '50px', flexGrow: 1, cursor: 'pointer' }}
               className={`header-month-box `}
               onClick={() => handleLeftMonthClick(month.value)}
@@ -125,7 +126,10 @@ export function CalendarHeader({
       </FilterWrap>
       <Box display="flex" justifyContent="center" gap="1rem" mt={4}>
         {eduLegendList.map(legend => (
-          <Box display="flex" alignItems="center">
+          <Box
+          key={legend.title}
+          display="flex"
+          alignItems="center">
             <CircleRoundedIcon sx={{ fontSize: '1rem', color: legend.color }} />{' '}
             <span>{legend.title}</span>
           </Box>

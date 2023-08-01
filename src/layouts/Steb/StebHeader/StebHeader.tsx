@@ -33,18 +33,18 @@ export default function StebHeader({ value }: { value: number }) {
         >
         <StepHeaderProgessIcon>
             <Image
-              src={value === 1 ? '/assets/images/lightOnEduScheduleIcon.png' : '/assets/images/lightOffEduScheduleIcon.png'}
+              src={value === 1 ? '/assets/images/education-schedule-red-circle-icon.png' : '/assets/images/lightOffEduScheduleIcon.png'}
               width={120}
               height={120}
               alt=''
             />
         </StepHeaderProgessIcon>
         <StepHeaderProgessIcon>
-          <Image src={value === 2 ? '/assets/images/lightOnJoinIcon.png' : '/assets/images/lightOffJoinIcon.png'} width={120} height={120} alt='' />
+          <Image src={value === 2 ? '/assets/images/education-application-red-circle-icon.png' : '/assets/images/lightOffJoinIcon.png'} width={120} height={120} alt='' />
         </StepHeaderProgessIcon>
         <StepHeaderProgessIcon>
             <Image
-              src={value === 3 ? '/assets/images/lightOnJoinCompleteIcon.png' : '/assets/images/lightOffJoinCompleteIcon.png'}
+              src={value === 3 ? '/assets/images/education-complete-red-circle-icon.png' : '/assets/images/lightOffJoinCompleteIcon.png'}
               width={120}
               height={120}
               alt=''

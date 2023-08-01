@@ -8,14 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import AnalyticsOutlinedIcon from '@mui/icons-material/AnalyticsOutlined';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
-import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
-import SourceOutlinedIcon from '@mui/icons-material/SourceOutlined';
+
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
@@ -35,6 +28,10 @@ import Logo from 'public/assets/svgs/logo.svg';
 import Image from 'next/image';
 
 const drawerWidth = 290;
+
+
+// 미사용 컴포넌트. 대신 src/components/admin-center/Drawer.tsx 사용
+// 폴더 구조 이해하면 삭제.
 
 export function Drawer02({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -347,6 +344,7 @@ export function Drawer02({ children }: { children: ReactNode }) {
                 src='/assets/images/ctsoecLogo.png'
                 height={40}
                 width={230}
+                alt='logo'
               />
               <Typography fontWeight='bold' fontSize='18px' textAlign='center'>
                 학습관리센터

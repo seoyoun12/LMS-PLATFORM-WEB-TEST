@@ -10,12 +10,8 @@ export function useInput<T>(initialState: T): [T, Dispatch<SetStateAction<T>> ,(
       if(typeof e === 'string' || typeof e === 'number') setValue(e)
       else if(e instanceof Object){
         const event = e as unknown as ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>
-        
         setValue(event.target.value as unknown as T);
       }
-      
-      
-      
     }
 
     return [value , setValue , onChangeValue]

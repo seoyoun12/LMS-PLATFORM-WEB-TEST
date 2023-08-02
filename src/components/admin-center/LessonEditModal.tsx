@@ -1,10 +1,10 @@
-import * as React from 'react';
+
 import Typography from '@mui/material/Typography';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Backdrop,Box,Button,Chip,FormControl,FormControlLabel,FormHelperText,FormLabel,InputAdornment,Radio,RadioGroup } from '@mui/material';
+import { Backdrop,Box,Button,Chip,FormControl,FormControlLabel,FormHelperText,FormLabel,InputAdornment,InputLabel,Radio,RadioGroup } from '@mui/material';
 import { ErrorMessage } from '@hookform/error-message';
 import { ContentType } from '@common/api/content';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { Modal, Spinner } from '@components/ui';
 import { Lesson } from '@common/api/lesson';
@@ -48,7 +48,7 @@ const defaultValues = {
 export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   const snackbar = useSnackbar();
   const [submitLoading, setSubmitLoading] = useState(false);
-  const [isFileDelete, setIsFileDelete] = useState(false);
+  
   const [fileName, setFileName] = useState<string | null>(null);
   const { handleUpload, handleProgressStatus, uploadPercentage } = useFileUpload();
   const { contentSeq } = router.query;
@@ -57,39 +57,32 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   const {register, handleSubmit, formState: { errors }, control, reset,watch, resetField, setValue} = useForm<FormType>({ defaultValues });
   const {onToggle: onToggleAddQuizModal, toggle: isAddQuizModalOpen} = useToggle();
 
-  const onInteractionRadioChange = React.useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const onInteractionRadioChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { target: { value } } = e;
     setValue('interaction', value === 'on');
   },[setValue]);
-  
-  useEffect(() => {
-    if (!!lesson && open) {
-      reset({ ...lesson });
-      setFileName(lesson?.s3Files[0]?.name || null);
-    }
-  }, [lesson, open, reset]);
 
-  const fileHandler = async (files: File[], lesson: Lesson) => {
-    const isFileUpload = files.length > 0;
-    if (isFileUpload) {
-      const file = files[0];
-      const fileName = files[0].name;
-      await handleUpload({
-        dataId: lesson.seq,
-        file,
-        fileName,
-        fileUploadType: FileType.LESSON_FILE,
+  const handleDeleteFile = useCallback(async () => {
+    const confirm = await dialog({
+      title: '파일 삭제하기',
+      description: '정말로 삭제하시겠습니까?',
+      confirmText: '삭제하기',
+      cancelText: '취소',
+    });
+    if (!confirm) return;
+    try {
+      await deleteFile({
+        fileTypeId: lesson.seq,
+        fileType: BbsType.TYPE_LESSON,
+        fileSeqList: lesson.s3Files.map(v => v.seq),
       });
-    } else {
-      if (isFileDelete) {
-        await deleteFile({
-          fileTypeId: lesson.seq,
-          fileType: BbsType.TYPE_LESSON,
-          fileSeqList: lesson.s3Files.map(v => v.seq),
-        });
-      }
+      resetField('files');
+      setFileName(null);
+      
+    } catch (error) {
+      return snackbar({ variant: 'error', message: error.message });
     }
-  };
+  },[lesson,resetField])
 
   // 삭제
   const onRemoveLesson = async (lessonId: number) => {
@@ -110,49 +103,67 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
       snackbar({ variant: 'error', message: e.data.message });
     }
   };
+
+    // 쓰레기함수.. 세상에.. create와 delete를 하나의 함수에서 분기처리한다..? 그것도 비순수함수로? 진짜 미친것같다...
+  // try catch는 왜 안쓰는걸까.. 본인 함수는 무결성 무오류 그 자체라는건가..? 정신병 걸릴것 같다
+  const fileHandler = async (files: File[], lesson: Lesson) => {
+    const file = files[0];
+    if (!file) return;
+    try {
+      const { name: fileName } = file;
+      await handleUpload({
+        dataId: lesson.seq,
+        file, // files[0]
+        fileName,
+        fileUploadType: FileType.LESSON_FILE,
+      });
+      
+    } catch (error) {
+      return snackbar({ variant: 'error', message: error.message });
+    }
+  };
+  
+  const onUploadLesson = async ( files:File[], lesson: Lesson, isUploadWithNewVideo:boolean ) => {
+    try {
+      isUploadWithNewVideo && await fileHandler(files, lesson);
+      setSubmitLoading(false);
+      handleClose(true);
+      snackbar({ variant: 'success', message: '업로드 완료되었습니다.' });
+      await modifyLesson({ lessonSeq: lesson.seq, lesson });
+      await mutate();
+    } catch (e) {
+      setSubmitLoading(false);
+      handleClose(true);
+      snackbar({ variant: 'error', message: e.message || e.data?.message });
+    }
+  }
   
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...lessonWatch }) => {
     setSubmitLoading(true);
+    const isUploadWithNewVideo = files && files.length > 0
     const lesson = {
       ...lessonWatch,
       completeTime: Number(lessonWatch.min) * 60 + Number(lessonWatch.sec),
       totalTime: Number(lessonWatch.min) * 60 + Number(lessonWatch.sec),
     };
-
-    try {
-      if (fileName) {
-        await modifyLesson({ lessonSeq: lesson.seq, lesson });
-        await fileHandler(files, lesson);
-        const isTrue = await handleProgressStatus();
-        if (isTrue) return snackbar({ variant: 'error', message: '업로드실패' });
-        setSubmitLoading(false);
-        handleClose(true);
-        snackbar({ variant: 'success', message: '업로드 완료되었습니다.' });
-      } else {
-        snackbar({ variant: 'error', message: '파일을 첨부하셔야합니다.' });
-        setSubmitLoading(false);
-      }
-    } catch (e) {
-      snackbar({ variant: 'error', message: e.message || e.data?.message });
-      setSubmitLoading(false);
-    }
+    await onUploadLesson(files, lesson, isUploadWithNewVideo);
   };
-
+  
   const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setFileName(files[0].name);
-    setIsFileDelete(false);
   };
 
-  const handleDeleteFile = () => {
-    resetField('files');
-    setFileName(null);
-    setIsFileDelete(true);
-  };
+  useEffect(() => {
+    if (!!lesson && open) {
+      reset({ ...lesson });
+      setFileName(lesson?.s3Files[0]?.name || null);
+    }
+  }, [lesson, open, reset]);
 
-  if (error) return <div>error</div>;
+  if (error) return <div>강의 업로드 정보를 불러오는데 실패하였습니다.</div>;
 
   return (
     <>
@@ -168,11 +179,9 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
         borderRadius:'10px',
         margin: 'auto',
         background: 'rgba(0,0,0,0.2)',
-        
       }}
       fullWidth
       title="퀴즈상태 변경"
-      
       >
       <Box 
         sx={{
@@ -188,7 +197,6 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
     </Modal>
 
     <Modal
-      // action="저장"
       action={
         <>
           <DeleteBtn
@@ -216,7 +224,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
         open={open}
         actionLoading={submitLoading}
         onCloseModal={() => handleClose(true)}
-        onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit)}
       >
       <Box component="form">
         <FormContainer>
@@ -241,32 +249,6 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
               as={<FormHelperText error />}
             />
           
-
-          {/* 닌자코드  */}
-          {/* <FormControl className="form-control" sx={{ display: 'none' }}>
-            <CustomInputLabel size="small">콘텐츠 타입</CustomInputLabel>
-            <Controller
-              rules={{ required: '콘텐츠 유형을 선택해주세요.' }}
-              control={control}
-              name="contentType"
-              render={({ field }) => (
-                <Select {...field} size="small" label="콘텐츠 타입">
-                  {contentTypeOptions.map(({ value, name }) => (
-                    <MenuItem value={value} key={value}>
-                      {name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
-            />
-            <ErrorMessage
-              errors={errors}
-              name="contentType"
-              as={<FormHelperText error />}
-            />
-          </FormControl> */}
-
-          
             <FileUploader
               register={register}
               regName="files"
@@ -277,16 +259,13 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
             </FileUploader>
             {fileName ? (
               <Chip
-                // sx={{ mt: '8px' }} // 파일 첨부시 여백 생기면서 늘어남. 주석처리. < 이런건 주석을 달지 말고 그냥 지웠으면 좋겠습니다.
                 icon={<OndemandVideoOutlinedIcon />}
                 label={fileName}
                 onDelete={handleDeleteFile}
                 sx={{ pl: '5px', ml: '5px', maxWidth: '700px' }}
               />
             ) : null}
-          
-
-          
+            
             <CompleteTimeControl>
               <Label variant="body2">학습시간</Label>
               <InputContainer>
@@ -309,7 +288,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
               </InputContainer>
             </CompleteTimeControl>
           
-            <FormLabel focused={false}>상태</FormLabel>
+            <Typography>상태</Typography>
             <Controller
               rules={{ required: true }}
               control={control}
@@ -329,9 +308,9 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                 </RadioGroup>
               )}
             />
-            <FormLabel focused={false}>상호작용</FormLabel>
+            <Typography>상호작용</Typography>
             <Controller
-              rules={{ required: true }}
+              
               control={control}
               name="interaction"
               render={({ field }) => (

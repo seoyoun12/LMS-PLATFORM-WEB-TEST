@@ -251,7 +251,7 @@ export default function Steb2() {
     const postData = {
       ...rest,
       businessType: watch().businessType, //TYPE_PASSENGER 이런식인줄 알았으나 PASSENGER식으로 요청해야함
-      carNumber: hideCarNumber ? null : rest.carNumber,
+      carNumber: hideCarNumber ? '충남00아0000' : rest.carNumber,
       identityNumber: firstIdentityNumber + secondIdentityNumber,
       phone: firstPhone + secondPhone + thirdPhone,
     }; //민증번호때문에 구분

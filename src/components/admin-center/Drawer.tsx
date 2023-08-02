@@ -18,39 +18,11 @@ import { useRouter } from 'next/router';
 import { Accordion } from '@components/ui';
 import { logout } from '@common/api';
 import Image from 'next/image';
+import a11yProps from '@utils/a11yProps';
+import CustomTabPanel from './drawer/CustomTabPanel';
 
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
-
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <Box
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      sx={{
-        marginTop: 2,
-      }}
-      {...other}
-    >
-      {value === index && children}
-    </Box>
-  );
-}
 
 export type TabType = 'normal' | 'traffic';
 

@@ -1,7 +1,7 @@
 
 import Typography from '@mui/material/Typography';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Backdrop,Box,Button,Chip,FormControl,FormControlLabel,FormHelperText,FormLabel,InputAdornment,InputLabel,Radio,RadioGroup } from '@mui/material';
+import { Backdrop,Box,Button,Chip,FormControl,FormControlLabel,FormHelperText,InputAdornment,Radio,RadioGroup } from '@mui/material';
 import { ErrorMessage } from '@hookform/error-message';
 import { ContentType } from '@common/api/content';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
@@ -20,8 +20,7 @@ import { BbsType, deleteFile } from '@common/api/adm/file';
 import { useDialog } from '@hooks/useDialog';
 import router from 'next/router';
 import useToggle from '@hooks/useToggle';
-
-
+import AddQuizModal from './quiz-interaction/AddQuizModal';
 interface Props {
   open: boolean;
   handleClose: (isSubmit: boolean) => void;
@@ -104,8 +103,6 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
     }
   };
 
-    // 쓰레기함수.. 세상에.. create와 delete를 하나의 함수에서 분기처리한다..? 그것도 비순수함수로? 진짜 미친것같다...
-  // try catch는 왜 안쓰는걸까.. 본인 함수는 무결성 무오류 그 자체라는건가..? 정신병 걸릴것 같다
   const fileHandler = async (files: File[], lesson: Lesson) => {
     const file = files[0];
     if (!file) return;
@@ -164,38 +161,14 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   }, [lesson, open, reset]);
 
   if (error) return <div>강의 업로드 정보를 불러오는데 실패하였습니다.</div>;
-
+  console.log(lesson);
   return (
     <>
-      <Modal
+    <AddQuizModal
       open={isAddQuizModalOpen}
       onCloseModal={onToggleAddQuizModal}
-      sx={{
-        display:'flex',
-        justifyContent:'center',
-        alignItems:'center',
-        width:'100%',
-        height:'100%',
-        borderRadius:'10px',
-        margin: 'auto',
-        background: 'rgba(0,0,0,0.2)',
-      }}
-      fullWidth
-      title="퀴즈상태 변경"
-      >
-      <Box 
-        sx={{
-          width:'100%',
-          minHeight:'590px',
-          padding: '1rem',
-          border: '1px solid red',
-          marginTop:'1rem'
-        }}
-      >
-        <Typography fontSize={40} fontWeight={900}>Hello world!!</Typography>
-      </Box>
-    </Modal>
-
+      quiz={lesson?.lessonQuizs}
+    />
     <Modal
       action={
         <>
@@ -228,7 +201,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
       >
       <Box component="form">
         <FormContainer>
-          {/* FormControl은 인풋당 하나씩 박는게 아닙니다... 제발요 */}
+          
           <FormControl className="form-control">
             <TextField
               {...register('chapter', { required: '차시를 입력해주세요.' })}

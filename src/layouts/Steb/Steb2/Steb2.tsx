@@ -83,22 +83,24 @@ export default function Steb2() {
 
   
   const nextStep = () => {
+    setPageIndex(prev => prev + 1);
     if(currentIndex > 9) return;
     if(currentIndex === 3 && hideCarNumber) return setCurrentIndex(5);
     if(currentIndex === 2 && disabledCompany) return setCurrentIndex(4);
     setCurrentIndex(prev  => prev + 1)
   
-    setPageIndex(prev => prev + 1);
+    
   }
 
   // currentIndex가 1이면 router.back(), 1 초과면 currentIndex - 1로 리팩터링 
   const prevStep = () => {
+    setPageIndex(prev => prev - 1);
     if(currentIndex <= 1) return
     if(currentIndex === 5 && hideCarNumber) return setCurrentIndex(3);
     if(currentIndex === 4 && disabledCompany) return setCurrentIndex(2);
     setCurrentIndex(prev  => prev - 1)
     
-    setPageIndex(prev => prev - 1);
+    
   }
 
 

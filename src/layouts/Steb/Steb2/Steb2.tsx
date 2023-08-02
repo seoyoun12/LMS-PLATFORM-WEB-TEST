@@ -87,7 +87,7 @@ export default function Steb2() {
     if(currentIndex === 3 && hideCarNumber) return setCurrentIndex(5);
     if(currentIndex === 2 && disabledCompany) return setCurrentIndex(4);
     setCurrentIndex(prev  => prev + 1)
-    if(pageIndex > 8) return;
+    if(pageIndex === 8) return;
     setPageIndex(prev => prev + 1);
   }
 
@@ -97,7 +97,7 @@ export default function Steb2() {
     if(currentIndex === 5 && hideCarNumber) return setCurrentIndex(3);
     if(currentIndex === 4 && disabledCompany) return setCurrentIndex(2);
     setCurrentIndex(prev  => prev - 1)
-    if(pageIndex < 1) return;
+    if(pageIndex === 1) return;
     setPageIndex(prev => prev - 1);
   }
 
@@ -519,7 +519,7 @@ export default function Steb2() {
 
 
         {
-          (currentIndex === 4 && !hideCarNumber) &&
+          (currentIndex === 4) &&
           <StepCard nextStepAbled={getValues().carNumber && getValues().carNumber.length > 8} comment='차량번호를 입력해 주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
             <Box width='100%'
              display='flex' alignItems='center' gap='1.25rem'>

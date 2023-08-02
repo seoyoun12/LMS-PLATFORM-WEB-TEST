@@ -63,6 +63,8 @@ export default function Steb2() {
   const confirmRef = useRef<boolean>();
   // const [CheckElementList, setCheckElementList] = useState<NodeListOf<Element>>();
   const [currentIndex,setCurrentIndex] = useState(1);
+  const [pageIndex,setPageIndex] = useState(1);
+
   const [disabledCompany, setDisabledCompany] = useState(false);
   
   const [isChecked,setIsChecked] = useState('deny');
@@ -85,6 +87,8 @@ export default function Steb2() {
     if(currentIndex === 3 && hideCarNumber) return setCurrentIndex(5);
     if(currentIndex === 2 && disabledCompany) return setCurrentIndex(4);
     setCurrentIndex(prev  => prev + 1)
+    if(pageIndex > 8) return;
+    setPageIndex(prev => prev + 1);
   }
 
   // currentIndex가 1이면 router.back(), 1 초과면 currentIndex - 1로 리팩터링 
@@ -93,6 +97,8 @@ export default function Steb2() {
     if(currentIndex === 5 && hideCarNumber) return setCurrentIndex(3);
     if(currentIndex === 4 && disabledCompany) return setCurrentIndex(2);
     setCurrentIndex(prev  => prev - 1)
+    if(pageIndex < 1) return;
+    setPageIndex(prev => prev - 1);
   }
 
 
@@ -463,7 +469,7 @@ export default function Steb2() {
        
         {
           currentIndex === 2 &&
-          <StepCard nextStepAbled={!!(getValues().businessSubType)} comment='운수 업종을 선택해주세요' index={currentIndex} nextStep={nextStep} prevStep={prevStep}>
+          <StepCard nextStepAbled={!!(getValues().businessSubType)} comment='운수 업종을 선택해주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
             {!(localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS') && (
                 
                 <FormControl sx={{ width:'90%' }}>
@@ -489,7 +495,7 @@ export default function Steb2() {
         }
         {
           currentIndex === 3 &&
-          <StepCard nextStepAbled={!!(getValues().businessName)} comment='회사명을 입력해 주세요' index={currentIndex} nextStep={nextStep} prevStep={prevStep}>
+          <StepCard nextStepAbled={!!(getValues().businessName)} comment='회사명을 입력해 주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
           
               {/* <TextField
                 name='companyName'
@@ -514,7 +520,7 @@ export default function Steb2() {
 
         {
           (currentIndex === 4 && !hideCarNumber) &&
-          <StepCard nextStepAbled={getValues().carNumber && getValues().carNumber.length > 8} comment='차량번호를 입력해 주세요' index={currentIndex} nextStep={nextStep} prevStep={prevStep}>
+          <StepCard nextStepAbled={getValues().carNumber && getValues().carNumber.length > 8} comment='차량번호를 입력해 주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
             <Box width='100%'
              display='flex' alignItems='center' gap='1.25rem'>
 
@@ -589,7 +595,7 @@ export default function Steb2() {
 
         {
           currentIndex === 5 &&
-          <StepCard nextStepAbled={!!(getValues().carRegisteredRegion)} comment='차량 등록지를 선택해주세요' index={currentIndex} nextStep={nextStep} prevStep={prevStep}>
+          <StepCard nextStepAbled={!!(getValues().carRegisteredRegion)} comment='차량 등록지를 선택해주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
               <FormControl sx={{ width:'90%' }}>
                 <Select
                   {...register('carRegisteredRegion', {
@@ -615,7 +621,7 @@ export default function Steb2() {
           </StepCard>
         }
         { currentIndex === 6 &&
-          <StepCard nextStepAbled={!!(getValues().residence)} comment='현재 거주지를 입력해주세요' index={currentIndex} nextStep={nextStep} prevStep={prevStep}>
+          <StepCard nextStepAbled={!!(getValues().residence)} comment='현재 거주지를 입력해주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
               <FormControl sx={{ width:'90%' }}>
                 <Select
                   {...register('residence', {
@@ -634,7 +640,7 @@ export default function Steb2() {
           </StepCard>
         }
         { currentIndex === 7 &&
-          <StepCard nextStepAbled={getValues().firstPhone?.length + getValues().secondPhone?.length + getValues().thirdPhone?.length > 10} comment='휴대전화 번호를 입력해주세요' index={currentIndex} nextStep={nextStep} prevStep={prevStep}>
+          <StepCard nextStepAbled={getValues().firstPhone?.length + getValues().secondPhone?.length + getValues().thirdPhone?.length > 10} comment='휴대전화 번호를 입력해주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
             <Box display='flex' gap='1rem' justifyContent='flex-start'>
               <FormControl sx={{ width:'90%' }}>
                 <Select
@@ -679,7 +685,7 @@ export default function Steb2() {
         }
         {
           currentIndex === 8 && 
-          <StepCard nextStepAbled comment='' index={currentIndex} nextStep={nextStep} prevStep={prevStep}>
+          <StepCard nextStepAbled comment='' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
             <Box paddingLeft='1rem' width='100%' display='flex' flexDirection='column' alignItems='flex-start' justifyContent='center'>
               <Typography display='flex'>SMS 문자 수신 동의 <Typography component='span' sx={{color:'#f41',fontWeight:'bold'}}>(선택)</Typography></Typography>
               <Typography>※ 교육접수 완료 시 예약완료 문자가 발송됩니다.</Typography>
@@ -725,7 +731,7 @@ export default function Steb2() {
         }
         {
           currentIndex === 9 &&
-          <StepCard nextStepAbled comment='개인정보 수집 및 이용 동의(필수)' index={currentIndex} nextStep={nextStep} prevStep={prevStep}>
+          <StepCard nextStepAbled comment='개인정보 수집 및 이용 동의(필수)' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
           <IndividualSummary
             isIndividualCheck={isIndividualCheck}
             setIsIndividualCheck={setIsIndividualCheck}

@@ -23,7 +23,7 @@ function StepCard({index, comment, children,nextStepAbled, nextStep, prevStep}:P
       <Box sx={{display:'flex', flexDirection:'row', justifyContent:'space-between', alignItems:'center', width:'100%',padding:'.25rem 1rem'}}>
         <Box sx={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'flex-start'}}>
           <BubbleBox>
-            <Typography variant='h6' sx={{fontSize:'20px', fontWeight:'bold'}}>STEP {index - 1}</Typography>
+            <Typography variant='h6' sx={{fontSize:'20px', fontWeight:'bold'}}>STEP {index}</Typography>
           </BubbleBox>
           <Box sx={{fontSize:'0.75rem', fontWeight:'bold'}}>
             <Typography fontSize='18px'>

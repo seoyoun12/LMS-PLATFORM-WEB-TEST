@@ -87,7 +87,7 @@ export default function Steb2() {
     if(currentIndex === 3 && hideCarNumber) return setCurrentIndex(5);
     if(currentIndex === 2 && disabledCompany) return setCurrentIndex(4);
     setCurrentIndex(prev  => prev + 1)
-    if(pageIndex === 8) return;
+  
     setPageIndex(prev => prev + 1);
   }
 
@@ -97,7 +97,7 @@ export default function Steb2() {
     if(currentIndex === 5 && hideCarNumber) return setCurrentIndex(3);
     if(currentIndex === 4 && disabledCompany) return setCurrentIndex(2);
     setCurrentIndex(prev  => prev - 1)
-    if(pageIndex === 1) return;
+    
     setPageIndex(prev => prev - 1);
   }
 

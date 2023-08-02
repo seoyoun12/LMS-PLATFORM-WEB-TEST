@@ -144,7 +144,7 @@ export default function Steb2() {
       courseSubCategoryType.CHARTER_BUS === value ||
       courseSubCategoryType.CORPORATE_TAXI === value
     ) {
-      setValue('carNumber', '0');
+      setValue('carNumber', '충남00아0000');
       setValue('businessName', '');
       setValue('businessSubType', value as courseSubCategoryType);
       setDisabledCompany(false);

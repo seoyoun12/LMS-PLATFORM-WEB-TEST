@@ -13,7 +13,6 @@ import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlin
 import ChromeReaderModeOutlinedIcon from '@mui/icons-material/ChromeReaderModeOutlined';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { ReactNode, SyntheticEvent, useState } from 'react';
-import { grey } from '@mui/material/colors';
 import { useRouter } from 'next/router';
 import { Accordion } from '@components/ui';
 import { logout } from '@common/api';

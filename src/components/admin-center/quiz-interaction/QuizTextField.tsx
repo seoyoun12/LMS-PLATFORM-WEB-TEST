@@ -6,19 +6,24 @@ interface Props {
   label: string
   value:string;
   onChange: (e:SyntheticEvent) => void;
+  multiline?: boolean;
+  rows?: number;
+  fullWidth?: boolean;
+  variant?: 'filled' | 'outlined' | 'standard';
 }
 
-function QuizTextField({name,label,onChange,value}:Props) {
+function QuizTextField({name,label,onChange,value,multiline,fullWidth,variant = 'outlined',rows = 1}:Props) {
   return (
     <TextField
     name={name}
     id="outlined-basic"
     label={label}
-    variant="outlined"
+    variant={variant}
     value={value}
-    fullWidth
-    rows={2}
+    rows={rows}
+    multiline={multiline}
     onChange={onChange}
+    fullWidth={fullWidth}
     />
   )
 }

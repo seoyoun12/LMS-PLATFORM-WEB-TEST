@@ -161,7 +161,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   }, [lesson, open, reset]);
 
   if (error) return <div>강의 업로드 정보를 불러오는데 실패하였습니다.</div>;
-  // console.log(lesson);
+  console.log(lesson);
   return (
     <>
     <AddQuizModal
@@ -335,7 +335,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                     }}
                     onClick={onToggleAddQuizModal}
                   >
-                    <Typography> + 추가 / 수정 하기 (총 0개)</Typography>
+                    <Typography> + 추가 / 수정 하기 (총 {lesson.lessonQuizs.length}개)</Typography>
                   </Button>
                 </Box>
             </Box>

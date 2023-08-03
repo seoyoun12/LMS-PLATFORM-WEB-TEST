@@ -9,6 +9,8 @@
  * ---------------------------------------------------------------
  */
 
+import { EduTargetMain } from "./learningMaterial";
+
 export interface AccessTokenRefreshRequestDto {
   accessToken?: string;
   refreshToken?: string;
@@ -6360,6 +6362,94 @@ export interface ProvincialEnrollResponseDto {
    * @format int64
    */
   userSeq?: number;
+}
+
+export class PrincialEnrollResponse implements ProvincialEnrollSaveRequestDto {
+  age3: number;
+  age4: number;
+  age5: number;
+  eduTargetMain: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+  eduTargetSub:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
+  elderly: number;
+  expectedToStartDtime: string;
+  expiredDtime: string;
+  grade1: number;
+  grade2: number;
+  grade3: number;
+  grade4: number;
+  grade5: number;
+  grade6: number;
+  modifiedDtime: string;
+  organization: string;
+  region:
+    | "CHEONAN"
+    | "GONGJU"
+    | "BORYEONG"
+    | "ASAN"
+    | "SEOSAN"
+    | "NONSAN"
+    | "GYERYONG"
+    | "DANGJIN"
+    | "GEUMSAN"
+    | "BUYEO"
+    | "SEOCHEON"
+    | "CHEONGYANG"
+    | "HONGSEONG"
+    | "YESAN"
+    | "TAEAN"
+    | "CHUNGNAM"
+    | "SEJONG"
+    | "SEOUL"
+    | "BUSAN"
+    | "DAEGU"
+    | "INCHEON"
+    | "GWANGJU"
+    | "DAEJEON"
+    | "ULSAN"
+    | "GYEONGGI"
+    | "GANGWON"
+    | "CHUNGBUK"
+    | "JEONBUK"
+    | "JEONNAM"
+    | "GYEONGBUK"
+    | "GYEONGNAM"
+    | "JEJU";
+  selfDriver: number;
+  seq: number;
+  status: number;
+  userInfo: string;
+  userSeq: number;
+
+  constructor( ) {
+    this.age3 = 0;
+    this.age4 = 0;
+    this.age5 = 0;
+    this.eduTargetMain = 'TYPE_CHILDREN';
+    this.eduTargetSub = 'TYPE_ELDERLY';
+    this.elderly = 0;
+    this.expectedToStartDtime = "";
+    this.expiredDtime = "";
+    this.grade1 = 0;
+    this.grade2 = 0;
+    this.grade3 = 0;
+    this.grade4 = 0;
+    this.grade5 = 0;
+    this.grade6 = 0;
+    this.modifiedDtime = "";
+    this.organization = "";
+    this.region = "SEOUL";
+    this.selfDriver = 0;
+    this.seq = 0;
+    this.status = 0;
+    this.userInfo = '';
+    this.userSeq = 0;
+  }
 }
 
 export interface ProvincialEnrollSaveRequestDto {

@@ -162,7 +162,6 @@ const MainPage: NextPage = () => {
   return (
     <WrapMainContainer
       ref={wrapRef}
-      // style={{ height: screenHeight ? screenHeight : '' }}
     >
       <Head>
         <title>충남교통연수원</title>
@@ -186,8 +185,8 @@ const MainPage: NextPage = () => {
                     src='/assets/images/main_center_info.png'
                     alt='중앙 안내문'
                     layout='responsive'
-                    width={1200}
-                    height={280}
+                    width={1000}
+                    height={200}
                     priority
                   />
                 </MainInfoBannerBox>
@@ -345,7 +344,8 @@ const WrapMainContainer = styled.div`
 
 // MainContainer
 const MainInfoBannerBox = styled(Box)`
-  
+  width: 90%;
+  margin: 0 auto;
 `;
 const ContentBox = styled(Box)`
   width: 80%;

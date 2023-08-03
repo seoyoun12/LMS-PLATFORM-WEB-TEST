@@ -99,11 +99,7 @@ export default function Steb2() {
     if(currentIndex === 5 && hideCarNumber) return setCurrentIndex(3);
     if(currentIndex === 4 && disabledCompany) return setCurrentIndex(2);
     setCurrentIndex(prev  => prev - 1)
-    
-    
   }
-
-
   const onChangeBusinessSubType = (value: string) => {
     //회사명 활성화 + 차량번호 비활성화
     // if (
@@ -419,9 +415,6 @@ export default function Steb2() {
 
   useEffect(() => {
     confirmRef.current = confirm;
-  }, [confirm]);
-
-  useEffect(() => {
     return () => {
       if (confirmRef.current === false) {
         //해당 페이지 접근시 개인, 단체 초기화.
@@ -430,7 +423,8 @@ export default function Steb2() {
       }
       confirmRef.current = false;
     };
-  }, []);
+  }, [confirm]);
+
 
   // useEffect(() => {
   //   //해당 페이지 접근시 개인, 단체 초기화.
@@ -456,7 +450,6 @@ export default function Steb2() {
         <Box display='flex' flexDirection='column' alignItems='center' justifyContent='center'>
         
         <LinearProgress sx={{margin:'0 auto',width:'50%'}} variant="determinate" value={((currentIndex - 1) * 100) / 8} />
-        <Typography sx={{marginTop:'.5rem',fontSize:'12px',fontWeight:'bold'}} variant="body2" color="text.secondary">{currentIndex - 1} / 8</Typography>
         </Box>
         {/* --- 교육개요 --- */}
         {
@@ -468,7 +461,6 @@ export default function Steb2() {
           nextStep={nextStep}
         />
         }
-       
         {
           currentIndex === 2 &&
           <StepCard nextStepAbled={!!(getValues().businessSubType)} comment='운수 업종을 선택해주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
@@ -498,19 +490,10 @@ export default function Steb2() {
         {
           currentIndex === 3 &&
           <StepCard nextStepAbled={!!(getValues().businessName)} comment='회사명을 입력해 주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
-          
-              {/* <TextField
-                name='companyName'
-                placeholder="회사명"
-                value={educationInfo.companyName}
-                onChange={onChangeEducationInfo}
-                fullWidth
-              /> */}
               <FormControl sx={{ width:'90%' }}>
               <TextField
                 placeholder="회사명"
                 {...register('businessName')}
-                // value={onReturnValueBusinessName()}
                 value={watch().businessName}
                 disabled={disabledCompany}
                 fullWidth
@@ -518,8 +501,6 @@ export default function Steb2() {
               </FormControl>
           </StepCard>
         }
-
-
         {
           (currentIndex === 4) &&
           <StepCard nextStepAbled={getValues().carNumber && getValues().carNumber.length > 8} comment='차량번호를 입력해 주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
@@ -588,13 +569,6 @@ export default function Steb2() {
             </Box>
           </StepCard>
         }
-
-
-
-
-
-
-
         {
           currentIndex === 5 &&
           <StepCard nextStepAbled={!!(getValues().carRegisteredRegion)} comment='차량 등록지를 선택해주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
@@ -728,7 +702,6 @@ export default function Steb2() {
                 />
               </RadioGroup>
             </Box>
-
           </StepCard>
         }
         {
@@ -739,10 +712,8 @@ export default function Steb2() {
             setIsIndividualCheck={setIsIndividualCheck}
           />
           <ButtonGroup
-            
             aria-label="outlined primary button group"
             sx={{ width: '100%', marginTop: '1rem' }}
-
           >
           <Button
             variant="contained"
@@ -753,7 +724,6 @@ export default function Steb2() {
             {loading ? <Spinner fit={true} /> : '신청하기'}
             {isIndividualCheck}
           </Button>
-
           {registerType === RegisterType.TYPE_ORGANIZATION && (
             <Button
               variant="contained"
@@ -761,7 +731,6 @@ export default function Steb2() {
               onClick={onClickConfirm}
               disabled={loading}
               sx={{ mb: 2, width:'50%',margin:'0 auto',fontWeight:'bold' }}
-
             >
               {loading ? <Spinner fit={true} /> : '확인'}
             </Button>
@@ -769,7 +738,6 @@ export default function Steb2() {
           </ButtonGroup>
         </StepCard>
         }
-        
       </Steb2BodyContainer>
     </Steb2Wrap>
   );

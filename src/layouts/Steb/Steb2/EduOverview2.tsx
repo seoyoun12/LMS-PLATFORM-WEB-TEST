@@ -45,8 +45,6 @@ const snackbar = useSnackbar();
 const getSingleCourse = async (courseClassSeq: number) => {
   try {
     const { data } = await getSingleCourseClass(courseClassSeq);
-    
-
     setCourseCategoryType(
       data.course.courseCategoryType as courseCategoryType
     );
@@ -138,8 +136,14 @@ useEffect(() => {
             </Box>
             <Typography variant='overline' sx={{color:'#f41', fontSize:'12px',fontWeight:'bold'}} >* 선택하신 교육과 일정을 확인해 주세요.</Typography>
             <CardActions sx={{paddingTop:'.5rem',borderTop:'1px solid #c7c7c7c7'}}>
-              <Button onClick={nextStep} fullWidth size="small" variant='contained' sx={{boxShadow:'2px 0px 2px #000',fontSize:'14px',fontWeight:'bold'}}>시작하기</Button>
-              <Button onClick={() => router.back()} fullWidth size="small" variant='contained' sx={{background:'#c7c7c7', boxShadow:'2px 0px 2px #000',fontSize:'14px',fontWeight:'bold'}} >취소하기</Button>
+              <Button
+                onClick={nextStep}
+                fullWidth
+                size="small"
+                variant='contained'
+                sx={{boxShadow:'2px 0px 2px #c7c7c7c7',fontSize:'14px',fontWeight:'bold'}}>시작하기</Button>
+              <Button
+                onClick={() => router.back()} fullWidth size="small" variant='contained' sx={{background:'#c7c7c7', boxShadow:'2px 0px 2px #c7c7c7c7',fontSize:'14px',fontWeight:'bold'}} >취소하기</Button>
             </CardActions>
         </Typography>
       </Box>

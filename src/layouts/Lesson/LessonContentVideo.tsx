@@ -72,7 +72,6 @@ export default function LessonContentVideo(props: Props) {
   const [progress, setProgress] = useState<number>(0); // 현재 lesson의 진행률을 나타내기 위한 state
   const [occurTimeQuiz, setOccurTimeQuiz] = useState<IQuizTime[] | []>([]);
   const [currentQuiz, setCurrentQuiz] = useState<IQuizTime | null>(null);
-  // 레퍼런스.
   const prevCourseUserSeq = useRef<number | null>(null);
   const prevCourseProgress = useRef<CourseProgressResponseDto | null>(null);
   const prevLesson = useRef<LessonDetailClientResponseDto | null>(null);
@@ -88,7 +87,6 @@ export default function LessonContentVideo(props: Props) {
   const videoIsPaused = useRef<boolean>(true);
   const videoIsFirst = useRef<boolean>(true);
   const videoIsFinished = useRef<boolean>(false);
-
   
   const updateProgress = useCallback(() => {
     const seconds = props.courseProgress.studyTime + videoPlayedSeconds.current;
@@ -154,13 +152,9 @@ export default function LessonContentVideo(props: Props) {
       apiSeconds.current = 0;
       apiVideoSeconds.current = 0;
     },[props]);
-
-
-
     
   const startTimer = useCallback(() => {
     stopTimer('RESET');
-
     if (props.lesson === null ||props.courseProgress.courseProgressSeq === null) return;
 
     const courseUserSeq = props.courseUserSeq;
@@ -169,11 +163,7 @@ export default function LessonContentVideo(props: Props) {
 
     const timer = window.setInterval(() => {
       if (currentLessonSeq.current !== lessonSeq || router.asPath !== routerAsPath || apiTimer.current !== timer) return clearInterval(timer);
-
       apiSeconds.current++;
-
-
-
       if (apiSeconds.current >= 30) {
         ApiClient.courseLog
           .createCourseModulesUsingPost1({
@@ -189,7 +179,6 @@ export default function LessonContentVideo(props: Props) {
               studyLastTime: videoCurrentSeconds.current,
             })
           );
-
         apiSeconds.current = 0;
         apiVideoSeconds.current = 0;
       }
@@ -201,7 +190,6 @@ export default function LessonContentVideo(props: Props) {
         courseProgressSeq: courseProgressSeq,
       });
     }, 1000);
-
     apiTimer.current = timer;
   }, [
     props.courseProgress.courseProgressSeq,
@@ -212,6 +200,7 @@ export default function LessonContentVideo(props: Props) {
     stopTimer,
     setLessonVideoInfo
   ]);
+
   const onPause = useCallback(() => {
     videoIsPaused.current = true;
   }, []);
@@ -225,7 +214,6 @@ export default function LessonContentVideo(props: Props) {
         lessonSeq: props.lesson.seq,
         studyTime: 0,
       });
-
       videoIsFirst.current = false;
       startTimer();
     }
@@ -244,10 +232,6 @@ export default function LessonContentVideo(props: Props) {
   const onSeeked = useCallback(() => {
     videoIsSeeking.current = false;
   }, []);
-
-  
-
-
   // currentLessonPlayTime
   const handleCloseModal = async () => {
     setOpenModal(false);
@@ -314,7 +298,6 @@ export default function LessonContentVideo(props: Props) {
             const filteredQuiz = quizOccurTime.filter((item:IQuizTime) => item.quizOccurTime !== quiz.quizOccurTime);
             localStorage.setItem(lessonSeq as string, JSON.stringify(filteredQuiz));
             setOccurTimeQuiz(filteredQuiz);
-
           if (document.fullscreenElement !== null) {
             videoPlayer.current?.fullscreen(false);
             setIsFullScreen(true);
@@ -368,30 +351,11 @@ export default function LessonContentVideo(props: Props) {
   useEffect(() => {
     if(!quiz) return;
 
-    const quizTime = JSON.parse(localStorage.getItem(lessonSeq as string));
+    // const quizTime = JSON.parse(localStorage.getItem(lessonSeq as string));
 
-    if(!quizTime){
-     
-      // const setQuizTime = quiz.map((q: IQuizTime) => {
-      //   if(q.randomTime === true) {
-      //     q.quizOccurTime = (props.currentLessonPlayTime);
-      //     q.isSolvedQuiz = false;
-      //   } else {
-      //     q.quizOccurTime = q.setTimeMin * 60 + q.setTimeSecond;
-      //     q.isSolvedQuiz = false;
-      //   } 
-      //   return q;
-      //   })
-      const addedOccurTimeInQuiz = getRandomInteger(quiz, props.currentLessonPlayTime)
-
-      console.log(addedOccurTimeInQuiz);
-      localStorage.setItem(lessonSeq as string, JSON.stringify(addedOccurTimeInQuiz));
-      setOccurTimeQuiz(addedOccurTimeInQuiz);
-
-    } else {
-      setOccurTimeQuiz(quizTime);
-    }
-
+    const addedOccuretimeQuiz = getRandomInteger(quiz, props.currentLessonPlayTime)
+    localStorage.setItem(lessonSeq as string, JSON.stringify(addedOccuretimeQuiz));
+    setOccurTimeQuiz(addedOccuretimeQuiz);
   },[lessonSeq,quiz])
 
 

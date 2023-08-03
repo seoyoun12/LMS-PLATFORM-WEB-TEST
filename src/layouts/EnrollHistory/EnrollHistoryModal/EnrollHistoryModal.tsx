@@ -373,7 +373,7 @@ export function EnrollHistoryModal({
                   sx={{
                     width: '100px',
                     background: 'red',
-                    '&:hover': { background: '#cc0000' },
+                    '&:hover': { background: 'rgb(191,49,51)' },
                   }}
                   onClick={onClickDelete}
                 >

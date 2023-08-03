@@ -160,6 +160,7 @@ const MainPage: NextPage = () => {
 
   if (!data) return <Spinner />;
   return (
+    <>
     <WrapMainContainer
       ref={wrapRef}
     >
@@ -173,7 +174,8 @@ const MainPage: NextPage = () => {
               src="/assets/images/cttiLogo.png"
               height={48}
               width={320}
-              alt="Your Name"
+              alt="충남교통연수원 로고"
+              
             />
           </LogoBox>
           <SubTitle>
@@ -273,15 +275,17 @@ const MainPage: NextPage = () => {
           </Box>
         </ContentBox>
       
-      <FooterContainer>
-        <FooterWord>CTTI</FooterWord>
-      </FooterContainer>
+      
     </WrapMainContainer>
+    <FooterContainer>
+    <FooterWord>CTTI</FooterWord>
+  </FooterContainer>
+  </>
   );
 };
 // Wrap
 const WrapMainContainer = styled.div`
-  position: relative;
+  
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -295,15 +299,15 @@ const WrapMainContainer = styled.div`
     width: 100%;
   }
   .category-card-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
     @media (max-width: 1500px) {
-      font-size: 2rem;
-    }
-    @media (max-width: 1080px) {
       font-size: 1.5rem;
     }
-    @media (max-width: 868px) {
+    @media (max-width: 1080px) {
       font-size: 1.25rem;
+    }
+    @media (max-width: 868px) {
+      font-size: 1.15rem;
     }
     @media (max-width: 658px) {
       font-size: 1rem;
@@ -315,30 +319,16 @@ const WrapMainContainer = styled.div`
   .gg {
     position: relative;
     width: 100%;
-    height: 180px;
+    
     margin: 0 auto;
     
-    @media (max-width: 1500px) {
-      width: 100%;
-      height: 180px;
-    }
-    @media (max-width: 1080px) {
-      width: 100%;
-      height: 180px;
-    }
-    @media (max-width: 868px) {
-      width: 100%;
-      height: 150px;
-    }
-    @media (max-width: 658px) {
-      width: 100%;
-      height: 90px;
-    }
     @media (max-width: 514px) {
       width: 90%;
-      height: 180px;
+      
     }
   }
+  margin: 0 auto;
+  width: 65%;
 `;
 
 
@@ -355,6 +345,7 @@ const ContentBox = styled(Box)`
   }
 `;
 const LogoBox = styled(Box)`
+  padding-top: 4rem;
   width: fit-content;
   margin: auto;
 `;
@@ -379,27 +370,26 @@ const CategoryGrid = styled(Grid)`
   justify-content: center;
   margin-top: 2rem;
   margin-bottom: 10rem;
-
-  @media (max-width: 514px) {
-      gap: 2rem;
-    }
+  flex-wrap: nowrap;
+  gap: 1rem;
+  @media (max-width: 500px) {
+    flex-direction: column;
+  }
 `;
 
 
 const MainCategoryCard = styled(Container)`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  width: calc(30% + .5rem);
+  width: 300px;
+  min-width: 200px;
   height: auto;
   background: #fff;
   box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2);
   z-index: 1;
   padding: 2rem 1rem;
   
-    @media (max-width: 514px) {
-      width:86%;
-    }
 `;
 
 
@@ -427,7 +417,7 @@ const CardInContainer = styled(Box)`
   }
 `;
 const FooterContainer = styled(Box)`
-  position: absolute;
+  position: fixed;
   bottom:0;
   width: 100%;
   height: 300px;
@@ -452,7 +442,7 @@ const FooterContainer = styled(Box)`
     }
 `;
 const FooterWord = styled(Box)`
-  position: absolute;
+  position:absolute;
   right: 10%;
   bottom: 0%;
   font-size: 15rem;

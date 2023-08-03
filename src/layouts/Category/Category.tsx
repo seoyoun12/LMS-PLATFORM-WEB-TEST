@@ -1,5 +1,4 @@
 import { CategoryCarousel } from '@components/ui';
-import { Box } from '@mui/material';
 import { CategoryCard } from '@components/ui/CategoryCard/CategoryCard';
 import { CategoryBoard } from '@components/ui/CategoryBoard/CategoryBoard';
 import useResponsive from '@hooks/useResponsive';

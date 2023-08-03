@@ -1,24 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import {
-  Box,
-  CircularProgress,
-  LinearProgress,
-  Typography,
-} from '@mui/material';
+import { Box,CircularProgress,LinearProgress,Typography } from '@mui/material';
 import { VideoPlayer } from '@components/common';
 import { Ncplayer } from 'types/ncplayer';
 import { useRouter } from 'next/router';
-import type {
-  CourseProgressResponseDto,
-  LessonDetailClientResponseDto,
-} from '@common/api/Api';
+import type { CourseProgressResponseDto,LessonDetailClientResponseDto } from '@common/api/Api';
 import ApiClient from '@common/api/ApiClient';
 import { useRecoilState } from 'recoil';
 import { learningStatus } from '@common/recoil';
 import { LessonContentVideoModal } from './LessonContentVideoModal';
 import useQuiz from '@common/api/quiz/useQuiz';
-import getRandomInt from '@utils/getRandomInt';
 import getRandomInteger from '@utils/getRandomInt';
 
 const PLAYER_ELEMENT_ID = 'lesson-player' as const;
@@ -38,11 +29,8 @@ export interface IQuiz {
   quizContent: string;
   randomTime: boolean;
   setTimeMin: number;
-  setTimeSecond: number;
-  
+  setTimeSecond: number; 
 }
-
-
 export interface IQuizTime extends IQuiz {
   quizOccurTime: number;
   isSolvedQuiz: boolean;
@@ -57,7 +45,6 @@ interface Props {
   loading?: boolean;
   onComplete?: (isEnd: boolean) => Promise<boolean>;
   currentLessonPlayTime: number;
-
 }
 
 //정신병자코드. 이 코드 작성자가 다른회사에 가서 이런 미친짓을 할까봐 너무 걱정이다.
@@ -350,9 +337,12 @@ export default function LessonContentVideo(props: Props) {
   
   useEffect(() => {
     if(!quiz) return;
-
+    
+    // 기존 요구사항이 한번 푼 퀴즈는 다시 나타나지 않는것이었으나, 이후 요구사항이 변경되어 한번 푼 퀴즈도 다시 나타나도록 변경
+    // 변수 quizTime은 로컬스토리지에 저장된 퀴즈를 불러와 할당한 변수이나 현재 사용하지 않으므로 주석처리함
     // const quizTime = JSON.parse(localStorage.getItem(lessonSeq as string));
-
+    
+    // 현재 강의에 포함된 퀴즈와 강의의 총 플레이타임을 가져와서 퀴즈가 발생할 시간을 랜덤으로 생성
     const addedOccuretimeQuiz = getRandomInteger(quiz, props.currentLessonPlayTime)
     localStorage.setItem(lessonSeq as string, JSON.stringify(addedOccuretimeQuiz));
     setOccurTimeQuiz(addedOccuretimeQuiz);
@@ -375,8 +365,9 @@ export default function LessonContentVideo(props: Props) {
         {/* 비디오플레이어위치 */}
         <VideoContentPlayerWrapper>
           {/* Quiz 모달 */}
-          {quiz?.length > 0 && <LessonContentVideoModal
-            open={openModal} // openModal  
+          {quiz?.length > 0 && 
+          <LessonContentVideoModal
+            open={openModal}
             handleClose={handleCloseModal}
             quiz={currentQuiz}
           />}

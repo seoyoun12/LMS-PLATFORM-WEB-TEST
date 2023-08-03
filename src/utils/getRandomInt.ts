@@ -6,18 +6,18 @@ export default function getRandomInteger(quiz: IQuiz[],currentLessonPlayTime: nu
   
   function getRandomInt(currentLessonPlayTime: number) {
     const quizTerm = Math.floor(currentLessonPlayTime * 0.1);
-    // currentLessonPlayTime의 10% 미만이어야 함. 추후 상수 quizTerm은 유저의 입력값으로 변경 필요.
+    // currentLessonPlayTime의 10% 미만이어야 함.
     const num = Math.floor( Math.random() * (currentLessonPlayTime - quizTerm));
     let flag = true;
 
-    // currentLessonPlayTime의 10% 미만이어야 함. 추후 상수 quizTerm은 유저의 입력값으로 변경 필요.
+    // currentLessonPlayTime의 10% 미만이어야 함.
     for(let i = 0; i < quizTerm; i ++) {
       if(quizTimeSet.has(num + i) || quizTimeSet.has(num - i)) {
         flag = false;
         break;
       }
     }
-    // currentLessonPlayTime의 10% 미만이어야 함. 추후 상수 quizTerm은 유저의 입력값으로 변경 필요.
+    // currentLessonPlayTime의 10% 미만이어야 함.
     if(flag && num > quizTerm){
       quizTimeSet.add(num);
       return num

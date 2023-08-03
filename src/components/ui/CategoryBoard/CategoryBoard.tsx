@@ -24,7 +24,6 @@ const tabsConfig = [
 export function CategoryBoard() {
   const [value, setValue] = useState(tabsConfig[0].value);
   
-
   const onChange = (newValue: string) => {
     setValue(newValue);
   };
@@ -68,7 +67,7 @@ const NoticeWrap = styled(Box)`
   background: #e6edf3;
 
   .Mui-selected {
-    color: rgb(194,51,51) !important;
+    color: #222;
     font-weight: bold;
   }
   .MuiTabs-indicator {

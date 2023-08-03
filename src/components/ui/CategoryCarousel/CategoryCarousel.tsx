@@ -20,7 +20,6 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
   const [swiperPageNumber, setSwiperPageNumber] = useState(0);
   const { data: BannerData } = useBannerList();
   
-
   // 배너 타입 결정
   const data = BannerData?.filter(item =>
     localStorage.getItem('site_course_type') === 'TYPE_TRANS_WORKER'
@@ -31,7 +30,6 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);
   
-
   useEffect(() => {
     window.addEventListener('resize', () => {
       const width = window.innerWidth;
@@ -44,9 +42,9 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
       });
     }
   }, []);
-  
   if (!data) return <Spinner />;
   if (!deprecated?.length) return <div>loading</div>;
+
   return (
     <Slider>
       <ImgBox width="100%" height="100%">
@@ -97,7 +95,6 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
           modules={[Navigation, Pagination, Controller, Autoplay]}
           spaceBetween={300}
           slidesPerView={1}
-          
           navigation={{
             prevEl: navigationPrevRef.current,
             nextEl: navigationNextRef.current,
@@ -123,8 +120,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
                   marginLeft: '4px',
                 }
           }
-        >
-          
+        > 
           <SwiperSlide key={data.length > 0 && data[0].seq}>
             <SlideInfo>
               <Box fontSize="24px" fontWeight="bold">
@@ -143,8 +139,6 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
               </Box>
             </SlideInfo>
           </SwiperSlide>
-
-          
         </Swiper>
       </SliderLayout>
     </Slider>
@@ -200,49 +194,5 @@ const SlideInfo = styled.div`
   p {
     font-size: 16px;
     padding: 8px 0;
-  }
-`;
-
-const Timeline = styled.div`
-  display: flex;
-  padding: 0 14px;
-  flex: 1;
-
-  .timeline-bg {
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.4);
-    height: 2px;
-    overflow: hidden;
-  }
-
-  .timeline-current {
-    width: 0;
-    height: 2px;
-    background: #fff;
-  }
-`;
-
-const SliderButton = styled.div`
-  width: 24px;
-  height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-
-  :hover {
-    background: rgba(255, 255, 255, 0.4);
-  }
-
-  span {
-    position: inherit;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-
-    &::after {
-      font-size: 16px;
-      color: #fff;
-    }
   }
 `;

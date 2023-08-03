@@ -8,11 +8,8 @@ interface Props {
 function TabsLayout({children}:Props) {
   return (
     <Box
-    display='flex'
-    flexDirection='column'
-    justifyContent='space-between'
-    alignItems='center'
-    gap='2rem'
+    
+    
     >
       {children}
     </Box>

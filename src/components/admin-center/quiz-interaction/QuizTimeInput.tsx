@@ -1,25 +1,26 @@
-import { LessonQuizResponseDto } from '@common/api/Api'
-import { Input } from '@mui/material'
+
+import { Input, Typography } from '@mui/material'
 import React, { SyntheticEvent } from 'react'
 
 interface Props {
-  item: Partial<LessonQuizResponseDto>
+  name:string;
   value:number;
   onChange: (e: SyntheticEvent) => void
   text: string;
 }
 
-function QuizTimeInput({item, value,onChange,text}:Props) {
+function QuizTimeInput({ value, text, name, onChange }:Props) {
   return (
-        <>
-          <Input
-        name='setTimeMin'
+    <>
+      <Input
+        name={name}
         type="number"
-        disabled={item.randomTime}
         value={value}
         onChange={onChange}
-        /> {text}
-        </>
+      /> 
+      <Typography> {text} </Typography>
+      </>
+        
   )
 }
 

@@ -77,22 +77,18 @@ export default function Steb2() {
   const { register, setValue, getValues, watch } = useForm<UserTransSaveInputDataType>({
     defaultValues: { firstIdentityNumber: '', secondIdentityNumber: '', smsYn: YN.YES,firstPhone:'',secondPhone:'',thirdPhone:'' },
   });
+  
   const { watch:carWatch, setValue:carSetValue, getValues:carGetValues, register: carRegister } = useForm<FormType>({
     defaultValues: { digit2:'', digit4:'', localName:'', oneWord:'' }
   });
 
-  
   const nextStep = () => {
     setPageIndex(prev => prev + 1);
     if(currentIndex > 9) return;
     if(currentIndex === 3 && hideCarNumber) return setCurrentIndex(5);
     if(currentIndex === 2 && disabledCompany) return setCurrentIndex(4);
-    setCurrentIndex(prev  => prev + 1)
-  
-    
+    setCurrentIndex(prev  => prev + 1) 
   }
-
-  // currentIndex가 1이면 router.back(), 1 초과면 currentIndex - 1로 리팩터링 
   const prevStep = () => {
     setPageIndex(prev => prev - 1);
     if(currentIndex <= 1) return
@@ -101,15 +97,6 @@ export default function Steb2() {
     setCurrentIndex(prev  => prev - 1)
   }
   const onChangeBusinessSubType = (value: string) => {
-    //회사명 활성화 + 차량번호 비활성화
-    // if (
-    //   courseSubCategoryType.CHARTER_BUS === value ||
-    //   courseSubCategoryType.SPECIAL_PASSENGER === value ||
-    //   courseSubCategoryType.CORPORATE_TAXI === value
-    // ) {
-    //   setDisabledCompany(false);
-    // }
-
     if (courseSubCategoryType.CHARTER_BUS === value) {
       setValue('businessName', '');
       setValue('businessSubType', value as courseSubCategoryType);
@@ -208,21 +195,6 @@ export default function Steb2() {
       setCurrentIndex(5);
       return snackbar({ variant: 'error', message: '차량등록지를 선택해주세요!' });
     }
-    // if (rest.name === '' || !rest.name) {
-    //   setCurrentIndex(6);
-    //   return snackbar({
-    //     variant: 'error',
-    //     message: '이름을 입력해주세요!(관리자일경우 일반회원으로 시도해주세요)',
-    //   });
-    // }
-
-    // if (firstIdentityNumber.length < 6 || secondIdentityNumber.length < 7) {
-    //   setCurrentIndex(6);
-    //   return snackbar({
-    //     variant: 'error',
-    //     message: '주민번호를 모두 입력해주세요!(관리자일경우 일반회원으로 시도해주세요)',
-    //   });
-    // }
     if (rest.residence === '' || !rest.residence) {
       setCurrentIndex(6);
       return snackbar({ variant: 'error', message: '거주지를 선택해주세요!' });
@@ -317,10 +289,9 @@ export default function Steb2() {
   };
 
   const onClickConfirm = async () => {
-    //단체에서 신청완료로 넘어가는 버튼
-    // setConfirm(true);
+    
     confirmRef.current = true;
-    // if (confirm) {
+    
     if (enroll.length === 0)
       return snackbar({
         variant: 'error',
@@ -328,18 +299,12 @@ export default function Steb2() {
       });
     setEnrollInfo({ seq: Number(enrollInfo && enrollInfo.seq) });
     router.push('/stebMove/steb3');
-    // }
   };
 
   const onChangeRadioValue = (e:ChangeEvent<HTMLInputElement>) => {
     if(e.target.value === 'agree') setValue('smsYn', YN.YES)
     else setValue('smsYn', YN.NO)
   }
-  //리코일 체크후 courseClassSeq값이 없으면 step1으로 이동시키는 이펙트
-
-  // console.log(user, 'user');
-
-  
 
   const regFunc = () => {
     const { localName, digit2, oneWord, digit4 } = carWatch();
@@ -403,14 +368,6 @@ export default function Steb2() {
     setValue('registerType', RegisterType.TYPE_INDIVIDUAL);
   }, []);
 
-  // 스크롤을 위한 이펙트
-  // useEffect(() => {
-  //   const scrollBoxList = document.querySelectorAll('.scroll-to-box');
-  //   // if (scrollBoxList.length !== (CheckElementList && CheckElementList.length))
-  //   setCheckElementList(scrollBoxList);
-  // }, []);
-
-  // console.log(watch());
 
 
   useEffect(() => {
@@ -424,24 +381,6 @@ export default function Steb2() {
       confirmRef.current = false;
     };
   }, [confirm]);
-
-
-  // useEffect(() => {
-  //   //해당 페이지 접근시 개인, 단체 초기화.
-  //   setEnroll([]);
-  //   setEnrollInfo([]);
-  // }, []);
-
-  // useEffect(() => {
-  //   onClickConfirm();
-  //   if (!confirm) {
-  //     return () => {
-  //       setOrganization([]);
-  //     };
-  //   }
-  // }, [confirm]);
-  // console.log(educationInfo.businessSubType);
-
   
   return (
     <Steb2Wrap>
@@ -759,66 +698,3 @@ const Steb2BodyContainer = styled(Container)`
 const AccentedWord = styled(Typography)`
   color: red;
 `;
-
-
-
-         {/* <EduOverview
-          setValue={setValue}
-          watch={watch}
-          setFixedBusinessType={setFixedBusinessType}
-        /> */}
-        {/* ---업체정보--- */}
-        {/* <CompanyInfo
-          isIndividual={isIndividual}
-          setIsIndividual={setIsIndividual}
-          register={register}
-          watch={watch}
-          setValue={setValue}
-          setHideCarNumber={setHideCarNumber}
-          fixedBusinessType={fixedBusinessType}
-          hideCarNumber={hideCarNumber}
-        /> */}
-
-        {/* --- 신청 구분 --- */}
-        {/* <StudentList registerType={registerType} setRegisterType={setRegisterType} /> */}
-        
-        {/* --- 교육신청자 정보 --- */}
-        {/* <StudentInfo
-          register={register}
-          setValue={setValue}
-          registerType={registerType}
-          setRegisterType={setRegisterType}
-          watch={watch}
-          hideCarNumber={hideCarNumber}
-        /> */}
-
-        {/* --- 개인정보 수집 및 이용 동의 --- */}
-        {/* <IndividualSummary
-          isIndividualCheck={isIndividualCheck}
-          setIsIndividualCheck={setIsIndividualCheck}
-        /> */}
-
-        {/* --- 신청버튼 --- */}
-          {/* <ConfirmButtonsWrap>    
-          <Button
-            variant="contained"
-            onClick={onClickEnroll}
-            disabled={loading}
-            fullWidth
-            sx={{ mb: 2 }}
-          >
-            {loading ? <Spinner fit={true} /> : '신청하기'}
-          </Button>
-
-          {registerType === RegisterType.TYPE_ORGANIZATION && (
-            <Button
-              variant="contained"
-              color="success"
-              onClick={onClickConfirm}
-              disabled={loading}
-              fullWidth
-            >
-              {loading ? <Spinner fit={true} /> : '확인'}
-            </Button>
-          )}
-          </ConfirmButtonsWrap> */}

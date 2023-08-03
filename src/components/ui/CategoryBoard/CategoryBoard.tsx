@@ -1,4 +1,3 @@
-
 import styled from '@emotion/styled';
 import { Box } from '@mui/material';
 import { useState } from 'react';
@@ -10,9 +9,12 @@ import { CategoryBoardLook } from '@layouts/Category/CategoryBoardLook';
 import { CSRTabs2Props } from '@components/ui/Tabs2/CSRTabs2';
 import dynamic from 'next/dynamic';
 
-const CSRTab2 = dynamic<CSRTabs2Props>(() => import('@components/ui/Tabs2/CSRTabs2'), {
-  ssr: false,
-});
+const CSRTab2 = dynamic<CSRTabs2Props>(
+  () => import('@components/ui/Tabs2/CSRTabs2'),
+  {
+    ssr: false,
+  }
+);
 
 const tabsConfig = [
   { label: '공지사항', value: 'cbNotice', href: <CategoryBoardNotice /> },
@@ -23,7 +25,7 @@ const tabsConfig = [
 
 export function CategoryBoard() {
   const [value, setValue] = useState(tabsConfig[0].value);
-  
+
   const onChange = (newValue: string) => {
     setValue(newValue);
   };
@@ -44,11 +46,15 @@ export function CategoryBoard() {
         />
       </Box>
       <Box
-        sx={{ borderBottom: '1px solid #2A2A2A', position: 'relative', top: '-1px' }}
+        sx={{
+          borderBottom: '1px solid #2A2A2A',
+          position: 'relative',
+          top: '-1px',
+        }}
       ></Box>
       <NoticeContainer>
         <Box mt={6}>
-          {tabsConfig.map(item => {
+          {tabsConfig.map((item) => {
             return (
               <Box hidden={item.value !== value} key={item.value}>
                 {/* key props error */}
@@ -65,13 +71,18 @@ export function CategoryBoard() {
 const NoticeWrap = styled(Box)`
   padding: 4rem 0 0;
   background: #e6edf3;
-
+  
+  color:'#222'; 
   .Mui-selected {
-    color: #222;
-    font-weight: bold;
+    font-weight: bold;  
   }
   .MuiTabs-indicator {
     background-color: rgb(194, 51, 51);
+    
   }
+  .MuiTab-textColorPrimary {
+    color: #222!important;
+  }
+  
 `;
 const NoticeContainer = styled(Box)``;

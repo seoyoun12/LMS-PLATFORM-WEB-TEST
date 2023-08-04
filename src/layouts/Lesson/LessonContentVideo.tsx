@@ -26,6 +26,7 @@ export interface IQuiz {
   itemX: string;
   lessonQuizTypeEnum: "ALARM" | "MULTIPLE_CHOICE" | "OX_QUIZ";
   lessonSeq: number;
+  lessonQuizSeq: number;
   quizContent: string;
   randomTime: boolean;
   setTimeMin: number;

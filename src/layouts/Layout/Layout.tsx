@@ -165,25 +165,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       >
         <Header isDesktop={isDesktop} />
       </AppBar>
-      {
-        // 계속 콘솔에서 뭐가 찍혀서 추적해봤는데 여기서 에러가 나더라고요.
-        // <header> 태그가 짤려서 온다고 하네요.
-        //
-        // 이유는 `typeof window !== 'undefined' && isDesktop` 이거 때문인 것 같아요.
-        //
-        // 페이지 접속할 때 nextjs에서 컴포넌트를 미리 렌더링 해서 불러오는데,
-        // 서버쪽에서는 window 객체가 없고 isDesktop는 항상 false(?)가 될테니 `<MobileNav />`를 불러올거고
-        // 클라이언트는 검증을 위해 다시 렌더링 할 때 `<GlobalNavigationBar />` 이거 아니면 `<TrafficGlobalNavigationBar />` 이거를 가져오니
-        // 출돌이 나서 그런 것 같아요.
-        //
-        // 일단 아래로 클라이언트에서만 렌더링 되도록 빼놓았어요.
-      }
-
-      {/* {router.route.includes('/category') && !router.route.includes('/admin') && <PopupBox />} */}
-      {/* category에 넣으면 css 붕괴. 이유 알수없음.(popupBox 넣으면 여러 상관없는 컴포넌트의 css들이 무작위로 지정됨. ex)카드 리스트에 Spinner의 스타일이 지정 ) 
-      ==> 해결, dynamic 으로 ssr 비활성화. 근데 해결하니까 누가 밑에 작성해주셨었네 감사합니다..!
-      */}
-
       <main className="fit">{children}</main>
       <Footer />
     </div>

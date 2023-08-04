@@ -1,11 +1,13 @@
 import { LessonQuizResponseDto } from '@common/api/Api'
 import { Box, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material'
+import { SyntheticEvent } from 'react'
 
 interface Props {
-  item: LessonQuizResponseDto
+  form: Partial<LessonQuizResponseDto>
+  onFormChange: (e: SyntheticEvent) => void
 }
 
-function AnswerBox({item}:Props) {
+function AnswerBox({form, onFormChange}:Props) {
   return (
     <Box
     width='100%'
@@ -13,23 +15,25 @@ function AnswerBox({item}:Props) {
     flexDirection='column'
     gap='0.5rem'
     >
-    {item.lessonQuizTypeEnum !== 'ALARM' && <Typography alignSelf='flex-start'>정답</Typography>}
+    {form?.lessonQuizTypeEnum !== 'ALARM' && <Typography alignSelf='flex-start'>정답</Typography>}
     {
-      item.lessonQuizTypeEnum === "OX_QUIZ" && (
-        <RadioGroup row>
-          <FormControlLabel value={item.itemO} control={<Radio />} label="O" />
-          <FormControlLabel value={item.itemX} control={<Radio />} label="X" />
+      form?.lessonQuizTypeEnum === "OX_QUIZ" && (
+        <RadioGroup name='answer' row onChange={onFormChange}>
+          <FormControlLabel value={form?.itemO} control={<Radio />} label="O" />
+          <FormControlLabel value={form?.itemX} control={<Radio />} label="X" />
         </RadioGroup>
       )}
       {
-      item.lessonQuizTypeEnum === "MULTIPLE_CHOICE" && (  
+      form?.lessonQuizTypeEnum === "MULTIPLE_CHOICE" && (  
         <TextField
-        id="outlined-basic"    
-        variant="outlined"
-        value={item.answer}
-        sx={{ flex:1, height:'100%'}}
-        size='small'
-        fullWidth
+          name='answer'
+          id="outlined-basic"
+          variant="outlined"
+          value={form?.answer}
+          sx={{ flex:1, height:'100%' }}
+          size='small'
+          fullWidth
+          onChange={onFormChange}
         />
       )}
     </Box>

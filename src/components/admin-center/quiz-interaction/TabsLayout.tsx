@@ -8,8 +8,6 @@ interface Props {
 function TabsLayout({children}:Props) {
   return (
     <Box
-    
-    
     >
       {children}
     </Box>

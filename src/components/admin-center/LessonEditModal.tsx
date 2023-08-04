@@ -168,6 +168,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
       open={isAddQuizModalOpen}
       onCloseModal={onToggleAddQuizModal}
       quiz={lesson?.lessonQuizs}
+      lessonSeq={lesson?.seq}
     />
     <Modal
       action={
@@ -326,6 +327,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                     width: '100%'
                   }}
                 >
+                  {/* 450 451 452 , 441,442 */}
                   <Button
                     variant="contained"
                     color="primary"
@@ -335,7 +337,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                     }}
                     onClick={onToggleAddQuizModal}
                   >
-                    <Typography> + 추가 / 수정 하기 (총 {lesson.lessonQuizs.length}개)</Typography>
+                    <Typography> + 추가 / 수정 하기 (총 {lesson ? lesson.lessonQuizs.length : 0}개)</Typography>
                   </Button>
                 </Box>
             </Box>

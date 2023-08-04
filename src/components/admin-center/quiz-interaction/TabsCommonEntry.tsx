@@ -1,18 +1,18 @@
-import React, { SyntheticEvent } from 'react'
+import { SyntheticEvent } from 'react'
 import QuizTextField from './QuizTextField'
-import { Box, Checkbox, Typography } from '@mui/material'
-import QuizTimeInput from './QuizTimeInput'
+import { Box } from '@mui/material'
+
 import { LessonQuizResponseDto } from '@common/api/Api'
 import RandomTimeBox from './RandomTimeBox'
 
 interface Props {
-  item: Partial<LessonQuizResponseDto>
+  
   form: Partial<LessonQuizResponseDto>
   onFormChange: (e: SyntheticEvent) => void
-
+  onCheckChange: (e: SyntheticEvent) => void
 }
 
-function TabsCommonEntry({item, form, onFormChange}:Props) {
+function TabsCommonEntry({ form, onFormChange,onCheckChange}:Props) {
   return (
     <Box
       display='flex'
@@ -24,18 +24,18 @@ function TabsCommonEntry({item, form, onFormChange}:Props) {
     <QuizTextField
       name='alarmContent'
       label="퀴즈 제목"
-      value={form.alarmContent || item.alarmContent}
+      value={form?.alarmContent}
       onChange={onFormChange}
       fullWidth
     />
-    <RandomTimeBox form={form} item={item} onFormChange={onFormChange} />
+    <RandomTimeBox form={form} onFormChange={onFormChange} onCheckChange={onCheckChange} />
     <QuizTextField
       name='quizContent'
-      label={item.lessonQuizTypeEnum === "ALARM" ? '알람 메세지' : '퀴즈 본문'}
+      label={form?.lessonQuizTypeEnum === "ALARM" ? '알람 메세지' : '퀴즈 본문'}
       multiline
-      rows={item.lessonQuizTypeEnum === "ALARM" ? 8 : 4}
+      rows={form?.lessonQuizTypeEnum === "ALARM" ? 8 : 4}
       variant='filled'
-      value={form.quizContent || item.quizContent}
+      value={form?.quizContent}
       fullWidth
       onChange={onFormChange}
       />

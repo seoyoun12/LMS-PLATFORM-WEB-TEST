@@ -160,7 +160,6 @@ useEffect(() => {
                 fullWidth
                 variant='contained'
                 sx={{background:'#c7c7c7', boxShadow:'2px 0px 2px #c7c7c7c7',fontSize:'18px',fontWeight:'bold'}}
-                
                 >취소하기</Button>
             </CardActions>
         

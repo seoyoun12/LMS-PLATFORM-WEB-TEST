@@ -31,10 +31,22 @@ function StepCard({index, comment, children,nextStepAbled, nextStep, prevStep}:P
           </BubbleBox>  
             <Typography fontSize='24px' fontWeight='bold'> {comment} </Typography>
         </Box>
-
-        <Box width='100%' paddingLeft='1rem'>
+        <Box
+          width='100%'
+          paddingLeft='1rem'
+          sx={{
+            display:'flex',
+            flexDirection:'column',
+            justifyContent:'center',
+            alignItems:'center',
+          }}
+          >
           {children}
         </Box>
+
+
+
+
         <Box
           sx={{
             position:'absolute',
@@ -46,10 +58,10 @@ function StepCard({index, comment, children,nextStepAbled, nextStep, prevStep}:P
           }}
         >
         <Button onClick={prevStep}  size="small" variant='text' sx={{border:'none'}}>
-          <Image src='/assets/images/prev_off.png' width={80} height={105} alt='' />
+          <Image src='/assets/images/prev_off.png' width={60} height={105} alt='' />
         </Button>
         <Button onClick={nextStep}  size="small" variant='text' sx={{border:'none'}} disabled={!nextStepAbled}>
-          <Image src={nextStepAbled ? '/assets/images/next_on.png' : '/assets/images/next_off.png'} width={80} height={105} alt='' />
+          <Image src={nextStepAbled ? '/assets/images/next_on.png' : '/assets/images/next_off.png'} width={60} height={105} alt='' />
         </Button>
         </Box>
     </Box>

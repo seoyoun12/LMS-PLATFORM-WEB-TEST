@@ -1,97 +1,58 @@
 import useQuiz from '@common/api/quiz/useQuiz'
-import { useDialog } from '@hooks/useDialog';
+import { DialogConfig, useDialog } from '@hooks/useDialog';
 import { IQuiz } from '@layouts/Lesson/LessonContentVideo';
-import { Button, ButtonGroup } from '@mui/material'
+import { ButtonGroup } from '@mui/material'
 import validateProperties from '@utils/validateProperties';
+import QuizSubmitButton from './QuizSubmitButton';
 
 interface Props {
   form: Partial<IQuiz>;
   createMode?: boolean;
 }
+enum MessageType {
+  CREATE = '생성',
+  UPDATE = '수정',
+  DELETE = '삭제',
+}
+
+
+// 해당 컴포넌트에서 사용하는 httpRequest를 추상화하기 위한 Wrapper function
+const simpleRequestWrapper = async (
+  request: () => Promise<void>,
+  dialog: (props: DialogConfig) => void,
+  message: MessageType,
+  form:Partial<IQuiz>
+  ) => {
+  if(!validateProperties(form.lessonQuizTypeEnum, form))
+    return dialog({
+      title: '퀴즈를 등록할 수 없습니다.',
+      description: '모든 항목을 입력해주세요.',
+      confirmText: '확인',
+      variant: 'alert',
+    })
+  try {
+    await request();
+    dialog({
+      title: `퀴즈가 ${message}되었습니다.`,
+      description: `퀴즈가 ${message}되었습니다.`,
+      confirmText: '확인',
+      variant: 'alert',
+    })
+  } catch (error) {
+    dialog({
+      title: '퀴즈 등록에 실패했습니다.',
+      description: `${error.message}`,
+      confirmText: '확인',
+      variant: 'alert',
+    })
+  }
+}
+
 
 function ConfirmButtons({form,createMode}:Props) {
   const { createQuiz,deleteQuiz,updateQuiz } = useQuiz(form?.lessonSeq);
   const dialog = useDialog();
-
-  const onSubmitUpdateQuiz = async () => {  
-    if(!validateProperties(form.lessonQuizTypeEnum, form)){
-      return dialog({
-        title: '퀴즈를 등록할 수 없습니다.',
-        description: '모든 항목을 입력해주세요.',
-        confirmText: '확인',
-        variant: 'alert',
-      })
-    } else {
-      try {
-        await updateQuiz(form.lessonQuizSeq, form);
-        dialog({
-          title: '퀴즈가 수정되었습니다.',
-          description: '퀴즈가 수정되었습니다.',
-          confirmText: '확인',
-          variant: 'alert',
-        })
-      } catch (error) {
-        dialog({
-          title: '퀴즈 수정에 실패했습니다.',
-          description: `${error.message}`,
-          confirmText: '확인',
-          variant: 'alert',
-        })
-      }
-    }
-  }
-  const onSubmitCreateQuiz = async () => {
-    if(!validateProperties(form.lessonQuizTypeEnum, form)){
-      return dialog({
-        title: '퀴즈를 등록할 수 없습니다.',
-        description: '모든 항목을 입력해주세요.',
-        confirmText: '확인',
-        variant: 'alert',
-      })
-    } else {
-      try {
-        await createQuiz(form);
-        dialog({
-          title: '퀴즈가 등록되었습니다.',
-          description: '퀴즈가 등록되었습니다.',
-          confirmText: '확인',
-          variant: 'alert',
-        })
-      } catch (error) {
-        dialog({
-          title: '퀴즈 등록에 실패했습니다.',
-          description: `${error.message}`,
-          confirmText: '확인',
-          variant: 'alert',
-        })
-      }
-    }
-  }
   
-  const onDeleteQuiz = async () => {
-    
-    const confirm = dialog({
-      title: '퀴즈를 삭제하시겠습니까?',
-      description: '퀴즈를 삭제하시겠습니까?',
-      confirmText: '확인',
-      cancelText: '취소',
-      variant: 'confirm',
-    });
-
-    if(confirm){
-      try {
-        await deleteQuiz(form.lessonQuizSeq);
-      } catch (error) {
-        dialog({
-          title: '퀴즈 삭제에 실패했습니다.',
-          description: `${error.message}`,
-          confirmText: '확인',
-          variant: 'alert',
-        })
-      }
-    }
-  }
-
   return (
     <ButtonGroup
       variant="outlined"
@@ -102,11 +63,39 @@ function ConfirmButtons({form,createMode}:Props) {
         gap: '0.5rem'
       }}
     >
-    {createMode
-    ? <Button variant="contained" color="info" sx={{width:'120px'}} onClick={onSubmitCreateQuiz}>추가</Button>
+    {
+    createMode
+    ? <QuizSubmitButton
+        buttonType="info"
+        buttonText='생성'
+        onClick={() => simpleRequestWrapper(
+          () => createQuiz(form),
+          dialog, 
+          MessageType.UPDATE, // request type for dialog
+          form 
+        )}
+      />
     : <>
-        <Button variant="contained" color="info" sx={{width:'120px'}} onClick={onSubmitUpdateQuiz}>수정</Button>
-        <Button variant="contained" color="warning" sx={{width:'120px'}} onClick={onDeleteQuiz}>삭제</Button>
+        <QuizSubmitButton
+          buttonType='info'
+          buttonText='수정'
+          onClick={() => simpleRequestWrapper(
+            () => updateQuiz(form.lessonQuizSeq, form),
+            dialog, 
+            MessageType.UPDATE, // request type for dialog
+            form 
+          )}
+          />
+        <QuizSubmitButton
+          buttonText='삭제'
+          buttonType='warning'
+          onClick={() => simpleRequestWrapper(
+            () => deleteQuiz(form.lessonQuizSeq),
+            dialog,
+            MessageType.DELETE,
+            null
+          )}
+        />
       </>
     }
     

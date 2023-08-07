@@ -9,13 +9,13 @@ function useQuiz(seq: number | null) {
   // post use SWR
   // const { data:postData, error:postError, mutate:postMutate } = useSWR<SWRResponse<IQuiz>>(seq ? `/lesson/quiz/${seq}` : null, POST, {});
 
-  const updateQuiz = async (lessonQuizSeq: number, data: Partial<IQuiz>) => {
-    await PUT(`/lesson/quiz/adm/${lessonQuizSeq}`, data);
+  const updateQuiz = async (lessonQuizSeq: number, form: Partial<IQuiz>) => {
+    await PUT(`/lesson/quiz/adm/${lessonQuizSeq}`, form);
     mutate();
   }
 
-  const createQuiz = async (data: Partial<IQuiz>) => {
-    await POST(`/lesson/quiz/adm?lessonSeq=${seq}`, data);
+  const createQuiz = async (form: Partial<IQuiz>) => {
+    await POST(`/lesson/quiz/adm?lessonSeq=${seq}`, form);
     mutate();
   }
 

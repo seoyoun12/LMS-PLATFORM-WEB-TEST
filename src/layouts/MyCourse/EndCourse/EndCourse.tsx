@@ -7,6 +7,8 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { Box, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 
+
+// index.tsx를 만들고 똑같은 이름의 컴포넌트를 만드는 이유가 뭐임... 도대체..
 export function EndCourse() {
   const snackbar = useSnackbar();
   const router = useRouter();

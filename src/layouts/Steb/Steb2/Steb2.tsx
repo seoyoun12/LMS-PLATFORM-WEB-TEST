@@ -4,14 +4,7 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { YN, phoneList } from '@common/constant';
-import {
-  courseClassIndividualEnroll,
-  courseClassOrganizationEnrll,
-  courseSubCategoryType,
-  RegisterType,
-  userBusinessType,
-  UserTransSaveInputDataType,
-} from '@common/api/courseClass';
+import { courseClassIndividualEnroll,courseClassOrganizationEnrll,courseSubCategoryType,RegisterType,userBusinessType,UserTransSaveInputDataType } from '@common/api/courseClass';
 import { useRecoilState } from 'recoil';
 import { courseClassEnrollInfo, courseClassEnrollList } from '@common/recoil';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -49,10 +42,7 @@ export default function Steb2() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const isDesktop = useResponsive();
-  const [isIndividual, setIsIndividual] = useState(true); //individual or team button
-  const [registerType, setRegisterType] = useState<RegisterType>(
-    RegisterType.TYPE_INDIVIDUAL
-  ); //개인신청 단체신청 토글
+  const [registerType, setRegisterType] = useState<RegisterType>(RegisterType.TYPE_INDIVIDUAL); //개인신청 단체신청 토글
   const [enroll, setEnroll] = useRecoilState(courseClassEnrollList); //전역에 신청자 정보 저장
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo); //전역에 교육정보 저장
   const [confirm, setConfirm] = useState(false);
@@ -149,10 +139,8 @@ export default function Steb2() {
     setHideCarNumber(false);
     setValue('businessName', '');
     setValue('businessSubType', value as courseSubCategoryType);
-  };
+  };  
 
-
-  
   const onClickEnroll = async () => {
     //단체 신청시 스택쌓이는 구조. 개인상태에서는 혼자 신청
     const {
@@ -251,14 +239,14 @@ export default function Steb2() {
           emailYn: YN.NO,
           smsYn: YN.NO,
         })
-          .then(async res => {
+          .then(async () => {
             //계정생성완료 후 작업
             try {
               const { data } = await courseClassOrganizationEnrll(postData);
               setValue('seq', data.seq);
               setEnroll(prev => [...prev, watch()]);
               setLoading(false);
-            } catch (e: any) {
+            } catch (e) {
               snackbar({ variant: 'error', message: e.data.message });
               setLoading(false);
             }
@@ -272,7 +260,7 @@ export default function Steb2() {
                 setValue('seq', data.seq);
                 setEnroll(prev => [...prev, watch()]);
                 setLoading(false);
-              } catch (e: any) {
+              } catch (e) {
                 snackbar({ variant: 'error', message: e.data.message });
                 setLoading(false);
               }
@@ -281,7 +269,7 @@ export default function Steb2() {
               snackbar({ variant: 'error', message: e.data.message });
           });
       }
-    } catch (e: any) {
+    } catch (e) {
       confirmRef.current = false;
       setLoading(false);
       snackbar({ variant: 'error', message: e.data.message });
@@ -404,7 +392,6 @@ export default function Steb2() {
           currentIndex === 2 &&
           <StepCard nextStepAbled={!!(getValues().businessSubType)} comment='운수 업종을 선택해주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
             {!(localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS') && (
-                
                 <FormControl sx={{ width:'90%' }}>
                   <Select
                     labelId="businessSubType"

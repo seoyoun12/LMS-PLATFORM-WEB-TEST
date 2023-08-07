@@ -645,7 +645,7 @@ export default function Steb2() {
             variant="contained"
             onClick={onClickEnroll}
             disabled={!(loading === false && isIndividualCheck === true)}
-            sx={{ mb: 2, width:'50%',margin:'0 auto',fontWeight:'bold' }}
+            sx={{ mb: 2, width:'50%',margin:'0 auto',fontWeight:'bold',fontSize: '24px' }}
           >
             {loading ? <Spinner fit={true} /> : '신청하기'}
             {isIndividualCheck}

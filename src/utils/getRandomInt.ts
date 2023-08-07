@@ -5,19 +5,22 @@ export default function getRandomInteger(quiz: IQuiz[],currentLessonPlayTime: nu
   const quizTimeSet = new Set<number>();
   
   function getRandomInt(currentLessonPlayTime: number) {
-    const quizTerm = Math.floor(currentLessonPlayTime * 0.1);
-    // currentLessonPlayTime의 10% 미만이어야 함.
-    const num = Math.floor( Math.random() * (currentLessonPlayTime - quizTerm));
+    // 재귀를 빠져나가는 flag varialble
     let flag = true;
 
-    // currentLessonPlayTime의 10% 미만이어야 함.
+    // 각 퀴즈의 간격은 총 플레이타임의10% 이상이어야 한다
+    const quizTerm = Math.floor(currentLessonPlayTime * 0.1); 
+  
+    // 퀴즈가 출현될 시간(seconds)
+    const num = Math.floor( Math.random() * (currentLessonPlayTime - quizTerm));
+    
     for(let i = 0; i < quizTerm; i ++) {
       if(quizTimeSet.has(num + i) || quizTimeSet.has(num - i)) {
         flag = false;
         break;
       }
     }
-    // currentLessonPlayTime의 10% 미만이어야 함.
+  
     if(flag && num > quizTerm){
       quizTimeSet.add(num);
       return num

@@ -15,16 +15,19 @@ function AnswerBox({form, onFormChange}:Props) {
     flexDirection='column'
     gap='0.5rem'
     >
-    {form?.lessonQuizTypeEnum !== 'ALARM' && <Typography alignSelf='flex-start'>정답</Typography>}
+    {form?.lessonQuizTypeEnum
+    !== 'ALARM' && <Typography alignSelf='flex-start'>정답</Typography>}
     {
-      form?.lessonQuizTypeEnum === "OX_QUIZ" && (
-        <RadioGroup name='answer' row onChange={onFormChange}>
-          <FormControlLabel value={form?.itemO} control={<Radio />} label="O" />
-          <FormControlLabel value={form?.itemX} control={<Radio />} label="X" />
-        </RadioGroup>
-      )}
+      form?.lessonQuizTypeEnum
+      === "OX_QUIZ" && 
+          <RadioGroup name='answer' row onChange={onFormChange}>
+           <FormControlLabel value={form?.itemO} control={<Radio />} label="O" />
+           <FormControlLabel value={form?.itemX} control={<Radio />} label="X" />
+          </RadioGroup> 
+      }
       {
-      form?.lessonQuizTypeEnum === "MULTIPLE_CHOICE" && (  
+      form?.lessonQuizTypeEnum
+      === "MULTIPLE_CHOICE" && 
         <TextField
           name='answer'
           id="outlined-basic"
@@ -35,7 +38,7 @@ function AnswerBox({form, onFormChange}:Props) {
           fullWidth
           onChange={onFormChange}
         />
-      )}
+      }
     </Box>
   )
 }

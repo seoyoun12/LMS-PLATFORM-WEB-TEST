@@ -1,46 +1,17 @@
 import * as React from 'react';
-import {
-  Controller,
-  SubmitHandler,
-  useForm,
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormWatch,
-} from 'react-hook-form';
-import {
-  Box,
-  Button,
-  Chip,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  FormLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  Select,
-  Typography,
-} from '@mui/material';
+import { Controller,useForm,UseFormRegister,UseFormSetValue,UseFormWatch } from 'react-hook-form';
+import { TextField, Box,Button,FormControl,FormControlLabel,FormHelperText,FormLabel,MenuItem,Radio,RadioGroup,Select,Typography } from '@mui/material';
 import { ErrorMessage } from '@hookform/error-message';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { Modal, Spinner } from '@components/ui';
-import TextField from '@mui/material/TextField';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { ProductStatus } from '@common/api/course';
-import {
-  CourseModuleSaveReqDto,
-  CourseModuleType,
-  deleteCourseModule,
-  getDetailCourseModule,
-  modifyCourseModule,
-  uploadCourseModule,
-} from '@common/api/adm/courseModule';
+import { CourseModuleSaveReqDto,CourseModuleType,deleteCourseModule,getDetailCourseModule,modifyCourseModule,uploadCourseModule } from '@common/api/adm/courseModule';
 import { YN } from '@common/constant';
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { CourseModuleSurveyList } from './CourseModuleSurveyList';
 import { useDialog } from '@hooks/useDialog';
-import { Max100Regex } from '@utils/inputRegexes';
 
 export const moduleTypeArr = [
   { title: '진도율', type: CourseModuleType.COURSE_MODULE_PROGRESS_RATE },
@@ -64,7 +35,7 @@ const inputByType: {
     children: [
       {
         name: '최소 진도율',
-        element: (register, watch, setValue) => (
+        element: (register) => (
           <FormControl className="form-control">
             <TextField {...register('limitProgress')} />
           </FormControl>
@@ -77,7 +48,7 @@ const inputByType: {
     children: [
       {
         name: '최소점수',
-        element: (register, watch, setValue) => (
+        element: (register) => (
           <FormControl className="form-control">
             <TextField {...register('limitScore')} />
           </FormControl>
@@ -128,6 +99,24 @@ const inputByType: {
   },
 ];
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 interface Props {
   open: boolean;
   onClose: () => void;
@@ -135,8 +124,6 @@ interface Props {
   courseSeq?: number;
   isModify?: boolean;
 }
-
-// interface FormType extends CourseModuleSaveReqDto {}
 
 const defaultValues = {
   status: ProductStatus.APPROVE,
@@ -147,67 +134,22 @@ const defaultValues = {
   limitScore: 0,
 };
 
-export function CourseModuleUploadModal({
-  open,
-  onClose,
-  courseModuleSeq,
-  courseSeq,
-  isModify = false,
-}: Props) {
+export function CourseModuleUploadModal({open,onClose,courseModuleSeq,courseSeq,isModify = false}: Props) {
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const [loading, setLoading] = useState(false);
   const [selectedSurveySeq, setSelectedSurveySeq] = useState<number>(null);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-    reset,
-    resetField,
-    setValue,
-    watch,
-  } = useForm<CourseModuleSaveReqDto>({ defaultValues });
-
-  useEffect(() => {
-    (async function () {
-      if (!isModify) return;
-      try {
-        const { data } = await getDetailCourseModule(Number(courseModuleSeq));
-        setValue('moduleName', data.moduleName);
-        setValue('moduleType', data.moduleType);
-        setValue('submitYn', data.submitYn);
-        setValue('limitProgress', data.limitProgress);
-        setValue('limitScore', data.limitScore);
-        setValue('status', data.status);
-        setValue('surveySeq', data.surveySeq);
-      } catch (e: any) {
-        console.dir(e);
-        snackbar({ variant: 'error', message: e.data.message });
-      }
-    })();
-  }, []);
-  // console.log(watch());
+  const { register, handleSubmit, formState: { errors }, control, reset, setValue, watch } = useForm<CourseModuleSaveReqDto>({ defaultValues });
 
   const onChangeSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedSurveySeq(Number(e.target.value));
   };
 
-  // const onSubmit: SubmitHandler<CourseModuleSaveReqDto> = async ({ ...survey }) => {
   const onSubmit = async () => {
-    const {
-      moduleName,
-      moduleType,
-      submitYn,
+    const { moduleName,moduleType,submitYn,examSeq,surveySeq,limitProgress,limitScore,status } = watch();
+    const inputParams: CourseModuleSaveReqDto = {
       examSeq,
-      surveySeq,
-      limitProgress,
-      limitScore,
-      status,
-    } = watch();
-    let inputParams: CourseModuleSaveReqDto = {
-      examSeq,
-      limitProgress: Number(limitProgress),
+      limitProgress: +limitProgress,
       limitScore,
       moduleName,
       moduleType,
@@ -215,6 +157,7 @@ export function CourseModuleUploadModal({
       submitYn,
       surveySeq: selectedSurveySeq || surveySeq,
     };
+
     if (!moduleName || moduleName === '' || !moduleType || !status) {
       return window.alert('모두 입력해주세요!');
     }
@@ -227,6 +170,7 @@ export function CourseModuleUploadModal({
     if (moduleType === CourseModuleType.COURSE_MODULE_PROGRESS_RATE) {
       if (!inputParams.limitProgress) return window.alert('모두 입력해주세요! 진도율');
     }
+
     if (moduleType === CourseModuleType.COURSE_MODULE_TEST) {
       if (!inputParams.examSeq || !inputParams.limitScore)
         return window.alert('모두 입력해주세요! 시험');
@@ -245,7 +189,7 @@ export function CourseModuleUploadModal({
         window.alert('등록이 완료되었습니다.');
         return onClose();
       }
-    } catch (e: any) {
+    } catch (e) {
       window.alert(e.data.message);
       setLoading(false);
     }
@@ -265,11 +209,30 @@ export function CourseModuleUploadModal({
         setLoading(false);
         onClose();
       }
-    } catch (e: any) {
+    } catch (e) {
       window.alert(e?.data?.message);
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    (async function () {
+      if (!isModify) return;
+      try {
+        const { data } = await getDetailCourseModule(Number(courseModuleSeq));
+        setValue('moduleName', data.moduleName);
+        setValue('moduleType', data.moduleType);
+        setValue('submitYn', data.submitYn);
+        setValue('limitProgress', data.limitProgress);
+        setValue('limitScore', data.limitScore);
+        setValue('status', data.status);
+        setValue('surveySeq', data.surveySeq);
+      } catch (e) {
+        console.dir(e);
+        snackbar({ variant: 'error', message: e.data.message });
+      }
+    })();
+  }, []);
 
   return (
     <Modal
@@ -345,20 +308,13 @@ export function CourseModuleUploadModal({
           {inputByType
             .filter(filt => watch().moduleType === filt.type)[0]
             ?.children.map(child => (
-              <Box width="100%">
+              <Box
+                key={child.name}
+                width="100%">
                 <Typography>{child.name}</Typography>
                 <Box>{child.element(register, watch, setValue)}</Box>
               </Box>
             ))}
-
-          {/* {watch().moduleType === CourseModuleType.COURSE_MODULE_SURVEY ? (
-            <Box>
-              <Box>최소 진도율</Box>
-              <Box></Box>
-            </Box>
-          ) : (
-            '안뇽'
-          )} */}
 
           <FormControl className="form-control">
             <FormLabel focused={false}>상태</FormLabel>

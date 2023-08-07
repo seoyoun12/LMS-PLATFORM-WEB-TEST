@@ -1,7 +1,7 @@
 import { UserTransSaveInputDataType, businessType, courseCategoryType, courseType, getCourseClassStep, getSingleCourseClass, userBusinessType } from '@common/api/courseClass';
 import { courseClassEnrollInfo } from '@common/recoil';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { Box, Button, Card, CardActions, LinearProgress, Typography } from '@mui/material';
+import { Box, Button, Card, CardActions, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
@@ -16,7 +16,7 @@ interface StepResponse {
 }
 
 const AccentSpan = styled.span`
-  color: #f41;
+  color: rgb(191,49,51);
   font-weight: bold;
 `
 
@@ -67,7 +67,7 @@ const getSingleCourse = async (courseClassSeq: number) => {
       studyEndDate: data.studyEndDate,
     }); //작동안하는듯한 코드확인필요
     // setValue('businessType', data.course.courseCategoryType);
-  } catch (e: any) {
+  } catch (e) {
     snackbar({ variant: 'error', message: e.data.message });
   }
 };
@@ -96,14 +96,25 @@ useEffect(() => {
 
   return (
     <>
-    
       <Box
-      border='1px solid #f41'
-      boxShadow='0px 1px 4px #f41'
-      sx={{margin: '1rem auto',display: 'flex', flexDirection:'column', justifyContent:'center', alignItems:'center',padding:'1rem 2rem',width:'fit-content'}} >
-        <Typography variant='subtitle1' align='center' sx={{whiteSpace:'pre-line',lineHeight:1.25}}>
+      border='4px solid #e7e6e6'
+      boxShadow='0px 1px 4px #e7e6e6'
+      sx={{
+        margin: '1rem auto',
+        display: 'flex',
+        flexDirection:'column',
+        justifyContent:'center',
+        alignItems:'center',
+        padding:'1rem 2rem',
+        width:'100%',
+        maxWidth:'600px'
+        }}>
+        <Typography
+          variant='subtitle1'
+          align='center'
+          sx={{whiteSpace:'pre-line',lineHeight:1.25,fontSize: '22px',fontWeight:'bold'}}>
           운수종사자 온라인{' '}
-            <AccentSpan>
+          <AccentSpan>
             {
               localStorage.getItem('site_course_type')
               === 'TYPE_LOW_FLOOR_BUS'
@@ -112,40 +123,47 @@ useEffect(() => {
             }
             </AccentSpan>
             {'\n'}교육예약을 시작하도록 하겠습니다.
+        </Typography>
+            
+            
             <Box display='flex' gap='0.5rem' marginTop={1}>
               <Card sx={{padding: '0 0.75rem',border: '2px solid orange'}}>
-                <Typography variant='subtitle1' align='center' sx={{fontSize:'14px'}}>
+                <Typography variant='subtitle1' align='center' sx={{fontSize:'20px',fontWeight:'bold'}}>
                     {(watch('businessType') === userBusinessType.PASSENGER && '여객')}
                     {(watch('businessType') === userBusinessType.FREIGHT && '화물')}
                 </Typography>
               </Card>
               <Card sx={{padding: '0 0.75rem',border: '2px solid orange'}}>
-                <Typography variant='subtitle1' align='center' sx={{fontSize:'14px'}}>
+                <Typography variant='subtitle1' align='center' sx={{fontSize:'20px',fontWeight:'bold'}}>
                 {stepsRes
                 .filter((filter) => filter.seq === stepSeq)
                 .map((item) =>`${item.step}기`)}
                 </Typography>
               </Card>
               <Card sx={{padding: '0 0.75rem',border: '2px solid orange'}}>
-                <Typography variant='subtitle1' align='center' sx={{fontSize:'14px'}}>
+                <Typography variant='subtitle1' align='center' sx={{fontSize:'20px', fontWeight:'bold'}}>
                   {stepsRes
                   .filter((filter) => filter.seq === stepSeq)
                   .map((item) =>` ${item.studyStartDate.split(' ')[0]} ~ ${item.studyEndDate.split(' ')[0]}`)}
                 </Typography>
               </Card>
             </Box>
-            <Typography variant='overline' sx={{color:'#f41', fontSize:'12px',fontWeight:'bold'}} >* 선택하신 교육과 일정을 확인해 주세요.</Typography>
-            <CardActions sx={{paddingTop:'.5rem',borderTop:'1px solid #c7c7c7c7'}}>
+            <Typography variant='overline' sx={{color:'rgb(191,49,51)', fontSize:'16px',fontWeight:'bold'}} >* 선택하신 교육과 일정을 확인해 주세요.</Typography>
+            <CardActions sx={{width:'100%',paddingTop:'.5rem',borderTop:'1px solid #c7c7c7c7'}}>
               <Button
                 onClick={nextStep}
                 fullWidth
-                size="small"
                 variant='contained'
-                sx={{boxShadow:'2px 0px 2px #c7c7c7c7',fontSize:'14px',fontWeight:'bold'}}>시작하기</Button>
+                sx={{boxShadow:'2px 0px 2px #c7c7c7c7',fontSize:'18px',fontWeight:'bold'}}>시작하기</Button>
               <Button
-                onClick={() => router.back()} fullWidth size="small" variant='contained' sx={{background:'#c7c7c7', boxShadow:'2px 0px 2px #c7c7c7c7',fontSize:'14px',fontWeight:'bold'}} >취소하기</Button>
+                onClick={() => router.back()}
+                fullWidth
+                variant='contained'
+                sx={{background:'#c7c7c7', boxShadow:'2px 0px 2px #c7c7c7c7',fontSize:'18px',fontWeight:'bold'}}
+                
+                >취소하기</Button>
             </CardActions>
-        </Typography>
+        
       </Box>
         </>
   )

@@ -32,12 +32,6 @@ interface FormType extends Lesson {
   files: File[];
 }
 
-const contentTypeOptions = [
-  // { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
-  { value: ContentType.CONTENT_MP4, name: 'mp4' },
-  // { value: ContentType.CONTENT_EXTERNAL, name: '외부링크' },
-];
-
 const defaultValues = {
   contentType: ContentType.CONTENT_MP4,
   status: ProductStatus.APPROVE,

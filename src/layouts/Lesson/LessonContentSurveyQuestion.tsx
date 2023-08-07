@@ -21,14 +21,30 @@ export default function LessonContentSurveyQuestion(props: Props) {
 				<QuestionItemContainer>
 					<QuestionFormControl disabled={props.loading}>
 						<RadioGroup name={`question_${props.index}`}>
-							{Array.from({ length: 10 }, (x, i) => [props.question.surveyMultipleChoice[`item${i + 1}`], (i + 1).toString()]).filter((v) => !!v[0]).map((v: [string, string], i) => (
-								<QuestionFormControlLabel key={i} control={<Radio size="small"/>} label={v[0]} value={v[1]} checked={(value.startsWith("item") ? value.slice(4) : value) === v[1]} onChange={() => setValue(v[1])}/>
+							{Array
+              .from(
+              { length: 10 },
+              (x, i) => [props.question.surveyMultipleChoice[`item${i + 1}`], (i + 1).toString()])
+              .filter((v) => !!v[0])
+              .map((v: [string, string], i) => (
+								<QuestionFormControlLabel
+                  key={i}
+                  control={<Radio size="small"/>}
+                  label={v[0]}
+                  value={v[1]}
+                  checked={
+                    (value.startsWith("item")
+                    ? value.slice(4)
+                    : value) === v[1]
+                  }
+                  onChange={() => setValue(v[1])}/>
 							))}
 						</RadioGroup>
 					</QuestionFormControl>
 				</QuestionItemContainer>
 			</QuestionContainer>
 		);
+    
 		case "TYPE_SUBJECTIVE": return (
 			<QuestionContainer>
 				<QuestionTitle>{props.index + 1}. {props.question.content}</QuestionTitle>

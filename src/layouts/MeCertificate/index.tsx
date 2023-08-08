@@ -2,9 +2,6 @@ import { NextPage } from 'next';
 import {
   MeCertificateContainer,
   MeCertificateContentContainer,
-  MeCertificateHeaderContainer,
-  MeCertificateHeaderSubtitle,
-  MeCertificateHeaderTitle,
   MeCertificateItemConfirmButton,
   MeCertificateItemContainer,
   MeCertificateItemContentContainer,
@@ -17,12 +14,12 @@ import {
   PrintModalWrapper,
 } from '@components/MeCertificate/style';
 import { useGetUserMyinfoCertificates } from '@common/api/user/myinfo/certificates';
-import { GET, POST, POST_TO_ALL_DATA } from '@common/httpClient';
+import { GET, POST_TO_ALL_DATA } from '@common/httpClient';
 import {
   UserMyinfoCertificatesConfirmResponseDto,
   UserMyinfoCertificatesResponseDto,
 } from '@common/api/Api';
-import BackgroundImage from 'public/assets/images/certificates_background.svg';
+
 import { NotFound } from '@components/ui/NotFound';
 import { useState } from 'react';
 import { AxiosResponse } from 'axios';
@@ -39,7 +36,7 @@ const MeCertificate: NextPage = () => {
     useState<FetchState>('READY');
   const [downloadCertificateFetchState, setDownloadCertificateFetchState] =
     useState<FetchState>('READY');
-  const [getCertificateState, setGetCertificateState] = useState<string>('READY');
+
 
   const handleClickShowCertificates = async (item: UserMyinfoCertificatesResponseDto) => {
     if (!item.courseUserSeq || showCertificateFetchState === 'FETCHING') {

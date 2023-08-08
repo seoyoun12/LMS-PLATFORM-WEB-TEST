@@ -8,21 +8,9 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { MainDisplayType, useMainDisplay } from '@common/api/mainDisplay';
 import { pageRegType } from '@common/recoil/pageType/atom';
-import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
-import {  useMyUser } from '@common/api/user';
 import { useRouter } from 'next/router';
 import { courseType } from '@common/api/courseClass';
 import { logout } from '@common/api';
-import useResponsive from '@hooks/useResponsive';
-// import styles from '@styles/common.module.scss';
-// import cn from 'clsx';
-// import { Link } from '@components/common';
-// import { useState } from 'react';
-// import { useRecoilState } from 'recoil';
-// import { pageType } from '@common/recoil';
-
-// 메인 3개의 카드
-
 const LinkList = [
   {
     mainDisplayType: MainDisplayType.EDUCATION_TRANSPORT_WORKER,
@@ -109,95 +97,55 @@ const LinkList = [
 ];
 const MainPage: NextPage = () => {
   const router = useRouter();
-  // const [screenHeight, setScreenHeight] = useState<number>();
-  // const [userPageType, setUserPageType] = useRecoilState(pageType);
-  const isLogin = useIsLoginStatus();
-  const isDesktop = useResponsive(1100);
-  const { user } = useMyUser();
   const { data } = useMainDisplay();
-  const wrapRef = React.useRef<HTMLDivElement>();
-  React.useEffect(() => {
-    // if (isLogin && user) {
-    //   if (user.roles.some(item => item === UserRole.ROLE_ADMIN)) return;
-    //   if (user.regCategory === regCategoryType.TYPE_TRANS_EDU) {
-    //     router.push('/category');
-    //   } else if (user.regCategory === regCategoryType.TYPE_TRAFFIC_SAFETY_EDU) {
-    //     router.push('/traffic/category');
-    //   }
-    // }
-  }, [isLogin, user]);
-
-  React.useEffect(() => {
-    const htmlTag = document.querySelector('html');
-    const bodyTag = document.querySelector('body');
-    const idTag = document.querySelector('#__next') as HTMLElement;
-    const idTagFirseChildStyle = idTag.childNodes[0] as HTMLElement;
-    const mainTag = document.querySelector('main');
-
-    if (isDesktop) {
-      htmlTag.style.height = '100%';
-      bodyTag.style.height = '100%';
-      idTag.style.height = '100%';
-      idTagFirseChildStyle.style.height = '100%';
-      mainTag.style.height = '100%';
-    }
-    if (!isDesktop) {
-      htmlTag.style.height = '';
-      bodyTag.style.height = '';
-      idTag.style.height = '';
-      idTagFirseChildStyle.style.height = '';
-      mainTag.style.height = '';
-    }
-
-    return () => {
-      htmlTag.style.height = '';
-      bodyTag.style.height = '';
-      idTag.style.height = '';
-      idTagFirseChildStyle.style.height = '';
-      mainTag.style.height = '';
-    };
-  }, [isDesktop]);
-
+  
   if (!data) return <Spinner />;
   return (
     <>
-    <WrapMainContainer
-      ref={wrapRef}
-    >
-      <Head>
-        <title>충남교통연수원</title>
-      </Head>
-      
-        <ContentBox>
-          <LogoBox>
-            <Image
-              src="/assets/images/cttiLogo.png"
-              height={48}
-              width={320}
-              alt="충남교통연수원 로고"
-              
-            />
-          </LogoBox>
-          <SubTitle>
-            <Box>충남 교통안전&nbsp;</Box>
-            <Box color="#236cef">온라인교육센터</Box>
-          </SubTitle>
-                <MainInfoBannerBox>
-                  <Image
-                    src='/assets/images/main_center_info.png'
-                    alt='중앙 안내문'
-                    layout='responsive'
-                    width={1000}
-                    height={200}
-                    priority
-                  />
-                </MainInfoBannerBox>
+    <Head>
+      <title>충남교통연수원</title>
+    </Head>
+    <Wrapper>
+      <ContentBox>
+        <MainInfoBannerBox>
+            <LogoBox>
+              <Image
+                src="/assets/images/cttiLogo.png"
+                height={48}
+                width={320}
+                alt="충남교통연수원 로고"
+              />
+            </LogoBox>
+            <SubTitle>
+              <Typography>충남 교통안전&nbsp;</Typography>
+              <Typography color="#236cef">온라인교육센터</Typography>
+            </SubTitle>
+            <InfoBanner>
+              <ol>
+              <li>
+              본 온라인 과정은
+              <span className='accent-word'>차량등록지가 충남 또는 세종시 운수종사자에 해당되는 교육</span>
+              으로 타시∙도 차량은 교육을 이수할 수 없습니다.
+              </li>
+              <li>
+                <span className='accent-word'>운전 중 교육을 진행할 경우</span>
+                안전을 위해 
+                <span className='accent-word'>교육이 중단</span>
+                됩니다.
+              </li>
+              <li>
+                온라인 교육은 네트워크 상태에 따라 데이터 요금이 발생할 수 있습니다.
+                <span className='accent-word'>(Wi-Fi 사용 권장)</span>
+              </li>
+              </ol>
+            </InfoBanner>
+          </MainInfoBannerBox>    
           <Box position="relative">
             <CategoryGrid
               container={true}
               spacing={0}
               columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
-              height={'100%'}
+              height='100%'
             >
               {data.map(item => {
                 if (item.status === 1) {
@@ -206,13 +154,14 @@ const MainPage: NextPage = () => {
                   return (
                     <MainCategoryCard sx={{ borderTop: `7px solid ${color}` }}>
                       <Box
-                        sx={{ cursor: 'pointer' }}
+                        sx={{
+                        cursor: 'pointer',
+                        display:'flex',
+                        justifyContent:'center',
+                        alignItems:'center',
+                        flexDirection:'column'
+                        }}
                         onClick={() => {
-                          // setUserPageType(pageType);
-                          // if (displayWord === '도민교통' || displayWord === '저상버스')
-                          // if (displayWord === '도민교통안전') {
-                          //   return window.alert('준비중 입니다.');
-                          // }
                           onClickCard();
                           router.push(href);
                         }}
@@ -228,7 +177,6 @@ const MainPage: NextPage = () => {
                             width="270"
                             height="184"
                             style={{ aspectRatio: '16 / 9', zIndex: -19999 }}
-                            
                             objectFit="fill"
                             alt='메인 카드 이미지'
                           />
@@ -237,7 +185,6 @@ const MainPage: NextPage = () => {
                           <Box>
                             <Typography
                               component="span"
-                              fontSize={24}
                               fontWeight="bold"
                               color={textColor}
                               className='category-card-title'
@@ -246,7 +193,6 @@ const MainPage: NextPage = () => {
                             </Typography>
                             <Typography
                               component="span"
-                              fontSize={24}
                               fontWeight="bold"
                               color="#000"
                               className='category-card-title'
@@ -276,7 +222,7 @@ const MainPage: NextPage = () => {
         </ContentBox>
       
       
-    </WrapMainContainer>
+    </Wrapper>
     <FooterContainer>
     <FooterWord>CTTI</FooterWord>
   </FooterContainer>
@@ -284,20 +230,21 @@ const MainPage: NextPage = () => {
   );
 };
 // Wrap
-const WrapMainContainer = styled.div`
-  
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
   height: auto;
   min-height:100vh;
+  margin: 0 auto;
   .MuiButton-root.MuiButton-textNeutral:hover {
     background-color: #fff;
   }
   .MuiButton-root.MuiButton-textNeutral {
     width: 100%;
   }
+
   .category-card-title {
     font-size: 2rem;
     @media (max-width: 1500px) {
@@ -306,43 +253,80 @@ const WrapMainContainer = styled.div`
     @media (max-width: 1080px) {
       font-size: 1.25rem;
     }
-    @media (max-width: 868px) {
-      font-size: 1.15rem;
-    }
-    @media (max-width: 658px) {
-      font-size: 1rem;
-    }
+    
     @media (max-width: 514px) {
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
   }
   .gg {
     position: relative;
     width: 100%;
-    
     margin: 0 auto;
-    
     @media (max-width: 514px) {
       width: 90%;
-      
     }
   }
-  margin: 0 auto;
-  width: 65%;
 `;
+const InfoBanner = styled.div`
+  width: 80%;
+  background-image: url('assets/images/hub_centerbox.png');
+  background-repeat: no-repeat;
+  margin: 0 auto;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  background-size: 100% 100%;
+  ol {
+  margin: 1rem auto;
+  padding: 3rem 2rem;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  list-style: disc;
+  font-weight: bold;
+  line-height: 1.2;
+  }
+  .accent-word {
+    font-weight: bold;
+    color: #f41;
+  }
+  li {
+    font-size: 1.25rem;
+  }
+  @media screen and (max-width: 514px) {
+    margin: 0rem auto;
+    width:100%;
+    padding: 2rem .75rem;
+    ol {
+    margin: .25rem auto;
+    padding: 4rem 0.67rem;
+    }
+    li {
+      font-size: 1rem;
+    }
+    
+  }
+`
 
 
 // MainContainer
 const MainInfoBannerBox = styled(Box)`
+  
   width: 90%;
-  margin: 0 auto;
+  margin: .25rem auto;
+  gap: .5rem;
+  min-height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+  flex-direction: column;
+  
 `;
+
 const ContentBox = styled(Box)`
   width: 80%;
-  margin: auto;
-  @media (max-width: 1230px) {
-    width: 95%;
-  }
+  margin: 0 auto;
 `;
 const LogoBox = styled(Box)`
   padding-top: 4rem;
@@ -354,6 +338,7 @@ const SubTitle = styled(Box)`
   font-size: 19px;
   font-weight: 700;
   padding: 0.5rem 2.5rem;
+  text-align: center;
   width: fit-content;
   margin: auto;
   margin-top: 30px;
@@ -362,36 +347,51 @@ const SubTitle = styled(Box)`
   border: 1px solid #236cef;
   border-radius: 24px;
   display: flex;
+  @media (max-width: 1500px) {
+    font-size: 18px;
+    }
+  @media (max-width: 1080px) { 
+    font-size: 18px;
+    }
+  @media (max-width: 868px) { 
+    font-size: 16px;
+    }
+    @media (max-width: 658px) {
+    font-size: 14px;
+    }
+    @media (max-width: 514px) {
+    font-size: 10px;
+    }
 `;
 
 const CategoryGrid = styled(Grid)`
   /* position: relative; */
+  width: 80%;
   display: flex;
   justify-content: center;
   margin-top: 2rem;
   margin-bottom: 10rem;
   flex-wrap: nowrap;
   gap: 1rem;
+  margin: 0 auto;
   @media (max-width: 500px) {
-    flex-direction: column;
+    
+    flex-direction: column; 
+    width: 100%;
   }
 `;
 
-
 const MainCategoryCard = styled(Container)`
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  width: 300px;
   min-width: 200px;
   height: auto;
   background: #fff;
   box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2);
   z-index: 1;
   padding: 2rem 1rem;
-  
 `;
-
 
 const CardInContainer = styled(Box)`
   width: 100%;
@@ -401,7 +401,6 @@ const CardInContainer = styled(Box)`
   align-items: center;
   background-color: white;
   padding-top: 2rem;
-  
   .button-bot-line {
     position: absolute;
     left: 0;
@@ -423,6 +422,7 @@ const FooterContainer = styled(Box)`
   height: 300px;
   background: #c53736;
   overflow: hidden;
+  z-index: -1;
 
   //23.07.26 **미디어 쿼리 기준**
   @media (max-width: 1500px) {
@@ -435,10 +435,10 @@ const FooterContainer = styled(Box)`
     height: 210px;
     }
     @media (max-width: 658px) {
-      height: 180px;
+    height: 180px;
     }
     @media (max-width: 514px) {
-      height: 120px;
+    height: 120px;
     }
 `;
 const FooterWord = styled(Box)`

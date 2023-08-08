@@ -27,7 +27,7 @@ function StepCard({index, comment, children,nextStepAbled, nextStep, prevStep}:P
         
         <DirectionButtonGroup>
           <img onClick={prevStep}  className='direction-arrow' src='/assets/images/prev_off.png' alt='' />
-          {index < 8 && <img onClick={nextStep} className='direction-arrow'  src={nextStepAbled ? '/assets/images/next_on.png' : '/assets/images/next_off.png'} alt='' />}
+          <img onClick={nextStep} className='direction-arrow'  src={nextStepAbled ? '/assets/images/next_on.png' : '/assets/images/next_off.png'} alt='' />
         </DirectionButtonGroup>
     </Wrapper>
   )

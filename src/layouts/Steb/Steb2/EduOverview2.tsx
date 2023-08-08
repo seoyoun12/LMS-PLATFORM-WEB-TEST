@@ -7,7 +7,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { useRecoilState } from 'recoil';
 import styled from '@emotion/styled'
-
 interface StepResponse {
   seq: number;
   step: number;
@@ -40,7 +39,6 @@ const [stepsRes, setStepsRes] = useState<StepResponse[]>([]); //기수 교육시
 const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo); //전역에 교육정보 저장
 const router = useRouter();
 const snackbar = useSnackbar();
-// const { data, error, mutate } = useSingleCourseClass(Number(enrollInfo && enrollInfo.seq));
 
 const getSingleCourse = async (courseClassSeq: number) => {
   try {
@@ -95,10 +93,8 @@ useEffect(() => {
 }, [courseCategoryType, courseBusinessType]);
 
   return (
-    <>
       <Box
-      border='4px solid #e7e6e6'
-      boxShadow='0px 1px 4px #e7e6e6'
+      
       sx={{
         margin: '1rem auto',
         display: 'flex',
@@ -106,8 +102,10 @@ useEffect(() => {
         justifyContent:'center',
         alignItems:'center',
         padding:'1rem 2rem',
-        width:'100%',
-        maxWidth:'600px'
+        width: '100%',
+        maxWidth:'600px',
+        border:'4px solid #e7e6e6',
+        boxShadow:'0px 1px 4px #e7e6e6'
         }}>
         <Typography
           variant='subtitle1'
@@ -126,7 +124,7 @@ useEffect(() => {
         </Typography>
             
             
-            <Box display='flex' gap='0.5rem' marginTop={1}>
+            <MyEduApplicationBox>
               <Card sx={{padding: '0 0.75rem',border: '2px solid orange'}}>
                 <Typography variant='subtitle1' align='center' sx={{fontSize:'20px',fontWeight:'bold'}}>
                     {(watch('businessType') === userBusinessType.PASSENGER && '여객')}
@@ -141,14 +139,15 @@ useEffect(() => {
                 </Typography>
               </Card>
               <Card sx={{padding: '0 0.75rem',border: '2px solid orange'}}>
-                <Typography variant='subtitle1' align='center' sx={{fontSize:'20px', fontWeight:'bold'}}>
+                <Typography variant='subtitle1' align='center' sx={{fontSize:'18px', fontWeight:'bold'}}>
                   {stepsRes
                   .filter((filter) => filter.seq === stepSeq)
                   .map((item) =>` ${item.studyStartDate.split(' ')[0]} ~ ${item.studyEndDate.split(' ')[0]}`)}
                 </Typography>
               </Card>
-            </Box>
-            <Typography variant='overline' sx={{color:'rgb(191,49,51)', fontSize:'16px',fontWeight:'bold'}} >* 선택하신 교육과 일정을 확인해 주세요.</Typography>
+            </MyEduApplicationBox>
+
+            <Typography variant='overline' sx={{color:'rgb(191,49,51)',wordSpacing:-1, fontSize:'15px',fontWeight:'bold'}} >* 선택하신 교육과 일정을 확인해 주세요.</Typography>
             <CardActions sx={{width:'100%',paddingTop:'.5rem',borderTop:'1px solid #c7c7c7c7'}}>
               <Button
                 onClick={nextStep}
@@ -164,8 +163,21 @@ useEffect(() => {
             </CardActions>
         
       </Box>
-        </>
+        
   )
 }
 
 export default EduOverview2
+
+
+const MyEduApplicationBox = styled(Box)`
+  display:flex;
+  width:100%;
+  
+  gap: 0.5rem;
+  margin-top: 1rem;
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
+`

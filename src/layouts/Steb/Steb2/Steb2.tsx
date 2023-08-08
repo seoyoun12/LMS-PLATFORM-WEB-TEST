@@ -74,12 +74,13 @@ export default function Steb2() {
 
   const nextStep = () => {
     setPageIndex(prev => prev + 1);
-    if(currentIndex > 9) return;
+    if(currentIndex > 8) return;
     if(currentIndex === 3 && hideCarNumber) return setCurrentIndex(5);
     if(currentIndex === 2 && disabledCompany) return setCurrentIndex(4);
     setCurrentIndex(prev  => prev + 1) 
   }
   const prevStep = () => {
+    
     setPageIndex(prev => prev - 1);
     if(currentIndex <= 1) return
     if(currentIndex === 5 && hideCarNumber) return setCurrentIndex(3);
@@ -157,22 +158,26 @@ export default function Steb2() {
       return window.alert('오류입니다! 교육일정으로 돌아가서 다시 신청해주세요!');
     if (String(rest.businessType) === '' || !rest.businessType) {
       setCurrentIndex(1);
+      setPageIndex(1)
       return snackbar({ variant: 'error', message: '운수구분을 선택해주세요!' });
     }
     //저상버스 처리
     if (!(localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS')) {
       if (String(rest.businessSubType) === '' || !rest.businessSubType) {
         setCurrentIndex(2);
+        setPageIndex(2)
         return snackbar({ variant: 'error', message: '업종구분을 선택해주세요!' });
       }
     }
     if (!disabledCompany && !rest.businessName) {
       setCurrentIndex(3);
+      setPageIndex(3)
       return snackbar({ variant: 'error', message: '회사명을 입력해주세요!' });
     }
     // localName, digit2, oneWord, digit4
     if ((!hideCarNumber && !carNumberRegex.test(rest.carNumber) || rest.carNumber.length < 9 )) {
       setCurrentIndex(4);
+      setPageIndex(4);
       return snackbar({
         variant: 'error',
         message: '올바른 형식의 차량번호를 입력해주세요!',
@@ -181,15 +186,18 @@ export default function Steb2() {
 
     if (rest.carRegisteredRegion === '' || !rest.carRegisteredRegion) {
       setCurrentIndex(5);
+      setPageIndex(5)
       return snackbar({ variant: 'error', message: '차량등록지를 선택해주세요!' });
     }
     if (rest.residence === '' || !rest.residence) {
       setCurrentIndex(6);
+      setPageIndex(6);
       return snackbar({ variant: 'error', message: '거주지를 선택해주세요!' });
     }
 
     if (!phoneRegex.test(firstPhone + secondPhone + thirdPhone)) {
       setCurrentIndex(7);
+      setPageIndex(7);
       return snackbar({
         variant: 'error',
         message: '올바른 형식의 휴대전화를 입력해주세요!',
@@ -198,6 +206,7 @@ export default function Steb2() {
 
     if (!isIndividualCheck) {
       setCurrentIndex(9);
+      setPageIndex(8);
       return snackbar({
         variant: 'error',
         message: '개인정보 수집 및 이용동의에 체크해주세요!',
@@ -374,9 +383,13 @@ export default function Steb2() {
     <Steb2Wrap>
       {isDesktop && <StebHeader value={2} />}
       <Steb2BodyContainer>
-        <Box display='flex' flexDirection='column' alignItems='center' justifyContent='center'>
-        
-        <LinearProgress sx={{margin:'0 auto',width:'50%'}} variant="determinate" value={((currentIndex - 1) * 100) / 8} />
+        <Box
+        display='flex'
+        flexDirection='column'
+        alignItems='center'
+        justifyContent='center'
+        >
+          <LinearProgress sx={{margin:'0 auto',width:'50%'}} variant="determinate" value={((currentIndex - 1) * 100) / 8} />
         </Box>
         {/* --- 교육개요 --- */}
         {
@@ -388,11 +401,18 @@ export default function Steb2() {
           nextStep={nextStep}
         />
         }
+
         {
           currentIndex === 2 &&
-          <StepCard nextStepAbled={!!(getValues().businessSubType)} comment='운수 업종을 선택해주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
+          <StepCard
+            nextStepAbled={!!(getValues().businessSubType)}
+            comment='운수 업종을 선택해주세요'
+            index={pageIndex}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          >
             {!(localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS') && (
-                <FormControl sx={{ width:'90%' }}>
+                <FormControl sx={{ width:'100%' }}>
                   <Select
                     labelId="businessSubType"
                     id="businessSubType"
@@ -415,7 +435,13 @@ export default function Steb2() {
         }
         {
           currentIndex === 3 &&
-          <StepCard nextStepAbled={!!(getValues().businessName)} comment='회사명을 입력해 주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
+          <StepCard
+            nextStepAbled={!!(getValues().businessName)}
+            comment='회사명을 입력해 주세요'
+            index={pageIndex}
+            nextStep={nextStep}
+            prevStep={prevStep}
+            >
               <FormControl sx={{ width:'90%' }}>
               <TextField
                 placeholder="회사명"
@@ -429,9 +455,17 @@ export default function Steb2() {
         }
         {
           (currentIndex === 4) &&
-          <StepCard nextStepAbled={getValues().carNumber && getValues().carNumber.length > 8} comment='차량번호를 입력해 주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
-            <Box width='100%'
-             display='flex' alignItems='center' gap='1.25rem'>
+          <StepCard
+            nextStepAbled={getValues().carNumber && getValues().carNumber.length > 8}
+            comment='차량번호를 입력해 주세요' index={pageIndex}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          >
+            <Box
+              width='90%'
+              display='flex'
+              alignItems='center'
+              gap='1.25rem'>
 
             <FormControl fullWidth>
               <Select
@@ -441,6 +475,9 @@ export default function Steb2() {
                 placeholder='지역명'
                 onChange={e => carSetValue('localName',e.target.value as string)}
                 value={carGetValues().localName || ''}
+                sx={{
+                  minWidth: '80px',
+                }}
                 >
                 {localList.map((item) => (
                   <MenuItem key={item.type} value={item.title}>
@@ -448,12 +485,9 @@ export default function Steb2() {
                   </MenuItem>
                 ))}
               </Select>
-            </FormControl>
-
             <TextField
               {...carRegister('digit2')}
               onChange={(e) => {
-                // if (!regex4.test(e.target.value)) return;
                 if (e.target.value.length > 2) return;
                 carSetValue('digit2', e.target.value.replace(/[^0-9]/g, ''));
               }}
@@ -461,15 +495,20 @@ export default function Steb2() {
               placeholder='차종 번호2자리'
               inputProps={{ inputMode: 'numeric' }}
               fullWidth
+              sx={{
+                minWidth: '80px',
+              }}
               />
-
-            <FormControl fullWidth>
+            
               <Select
                 {...carRegister('oneWord')}
                 displayEmpty
                 renderValue={ !carWatch().oneWord ? () => <Placeholder>용도 기호</Placeholder> : null }
                 placeholder='용도 기호 한글 한글자'
                 value={carGetValues().oneWord || ''}
+                sx={{
+                  minWidth: '80px',
+                }}
               >
                 {oneWordList.map((item) => (
                   <MenuItem key={item} value={item}>
@@ -477,7 +516,7 @@ export default function Steb2() {
                   </MenuItem>
                 ))}
               </Select>
-            </FormControl>
+            
 
             <TextField
               {...carRegister('digit4')}
@@ -490,9 +529,13 @@ export default function Steb2() {
               placeholder='차량번호 4자리'
               inputProps={{ inputMode: 'numeric' }}
               fullWidth
+              sx={{
+                minWidth: '80px',
+              }}
             />
-
+              </FormControl>
             </Box>
+            
           </StepCard>
         }
         {
@@ -531,9 +574,13 @@ export default function Steb2() {
                   })}
                   onChange={(e) => setValue('residence', e.target.value as string)}
                   value={getValues().residence || ''}
+                  
                 >
                 {residenceList.map(item => (
-                  <MenuItem key={item.en} value={item.en}>
+                  <MenuItem
+                    key={item.en}
+                    value={item.en}
+                  >
                     {item.ko}
                   </MenuItem>
                 ))}
@@ -543,8 +590,8 @@ export default function Steb2() {
         }
         { currentIndex === 7 &&
           <StepCard nextStepAbled={getValues().firstPhone?.length + getValues().secondPhone?.length + getValues().thirdPhone?.length > 10} comment='휴대전화 번호를 입력해주세요' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
-            <Box display='flex' gap='1rem' justifyContent='flex-start'>
-              <FormControl sx={{ width:'90%' }}>
+            <Box display='flex' gap='0.5rem' justifyContent='flex-start'>
+              <FormControl sx={{ width:'100%' }}>
                 <Select
                   labelId="phone-type-label"
                   id="phone-type"
@@ -569,6 +616,9 @@ export default function Steb2() {
                 inputProps={{ inputMode: 'numeric' }}
                 fullWidth
                 placeholder='가운데 번호 4자리'
+                sx={{
+                  fontSize:'12px'
+                }}
               />
               
               <TextField
@@ -587,19 +637,27 @@ export default function Steb2() {
         }
         {
           currentIndex === 8 && 
-          <StepCard nextStepAbled comment='' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
+          <StepCard
+            nextStepAbled
+            comment=''
+            index={pageIndex}
+            nextStep={nextStep}
+            prevStep={prevStep}
+            >
             <Box paddingLeft='1rem' width='100%' display='flex' flexDirection='column' alignItems='flex-start' justifyContent='center'>
+
+              <SmsTerms>
               <Typography display='flex'>SMS 문자 수신 동의 <Typography component='span' sx={{color:'#f41',fontWeight:'bold'}}>(선택)</Typography></Typography>
               <Typography>※ 교육접수 완료 시 예약완료 문자가 발송됩니다.</Typography>
               <Typography>※ 신청인 본인의 휴대폰 번호를 입력하셔야 합니다.</Typography>
               <AccentedWord> ※ 휴대혼번호 입력후 SMS 동의시 교육관련 문자메시지를 받으실 수 있습니다.</AccentedWord>
-            
+              </SmsTerms>
               <RadioGroup
                 name="smsYn"
-                defaultValue='deny'
+                defaultValue={isChecked}
                 onChange={onChangeRadioValue}
                 row
-                sx={{gap:'2rem',marginTop:'2rem',alignSelf:'center'}}
+                sx={{display:'flex', flexWrap:'nowrap', gap:'1rem',marginTop:'2rem',alignSelf:'center'}}
               >
                 <FormControlLabel
                   value='agree'
@@ -632,34 +690,40 @@ export default function Steb2() {
         }
         {
           currentIndex === 9 &&
-          <StepCard nextStepAbled comment='개인정보 수집 및 이용 동의(필수)' index={pageIndex} nextStep={nextStep} prevStep={prevStep}>
+          <StepCard
+          nextStepAbled
+          comment='개인정보 수집 및 이용 동의(필수)'
+          index={pageIndex}
+          nextStep={nextStep}
+          prevStep={prevStep}
+          
+          >
           <IndividualSummary
             isIndividualCheck={isIndividualCheck}
             setIsIndividualCheck={setIsIndividualCheck}
           />
           <ButtonGroup
-            aria-label="outlined primary button group"
-            sx={{ width: '100%', marginTop: '1rem' }}
+            sx={{ width: '100%', marginTop: '1rem',padding:'3rem' }}
           >
-          <Button
+          <ApplicationButton
             variant="contained"
             onClick={onClickEnroll}
             disabled={!(loading === false && isIndividualCheck === true)}
-            sx={{ mb: 2, width:'50%',margin:'0 auto',fontWeight:'bold',fontSize: '24px' }}
+            
           >
             {loading ? <Spinner fit={true} /> : '신청하기'}
             {isIndividualCheck}
-          </Button>
+          </ApplicationButton>
+
           {registerType === RegisterType.TYPE_ORGANIZATION && (
-            <Button
+            <ApplicationButton
               variant="contained"
               color="success"
               onClick={onClickConfirm}
               disabled={loading}
-              sx={{ mb: 2, width:'50%',margin:'0 auto',fontWeight:'bold' }}
             >
               {loading ? <Spinner fit={true} /> : '확인'}
-            </Button>
+            </ApplicationButton>
           )}
           </ButtonGroup>
         </StepCard>
@@ -685,3 +749,20 @@ const Steb2BodyContainer = styled(Container)`
 const AccentedWord = styled(Typography)`
   color: red;
 `;
+
+const SmsTerms = styled(Box)`
+  margin: 0 auto;
+`
+
+const ApplicationButton = styled(Button)`
+  width:100%;
+  margin:0 auto;
+  font-weight:bold;
+  font-size: 24px;
+
+  @media screen and (max-width: 514px) {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+`

@@ -6,9 +6,7 @@ import useSWR, { SWRResponse } from 'swr';
 
 function useQuiz(lessonSeq: number | null) {
   const { data, error, mutate } = useSWR<SWRResponse<IQuiz[]>>(lessonSeq ? `/lesson/quiz/${lessonSeq}` : null, GET);
-  // post use SWR
-  // const { data:postData, error:postError, mutate:postMutate } = useSWR<SWRResponse<IQuiz>>(seq ? `/lesson/quiz/${seq}` : null, POST, {});
-
+  
   const updateQuiz = async (lessonQuizSeq: number, form: Partial<IQuiz>) => {
     await PUT(`/lesson/quiz/adm/${lessonQuizSeq}`, form);
     await mutate();

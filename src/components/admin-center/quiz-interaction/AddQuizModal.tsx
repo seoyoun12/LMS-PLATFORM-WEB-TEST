@@ -5,6 +5,7 @@ import TabButtons from './TabButtons';
 import TabContent from './TabContent';
 import QuizCreateForm from './QuizCreateForm';
 import { LessonQuizResponseDto } from '@common/api/Api';
+
 interface Props {
   open: boolean;
   quiz: LessonQuizResponseDto[];
@@ -78,13 +79,13 @@ function AddQuizModal({ open, quiz,lessonSeq, onCloseModal, handleClose,setQuizL
   },[])
 
   const onClearAddQuizState = useCallback(() => {
-      onCloseModal();
       setTabIndex(0);
       setCreateMode(false);
       setForm(null);
-      setCreateForm(BASIC_FORM)
-      handleClose(true);
+      setCreateForm(BASIC_FORM);
       setQuizList(null);
+      onCloseModal();
+      handleClose(true);
   },[])
   
   useEffect(() => {
@@ -147,8 +148,7 @@ function AddQuizModal({ open, quiz,lessonSeq, onCloseModal, handleClose,setQuizL
             createMode={createMode}
             onClearAddQuizState={onClearAddQuizState}
             />
-      } 
-      
+      }
     </ModalInnerLayout>
   </Modal>
   )

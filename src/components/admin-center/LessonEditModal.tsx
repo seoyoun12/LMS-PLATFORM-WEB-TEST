@@ -1,29 +1,28 @@
-
 import Typography from '@mui/material/Typography';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Backdrop,Box,Button,Chip,FormControl,FormControlLabel,FormHelperText,InputAdornment,Radio,RadioGroup } from '@mui/material';
-import { ErrorMessage } from '@hookform/error-message';
-import { ContentType } from '@common/api/content';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
+import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
+import TextField from '@mui/material/TextField';
+import router from 'next/router';
+import useToggle from '@hooks/useToggle';
+import AddQuizModal from './quiz-interaction/AddQuizModal';
 import { Modal, Spinner } from '@components/ui';
 import { Lesson } from '@common/api/lesson';
 import { modifyLesson, removeLesson, useLessonList } from '@common/api/adm/lesson';
-import TextField from '@mui/material/TextField';
 import { ProductStatus } from '@common/api/course';
 import { useSnackbar } from '@hooks/useSnackbar';
-import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { useFileUpload } from '@hooks/useChunkFileUpload';
 import { FileType } from '@common/api/file';
 import { FileUploader } from '@components/ui/FileUploader';
 import { BbsType, deleteFile } from '@common/api/adm/file';
 import { useDialog } from '@hooks/useDialog';
-import router from 'next/router';
-import useToggle from '@hooks/useToggle';
-import AddQuizModal from './quiz-interaction/AddQuizModal';
 import { PUT } from '@common/httpClient';
-import { IQuizTime } from '@layouts/Lesson/LessonContentVideo';
 import { LessonQuizResponseDto, LessonResponseDto } from '@common/api/Api';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Backdrop, Box, Button, Chip, FormControl, FormControlLabel, FormHelperText, InputAdornment, Radio, RadioGroup } from '@mui/material';
+import { ErrorMessage } from '@hookform/error-message';
+import { ContentType } from '@common/api/content';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+
 interface Props {
   open: boolean;
   handleClose: (isSubmit: boolean) => void;

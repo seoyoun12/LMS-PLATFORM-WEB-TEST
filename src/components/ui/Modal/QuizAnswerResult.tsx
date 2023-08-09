@@ -52,6 +52,8 @@ function QuizAnswerResult({onChoiceAnswer, userSelectedAnswer, quiz, quizAnswer,
       border='1px solid #c7c7c7c7'
       
       >
+      {
+        quiz.lessonQuizTypeEnum === 'MULTIPLE_CHOICE' &&
       <Typography
       color={isCorrectColor}
       fontWeight='bold'
@@ -59,14 +61,31 @@ function QuizAnswerResult({onChoiceAnswer, userSelectedAnswer, quiz, quizAnswer,
       whiteSpace='pre-line'
       lineHeight={0.75}
       >
-      {
+        {
         userSelectedAnswer.split('. ')[1] === quiz.answer
-        ? '(O) 정답입니다.'
-        : `(X) 틀렸습니다. \n
-          정답은 ${quizAnswer} 입니다.
-        `
-      }
+          ? '(O) 정답입니다.'
+          : `(X) 틀렸습니다. \n 정답은 ${quizAnswer} 입니다.`
+        }
       </Typography>
+      }
+      
+
+      {
+        quiz.lessonQuizTypeEnum === 'OX_QUIZ' && 
+        <Typography
+          color={isCorrectColor}
+          fontWeight='bold'
+          fontSize='16px'
+          whiteSpace='pre-line'
+          lineHeight={0.75}
+        >
+        {
+        userSelectedAnswer === quiz.answer
+          ? '(O) 정답입니다.'
+          : `(X) 틀렸습니다. \n 정답은 ${quizAnswer} 입니다.`
+        }
+      </Typography>
+      }
       <Typography marginTop='2rem'>
         {quiz.feedback}
       </Typography>

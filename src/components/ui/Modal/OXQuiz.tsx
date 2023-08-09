@@ -10,7 +10,7 @@ interface Props {
 
 function OXQuiz({quizAnswer, itemO, itemX,onChoiceAnswer}: Props) {
 
-  console.log(quizAnswer,itemO,itemX)
+  // console.log(quizAnswer,itemO,itemX)
   return (
     <Box
       padding='2rem'

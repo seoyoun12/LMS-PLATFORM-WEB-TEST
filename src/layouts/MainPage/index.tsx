@@ -139,7 +139,6 @@ const MainPage: NextPage = () => {
               </ol>
             </InfoBanner>
           </MainInfoBannerBox>    
-          
             <CardContainer >
               {data.map(item => {
                 if (item.status === 1) {
@@ -216,7 +215,6 @@ const MainPage: NextPage = () => {
         <FooterWord>CTTI</FooterWord>
       </FooterContainer>
     </Wrapper>
-    
   </>
   );
 };
@@ -285,7 +283,6 @@ const InfoBanner = styled.div`
     ol {
     width: 100%;
     margin: 1rem;
-    
     }
     li {
       font-weight: 400;
@@ -365,7 +362,7 @@ const SubTitle = styled(Box)`
 
 const CardContainer = styled.div`
   position:absolute;
-  bottom: -100px;
+  bottom: -96px;
   left: 50%;
   right: 50%;
   transform: translate(-50%, -50%);
@@ -376,6 +373,7 @@ const CardContainer = styled.div`
   flex-wrap: nowrap;
   gap: 2rem;
   @media (max-width: 500px) {
+    bottom: -48px;
     position: relative;
     flex-direction: column; 
     width: 100%;

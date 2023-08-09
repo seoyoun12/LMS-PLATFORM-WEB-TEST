@@ -18,7 +18,8 @@ function QuizAnswerResult({onChoiceAnswer, userSelectedAnswer, quiz, quizAnswer,
     onChoiceAnswer('await');
   }
   
-  const isCorrectColor = userSelectedAnswer.split('. ')[1] === quiz.answer ? '#03dd03' : '#ff0000'
+  const isCorrectMultipleChoiceColor = userSelectedAnswer.split('. ')[1] === quiz.answer ? '#03dd03' : '#ff0000'
+  const isCorrectOXQuizChoiceColor = userSelectedAnswer === quiz.answer ? '#03dd03' : '#ff0000'
   return (
     <>
     <Box
@@ -33,7 +34,7 @@ function QuizAnswerResult({onChoiceAnswer, userSelectedAnswer, quiz, quizAnswer,
       height:'42px',
       borderRadius: '6px',
       fontSize:'22px',
-      backgroundColor: isCorrectColor,
+      backgroundColor: quiz.lessonQuizTypeEnum === 'MULTIPLE_CHOICE' ? isCorrectMultipleChoiceColor : isCorrectOXQuizChoiceColor,
       color:'#fff',
       border:'1px solid #c7c7c7c7'
     }}
@@ -55,16 +56,16 @@ function QuizAnswerResult({onChoiceAnswer, userSelectedAnswer, quiz, quizAnswer,
       {
         quiz.lessonQuizTypeEnum === 'MULTIPLE_CHOICE' &&
       <Typography
-      color={isCorrectColor}
+      color={isCorrectMultipleChoiceColor}
       fontWeight='bold'
       fontSize='16px'
       whiteSpace='pre-line'
-      lineHeight={0.75}
+      lineHeight={1.5}
       >
         {
         userSelectedAnswer.split('. ')[1] === quiz.answer
           ? '(O) 정답입니다.'
-          : `(X) 틀렸습니다. \n 정답은 ${quizAnswer} 입니다.`
+          : `(X) 틀렸습니다. \n \n 정답은 ${quizAnswer} 입니다.`
         }
       </Typography>
       }
@@ -73,7 +74,7 @@ function QuizAnswerResult({onChoiceAnswer, userSelectedAnswer, quiz, quizAnswer,
       {
         quiz.lessonQuizTypeEnum === 'OX_QUIZ' && 
         <Typography
-          color={isCorrectColor}
+          color={isCorrectOXQuizChoiceColor}
           fontWeight='bold'
           fontSize='16px'
           whiteSpace='pre-line'
@@ -82,7 +83,7 @@ function QuizAnswerResult({onChoiceAnswer, userSelectedAnswer, quiz, quizAnswer,
         {
         userSelectedAnswer === quiz.answer
           ? '(O) 정답입니다.'
-          : `(X) 틀렸습니다. \n 정답은 ${quizAnswer} 입니다.`
+          : `(X) 틀렸습니다. \n \n 정답은 ${quizAnswer} 입니다.`
         }
       </Typography>
       }

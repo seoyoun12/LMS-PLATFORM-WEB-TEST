@@ -294,6 +294,7 @@ const InfoBanner = styled.div`
   }
   @media screen and (max-width: 514px) {
     width: 22rem;
+    /* height: 240px; */
     background-size: 100% 100%;
     ol {
     width: 100%;

@@ -150,7 +150,7 @@ export default function Steb2() {
       thirdPhone, 
       ...rest
     } = watch();
-    console.log('restCarNumber',rest.carNumber)
+    
     if (!enrollInfo || !enrollInfo.seq)
       return window.alert('오류입니다! 교육일정으로 돌아가서 다시 신청해주세요!');
     if (String(rest.businessType) === '' || !rest.businessType) {
@@ -172,7 +172,7 @@ export default function Steb2() {
       return snackbar({ variant: 'error', message: '회사명을 입력해주세요!' });
     }
     // localName, digit2, oneWord, digit4
-    if ((!hideCarNumber && !carNumberRegex.test(rest.carNumber) || rest.carNumber.length < 9 )) {
+    if ((!hideCarNumber && !carNumberRegex.test(rest.carNumber))) {
       setCurrentIndex(4);
       setPageIndex(4);
       return snackbar({
@@ -349,7 +349,6 @@ export default function Steb2() {
   }, [user, registerType]);
 
 
-  //temp delete 
   useEffect(() => {
     if (enrollInfo) setValue('courseClassSeq', Number(enrollInfo.seq));
 

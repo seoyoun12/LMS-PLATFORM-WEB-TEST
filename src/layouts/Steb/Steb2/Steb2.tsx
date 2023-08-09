@@ -16,7 +16,6 @@ import { Phone4Regex, carNumberRegex, phoneRegex } from '@utils/inputRegexes';
 import EduOverview2 from './EduOverview2';
 import StepCard from './common/StepCard';
 import { userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
-
 import { locationList, residenceList } from '@layouts/MeEdit/MeEdit';
 import { UserRole, useMyUser } from '@common/api/user';
 import { blue } from '@mui/material/colors';
@@ -54,9 +53,7 @@ export default function Steb2() {
   // const [CheckElementList, setCheckElementList] = useState<NodeListOf<Element>>();
   const [currentIndex,setCurrentIndex] = useState(1);
   const [pageIndex,setPageIndex] = useState(1);
-
   const [disabledCompany, setDisabledCompany] = useState(false);
-  
   const [isChecked,setIsChecked] = useState('deny');
   const [name, setName] = useState<string>(); //이름
   const [firstIdentityNumber, setFirstIdentityNumber] = useState<string>(); //주민앞
@@ -351,14 +348,16 @@ export default function Steb2() {
     }
   }, [user, registerType]);
 
-  useEffect(() => {
-    if (enrollInfo) setValue('courseClassSeq', Number(enrollInfo.seq));
 
-    if (!enrollInfo || !enrollInfo.seq) {
-      window.alert('과정정보가 없거나 잘못된 과정입니다! 다시 시도해주세요.');
-      router.push(`/stebMove/steb1`);
-    }
-  }, [enrollInfo]);
+  //temp delete 
+  // useEffect(() => {
+  //   if (enrollInfo) setValue('courseClassSeq', Number(enrollInfo.seq));
+
+  //   if (!enrollInfo || !enrollInfo.seq) {
+  //     window.alert('과정정보가 없거나 잘못된 과정입니다! 다시 시도해주세요.');
+  //     router.push(`/stebMove/steb1`);
+  //   }
+  // }, [enrollInfo]);
 
   //useForm의 첫 타입설정 이펙트
   useEffect(() => {
@@ -421,13 +420,13 @@ export default function Steb2() {
                     onChange={e => onChangeBusinessSubType(e.target.value as string)}
                     value={getValues().businessSubType || ''}
                   >
-                    {userBusinessTypeTwo
-                      .filter(filter => filter.category === watch().businessType)
-                      .map(item => (
-                        <MenuItem key={item.enType} value={item.enType}>
-                          {item.type}
-                        </MenuItem>
-                      ))}
+                  {userBusinessTypeTwo
+                    .filter(filter => filter.category === watch().businessType)
+                    .map(item => (
+                      <MenuItem key={item.enType} value={item.enType}>
+                        {item.type}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
           )}
@@ -467,7 +466,12 @@ export default function Steb2() {
               alignItems='center'
               gap='1.25rem'>
 
-            <FormControl fullWidth>
+            <FormControl
+            fullWidth
+            sx={{
+              gap: '0.15rem'
+            }}
+            >
               <Select
                 {...carRegister('localName')}
                 displayEmpty
@@ -595,9 +599,13 @@ export default function Steb2() {
                 <Select
                   labelId="phone-type-label"
                   id="phone-type"
+                  
                   {...register('firstPhone')}
                   onChange={e => setValue('firstPhone', e.target.value)}
                   value={getValues().firstPhone || ''}
+                  sx={{
+                    minWidth:'70px',
+                  }}
                 >
                 {phoneList.map(item => (
                   <MenuItem key={item} value={item}>
@@ -614,10 +622,15 @@ export default function Steb2() {
                   setValue('secondPhone', e.target.value.replace(/[^0-9]/g, ''));
                 }}
                 inputProps={{ inputMode: 'numeric' }}
-                fullWidth
                 placeholder='가운데 번호 4자리'
                 sx={{
-                  fontSize:'12px'
+                  minWidth: '120px',
+                  '& .MuiInputBase-input::placeholder': {
+                    fontSize: '0.65rem',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    border:0
+                  }
                 }}
               />
               
@@ -631,6 +644,16 @@ export default function Steb2() {
                 inputProps={{ inputMode: 'numeric' }}
                 placeholder='끝 번호 4자리'
                 fullWidth
+                size='medium'
+                sx={{
+                  minWidth: '80px',
+                  '& .MuiInputBase-input::placeholder': {
+                    fontSize: '0.65rem',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    border:0
+                  }
+                }}
               />
             </Box>
           </StepCard>
@@ -692,11 +715,11 @@ export default function Steb2() {
           currentIndex === 9 &&
           <StepCard
           nextStepAbled
-          comment='개인정보 수집 및 이용 동의(필수)'
+          comment='개인정보 수집 및 이용 동의split(필수)'
           index={pageIndex}
           nextStep={nextStep}
           prevStep={prevStep}
-          
+          isEndStep
           >
           <IndividualSummary
             isIndividualCheck={isIndividualCheck}
@@ -753,6 +776,7 @@ const AccentedWord = styled(Typography)`
 const SmsTerms = styled(Box)`
   margin: 0 auto;
 `
+
 
 const ApplicationButton = styled(Button)`
   width:100%;

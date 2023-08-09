@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Box, Typography, autocompleteClasses } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
@@ -39,12 +39,13 @@ export function IndividualSummary({ setIsIndividualCheck, isIndividualCheck }: P
           margin: '2rem auto 0'
         }}
       >
+        
+        <ConfirmAgreementBox>
         {
         isIndividualCheck
         ? <RadioButtonCheckedIcon sx={{ color: '#3498db' }} />
         : <RadioButtonUncheckedIcon sx={{ color: '#b1b1b1' }} />
         }
-        <ConfirmAgreementBox>
         <Typography className='agreement'>개인정보 수집 및 이용 동의합니다.
         <span className='accent-word'>(필수)</span>
         </Typography>
@@ -77,6 +78,7 @@ const ConfirmAgreementBox = styled(Box)`
   align-items:center;
   justify-content:center;
   margin: 0 auto;
+  gap: .25rem;
   width:80%;
   .agreement {
     font-size: 24px;

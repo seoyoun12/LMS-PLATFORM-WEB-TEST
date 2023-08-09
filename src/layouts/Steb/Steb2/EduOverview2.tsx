@@ -173,9 +173,9 @@ export default EduOverview2
 const MyEduApplicationBox = styled(Box)`
   display:flex;
   width:100%;
-  
+  justify-content: center;
   gap: 0.5rem;
-  margin-top: 1rem;
+  margin: 1rem auto;
 
   @media screen and (max-width: 600px) {
     flex-direction: column;

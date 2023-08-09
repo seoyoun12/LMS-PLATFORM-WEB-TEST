@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-import * as React from 'react';
 import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
 import { Box,Button,Grid,Typography } from '@mui/material';
@@ -105,6 +104,7 @@ const MainPage: NextPage = () => {
     <Head>
       <title>충남교통연수원</title>
     </Head>
+    
     <Wrapper>
       <ContentBox>
         <MainInfoBannerBox>
@@ -117,26 +117,26 @@ const MainPage: NextPage = () => {
               />
             </LogoBox>
             <SubTitle>
-              <Typography>충남 교통안전&nbsp;</Typography>
-              <Typography color="#236cef">온라인교육센터</Typography>
+              <span>충남 교통안전&nbsp;</span>
+              <span>온라인교육센터</span>
             </SubTitle>
             <InfoBanner>
               <ol>
-              <li>
-              본 온라인 과정은
-              <span className='accent-word'>차량등록지가 충남 또는 세종시 운수종사자에 해당되는 교육</span>
-              으로 타시∙도 차량은 교육을 이수할 수 없습니다.
-              </li>
-              <li>
-                <span className='accent-word'>운전 중 교육을 진행할 경우</span>
-                안전을 위해 
-                <span className='accent-word'>교육이 중단</span>
-                됩니다.
-              </li>
-              <li>
-                온라인 교육은 네트워크 상태에 따라 데이터 요금이 발생할 수 있습니다.
-                <span className='accent-word'>(Wi-Fi 사용 권장)</span>
-              </li>
+                <li>
+                본 온라인 과정은{' '}
+                <span className='accent-word'>차량등록지가 충남 또는 세종시 운수종사자에 해당되는 교육</span>
+                으로 타시∙도 차량은 교육을 이수할 수 없습니다.
+                </li>
+                <li>
+                  <span className='accent-word'>운전 중 교육을 진행할 경우{' '}</span>
+                  안전을 위해 {' '}
+                  <span className='accent-word'>교육이 중단</span>
+                  됩니다.
+                </li>
+                <li>
+                  온라인 교육은 네트워크 상태에 따라 데이터 요금이 발생할 수 있습니다.
+                  <span className='accent-word'>(Wi-Fi 사용 권장)</span>
+                </li>
               </ol>
             </InfoBanner>
           </MainInfoBannerBox>    
@@ -220,12 +220,10 @@ const MainPage: NextPage = () => {
             </CategoryGrid>
           </Box>
         </ContentBox>
-      
-      
     </Wrapper>
     <FooterContainer>
-    <FooterWord>CTTI</FooterWord>
-  </FooterContainer>
+      <FooterWord>CTTI</FooterWord>
+    </FooterContainer>
   </>
   );
 };
@@ -234,6 +232,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
   height: auto;
   min-height:100vh;
@@ -268,24 +267,23 @@ const Wrapper = styled.div`
   }
 `;
 const InfoBanner = styled.div`
-  width: 80%;
+  width: 70rem;
+  height: 240px;
+  background-size: contain;
   background-image: url('assets/images/hub_centerbox.png');
   background-repeat: no-repeat;
-  margin: 0 auto;
   padding: 2rem;
-  margin-bottom: 3rem;
-  background-size: 100% 100%;
+  
   ol {
-  margin: 1rem auto;
-  padding: 3rem 2rem;
-  width: 90%;
+  margin: 1.25rem auto;
+  width: 50rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
   list-style: disc;
   font-weight: bold;
-  line-height: 1.2;
+  line-height: 1.4;
   }
   .accent-word {
     font-weight: bold;
@@ -295,24 +293,23 @@ const InfoBanner = styled.div`
     font-size: 1.25rem;
   }
   @media screen and (max-width: 514px) {
-    margin: 0rem auto;
-    width:100%;
-    padding: 2rem .75rem;
+    width: 22rem;
+    background-size: 100% 100%;
     ol {
-    margin: .25rem auto;
-    padding: 4rem 0.67rem;
+    width: 100%;
+    margin: 1.5rem;
+    line-height: 1.75;
     }
     li {
-      font-size: 1rem;
+      font-weight: 400;
+      width: 90%;
+      font-size: 0.75rem;
+      line-height: 1.35;
     }
-    
   }
 `
 
-
-// MainContainer
 const MainInfoBannerBox = styled(Box)`
-  
   width: 90%;
   margin: .25rem auto;
   gap: .5rem;
@@ -326,7 +323,7 @@ const MainInfoBannerBox = styled(Box)`
 
 const ContentBox = styled(Box)`
   width: 80%;
-  margin: 0 auto;
+  margin: 2rem 2rem;
 `;
 const LogoBox = styled(Box)`
   padding-top: 4rem;
@@ -335,7 +332,7 @@ const LogoBox = styled(Box)`
 `;
 
 const SubTitle = styled(Box)`
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 700;
   padding: 0.5rem 2.5rem;
   text-align: center;
@@ -347,10 +344,10 @@ const SubTitle = styled(Box)`
   border: 1px solid #236cef;
   border-radius: 24px;
   display: flex;
-  @media (max-width: 1500px) {
-    font-size: 18px;
+    span:last-child {
+      color: #236cef;
     }
-  @media (max-width: 1080px) { 
+  @media (max-width: 1500px) {
     font-size: 18px;
     }
   @media (max-width: 868px) { 
@@ -360,12 +357,11 @@ const SubTitle = styled(Box)`
     font-size: 14px;
     }
     @media (max-width: 514px) {
-    font-size: 10px;
+    font-size: 12px;
     }
 `;
 
 const CategoryGrid = styled(Grid)`
-  /* position: relative; */
   width: 80%;
   display: flex;
   justify-content: center;
@@ -375,22 +371,26 @@ const CategoryGrid = styled(Grid)`
   gap: 1rem;
   margin: 0 auto;
   @media (max-width: 500px) {
-    
     flex-direction: column; 
     width: 100%;
   }
 `;
 
 const MainCategoryCard = styled(Container)`
+  min-width: 360px;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 200px;
+  
   height: auto;
   background: #fff;
   box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2);
   z-index: 1;
   padding: 2rem 1rem;
+
+  @media screen and (max-width: 514px) {
+    min-width: 300px;
+  }
 `;
 
 const CardInContainer = styled(Box)`

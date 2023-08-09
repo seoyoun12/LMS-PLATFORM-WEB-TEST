@@ -21,8 +21,13 @@ function AnswerBox({form, onFormChange}:Props) {
       form?.lessonQuizTypeEnum
       === "OX_QUIZ" && 
           <RadioGroup name='answer' row onChange={onFormChange}>
-           <FormControlLabel value={form?.itemO} control={<Radio />} label="O" />
-           <FormControlLabel value={form?.itemX} control={<Radio />} label="X" />
+           <FormControlLabel
+            value={form?.itemO}
+            control={<Radio />}
+            label="O"
+            checked={form?.answer === form?.itemO}
+            />
+           <FormControlLabel value={form?.itemX} control={<Radio />} label="X" checked={form?.answer === form?.itemX} />
           </RadioGroup> 
       }
       {

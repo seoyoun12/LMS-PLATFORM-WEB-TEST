@@ -8,7 +8,7 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { Modal, Spinner } from '@components/ui';
 import { Lesson } from '@common/api/lesson';
-import { modifyLesson, removeLesson, useLessonList } from '@common/api/adm/lesson';
+import { modifyLesson, removeLesson, useLesson, useLessonList } from '@common/api/adm/lesson';
 import TextField from '@mui/material/TextField';
 import { ProductStatus } from '@common/api/course';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -21,6 +21,8 @@ import { useDialog } from '@hooks/useDialog';
 import router from 'next/router';
 import useToggle from '@hooks/useToggle';
 import AddQuizModal from './quiz-interaction/AddQuizModal';
+import { PUT } from '@common/httpClient';
+import axios from 'axios';
 interface Props {
   open: boolean;
   handleClose: (isSubmit: boolean) => void;
@@ -41,19 +43,22 @@ const defaultValues = {
 export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   const snackbar = useSnackbar();
   const [submitLoading, setSubmitLoading] = useState(false);
-  
   const [fileName, setFileName] = useState<string | null>(null);
-  const { handleUpload, handleProgressStatus, uploadPercentage } = useFileUpload();
+  const { handleUpload, uploadPercentage } = useFileUpload();
+  const [lessonSeq, setLessonSeq] = useState(lesson?.seq);
   const { contentSeq } = router.query;
   const { mutate } = useLessonList(Number(contentSeq));
   const dialog = useDialog();
   const {register, handleSubmit, formState: { errors }, control, reset,watch, resetField, setValue} = useForm<FormType>({ defaultValues });
   const {onToggle: onToggleAddQuizModal, toggle: isAddQuizModalOpen} = useToggle();
+  
 
-  const onInteractionRadioChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const onInteractionRadioChange = useCallback( async (e: ChangeEvent<HTMLInputElement>) => {
     const { target: { value } } = e;
     setValue('interaction', value === 'on');
-  },[setValue]);
+    await PUT(`/lesson/adm/interaction/${lessonSeq}?interaction=${value === 'on'}`);
+    mutate();
+  },[setValue,lessonSeq]);
 
   const handleDeleteFile = useCallback(async () => {
     const confirm = await dialog({
@@ -71,7 +76,6 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
       });
       resetField('files');
       setFileName(null);
-      
     } catch (error) {
       return snackbar({ variant: 'error', message: error.message });
     }
@@ -154,8 +158,13 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
     }
   }, [lesson, open, reset]);
 
+  useEffect(() => {
+    if(!lesson) return; 
+    setLessonSeq(lesson.seq);
+  },[lesson])
+
   if (error) return <div>강의 업로드 정보를 불러오는데 실패하였습니다.</div>;
-  console.log(lesson);
+  
   return (
     <>
     <AddQuizModal

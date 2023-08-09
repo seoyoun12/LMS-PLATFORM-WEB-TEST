@@ -63,8 +63,8 @@ function QuizCreateForm({form, createMode, onFormChange, onCheckChange}:Props) {
         <AnswerBox form={form} onFormChange={onFormChange} /> 
     
     
-    { form?.lessonQuizTypeEnum === "MULTIPLE_CHOICE" && <MultipleChoiceBox form={form} onFormChange={onFormChange} /> }
-    { form?.lessonQuizTypeEnum !== "ALARM" &&  <FeedbackBox form={form} onFormChange={onFormChange} /> }
+      { form?.lessonQuizTypeEnum === "MULTIPLE_CHOICE" && <MultipleChoiceBox form={form} onFormChange={onFormChange} /> }
+      { form?.lessonQuizTypeEnum !== "ALARM" &&  <FeedbackBox form={form} onFormChange={onFormChange} /> }
         <ConfirmButtons form={form} createMode={createMode} />
       </TabsLayout> 
     </Box>

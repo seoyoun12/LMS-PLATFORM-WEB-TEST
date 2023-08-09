@@ -117,8 +117,8 @@ const MainPage: NextPage = () => {
               />
             </LogoBox>
             <SubTitle>
-              <span>충남 교통안전&nbsp;</span>
-              <span>온라인교육센터</span>
+              <Typography className='word'>충남 교통안전&nbsp;</Typography>
+              <Typography className='word accent-word'>온라인교육센터</Typography>
             </SubTitle>
             <InfoBanner>
               <ol>
@@ -140,19 +140,14 @@ const MainPage: NextPage = () => {
               </ol>
             </InfoBanner>
           </MainInfoBannerBox>    
-          <Box position="relative">
-            <CategoryGrid
-              container={true}
-              spacing={0}
-              columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
-              height='100%'
-            >
+          
+            <CardContainer >
               {data.map(item => {
                 if (item.status === 1) {
                   const { href,color,textColor,displayWord,imgPath,lineColor,onClickCard } =
                   LinkList.filter(filter => filter.mainDisplayType === item.mainDisplayType)[0];
                   return (
-                    <MainCategoryCard sx={{ borderTop: `7px solid ${color}` }}>
+                    <MainCategoryCard bgColor={color}>
                       <Box
                         sx={{
                         cursor: 'pointer',
@@ -168,20 +163,19 @@ const MainPage: NextPage = () => {
                       >
                         <Box
                           width='100%'
-                          borderRadius="8px 8px 0 0"
                           overflow="hidden"
                           className="gg"
                         >
                           <Image
                             src={imgPath}
-                            width="270"
-                            height="184"
-                            style={{ aspectRatio: '16 / 9', zIndex: -19999 }}
-                            objectFit="fill"
+                            width={270}
+                            height={184}
+                            style={{ aspectRatio: '16 / 9'}}
+                            objectFit='scale-down'
                             alt='메인 카드 이미지'
                           />
                         </Box>
-                        <CardInContainer>
+                        <CardText>
                           <Box>
                             <Typography
                               component="span"
@@ -211,19 +205,19 @@ const MainPage: NextPage = () => {
                               borderRight={` 2px solid ${lineColor}`}
                             />
                           </Button>
-                        </CardInContainer>
+                        </CardText>
                       </Box>
                     </MainCategoryCard>
                   );
                 }
               })}
-            </CategoryGrid>
-          </Box>
+            </CardContainer>
         </ContentBox>
+        <FooterContainer>
+        <FooterWord>CTTI</FooterWord>
+      </FooterContainer>
     </Wrapper>
-    <FooterContainer>
-      <FooterWord>CTTI</FooterWord>
-    </FooterContainer>
+    
   </>
   );
 };
@@ -234,8 +228,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: auto;
-  min-height:100vh;
+  min-height: 100vh; 
   margin: 0 auto;
   .MuiButton-root.MuiButton-textNeutral:hover {
     background-color: #fff;
@@ -257,14 +250,7 @@ const Wrapper = styled.div`
       font-size: 1.5rem;
     }
   }
-  .gg {
-    position: relative;
-    width: 100%;
-    margin: 0 auto;
-    @media (max-width: 514px) {
-      width: 90%;
-    }
-  }
+  
 `;
 const InfoBanner = styled.div`
   width: 70rem;
@@ -294,18 +280,19 @@ const InfoBanner = styled.div`
   }
   @media screen and (max-width: 514px) {
     width: 22rem;
-    /* height: 240px; */
+    
+    background-image: url('assets/images/hub_mobile_centerbox.png');
     background-size: 100% 100%;
     ol {
     width: 100%;
-    margin: 1.5rem;
-    line-height: 1.75;
+    margin: 1rem;
+    
     }
     li {
       font-weight: 400;
       width: 90%;
       font-size: 0.75rem;
-      line-height: 1.35;
+      line-height: 1.8;
     }
   }
 `
@@ -319,7 +306,6 @@ const MainInfoBannerBox = styled(Box)`
   justify-content: center;
   align-items:center;
   flex-direction: column;
-  
 `;
 
 const ContentBox = styled(Box)`
@@ -327,14 +313,14 @@ const ContentBox = styled(Box)`
   margin: 2rem 2rem;
 `;
 const LogoBox = styled(Box)`
-  padding-top: 4rem;
+  padding-top: 1rem;
   width: fit-content;
   margin: auto;
 `;
 
 const SubTitle = styled(Box)`
   font-size: 18px;
-  font-weight: 700;
+  
   padding: 0.5rem 2.5rem;
   text-align: center;
   width: fit-content;
@@ -345,56 +331,78 @@ const SubTitle = styled(Box)`
   border: 1px solid #236cef;
   border-radius: 24px;
   display: flex;
-    span:last-child {
+   .word {
+    font-weight: bold;
+   }
+    .accent-word {
       color: #236cef;
     }
   @media (max-width: 1500px) {
+    .word {
+    font-weight: bold;
     font-size: 18px;
+   }
+    
     }
   @media (max-width: 868px) { 
+    .word {
+    font-weight: bold;
     font-size: 16px;
+   }
     }
     @media (max-width: 658px) {
+      .word {
+    font-weight: bold;
     font-size: 14px;
+   }
     }
     @media (max-width: 514px) {
+      .word {
+    font-weight: bold;
     font-size: 12px;
+   }
     }
 `;
 
-const CategoryGrid = styled(Grid)`
-  width: 80%;
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-  margin-bottom: 10rem;
-  flex-wrap: nowrap;
-  gap: 1rem;
-  margin: 0 auto;
-  @media (max-width: 500px) {
-    flex-direction: column; 
-    width: 100%;
-  }
-`;
-
-const MainCategoryCard = styled(Container)`
-  min-width: 360px;
+const CardContainer = styled.div`
+  position:absolute;
+  bottom: -100px;
+  left: 50%;
+  right: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  
-  height: auto;
-  background: #fff;
-  box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  padding: 2rem 1rem;
+  flex-wrap: nowrap;
+  gap: 2rem;
+  @media (max-width: 500px) {
+    position: relative;
+    flex-direction: column; 
+    width: 100%;
+    left:0;
+    right:0;
+    transform: translate(0, 0);
+  }
+`;
 
+const MainCategoryCard = styled.div<{bgColor: string}>`
+  width: 360px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  z-index: 1;
+  padding: 2rem 0;
+  box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2);
+  border-top: ${(props) => (props.bgColor ? `7px solid ${props.bgColor}` : 'black')};
+  
   @media screen and (max-width: 514px) {
     min-width: 300px;
   }
 `;
 
-const CardInContainer = styled(Box)`
+const CardText = styled(Box)`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -417,30 +425,12 @@ const CardInContainer = styled(Box)`
   }
 `;
 const FooterContainer = styled(Box)`
-  position: fixed;
-  bottom:0;
+  position: relative;
   width: 100%;
   height: 300px;
   background: #c53736;
   overflow: hidden;
   z-index: -1;
-
-  //23.07.26 **미디어 쿼리 기준**
-  @media (max-width: 1500px) {
-    height: 270px;
-    }
-  @media (max-width: 1080px) { 
-    height: 240px;
-    }
-  @media (max-width: 868px) { 
-    height: 210px;
-    }
-    @media (max-width: 658px) {
-    height: 180px;
-    }
-    @media (max-width: 514px) {
-    height: 120px;
-    }
 `;
 const FooterWord = styled(Box)`
   position:absolute;

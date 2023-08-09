@@ -30,6 +30,8 @@ const simpleRequestWrapper = async (
       confirmText: '확인',
       variant: 'alert',
     })
+
+    
   try {
     await request();
     dialog({

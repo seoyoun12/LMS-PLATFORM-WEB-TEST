@@ -8,26 +8,36 @@ interface Props {
   children: ReactNode;
   nextStep: () => void;
   prevStep: () => void;
+  isEndStep?: boolean; // 마지막 스텝인지 여부를 확인하는 flag
   nextStepAbled: boolean; // 다음 스텝으로 넘어갈 수 있는지 여부를 확인하는 flag
 }
 
-function StepCard({index, comment, children,nextStepAbled, nextStep, prevStep}:Props) {
+function StepCard({isEndStep,index, comment, children,nextStepAbled, nextStep, prevStep}:Props) {
   
   return (
     <Wrapper>
         <Box sx={{margin:'1.25rem 0 ',display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
           <BubbleBox>
             <Typography variant='h6'>STEP {index -1}</Typography>
-          </BubbleBox>  
-            <Typography className='info-comment'> {comment}  </Typography>
+          </BubbleBox> 
+            <Typography variant='subtitle1' className='info-comment'>
+              {comment.split('split')[0]}{' '}
+              <Typography variant='caption' color='#f41' fontSize={16}>
+                {comment.split('split')[1]}
+              </Typography>
+            </Typography>
         </Box>
         <ChildrenWrapper>
           {children}
         </ChildrenWrapper>
         
         <DirectionButtonGroup>
-          <img onClick={prevStep}  className='direction-arrow' src='/assets/images/prev_off.png' alt='' />
-          <img onClick={nextStep} className='direction-arrow'  src={nextStepAbled ? '/assets/images/next_on.png' : '/assets/images/next_off.png'} alt='' />
+          <DirectionButton onClick={prevStep}>
+          <img className='direction-arrow' src='/assets/images/prev_off.png' alt='' />
+          </DirectionButton>
+          {(nextStepAbled && !isEndStep) && <DirectionButton onClick={nextStep} disabled={!nextStepAbled}>
+          <img className='direction-arrow' src={nextStepAbled ? '/assets/images/next_on.png' : '/assets/images/next_off.png'} alt='' />
+          </DirectionButton>}
         </DirectionButtonGroup>
     </Wrapper>
   )
@@ -35,8 +45,14 @@ function StepCard({index, comment, children,nextStepAbled, nextStep, prevStep}:P
 
 export default StepCard;
 
+const DirectionButton = styled.button`
+  padding: 0.1rem;
+
+`
+
 const ChildrenWrapper = styled(Box)`
-  width:100%;
+  width:80%;
+  padding-bottom: 2rem;
   display:flex;
   flex-direction:column;
   justify-content:center;

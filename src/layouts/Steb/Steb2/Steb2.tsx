@@ -350,14 +350,14 @@ export default function Steb2() {
 
 
   //temp delete 
-  // useEffect(() => {
-  //   if (enrollInfo) setValue('courseClassSeq', Number(enrollInfo.seq));
+  useEffect(() => {
+    if (enrollInfo) setValue('courseClassSeq', Number(enrollInfo.seq));
 
-  //   if (!enrollInfo || !enrollInfo.seq) {
-  //     window.alert('과정정보가 없거나 잘못된 과정입니다! 다시 시도해주세요.');
-  //     router.push(`/stebMove/steb1`);
-  //   }
-  // }, [enrollInfo]);
+    if (!enrollInfo || !enrollInfo.seq) {
+      window.alert('과정정보가 없거나 잘못된 과정입니다! 다시 시도해주세요.');
+      router.push(`/stebMove/steb1`);
+    }
+  }, [enrollInfo]);
 
   //useForm의 첫 타입설정 이펙트
   useEffect(() => {

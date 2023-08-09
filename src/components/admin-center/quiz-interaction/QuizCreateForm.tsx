@@ -21,11 +21,12 @@ interface Props {
   createMode: boolean;
   onFormChange: (e: SyntheticEvent | string, key?: string) => void;
   onCheckChange: (e: SyntheticEvent) => void;
+  onClearAddQuizState: () => void;
 }
 
 
 
-function QuizCreateForm({form, createMode, onFormChange, onCheckChange}:Props) {
+function QuizCreateForm({form, createMode, onFormChange, onCheckChange, onClearAddQuizState}:Props) {
   const [quizType, setQuizType] = useState('');
 
   const onSelectChange = (event: SelectChangeEvent) => {
@@ -65,7 +66,7 @@ function QuizCreateForm({form, createMode, onFormChange, onCheckChange}:Props) {
     
       { form?.lessonQuizTypeEnum === "MULTIPLE_CHOICE" && <MultipleChoiceBox form={form} onFormChange={onFormChange} /> }
       { form?.lessonQuizTypeEnum !== "ALARM" &&  <FeedbackBox form={form} onFormChange={onFormChange} /> }
-        <ConfirmButtons form={form} createMode={createMode} />
+        <ConfirmButtons form={form} createMode={createMode} onClearAddQuizState={onClearAddQuizState} />
       </TabsLayout> 
     </Box>
   )

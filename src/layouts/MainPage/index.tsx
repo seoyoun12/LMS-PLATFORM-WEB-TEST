@@ -1,8 +1,7 @@
 import type { NextPage } from 'next';
 import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
-import { Box,Button,Grid,Typography } from '@mui/material';
-import { Container } from '@mui/system';
+import { Box, Button, Typography } from '@mui/material';
 import Head from 'next/head';
 import Image from 'next/image';
 import { MainDisplayType, useMainDisplay } from '@common/api/mainDisplay';
@@ -280,7 +279,7 @@ const InfoBanner = styled.div`
   }
   @media screen and (max-width: 514px) {
     width: 22rem;
-    
+    height: 240px;
     background-image: url('assets/images/hub_mobile_centerbox.png');
     background-size: 100% 100%;
     ol {

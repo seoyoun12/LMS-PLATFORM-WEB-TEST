@@ -8,7 +8,7 @@ interface Props {
   onFormChange: (e: SyntheticEvent) => void
 }
 function FeedbackBox({form,onFormChange}:Props) {
-  console.log(form);
+  
   return (
     <Box
     marginTop='1rem'

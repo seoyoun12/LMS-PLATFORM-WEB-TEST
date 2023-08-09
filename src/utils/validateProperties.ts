@@ -2,6 +2,7 @@ import { IQuiz } from "@layouts/Lesson/LessonContentVideo"
 import falsyCheck from "./falsyCheck"
 
 export default function validateProperties(type: 'ALARM' | 'MULTIPLE_CHOICE' | 'OX_QUIZ', form:Partial<IQuiz>): boolean {
+  
   let flag = true;
 
   if(type === 'ALARM'){

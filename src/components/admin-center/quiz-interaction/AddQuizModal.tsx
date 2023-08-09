@@ -1,43 +1,48 @@
 import { Modal, Spinner } from '@components/ui';
-import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import ModalInnerLayout from './ModalInnerLayout';
 import TabButtons from './TabButtons';
 import TabContent from './TabContent';
-import { IQuiz, IQuizTime } from '@layouts/Lesson/LessonContentVideo';
 import QuizCreateForm from './QuizCreateForm';
+import { LessonQuizResponseDto } from '@common/api/Api';
 interface Props {
   open: boolean;
-  quiz: IQuizTime[];
+  quiz: LessonQuizResponseDto[];
   lessonSeq: number;
   onCloseModal: () => void;
+  handleClose: (bool: boolean) => void;
+  setQuizList: Dispatch<SetStateAction<LessonQuizResponseDto[]>>;
 }
 
-function AddQuizModal({ open, quiz,lessonSeq, onCloseModal }: Props) {
+const BASIC_FORM: Partial<LessonQuizResponseDto> = {
+  lessonQuizTypeEnum: 'ALARM',
+  alarmContent: '',
+  quizContent: '',
+  answer: '',
+  feedback: '',
+  item1: '',
+  item2: '',
+  item3: '',
+  item4: '',
+  itemO: 'O',
+  itemX: 'X',
+  lessonSeq:0,
+  randomTime: true,
+  setTimeMin: 0,
+  setTimeSecond: 0
+}
+
+function AddQuizModal({ open, quiz,lessonSeq, onCloseModal, handleClose,setQuizList }: Props) {
   const [tabIndex, setTabIndex] = useState(0);
-  const [form, setForm] = useState<IQuiz>(null);
+  const [form, setForm] = useState<LessonQuizResponseDto>(null);
   const [createMode, setCreateMode] = useState(false);
-  const [createForm,setCreateForm] = useState<Partial<IQuiz>>({
-    lessonQuizTypeEnum: 'ALARM',
-    alarmContent: '',
-    quizContent: '',
-    answer: '',
-    feedback: '',
-    item1: '',
-    item2: '',
-    item3: '',
-    item4: '',
-    itemO: 'O',
-    itemX: 'X',
-    lessonSeq:0,
-    randomTime: true,
-    setTimeMin: 0,
-    setTimeSecond: 0
-  });
+  const [createForm,setCreateForm] = useState<Partial<LessonQuizResponseDto>>(BASIC_FORM);
 
   const onTabChange = useCallback((_, newValue: number) => {
     setTabIndex(newValue);
-    if (newValue === quiz.length) setCreateMode(true);
-    else setCreateMode(false);
+    if (quiz.length !== 0 && newValue === quiz.length) return setCreateMode(true);
+    if(quiz.length === 0) return setCreateMode(true);
+    else return setCreateMode(false);
   },[quiz?.length]);
 
 
@@ -59,7 +64,7 @@ function AddQuizModal({ open, quiz,lessonSeq, onCloseModal }: Props) {
   // onFormCreateChange, onCheckCreateChange는 <새로운 퀴즈>를 생성할 때 쓰입니다.
   const onFormCreateChange = useCallback((event: SyntheticEvent | string, key = '') => {
     if(typeof event === 'string')
-    return setCreateForm((prev) => ({...prev, [key]: event}))
+      return setCreateForm((prev) => ({...prev, [key]: event}))
     
     const target = event.target as HTMLInputElement;
     const { name, value } = target;
@@ -70,6 +75,16 @@ function AddQuizModal({ open, quiz,lessonSeq, onCloseModal }: Props) {
     const target = event.target as HTMLInputElement;
     const { name, checked } = target;
     setCreateForm((prev) =>({...prev, [name]: checked}))
+  },[])
+
+  const onClearAddQuizState = useCallback(() => {
+      onCloseModal();
+      setTabIndex(0);
+      setCreateMode(false);
+      setForm(null);
+      setCreateForm(BASIC_FORM)
+      handleClose(true);
+      setQuizList(null);
   },[])
   
   useEffect(() => {
@@ -86,18 +101,15 @@ function AddQuizModal({ open, quiz,lessonSeq, onCloseModal }: Props) {
   useEffect(() => {
     if(quiz?.length === 0) setCreateMode(true)
     else setCreateMode(false)
-  },[quiz?.length])
+  },[quiz])
+  
 
   if(!quiz) return <Spinner />;
 
   return (
     <Modal
       open={open}
-      onCloseModal={() => {
-        onCloseModal();
-        setTabIndex(0);
-        setCreateMode(false);
-      }}
+      onCloseModal={onClearAddQuizState}
       sx={{
         display:'flex',
         justifyContent:'center',
@@ -123,6 +135,7 @@ function AddQuizModal({ open, quiz,lessonSeq, onCloseModal }: Props) {
           onFormChange={onFormChange}
           tabIndex={tabIndex}
           onCheckChange={onCheckChange}
+          onClearAddQuizState={onClearAddQuizState}
           />
       ))}
       {
@@ -132,6 +145,7 @@ function AddQuizModal({ open, quiz,lessonSeq, onCloseModal }: Props) {
             onFormChange={onFormCreateChange}
             onCheckChange={onCheckCreateChange}
             createMode={createMode}
+            onClearAddQuizState={onClearAddQuizState}
             />
       } 
       

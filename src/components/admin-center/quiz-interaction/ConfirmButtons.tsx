@@ -8,6 +8,7 @@ import QuizSubmitButton from './QuizSubmitButton';
 interface Props {
   form: Partial<IQuiz>;
   createMode?: boolean;
+  onClearAddQuizState: () => void
 }
 enum MessageType {
   CREATE = '생성',
@@ -23,6 +24,7 @@ const simpleRequestWrapper = async (
   message: MessageType,
   form:Partial<IQuiz>
   ) => {
+  if(message !== MessageType.DELETE) {
   if(!validateProperties(form.lessonQuizTypeEnum, form))
     return dialog({
       title: '퀴즈를 등록할 수 없습니다.',
@@ -30,8 +32,8 @@ const simpleRequestWrapper = async (
       confirmText: '확인',
       variant: 'alert',
     })
+  }
 
-    
   try {
     await request();
     dialog({
@@ -42,7 +44,7 @@ const simpleRequestWrapper = async (
     })
   } catch (error) {
     dialog({
-      title: '퀴즈 등록에 실패했습니다.',
+      title: `퀴즈 ${message}에 실패했습니다.`,
       description: `${error.message}`,
       confirmText: '확인',
       variant: 'alert',
@@ -51,10 +53,11 @@ const simpleRequestWrapper = async (
 }
 
 
-function ConfirmButtons({form,createMode}:Props) {
+function ConfirmButtons({form,createMode,onClearAddQuizState}:Props) {
   const { createQuiz,deleteQuiz,updateQuiz } = useQuiz(form?.lessonSeq);
   const dialog = useDialog();
   
+  console.log(form);
   return (
     <ButtonGroup
       variant="outlined"
@@ -70,33 +73,36 @@ function ConfirmButtons({form,createMode}:Props) {
     ? <QuizSubmitButton
         buttonType="info"
         buttonText='생성'
-        onClick={() => simpleRequestWrapper(
-          () => createQuiz(form),
-          dialog, 
-          MessageType.UPDATE, // request type for dialog
-          form 
-        )}
+        onClick={async () => {
+          await simpleRequestWrapper(() => createQuiz(form),dialog, MessageType.CREATE,form);
+          onClearAddQuizState();
+        }}
       />
     : <>
         <QuizSubmitButton
           buttonType='info'
           buttonText='수정'
-          onClick={() => simpleRequestWrapper(
+          onClick={async () => {
+            await simpleRequestWrapper(
             () => updateQuiz(form.lessonQuizSeq, form),
             dialog, 
             MessageType.UPDATE, // request type for dialog
             form 
-          )}
+          )
+          onClearAddQuizState()
+        }}
           />
         <QuizSubmitButton
           buttonText='삭제'
           buttonType='warning'
-          onClick={() => simpleRequestWrapper(
+          onClick={async () => {
+            await simpleRequestWrapper(
             () => deleteQuiz(form.lessonQuizSeq),
             dialog,
             MessageType.DELETE,
-            null
-          )}
+            null);
+            onClearAddQuizState();
+        }}
         />
       </>
     }

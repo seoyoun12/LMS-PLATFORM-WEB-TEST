@@ -7,18 +7,18 @@ import { LessonQuizResponseDto } from "@common/api/Api";
 import { SyntheticEvent } from "react";
 import FeedbackBox from "./FeedbackBox";
 import ConfirmButtons from "./ConfirmButtons";
-import { IQuiz } from "@layouts/Lesson/LessonContentVideo";
 
 interface Props {
   item: Partial<LessonQuizResponseDto>
-  form: IQuiz
+  form: LessonQuizResponseDto
   onFormChange: (e: SyntheticEvent) => void
   onCheckChange: (e: SyntheticEvent) => void
   tabIndex: number;
   index: number;
+  onClearAddQuizState: () => void;
 }
 
-function TabContent({item, form, onFormChange,onCheckChange, tabIndex, index}:Props) {
+function TabContent({item, form, onFormChange,onCheckChange, onClearAddQuizState, tabIndex, index}:Props) {
   return (
     <CustomTabPanel key={item.quizContent} value={tabIndex} index={index}>
       <TabsLayout>
@@ -30,8 +30,9 @@ function TabContent({item, form, onFormChange,onCheckChange, tabIndex, index}:Pr
     { item.lessonQuizTypeEnum !== "ALARM" && (
         <FeedbackBox form={form}  onFormChange={onFormChange} />
     )}
-        <ConfirmButtons form={form} />
+        <ConfirmButtons form={form} onClearAddQuizState={onClearAddQuizState} />
       </TabsLayout> 
+      
     </CustomTabPanel>
   )
 }

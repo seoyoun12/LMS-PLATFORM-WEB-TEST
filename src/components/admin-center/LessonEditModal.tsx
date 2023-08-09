@@ -8,7 +8,7 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { Modal, Spinner } from '@components/ui';
 import { Lesson } from '@common/api/lesson';
-import { modifyLesson, removeLesson, useLesson, useLessonList } from '@common/api/adm/lesson';
+import { modifyLesson, removeLesson, useLessonList } from '@common/api/adm/lesson';
 import TextField from '@mui/material/TextField';
 import { ProductStatus } from '@common/api/course';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -22,7 +22,8 @@ import router from 'next/router';
 import useToggle from '@hooks/useToggle';
 import AddQuizModal from './quiz-interaction/AddQuizModal';
 import { PUT } from '@common/httpClient';
-import axios from 'axios';
+import { IQuizTime } from '@layouts/Lesson/LessonContentVideo';
+import { LessonQuizResponseDto, LessonResponseDto } from '@common/api/Api';
 interface Props {
   open: boolean;
   handleClose: (isSubmit: boolean) => void;
@@ -48,6 +49,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   const [lessonSeq, setLessonSeq] = useState(lesson?.seq);
   const { contentSeq } = router.query;
   const { mutate } = useLessonList(Number(contentSeq));
+  const [quizList, setQuizList] = useState<LessonQuizResponseDto[] | null>(null);
   const dialog = useDialog();
   const {register, handleSubmit, formState: { errors }, control, reset,watch, resetField, setValue} = useForm<FormType>({ defaultValues });
   const {onToggle: onToggleAddQuizModal, toggle: isAddQuizModalOpen} = useToggle();
@@ -56,9 +58,10 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   const onInteractionRadioChange = useCallback( async (e: ChangeEvent<HTMLInputElement>) => {
     const { target: { value } } = e;
     setValue('interaction', value === 'on');
-    await PUT(`/lesson/adm/interaction/${lessonSeq}?interaction=${value === 'on'}`);
-    mutate();
-  },[setValue,lessonSeq]);
+    const updateQuizData = await PUT<LessonResponseDto>(`/lesson/adm/interaction/${lessonSeq}?interaction=${value === 'on'}`);
+    setQuizList(updateQuizData.lessonQuizs);
+    await mutate();
+  },[lessonSeq,mutate]);
 
   const handleDeleteFile = useCallback(async () => {
     const confirm = await dialog({
@@ -81,7 +84,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
     }
   },[lesson,resetField])
 
-  // 삭제
+  
   const onRemoveLesson = async (lessonId: number) => {
     try {
       const dialogConfirmed = await dialog({
@@ -132,6 +135,8 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
       snackbar({ variant: 'error', message: e.message || e.data?.message });
     }
   }
+
+  
   
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...lessonWatch }) => {
     setSubmitLoading(true);
@@ -161,7 +166,8 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   useEffect(() => {
     if(!lesson) return; 
     setLessonSeq(lesson.seq);
-  },[lesson])
+    setQuizList(lesson.lessonQuizs);
+  },[lesson, quizList])
 
   if (error) return <div>강의 업로드 정보를 불러오는데 실패하였습니다.</div>;
   
@@ -170,8 +176,10 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
     <AddQuizModal
       open={isAddQuizModalOpen}
       onCloseModal={onToggleAddQuizModal}
-      quiz={lesson?.lessonQuizs}
+      quiz={quizList}
       lessonSeq={lesson?.seq}
+      handleClose={handleClose}
+      setQuizList={setQuizList}
     />
     <Modal
       action={
@@ -201,7 +209,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
         open={open}
         actionLoading={submitLoading}
         onCloseModal={() => handleClose(true)}
-      onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit)}
       >
       <Box component="form">
         <FormContainer>
@@ -340,7 +348,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                     }}
                     onClick={onToggleAddQuizModal}
                   >
-                    <Typography> + 추가 / 수정 하기 (총 {lesson ? lesson.lessonQuizs.length : 0}개)</Typography>
+                    <Typography> + 추가 / 수정 하기 (총 {quizList ? quizList.length : 0}개)</Typography>
                   </Button>
                 </Box>
             </Box>

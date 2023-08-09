@@ -4,24 +4,24 @@ import { IQuiz } from '@layouts/Lesson/LessonContentVideo';
 
 import useSWR, { SWRResponse } from 'swr';
 
-function useQuiz(seq: number | null) {
-  const { data, error, mutate } = useSWR<SWRResponse<IQuiz[]>>(seq ? `/lesson/quiz/${seq}` : null, GET);
+function useQuiz(lessonSeq: number | null) {
+  const { data, error, mutate } = useSWR<SWRResponse<IQuiz[]>>(lessonSeq ? `/lesson/quiz/${lessonSeq}` : null, GET);
   // post use SWR
   // const { data:postData, error:postError, mutate:postMutate } = useSWR<SWRResponse<IQuiz>>(seq ? `/lesson/quiz/${seq}` : null, POST, {});
 
   const updateQuiz = async (lessonQuizSeq: number, form: Partial<IQuiz>) => {
     await PUT(`/lesson/quiz/adm/${lessonQuizSeq}`, form);
-    mutate();
+    await mutate();
   }
 
   const createQuiz = async (form: Partial<IQuiz>) => {
-    await POST(`/lesson/quiz/adm?lessonSeq=${seq}`, form);
-    mutate();
+    await POST(`/lesson/quiz/adm?lessonSeq=${lessonSeq}`, form);
+    await mutate();
   }
 
   const deleteQuiz = async (lessonQuizSeq: number) => {
     await DELETE(`/lesson/quiz/adm/${lessonQuizSeq}`);
-    mutate();
+    await mutate();
   }
   
   return {

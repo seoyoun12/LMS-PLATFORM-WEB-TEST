@@ -105,7 +105,7 @@ const MainPage: NextPage = () => {
     </Head>
     
     <Wrapper>
-      <ContentBox>
+      
         <MainInfoBannerBox>
             <LogoBox>
               <Image
@@ -138,7 +138,7 @@ const MainPage: NextPage = () => {
                 </li>
               </ol>
             </InfoBanner>
-          </MainInfoBannerBox>    
+          </MainInfoBannerBox> 
             <CardContainer >
               {data.map(item => {
                 if (item.status === 1) {
@@ -160,16 +160,14 @@ const MainPage: NextPage = () => {
                         }}
                       >
                         <Box
-                          width='100%'
-                          overflow="hidden"
-                          className="gg"
+                          margin='0 1rem'
                         >
                           <Image
                             src={imgPath}
-                            width={270}
-                            height={184}
-                            style={{ aspectRatio: '16 / 9'}}
-                            objectFit='scale-down'
+                            width={320}
+                            height={180}
+                            // style={{ aspectRatio: '16 / 9'}}
+                            objectFit='fill'
                             alt='메인 카드 이미지'
                           />
                         </Box>
@@ -210,7 +208,7 @@ const MainPage: NextPage = () => {
                 }
               })}
             </CardContainer>
-        </ContentBox>
+        
         <FooterContainer>
         <FooterWord>CTTI</FooterWord>
       </FooterContainer>
@@ -220,12 +218,14 @@ const MainPage: NextPage = () => {
 };
 // Wrap
 const Wrapper = styled.div`
+  position:relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  
   align-items: center;
   width: 100%;
-  min-height: 100vh; 
+  min-height: 100vh;
+  height: auto;
   margin: 0 auto;
   .MuiButton-root.MuiButton-textNeutral:hover {
     background-color: #fff;
@@ -236,64 +236,112 @@ const Wrapper = styled.div`
 
   .category-card-title {
     font-size: 2rem;
+
     @media (max-width: 1500px) {
       font-size: 1.5rem;
     }
     @media (max-width: 1080px) {
       font-size: 1.25rem;
     }
-    
-    @media (max-width: 514px) {
-      font-size: 1.5rem;
+    @media (max-width: 570px) {
+      font-size: 1rem;
     }
   }
   
 `;
 const InfoBanner = styled.div`
-  width: 70rem;
-  height: 240px;
+  width: 60rem;
+  min-height: 480px;
   background-size: contain;
   background-image: url('assets/images/hub_centerbox.png');
   background-repeat: no-repeat;
   padding: 2rem;
-  
   ol {
   margin: 1.25rem auto;
-  width: 50rem;
+  width: 51rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
   list-style: disc;
   font-weight: bold;
-  line-height: 1.4;
+  line-height: 1.15;
   }
   .accent-word {
     font-weight: bold;
     color: #f41;
   }
   li {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
   }
-  @media screen and (max-width: 514px) {
-    width: 22rem;
-    height: 240px;
+  @media (max-width: 1280px) {
+    width: 54rem;
+    min-height: 420px;
+    ol {
+      margin: 0.5rem auto;
+      width: 45rem;
+        li{
+        font-size: 1.1rem;
+        line-height: 1.25;
+      }
+    }
+  }
+  @media (max-width: 1080px) {
+    width: 49rem;
+    min-height: 450px;
+    ol {
+      width: 44rem;
+      margin: 0.25rem auto;
+      margin-left: 1rem;
+      
+        li{
+        font-size: 1rem;
+        line-height: 1.3;
+      }
+    }
+  }
+
+  @media (max-width: 868px) {
+    width: 45rem;
+    min-height: 360px;
+    /* margin-top: 5rem; */
+    
+    ol {
+      margin: 0.25rem auto;
+      margin-left: .75rem;
+      width: 40rem;
+        li{
+        font-size: .85rem;
+        line-height: 1.15;
+      }
+    }
+  }
+  @media screen and (max-width: 684px) {
+    width: 100%;
+    min-height: 240px;
     background-image: url('assets/images/hub_mobile_centerbox.png');
     background-size: 100% 100%;
+    
     ol {
-    width: 100%;
     margin: 1rem;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 2.5rem;
+    gap: 1.5rem;
+    padding: .75rem;
+      li {
+        font-weight: 400;
+        width: 100%;
+        font-size: 1.2rem;
+        line-height: 1.6;
+      }
     }
-    li {
-      font-weight: 400;
-      width: 90%;
-      font-size: 0.75rem;
-      line-height: 1.8;
-    }
+    
   }
 `
 
-const MainInfoBannerBox = styled(Box)`
+const MainInfoBannerBox = styled.div`
   width: 90%;
   margin: .25rem auto;
   gap: .5rem;
@@ -304,10 +352,7 @@ const MainInfoBannerBox = styled(Box)`
   flex-direction: column;
 `;
 
-const ContentBox = styled(Box)`
-  width: 80%;
-  margin: 2rem 2rem;
-`;
+
 const LogoBox = styled(Box)`
   padding-top: 1rem;
   width: fit-content;
@@ -362,17 +407,18 @@ const SubTitle = styled(Box)`
 
 const CardContainer = styled.div`
   position:absolute;
-  bottom: -96px;
+  bottom: 0;
   left: 50%;
   right: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
+  padding: 0 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
   gap: 2rem;
-  @media (max-width: 500px) {
+  @media (max-width: 684px) {
     bottom: -48px;
     position: relative;
     flex-direction: column; 
@@ -384,7 +430,8 @@ const CardContainer = styled.div`
 `;
 
 const MainCategoryCard = styled.div<{bgColor: string}>`
-  width: 360px;
+  width: 300px;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -395,7 +442,7 @@ const MainCategoryCard = styled.div<{bgColor: string}>`
   border-top: ${(props) => (props.bgColor ? `7px solid ${props.bgColor}` : 'black')};
   
   @media screen and (max-width: 514px) {
-    min-width: 300px;
+    min-width: 348px;
   }
 `;
 
@@ -407,15 +454,17 @@ const CardText = styled(Box)`
   align-items: center;
   background-color: white;
   padding-top: 2rem;
+  
   .button-bot-line {
+
     position: absolute;
-    left: 0;
+    left: 10%;
     bottom: 0;
-    width: 100%;
+    width: 80%;
   }
   .button-right-line {
     position: absolute;
-    right:4.5%;
+    right:13.5%;
     bottom:-8.15%;
     height: 75%;
     transform: rotate(-40deg);
@@ -424,7 +473,9 @@ const CardText = styled(Box)`
 const FooterContainer = styled(Box)`
   position: relative;
   width: 100%;
-  height: 300px;
+  min-height: 300px;
+  height: 20%;
+  
   background: #c53736;
   overflow: hidden;
   z-index: -1;

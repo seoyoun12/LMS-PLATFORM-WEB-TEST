@@ -237,21 +237,19 @@ const Wrapper = styled.div`
   .category-card-title {
     font-size: 2rem;
 
-    @media (max-width: 1500px) {
-      font-size: 1.5rem;
-    }
+    
     @media (max-width: 1080px) {
       font-size: 1.25rem;
     }
-    @media (max-width: 570px) {
-      font-size: 1rem;
+    @media (max-width: 684px) {
+      font-size: 1.25rem;
     }
   }
   
 `;
 const InfoBanner = styled.div`
   width: 60rem;
-  min-height: 480px;
+  min-height: 520px;
   background-size: contain;
   background-image: url('assets/images/hub_centerbox.png');
   background-repeat: no-repeat;
@@ -276,7 +274,7 @@ const InfoBanner = styled.div`
   }
   @media (max-width: 1280px) {
     width: 54rem;
-    min-height: 420px;
+    min-height: 500px;
     ol {
       margin: 0.5rem auto;
       width: 45rem;
@@ -288,7 +286,7 @@ const InfoBanner = styled.div`
   }
   @media (max-width: 1080px) {
     width: 49rem;
-    min-height: 450px;
+    min-height: 500px;
     ol {
       width: 44rem;
       margin: 0.25rem auto;
@@ -303,7 +301,7 @@ const InfoBanner = styled.div`
 
   @media (max-width: 868px) {
     width: 45rem;
-    min-height: 360px;
+    min-height: 520px;
     /* margin-top: 5rem; */
     
     ol {
@@ -378,13 +376,6 @@ const SubTitle = styled(Box)`
     .accent-word {
       color: #236cef;
     }
-  @media (max-width: 1500px) {
-    .word {
-    font-weight: bold;
-    font-size: 18px;
-   }
-    
-    }
   @media (max-width: 868px) { 
     .word {
     font-weight: bold;
@@ -418,8 +409,12 @@ const CardContainer = styled.div`
   align-items: center;
   flex-wrap: nowrap;
   gap: 2rem;
+  @media (max-width: 1080px) {
+    bottom: 4rem;
+    gap: .5rem;
+  }
   @media (max-width: 684px) {
-    bottom: -48px;
+    bottom: -24px;
     position: relative;
     flex-direction: column; 
     width: 100%;
@@ -464,7 +459,7 @@ const CardText = styled(Box)`
   }
   .button-right-line {
     position: absolute;
-    right:13.5%;
+    right:12%;
     bottom:-8.15%;
     height: 75%;
     transform: rotate(-40deg);
@@ -474,7 +469,7 @@ const FooterContainer = styled(Box)`
   position: relative;
   width: 100%;
   min-height: 300px;
-  height: 20%;
+  
   
   background: #c53736;
   overflow: hidden;

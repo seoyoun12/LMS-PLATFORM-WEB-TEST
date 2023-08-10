@@ -459,8 +459,8 @@ const CardText = styled(Box)`
   }
   .button-right-line {
     position: absolute;
-    right:12%;
-    bottom:-8.15%;
+    right:13.85%;
+    bottom:-8%;
     height: 75%;
     transform: rotate(-40deg);
   }
@@ -469,8 +469,6 @@ const FooterContainer = styled(Box)`
   position: relative;
   width: 100%;
   min-height: 300px;
-  
-  
   background: #c53736;
   overflow: hidden;
   z-index: -1;

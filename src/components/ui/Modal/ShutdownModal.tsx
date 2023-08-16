@@ -48,6 +48,7 @@ const ConfirmButton = styled(Button)`
   font-size:  22px;
   font-weight: bold;
   border: 1px solid transparent;
+  
   &:hover {
     color: rgb(191,49,51);
     background-color: #fff;

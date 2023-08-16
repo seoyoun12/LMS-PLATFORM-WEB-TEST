@@ -118,11 +118,11 @@ export function ModalQuiz({ open, quiz, loading,onCloseModal }: ModalProps) {
 }
 
 const DialogBox = styled(Dialog)`
-
+  
   @media screen and (max-width: 600px) {
     width: 80%;
     margin: 0 auto;
-    
+    min-width: 360px;
     
   }
 `;
@@ -134,7 +134,11 @@ const Container = styled(Box)`
   align-items:center;
   justify-content:center;
   background:linear-gradient(rgb(194,51,51) 10%, #fff 10%); 
-  
+  min-width: 500px;
+  @media screen and (max-width: 600px) {
+    min-width: 300px;
+    
+  }
 `
 const ModalInner = styled(Box)`
   width:100%;

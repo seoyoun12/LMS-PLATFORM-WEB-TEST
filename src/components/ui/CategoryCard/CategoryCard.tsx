@@ -23,7 +23,7 @@ const categoryData = [
     icon: 'assets/images/promiseTransIcon.png',
     // icon: <PromiseIcon />,
     color: '#84B9EE',
-    btnText: '내역확인',
+    btnText: '예약내역확인',
   },
   {
     id: 3,

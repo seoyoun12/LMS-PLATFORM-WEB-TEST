@@ -1,40 +1,14 @@
 /* eslint-disable */
-
 import styled from '@emotion/styled';
 import { CustomContentGenerator, EventContentArg } from '@fullcalendar/core';
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography,
-} from '@mui/material';
-import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
+import { Box,Button,TableBody,TableCell,TableContainer,TableRow,Typography } from '@mui/material';
 import FullCalendar from '@fullcalendar/react';
-import {
-  CalendarEvent,
-  ClickedPlanInfo,
-  courseBusinessTypeList,
-  eduLegendList,
-  FilterType,
-} from '../Calendar';
+import { ClickedPlanInfo,courseBusinessTypeList } from '../Calendar';
 import { Modal } from '@components/ui/Modal';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import dateFormat from 'dateformat';
 import { useRouter } from 'next/router';
-import {
-  courseType,
-  courseCategoryType,
-  CourseClassRes,
-  courseSubCategoryType,
-  businessType,
-} from '@common/api/courseClass';
+import { courseType,courseCategoryType,CourseClassRes,courseSubCategoryType,businessType } from '@common/api/courseClass';
 import { courseClassEnrollInfo } from '@common/recoil';
 import { useRecoilState } from 'recoil';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
@@ -94,15 +68,7 @@ export const courseSubCategory = [
   { type: courseSubCategoryType.HIGH_PRESSURE_GAS_TOXIC, ko: '고압가스(독성)' },
 ];
 
-export function CalendarBody({
-  setOpenModal,
-  setModalInfo,
-  openModal,
-  modalInfo,
-  calendarRef,
-  filter,
-  schedule,
-}: Props) {
+export function CalendarBody({ setOpenModal,setModalInfo,openModal,modalInfo,calendarRef,filter,schedule }: Props) {
   const router = useRouter();
   const isLogin = useIsLoginStatus();
   const [loading, setLoading] = useState(false);
@@ -116,15 +82,10 @@ export function CalendarBody({
   };
 
   const scheduleList = schedule?.map((item) => {
-    //정원이 다 찼을경우
     const isFullPeople =
       item.limitPeople !== 0 && item.enrolledPeopleCnt === item.limitPeople;
-
-    //마감여부
-    //이전 날짜일경우(마지막 날짜보다 현재날짜가 작을경우 true)
     const prevSchedule =
-      new Date(item.requestEndDate.replaceAll('-', '/')).getTime() -
-        new Date().getTime() >=
+      new Date(item.requestEndDate.replaceAll('-', '/')).getTime() - new Date().getTime() >=
       0
         ? true
         : false;
@@ -133,13 +94,8 @@ export function CalendarBody({
     const nextSchedule = new Date().getTime() > new Date(item.eduEnd).getTime();
 
     //이후 날짜일 경우.
-    const isReceive =
-      new Date(item.requestEndDate.replaceAll('-', '/')).getTime() -
-        new Date().getTime() >=
-      0
-        ? new Date(item.requestStartDate.replaceAll('-', '/')).getTime() -
-            new Date().getTime() <=
-          0
+    const isReceive = new Date(item.requestEndDate.replaceAll('-', '/')).getTime() - new Date().getTime() >= 0
+        ? new Date(item.requestStartDate.replaceAll('-', '/')).getTime() - new Date().getTime() <= 0
           ? true
           : false
         : false;
@@ -209,9 +165,11 @@ export function CalendarBody({
       className:
         item.enableToEnrollYn === YN.YES
           ? isFullPeople
-            ? 'TYPE_NONE'
-            : 'TYPE_SUP_COMMON'
-          : 'TYPE_NONE',
+          ? 'TYPE_NONE'
+          : item.course.courseBusinessType === 'TYPE_PASSENGER'
+          ? 'passanger'
+          : 'cargo'
+          : 'TYPE_NONE'
       // item.enableToEnrollYn === YN.YES ? eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType : 'TYPE_NONE', 나중에 필요시 사용
       // className: isReceive
       // ? eduLegendList.filter(legend => legend.enType === item.course.courseCategoryType)[0]?.enType || 'TYPE_NONE'
@@ -472,76 +430,37 @@ export function CalendarBody({
   );
 }
 function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
-  const {
-    //@ts-ignore
-    event: {
-      _def: { extendedProps },
-      title,
-    },
-  } = info;
-
+  // @ts-ignore
+  const { event: { _def: { extendedProps }, title} } = info;
   // @ts-ignore
   return (
-    <Box sx={{ color: 'black', fontSize: '1rem' }}>
-      <Box display='flex'>
-        <Box
-          sx={{
-            color:
-              extendedProps.prevSchedule &&
-              extendedProps.enableToEnrollYn === YN.YES
-                ? extendedProps.isFullPeople
-                  ? '#7a7a7a'
-                  : '#df280a'
-                : '#7a7a7a',
-          }}
-          fontWeight='bold'
-        >
-          [{title}]&nbsp;
-        </Box>
-        <Box>
-          {/* {extendedProps.step}기 {extendedProps.courseCategoryType.ko}교육 */}
-          {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS'
+      <ScaduleContentBox>
+          <Typography>
+            {
+            localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS'
             ? '저상버스 운전자교육'
-            : '보수일반'}
-        </Box>
-      </Box>
-      {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS' ? (
-        ''
-      ) : (
-        <Box>
-          {/* courseBusinessTypeList.filter(
-            item => item.enType === extendedProps.course.courseBusinessType
-          )[0]?.type */}
-
-          {extendedProps.courseSubCategoryType.type ===
-          courseSubCategoryType.BUS
-            ? '여객'
-            : extendedProps.courseSubCategoryType.type ===
-              courseSubCategoryType.INDIVIDUAL_CARGO
-            ? '화물'
-            : 'null'}
-          {/* 여객 / 화물 */}
-        </Box>
-      )}
-
-      <Box>
+            : '보수교육'
+            }
+          </Typography>
+          
+            {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS'
+            ? ''
+            : extendedProps.courseSubCategoryType.type === courseSubCategoryType.BUS
+                ? <Typography display='flex' alignItems='end' gap='.5rem'>여객 <Typography component='span'>(버스, 택시, 특수여객)</Typography></Typography>
+                : extendedProps.courseSubCategoryType.type === courseSubCategoryType.INDIVIDUAL_CARGO
+                ? <Typography display='flex' alignItems='end' gap='.5rem'>화물 <Typography component='span'>(일반화물, 용달화물, 개별화물)</Typography></Typography>
+            : 'null'
+            }   
+          
+        <Typography component='span'>
         {extendedProps.limitPeople === 0
-          ? '제한없음'
-          : `${extendedProps.enrolledPeopleCnt} / ${extendedProps.limitPeople}`}
-      </Box>
-      {/* <Typography color="black">
-        {courseCategoryType?.ko ? courseCategoryType.ko : 'null'}교육 / {lessonTime ? (lessonTime === 0 ? '종일' : lessonTime) : 'null'}시간
-      </Typography> */}
-      {/* <Typography color="black">
-        {
-          //@ts-ignore
-          info && info.event._def.extendedProps.mediaType
-        }
-      </Typography> */}
-    </Box>
+          ? '(제한없음)'
+          : `(${extendedProps.enrolledPeopleCnt} / ${extendedProps.limitPeople})`}
+        </Typography>
+        </ScaduleContentBox>
   );
 }
-const CalendarWrap = styled(Box)<{ filter: string }>`
+const CalendarWrap = styled(Box)<{ filter: string}>`
   .fc-dayGridMonth-view {
     border-top: 3px solid #000;
   }
@@ -555,16 +474,10 @@ const CalendarWrap = styled(Box)<{ filter: string }>`
   }
   .fc-daygrid-day-top {
     justify-content: flex-end; //날짜 왼쪽정렬
-    a {
-      /* background: #8e8e8e;
-      color: white;
-      padding: 5px;
-      border-radius: 220px; */
-    }
   }
 
   .fc-day-today {
-    background-color: white !important; // as possible as Avoid using '!important' !!!!
+    background-color: #fff;
   }
   //date
   .fc-day-sun {
@@ -591,6 +504,20 @@ const CalendarWrap = styled(Box)<{ filter: string }>`
     /* overflow: hidden; */
     padding-left: 1rem;
   }
+  //이상한 이벤트 블록
+  .fc-daygrid-dot-event {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #dae2f3 !important;
+    margin: 0.75rem 0;
+    /* overflow: hidden; */
+    padding-left: 1rem;
+  }
+  //블록 넘치는 글자 hide
+  .fc-daygrid-event {
+    overflow: hidden;
+  }
 
   //calendar event start in date
   .fc-event-start {
@@ -606,45 +533,51 @@ const CalendarWrap = styled(Box)<{ filter: string }>`
     /* margin-right: 1rem !important; */
     /* text-align: right; */
   }
-
-  //블록 넘치는 글자 hide
-  .fc-daygrid-event {
-    overflow: hidden;
-  }
+  /* .fc-day-sat {
+    color: red;
+  } */
 
   .TYPE_SUP_COMMON {
-    background: #f0ffdf;
+    background: #2d63e2;
     border: #d3f2a0;
   }
+  .passanger {
+    background: #2d75b6;
+  }
+  .cargo {
+    background: #c55a11;
+  }
   .TYPE_SUP_CONSTANT {
-    background: #d9fdf1;
-    border: #baeedc;
+    background: #036c19;
+    border: #eed4ba;
   }
   .TYPE_CONSTANT {
-    background: #eed4ba;
-    border: #036c19;
+    background: #036c19;
+    border: #eed4ba;
   }
   .TYPE_NEW {
-    background: #e0e095;
-    border: #2980b9;
+    background: #2980b9;
+    border: #e0e095;
   }
   .TYPE_ILLEGAL {
-    background: #cce0ed;
-    border: #4c0c0c;
+    background: #4c0c0c;
+    border: #cce0ed;
   }
   .TYPE_HANDICAPPED {
-    background: #c2c0ea;
-    border: #3f2de2;
+    background: #190b99;
+    border: #c2c0ea;
   }
   .TYPE_DANGEROUS {
-    background: #e8c0cf;
-    border: #b34caa;
+    background: #b807a9;
+    border: #e8c0cf;
   }
   .TYPE_NONE {
-    background: #dfdfdf;
-    border: #e0e0e0;
+    background: #d0cece;
+    
   }
 `;
+
+
 const EduGuide = styled(Typography)`
   width: fit-content;
   font-weight: 700;
@@ -685,3 +618,17 @@ const CloseButton = styled(Button)`
   font-weight: 500;
   background-color: #383838;
 `;
+
+const ScaduleContentBox = styled(Box)`
+  display: flex;
+  align-items: end;
+  column-gap: .25rem;
+  p {
+    font-size: 22px;
+    font-weight: bold;
+  }
+  span {
+    font-size: 14px;
+    font-weight: bold;
+  }
+`

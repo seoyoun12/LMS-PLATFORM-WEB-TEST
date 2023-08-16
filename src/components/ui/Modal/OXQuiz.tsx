@@ -1,81 +1,46 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box} from '@mui/material';
 import React from 'react'
+import styled from 'styled-components';
+import OXButton from './OXButton';
 
 interface Props {
   quizAnswer: string;
-  itemO: string;
-  itemX: string;
+  ox: string[];
   onChoiceAnswer: (str: string) => void
 }
 
-function OXQuiz({quizAnswer, itemO, itemX,onChoiceAnswer}: Props) {
+function OXQuiz({ ox, onChoiceAnswer }: Props) {
 
   // console.log(quizAnswer,itemO,itemX)
   return (
-    <Box
-      padding='2rem'
-      width='100%'
-    >
-      <Box
-        display='flex'
-        justifyContent='space-between'
-        alignItems='center'
-        gap='1rem'
-        width='90%'
-        margin='0 auto'
-        >
-          <Box
-            flex='1'
-            display='flex'
-            justifyContent='center'
-            alignItems='center'
-            border='1px solid #03cc03'
-            borderRadius='20px'
-            overflow='hidden'
-            >
-            <Button
-              sx={{':hover': {
-                backgroundColor:'#fff',
-                color:'#03cc03',
-              },
-                width:'100%',
-                minHeight:'200px',
-                backgroundColor:'#03cc03',
-                color:'#fff',
-              }}
-              onClick={() => onChoiceAnswer(itemO)}
-            >
-              <Typography align='center' fontSize='96px' fontWeight='bold'>{itemO}</Typography>
-            </Button>
-          </Box>
-          <Box
-            flex='1'
-            display='flex'
-            justifyContent='center'
-            alignItems='center'
-            border='1px solid #f41'
-            borderRadius='20px'
-            overflow='hidden'
-            >
-            <Button
-              sx={{':hover': {
-                backgroundColor:'#fff',
-                color:'#f41',
-              },
-                width:'100%',
-                minHeight:'200px',
-                backgroundColor:'#f41',
-                color:'#fff',
-              }}
-              onClick={() => onChoiceAnswer(itemX)}
-            >
-              <Typography align='center' fontSize='96px' fontWeight='bold'>{itemX}</Typography>
-            </Button>
-          </Box>
-          
-      </Box>
-    </Box>
+    <Container>
+      <InnerContainer>
+          <OXButton
+            bgColor='#83bc5c'
+            ox={ox[0]}
+            onClick={() => onChoiceAnswer(ox[0])}
+          />
+          <OXButton
+            bgColor='#4f8ad1'
+            ox={ox[1]}
+            onClick={() => onChoiceAnswer(ox[1])}
+          />
+      </InnerContainer>
+    </Container>
   )
 }
 
-export default OXQuiz
+export default OXQuiz;
+
+const Container = styled(Box)`
+  padding:2rem;
+  width:100%;
+`
+const InnerContainer = styled(Box)`
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:1rem;
+  width:90%;
+  margin:0 auto;
+` 

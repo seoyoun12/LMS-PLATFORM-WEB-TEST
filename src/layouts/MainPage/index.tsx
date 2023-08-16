@@ -97,6 +97,7 @@ const MainPage: NextPage = () => {
   const router = useRouter();
   const { data } = useMainDisplay();
   
+  
   if (!data) return <Spinner />;
   return (
     <>

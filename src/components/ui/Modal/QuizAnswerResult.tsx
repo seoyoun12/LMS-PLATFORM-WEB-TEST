@@ -18,8 +18,8 @@ function QuizAnswerResult({onChoiceAnswer, userSelectedAnswer, quiz, quizAnswer,
     onChoiceAnswer('await');
   }
   
-  const isCorrectMultipleChoiceColor = userSelectedAnswer.split('. ')[1] === quiz.answer ? '#03dd03' : '#ff0000'
-  const isCorrectOXQuizChoiceColor = userSelectedAnswer === quiz.answer ? '#03dd03' : '#ff0000'
+  const isCorrectMultipleChoiceColor = userSelectedAnswer.split('. ')[1] === quiz.answer ? '#83bc5c' : '#4f8ad1'
+  const isCorrectOXQuizChoiceColor = userSelectedAnswer === quiz.answer ? '#83bc5c' : '#4f8ad1'
   return (
     <>
     <Box

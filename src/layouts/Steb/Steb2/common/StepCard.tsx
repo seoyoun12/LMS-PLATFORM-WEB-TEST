@@ -35,8 +35,8 @@ function StepCard({isEndStep,index, comment, children,nextStepAbled, nextStep, p
           <DirectionButton onClick={prevStep}>
           <img className='direction-arrow' src='/assets/images/prev_off.png' alt='' />
           </DirectionButton>
-          {(nextStepAbled && !isEndStep) && <DirectionButton onClick={nextStep} disabled={!nextStepAbled}>
-          <img className='direction-arrow' src={nextStepAbled ? '/assets/images/next_on.png' : '/assets/images/next_off.png'} alt='' />
+          {(nextStepAbled && !isEndStep) && <DirectionButton  onClick={nextStep} disabled={!nextStepAbled}>
+          <img className='direction-arrow blink' src={nextStepAbled ? '/assets/images/next_on.png' : '/assets/images/next_off.png'} alt='' />
           </DirectionButton>}
         </DirectionButtonGroup>
     </Wrapper>
@@ -47,7 +47,19 @@ export default StepCard;
 
 const DirectionButton = styled.button`
   padding: 0.1rem;
+  @keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
 
+
+  .blink{
+    animation: blink 0.25s 3;
+  }
 `
 
 const ChildrenWrapper = styled(Box)`

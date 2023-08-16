@@ -53,13 +53,17 @@ const ConfirmButton = styled(Button)`
     background-color: #fff;
     border: 1px solid rgb(191,49,51);
   }
+  @media screen and (max-width: 500px) {
+    font-size: 18px;
+  }
 `
 
 const InnerContainer = styled(Box)`
   width: 36%;
-  height: 12%;
+  min-width: 480px;
+  padding: 1rem;
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: 8px;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -67,10 +71,16 @@ const InnerContainer = styled(Box)`
   gap: .5rem;
   border: 1px solid #c7c7c7c7;
   box-shadow: 1px 1px 2px #ccc;
-
+  
   h1 {
     font-size: 22px;
     font-weight: bold;
-
   }
+  @media screen and (max-width: 500px) {
+      min-width: 360px;
+      min-height:100px;
+      h1{
+        font-size: 18px;
+      }
+    }
 `;

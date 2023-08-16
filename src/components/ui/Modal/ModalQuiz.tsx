@@ -1,16 +1,17 @@
 import Dialog, { DialogProps } from '@mui/material/Dialog';
-import { Spinner } from '@components/ui';
-import styled from '@emotion/styled';
-import { Box, Typography } from '@mui/material';
-import { IQuizTime } from '@layouts/Lesson/LessonContentVideo';
 import MultipleChoiceQuiz from './MultipleChoiceQuiz';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import QuizAnswerResult from './QuizAnswerResult';
 import OXQuiz from './OXQuiz';
 import Alarm from './Alarm';
 import useCondition from '@hooks/useCondition';
 import ShutdownModal from './ShutdownModal';
 import useToggle from '@hooks/useToggle';
+import styled from '@emotion/styled';
+import { Spinner } from '@components/ui';
+import { Box, Typography } from '@mui/material';
+import { IQuizTime } from '@layouts/Lesson/LessonContentVideo';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 
 type QuizType = 'ALARM' | 'MULTIPLE_CHOICE' | 'OX_QUIZ';
 type ModalProps = {
@@ -117,68 +118,30 @@ export function ModalQuiz({ open, quiz, loading,onCloseModal }: ModalProps) {
 }
 
 const DialogBox = styled(Dialog)`
-  .MuiPaper-root {
-    margin: 0;
+
+  @media screen and (max-width: 600px) {
     width: 80%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* width: fit-content; */
-  }
-  .MuiDialog-container {
-    justify-content: center;
-    width: 100%;
-  }
-  //온라인 교육 신청쪽 테이블 박살남.
-  @media (max-width: 820px) {
-    .MuiDialogContent-root {
-      padding: 0;
-    }
-  }
-  @media (max-width: 768px) {
-    .MuiPaper-root {
-      margin: 0;
-      width: 100%;
-    }
-    .MuiDialog-container {
-      justify-content: none;
-      width: 100%;
-    }
-    .MuiDialogContent-root {
-      padding: 0;
-    }
-  }
-  @media (max-width: 500px) {
-    .MuiPaper-root {
-      margin: 0;
-      width: 100%;
-    }
-    .MuiDialog-container {
-      justify-content: none;
-      width: 100%;
-    }
-    .MuiDialogContent-root {
-      padding: 0;
-    }
+    margin: 0 auto;
+    
+    
   }
 `;
 
 const Container = styled(Box)`
+  width: 100%;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
+  background:linear-gradient(rgb(194,51,51) 10%, #fff 10%); 
+  
 `
 const ModalInner = styled(Box)`
-
-width:100%;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-padding:0;
-margin:0;
-background:linear-gradient(rgb(194,51,51) 10%, #fff 10%);
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
 `
 
 const QuizTitle = styled(Typography)`

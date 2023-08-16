@@ -9,22 +9,34 @@ interface Props {
 }
 
 const ButtonContainer = styled(Box)<{bgColor: string}>`
-  flex:1;
+  width:100%;
   display:flex;
   justify-content:center;
   align-items:center;
   border: ${({bgColor}) => `1px solid ${bgColor}`};
   border-radius:20px;
   overflow:hidden;
+
+  @media screen and (max-width: 600px) {
+    min-width: 80px;
+    min-height: 80px;
+  }
+  
 `
 const StyledButton = styled(Button)<{bgColor: string}>`
-    width:100%;
-    min-height:200px;
+
+    width: 100%;
+    min-width: 180px;
     background-color:${({bgColor}) => bgColor};
     color:#fff;
     &:hover {
       background-color:#fff;
       color: ${({bgColor}) => bgColor};
+    }
+    @media screen and (max-width: 600px) {
+      p {
+        font-size: 48px;
+      }
     }
 `
 

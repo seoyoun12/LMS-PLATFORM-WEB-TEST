@@ -1,22 +1,10 @@
-import styles from '@styles/common.module.scss';
 import styled from '@emotion/styled';
-import { keyframes } from 'styled-components';
-import {
-  Box,
-  Button,
-  cardActionAreaClasses,
-  Container,
-  Grid,
-  Typography,
-} from '@mui/material';
-import { Link } from '@components/common';
-import CalendarIcon from '/public/assets/svgs/calendarIcon.svg';
-import PromiseIcon from '/public/assets/svgs/promiseIcon.svg';
-import StudyIcon from '/public/assets/svgs/studyIcon.svg';
-import CertificateIcon from '/public/assets/svgs/certificateIcon.svg';
-import { courseType } from '@common/api/courseClass';
 import Image from 'next/image';
 import useResponsive from '@hooks/useResponsive';
+import { Box,Container,Grid,Typography } from '@mui/material';
+import { Link } from '@components/common';
+import { courseType } from '@common/api/courseClass';
+
 
 const categoryData = [
   {
@@ -35,7 +23,7 @@ const categoryData = [
     icon: 'assets/images/promiseTransIcon.png',
     // icon: <PromiseIcon />,
     color: '#84B9EE',
-    btnText: '내역확인',
+    btnText: '예약내역확인',
   },
   {
     id: 3,
@@ -98,17 +86,17 @@ export function CategoryCard() {
                 >
                   <Box display="flex" alignItems="center" justifyContent="center">
                     {/* {categoryData.icon} */}
-                    <Image src={'/' + categoryData.icon} width={100} height={100} />
+                    <Image src={'/' + categoryData.icon} width={100} height={100} alt=''/>
                   </Box>
                   <Box mt={2}>
                     {/* <div className='categoryIcon'/> */}
                     <GridTitleTypography fontWeight={500} fontSize="18px">
                       {/* {categoryData.title} */}
                       {typeof window !== 'undefined' &&
-                      localStorage.getItem('site_course_type') ===
-                        courseType.TYPE_TRANS_WORKER
+                      localStorage.getItem('site_course_type') === courseType.TYPE_TRANS_WORKER
                         ? '운수종사자'
-                        : '저상버스'}
+                        : '저상버스'
+                        }
                     </GridTitleTypography>
                     <GridTitleTypography fontWeight={700} fontSize="24px">
                       {categoryData.btnText}
@@ -118,17 +106,7 @@ export function CategoryCard() {
               </GridLink>
             </GridItem>
           ))}
-          {/*  */}
-          {/* <PracticeBox className="sample"> */}
-          {/* <Box className="figure">
-              <Box className="figcaption">
-                <Box className="line">
-                  <span>card</span>
-                </Box>
-              </Box>
-            </Box> */}
-          {/* </PracticeBox> */}
-          {/*  */}
+          
         </GridWrap>
       </Container>
     </CardWrap>

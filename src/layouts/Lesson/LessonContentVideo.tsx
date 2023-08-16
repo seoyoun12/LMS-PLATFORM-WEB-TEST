@@ -1,24 +1,41 @@
-import React, { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import {
-  Box,
-  CircularProgress,
-  LinearProgress,
-  Typography,
-} from '@mui/material';
+import { Box,CircularProgress,LinearProgress,Typography } from '@mui/material';
 import { VideoPlayer } from '@components/common';
 import { Ncplayer } from 'types/ncplayer';
 import { useRouter } from 'next/router';
-import type {
-  CourseProgressResponseDto,
-  LessonDetailClientResponseDto,
-} from '@common/api/Api';
+import type { CourseProgressResponseDto,LessonDetailClientResponseDto } from '@common/api/Api';
 import ApiClient from '@common/api/ApiClient';
 import { useRecoilState } from 'recoil';
 import { learningStatus } from '@common/recoil';
 import { LessonContentVideoModal } from './LessonContentVideoModal';
+import useQuiz from '@common/api/quiz/useQuiz';
+import getRandomInteger from '@utils/getRandomInt';
 
 const PLAYER_ELEMENT_ID = 'lesson-player' as const;
+
+export interface IQuiz {
+  alarmContent: string;
+  answer: string;
+  feedback: string;
+  item1: string;
+  item2: string;
+  item3: string;
+  item4: string;
+  itemO: string;
+  itemX: string;
+  lessonQuizTypeEnum: "ALARM" | "MULTIPLE_CHOICE" | "OX_QUIZ";
+  lessonSeq: number;
+  lessonQuizSeq: number;
+  quizContent: string;
+  randomTime: boolean;
+  setTimeMin: number;
+  setTimeSecond: number; 
+}
+export interface IQuizTime extends IQuiz {
+  quizOccurTime: number;
+  isSolvedQuiz: boolean;
+}
 
 interface Props {
   coursePlayFirst?: boolean;
@@ -28,43 +45,38 @@ interface Props {
   lessonCompleted?: boolean;
   loading?: boolean;
   onComplete?: (isEnd: boolean) => Promise<boolean>;
+  currentLessonPlayTime: number;
 }
 
+//정신병자코드. 이 코드 작성자가 다른회사에 가서 이런 미친짓을 할까봐 너무 걱정이다.
 export default function LessonContentVideo(props: Props) {
   const router = useRouter();
   const routerAsPath = router.asPath;
   const [lessonVideoInfo, setLessonVideoInfo] = useRecoilState(learningStatus); //헤더 학습종료를 위한 리코일
-
-  // 스테이트.
-
-  const [progress, setProgress] = React.useState<number>(0);
-
-  // 레퍼런스.
-
-  const prevCourseUserSeq = React.useRef<number | null>(null);
-  const prevCourseProgress = React.useRef<CourseProgressResponseDto | null>(
-    null
-  );
-  const prevLesson = React.useRef<LessonDetailClientResponseDto | null>(null);
-
-  const currentLessonSeq = React.useRef<number | null>(null);
-
-  const apiTimer = React.useRef<number | null>(null);
-  const apiSeconds = React.useRef<number>(0);
-  const apiVideoSeconds = React.useRef<number>(0);
-
-  const videoPlayer = React.useRef<Ncplayer | null>(null);
-  const vidoeDurationSeconds = React.useRef<number>(0);
-  const videoCurrentSeconds = React.useRef<number>(0);
-  const videoPlayedSeconds = React.useRef<number>(0);
-  const videoIsSeeking = React.useRef<boolean>(false);
-  const videoIsPaused = React.useRef<boolean>(true);
-  const videoIsFirst = React.useRef<boolean>(true);
-  const videoIsFinished = React.useRef<boolean>(false);
-
-  // 콜백
-
-  const updateProgress = React.useCallback(() => {
+  const [openModal, setOpenModal] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const { contentSeq: lessonSeq } = router.query; // courseUserSeq가 courseSeq, contentSeq가 lessonSeq입니다. Swagger 참조하실 때 참고해주세요.
+  const { quiz, error } = useQuiz(+lessonSeq);
+  const [progress, setProgress] = useState<number>(0); // 현재 lesson의 진행률을 나타내기 위한 state
+  const [occurTimeQuiz, setOccurTimeQuiz] = useState<IQuizTime[] | []>([]);
+  const [currentQuiz, setCurrentQuiz] = useState<IQuizTime | null>(null);
+  const prevCourseUserSeq = useRef<number | null>(null);
+  const prevCourseProgress = useRef<CourseProgressResponseDto | null>(null);
+  const prevLesson = useRef<LessonDetailClientResponseDto | null>(null);
+  const currentLessonSeq = useRef<number | null>(null);
+  const apiTimer = useRef<number | null>(null);
+  const apiSeconds = useRef<number>(0);
+  const apiVideoSeconds = useRef<number>(0);
+  const videoPlayer = useRef<Ncplayer | null>(null);
+  const vidoeDurationSeconds = useRef<number>(0);
+  const videoCurrentSeconds = useRef<number>(0);
+  const videoPlayedSeconds = useRef<number>(0);
+  const videoIsSeeking = useRef<boolean>(false);
+  const videoIsPaused = useRef<boolean>(true);
+  const videoIsFirst = useRef<boolean>(true);
+  const videoIsFinished = useRef<boolean>(false);
+  
+  const updateProgress = useCallback(() => {
     const seconds = props.courseProgress.studyTime + videoPlayedSeconds.current;
     setProgress(
       !props.lessonCompleted &&
@@ -75,22 +87,14 @@ export default function LessonContentVideo(props: Props) {
     );
   }, [props.courseProgress.studyTime, props.lessonCompleted]);
 
-  // 콜백 - 타이머.
-
-  const stopTimer = React.useCallback(
+  const stopTimer = useCallback(
     async (mode: 'PREV' | 'CURRENT' | 'RESET', isEnd = false) => {
       if (apiTimer.current !== null) {
         window.clearInterval(apiTimer.current);
 
         if (mode !== 'RESET') {
-          if (
-            (mode === 'CURRENT' &&
-              (props.lesson === null ||
-                props.courseProgress.courseProgressSeq === null)) ||
-            (mode === 'PREV' &&
-              props.courseUserSeq === prevCourseUserSeq.current &&
-              props.lesson.seq === prevLesson.current.seq)
-          )
+          if ((mode === 'CURRENT' && (props.lesson === null || props.courseProgress.courseProgressSeq === null))
+            ||(mode === 'PREV' && props.courseUserSeq === prevCourseUserSeq.current && props.lesson.seq === prevLesson.current.seq))
             return;
 
           if (mode === 'CURRENT') {
@@ -98,10 +102,9 @@ export default function LessonContentVideo(props: Props) {
             videoIsFirst.current = true;
           }
 
-          const courseUserSeq =
-            mode === 'PREV' ? prevCourseUserSeq.current : props.courseUserSeq;
+          const courseUserSeq = mode === 'PREV' ? prevCourseUserSeq.current : props.courseUserSeq;
           const courseProgressSeq =
-            mode === 'PREV'
+              mode === 'PREV'
               ? prevCourseProgress.current.courseProgressSeq
               : props.courseProgress.courseProgressSeq;
           const lessonSeq =
@@ -136,33 +139,19 @@ export default function LessonContentVideo(props: Props) {
       apiTimer.current = null;
       apiSeconds.current = 0;
       apiVideoSeconds.current = 0;
-    },
-    [props]
-  );
-
-  const startTimer = React.useCallback(() => {
+    },[props]);
+    
+  const startTimer = useCallback(() => {
     stopTimer('RESET');
-
-    if (
-      props.lesson === null ||
-      props.courseProgress.courseProgressSeq === null
-    )
-      return;
+    if (props.lesson === null ||props.courseProgress.courseProgressSeq === null) return;
 
     const courseUserSeq = props.courseUserSeq;
     const courseProgressSeq = props.courseProgress.courseProgressSeq;
     const lessonSeq = props.lesson.seq;
 
     const timer = window.setInterval(() => {
-      if (
-        currentLessonSeq.current !== lessonSeq ||
-        router.asPath !== routerAsPath ||
-        apiTimer.current !== timer
-      )
-        return clearInterval(timer);
-
+      if (currentLessonSeq.current !== lessonSeq || router.asPath !== routerAsPath || apiTimer.current !== timer) return clearInterval(timer);
       apiSeconds.current++;
-
       if (apiSeconds.current >= 30) {
         ApiClient.courseLog
           .createCourseModulesUsingPost1({
@@ -178,7 +167,6 @@ export default function LessonContentVideo(props: Props) {
               studyLastTime: videoCurrentSeconds.current,
             })
           );
-
         apiSeconds.current = 0;
         apiVideoSeconds.current = 0;
       }
@@ -190,7 +178,6 @@ export default function LessonContentVideo(props: Props) {
         courseProgressSeq: courseProgressSeq,
       });
     }, 1000);
-
     apiTimer.current = timer;
   }, [
     props.courseProgress.courseProgressSeq,
@@ -199,20 +186,15 @@ export default function LessonContentVideo(props: Props) {
     router,
     routerAsPath,
     stopTimer,
+    setLessonVideoInfo
   ]);
 
-  // 콜백 - 이벤트.
-  // 일시정지
-  const onPause = React.useCallback(() => {
+  const onPause = useCallback(() => {
     videoIsPaused.current = true;
   }, []);
-  // 재생
-  const onPlaying = React.useCallback(() => {
-    if (
-      props.lesson === null ||
-      props.courseProgress.courseProgressSeq === null
-    )
-      return;
+
+  const onPlaying = useCallback(() => {
+    if ( props.lesson === null || props.courseProgress.courseProgressSeq === null) return;
 
     if (videoIsFirst.current) {
       ApiClient.courseLog.createCourseModulesUsingPost1({
@@ -220,12 +202,9 @@ export default function LessonContentVideo(props: Props) {
         lessonSeq: props.lesson.seq,
         studyTime: 0,
       });
-
       videoIsFirst.current = false;
-
       startTimer();
     }
-
     videoIsPaused.current = false;
   }, [
     props.courseProgress.courseProgressSeq,
@@ -234,55 +213,30 @@ export default function LessonContentVideo(props: Props) {
     startTimer,
   ]);
 
-  const onSeeking = React.useCallback(() => {
+  const onSeeking = useCallback(() => {
     videoIsSeeking.current = true;
   }, []);
 
-  const onSeeked = React.useCallback(() => {
+  const onSeeked = useCallback(() => {
     videoIsSeeking.current = false;
   }, []);
-
-  // 모달창
-  // 상태(state) 정의
-  // const [showModal, setShowModal] = React.useState(false);
-  const [openModal, setOpenModal] = useState(false);
-
-  // 전체화면이었는지 아닌지
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  // currentLessonPlayTime
   const handleCloseModal = async () => {
     setOpenModal(false);
     // 모달 종료시 다시
     videoPlayer.current?.play();
-    console.log('비디오 상태 : ', videoPlayer.current);
     if (isFullScreen === true) {
       videoPlayer.current?.fullscreen(true);
       setIsFullScreen(false);
     }
   };
-  const onTimeChange = React.useCallback(
+
+  const onTimeChange = useCallback(
     (time: number) => {
       if (time === videoCurrentSeconds.current) return;
-
-      // 시간되면 정지 후 모달
-      // if (time === 3) {
-      //   // Ncplayer.pause();
-      //   // onPause();
-      //   videoPlayer.current?.pause();
-      //   // 전체화면에서 모달이 뜰시 전체화면 해제
-      //   // 동작안함
-      //   // alert('3초');
-      //   // 일시정지 하는 코드를 넣어줘
-      //   if (document.fullscreenElement !== null) {
-      //     videoPlayer.current?.fullscreen(false);
-      //     setIsFullScreen(true);
-      //   }
-      //   setOpenModal(true);
-      // }
-      if (
-        time !== videoCurrentSeconds.current + 1 ||
-        videoIsPaused.current ||
-        videoIsSeeking.current
-      ) {
+      
+     
+      if ( time !== videoCurrentSeconds.current + 1 || videoIsPaused.current || videoIsSeeking.current ) {
         videoCurrentSeconds.current = time;
         return;
       }
@@ -313,27 +267,49 @@ export default function LessonContentVideo(props: Props) {
   );
 
   // 종료
-  const onEnded = React.useCallback(() => {
+  const onEnded = useCallback(() => {
     videoCurrentSeconds.current = vidoeDurationSeconds.current;
     videoIsFinished.current = true;
     videoIsFirst.current = true;
     stopTimer('CURRENT', true);
   }, [stopTimer]);
 
-  // 이펙트.
 
-  React.useEffect(() => {
+  useEffect(() => {
+     // 시간되면 정지 후 모달
+   const flag = setInterval(() => {
+      occurTimeQuiz.forEach((quiz:IQuizTime) => {
+        if (!quiz.isSolvedQuiz && quiz.quizOccurTime === videoCurrentSeconds.current) {
+            videoPlayer.current?.pause();
+            setCurrentQuiz(quiz);
+            const quizOccurTime = JSON.parse(localStorage.getItem(lessonSeq + ''));
+            const filteredQuiz = quizOccurTime.filter((item:IQuizTime) => item.quizOccurTime !== quiz.quizOccurTime);
+            localStorage.setItem(lessonSeq as string, JSON.stringify(filteredQuiz));
+            setOccurTimeQuiz(filteredQuiz);
+          if (document.fullscreenElement !== null) {
+            videoPlayer.current?.fullscreen(false);
+            setIsFullScreen(true);
+          }
+          setOpenModal(true);
+        }
+        })
+    },1000)
+  
+    return () => clearInterval(flag)
+  },[occurTimeQuiz])
+
+  // console.log(videoCurrentSeconds.current);
+  
+  useEffect(() => {
     if (!props.coursePlayFirst && videoPlayer.current)
+    
       videoPlayer.current.play();
   }, [props.coursePlayFirst]);
 
-  React.useEffect(() => {
-    if (prevCourseUserSeq.current === null)
-      prevCourseUserSeq.current = props.courseUserSeq;
-    if (prevCourseProgress.current === null)
-      prevCourseProgress.current = props.courseProgress;
+  useEffect(() => {
+    if (prevCourseUserSeq.current === null) prevCourseUserSeq.current = props.courseUserSeq;
+    if (prevCourseProgress.current === null) prevCourseProgress.current = props.courseProgress;
     if (prevLesson.current === null) prevLesson.current = props.lesson;
-
     stopTimer('PREV');
 
     vidoeDurationSeconds.current = props.lesson ? props.lesson.totalTime : 0;
@@ -345,11 +321,9 @@ export default function LessonContentVideo(props: Props) {
     videoIsPaused.current = true;
     videoIsFirst.current = true;
     videoIsFinished.current = false;
-
     prevCourseUserSeq.current = props.courseUserSeq;
     prevCourseProgress.current = props.courseProgress;
     prevLesson.current = props.lesson;
-
     currentLessonSeq.current = props.lesson.seq;
 
     updateProgress();
@@ -361,7 +335,20 @@ export default function LessonContentVideo(props: Props) {
     updateProgress,
   ]);
 
-  // 렌더링.
+  
+  useEffect(() => {
+    if(!quiz) return;
+    
+    // 기존 요구사항이 한번 푼 퀴즈는 다시 나타나지 않는것이었으나, 이후 요구사항이 변경되어 한번 푼 퀴즈도 다시 나타나도록 변경
+    // 변수 quizTime은 로컬스토리지에 저장된 퀴즈를 불러와 할당한 변수이나 현재 사용하지 않으므로 주석처리함
+    // const quizTime = JSON.parse(localStorage.getItem(lessonSeq as string));
+    
+    // 현재 강의에 포함된 퀴즈와 강의의 총 플레이타임을 가져와서 퀴즈가 발생할 시간을 랜덤으로 생성
+    const addedOccuretimeQuiz = getRandomInteger(quiz, props.currentLessonPlayTime)
+    localStorage.setItem(lessonSeq as string, JSON.stringify(addedOccuretimeQuiz));
+    setOccurTimeQuiz(addedOccuretimeQuiz);
+  },[lessonSeq,quiz])
+
 
   if (props.loading)
     return (
@@ -369,18 +356,23 @@ export default function LessonContentVideo(props: Props) {
         <CircularProgress size='1.5rem' />
       </VideoContentWrapper>
     );
-  if (props.lesson === null || props.courseProgress === null)
-    return <VideoContentWrapper>강의가 존재하지 않습니다.</VideoContentWrapper>;
+  if (props.lesson === null || props.courseProgress === null) return <VideoContentWrapper>강의가 존재하지 않습니다.</VideoContentWrapper>;
 
+  if(error) return <VideoContentWrapper>에러가 발생했습니다.</VideoContentWrapper>
+    
   return (
     <>
       <VideoContainer>
         {/* 비디오플레이어위치 */}
         <VideoContentPlayerWrapper>
+          {/* Quiz 모달 */}
+          {quiz?.length > 0 && 
           <LessonContentVideoModal
             open={openModal}
             handleClose={handleCloseModal}
-          />
+            quiz={currentQuiz}
+          />}
+          
           <VideoPlayer
             playlist={props.lesson.s3Files[0]?.path}
             initialPlayerId={PLAYER_ELEMENT_ID}
@@ -398,8 +390,10 @@ export default function LessonContentVideo(props: Props) {
             onTimeChange={onTimeChange}
             onEnded={onEnded}
             onReady={(v) => (videoPlayer.current = v)}
+            
           ></VideoPlayer>
         </VideoContentPlayerWrapper>
+        
         <ContentInfoContainer>
           <ContentInfoTitle variant='h6'>
             {props.lesson.lessonNm}

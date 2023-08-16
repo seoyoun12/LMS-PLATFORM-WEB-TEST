@@ -56,4 +56,12 @@ export function ServiceBoard() {
 const ServiceContainer = styled(Box)`
   margin: auto;
   /* width: 1200px; */
+  .Mui-selected {
+    color: rgb(194,51,51) !important;
+    font-weight: bold;
+  }
+  .MuiTabs-indicator {
+    
+    background-color: rgb(194,51,51);
+  }
 `;

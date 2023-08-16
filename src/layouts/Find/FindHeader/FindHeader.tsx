@@ -17,7 +17,7 @@ export function FindHeader({
     <FindHeaderWrap>
       <Box
         sx={{
-          // background: '#246aef',
+          // background: 'rgb(194,51,51)',
           backgroundImage: `url('/assets/images/domin-signup-banner.png')`,
           color: 'white',
           textAlign: 'center',

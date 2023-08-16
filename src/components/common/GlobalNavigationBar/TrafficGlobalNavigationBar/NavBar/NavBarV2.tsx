@@ -21,7 +21,7 @@ const IndicatorBox = ({ index, value }: { index: number; value: number }) => {
         opacity: index !== value && 0,
         height: '4px',
         width: '100%',
-        background: '#256bef',
+        background: 'rgb(194,51,51)',
         position: 'relative',
       }}
     >
@@ -32,7 +32,7 @@ const IndicatorBox = ({ index, value }: { index: number; value: number }) => {
           transform: 'translateX(-50%)',
           width: '0px',
           height: '0px',
-          borderTop: '16px solid #256bef',
+          borderTop: '16px solid rgb(194,51,51)',
           borderLeft: '14px solid transparent',
           borderRight: '14px solid transparent',
         }}

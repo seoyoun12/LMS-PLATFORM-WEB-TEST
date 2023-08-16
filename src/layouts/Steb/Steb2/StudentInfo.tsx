@@ -305,16 +305,6 @@ export function StudentInfo({
       <AccentedWord>
         ※ 휴대혼번호 입력후 SMS 동의시 교육관련 문자메시지를 받으실 수 있습니다.
       </AccentedWord>
-      {/* <Box height="120px">이용약관 입니다.</Box> */}
-      {/* <Box display="flex" alignItems="center">
-        {isIndividualCheck ? (
-          <CheckCircleIcon onClick={() => setIsIndividualCheck(false)} sx={{ color: '#3498db' }} />
-        ) : (
-          <CheckCircleOutlineIcon onClick={() => setIsIndividualCheck(true)} sx={{ color: '#b1b1b1' }} />
-        )}
-        <Typography ml={1}>개인정보 수집 및 이용 동의합니다</Typography>
-        <EssentialWord>(필수)</EssentialWord>
-      </Box> */}
     </StudentInfoWrap>
   );
 }
@@ -324,9 +314,6 @@ const StudentInfoWrap = styled(Box)`
 `;
 const AccentedWord = styled(Typography)`
   color: red;
-`;
-const EssentialWord = styled(Typography)`
-  color: rgb(39, 174, 96);
 `;
 
 const TableCustomRow = styled(TableRow)`

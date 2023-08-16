@@ -1,10 +1,9 @@
 import styled from '@emotion/styled';
-import { Box, Button, IconButton, InputBase, Radio } from '@mui/material';
+import { Box, Button, IconButton, InputBase } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import ReplayIcon from '@mui/icons-material/Replay';
-import { CompleteType, StatusType } from '@common/api/adm/learningInfo';
 
 interface Props {
   //   searchInputRef: React.MutableRefObject<HTMLInputElement>;
@@ -45,6 +44,9 @@ export const ManagementSearchHeadRow = React.forwardRef(function (
     </HeadRows>
   );
 });
+
+
+
 const HeadRows = styled(Box)``;
 const SearchContainer = styled.form`
   display: flex;

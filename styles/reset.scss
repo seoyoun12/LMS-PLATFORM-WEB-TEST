@@ -133,6 +133,8 @@ audio:not([controls]) {
  *    user zoom.
  */
 html {
+  // width: 100vw;
+  // min-height: 100vh;
   font-size: 100%; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
   -ms-text-size-adjust: 100%; /* 2 */

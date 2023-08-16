@@ -4,7 +4,7 @@ import { Lesson, LessonInput } from '@common/api/lesson';
 import { BbsType, deleteFile } from '@common/api/adm/file';
 
 export function useLessonList(contentSeq: number) {
-  const { data, error, mutate } = useSWR<SWRResponse<Lesson[]>>(contentSeq ? `/lesson/adm/${contentSeq}` : null, GET);
+  const { data, error, mutate } = useSWR<SWRResponse<Lesson[]>>(contentSeq ? `/lesson/${contentSeq}` : null, GET);
 
   return {
     lessonList: data?.data,
@@ -14,12 +14,19 @@ export function useLessonList(contentSeq: number) {
 }
 
 export function useLesson(lessonSeq: number | null) {
-  const { data, error , mutate } = useSWR<SWRResponse<Lesson>>(lessonSeq ? `/lesson/adm/detail/${lessonSeq}` : null, GET);
+  const { data, error , mutate } = useSWR<SWRResponse<Lesson>>(lessonSeq ? `/lesson/detail/${lessonSeq}` : null, GET);
+  // const {  } = useSWR<SWRResponse<Lesson>>(lessonSeq ? `/lesson/adm/interaction/${lessonSeq}` : null, PUT);
+  
+  const updateInteraction = async(isInteraction: boolean) => {
+    await PUT(`/lesson/adm/interaction/${lessonSeq}?interaction=${isInteraction}`);
+    mutate();
+  }
 
   return {
     lesson: data?.data,
     lessonError: error,
-    lessonMutate: mutate
+    lessonMutate: mutate,
+    updateInteraction
   };
 }
 
@@ -40,6 +47,7 @@ export async function modifyLesson({ lessonSeq, lesson }: {
 export async function removeLesson(lessonSeq: number) {
   return await DELETE(`/lesson/adm/delete/${lessonSeq}`);
 }
+
 
 // 업로드
 export async function lessonUpload({ contentSeq, lessonInput }:{

@@ -1,8 +1,4 @@
-import type { NextPage } from 'next';
-import * as React from 'react';
-import styled from '@emotion/styled';
-import { ContentCard, CategoryCarousel, Spinner } from '@components/ui';
-import { Box, Grid } from '@mui/material';
+import { CategoryCarousel } from '@components/ui';
 import { CategoryCard } from '@components/ui/CategoryCard/CategoryCard';
 import { CategoryBoard } from '@components/ui/CategoryBoard/CategoryBoard';
 import useResponsive from '@hooks/useResponsive';
@@ -23,60 +19,22 @@ const bannerData = [
   },
 ];
 
-// const SecondPage: NextPage = (res) => {
+
 export function Category() {
   const isDesktop = useResponsive(1024);
-  // const [ page, setPage ] = useState(0);
-  // const { data, error } = useCourseList({ page });
-
-  // if (error) return <div>error</div>;
-  // if (!data) return <Spinner />;
+  
 
   return (
-    <Box>
-      {/*팝업 필수 */}
-      {/* <PopupBox /> */}
-      {isDesktop ? (
-        <CategoryCarousel datas={bannerData} />
-      ) : (
-        <CategoryCarouselMobile datas={bannerData} />
-      )}
+    <>
+      {
+        isDesktop
+        ? <CategoryCarousel datas={bannerData} />
+        : <CategoryCarouselMobile datas={bannerData} />
+      }
       <CategoryCard></CategoryCard>
+      
+      {/* 게시판 */}
       <CategoryBoard></CategoryBoard>
-    </Box>
+    </>
   );
 }
-
-// const ContentContainer = styled.div`
-//   padding: 76px 20px 0 20px !important;
-// `;
-
-// const CourseGrid = styled(Grid)`
-//   display: flex;
-//   justify-content: center;
-// `;
-
-// const BannerContainer = styled.div`
-//   display: flex;
-//   width: 100%;
-//   background: linear-gradient(270.44deg,
-//   rgb(255, 122, 0) 0.21%,
-//   rgba(255, 122, 0, 0.4) 99.18%) 0% 0% / 100%;
-//   margin-bottom: 32px;
-
-//   img {
-//     padding-right: 16px;
-//     position: relative;
-//     top: 32px;
-//   }
-// `;
-
-// const ContentCardContainer = styled.div`
-//   display: flex;
-//   align-items: center;
-//   padding-bottom: 32px;
-
-//   > *:not(:last-child) {
-//     margin-right: 24px;
-//   }
-// `;

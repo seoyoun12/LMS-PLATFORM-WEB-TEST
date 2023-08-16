@@ -1,17 +1,5 @@
-import {
-  courseSubCategoryType,
-  getCourseClassStep,
-  RegisterType,
-} from '@common/api/courseClass';
-import {
-  getSingleCourseUser,
-  modifyCourseUserIndi,
-  modifyCourseUserOrga,
-  RegType,
-  delelteCourseUserIndi,
-  delelteCourseUserOrga,
-  FindCourseUserRes,
-} from '@common/api/courseUser';
+import { courseSubCategoryType,getCourseClassStep,RegisterType } from '@common/api/courseClass';
+import { getSingleCourseUser,modifyCourseUserIndi,modifyCourseUserOrga,RegType,delelteCourseUserIndi,delelteCourseUserOrga,FindCourseUserRes } from '@common/api/courseUser';
 import { phoneList } from '@common/constant';
 import { Modal, Spinner } from '@components/ui';
 import { EnrollHistoryCarNumberBox } from '@components/ui/EnrollHistory';
@@ -19,29 +7,13 @@ import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { locationList, residenceList } from '@layouts/MeEdit/MeEdit';
-import {
-  userBusinessTypeOne,
-  userBusinessTypeTwo,
-} from '@layouts/MeEdit/TransWorker/TransWorker';
-import {
-  Box,
-  Button,
-  FormControl,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow as MuiTableRow,
-  TextField,
-} from '@mui/material';
+import { userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
+import { Box,Button,FormControl,MenuItem,Select,Table,TableBody,TableCell,TableRow as MuiTableRow,TextField } from '@mui/material';
 import { checkDatePeriod } from '@utils/checkDate';
 import { carNumberRegex, Phone4Regex } from '@utils/inputRegexes';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import dateFormat from 'dateformat';
-import { useRouter } from 'next/router';
 
 interface Props {
   open: boolean;
@@ -58,7 +30,7 @@ export function EnrollHistoryModal({
   regType,
   courseTitle,
 }: Props) {
-  const router = useRouter();
+  
   const snackbar = useSnackbar();
   const dialog = useDialog();
   const { register, setValue, reset, watch } = useForm<FindCourseUserRes>();
@@ -167,21 +139,16 @@ export function EnrollHistoryModal({
           ]);
         }
         setGetDataLoading(false);
-      } catch (e: any) {
+      } catch (e) {
         setGetDataLoading(false);
         snackbar({ variant: 'error', message: e.data.message });
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   //기수변경
   const onSubmit = async () => {
-    // for (let [key, obj] of Object.entries(watch())) {
-    //   if (!obj || obj === '') return window.alert('모두 입력해 주세요!');
-    // }
-    // if (phone1.length !== 3 || phone2.length !== 4 || phone3.length !== 4) {
-    //   return window.alert('모두 입력해 주세요!');
-    // }
 
     if (!hideCarNumber && !carNumberRegex.test(watch().carNumber)) {
       return snackbar({
@@ -231,10 +198,10 @@ export function EnrollHistoryModal({
         };
 
         if (regType === RegisterType.TYPE_INDIVIDUAL) {
-          const data = await modifyCourseUserIndi(courseUserSeq, dataValue);
+          await modifyCourseUserIndi(courseUserSeq, dataValue);
         }
         if (regType === RegisterType.TYPE_ORGANIZATION) {
-          const data = await modifyCourseUserOrga(courseUserSeq, dataValue);
+          await modifyCourseUserOrga(courseUserSeq, dataValue);
         }
         snackbar({
           variant: 'success',
@@ -243,7 +210,7 @@ export function EnrollHistoryModal({
         handleClose();
       }
       setLoading(false);
-    } catch (e: any) {
+    } catch (e) {
       setLoading(false);
       snackbar({ variant: 'error', message: e.data.message });
     }
@@ -270,25 +237,23 @@ export function EnrollHistoryModal({
         message: '성공적으로 신청취소 했습니다.',
       });
       handleClose();
-    } catch (e: any) {
+    } catch (e) {
       snackbar({ variant: 'error', message: e.data.message });
     }
   };
 
   //인풋 잠금처리를 위한 change
   const onChangeBusinessSubType = (value: string, userCompanyName?: string) => {
-    // const {
-    //   target: { value },
-    // } = e;
+
     if (courseSubCategoryType.CHARTER_BUS === value) {
-      // setValue('userCompanyName', '');
+
       setValue('userSubBusinessType', value as courseSubCategoryType);
       setDisabledCompany(false);
       return setHideCarNumber(false);
     }
 
     if (courseSubCategoryType.SPECIAL_PASSENGER === value) {
-      // setValue('userCompanyName', '');
+
       setValue('userSubBusinessType', value as courseSubCategoryType);
       setDisabledCompany(false);
       return setHideCarNumber(true);
@@ -345,23 +310,18 @@ export function EnrollHistoryModal({
       onCloseModal={handleClose}
       title={courseTitle}
       maxWidth="lg"
-      action={
-        isAfterStudyDate ? (
-          ''
-        ) : (
+      action={ isAfterStudyDate
+        ? ''
+        : (
           <Box width="100%" display="flex" justifyContent="flex-end" gap={2}>
-            {loading ? (
-              <Spinner fit={true} />
-            ) : isStudyPeriod ? (
+            {
+            loading
+            ? <Spinner fit={true} />
+            : isStudyPeriod
+            ? (
               <Button
                 variant="contained"
-                onClick={() => {
-                  window.open(
-                    `/course/${watch().seq}/lesson/${watch().firstChapterSeq}`,
-                    // '',
-                    '_blank'
-                  );
-                }}
+                onClick={() => window.open(`/course/${watch().seq}/lesson/${watch().firstChapterSeq}`,'_blank')}
               >
                 학습하기
               </Button>
@@ -369,11 +329,10 @@ export function EnrollHistoryModal({
               <>
                 <Button
                   variant="contained"
-                  // color="warning"
                   sx={{
                     width: '100px',
                     background: 'red',
-                    '&:hover': { background: '#cc0000' },
+                    '&:hover': { background: 'rgb(191,49,51)' },
                   }}
                   onClick={onClickDelete}
                 >

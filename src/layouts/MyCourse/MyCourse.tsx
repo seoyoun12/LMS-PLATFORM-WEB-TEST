@@ -1,13 +1,13 @@
+import dynamic from 'next/dynamic';
 import styled from '@emotion/styled';
-import { Box, BoxProps, Container, Typography } from '@mui/material';
-import { Tabs2 } from '@components/ui/Tabs2';
-import React from 'react';
+import useResponsive from '@hooks/useResponsive';
+import Image from 'next/image';
+import { Box, BoxProps } from '@mui/material';
 import { useRouter } from 'next/router';
 import { LearningCourse } from './LearningCourse';
 import { EndCourse } from './EndCourse';
-import dynamic from 'next/dynamic';
 import { CSRTabs2Props } from '@components/ui/Tabs2/CSRTabs2';
-import useResponsive from '@hooks/useResponsive';
+
 
 const CSRTab2 = dynamic<CSRTabs2Props>(() => import('@components/ui/Tabs2/CSRTabs2'), {
   ssr: false,
@@ -22,11 +22,8 @@ export function MyCourse() {
   const router = useRouter();
   const isDesktop = useResponsive();
   return (
-    <MyCoursewrap>
-      <MyCourseContainer>
-        <MyCourseTitle>학습현황</MyCourseTitle>
-        <MyCourseSubTitle>학습중인 과정을 확인할수 있습니다</MyCourseSubTitle>
-      </MyCourseContainer>
+    <Wrapper>
+      <Image src={'/assets/images/learning_status.png'} alt='학습현황'  width={1920} height={322} layout='intrinsic'/>
       <Box boxSizing={'border-box'} borderBottom={'2px solid #e0e0e0'}>
         <Box maxWidth={1200} sx={{ margin: 'auto', marginTop: '1.5rem' }}>
           <CSRTab2
@@ -46,14 +43,19 @@ export function MyCourse() {
           <EndCourse />
         </TabPanel>
       </CourseContainer>
-    </MyCoursewrap>
+    </Wrapper>
   );
 }
 
-const MyCoursewrap = styled(Box)`
+const Wrapper = styled(Box)`
   .Mui-selected {
-    color: black !important;
+    color: #000 !important;
     font-weight: bold;
+    border-bottom: 2px solid #000 !important;
+    
+  }
+  .MuiTabs-indicator {
+    background-color: rgb(194,51,51);
   }
 `;
 
@@ -71,25 +73,6 @@ const TabPanel = (props: TabPanelProps) => {
     </Box>
   );
 };
-const MyCourseContainer = styled(Box)`
-  width: 100%;
-  height: 262px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  line-height: 42px;
-  color: white;
-  background-image: url('/assets/images/currentStudy.png');
-`;
-const MyCourseTitle = styled(Box)`
-  font-size: 48px;
-  font-weight: 500;
-`;
-const MyCourseSubTitle = styled(Box)`
-  font-size: 17px;
-  font-weight: 500;
-`;
 const CourseContainer = styled(Box)`
   max-width: 1200px;
   padding: 2.5rem 16px 3rem 16px;

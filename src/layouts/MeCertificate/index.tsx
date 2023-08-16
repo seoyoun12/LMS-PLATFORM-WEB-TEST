@@ -2,9 +2,6 @@ import { NextPage } from 'next';
 import {
   MeCertificateContainer,
   MeCertificateContentContainer,
-  MeCertificateHeaderContainer,
-  MeCertificateHeaderSubtitle,
-  MeCertificateHeaderTitle,
   MeCertificateItemConfirmButton,
   MeCertificateItemContainer,
   MeCertificateItemContentContainer,
@@ -17,18 +14,19 @@ import {
   PrintModalWrapper,
 } from '@components/MeCertificate/style';
 import { useGetUserMyinfoCertificates } from '@common/api/user/myinfo/certificates';
-import { GET, POST, POST_TO_ALL_DATA } from '@common/httpClient';
+import { GET, POST_TO_ALL_DATA } from '@common/httpClient';
 import {
   UserMyinfoCertificatesConfirmResponseDto,
   UserMyinfoCertificatesResponseDto,
 } from '@common/api/Api';
-import BackgroundImage from 'public/assets/images/certificates_background.svg';
+
 import { NotFound } from '@components/ui/NotFound';
 import { useState } from 'react';
 import { AxiosResponse } from 'axios';
 import { FetchState } from 'types/fetch';
 import { Backdrop, CircularProgress } from '@mui/material';
 import { Spinner } from '@components/ui';
+import Image from 'next/image';
 
 const MeCertificate: NextPage = () => {
   const { certificateList, mutate } = useGetUserMyinfoCertificates();
@@ -38,7 +36,7 @@ const MeCertificate: NextPage = () => {
     useState<FetchState>('READY');
   const [downloadCertificateFetchState, setDownloadCertificateFetchState] =
     useState<FetchState>('READY');
-  const [getCertificateState, setGetCertificateState] = useState<string>('READY');
+
 
   const handleClickShowCertificates = async (item: UserMyinfoCertificatesResponseDto) => {
     if (!item.courseUserSeq || showCertificateFetchState === 'FETCHING') {
@@ -144,13 +142,7 @@ const MeCertificate: NextPage = () => {
           </PrintModalWrapper>
         )}
       </PrintModal>
-      <MeCertificateHeaderContainer>
-        <MeCertificateHeaderTitle>증명서 발급</MeCertificateHeaderTitle>
-        <MeCertificateHeaderSubtitle>
-          수료확인 및 증명서 발급을 받을 수 있습니다!
-        </MeCertificateHeaderSubtitle>
-        <BackgroundImage />
-      </MeCertificateHeaderContainer>
+      <Image src={'/assets/images/cert_issued.png'} width={1920} height={282} layout="intrinsic" alt='cert' />
 
       <MeCertificateContentContainer>
         {certificateList?.data.length <= 0 ? (

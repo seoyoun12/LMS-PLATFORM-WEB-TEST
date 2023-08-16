@@ -3,15 +3,12 @@ import { Button, Chip, Container, TableBody, TableHead } from '@mui/material';
 import { Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import * as React from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import styled from '@emotion/styled';
 import { LessonBulkUploadModal } from '@components/admin-center/LessonBulkUploadModal';
-import { removeLesson, useLesson, useLessonList } from '@common/api/adm/lesson';
-import { useSnackbar } from '@hooks/useSnackbar';
-import { useDialog } from '@hooks/useDialog';
+import {  useLesson, useLessonList } from '@common/api/adm/lesson';
 import { ContentType } from '@common/api/content';
 import { ProductStatus } from '@common/api/course';
 import { LessonEditModal } from '@components/admin-center/LessonEditModal';
@@ -39,37 +36,16 @@ const contentType = {
 
 export function LessonList() {
   const router = useRouter();
-  const snackbar = useSnackbar();
-  const dialog = useDialog();
+  
   // const [openBulkUploadModal, setOpenBulkUploadModal] = useState(false);
   const [openBulkUploadModal, setOpenBulkUploadModal] = useState(false);
   const [openUploadModal, setOpenUploadModal] = useState(false);
   const [lessonId, setLessonId] = useState<number | null>(null);
   const { contentSeq } = router.query;
+
   const { lessonList, lessonListError, mutate } = useLessonList(Number(contentSeq));
   const { lesson, lessonError, lessonMutate } = useLesson(lessonId);
-
-  // console.log('레슨리스트 :', lessonList);
-
-  // 삭제 -> modal 내부로 이동
-  // const onRemoveLesson = async (lessonId: number) => {
-  //   try {
-  //     const dialogConfirmed = await dialog({
-  //       title: '콘텐츠 삭제하기',
-  //       description: '정말로 삭제하시겠습니까?',
-  //       confirmText: '삭제하기',
-  //       cancelText: '취소',
-  //     });
-  //     if (dialogConfirmed) {
-  //       await removeLesson(lessonId);
-  //       snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-  //       await mutate();
-  //     }
-  //   } catch (e: any) {
-  //     snackbar({ variant: 'error', message: e.data.message });
-  //   }
-  // };
-
+  
   const modifyLesson = (lessonId: number) => {
     setLessonId(lessonId);
     setOpenUploadModal(true);
@@ -80,7 +56,6 @@ export function LessonList() {
       await mutate();
       lessonMutate()
     }
-
     if (openUploadModal) {
       setOpenUploadModal(false);
     }
@@ -130,9 +105,6 @@ export function LessonList() {
                 <TableCell style={{ width: 100 }} align="left">
                   {lesson.chapter}
                 </TableCell>
-                {/* <TableCell style={{ width: 80 }} align="right">
-                  {contentType[lesson.contentType]}
-                </TableCell> */}
                 <TableCell style={{ width: 600 }} align="left">
                   {lesson.lessonNm}
                 </TableCell>
@@ -142,43 +114,14 @@ export function LessonList() {
                 <TableCell style={{ width: 150 }} align="center">
                   {min}분 {sec}초
                 </TableCell>
-                {/* <TableCell style={{ width: 100 }} align="right">
-                  {lesson.totalTime}
-                </TableCell>
-                <TableCell style={{ width: 100 }} align="right">
-                  {lesson.completeTime}
-                </TableCell> */}
-                {/* <TableCell style={{ width: 100 }} align="right">
-                  {lesson.totalPage}
-                </TableCell> */}
                 <TableCell style={{ width: 10 }} align="center">
                   <Chip
-                    label={lesson.status === ProductStatus.APPROVE ? '정상' : '중지'}
+                    label={ lesson.status === ProductStatus.APPROVE ? '정상' : '중지' }
                     variant="outlined"
                     size="small"
-                    color={
-                      lesson.status === ProductStatus.APPROVE ? 'secondary' : 'default'
-                    }
+                    color={ lesson.status === ProductStatus.APPROVE ? 'secondary' : 'default' }
                   />
                 </TableCell>
-                {/* <TableCell style={{ width: 135 }} align="right">
-                  <Button
-                    variant="text"
-                    color="neutral"
-                    size="small"
-                    onClick={() => modifyLesson(lesson.seq)}
-                  >
-                    수정
-                  </Button>
-                  <Button
-                    variant="text"
-                    color="warning"
-                    onClick={() => onRemoveLesson(lesson.seq)}
-                    size="small"
-                  >
-                    삭제
-                  </Button>
-                </TableCell> */}
               </TableRow>
             );
           })}

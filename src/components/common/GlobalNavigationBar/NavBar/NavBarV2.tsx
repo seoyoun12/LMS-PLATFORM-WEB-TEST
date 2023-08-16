@@ -19,7 +19,7 @@ const IndicatorBox = ({ index, value }: { index: number; value: number }) => {
         opacity: index !== value && 0,
         height: '4px',
         width: '100%',
-        background: '#256bef',
+        background: 'rgb(194,51,51)',
         position: 'relative',
       }}
     >
@@ -30,7 +30,7 @@ const IndicatorBox = ({ index, value }: { index: number; value: number }) => {
           transform: 'translateX(-50%)',
           width: '0px',
           height: '0px',
-          borderTop: '16px solid #256bef',
+          borderTop: '16px solid rgb(194,51,51)',
           borderLeft: '14px solid transparent',
           borderRight: '14px solid transparent',
         }}
@@ -103,28 +103,7 @@ export function NavBarV2() {
           ))}
         </HeaderTitleWrap>
       </NavContainer>
-      {/* 여기에 리모컨 */}
-      {/* {isShowRemote && (
-        <RemoteWrap>
-          <Box className="remote-box" color="primary.main">
-            <MenuItem>내 정보</MenuItem>
-            <MenuItem>일정보기</MenuItem>
-          </Box>
-          <Box className="remote-circle-box" color="primary.main">
-            <MenuItem
-              className="remote-circle"
-              onClick={() =>
-                window.scrollTo({
-                  top: 0,
-                  // behavior: 'smooth'
-                })
-              }
-            >
-              TOP
-            </MenuItem>
-          </Box>
-        </RemoteWrap>
-      )} */}
+      
     </ContentContainer>
   );
 }
@@ -154,7 +133,7 @@ const ContentContainer = styled.nav`
     /* border-radius: 0 0 4px 4px; */
     transition: min-height 0.2s ease-in-out;
     border-top: 1px solid #e1e1e1;
-    border-bottom: 1px solid rgb(52, 152, 219);
+    border-bottom: 1px solid rgb(194, 51, 51);
   }
   .hidden {
     /* display: none; */

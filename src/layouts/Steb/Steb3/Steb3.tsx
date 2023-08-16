@@ -16,19 +16,15 @@ import {
 import StebHeader from '../StebHeader/StebHeader';
 import { useRecoilState } from 'recoil';
 import { courseClassEnrollInfo, courseClassEnrollList, userInfo } from '@common/recoil';
-import CheckIcon from '@mui/icons-material/Check';
 import { locationList } from '@layouts/MeEdit/MeEdit';
-import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import { useRouter } from 'next/router';
 import {
   businessType,
   courseCategoryType,
   getSingleCourseClass,
-  useSingleCourseClass,
+  
 } from '@common/api/courseClass';
-import { useEffect, useLayoutEffect, useState } from 'react';
-import { useSnackbar } from '@hooks/useSnackbar';
-import dateFormat from 'dateformat';
+import { useLayoutEffect, useState } from 'react';
 import { courseCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { Spinner } from '@components/ui';
 import { courseBusinessTypeList } from '@layouts/Calendar/Calendar';
@@ -36,59 +32,16 @@ import CheckedCircle from '/public/assets/svgs/CheckedCircle.svg';
 import { getMyUser } from '@common/api/user';
 import useResponsive from '@hooks/useResponsive';
 
-// const dummyEnrollList = [
-//   {
-//     businessName: 'help me companies',
-//     businessSubType: 'SPECIAL_TRANSPORTATION',
-//     businessType: 'PASSENGER',
-//     carNumber: '123456',
-//     carRegisteredRegion: 'CHUNGNAM',
-//     courseClassSeq: 8,
-//     firstIdentityNumber: '123456',
-//     firstPhone: '010',
-//     name: '이제호',
-//     registerType: 'TYPE_INDIVIDUAL',
-//     secondIdentityNumber: '1234567',
-//     secondPhone: '1234',
-//     smsYn: 'Y',
-//     thirdPhone: '1234',
-//   },
-//   {
-//     businessName: 'help me companies',
-//     businessSubType: 'SPECIAL_TRANSPORTATION',
-//     businessType: 'PASSENGER',
-//     carNumber: '123456',
-//     carRegisteredRegion: 'SEJONG',
-//     courseClassSeq: 8,
-//     firstIdentityNumber: '123456',
-//     firstPhone: '010',
-//     name: '로봇',
-//     registerType: 'TYPE_INDIVIDUAL',
-//     secondIdentityNumber: '1234567',
-//     secondPhone: '1234',
-//     smsYn: 'Y',
-//     thirdPhone: '1234',
-//   },
-// ];
-
-// const dummyInfo = {
-//   courseCategoryType: courseCategory[0].type,
-//   courseBusinessType: courseBusinessTypeList[0].enType,
-//   step: 13,
-//   studyStartDate: '2022-08-18',
-//   studyEndDate: '2222-08-18',
-// };
-
 export default function Steb3() {
   const router = useRouter();
-  const snackbar = useSnackbar();
+  
   const isDesktop = useResponsive();
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState<string>('');
   const [enrollInfo, setEnrollInfo] = useRecoilState(courseClassEnrollInfo);
   const [user, setUser] = useRecoilState(userInfo);
   const [enrollList, setEnrollList] = useRecoilState(courseClassEnrollList);
-  // const [enrollList, setEnrollList] = useState([]);
+  
   const [info, setInfo] = useState<{
     courseCategoryType: courseCategoryType;
     courseBusinessType: businessType;
@@ -96,8 +49,6 @@ export default function Steb3() {
     studyStartDate: string;
     studyEndDate: string;
   }>();
-
-  // console.log(enrollInfo, 'enrollinfo', enrollList, info);
 
   const getData = async (seq: number) => {
     setLoading(true);
@@ -133,24 +84,19 @@ export default function Steb3() {
     if (enrollInfo?.seq) {
       getData(enrollInfo.seq);
     }
-
     return () => {
       setEnrollList([]);
       setEnrollInfo(null);
     };
   }, []);
 
-  console.log(enrollList, 'dd');
-
-  // if (loading) return <Spinner />;
+  
   if (loading || !info) return <Spinner />;
   return (
     <Steb3Wrap>
       {isDesktop && <StebHeader value={3} />}
       <Steb3BodyWrap>
-        {/* <HeaderTypo variant="h5">신청완료</HeaderTypo> */}
         <CompleteRegi>
-          {/* <CheckIcon sx={{ fontSize: '6rem', color: 'primary.main' }} /> */}
           <CheckedCircle />
           <Box mt={4} display="flex" flexWrap="wrap">
             <Typography component="span" sx={{ fontSize: '38px' }} margin="auto">
@@ -176,9 +122,6 @@ export default function Steb3() {
             mt={4}
             mb={2}
           >
-            {/* <HorizontalRuleRoundedIcon
-              sx={{ transform: 'scale(1,2)', color: '#3498db' }}
-            /> */}
             <span>신청교육</span>
           </Typography>
           <TableContainer>
@@ -260,9 +203,6 @@ export default function Steb3() {
             paddingBottom="0.5rem"
             borderBottom="3px solid #000"
           >
-            {/* <HorizontalRuleRoundedIcon
-              sx={{ transform: 'scale(1,2)', color: '#3498db' }}
-            /> */}
             <span>교육신청자 리스트</span>
           </Typography>
           <StudentItemListWrap>
@@ -298,7 +238,7 @@ export default function Steb3() {
                         {item.carNumber && (
                           <UserTableRow>
                             <StuTableLeftCell>차량번호</StuTableLeftCell>
-                            <StuTableRightCell>{item.carNumber}</StuTableRightCell>
+                            <StuTableRightCell>{item.carNumber === '충남00아0000' ? null : item.carNumber}</StuTableRightCell>
                           </UserTableRow>
                         )}
                         <UserTableRow>
@@ -370,11 +310,7 @@ const Steb3BodyWrap = styled(Container)`
   padding-left: 1rem;
   padding-right: 1rem;
 `;
-const HeaderTypo = styled(Typography)`
-  padding-bottom: 1rem;
-  border-bottom: 2px solid #c3c3c3;
-  font-weight: bold;
-`;
+
 const CompleteRegi = styled(Box)`
   display: flex;
   flex-direction: column;
@@ -428,14 +364,9 @@ const StudentListItem = styled(Grid)`
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
-  /* border-bottom: 2px solid #e1e1e1; Add border Bottom */
+  
 `;
 
-// const StudentListItem = styled(Box)`
-//   display: flex;
-//   padding-bottom: 1rem;
-//   border-bottom: 2px solid #e1e1e1;
-// `;
 const StuTableContainer = styled(TableContainer)`
   .css-2lu2eg-MuiTableCell-root {
     border-bottom: none;
@@ -443,12 +374,7 @@ const StuTableContainer = styled(TableContainer)`
     font-weight: bold;
   }
   .css-dfr580-MuiTableRow-root {
-    /* :first-of-type {
-      td {
-        border-top: none;
-      }
-    } */
-    //마지막 엘리먼트의 라인선을 제거
+
     :last-child {
       td {
         border-bottom: none;
@@ -459,14 +385,11 @@ const StuTableContainer = styled(TableContainer)`
 
 const UserTableRow = styled(TableRow)`
   display: flex;
-  /* td:first-of-type {
-  }
-  td:last-child {
-  } */
+  
 `;
 
 const BottomBox = styled(Box)`
-  /* width: 420px; */
+  
   margin: auto;
   border: 1px solid #c4c4c4;
   border-radius: 4px;

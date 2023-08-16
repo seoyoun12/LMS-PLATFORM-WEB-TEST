@@ -147,5 +147,9 @@ interface Ncplayer {
   _view: any;
 
   _detachEvent(event: { type: EventType, listner: (event: Event) => void }): void;
+
+  _autoPause:boolean;
+
+
   
 }

@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from '@emotion/styled';
 import {
   Button,
@@ -22,6 +21,7 @@ import LessonContentSurvey from './LessonContentSurvey';
 import { LessonContentType, LESSON_CONTENT_TYPES } from './Lesson.types';
 import { useRouter } from 'next/router';
 import LessonHeader from './LessonHeader';
+import { Fragment, ReactElement, useEffect, useState } from 'react';
 
 export interface LessonProps {
   courseUserSeq: number;
@@ -30,40 +30,35 @@ export interface LessonProps {
 }
 
 export default function Lesson(props: LessonProps) {
-
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [dialog, setDialog] = useState<'FIRST' | "NEXT" | "SURVEY" | null>('FIRST');
+  const [course, setCourse] = useState<CourseDetailClientResponseDto | null>(null);
+  const [courseTotalProgress, setCourseTotalProgress] = useState<number | null>(null);
+  const [coursePlayFirst, setCoursePlayFirst] = useState(true);
+  const [courseLessonsCompleted, setCourseLessonsCompleted] = useState<boolean[]>([]);
+  const [courseModule, setCourseModule] = useState<CourseModuleFindResponseDto | null>(null);
+  const [courseModules, setCourseModules] = useState<CourseModuleFindResponseDto[] | null>(null);
+  const [courseModulesCompleted, setCourseModulesCompleted] = useState<boolean[]>([]);
+  const [moduleSurvey, setModuleSurvey] = useState<SurveyResponseDto | null>(null);
+  const [moduleSurveyTodo, setModuleSurveyTodo] = useState<CourseModuleFindResponseDto | null>(null);
+  const [currentLessonPlayTime,setCurrentLessonPlayTime] = useState(0);
 
-  // 스테이트.
+  useEffect(() => {
+    const { lessons } = course || { lessons: [] };
+    const { contentSeq: lessonSeq } = props;
+    const currentLesson = lessons.find((lesson) => lesson.seq === lessonSeq);
+    setCurrentLessonPlayTime(currentLesson?.completeTime || 0);
+  },[props,course])
 
-  const [loading, setLoading] = React.useState<boolean>(true);
-  const [dialog, setDialog] = React.useState<'FIRST' | "NEXT" | "SURVEY" | null>('FIRST');
 
-  const [course, setCourse] = React.useState<CourseDetailClientResponseDto | null>(null);
-  const [courseTotalProgress, setCourseTotalProgress] = React.useState<number | null>(null);
-  const [coursePlayFirst, setCoursePlayFirst] = React.useState<boolean>(true);
-  const [courseLessonsCompleted, setCourseLessonsCompleted] = React.useState<boolean[]>(
-    []
-  );
-  const [courseModule, setCourseModule] =
-    React.useState<CourseModuleFindResponseDto | null>(null);
-  const [courseModules, setCourseModules] = React.useState<
-    CourseModuleFindResponseDto[] | null
-  >(null);
-  const [courseModulesCompleted, setCourseModulesCompleted] = React.useState<boolean[]>(
-    []
-  );
-  const [moduleSurvey, setModuleSurvey] = React.useState<SurveyResponseDto | null>(null);
-  const [moduleSurveyTodo, setModuleSurveyTodo] = React.useState<CourseModuleFindResponseDto | null>(null);
+  useEffect(() => setCoursePlayFirst(true), [props.courseUserSeq]);
 
-  // 이펙트.
-
-  React.useEffect(() => setCoursePlayFirst(true), [props.courseUserSeq]);
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.contentType === 'LESSON') setDialog('FIRST');
   }, [props.courseUserSeq, props.contentType]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setLoading(true);
 
     ApiClient.course
@@ -122,7 +117,7 @@ export default function Lesson(props: LessonProps) {
       .finally(() => setLoading(false));
   }, [props]);
 
-  React.useEffect(() => {
+  useEffect(() => {
 
     if (!courseModules) return;
 
@@ -149,10 +144,10 @@ export default function Lesson(props: LessonProps) {
 
   // 컴포넌트.
 
-  let Content: React.ReactElement = <React.Fragment/>;
-  let DialogFirst: React.ReactElement = <React.Fragment/>;
-  let DialogNext: React.ReactElement = <React.Fragment/>;
-  let DialogSurvey: React.ReactElement = <React.Fragment/>;
+  let Content: ReactElement = <Fragment/>;
+  let DialogFirst: ReactElement = <Fragment/>;
+  let DialogNext: ReactElement = <Fragment/>;
+  let DialogSurvey: ReactElement = <Fragment/>;
 
   switch (props.contentType) {
     case 'LESSON': {
@@ -179,18 +174,15 @@ export default function Lesson(props: LessonProps) {
             .then((res) => {
               const course = res.data.data;
               const completed = course.lessons[lessonIndex].completedYn === "Y";
-              
               const newCourseLessonsCompleted = [...courseLessonsCompleted];
               newCourseLessonsCompleted[lessonIndex] = completed;
-
               setCourseLessonsCompleted(newCourseLessonsCompleted);
               setCourseTotalProgress(course.totalProgress);
-              
               if (completed && course.lessons[lessonIndex + 1] && isEnd) setDialog("NEXT");
-
               return completed;
             })
           }
+          currentLessonPlayTime={currentLessonPlayTime}
         />
       );
 
@@ -243,7 +235,6 @@ export default function Lesson(props: LessonProps) {
           </DialogActions>
         </Dialog>
       );
-
       break;
     }
     case 'SURVEY': {

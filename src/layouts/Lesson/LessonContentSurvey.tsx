@@ -74,7 +74,7 @@ export default function LessonContentSurvey(props: Props) {
           })
           .then(res => {
             setDialog(res.data.success ? 'SUCCESS' : 'FAILED');
-            setDialogMessage(res.data.success ? '제출이 완료되었습니다' : '제출 실패했습니다.');
+            setDialogMessage(res.data.success ? '제출이 완료되었습니다 \n 수료확인을 통해 수료증 발급을 진행할 수 있습니다.' : '제출 실패했습니다.');
             res.data.success && props.onComplete();
           })
           .catch(err => {
@@ -117,7 +117,7 @@ export default function LessonContentSurvey(props: Props) {
         onClose={() => dialog === 'SUCCESS' ? router.replace(router.asPath) : setDialog(null)}
       >
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText sx={{whiteSpace:'pre-line'}}>
             {dialogMessage}
           </DialogContentText>
         </DialogContent>

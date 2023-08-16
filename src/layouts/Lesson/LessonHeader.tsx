@@ -49,10 +49,9 @@ export default function LessonHeader() {
         <Box className="lesson-header-img">
           <Image
             src="/assets/images/cttsLogo.png"
-            // width={224}
-            // height={40}
             layout="fill"
             alt="Your Name"
+            priority
           />
         </Box>
         <Button variant="contained" onClick={onCloseWindow}>

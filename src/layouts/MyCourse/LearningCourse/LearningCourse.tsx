@@ -1,53 +1,28 @@
-import { useRouter } from 'next/router';
-import {
-  LearningStatusRes,
-  ProgressStatus,
-  useLearningStatus,
-  useMyUser,
-} from '@common/api/user';
+import { LearningStatusRes,ProgressStatus,useLearningStatus } from '@common/api/user';
 import { Spinner } from '@components/ui';
 import { ContentCardV2 } from '@components/ui/ContentCard';
 import styled from '@emotion/styled';
-import { Box, Grid, Link } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { NotFound } from '@components/ui/NotFound';
 import { useSnackbar } from '@hooks/useSnackbar';
 
 export function LearningCourse() {
   const snackbar = useSnackbar();
-  const router = useRouter();
-  const { data, error, mutate } = useLearningStatus();
+  const { data } = useLearningStatus();
 
   const onClickEnterCourseLesson = (res: LearningStatusRes) => {
-    const isStartStudy =
-      new Date(res.studyStartDate.replaceAll('-', '/')).getTime() < new Date().getTime(); //현재시간이 크면 true 아니면 false
-    const isEndedStudy =
-      new Date(res.studyEndDate.replaceAll('-', '/')).getTime() < new Date().getTime(); //현재시간이 크면 true 아니면 false
-    if (res.progressStatus === ProgressStatus.TYPE_BEFORE || !isStartStudy)
-      return snackbar({ variant: 'error', message: '아직 학습이 시작되지 않았습니다!' });
-    if (res.progressStatus === ProgressStatus.TYPE_ENDED || isEndedStudy)
-      return snackbar({ variant: 'error', message: '종료된 학습입니다!' });
+    // console.log('hello world');
+    const isStartStudy = new Date(res.studyStartDate.replaceAll('-', '/')).getTime() < new Date().getTime(); //현재시간이 크면 true 아니면 false
+    const isEndedStudy = new Date(res.studyEndDate.replaceAll('-', '/')).getTime() < new Date().getTime(); //현재시간이 크면 true 아니면 false
+    if (res.progressStatus === ProgressStatus.TYPE_BEFORE || !isStartStudy) return snackbar({ variant: 'error', message: '아직 학습이 시작되지 않았습니다!' });
+    if (res.progressStatus === ProgressStatus.TYPE_ENDED || isEndedStudy) return snackbar({ variant: 'error', message: '종료된 학습입니다!' });
 
-    if (res.progressStatus === ProgressStatus.TYPE_PROGRESSING) {
-      // router.push(
-      //   `/course/${res.courseUserSeq}/lesson/${
-      //     !res.recentLessonSeq ? 1 : res.recentLessonSeq
-      //   }`
-      // );
-      let newTab = window.open(
-        `/course/${res.courseUserSeq}/lesson/${
-          !res.recentLessonSeq ? 1 : res.recentLessonSeq
-        }`,
-        // '',
-        '_blank'
-      );
-      // newTab.onbeforeunload = function (e) {
-      //   e.preventDefault();
-      //   window.alert('테스트입니다.');
-      // };
-    }
+    // 이코드 왜 빼놓은거...?
+    window.open(`/course/${res.courseUserSeq}/lesson/${!res.recentLessonSeq ? 1 : res.recentLessonSeq}`,'_blank');
   };
 
   if (!data) return <Spinner />;
+
   return (
     <LearningCourseWrap>
       {data.length <= 0 ? (
@@ -93,7 +68,6 @@ export function LearningCourse() {
                     //     ? `지금바로 학습하기!(${startDate}~${endDate})`
                     //     : `${item.startLeftDays}일 남음(${startDate}~${endDate})`
                     // }
-
                     // content1={
                     //   res.progress > 0
                     //     ? `현재 진도율 ${res.progress}%`

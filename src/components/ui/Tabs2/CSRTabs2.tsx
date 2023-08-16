@@ -34,19 +34,20 @@ export interface CSRTabs2Props {
 //variant 속성이 명시되어 있어도 reponseWitdh가 정의되어 있다면 variant: scrollable이 강제됩니다.
 
 export default function CSRTabs2({
-  tabsConfig,
-  showBorderBottom = true,
-  variant = 'standard',
-  gap,
-  rendering = true,
-  onChange,
-  value,
-  fontSx,
-  // scrollable = false,
-  showIndicator = true,
-  responsiveWidth = 1,
-  ...props
+tabsConfig,
+showBorderBottom = true,
+variant = 'standard',
+gap,
+rendering = true,
+onChange,
+value,
+fontSx,
+// scrollable = false,
+showIndicator = true,
+responsiveWidth = 1,
+...props
 }: CSRTabs2Props) {
+  
   const router = useRouter();
   const { pathname, query } = router;
   const [cssValue, setCssValue] = useState<{ variant: string; gap: number }>({

@@ -3,6 +3,8 @@ import { ContentType } from '@common/api/content';
 import { ProductStatus } from '@common/api/course';
 import useSWR, { SWRResponse } from 'swr';
 import { S3Files } from 'types/file';
+import { LessonQuizResponseDto } from './Api';
+import { IQuizTime } from '@layouts/Lesson/LessonContentVideo';
 
 // export interface LessonInput {
 //   contentType?: ContentType;
@@ -35,6 +37,8 @@ export interface Lesson {
   totalTime: number;
   min: number;
   sec: number;
+  interaction: boolean;
+  lessonQuizs: IQuizTime[]
 }
 
 export type LessonInput = Partial<Lesson>;

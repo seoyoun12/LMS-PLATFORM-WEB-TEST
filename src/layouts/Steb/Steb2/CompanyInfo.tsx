@@ -142,12 +142,12 @@ export function CompanyInfo({
   };
 
   //임시로 만든 저상버스용 이펙트
-  useEffect(() => {
-    if (localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS') {
-      setValue('businessSubType', courseSubCategoryType.BUS);
-      onChangeBusinessSubType('BUS');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS') {
+  //     setValue('businessSubType', courseSubCategoryType.BUS);
+  //     onChangeBusinessSubType('BUS');
+  //   }
+  // }, []);
 
   // const onChangeCompanyName = (e: any) => {
   //   setValue('businessName', e.target.value);
@@ -200,7 +200,7 @@ export function CompanyInfo({
                 {userBusinessTypeOne
                   .filter(item => item.enType === fixedBusinessType)
                   .map(item => (
-                    <MenuItem value={item.enType}>{item.type}</MenuItem>
+                    <MenuItem key={item.type} value={item.enType}>{item.type}</MenuItem>
                   ))}
               </TableRightCell>
             </TableCustomRow>
@@ -244,6 +244,11 @@ export function CompanyInfo({
               />
             </TableRightCell>
           </TableCustomRow>
+
+
+
+
+
           {hideCarNumber === false && (
             <TableCustomRow>
               <TableLeftCell>차량 번호</TableLeftCell>
@@ -253,6 +258,9 @@ export function CompanyInfo({
               </TableRightCell>
             </TableCustomRow>
           )}
+
+
+          
           <TableCustomRow>
             <TableLeftCell>차량 등록지</TableLeftCell>
             <TableRightCell className="scroll-to-box">

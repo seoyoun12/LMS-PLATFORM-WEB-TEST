@@ -1,39 +1,27 @@
-import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import {
-  Backdrop,
-  Box,
-  Button,
-  Chip,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  FormLabel,
-  InputAdornment,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  Select,
-} from '@mui/material';
-import { ErrorMessage } from '@hookform/error-message';
-import { ContentType } from '@common/api/content';
-import { ChangeEvent, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { CustomInputLabel } from '@components/ui/InputLabel';
+import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
+import TextField from '@mui/material/TextField';
+import router from 'next/router';
+import useToggle from '@hooks/useToggle';
+import AddQuizModal from './quiz-interaction/AddQuizModal';
 import { Modal, Spinner } from '@components/ui';
 import { Lesson } from '@common/api/lesson';
 import { modifyLesson, removeLesson, useLessonList } from '@common/api/adm/lesson';
-import TextField from '@mui/material/TextField';
 import { ProductStatus } from '@common/api/course';
 import { useSnackbar } from '@hooks/useSnackbar';
-import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { useFileUpload } from '@hooks/useChunkFileUpload';
 import { FileType } from '@common/api/file';
 import { FileUploader } from '@components/ui/FileUploader';
 import { BbsType, deleteFile } from '@common/api/adm/file';
 import { useDialog } from '@hooks/useDialog';
-import router from 'next/router';
+import { PUT } from '@common/httpClient';
+import { LessonQuizResponseDto, LessonResponseDto } from '@common/api/Api';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Backdrop, Box, Button, Chip, FormControl, FormControlLabel, FormHelperText, InputAdornment, Radio, RadioGroup } from '@mui/material';
+import { ErrorMessage } from '@hookform/error-message';
+import { ContentType } from '@common/api/content';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 
 interface Props {
   open: boolean;
@@ -46,12 +34,6 @@ interface FormType extends Lesson {
   files: File[];
 }
 
-const contentTypeOptions = [
-  // { value: ContentType.CONTENT_HTML, name: '웹콘텐츠(HTML5)' },
-  { value: ContentType.CONTENT_MP4, name: 'mp4' },
-  // { value: ContentType.CONTENT_EXTERNAL, name: '외부링크' },
-];
-
 const defaultValues = {
   contentType: ContentType.CONTENT_MP4,
   status: ProductStatus.APPROVE,
@@ -61,51 +43,47 @@ const defaultValues = {
 export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
   const snackbar = useSnackbar();
   const [submitLoading, setSubmitLoading] = useState(false);
-  const [isFileDelete, setIsFileDelete] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
-  const { handleUpload, handleProgressStatus, uploadPercentage } = useFileUpload();
+  const { handleUpload, uploadPercentage } = useFileUpload();
+  const [lessonSeq, setLessonSeq] = useState(lesson?.seq);
   const { contentSeq } = router.query;
-  const { lessonList, lessonListError, mutate } = useLessonList(Number(contentSeq));
+  const { mutate } = useLessonList(Number(contentSeq));
+  const [quizList, setQuizList] = useState<LessonQuizResponseDto[] | null>(null);
   const dialog = useDialog();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-    reset,
-    resetField,
-  } = useForm<FormType>({ defaultValues });
+  const {register, handleSubmit, formState: { errors }, control, reset,watch, resetField, setValue} = useForm<FormType>({ defaultValues });
+  const {onToggle: onToggleAddQuizModal, toggle: isAddQuizModalOpen} = useToggle();
+  
 
-  useEffect(() => {
-    if (!!lesson && open) {
-      reset({ ...lesson });
-      setFileName(lesson?.s3Files[0]?.name || null);
-    }
-  }, [lesson, open, reset]);
+  const onInteractionRadioChange = useCallback( async (e: ChangeEvent<HTMLInputElement>) => {
+    const { target: { value } } = e;
+    setValue('interaction', value === 'on');
+    const updateQuizData = await PUT<LessonResponseDto>(`/lesson/adm/interaction/${lessonSeq}?interaction=${value === 'on'}`);
+    setQuizList(updateQuizData.lessonQuizs);
+    await mutate();
+  },[lessonSeq,mutate]);
 
-  const fileHandler = async (files: File[], lesson: Lesson) => {
-    const isFileUpload = files.length > 0;
-    if (isFileUpload) {
-      const file = files[0];
-      const fileName = files[0].name;
-      await handleUpload({
-        dataId: lesson.seq,
-        file,
-        fileName,
-        fileUploadType: FileType.LESSON_FILE,
+  const handleDeleteFile = useCallback(async () => {
+    const confirm = await dialog({
+      title: '파일 삭제하기',
+      description: '정말로 삭제하시겠습니까?',
+      confirmText: '삭제하기',
+      cancelText: '취소',
+    });
+    if (!confirm) return;
+    try {
+      await deleteFile({
+        fileTypeId: lesson.seq,
+        fileType: BbsType.TYPE_LESSON,
+        fileSeqList: lesson.s3Files.map(v => v.seq),
       });
-    } else {
-      if (isFileDelete) {
-        await deleteFile({
-          fileTypeId: lesson.seq,
-          fileType: BbsType.TYPE_LESSON,
-          fileSeqList: lesson.s3Files.map(v => v.seq),
-        });
-      }
+      resetField('files');
+      setFileName(null);
+    } catch (error) {
+      return snackbar({ variant: 'error', message: error.message });
     }
-  };
+  },[lesson,resetField])
 
-  // 삭제
+  
   const onRemoveLesson = async (lessonId: number) => {
     try {
       const dialogConfirmed = await dialog({
@@ -120,56 +98,89 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
         handleClose(true);
         await mutate();
       }
-    } catch (e: any) {
+    } catch (e) {
       snackbar({ variant: 'error', message: e.data.message });
     }
   };
 
+  const fileHandler = async (files: File[], lesson: Lesson) => {
+    const file = files[0];
+    if (!file) return;
+    try {
+      const { name: fileName } = file;
+      await handleUpload({
+        dataId: lesson.seq,
+        file, // files[0]
+        fileName,
+        fileUploadType: FileType.LESSON_FILE,
+      });
+      
+    } catch (error) {
+      return snackbar({ variant: 'error', message: error.message });
+    }
+  };
+  
+  const onUploadLesson = async ( files:File[], lesson: Lesson, isUploadWithNewVideo:boolean ) => {
+    try {
+      isUploadWithNewVideo && await fileHandler(files, lesson);
+      setSubmitLoading(false);
+      handleClose(true);
+      snackbar({ variant: 'success', message: '업로드 완료되었습니다.' });
+      await modifyLesson({ lessonSeq: lesson.seq, lesson });
+      await mutate();
+    } catch (e) {
+      setSubmitLoading(false);
+      handleClose(true);
+      snackbar({ variant: 'error', message: e.message || e.data?.message });
+    }
+  }
+
+  
+  
   const onSubmit: SubmitHandler<FormType> = async ({ files, ...lessonWatch }) => {
     setSubmitLoading(true);
+    const isUploadWithNewVideo = files && files.length > 0
     const lesson = {
       ...lessonWatch,
       completeTime: Number(lessonWatch.min) * 60 + Number(lessonWatch.sec),
       totalTime: Number(lessonWatch.min) * 60 + Number(lessonWatch.sec),
     };
-
-    try {
-      if (fileName) {
-        await modifyLesson({ lessonSeq: lesson.seq, lesson });
-        await fileHandler(files, lesson);
-        const isTrue = await handleProgressStatus();
-        if (isTrue) return snackbar({ variant: 'error', message: '업로드실패' });
-        setSubmitLoading(false);
-        handleClose(true);
-        snackbar({ variant: 'success', message: '업로드 완료되었습니다.' });
-      } else {
-        snackbar({ variant: 'error', message: '파일을 첨부하셔야합니다.' });
-        setSubmitLoading(false);
-      }
-    } catch (e: any) {
-      snackbar({ variant: 'error', message: e.message || e.data?.message });
-      setSubmitLoading(false);
-    }
+    await onUploadLesson(files, lesson, isUploadWithNewVideo);
   };
-
+  
   const handleFileChange = (e: ChangeEvent) => {
     e.preventDefault();
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     setFileName(files[0].name);
-    setIsFileDelete(false);
   };
 
-  const handleDeleteFile = () => {
-    resetField('files');
-    setFileName(null);
-    setIsFileDelete(true);
-  };
+  useEffect(() => {
+    if (!!lesson && open) {
+      reset({ ...lesson });
+      setFileName(lesson?.s3Files[0]?.name || null);
+    }
+  }, [lesson, open, reset]);
 
-  if (error) return <div>error</div>;
+  useEffect(() => {
+    if(!lesson) return; 
+    setLessonSeq(lesson.seq);
+    setQuizList(lesson.lessonQuizs);
+  },[lesson, quizList])
+
+  if (error) return <div>강의 업로드 정보를 불러오는데 실패하였습니다.</div>;
+  
   return (
+    <>
+    <AddQuizModal
+      open={isAddQuizModalOpen}
+      onCloseModal={onToggleAddQuizModal}
+      quiz={quizList}
+      lessonSeq={lesson?.seq}
+      handleClose={handleClose}
+      setQuizList={setQuizList}
+    />
     <Modal
-      // action="저장"
       action={
         <>
           <DeleteBtn
@@ -189,18 +200,19 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
             저장
           </SubmitBtn>
         </>
-      }
-      title="강의 업로드"
-      maxWidth="sm"
-      fullWidth
-      loading={!lesson}
-      open={open}
-      actionLoading={submitLoading}
-      onCloseModal={() => handleClose(true)}
-      onSubmit={handleSubmit(onSubmit)}
-    >
+        }
+        title="강의 업로드"
+        maxWidth="sm"
+        fullWidth
+        loading={!lesson}
+        open={open}
+        actionLoading={submitLoading}
+        onCloseModal={() => handleClose(true)}
+        onSubmit={handleSubmit(onSubmit)}
+      >
       <Box component="form">
         <FormContainer>
+          
           <FormControl className="form-control">
             <TextField
               {...register('chapter', { required: '차시를 입력해주세요.' })}
@@ -209,9 +221,6 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
               variant="outlined"
             />
             <ErrorMessage errors={errors} name="chapter" as={<FormHelperText error />} />
-          </FormControl>
-
-          <FormControl className="form-control">
             <TextField
               {...register('lessonNm', { required: '강의명을 입력해주세요.' })}
               size="small"
@@ -223,32 +232,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
               name="contentName"
               as={<FormHelperText error />}
             />
-          </FormControl>
-
-          <FormControl className="form-control" sx={{ display: 'none' }}>
-            <CustomInputLabel size="small">콘텐츠 타입</CustomInputLabel>
-            <Controller
-              rules={{ required: '콘텐츠 유형을 선택해주세요.' }}
-              control={control}
-              name="contentType"
-              render={({ field }) => (
-                <Select {...field} size="small" label="콘텐츠 타입">
-                  {contentTypeOptions.map(({ value, name }) => (
-                    <MenuItem value={value} key={value}>
-                      {name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
-            />
-            <ErrorMessage
-              errors={errors}
-              name="contentType"
-              as={<FormHelperText error />}
-            />
-          </FormControl>
-
-          <FormControl className="form-control">
+          
             <FileUploader
               register={register}
               regName="files"
@@ -259,16 +243,13 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
             </FileUploader>
             {fileName ? (
               <Chip
-                // sx={{ mt: '8px' }} // 파일 첨부시 여백 생기면서 늘어남. 주석처리.
                 icon={<OndemandVideoOutlinedIcon />}
                 label={fileName}
                 onDelete={handleDeleteFile}
                 sx={{ pl: '5px', ml: '5px', maxWidth: '700px' }}
               />
             ) : null}
-          </FormControl>
-
-          <FormControl className="form-control">
+            
             <CompleteTimeControl>
               <Label variant="body2">학습시간</Label>
               <InputContainer>
@@ -290,10 +271,8 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                 />
               </InputContainer>
             </CompleteTimeControl>
-          </FormControl>
-
-          <FormControl className="form-control">
-            <FormLabel focused={false}>상태</FormLabel>
+          
+            <Typography>상태</Typography>
             <Controller
               rules={{ required: true }}
               control={control}
@@ -313,18 +292,94 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                 </RadioGroup>
               )}
             />
-          </FormControl>
-
-          {/* <DeleteBtn
-            variant="contained"
-            color="warning"
-            onClick={() => onRemoveLesson(lesson.seq)}
-            size="small"
+            <Typography>상호작용</Typography>
+            <Controller
+              
+              control={control}
+              name="interaction"
+              render={({ field }) => (
+                <RadioGroup
+                  row
+                  {...field}
+                  value={watch().interaction ? 'on' : 'off'}
+                  onChange={onInteractionRadioChange}
+                >
+                  <FormControlLabel
+                    value='on'
+                    control={<Radio />}
+                    label="켬"
+                  />
+                  <FormControlLabel
+                    value='off'
+                    control={<Radio />}
+                    label="끔"
+                  />
+                </RadioGroup>
+              )}
+            />
+            {watch().interaction
+            ? <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mt: 2,
+                  backgroundColor: '#d7d7d7c7',
+                  borderRadius: '4px',
+                  padding: '1rem'
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%'
+                  }}
+                >
+                  {/* 450 451 452 , 441,442 */}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    sx={{
+                      boxShadow: '1px 1px 2px #222',
+                    }}
+                    onClick={onToggleAddQuizModal}
+                  >
+                    <Typography> + 추가 / 수정 하기 (총 {quizList ? quizList.length : 0}개)</Typography>
+                  </Button>
+                </Box>
+            </Box>
+            : <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              mt: 2,
+              backgroundColor: '#d7d7d7c7',
+              borderRadius: '4px',
+              padding: '1rem'
+            }}
           >
-            삭제
-          </DeleteBtn> */}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%'
+              }}
+            >
+                <Typography>
+                  상호작용이 꺼져있으므로 퀴즈가 나타나지 않습니다.
+                </Typography>
+              </Box>
+            </Box>
+            }
+          </FormControl>
         </FormContainer>
       </Box>
+        
       <Backdrop
         open={submitLoading}
         sx={{ zIndex: 9999, display: 'flex', flexDirection: 'column' }}
@@ -344,7 +399,7 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
             sx={{
               width: `${uploadPercentage}%`,
               height: '25px',
-              background: '#256def',
+              background: 'rgb(194,51,51)',
               borderRadius: '8px',
               transition: 'width 0.2s ease-in',
             }}
@@ -365,17 +420,19 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
         </Box>
       </Backdrop>
     </Modal>
+    </>
   );
 }
 
 const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
   padding-top: 20px;
 
   .form-control {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 
     &:not(:last-child) {
       margin-bottom: 30px;
@@ -395,7 +452,6 @@ const InputContainer = styled.div`
 
   > * {
     width: 40%;
-
     &:first-of-type {
       margin-right: 12px;
     }

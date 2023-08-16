@@ -14,3 +14,5 @@ export const convertBirth = (birth: string) => {
   if (birthYear <= currentYear) format = `20${birth}`;
   return format;
 };
+
+

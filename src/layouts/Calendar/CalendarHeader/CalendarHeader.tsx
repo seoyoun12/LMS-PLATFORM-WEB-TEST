@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
-import { Box, Button, Radio, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
-import { eduLegendList, FilterType, MonthClickType } from '../Calendar';
+import { eduLegendList, MonthClickType } from '../Calendar';
 import { grey } from '@mui/material/colors';
-import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import ArrowLeftRoundedIcon from '@mui/icons-material/ArrowLeftRounded';
 import ArrowRightRoundedIcon from '@mui/icons-material/ArrowRightRounded';
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
@@ -88,8 +87,8 @@ export function CalendarHeader({
         />
       </DateWrap>
       <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
-        <Typography fontSize="18px">
-          - 해당 일정을 클릭 하시면 자세한 교육내용을 확인하실 수 있습니다.
+        <Typography fontSize="16px" fontWeight='bold' paddingLeft='1rem' marginBottom='1rem'>
+          <span style={{color:'rgb(194,51,51)'}}>✓</span> 해당 일정을 클릭 하시면 자세한 교육내용을 확인하실 수 있습니다.
         </Typography>
         {/* <Box>
           {filterList.map(item => (
@@ -115,9 +114,9 @@ export function CalendarHeader({
               onClick={onChangeFilter}
               value={item.enType}
               sx={{
-                background: filter === item.enType ? '#256aef' : '#d8d6d6',
+                background: filter === item.enType ? 'rgb(197,55,54)' : '#d8d6d6',
                 '&:hover': {
-                  backgroundColor: filter === item.enType ? '#143c89' : '#919191',
+                  backgroundColor: filter === item.enType ? 'rgba(197,55,54,80)' : '#919191',
                 },
               }}
             >

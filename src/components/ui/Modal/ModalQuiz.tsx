@@ -56,7 +56,7 @@ export function ModalQuiz({ open, quiz, loading,onCloseModal }: ModalProps) {
   useEffect(() => {
     if(!open) return;
     const timer = setInterval(() => {
-      if(timeRef.current === 600) {
+      if(timeRef.current === 10) {
         toggleShutdownModal();
         
         clearInterval(timer);
@@ -83,10 +83,14 @@ export function ModalQuiz({ open, quiz, loading,onCloseModal }: ModalProps) {
                 <QuizTitle>{quiz.alarmContent} {'\n'}</QuizTitle>
                 <QuizContentBox>
                   <QuizText variant='h6'> {quiz.quizContent}</QuizText>
-              { quizAppearanceCondition('MULTIPLE_CHOICE') && <ChoiceAlartText>다음 중 맞는 보기를 고르세요.</ChoiceAlartText>}
+                  { quizAppearanceCondition('MULTIPLE_CHOICE')
+                    && <ChoiceAlartText>다음 중 맞는 보기를 고르세요.</ChoiceAlartText>
+                  }
                 </QuizContentBox>
 
-              { quizAppearanceCondition('ALARM') && <Alarm onClick={onCloseModal} />}
+              { quizAppearanceCondition('ALARM')
+              && <Alarm onClick={onCloseModal} />
+              }
               { quizAppearanceCondition('MULTIPLE_CHOICE') && <MultipleChoiceQuiz quizItem={quizItem} onCloseModal={onCloseModal} onChoiceAnswer={onChoiceAnswer} />}
 
               {
@@ -118,11 +122,11 @@ export function ModalQuiz({ open, quiz, loading,onCloseModal }: ModalProps) {
 }
 
 const DialogBox = styled(Dialog)`
-
+  
   @media screen and (max-width: 600px) {
     width: 80%;
     margin: 0 auto;
-    
+    min-width: 360px;
     
   }
 `;
@@ -134,7 +138,11 @@ const Container = styled(Box)`
   align-items:center;
   justify-content:center;
   background:linear-gradient(rgb(194,51,51) 10%, #fff 10%); 
-  
+  min-width: 500px;
+  @media screen and (max-width: 600px) {
+    min-width: 300px;
+    
+  }
 `
 const ModalInner = styled(Box)`
   width:100%;

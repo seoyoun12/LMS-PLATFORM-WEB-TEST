@@ -4,12 +4,10 @@ import { Box, Button, Typography } from '@mui/material';
 interface Props {
   userSelectedAnswer: string;
   quiz: IQuizTime;
-  onCloseModal?: () => void;
   quizAnswer: string;
+  onCloseModal?: () => void;
   onChoiceAnswer: (str: string) => void
 }
-//  {/* 버튼 클릭시 로컬스토리지에 해당 퀴즈를 제거해야 함. 제거하는 방법은 quizOccurTime으로 quiz를 필터링하여 제거한 뒤 남은 퀴즈 저장하는 방법 */}
-
 
 function QuizAnswerResult({onChoiceAnswer, userSelectedAnswer, quiz, quizAnswer, onCloseModal}: Props) {
 

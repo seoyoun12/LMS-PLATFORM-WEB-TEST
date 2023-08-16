@@ -37,12 +37,12 @@ export function EnrollHistoryTrafficModal({ open,handleClose,enrollSeq,enrollOrg
     if(!isAllowed) return;
 
     if (value.length > 6) return;
-    if (value === '') return setValue(name, Number(value)) 
+    if (value === '') return setValue(name as any, Number(value)) 
     if (value.length === 0 || value === '0') {
-      return setValue(name, Number(value));
+      return setValue(name as any, Number(value));
     }
     if (!Number(value)) return;
-    setValue(name, Number(value.replace(/[^0-9]/g, '')));
+    setValue(name as unknown as any, Number(value.replace(/[^0-9]/g , '')));
   };
 
   const handleEnrollCancel = async (enrollSeq: number) => {
@@ -301,7 +301,7 @@ export function EnrollHistoryTrafficModal({ open,handleClose,enrollSeq,enrollOrg
                         <TextField
                           onChange={handleEduPersonCount}
                           name={ap}
-                          value={isAllowedType(ap) ? watch(ap) : 0}
+                          value={isAllowedType(ap) ? watch(ap as any) : 0}
                           InputProps={{ endAdornment: <Box>명</Box> }}
                           sx={{
                             marginLeft: '-10px',

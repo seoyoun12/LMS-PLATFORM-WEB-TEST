@@ -1,7 +1,7 @@
 import Axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { jwpInterceptor, responseInterceptor } from "@common/httpInterceptor";
 import { tokenInterceptor } from "@common/httpInterceptor/tokenInterceptor";
-import { HttpError } from "@common/errors";
+
 
 /**
  *  * Basic

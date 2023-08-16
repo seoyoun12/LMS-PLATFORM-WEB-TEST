@@ -83,10 +83,14 @@ export function ModalQuiz({ open, quiz, loading,onCloseModal }: ModalProps) {
                 <QuizTitle>{quiz.alarmContent} {'\n'}</QuizTitle>
                 <QuizContentBox>
                   <QuizText variant='h6'> {quiz.quizContent}</QuizText>
-              { quizAppearanceCondition('MULTIPLE_CHOICE') && <ChoiceAlartText>다음 중 맞는 보기를 고르세요.</ChoiceAlartText>}
+                  { quizAppearanceCondition('MULTIPLE_CHOICE')
+                    && <ChoiceAlartText>다음 중 맞는 보기를 고르세요.</ChoiceAlartText>
+                  }
                 </QuizContentBox>
 
-              { quizAppearanceCondition('ALARM') && <Alarm onClick={onCloseModal} />}
+              { quizAppearanceCondition('ALARM')
+              && <Alarm onClick={onCloseModal} />
+              }
               { quizAppearanceCondition('MULTIPLE_CHOICE') && <MultipleChoiceQuiz quizItem={quizItem} onCloseModal={onCloseModal} onChoiceAnswer={onChoiceAnswer} />}
 
               {

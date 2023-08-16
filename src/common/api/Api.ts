@@ -9,8 +9,6 @@
  * ---------------------------------------------------------------
  */
 
-import { EduTargetMain } from "./learningMaterial";
-
 export interface AccessTokenRefreshRequestDto {
   accessToken?: string;
   refreshToken?: string;
@@ -6364,94 +6362,6 @@ export interface ProvincialEnrollResponseDto {
   userSeq?: number;
 }
 
-export class PrincialEnrollResponse implements ProvincialEnrollSaveRequestDto {
-  age3: number;
-  age4: number;
-  age5: number;
-  eduTargetMain: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
-  eduTargetSub:
-    | "TYPE_KINDERGARTEN"
-    | "TYPE_ELEMENTARY"
-    | "TYPE_MIDDLE"
-    | "TYPE_HIGH"
-    | "TYPE_SELF_DRIVER"
-    | "TYPE_ELDERLY";
-  elderly: number;
-  expectedToStartDtime: string;
-  expiredDtime: string;
-  grade1: number;
-  grade2: number;
-  grade3: number;
-  grade4: number;
-  grade5: number;
-  grade6: number;
-  modifiedDtime: string;
-  organization: string;
-  region:
-    | "CHEONAN"
-    | "GONGJU"
-    | "BORYEONG"
-    | "ASAN"
-    | "SEOSAN"
-    | "NONSAN"
-    | "GYERYONG"
-    | "DANGJIN"
-    | "GEUMSAN"
-    | "BUYEO"
-    | "SEOCHEON"
-    | "CHEONGYANG"
-    | "HONGSEONG"
-    | "YESAN"
-    | "TAEAN"
-    | "CHUNGNAM"
-    | "SEJONG"
-    | "SEOUL"
-    | "BUSAN"
-    | "DAEGU"
-    | "INCHEON"
-    | "GWANGJU"
-    | "DAEJEON"
-    | "ULSAN"
-    | "GYEONGGI"
-    | "GANGWON"
-    | "CHUNGBUK"
-    | "JEONBUK"
-    | "JEONNAM"
-    | "GYEONGBUK"
-    | "GYEONGNAM"
-    | "JEJU";
-  selfDriver: number;
-  seq: number;
-  status: number;
-  userInfo: string;
-  userSeq: number;
-
-  constructor( ) {
-    this.age3 = 0;
-    this.age4 = 0;
-    this.age5 = 0;
-    this.eduTargetMain = 'TYPE_CHILDREN';
-    this.eduTargetSub = 'TYPE_ELDERLY';
-    this.elderly = 0;
-    this.expectedToStartDtime = "";
-    this.expiredDtime = "";
-    this.grade1 = 0;
-    this.grade2 = 0;
-    this.grade3 = 0;
-    this.grade4 = 0;
-    this.grade5 = 0;
-    this.grade6 = 0;
-    this.modifiedDtime = "";
-    this.organization = "";
-    this.region = "SEOUL";
-    this.selfDriver = 0;
-    this.seq = 0;
-    this.status = 0;
-    this.userInfo = '';
-    this.userSeq = 0;
-  }
-}
-
 export interface ProvincialEnrollSaveRequestDto {
   /**
    * 만 3세 인원 수 - 세부타입: 유치원
@@ -12205,6 +12115,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
+     * @description 관리자 권한으로 Lesson 의 시퀀스 및 상호작용 정보를 Path Variable 로 전달받아 해당 Lesson의 상호작용 을 수정한다.
+     *
+     * @tags [관리자] 레슨 API
+     * @name UpdateLessonInteractionUsingPut
+     * @summary [관리자] 레슨 상호작용 수정 API
+     * @request PUT:/lesson/adm/interaction/{lessonSeq}
+     */,
+    updateLessonInteractionUsingPut: (lessonSeq: number, query: { interaction: boolean }, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<LessonResponseDto>, void>({
+        path: `/lesson/adm/interaction/${lessonSeq}`,
+        method: "PUT",
+        query: query,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
      * @description 관리자 권한으로 Lesson 의 시퀀스를 Path Variable 로 전달받아 해당 Lesson 을 수정한다.{ "completeTime": 1532 -> 수료시간, "lessonNm": "string" -> 레슨 이름, "lessonType": 0 -> 레슨 타입 Enum, "chapter": 3 -> 차시, "status": 1 -> 사용 여부, "totalPage": 12 -> 전체 페이지, "totalTime": 1532 -> 총 시간 }
      *
      * @tags [관리자] 레슨 API
@@ -12280,21 +12206,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 퀴즈 시퀀스를 전달 받아 퀴즈 정보를 삭제한다.
-     *
-     * @tags [관리자] 레슨 퀴즈 API
-     * @name DeleteQuizUsingDelete
-     * @summary [관리자] 퀴즈 삭제 API
-     * @request DELETE:/lesson/quiz/adm
-     */,
-    deleteQuizUsingDelete: (query: { lessonQuizSeq: number }, params: RequestParams = {}) =>
-      this.request<ApiResponseWrapper<LessonQuizResponseDto>, void>({
-        path: `/lesson/quiz/adm`,
-        method: "DELETE",
-        query: query,
-        ...params,
-      })
-    /**
      * @description 퀴즈 시퀀스 및 수정 DTO 를 전달 받아 퀴즈 정보를 수정한다.
      *
      * @tags [관리자] 레슨 퀴즈 API
@@ -12312,6 +12223,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "PUT",
         body: lessonQuizUpdateRequestDto,
         type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 퀴즈 시퀀스를 전달 받아 퀴즈 정보를 삭제한다.
+     *
+     * @tags [관리자] 레슨 퀴즈 API
+     * @name DeleteQuizUsingDelete
+     * @summary [관리자] 퀴즈 삭제 API
+     * @request DELETE:/lesson/quiz/adm/{lessonQuizSeq}
+     */,
+    deleteQuizUsingDelete: (lessonQuizSeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<LessonQuizResponseDto>, void>({
+        path: `/lesson/quiz/adm/${lessonQuizSeq}`,
+        method: "DELETE",
         ...params,
       })
     /**

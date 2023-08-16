@@ -1,18 +1,12 @@
-import { IQuiz, IQuizTime } from '@layouts/Lesson/LessonContentVideo'
-import { Box, Button, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Box } from '@mui/material'
 import QuizItemButton from './QuizItemButton';
-
-
 interface Props {
   onCloseModal: () => void;
   onChoiceAnswer: (answer: string) => void;
   quizItem: string[];
 }
 
-
-
-function MultipleChoiceQuiz({quizItem, onCloseModal, onChoiceAnswer}: Props) {
+function MultipleChoiceQuiz({quizItem, onChoiceAnswer}: Props) {
   
   return (
     <Box sx={{display:'flex',flexDirection:'column',gap:'.75rem',width:'90%',alignItems:'center',justifyContent:'center',margin:'2rem 0 '}}>

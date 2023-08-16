@@ -56,7 +56,7 @@ export function ModalQuiz({ open, quiz, loading,onCloseModal }: ModalProps) {
   useEffect(() => {
     if(!open) return;
     const timer = setInterval(() => {
-      if(timeRef.current === 600) {
+      if(timeRef.current === 10) {
         toggleShutdownModal();
         
         clearInterval(timer);

@@ -167,14 +167,12 @@ const MainPage: NextPage = () => {
                           overflow="hidden"
                           className="gg"
                         >
-                          <Image
+                          <img
                             src={imgPath}
-                            width={270}
-                            height={184}
-                            style={{ aspectRatio: '16 / 9'}}
-                            objectFit='scale-down'
+                            
                             alt='메인 카드 이미지'
                           />
+                          
                         </Box>
                         <CardText>
                           <Box>
@@ -398,7 +396,12 @@ const MainCategoryCard = styled.div<{bgColor: string}>`
   border-top: ${(props) => (props.bgColor ? `7px solid ${props.bgColor}` : 'black')};
   
   @media screen and (max-width: 514px) {
+    max-width: 90%;
     min-width: 300px;
+    img {
+      width: 270px;
+      height: 170px;
+    }
   }
 `;
 
@@ -418,8 +421,8 @@ const CardText = styled(Box)`
   }
   .button-right-line {
     position: absolute;
-    right:4.5%;
-    bottom:-8.15%;
+    right:3.5%;
+    bottom:-6%;
     height: 75%;
     transform: rotate(-40deg);
   }

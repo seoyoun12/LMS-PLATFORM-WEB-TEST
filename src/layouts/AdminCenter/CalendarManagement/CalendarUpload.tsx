@@ -1,20 +1,17 @@
-import { useCourseList } from '@common/api/adm/course';
+
 import { Modal, Spinner, Table } from '@components/ui';
 import styled from '@emotion/styled';
 import { ErrorMessage } from '@hookform/error-message';
-import { CalendarEvent } from '@layouts/Calendar/Calendar';
+
 import {
   Box,
   Button,
   Container,
   FormControl,
   FormHelperText,
-  IconButton,
+  
   InputBase,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
+  
   TextField,
   Typography,
   Checkbox,
@@ -324,22 +321,6 @@ export function CalendarUpload() {
 const CalendarUpdloadWrap = styled(Container)``;
 
 const CourseConnectButton = styled(Button)``;
-const SearchContainer = styled.form`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 4px 6px 0 6px;
-  margin-bottom: 24px;
-  border-radius: 4px;
-  border: 1px solid ${grey[300]};
-`;
-
-const SearchInput = styled(InputBase)`
-  width: 100%;
-`;
-const ConnectButton = styled(Button)`
-  margin-right: 12px;
-`;
 
 const SubmitBtn = styled(Button)`
   width: 15%;

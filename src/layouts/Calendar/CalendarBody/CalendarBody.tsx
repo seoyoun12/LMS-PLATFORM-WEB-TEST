@@ -434,30 +434,30 @@ function renderEventContent(info: CustomContentGenerator<EventContentArg>) {
   const { event: { _def: { extendedProps }, title} } = info;
   // @ts-ignore
   return (
-      <ScaduleContentBox>
+    <>
+    <ScaduleContentBox>
           <Typography>
-            {
-            localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS'
+            { localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS'
             ? '저상버스 운전자교육'
             : '보수교육'
             }
           </Typography>
-          
             {localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS'
             ? ''
             : extendedProps.courseSubCategoryType.type === courseSubCategoryType.BUS
-                ? <Typography display='flex' alignItems='end' gap='.5rem'>여객 <Typography component='span'>(버스, 택시, 특수여객)</Typography></Typography>
-                : extendedProps.courseSubCategoryType.type === courseSubCategoryType.INDIVIDUAL_CARGO
-                ? <Typography display='flex' alignItems='end' gap='.5rem'>화물 <Typography component='span'>(일반화물, 용달화물, 개별화물)</Typography></Typography>
+              ? <Typography display='flex' alignItems='end' gap='.5rem'>여객 <Typography component='span'>(버스, 택시, 특수여객)</Typography></Typography>
+              : extendedProps.courseSubCategoryType.type === courseSubCategoryType.INDIVIDUAL_CARGO
+              ? <Typography display='flex' alignItems='end' gap='.5rem'>화물 <Typography component='span'>(일반화물, 용달화물, 개별화물)</Typography></Typography>
             : 'null'
             }   
-          
-        <Typography component='span'>
-        {extendedProps.limitPeople === 0
-          ? '(제한없음)'
-          : `(${extendedProps.enrolledPeopleCnt} / ${extendedProps.limitPeople})`}
-        </Typography>
         </ScaduleContentBox>
+          <Typography component='span'>
+            {extendedProps.limitPeople === 0
+            ? '(제한없음)'
+            : `(${extendedProps.enrolledPeopleCnt} / ${extendedProps.limitPeople})`}
+          </Typography>
+    </>
+      
   );
 }
 const CalendarWrap = styled(Box)<{ filter: string}>`

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Container } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import React, { Component } from 'react';
+import React from 'react';
 import FullCalendar from '@fullcalendar/react';
 import { CalendarHeader } from './CalendarHeader';
 import dateFormat from 'dateformat';
@@ -14,7 +14,6 @@ import {
   courseType,
   useCourseClass,
 } from '@common/api/courseClass';
-import { Spinner } from '@components/ui';
 import { checkIsDate } from '@utils/checkDate';
 
 export interface ClickedPlanInfo {

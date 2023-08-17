@@ -90,17 +90,17 @@ export function CategoryCard() {
                   </Box>
                   <Box mt={2}>
                     {/* <div className='categoryIcon'/> */}
-                    <BtnText fontWeight={500} fontSize="18px">
+                    <GridTitleTypography fontWeight={500} fontSize="18px">
                       {/* {categoryData.title} */}
                       {typeof window !== 'undefined' &&
                       localStorage.getItem('site_course_type') === courseType.TYPE_TRANS_WORKER
                         ? '운수종사자'
                         : '저상버스'
                         }
-                    </BtnText>
-                    <BtnText fontWeight={700} fontSize="24px">
+                    </GridTitleTypography>
+                    <GridTitleTypography fontWeight={700} fontSize="24px">
                       {categoryData.btnText}
-                    </BtnText>
+                    </GridTitleTypography>
                   </Box>
                 </Box>
               </GridLink>
@@ -127,7 +127,24 @@ const GridWrap = styled(Grid)`
   /* width: 100%; */
   padding-top: 24px;
   padding-bottom: 40px;
-  
+`;
+
+const GridContainer = styled(Container)<{ cardcolor: string }>`
+  /* display: flex; */
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  /* background-color: rgb(255, 0, 0, 0.1); */
+  background-color: ${({ cardcolor }) => cardcolor};
+
+  .categoryIcon {
+    width: 100px;
+    height: 100px;
+  }
+`;
+
+const ContentContainer = styled.div`
+  padding: 35px 0px 0 20px !important;
 `;
 
 const GridTitleTypography = styled(Typography)`
@@ -145,15 +162,7 @@ const GridTitleTypography = styled(Typography)`
     font-size: 3rem;
     color: red;
   }
-  
 `;
-const BtnText = styled(GridTitleTypography)`
-
-  @media screen and (max-width: 500px) {
-    
-    font-size: .8rem;
-}
-`
 
 const GridItem = styled(Grid)<{ cardcolor: string }>`
   /* display: flex; */

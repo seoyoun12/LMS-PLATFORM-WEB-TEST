@@ -9,6 +9,7 @@ import { pageRegType } from '@common/recoil/pageType/atom';
 import { useRouter } from 'next/router';
 import { courseType } from '@common/api/courseClass';
 import { logout } from '@common/api';
+import { useDialog } from '@hooks/useDialog';
 const LinkList = [
   {
     mainDisplayType: MainDisplayType.EDUCATION_TRANSPORT_WORKER,
@@ -101,6 +102,7 @@ const MainPage: NextPage = () => {
   if (!data) return <Spinner />;
   return (
     <>
+    
     <Head>
       <title>충남교통연수원</title>
     </Head>

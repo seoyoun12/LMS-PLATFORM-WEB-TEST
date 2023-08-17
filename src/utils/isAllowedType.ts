@@ -1,5 +1,4 @@
 import { ProvincialEnrollSaveRequestDto } from "@common/api/Api";
-
 export class PrincialEnrollResponse implements ProvincialEnrollSaveRequestDto {
   age3: number;
   age4: number;
@@ -21,7 +20,7 @@ export class PrincialEnrollResponse implements ProvincialEnrollSaveRequestDto {
   userInfo: string;
   userSeq: number;
 
-  constructor( ) {
+  constructor() {
     this.age3 = 0;
     this.age4 = 0;
     this.age5 = 0;

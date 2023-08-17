@@ -54,12 +54,13 @@ export default function Steb2() {
   const [currentIndex,setCurrentIndex] = useState(1);
   const [pageIndex,setPageIndex] = useState(1);
   const [disabledCompany, setDisabledCompany] = useState(false);
-  const [isChecked,setIsChecked] = useState('deny');
+
+  const [isChecked,setIsChecked] = useState('agree'); // agree | deny
   const [name, setName] = useState<string>(); //이름
   const [firstIdentityNumber, setFirstIdentityNumber] = useState<string>(); //주민앞
   const [secondIdentityNumber, setSecondidentityNumber] = useState<string>(); //주민뒷
   const [err, setErr] = useState(false);
-  const { user, error } = useMyUser();
+  const { user } = useMyUser();
 
   const { register, setValue, getValues, watch } = useForm<UserTransSaveInputDataType>({
     defaultValues: { firstIdentityNumber: '', secondIdentityNumber: '', smsYn: YN.YES,firstPhone:'',secondPhone:'',thirdPhone:'' },

@@ -4,8 +4,8 @@ import { CategoryBoard } from '@components/ui/CategoryBoard/CategoryBoard';
 import useResponsive from '@hooks/useResponsive';
 import { CategoryCarouselMobile } from '@components/ui/CategoryCarouselMobile';
 
-import useToggle from '@hooks/useToggle';
-import { Box, Button, Icon, Modal, Typography } from '@mui/material';
+// import useToggle from '@hooks/useToggle';
+// import { Box, Button, Icon, Modal, Typography } from '@mui/material';
 
 const bannerData = [
   {
@@ -32,11 +32,12 @@ const bannerData = [
 
 export function Category() {
   const isDesktop = useResponsive(1024);
-  const { toggle, onToggle } = useToggle();
+  // const { toggle, onToggle } = useToggle();
 
   return (
     <>
-    {
+    {/* 테스트기간 중 유저에게 학습불인정기간임을 알려주는 모달 */}
+    {/* {
         <Modal
         open={!toggle}
         onClose={onToggle}
@@ -109,7 +110,7 @@ export function Category() {
             </Box>
           </Box>
         </Modal>
-    }
+    } */}
       {
         isDesktop
         ? <CategoryCarousel datas={bannerData} />

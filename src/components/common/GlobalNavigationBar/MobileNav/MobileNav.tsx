@@ -241,12 +241,12 @@ export default function MobileNav() {
                   <Box
                     ml={2}
                     sx={{
-                      whiteSpace: 'pre-wrap',
+                      whiteSpace: 'pre-line',
                       height: '40px',
-                      textAlign: 'center',
+                      textAlign: 'left',
                       fontSize: '14px',
                     }}
-                  >{`${user?.name}님 \n환영합니다!`}</Box>
+                  >{user?.name}님{'\n'}환영합니다!</Box>
                 </Box>
               ) : (
                 ''

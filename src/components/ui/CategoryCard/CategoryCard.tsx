@@ -162,32 +162,27 @@ const GridTitleTypography = styled(Typography)`
     font-size: 3rem;
     color: red;
   }
+
+  @media screen and (max-width: 500px) {
+    
+    font-size: 1rem;
+  }
+  @media screen and (max-width: 360px) {
+    font-size: .8rem;
+  }
 `;
 
 const GridItem = styled(Grid)<{ cardcolor: string }>`
-  /* display: flex; */
+  
   border-radius: 20px;
-  /* background-color: rgb(255, 0, 0, 0.1); */
-  // background-color: ${({ cardcolor }) => cardcolor};
-  // border: 5px solid ${({ cardcolor }) => cardcolor};
+
+  @media screen and (max-width: 500px) {
+    font-size: 1rem;
+    
+  }
+  
 `;
 const GridLink = styled(Link)`
   text-align: center;
   color: black;
 `;
-
-// const PracticeBox = styled(Box)`
-//   width: 100px;
-//   height: 100px;
-//   border: 1px solid black;
-//   animation: fadein 3s;
-
-//   @keyframes fadein {
-//     from {
-//       opacity: 0;
-//     }
-//     to {
-//       opacity: 1;
-//     }
-//   }
-// `;

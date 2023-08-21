@@ -228,7 +228,8 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  min-height: 100vh; 
+  height: auto;
+  
   margin: 0 auto;
   .MuiButton-root.MuiButton-textNeutral:hover {
     background-color: #fff;
@@ -364,19 +365,17 @@ const SubTitle = styled(Box)`
 `;
 
 const CardContainer = styled.div`
-  position:absolute;
-  bottom: -96px;
-  left: 50%;
-  right: 50%;
-  transform: translate(-50%, -50%);
+  margin-top: 2rem;
+  margin-bottom: -8rem;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
   gap: 2rem;
+  z-index: 10;
   @media (max-width: 500px) {
-    bottom: -48px;
+    
     position: relative;
     flex-direction: column; 
     width: 100%;
@@ -393,10 +392,10 @@ const MainCategoryCard = styled.div<{bgColor: string}>`
   align-items: center;
   background: #fff;
   z-index: 1;
-  padding: 2rem 0;
+  padding: 2rem 1rem;
   box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.2);
   border-top: ${(props) => (props.bgColor ? `7px solid ${props.bgColor}` : 'black')};
-  
+  min-width: 200px;
   @media screen and (max-width: 514px) {
     min-width: 300px;
   }
@@ -424,13 +423,17 @@ const CardText = styled(Box)`
     transform: rotate(-40deg);
   }
 `;
-const FooterContainer = styled(Box)`
+const FooterContainer = styled.div`
   position: relative;
   width: 100%;
   height: 300px;
   background: #c53736;
   overflow: hidden;
-  z-index: -1;
+  
+  @media (max-width: 514px) {
+      height: 200px;
+    }
+  
 `;
 const FooterWord = styled(Box)`
   position:absolute;

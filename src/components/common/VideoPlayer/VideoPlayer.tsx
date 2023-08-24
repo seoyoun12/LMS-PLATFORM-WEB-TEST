@@ -122,12 +122,7 @@ export function VideoPlayer(props: Props) {
 
       }
     }
-    return () => {
-      playerTimeObserver.current.disconnect();
-      player.current = null;
-      needUpdate.current = false;
-      
-    }
+
   }, [scriptLoaded, playlist, props]);
 
   useEffect(() => {

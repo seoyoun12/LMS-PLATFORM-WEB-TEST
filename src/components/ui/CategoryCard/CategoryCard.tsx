@@ -79,7 +79,7 @@ export function CategoryCard() {
                     border: `5px solid ${categoryData.color}`,
                     // width: 'fit-content',
                     margin: 'auto',
-                    padding: `${!isTablet ? '8px  32px' : ' 32px 58px'}`,
+                    padding: '8px 32px',
                     borderRadius: '12px',
                     background: 'white',
                   }}
@@ -127,24 +127,6 @@ const GridWrap = styled(Grid)`
   /* width: 100%; */
   padding-top: 24px;
   padding-bottom: 40px;
-`;
-
-const GridContainer = styled(Container)<{ cardcolor: string }>`
-  /* display: flex; */
-  width: 200px;
-  height: 200px;
-  border-radius: 20px;
-  /* background-color: rgb(255, 0, 0, 0.1); */
-  background-color: ${({ cardcolor }) => cardcolor};
-
-  .categoryIcon {
-    width: 100px;
-    height: 100px;
-  }
-`;
-
-const ContentContainer = styled.div`
-  padding: 35px 0px 0 20px !important;
 `;
 
 const GridTitleTypography = styled(Typography)`

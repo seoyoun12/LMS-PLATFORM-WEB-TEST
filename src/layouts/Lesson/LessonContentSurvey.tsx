@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText } from '@mui/material';
@@ -18,22 +18,22 @@ export interface Props {
 export default function LessonContentSurvey(props: Props) {
   const router = useRouter();
 
-  // 스테이트.
+  // 스테이트. << 정신질환 주석
 
-  const [loadingData, setLoadingData] = React.useState<boolean>(false);
-  const [loadingForm, setLoadingForm] = React.useState<boolean>(false);
-  const [dialog, setDialog] = React.useState<'FAILED' | 'SUCCESS' | null>(null);
-  const [dialogMessage, setDialogMessage] = React.useState<string | null>(null);
+  const [loadingData, setLoadingData] = useState<boolean>(false);
+  const [loadingForm, setLoadingForm] = useState<boolean>(false);
+  const [dialog, setDialog] = useState<'FAILED' | 'SUCCESS' | null>(null);
+  const [dialogMessage, setDialogMessage] = useState<string | null>(null);
 
-  // 이펙트.
+  // 이펙트. < 정신질환 주석2
 
-  React.useEffect(() => {
+  useEffect(() => {
     setLoadingData(false);
     setLoadingForm(false);
     setDialog(null);
   }, [props.survey]);
 
-  // 렌더링.
+  // 렌더링. < 정신질환 주석3
 
   if (props.loading)
     return (
@@ -49,21 +49,16 @@ export default function LessonContentSurvey(props: Props) {
       autoComplete="off"
       onSubmit={e => {
         e.preventDefault();
-
         if (props.surveyCompleted) {
-
           setDialog('FAILED');
           setDialogMessage('이미 제출한 설문입니다.');
           return;
-
         }
-
         const formData = new FormData(e.target as HTMLFormElement);
         const awnserList = props.survey.surveyQuestionList.map((question, i) => ({
           answer: formData.get(`question_${i}`)?.toString() || (question.questionType === "TYPE_MULTIPLE_CHOICE" ? "0" : ""),
           surveyQuestionSeq: question.seq,
         }));
-
         setLoadingForm(true);
 
         ApiClient.survey
@@ -111,6 +106,7 @@ export default function LessonContentSurvey(props: Props) {
           />
         ))}
       </SurveyContent>
+      
       <SurveySubmitButton variant="contained" type="submit">제출하기</SurveySubmitButton>
       <Dialog
         open={dialog !== null}

@@ -1,19 +1,6 @@
 import styled from '@emotion/styled';
-import {
-  Button,
-  CircularProgress,
-  Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  Typography,
-} from '@mui/material';
-import {
-  CourseDetailClientResponseDto,
-  CourseModuleFindResponseDto,
-  SurveyResponseDto,
-} from '@common/api/Api';
+import { Button,CircularProgress,Container,Dialog,DialogActions,DialogContent,DialogContentText,Typography } from '@mui/material';
+import { CourseDetailClientResponseDto,CourseModuleFindResponseDto,SurveyResponseDto } from '@common/api/Api';
 import ApiClient from '@common/api/ApiClient';
 import LessonSidebar from './LessonSidebar';
 import LessonContentVideo from './LessonContentVideo';
@@ -32,16 +19,16 @@ export interface LessonProps {
 export default function Lesson(props: LessonProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [dialog, setDialog] = useState<'FIRST' | "NEXT" | "SURVEY" | null>('FIRST');
-  const [course, setCourse] = useState<CourseDetailClientResponseDto | null>(null);
-  const [courseTotalProgress, setCourseTotalProgress] = useState<number | null>(null);
+  const [dialog, setDialog] = useState('FIRST');
+  const [course, setCourse] = useState(null);
+  const [courseTotalProgress, setCourseTotalProgress] = useState(null);
   const [coursePlayFirst, setCoursePlayFirst] = useState(true);
-  const [courseLessonsCompleted, setCourseLessonsCompleted] = useState<boolean[]>([]);
-  const [courseModule, setCourseModule] = useState<CourseModuleFindResponseDto | null>(null);
-  const [courseModules, setCourseModules] = useState<CourseModuleFindResponseDto[] | null>(null);
-  const [courseModulesCompleted, setCourseModulesCompleted] = useState<boolean[]>([]);
-  const [moduleSurvey, setModuleSurvey] = useState<SurveyResponseDto | null>(null);
-  const [moduleSurveyTodo, setModuleSurveyTodo] = useState<CourseModuleFindResponseDto | null>(null);
+  const [courseLessonsCompleted, setCourseLessonsCompleted] = useState([]);
+  const [courseModule, setCourseModule] = useState(null);
+  const [courseModules, setCourseModules] = useState(null);
+  const [courseModulesCompleted, setCourseModulesCompleted] = useState([]);
+  const [moduleSurvey, setModuleSurvey] = useState(null);
+  const [moduleSurveyTodo, setModuleSurveyTodo] = useState(null);
   const [currentLessonPlayTime,setCurrentLessonPlayTime] = useState(0);
 
   useEffect(() => {

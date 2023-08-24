@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText } from '@mui/material';
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, Typography } from '@mui/material';
 import { CourseModuleFindResponseDto, SurveyResponseDto } from '@common/api/Api';
 import ApiClient from '@common/api/ApiClient';
 import LessonContentSurveyQuestion from './LessonContentSurveyQuestion';
@@ -24,7 +24,7 @@ export default function LessonContentSurvey(props: Props) {
   const [loadingForm, setLoadingForm] = useState<boolean>(false);
   const [dialog, setDialog] = useState<'FAILED' | 'SUCCESS' | null>(null);
   const [dialogMessage, setDialogMessage] = useState<string | null>(null);
-
+  
   // 이펙트. < 정신질환 주석2
 
   useEffect(() => {
@@ -43,15 +43,17 @@ export default function LessonContentSurvey(props: Props) {
     );
   if (props.courseModule === null || props.survey === null)
     return <SurveyEmptyContainer>설문이 존재하지 않습니다.</SurveyEmptyContainer>;
-
+      // console.log(dialog);
   return (
     <SurveyContainer
       autoComplete="off"
       onSubmit={e => {
         e.preventDefault();
+        setLoadingForm(true);
         if (props.surveyCompleted) {
           setDialog('FAILED');
           setDialogMessage('이미 제출한 설문입니다.');
+          setLoadingForm(false);
           return;
         }
         const formData = new FormData(e.target as HTMLFormElement);
@@ -59,8 +61,6 @@ export default function LessonContentSurvey(props: Props) {
           answer: formData.get(`question_${i}`)?.toString() || (question.questionType === "TYPE_MULTIPLE_CHOICE" ? "0" : ""),
           surveyQuestionSeq: question.seq,
         }));
-        setLoadingForm(true);
-
         ApiClient.survey
           .participateSurveyUsingPost({
             courseUserSeq: props.courseUserSeq,
@@ -68,19 +68,27 @@ export default function LessonContentSurvey(props: Props) {
             answerList: awnserList,
           })
           .then(res => {
-            setDialog(res.data.success ? 'SUCCESS' : 'FAILED');
-            setDialogMessage(res.data.success ? '제출이 완료되었습니다 \n 수료확인을 통해 수료증 발급을 진행할 수 있습니다.' : '제출 실패했습니다.');
-            res.data.success && props.onComplete();
+            if(res.data.success){
+              setDialog('SUCCESS');
+              setDialogMessage('제출이 완료되었습니다 \n 수료확인을 통해 수료증 발급을 진행할 수 있습니다.')
+              props.onComplete();
+            } else {
+              setDialog('FAILED');
+              setDialogMessage('제출 실패했습니다.')
+            }
+            setLoadingForm(false);
           })
           .catch(err => {
             setDialog('FAILED');
             setDialogMessage(
               err.response?.status === 400
                 ? '이미 제출한 설문입니다.'
-                : '전송을 실패하였습니다.'
+                : '전송에 실패하였습니다.'
             );
           })
-          .finally(() => setLoadingForm(false));
+          .finally(() => {
+            setLoadingForm(false);
+          });
       }}
     >
       {loadingForm && (
@@ -106,8 +114,17 @@ export default function LessonContentSurvey(props: Props) {
           />
         ))}
       </SurveyContent>
-      
-      <SurveySubmitButton variant="contained" type="submit">제출하기</SurveySubmitButton>
+          {/* 진짜 코드를 더럽게 짜고 무슨 연습장마냥 갈겨놔서 유지보수가 불가능할 정도로 너무 힘드네요.
+          이 사람은 비디오부터 진짜 개막장입니다. 개발자하면 안되는 전형적인 트롤입니다 */}
+      <SurveySubmitButton
+      onClick={() => setLoadingForm(true)}
+      variant="contained" type="submit">
+        {
+          loadingForm
+          ? <CircularProgress size="1.5rem" color='secondary' />
+          : <Typography sx={{fontSize: '18px'}}>제출하기</Typography>
+        }
+      </SurveySubmitButton>
       <Dialog
         open={dialog !== null}
         onClose={() => dialog === 'SUCCESS' ? router.replace(router.asPath) : setDialog(null)}
@@ -170,6 +187,10 @@ const SurveyContent = styled.div`
 
 const SurveySubmitButton = styled(Button)`
   display: block;
+  height: 56px;
+  &:hover {
+    background-color: #cb054a;
+  }
 `;
 
 const FormLoading = styled.div`

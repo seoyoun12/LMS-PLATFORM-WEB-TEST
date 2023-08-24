@@ -1,16 +1,14 @@
 import styled from '@emotion/styled';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Avatar, Box, Drawer, MenuItem, Typography } from '@mui/material';
+import { Avatar, Box, Drawer, Typography } from '@mui/material';
 import Image from 'next/image';
 import { Link } from '@components/common';
 import { useEffect, useState } from 'react';
 import { courseType } from '@common/api/courseClass';
 import { ProvintialHeaderList } from '../TrafficGlobalNavigationBar/NavBar/NavBarV2';
 import { TransHeaderList } from '../NavBar/NavBarV2';
-import { Accordion } from '@components/ui';
 import CloseIcon from '@mui/icons-material/Close';
 import { useRouter } from 'next/router';
-import { SiteMap } from '../SiteMap';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { logout } from '@common/api';
 import { useRecoilState } from 'recoil';

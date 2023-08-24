@@ -45,14 +45,13 @@ export function VideoPlayer(props: Props) {
     []
   );
 
-  
-  useLayoutEffect(() => {
+  // 솔직히 newFolderGames는 개발하면 안된다. 진짜 해도 해도 너무한다
+  useEffect(() => {
     if (!scriptLoaded || !window.ncplayer) return;
 
     if (
       Array.isArray(playlist) && Array.isArray(props.playlist)
-        ? playlist.length !== props.playlist.length ||
-          playlist.some((v, i) => v !== props.playlist[i])
+        ? playlist.length !== props.playlist.length || playlist.some((v, i) => v !== props.playlist[i])
         : playlist !== props.playlist
     ) {
       setPlaylist(props.playlist);
@@ -101,10 +100,9 @@ export function VideoPlayer(props: Props) {
         playerTimeObserver.current = new MutationObserver((mutationList) => {
           mutationList.forEach((mutation) => {
             if (mutation.type !== 'characterData') return;
-
             const timeSplit = mutation.target.textContent.split(':');
-            if (timeSplit.length !== 2 && timeSplit.length !== 3) return;
 
+            if (timeSplit.length !== 2 && timeSplit.length !== 3) return;
             const hours = timeSplit.length === 3 ? parseInt(timeSplit[0]) : 0;
             const minutes = parseInt(timeSplit[timeSplit.length - 2]);
             const seconds = parseInt(timeSplit[timeSplit.length - 2 + 1]);
@@ -114,13 +112,21 @@ export function VideoPlayer(props: Props) {
               // console.log('현재 동영상 시간:', currentTimeNode);
           });
         });
+
         playerTimeObserver.current.observe(currentTimeNode, {
           characterData: true,
           attributes: false,
           childList: false,
           subtree: true,
         });
+
       }
+    }
+    return () => {
+      playerTimeObserver.current.disconnect();
+      player.current = null;
+      needUpdate.current = false;
+      
     }
   }, [scriptLoaded, playlist, props]);
 

@@ -1,6 +1,18 @@
 import styled from '@emotion/styled';
-import { Button,CircularProgress,Container,Dialog,DialogActions,DialogContent,DialogContentText,Typography } from '@mui/material';
-import { CourseDetailClientResponseDto,CourseModuleFindResponseDto,SurveyResponseDto } from '@common/api/Api';
+import {
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Typography,
+} from '@mui/material';
+import {
+  CourseDetailClientResponseDto,
+  CourseModuleFindResponseDto,
+  SurveyResponseDto,
+} from '@common/api/Api';
 import ApiClient from '@common/api/ApiClient';
 import LessonSidebar from './LessonSidebar';
 import LessonContentVideo from './LessonContentVideo';
@@ -16,19 +28,25 @@ export interface LessonProps {
   contentSeq: number;
 }
 
+
+let Content: ReactElement = <Fragment/>;
+let DialogFirst: ReactElement = <Fragment/>;
+let DialogNext: ReactElement = <Fragment/>;
+let DialogSurvey: ReactElement = <Fragment/>;
+
 export default function Lesson(props: LessonProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [dialog, setDialog] = useState('FIRST');
-  const [course, setCourse] = useState(null);
-  const [courseTotalProgress, setCourseTotalProgress] = useState(null);
+  const [dialog, setDialog] = useState<'FIRST' | "NEXT" | "SURVEY" | null>('FIRST');
+  const [course, setCourse] = useState<CourseDetailClientResponseDto | null>(null);
+  const [courseTotalProgress, setCourseTotalProgress] = useState<number | null>(null);
   const [coursePlayFirst, setCoursePlayFirst] = useState(true);
-  const [courseLessonsCompleted, setCourseLessonsCompleted] = useState([]);
-  const [courseModule, setCourseModule] = useState(null);
-  const [courseModules, setCourseModules] = useState(null);
-  const [courseModulesCompleted, setCourseModulesCompleted] = useState([]);
-  const [moduleSurvey, setModuleSurvey] = useState(null);
-  const [moduleSurveyTodo, setModuleSurveyTodo] = useState(null);
+  const [courseLessonsCompleted, setCourseLessonsCompleted] = useState<boolean[]>([]);
+  const [courseModule, setCourseModule] = useState<CourseModuleFindResponseDto | null>(null);
+  const [courseModules, setCourseModules] = useState<CourseModuleFindResponseDto[] | null>(null);
+  const [courseModulesCompleted, setCourseModulesCompleted] = useState<boolean[]>([]);
+  const [moduleSurvey, setModuleSurvey] = useState<SurveyResponseDto | null>(null);
+  const [moduleSurveyTodo, setModuleSurveyTodo] = useState<CourseModuleFindResponseDto | null>(null);
   const [currentLessonPlayTime,setCurrentLessonPlayTime] = useState(0);
 
   useEffect(() => {
@@ -39,12 +57,23 @@ export default function Lesson(props: LessonProps) {
   },[props,course])
 
 
-  useEffect(() => setCoursePlayFirst(true), [props.courseUserSeq]);
 
+
+  useEffect(() => {
+    setCoursePlayFirst(true)
+  }
+  , [props.courseUserSeq]);
+
+
+  
   useEffect(() => {
     if (props.contentType === 'LESSON') setDialog('FIRST');
   }, [props.courseUserSeq, props.contentType]);
 
+  
+
+  // useEffect가 뭔지 모르나봐요 진짜 정신병걸린것 같습니다.
+  // 이정도 중증이면 당장 병원에 집어 넣어야합니다
   useEffect(() => {
     setLoading(true);
 
@@ -72,11 +101,8 @@ export default function Lesson(props: LessonProps) {
                   case 'COURSE_MODULE_TEST':
                     return cm.submitYn === 'Y';
                   case 'COURSE_MODULE_SURVEY':
-                    return (
-                      course.surveyList.findIndex(
-                        v => v.surveySeq === cm.surveySeq && v.surveyCompletedYn === 'Y'
-                      ) !== -1
-                    );
+                    return course.surveyList.findIndex(v => v.surveySeq === cm.surveySeq && v.surveyCompletedYn === 'Y') !== -1;
+                    
                 }
               })
             );
@@ -105,47 +131,27 @@ export default function Lesson(props: LessonProps) {
   }, [props]);
 
   useEffect(() => {
-
     if (!courseModules) return;
-
     const surveyTodo = courseModules.find((v, i) => v.moduleType === "COURSE_MODULE_SURVEY" && !courseModulesCompleted[i]) || null;
     setModuleSurveyTodo(surveyTodo);
-
-    if (course.totalProgress >= 100 && surveyTodo) setDialog("SURVEY");
-
+    // if (course.totalProgress >= 100 && surveyTodo) setDialog("SURVEY");
   }, [course, courseModules, courseModulesCompleted]);
 
-  // 렌더 - 에러.
 
   if (course === null) {
     return (
       <LessonContentEmptyWrapper>
-        {loading ? (
-          <CircularProgress size="1.5rem" />
-        ) : (
-          <Typography>강의를 찾을 수 없습니다.</Typography>
-        )}
+        <Typography>강의를 찾을 수 없습니다.</Typography>
       </LessonContentEmptyWrapper>
     );
   }
 
-  // 컴포넌트.
-
-  let Content: ReactElement = <Fragment/>;
-  let DialogFirst: ReactElement = <Fragment/>;
-  let DialogNext: ReactElement = <Fragment/>;
-  let DialogSurvey: ReactElement = <Fragment/>;
 
   switch (props.contentType) {
     case 'LESSON': {
-      const lessonIndex = course.lessons.findIndex(
-        lesson => lesson.seq === props.contentSeq
-      );
+      const lessonIndex = course.lessons.findIndex(lesson => lesson.seq === props.contentSeq);
       const lesson = lessonIndex >= 0 ? course.lessons[lessonIndex] : null;
-      const courseProgress =
-        (lesson &&
-          course.courseProgressResponseDtoList.find(v => v.lessonSeq === lesson.seq)) ||
-        null;
+      const courseProgress = lesson ? course.courseProgressResponseDtoList.find(v => v.lessonSeq === lesson.seq) : null;
 
       Content = (
         <LessonContentVideo
@@ -225,9 +231,7 @@ export default function Lesson(props: LessonProps) {
       break;
     }
     case 'SURVEY': {
-      const moduleIndex = courseModules
-        ? courseModules.findIndex(module => module.surveySeq === props.contentSeq)
-        : -1;
+      const moduleIndex = courseModules ? courseModules.findIndex(module => module.surveySeq === props.contentSeq) : -1;
 
       Content = (
         <LessonContentSurvey
@@ -254,9 +258,10 @@ export default function Lesson(props: LessonProps) {
       <Dialog
         open={dialog === 'SURVEY'}
         onClose={() => {
-          setDialog(null);
           router.push(`/course/${course.courseUserSeq}/${LESSON_CONTENT_TYPES[1].toLowerCase()}/${moduleSurveyTodo.surveySeq}`);
+          setDialog(null);
         }}
+        
       >
         <DialogContent>
           <DialogContentText>
@@ -266,8 +271,9 @@ export default function Lesson(props: LessonProps) {
         <DialogActions>
           <Button
             onClick={() => {
-              setDialog(null);
+              console.log(dialog);
               router.push(`/course/${course.courseUserSeq}/${LESSON_CONTENT_TYPES[1].toLowerCase()}/${moduleSurveyTodo.surveySeq}`);
+              setDialog(null);
             }}
           >
             확인

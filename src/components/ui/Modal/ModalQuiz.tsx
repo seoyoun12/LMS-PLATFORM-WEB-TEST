@@ -56,7 +56,7 @@ export function ModalQuiz({ open, quiz, loading,onCloseModal }: ModalProps) {
   useEffect(() => {
     if(!open) return;
     const timer = setInterval(() => {
-      if(timeRef.current === 10) {
+      if(timeRef.current === 600) {
         toggleShutdownModal();
         
         clearInterval(timer);
@@ -68,7 +68,7 @@ export function ModalQuiz({ open, quiz, loading,onCloseModal }: ModalProps) {
     }
     ,1000)
     return () => clearInterval(timer);
-  },[open])
+  },[open,quiz])
 
   return (
     <>
@@ -155,11 +155,11 @@ const ModalInner = styled(Box)`
 const QuizTitle = styled(Typography)`
   font-size: 1.5rem;
   font-weight: bold;
-  padding-top: .25rem;
+  
   text-align: center;
   color: #fff;
   margin: auto;
-  
+  margin-bottom: 8rem;
 `
 
 const QuizContentBox = styled(Box)`

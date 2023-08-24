@@ -1,54 +1,51 @@
 import { IQuiz, IQuizTime } from "@layouts/Lesson/LessonContentVideo";
 
-export default function getRandomInteger(quiz: IQuiz[],currentLessonPlayTime: number) {
-
+export default function getRandomInteger(quiz: IQuiz[], currentLessonPlayTime: number) {
   const quizTimeSet = new Set<number>();
-  
-  function getRandomInt(currentLessonPlayTime: number) {
-    // 재귀를 빠져나가는 flag varialble
-    let flag = true;
+  const quizTimeHesh = new Set<number>();
+  const quizTerm = currentLessonPlayTime < 100 ? 1 : Math.floor(currentLessonPlayTime * 0.1);
 
-    // 각 퀴즈의 간격은 총 플레이타임의10% 이상이어야 한다
-    const quizTerm = Math.floor(currentLessonPlayTime * 0.1); 
+  console.log(currentLessonPlayTime);
   
-    // 퀴즈가 출현될 시간(seconds)
-    const num = Math.floor( Math.random() * (currentLessonPlayTime - quizTerm));
-    
-    for(let i = 0; i < quizTerm; i ++) {
-      if(quizTimeSet.has(num + i) || quizTimeSet.has(num - i)) {
-        flag = false;
-        break;
-      }
+
+  Array.from({ length: currentLessonPlayTime }, (_, i) => i * Math.floor(Math.random() * i + quizTerm))
+  .forEach((time) => {
+    if(time < currentLessonPlayTime){
+      quizTimeHesh.add(time);
     }
+  });
   
-    if(flag && num > quizTerm){
-      quizTimeSet.add(num);
-      return num
-    } else {
-      return getRandomInt(currentLessonPlayTime)
-    }
+  
+  const quizTimeCandidates:number[] = Object.values([...quizTimeHesh]).sort(() => Math.random());
+
+  console.log(quizTimeCandidates);
+
+  
+
+  function getRandomInt(): number {
+    const randomIndex = Math.floor(Math.random() * quizTimeCandidates.length);
+    return quizTimeCandidates[randomIndex];
   }
 
   const newQuiz = quiz.map((q: IQuiz): IQuizTime => {
-    if(q.randomTime === true){
-      const randomInt = getRandomInt(currentLessonPlayTime);
+    if (q.randomTime === true) {
+      const randomInt = getRandomInt();
       return {
         ...q,
-        quizOccurTime: randomInt,
+        quizOccurTime: randomInt >= 0 ? randomInt : 0, // -1일 경우 예외 처리
         isSolvedQuiz: false
-      }
-    } 
-    else {
-      quizTimeSet.add(q.setTimeMin * 60 + q.setTimeSecond);
+      };
+    } else {
+      const fixedTime = q.setTimeMin * 60 + q.setTimeSecond;
+      quizTimeSet.add(fixedTime);
       return {
         ...q,
-        quizOccurTime : q.setTimeMin * 60 + q.setTimeSecond,
+        quizOccurTime: fixedTime,
         isSolvedQuiz: false
       };
     }
   });
-  
-  getRandomInt(currentLessonPlayTime)
+
   return newQuiz;
 }
 

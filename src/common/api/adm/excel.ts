@@ -2,13 +2,18 @@ import { YN } from '@common/constant';
 import { GET, POST } from '@common/httpClient';
 import { RoleType } from 'src/staticDataDescElements/staticType';
 import { StepsBySurveyForExcel } from '../Api';
+import { FormType } from '@components/admin-center/CourseInfo/HeadRowsRight';
 
 // 학습현황(운수/저상) 엑셀 다운로드
-export function getExcelCourseLearning() {
+export function getExcelCourseLearning(body:FormType) {
+  
   return POST(
     `/adm/excel/download/course-learning-user`,
     {},
-    { responseType: 'blob' }
+    {
+      responseType: 'blob',
+      params:body
+    }
   );
 }
 
@@ -16,8 +21,9 @@ export function getExcelCourseLearning() {
 export function getExcelCourseTrafficLearning() {
   return POST(
     `/adm/excel/download/provincial-learning-status`,
-    {},
-    { responseType: 'blob' }
+    {
+    },
+    { responseType: 'blob', }
   );
 }
 

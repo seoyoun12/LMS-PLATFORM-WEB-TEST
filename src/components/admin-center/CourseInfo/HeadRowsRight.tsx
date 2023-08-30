@@ -18,7 +18,7 @@ import {
 import { useEffect, useState } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 
-interface FormType {
+export interface FormType {
   page: number;
   notFound: boolean;
   nameOrUsername: string; //이름 혹은 아이디

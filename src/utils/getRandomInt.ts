@@ -5,9 +5,6 @@ export default function getRandomInteger(quiz: IQuiz[], currentLessonPlayTime: n
   const quizTimeHesh = new Set<number>();
   const quizTerm = currentLessonPlayTime < 100 ? 1 : Math.floor(currentLessonPlayTime * 0.1);
 
-  console.log(currentLessonPlayTime);
-  
-
   Array.from({ length: currentLessonPlayTime }, (_, i) => i * Math.floor(Math.random() * i + quizTerm))
   .forEach((time) => {
     if(time < currentLessonPlayTime){
@@ -15,12 +12,8 @@ export default function getRandomInteger(quiz: IQuiz[], currentLessonPlayTime: n
     }
   });
   
-  
   const quizTimeCandidates:number[] = Object.values([...quizTimeHesh]).sort(() => Math.random());
 
-  console.log(quizTimeCandidates);
-
-  
 
   function getRandomInt(): number {
     const randomIndex = Math.floor(Math.random() * quizTimeCandidates.length);

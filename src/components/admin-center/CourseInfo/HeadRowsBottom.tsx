@@ -1,22 +1,9 @@
 import { getExcelCourseLearning } from '@common/api/adm/excel';
-import {
-  useLearningInfoCourses,
-  useLearningInfoStep,
-} from '@common/api/adm/learningInfo';
-import ApiClient from '@common/api/ApiClient';
 import { Spinner } from '@components/ui';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';
-import {
-  Backdrop,
-  Box,
-  Button,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Backdrop,Box,Button } from '@mui/material';
+import {  useState } from 'react';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { grey } from '@mui/material/colors';

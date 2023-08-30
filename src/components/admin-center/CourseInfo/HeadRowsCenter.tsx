@@ -1,28 +1,9 @@
-import { CourseType } from '@common/api/adm/courseClass';
+
 import styled from '@emotion/styled';
-import {
-  Backdrop,
-  Box,
-  Button,
-  IconButton,
-  InputBase,
-  MenuItem,
-  Radio,
-  Select,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Backdrop,Box,Button,InputBase,Radio,TextField,Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import React from 'react';
-import SearchIcon from '@mui/icons-material/Search';
-import ReplayIcon from '@mui/icons-material/Replay';
 import { CompleteType, StatusType } from '@common/api/adm/learningInfo';
-import {
-  userBusinessTypeOne,
-  userBusinessTypeTwo,
-} from '@layouts/MeEdit/TransWorker/TransWorker';
-import { locationList } from '@layouts/MeEdit/MeEdit';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { getExcelCourseLearning } from '@common/api/adm/excel';
 import { useState } from 'react';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -53,6 +34,7 @@ export const HeadRowsCenter = React.forwardRef(function (
 ) {
   const snackbar = useSnackbar();
   const [loading, setLoading] = useState(false);
+
   const onClickExcelDownload = async () => {
     const a = document.createElement('a');
     setLoading(true);
@@ -122,26 +104,7 @@ export const HeadRowsCenter = React.forwardRef(function (
         fullWidth
       />
 
-      {/* <SearchContainer onSubmit={handleSearch}>
-        <SearchInput
-          inputRef={searchInputRef}
-          placeholder="이름 혹은 아이디 검색"
-          size="small"
-          type="search"
-        />
-        <IconButton type="submit">
-          <SearchIcon />
-        </IconButton>
-      </SearchContainer>
-      <ReloadButton
-        size="small"
-        color="neutral"
-        variant="text"
-        endIcon={<ReplayIcon htmlColor={grey[700]} />}
-        onClick={e => handleSearch(e, true)}
-      >
-        전체 다시 불러오기
-      </ReloadButton> */}
+      
       <SearchContainer>
         <SearchInput inputRef={searchInputRef} placeholder="이름 혹은 아이디 검색" />
       </SearchContainer>
@@ -161,6 +124,9 @@ export const HeadRowsCenter = React.forwardRef(function (
     </HeadRows>
   );
 });
+
+HeadRowsCenter.displayName = 'HeadRowsCenter';
+
 const HeadRows = styled(Box)`
   width: 33.3%;
 `;
@@ -178,4 +144,4 @@ const SearchInput = styled(InputBase)`
   width: 100%;
 `;
 
-const ReloadButton = styled(Button)``;
+

@@ -1,41 +1,28 @@
-import {
-  Container,
-  TableBody,
-  TableHead,
-  Typography,
-  Button,
-  Box,
-  InputBase,
-  IconButton,
-  Radio,
-} from '@mui/material';
-import styles from '@styles/common.module.scss';
+import { TableBody,TableHead,Typography,Button,Box,InputBase,TextField,Backdrop,SelectChangeEvent } from '@mui/material';
+
+import { grey } from '@mui/material/colors';
 import { Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
-import dateFormat from 'dateformat';
-import { UserModifyModal } from '@components/admin-center/UserModifyModal';
-import {
-  CompleteType,
-  StatusType,
-  useLearningInfo,
-} from '@common/api/adm/learningInfo';
-import { grey } from '@mui/material/colors';
+import ReplayIcon from '@mui/icons-material/Replay';
+import { CompleteType,StatusType,useLearningInfo,useLearningInfoCourses,useLearningInfoStep } from '@common/api/adm/learningInfo';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { CourseType } from '@common/api/adm/courseClass';
 import { NotFound } from '@components/ui/NotFound';
-import { HeadRowsCenter } from '@components/admin-center/CourseInfo/HeadRowsCenter';
 import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { convertBirth } from '@utils/convertBirth';
-import { HeadRowsLeft } from '@components/admin-center/CourseInfo/HeadRowsLeft';
-import { utils, writeFile } from 'xlsx';
-import { HeadRowsRight } from '@components/admin-center/CourseInfo/HeadRowsRight';
-import { HeadRowsBottom } from '@components/admin-center/CourseInfo/HeadRowsBottom';
 import { useForm } from 'react-hook-form';
-import { HeadRowsTop } from '@components/admin-center/CourseInfo/HeadRowsTop';
+import { locationList } from '@layouts/MeEdit/MeEdit';
+import { userBusinessTypeOne } from '@layouts/MeEdit/TransWorker/TransWorker';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { getExcelCourseLearning } from '@common/api/adm/excel';
+import CourseSelectBox from './common/CourseSelectBox';
+import { CourseLearningInfoCoursesResponseDto } from '@common/api/Api';
+import CourseRadioBox from './common/CourseRadioBox';
 
 const headRows: {
   name: string;
@@ -99,23 +86,27 @@ export default function CourseInfoManagement() {
   // const [notFound, setNotFound] = useState(false);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const [submitValue, setSubmitValue] = useState<FormType>(defaultValues);
-  const { watch, setValue, reset, register } = useForm<FormType>({
-    defaultValues,
-  });
+  const { watch, setValue, reset, register } = useForm<FormType>({ defaultValues });
   const { data, error, mutate } = useLearningInfo(submitValue);
-  // console.log(watch());
+  const [loading, setLoading] = useState(false);
 
-  // Pagination
+  const { courses } = useLearningInfoCourses();
+  const { steps } = useLearningInfoStep(watch().courseSeq);
+
+  const onChangeSeletedSeq = (e: SelectChangeEvent) => {
+    onChageCourseSeq(Number(e.target.value));
+    onChageCourseClassSeq(null);
+  };
+  const onChangeSelectedClassSeq = (e: SelectChangeEvent) => {
+    onChageCourseClassSeq(Number(e.target.value) || null);
+  };
   const onChangePage = (page: number) => {
     setSubmitValue(prev => {
       return { ...prev, page };
     });
   };
 
-  const onChangeCourseType = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean
-  ) => {
+  const onChangeCourseType = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value as CourseType;
     setValue('courseType', value);
   };
@@ -134,12 +125,14 @@ export default function CourseInfoManagement() {
   };
 
   //업종구분
-  const onChangeBusinessType = (value: string) => {
+  const onChangeBusinessType = (e: SelectChangeEvent ) => {
+    const value = e.target.value
     setValue('notFound', false);
     setValue('businessType', value);
   };
   //차량등록지
-  const onChangeCarRegitRegion = (value: string) => {
+  const onChangeCarRegitRegion = (e: SelectChangeEvent) => {
+    const value = e.target.value;
     setValue('notFound', false);
     setValue('carRegitRegion', value);
   };
@@ -147,6 +140,9 @@ export default function CourseInfoManagement() {
   const onChangeCompanyName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue('businessName', e.target.value);
   };
+
+
+
   const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue('phone', e.target.value);
   };
@@ -180,23 +176,10 @@ export default function CourseInfoManagement() {
     setValue('carNumber', value);
   };
 
-  // 검색 (outdated , handlesumit을 이용해주세요.)
-  const handleSearch = async (e: FormEvent, isReload = false) => {
-    //FormEvent에 대해 araboza
-    e.preventDefault();
-    setValue('notFound', false);
-    if (isReload) {
-      reset();
-      setSubmitValue(watch());
-      return;
-    }
-    if (searchInputRef.current) {
-      setValue('nameOrUsername', searchInputRef.current.value);
-      // setNameOrUsername(searchInputRef.current.value);
-    }
-  };
 
-  const handleSubmit = (isReload = false) => {
+  const handleSubmit = (e:FormEvent,isReload = false) => {
+    e.preventDefault();
+    
     setValue('notFound', false);
     if (isReload) {
       reset();
@@ -209,11 +192,8 @@ export default function CourseInfoManagement() {
     }
 
     const { phone, identityNumber } = watch();
-    if (phone === '' || phone?.replaceAll(' ', '') === '')
-      setValue('phone', null);
-    if (identityNumber === '' || identityNumber?.replaceAll(' ', '') === '')
-      setValue('identityNumber', null);
-
+    if (!phone || phone.trim() === '') setValue('phone', null);
+    if (!identityNumber || identityNumber.trim() === '') setValue('identityNumber', null);
     setSubmitValue(watch());
   };
 
@@ -226,6 +206,41 @@ export default function CourseInfoManagement() {
     );
   };
 
+
+  const duplicateRemoveCourses: CourseLearningInfoCoursesResponseDto[] = useMemo(() => {
+    const temp = [];
+      courses?.forEach(course => {
+        if(!temp.find(item => item.courseSeq === course.courseSeq)){
+          temp.push(course);
+        }
+      })
+      return temp;
+  },[courses]);
+
+  const snackbar = useSnackbar();
+  const [fileLoading, setFileLoading] = useState(false);
+
+
+  const onClickExcelDownload = async () => {
+    const a = document.createElement('a');
+    setFileLoading(true);
+    try {
+      const data = await getExcelCourseLearning(watch());
+      const excel = new Blob([data]);
+      a.href = URL.createObjectURL(excel);
+      a.download = '충남_관리자_학습현황(운수/저상)_데이터.xlsx';
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(a.href);
+      snackbar({ variant: 'success', message: '다운로드 완료' });
+      setFileLoading(false);
+    } catch (e) {
+      snackbar({ variant: 'error', message: e.data.message });
+      setFileLoading(false);
+    }
+  };
+
+  console.log(watch());
   useEffect(() => {
     if (data) {
       data.content.length === 0 && setValue('notFound', true);
@@ -236,191 +251,376 @@ export default function CourseInfoManagement() {
   if (!data) return <Spinner />;
   // user/adm/course-info/detail/{courseUserSeq}
   return (
+    // <HeadRowsTop
+    //     courseType={watch().courseType}
+    //     onChangeCourseType={onChangeCourseType}
+    //   /> 
+    //   <Box display="flex" gap={2}>
+    //      <HeadRowsLeft
+    //       courseSeq={watch().courseSeq}
+    //       onChageCourseSeq={onChageCourseSeq}
+    //       courseClassSeq={watch().courseClassSeq}
+    //       onChageCourseClassSeq={onChageCourseClassSeq}
+    //       register={register}
+    //       businessType={watch().businessType}
+    //       onChangeBusinessType={onChangeBusinessType}
+    //       carRegitRegion={watch().carRegitRegion}
+    //       onChangeCarRegitRegion={onChangeCarRegitRegion}
+    //     /> 
+    //      <HeadRowsRight
+    //       register={register}
+    //       onChangeCompanyName={onChangeCompanyName}
+    //       onChangePhone={onChangePhone}
+    //       onChangeIdentify={onChangeIdentify}
+    //     /> 
+    //      <HeadRowsCenter
+    //       ref={searchInputRef}
+    //       completeType={watch().completeType}
+    //       statusType={watch().statusType}
+    //       carNumber={watch().carNumber}
+    //       handleSearch={handleSearch}
+    //       onChangeCompleteType={onChangeCompleteType}
+    //       onChangeStatusType={onChangeStatusType}
+    //       onChangeCarNumber={onChangeCarNumber}
+    //     /> 
+    //     </Box> 
+    // <HeadRowsBottom
+    //     search={watch().nameOrUsername}
+    //     handleSubmit={handleSubmit}
+    //   />
+    <form onSubmit={(e) => handleSubmit(e,false)}>
+      <Title variant="h1">전체 수강생 학습현황</Title>
+      <ChoiceContainerWrapper>
+        <LeftContainer>
+          
+          <Box>
+            <Typography>교육연도</Typography>
+            <TextField fullWidth/>
+          </Box>
+
+          <Box sx={{display:'flex',alignItems:'center',gap: '1rem'}}>
+            <CourseSelectBox
+              label="과정 선택"
+              firstOptionLabel="전체"
+              menuItem={duplicateRemoveCourses ?? []}
+              onChange={onChangeSeletedSeq}
+              value={watch().courseSeq + ''}
+              itemKey="courseSeq"
+              itemValue="courseSeq"
+              itemName="courseName"
+
+            />
+            <CourseSelectBox
+              label="과정기수 선택"
+              firstOptionLabel="전체"
+              menuItem={steps ?? []}
+              onChange={onChangeSelectedClassSeq}
+              value={watch().courseClassSeq + ''}
+              itemKey="courseClassSeq"
+              itemValue="courseClassSeq"
+              itemName="yearAndStep"
+            />
+        </Box>
+
+      <Box>
+        <Typography>학습기간</Typography>
+        <Box display="flex" gap={2} alignItems="center">
+          <TextField type="date" {...register('studyStartDate')} fullWidth /> ~
+          <TextField type="date" {...register('studyEndDate')} fullWidth />
+        </Box>
+      </Box>
+      
+      <Box sx={{display:'flex',alignItems:'center',gap: '1rem'}}>
+          <CourseSelectBox
+            label="업종"
+            firstOptionLabel="-없음-"
+            menuItem={userBusinessTypeOne}
+            onChange={onChangeBusinessType}
+            value={watch().businessType + ''}
+            itemKey="enType"
+            itemValue="enType"
+            itemName="type"
+          />
+          <CourseSelectBox
+            label="차량등록지"
+            firstOptionLabel="-없음-"
+            menuItem={locationList}
+            onChange={onChangeCarRegitRegion}
+            value={watch().carRegitRegion + ''}
+            itemKey="en"
+            itemValue="en"
+            itemName="ko"
+          />
+        </Box>
+
+        </LeftContainer>
+
+      <CenterContainer>
+
+        
+      <Box>
+        <Typography>업체명</Typography>
+        <TextField
+          {...register('businessName')}
+          onChange={onChangeCompanyName}
+          placeholder="업체명"
+          fullWidth
+        />
+    </Box>
     <Box>
-      <CourseInfoTypography variant="h5">
-        전체 수강생 학습현황
-      </CourseInfoTypography>
-      <HeadRowsTop
-        courseType={watch().courseType}
-        onChangeCourseType={onChangeCourseType}
-      />
-      <Box display="flex" gap={2}>
-        <HeadRowsLeft
-          courseSeq={watch().courseSeq}
-          onChageCourseSeq={onChageCourseSeq}
-          courseClassSeq={watch().courseClassSeq}
-          onChageCourseClassSeq={onChageCourseClassSeq}
-          register={register}
-          businessType={watch().businessType}
-          onChangeBusinessType={onChangeBusinessType}
-          carRegitRegion={watch().carRegitRegion}
-          onChangeCarRegitRegion={onChangeCarRegitRegion}
-        />
-        <HeadRowsRight
-          register={register}
-          onChangeCompanyName={onChangeCompanyName}
-          onChangePhone={onChangePhone}
-          onChangeIdentify={onChangeIdentify}
-        />
-        <HeadRowsCenter
-          ref={searchInputRef}
-          completeType={watch().completeType}
-          statusType={watch().statusType}
-          carNumber={watch().carNumber}
-          handleSearch={handleSearch}
-          onChangeCompleteType={onChangeCompleteType}
-          onChangeStatusType={onChangeStatusType}
-          onChangeCarNumber={onChangeCarNumber}
+        <Typography>핸드폰번호</Typography>
+        <TextField {...register('phone')}  placeholder='"-" 없이 입력' fullWidth />
+      </Box>
+      <Box>
+        <Typography>주민등록번호</Typography>
+        <TextField
+          {...register('identityNumber')}
+          placeholder='"-" 없이 입력'
+          fullWidth
         />
       </Box>
-      <HeadRowsBottom
-        search={watch().nameOrUsername}
-        handleSubmit={handleSubmit}
-      />
-      {watch().notFound ? (
-        <NotFound content="학습현황이 존재하지 않습니다!" />
-      ) : (
-        <Table
-          pagination={true}
-          totalNum={data?.totalElements}
-          page={data?.number}
-          onChangePage={onChangePage}
-          size="small"
-          sx={{ tableLayout: 'fixed' }}
-        >
-          <TableHead>
-            <TableRow>
-              {headRows.map(
-                ({
-                  name,
-                  align,
-                  width,
-                }: {
-                  name: string;
-                  align: string;
-                  width: string;
-                }) => (
-                  <CourseInfoTitleTableCell
-                    key={name}
-                    align="center"
-                    width={width}
-                  >
-                    {name}
-                  </CourseInfoTitleTableCell>
-                )
-              )}
-            </TableRow>
-          </TableHead>
+        <Box>
+          <Typography>차량번호</Typography>
+            <TextField
+            {...register('carNumber')}
+              
+              fullWidth
+            />
+        </Box>
+      </CenterContainer>
 
-          <TableBody>
-            {data.content.map(user => (
-              <TableRow
-                sx={{ cursor: 'pointer' }}
-                key={user.username}
-                hover
-                onClick={() => onClickmodifyCourseInfo(user.courseUserSeq)}
-              >
-                <CourseInfoTableCell align="center">
-                  {user.courseUserSeq}
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  <NameBox title={user.name}>{user.name}</NameBox>
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  {user.username || '실명계정'}
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  <SubjectBox>{convertBirth(user.birth)}</SubjectBox>
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  <SubjectBox>{user.phone}</SubjectBox>
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  <SubjectBox>
-                    {
-                      courseSubCategory.filter(
-                        filter => filter.type === user.businessSubType
-                      )[0]?.ko
-                    }
-                  </SubjectBox>
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  <SubjectBox>{user.courseName}</SubjectBox>
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  {user.yearAndStep}
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  {user.studyDate}
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  {user.displayTotalProgress}
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  {user.displayCompleteYn}
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align="center">
-                  {user.displayClassLearningStatus}
-                </CourseInfoTableCell>
+      <Backdrop open={loading}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          sx={{ background: 'white', borderRadius: '4px', padding: '12px' }}
+        >
+          <Spinner fit={true} />
+          <Box color="rgb(194,51,51)" fontWeight="bold">
+            다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
+          </Box>
+        </Box>
+      </Backdrop>
+    </ChoiceContainerWrapper>
+    {/*  */}
+    
+    <RadioGroupContainer>
+      
+      <CourseRadioBox
+        title="과정타입선택"
+        checked1={CourseType.TYPE_TRANS_WORKER === watch().courseType}
+        checked2={CourseType.TYPE_LOW_FLOOR_BUS === watch().courseType}
+        checked3={CourseType.TYPE_PROVINCIAL === watch().courseType}
+        onChange={onChangeCourseType}
+        label1='운수종사자'
+        label2='저상버스'
+        label3='도민교통'
+        value1={CourseType.TYPE_TRANS_WORKER}
+        value2={CourseType.TYPE_LOW_FLOOR_BUS}
+        value3={CourseType.TYPE_PROVINCIAL}
+      />
+
+      <CourseRadioBox
+        title="수료여부"
+        checked1={watch().completeType === null}
+        checked2={watch().completeType === CompleteType.TYPE_COMPLETE}
+        checked3={watch().completeType === CompleteType.TYPE_INCOMPLETE}
+        onChange={onChangeCompleteType}
+        value1={null}
+        value2={CompleteType.TYPE_COMPLETE}
+        value3={CompleteType.TYPE_INCOMPLETE}
+        label1="전체"
+        label2="수료"
+        label3="미수료"
+      />
+        
+      <CourseRadioBox
+        title="퇴교여부(상태)"
+        checked1={watch().statusType === null}
+        checked2={watch().statusType === StatusType.TYPE_NORMAL}
+        checked3={watch().statusType === StatusType.TYPE_OUT}
+        onChange={onChangeStatusType}
+        value1={null}
+        value2={StatusType.TYPE_NORMAL}
+        value3={StatusType.TYPE_OUT}
+        label1="전체"
+        label2="정상"
+        label3="퇴교"
+      />
+      </RadioGroupContainer>
+    <SearchContainer>
+
+      
+        <Box sx={{ display:'flex',flexDirection:'column' }}>
+          <Typography sx={{display:'flex',justifyContent:'space-between'}}>
+              사용자 검색 
+              <Typography component='span' sx={{color:'#a7a7a7c7'}}>
+                {watch().nameOrUsername !== '' && `최근 검색어: ${watch().nameOrUsername}`}
+              </Typography>
+            </Typography>
+          <SearchInput
+            {...register('nameOrUsername')}
+            inputRef={searchInputRef}
+            placeholder="이름 혹은 아이디 입력"
+            fullWidth
+          />
+        </Box>
+      
+
+      <BoxRow sx={{ flexDirection: 'row' }}>
+        
+        <Button type="submit" variant='contained' onClick={(e) => handleSubmit(e,false)} fullWidth>
+          검색하기
+        </Button>
+        <ReloadButton
+          type='submit'
+          size='small'
+          color='neutral'
+          variant='text'
+          endIcon={<ReplayIcon htmlColor={grey[700]} />}
+          sx={{ marginLeft: '12px',border:'1px solid #c7c7c744' }}
+          onClick={(e) => handleSubmit(e,true)}
+          fullWidth
+        >
+          전체 다시 불러오기
+        </ReloadButton>
+      </BoxRow>
+
+      <Backdrop open={loading}>
+        <Box
+          display='flex'
+          flexDirection='column'
+          sx={{ background: 'white', borderRadius: '4px', padding: '12px' }}
+        >
+          <Spinner fit={true} />
+          <Box color='rgb(194,51,51)' fontWeight='bold'>
+            다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
+          </Box>
+        </Box>
+      </Backdrop>
+    </SearchContainer>
+      
+    <BoxRow sx={{ flexDirection: 'row-reverse' }}>
+      <Button
+        variant='contained'
+        color='success'
+        disabled={fileLoading}
+        onClick={onClickExcelDownload}
+      >
+        {fileLoading ? (
+          <Spinner fit={true} />
+        ) : (
+          <Box sx={{display:'flex',alignItems:'center'}}>
+            <FileCopyIcon sx={{ marginRight: '4px' }} />
+            학습현황 엑셀다운로드
+          </Box>
+        )}
+      </Button>
+    </BoxRow>
+      <ResultContainer>
+        {watch().notFound ? (
+          <NotFound content="학습현황이 존재하지 않습니다!" />
+        ) : (
+          <Table
+            pagination={true}
+            totalNum={data?.totalElements}
+            page={data?.number}
+            onChangePage={onChangePage}
+            size="small"
+            sx={{ tableLayout: 'fixed' }}
+          >
+            <TableHead>
+              <TableRow>
+                {headRows.map(
+                  ({
+                    name,
+                    width,
+                  }: {
+                    name: string;
+                    align: string;
+                    width: string;
+                  }) => (
+                    <CourseInfoTitleTableCell
+                      key={name}
+                      align="center"
+                      width={width}
+                    >
+                      {name}
+                    </CourseInfoTitleTableCell>
+                  )
+                )}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
-    </Box>
+            </TableHead>
+
+            <TableBody>
+              {data.content.map(user => (
+                <TableRow
+                  sx={{ cursor: 'pointer' }}
+                  key={user.username}
+                  hover
+                  onClick={() => onClickmodifyCourseInfo(user.courseUserSeq)}
+                >
+                  <CourseInfoTableCell align="center">
+                    {user.courseUserSeq}
+                  </CourseInfoTableCell>
+                  <CourseInfoTableCell align="center">
+                    <NameBox title={user.name}>{user.name}</NameBox>
+                  </CourseInfoTableCell>
+                  <CourseInfoTableCell align="center">
+                    {user.username || '실명계정'}
+                  </CourseInfoTableCell>
+                  <CourseInfoTableCell align="center">
+                    <SubjectBox>{convertBirth(user.birth)}</SubjectBox>
+                  </CourseInfoTableCell>
+                  <CourseInfoTableCell align="center">
+                    <SubjectBox>{user.phone}</SubjectBox>
+                  </CourseInfoTableCell>
+                  <CourseInfoTableCell align="center">
+                    <SubjectBox>
+                      {
+                        courseSubCategory.filter(
+                          filter => filter.type === user.businessSubType
+                        )[0]?.ko
+                      }
+                    </SubjectBox>
+                  </CourseInfoTableCell>
+                  <CourseInfoTableCell align="center">
+                    <SubjectBox>{user.courseName}</SubjectBox>
+                  </CourseInfoTableCell>
+                  <CourseInfoTableCell align="center">
+                    {user.yearAndStep}
+                  </CourseInfoTableCell>
+                  <CourseInfoTableCell align="center">
+                    {user.studyDate}
+                  </CourseInfoTableCell>
+                  <CourseInfoTableCell align="center">
+                    {user.displayTotalProgress}
+                  </CourseInfoTableCell>
+                  <CourseInfoTableCell align="center">
+                    {user.displayCompleteYn}
+                  </CourseInfoTableCell>
+                  <CourseInfoTableCell align="center">
+                    {user.displayClassLearningStatus}
+                  </CourseInfoTableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </ResultContainer>
+    </form>
   );
 }
 
-const UserTypo = styled(Typography)`
-  margin-bottom: 12px;
-  font-weight: 700;
-`;
-
-const SearchContainer = styled.form`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 4px 6px 0 6px;
-  margin-bottom: 24px;
-  border-radius: 4px;
-  border: 1px solid ${grey[300]};
-`;
-
-const SearchInput = styled(InputBase)`
-  width: 100%;
-`;
-
-const ReloadButton = styled(Button)`
-  margin-left: auto;
-`;
-const ConnectButton = styled(Button)`
-  margin-right: 12px;
-`;
-
-const UserTableRow = styled(TableRow)`
-  white-space: nowrap;
-`;
-
-const UserTitleTableCell = styled(TableCell)`
-  height: 1px;
-  position: relative;
-  font-weight: bold;
-`;
-
-const UserTableCell = styled(TableCell)`
-  white-space: nowrap;
-  text-align: center;
-  padding-top: 10px;
-  margin: 0;
-`;
-
-///////////////
 
 // 학습현황 글자
-const CourseInfoTypography = styled(Typography)`
+const Title = styled(Typography)`
   margin-bottom: 30px;
   font-weight: 700;
+  font-size: 32px;
 `;
+
+
 
 // 학습현황 제목. ellipsis 적용.
 const SubjectBox = styled(Box)`
@@ -461,3 +661,71 @@ const NameBox = styled(Box)`
   white-space: nowrap;
   width: 100%;
 `;
+
+
+const SearchInput = styled(InputBase)`
+  
+  height: 56px;
+  border-radius: 4px;
+  border: 1px solid #c7c7c7;
+  padding: 0 12px;
+`;
+
+const ChoiceContainerWrapper = styled(Box)`
+  display: flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 2rem;
+`
+
+const Container = styled(Box)`
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap: .25rem; 
+  
+`
+
+const RadioGroupContainer = styled(Box)`
+
+  border-top: 1px solid #c7c7c7;
+  border-bottom: 1px solid #c7c7c7;
+  padding: .25rem 0;
+  margin: 1rem 0;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap: 1rem; 
+`
+
+const CenterContainer = styled(Container)`
+  
+`;
+
+
+const LeftContainer = styled(Container)`
+  
+`;
+
+const BoxRow = styled(Box)`
+  display: flex;
+  width: 100%;
+  gap: 16px;
+`;
+
+const SearchContainer = styled(Box)`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+`;
+
+const ResultContainer = styled(Box)`
+  
+
+`
+
+
+
+const ReloadButton = styled(Button)``;

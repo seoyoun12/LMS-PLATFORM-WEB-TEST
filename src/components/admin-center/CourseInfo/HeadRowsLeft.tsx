@@ -1,24 +1,10 @@
 import { CourseType } from '@common/api/adm/courseClass';
-import {
-  CompleteType,
-  StatusType,
-  useLearningInfoCourses,
-  useLearningInfoStep,
-} from '@common/api/adm/learningInfo';
-import ApiClient from '@common/api/ApiClient';
+import { CompleteType,StatusType,useLearningInfoCourses,useLearningInfoStep } from '@common/api/adm/learningInfo';
 import styled from '@emotion/styled';
 import { locationList } from '@layouts/MeEdit/MeEdit';
 import { userBusinessTypeOne } from '@layouts/MeEdit/TransWorker/TransWorker';
-import {
-  Box,
-  MenuItem,
-  Radio,
-  Select,
-  SelectChangeEvent,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Box, MenuItem, Select, SelectChangeEvent, TextField, Typography } from '@mui/material';
+import { useMemo } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 
 interface FormType {
@@ -63,8 +49,8 @@ export function HeadRowsLeft({
   carRegitRegion,
   onChangeCarRegitRegion,
 }: Props) {
-  const { courses, coursesError } = useLearningInfoCourses();
-  const { steps, stepsError } = useLearningInfoStep(courseSeq);
+  const { courses } = useLearningInfoCourses();
+  const { steps } = useLearningInfoStep(courseSeq);
 
   const onChangeSeletedSeq = (e: SelectChangeEvent) => {
     onChageCourseSeq(Number(e.target.value));
@@ -74,6 +60,17 @@ export function HeadRowsLeft({
     onChageCourseClassSeq(Number(e.target.value) || null);
   };
 
+  const duplicateRemoveCourses = useMemo(() => {
+    const temp = [];
+      courses?.forEach(course => {
+        if(!temp.find(item => item.courseSeq === course.courseSeq)){
+          temp.push(course);
+        }
+      })
+      return temp;
+  },[courses]);
+
+  // console.log(duplicateRemoveCourses);
   return (
     <HeadRowsLeftWrap>
       <BoxRow>
@@ -81,11 +78,17 @@ export function HeadRowsLeft({
           <Typography>과정 선택</Typography>
           <Select onChange={onChangeSeletedSeq} value={String(courseSeq)} fullWidth>
             <MenuItem value={null}>전체</MenuItem>
-            {courses?.map((item, idx) => (
-              <MenuItem key={idx} value={item.courseSeq}>
+            {
+            // courses의 요소가 중복되어 들어오기에 중복제거를 위해 Set을 사용한다.
+            // const uniqueCourses = [...new Set(courses?.map(item => item.courseSeq))];
+            
+            duplicateRemoveCourses?.map((item) => {
+              // console.log(item);
+              return (
+              <MenuItem key={item.courseSeq} value={item.courseSeq}>
                 {item.courseName}
               </MenuItem>
-            ))}
+            )})}
           </Select>
         </Box>
         <Box width="50%">

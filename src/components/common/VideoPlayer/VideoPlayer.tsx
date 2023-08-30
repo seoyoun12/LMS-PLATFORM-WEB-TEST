@@ -2,7 +2,7 @@
 import Script from 'next/script';
 import { Config, EventType, Ncplayer } from 'types/ncplayer';
 import styled from '@emotion/styled';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // import { Box } from '@mui/material';
 // import { ModalQuiz } from '@components/ui/Modal';
 
@@ -119,10 +119,9 @@ export function VideoPlayer(props: Props) {
           childList: false,
           subtree: true,
         });
-
       }
     }
-
+    
   }, [scriptLoaded, playlist, props]);
 
   useEffect(() => {

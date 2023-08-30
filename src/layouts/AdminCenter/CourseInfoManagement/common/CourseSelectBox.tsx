@@ -10,7 +10,7 @@ interface Props<T> {
   itemKey: string;
   itemValue: string;
   itemName: string;
-  firstOptionLabel: string
+  firstOptionLabel: string | null;
 }
 
 function CourseSelectBox<T>({label, onChange, value, menuItem, firstOptionLabel,itemValue, itemKey, itemName}: Props<T>) {
@@ -29,7 +29,7 @@ function CourseSelectBox<T>({label, onChange, value, menuItem, firstOptionLabel,
 
           }}
         >
-          <MenuItem value={null}>{firstOptionLabel}</MenuItem>
+          {firstOptionLabel && <MenuItem value={null}>{firstOptionLabel}</MenuItem>}
           {menuItem.map(item => (
             <MenuItem key={item[itemKey]} value={item[itemValue]}>
               {item[itemName]}

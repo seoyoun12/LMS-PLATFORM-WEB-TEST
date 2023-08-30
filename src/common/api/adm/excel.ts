@@ -1,29 +1,45 @@
 import { YN } from '@common/constant';
-import { GET, POST } from '@common/httpClient';
+import { GET, POST, api } from '@common/httpClient';
 import { RoleType } from 'src/staticDataDescElements/staticType';
 import { StepsBySurveyForExcel } from '../Api';
 import { FormType } from '@components/admin-center/CourseInfo/HeadRowsRight';
 
+
+
 // 학습현황(운수/저상) 엑셀 다운로드
 export function getExcelCourseLearning(body:FormType) {
   
-  return POST(
-    `/adm/excel/download/course-learning-user`,
-    {},
-    {
-      responseType: 'blob',
-      params:body
+  const extractValidParams = {}
+
+  for(const key in body) {
+    if(body[key]) {
+      extractValidParams[key] = body[key];
     }
+  }
+  return api.get(
+    `/adm/excel/download/course-learning-user`,
+    {
+      responseType: 'arraybuffer',
+      params:extractValidParams,
+    },
   );
 }
 
 // 학습현황(도민) 엑셀 다운로드
-export function getExcelCourseTrafficLearning() {
-  return POST(
+export function getExcelCourseTrafficLearning(body:FormType) {
+
+  const extractValidParams = {}
+  for(const key in body) {
+    if(body[key]) {
+      extractValidParams[key] = body[key];
+    }
+  }
+  return api.get(
     `/adm/excel/download/provincial-learning-status`,
     {
+      responseType: 'arraybuffer',
+      params:extractValidParams, 
     },
-    { responseType: 'blob', }
   );
 }
 

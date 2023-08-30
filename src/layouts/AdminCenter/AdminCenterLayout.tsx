@@ -31,7 +31,7 @@ export const AdminCenterLayout = ({
         }
         setLoading(false);
       } catch (e: any) {
-        snackbar({ variant: 'error', message: e.data.message });
+        snackbar({ variant: 'error', message: e });
         router.back();
       }
     })();

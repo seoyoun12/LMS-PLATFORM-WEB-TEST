@@ -9,6 +9,41 @@ import { tokenInterceptor } from "@common/httpInterceptor/tokenInterceptor";
  *  * HTTP Authorization Scheme  basic
  */
 
+
+interface AxiosResponse<T> {
+  data: T;
+  status: number;
+  statusText: string;
+  error?: AxiosError;
+}
+
+
+interface ResponseError extends Error {
+  config: AxiosRequestConfig;
+  code?: string;
+  message: string;
+}
+
+
+
+// interface AxiosRequest<T,P> {
+//   url: string;
+//   body: T
+//   headers: P
+// }
+
+// export const get = async <T, P>(
+//   { url, body, headers }: AxiosRequest<T,P>,
+// ): Promise<AxiosResponse<T>> => {
+//   try {
+//     const response = await api.get<T>(url, { data: body, headers });
+//     return response;
+//   } catch (error) {
+//     return handleError(error);
+//   }
+// };
+
+
 export const axiosHeaders = {
   "Api-Key": "bWlyaW06MTIzNA==",
   withCredentials: true,
@@ -30,6 +65,8 @@ export const api = Axios.create({
   headers: axiosHeaders,
 });
 triggerInterceptors();
+
+
 
 export const GET = async <T = any>(
   url: string,

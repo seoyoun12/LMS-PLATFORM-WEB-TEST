@@ -1,5 +1,5 @@
 import { TableBody,TableHead,Typography,Button,Box,InputBase,TextField,Backdrop,SelectChangeEvent } from '@mui/material';
-
+import { saveAs } from 'file-saver';
 import { grey } from '@mui/material/colors';
 import { Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
@@ -23,6 +23,10 @@ import { getExcelCourseLearning } from '@common/api/adm/excel';
 import CourseSelectBox from './common/CourseSelectBox';
 import { CourseLearningInfoCoursesResponseDto } from '@common/api/Api';
 import CourseRadioBox from './common/CourseRadioBox';
+import { format, getYear } from 'date-fns';
+import { api } from '@common/httpClient';
+
+// https://api.bonobono.dev/api/v1/course/adm/learning-info/courses
 
 const headRows: {
   name: string;
@@ -60,6 +64,7 @@ interface FormType {
   studyEndDate: string; //학습종료일
   phone: string | null; //전화번호
   identityNumber: string | null; //주민번호 (-포함)
+  year?: number;
 }
 
 const defaultValues: FormType = {
@@ -79,18 +84,23 @@ const defaultValues: FormType = {
   studyEndDate: '',
   phone: null,
   identityNumber: null,
+  year: getYear(new Date()),
 };
 
+const DUMMY_YEAR_ARRAY = Array.from({ length: getYear(new Date()) - 2022 + 1 }).map((_, i) => {
+  return {year: i + 2022};
+});
+
 export default function CourseInfoManagement() {
-  const router = useRouter();
+
   // const [notFound, setNotFound] = useState(false);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const [submitValue, setSubmitValue] = useState<FormType>(defaultValues);
   const { watch, setValue, reset, register } = useForm<FormType>({ defaultValues });
   const { data, error, mutate } = useLearningInfo(submitValue);
   const [loading, setLoading] = useState(false);
-
-  const { courses } = useLearningInfoCourses();
+  const [currentYear, setCurrentYear] = useState(getYear(new Date()));
+  const { courses } = useLearningInfoCourses(currentYear);
   const { steps } = useLearningInfoStep(watch().courseSeq);
 
   const onChangeSeletedSeq = (e: SelectChangeEvent) => {
@@ -105,6 +115,14 @@ export default function CourseInfoManagement() {
       return { ...prev, page };
     });
   };
+
+  const onChangeYear = (e: SelectChangeEvent) => {
+    const { value } = e.target;
+    if( value === '전체') return setCurrentYear(getYear(new Date()));
+
+    setCurrentYear(+value);
+    setValue('year', +value);
+  }
 
   const onChangeCourseType = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value as CourseType;
@@ -142,6 +160,9 @@ export default function CourseInfoManagement() {
   };
 
 
+
+ const [year, setYear] = useState(0);
+      
 
   const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue('phone', e.target.value);
@@ -220,32 +241,34 @@ export default function CourseInfoManagement() {
   const snackbar = useSnackbar();
   const [fileLoading, setFileLoading] = useState(false);
 
-
   const onClickExcelDownload = async () => {
-    const a = document.createElement('a');
     setFileLoading(true);
+    
     try {
-      const data = await getExcelCourseLearning(watch());
-      const excel = new Blob([data]);
-      a.href = URL.createObjectURL(excel);
-      a.download = '충남_관리자_학습현황(운수/저상)_데이터.xlsx';
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(a.href);
-      snackbar({ variant: 'success', message: '다운로드 완료' });
+      const data  = await getExcelCourseLearning(watch());
+      const blob = new Blob([data.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       setFileLoading(false);
+      return saveAs(blob, format(new Date(), 'yyyy-MM-dd') + ' 학습현황.xlsx');
+
     } catch (e) {
-      snackbar({ variant: 'error', message: e.data.message });
+      // snackbar({ variant: 'error', message: e });
+      console.error(e);
       setFileLoading(false);
     }
   };
 
   console.log(watch());
+
+
   useEffect(() => {
     if (data) {
       data.content.length === 0 && setValue('notFound', true);
     }
+    
   }, [data]);
+
+  
+
 
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
@@ -292,10 +315,21 @@ export default function CourseInfoManagement() {
       <Title variant="h1">전체 수강생 학습현황</Title>
       <ChoiceContainerWrapper>
         <LeftContainer>
-          
           <Box>
-            <Typography>교육연도</Typography>
-            <TextField fullWidth/>
+            {/* <Typography>교육연도</Typography> */}
+
+            <CourseSelectBox
+              label="교육년도 선택"
+              firstOptionLabel={null}
+              menuItem={DUMMY_YEAR_ARRAY}
+              onChange={onChangeYear}
+              value={watch().year + ''}
+              itemKey="year"
+              itemValue="year"
+              itemName="year"
+            />
+
+            {/* <TextField fullWidth {...register('year')}/> */}
           </Box>
 
           <Box sx={{display:'flex',alignItems:'center',gap: '1rem'}}>
@@ -308,7 +342,6 @@ export default function CourseInfoManagement() {
               itemKey="courseSeq"
               itemValue="courseSeq"
               itemName="courseName"
-
             />
             <CourseSelectBox
               label="과정기수 선택"
@@ -321,7 +354,6 @@ export default function CourseInfoManagement() {
               itemName="yearAndStep"
             />
         </Box>
-
       <Box>
         <Typography>학습기간</Typography>
         <Box display="flex" gap={2} alignItems="center">
@@ -331,33 +363,30 @@ export default function CourseInfoManagement() {
       </Box>
       
       <Box sx={{display:'flex',alignItems:'center',gap: '1rem'}}>
-          <CourseSelectBox
-            label="업종"
-            firstOptionLabel="-없음-"
-            menuItem={userBusinessTypeOne}
-            onChange={onChangeBusinessType}
-            value={watch().businessType + ''}
-            itemKey="enType"
-            itemValue="enType"
-            itemName="type"
-          />
-          <CourseSelectBox
-            label="차량등록지"
-            firstOptionLabel="-없음-"
-            menuItem={locationList}
-            onChange={onChangeCarRegitRegion}
-            value={watch().carRegitRegion + ''}
-            itemKey="en"
-            itemValue="en"
-            itemName="ko"
-          />
-        </Box>
+        <CourseSelectBox
+          label="업종"
+          firstOptionLabel="-없음-"
+          menuItem={userBusinessTypeOne}
+          onChange={onChangeBusinessType}
+          value={watch().businessType + ''}
+          itemKey="enType"
+          itemValue="enType"
+          itemName="type"
+        />
+        <CourseSelectBox
+          label="차량등록지"
+          firstOptionLabel="-없음-"
+          menuItem={locationList}
+          onChange={onChangeCarRegitRegion}
+          value={watch().carRegitRegion + ''}
+          itemKey="en"
+          itemValue="en"
+          itemName="ko"
+        />
+      </Box>
+    </LeftContainer>
 
-        </LeftContainer>
-
-      <CenterContainer>
-
-        
+    <CenterContainer>
       <Box>
         <Typography>업체명</Typography>
         <TextField
@@ -366,28 +395,20 @@ export default function CourseInfoManagement() {
           placeholder="업체명"
           fullWidth
         />
-    </Box>
-    <Box>
+      </Box>
+      <Box>
         <Typography>핸드폰번호</Typography>
         <TextField {...register('phone')}  placeholder='"-" 없이 입력' fullWidth />
       </Box>
       <Box>
         <Typography>주민등록번호</Typography>
-        <TextField
-          {...register('identityNumber')}
-          placeholder='"-" 없이 입력'
-          fullWidth
-        />
+        <TextField {...register('identityNumber')} placeholder='"-" 없이 입력' fullWidth/>
       </Box>
-        <Box>
-          <Typography>차량번호</Typography>
-            <TextField
-            {...register('carNumber')}
-              
-              fullWidth
-            />
-        </Box>
-      </CenterContainer>
+      <Box>
+        <Typography>차량번호</Typography>
+        <TextField {...register('carNumber')} fullWidth />
+      </Box>
+    </CenterContainer>
 
       <Backdrop open={loading}>
         <Box
@@ -465,9 +486,8 @@ export default function CourseInfoManagement() {
             fullWidth
           />
         </Box>
-      
 
-      <BoxRow sx={{ flexDirection: 'row' }}>
+      <BoxRow sx={{ flexDirection: 'row',marginTop: '.25rem',marginBottom:'2rem' }}>
         
         <Button type="submit" variant='contained' onClick={(e) => handleSubmit(e,false)} fullWidth>
           검색하기
@@ -500,7 +520,7 @@ export default function CourseInfoManagement() {
       </Backdrop>
     </SearchContainer>
       
-    <BoxRow sx={{ flexDirection: 'row-reverse' }}>
+    <BoxRow sx={{ flexDirection: 'row-reverse',paddingTop:'1rem',borderTop:'1px solid #c7c7c7' }}>
       <Button
         variant='contained'
         color='success'
@@ -531,7 +551,8 @@ export default function CourseInfoManagement() {
           >
             <TableHead>
               <TableRow>
-                {headRows.map(
+                {
+                headRows.map(
                   ({
                     name,
                     width,
@@ -690,12 +711,12 @@ const RadioGroupContainer = styled(Box)`
 
   border-top: 1px solid #c7c7c7;
   border-bottom: 1px solid #c7c7c7;
-  padding: .25rem 0;
+  padding: .25rem 2rem;
   margin: 1rem 0;
   display:flex;
   align-items:center;
-  justify-content:flex-start;
-  gap: 1rem; 
+  justify-content:center;
+  gap: 1rem;
 `
 
 const CenterContainer = styled(Container)`

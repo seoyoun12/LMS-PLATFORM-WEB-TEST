@@ -88,10 +88,9 @@ export function useLearningInfo({ page, ...rest }: CourseLearningInfoRequestDto)
   };
 }
 
-export function useLearningInfoCourses() {
-  const { data, error, mutate } = useSWR<
-    SWRResponse<CourseLearningInfoCoursesResponseDto[]>
-  >(`/course/adm/learning-info/courses`, GET, {
+export function useLearningInfoCourses(year:number) {
+  const { data, error, mutate } = useSWR<SWRResponse<CourseLearningInfoCoursesResponseDto[]>
+  >(`/course/adm/learning-info/courses?year=${year}`, GET, {
     revalidateOnFocus: false,
     onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
       if (error.status === 401) return;

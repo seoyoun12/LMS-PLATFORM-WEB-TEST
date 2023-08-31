@@ -1,41 +1,29 @@
-import {
-  Container,
-  TableBody,
-  TableHead,
-  Typography,
-  Button,
-  Box,
-  InputBase,
-  IconButton,
-  Radio,
-} from '@mui/material';
-import styles from '@styles/common.module.scss';
+import { TableBody,TableHead,Typography,Button,Box,InputBase,TextField,Backdrop,SelectChangeEvent } from '@mui/material';
+import { saveAs } from 'file-saver';
+import { grey } from '@mui/material/colors';
 import { Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
-import dateFormat from 'dateformat';
-import { UserModifyModal } from '@components/admin-center/UserModifyModal';
-import {
-  CompleteType,
-  StatusType,
-  useLearningInfo,
-} from '@common/api/adm/learningInfo';
-import { grey } from '@mui/material/colors';
+import ReplayIcon from '@mui/icons-material/Replay';
+import { CompleteType,StatusType,useLearningInfo,useLearningInfoCourses,useLearningInfoStep } from '@common/api/adm/learningInfo';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { CourseType } from '@common/api/adm/courseClass';
 import { NotFound } from '@components/ui/NotFound';
-import { HeadRowsCenter } from '@components/admin-center/CourseInfo/HeadRowsCenter';
 import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { convertBirth } from '@utils/convertBirth';
-import { HeadRowsLeft } from '@components/admin-center/CourseInfo/HeadRowsLeft';
-import { utils, writeFile } from 'xlsx';
-import { HeadRowsRight } from '@components/admin-center/CourseInfo/HeadRowsRight';
-import { HeadRowsBottom } from '@components/admin-center/CourseInfo/HeadRowsBottom';
 import { useForm } from 'react-hook-form';
-import { HeadRowsTop } from '@components/admin-center/CourseInfo/HeadRowsTop';
+import { locationList } from '@layouts/MeEdit/MeEdit';
+import { userBusinessTypeOne } from '@layouts/MeEdit/TransWorker/TransWorker';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { getExcelCourseLearning } from '@common/api/adm/excel';
+import CourseSelectBox from './common/CourseSelectBox';
+import { CourseLearningInfoCoursesResponseDto } from '@common/api/Api';
+import CourseRadioBox from './common/CourseRadioBox';
+import { format, getYear } from 'date-fns';
+import CourseTextInputBox from './common/CourseTextInputBox';
 
 const headRows: {
   name: string;
@@ -56,7 +44,7 @@ const headRows: {
   { name: '상태', align: 'center', width: '5%' },
 ];
 
-interface FormType {
+export interface FormType {
   page: number;
   notFound: boolean;
   nameOrUsername: string; //이름 혹은 아이디
@@ -73,6 +61,7 @@ interface FormType {
   studyEndDate: string; //학습종료일
   phone: string | null; //전화번호
   identityNumber: string | null; //주민번호 (-포함)
+  year?: number;
 }
 
 const defaultValues: FormType = {
@@ -92,30 +81,50 @@ const defaultValues: FormType = {
   studyEndDate: '',
   phone: null,
   identityNumber: null,
+  year: getYear(new Date()),
 };
 
+const DUMMY_YEAR_ARRAY = Array.from({ length: getYear(new Date()) - 2022 + 1 }).map((_, i) => {
+  return {year: i + 2022};
+});
+
+
 export default function CourseInfoManagement() {
-  const router = useRouter();
+
   // const [notFound, setNotFound] = useState(false);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const [submitValue, setSubmitValue] = useState<FormType>(defaultValues);
-  const { watch, setValue, reset, register } = useForm<FormType>({
-    defaultValues,
-  });
-  const { data, error, mutate } = useLearningInfo(submitValue);
-  // console.log(watch());
+  const { watch, setValue, reset, register } = useForm<FormType>({ defaultValues });
+  const { data, error } = useLearningInfo(submitValue);
+  const [loading, setLoading] = useState(false);
+  const [currentYear, setCurrentYear] = useState(getYear(new Date()));
+  const { courses } = useLearningInfoCourses(currentYear);
+  const { steps } = useLearningInfoStep(watch().courseSeq);
+  const snackbar = useSnackbar();
+  const [fileLoading, setFileLoading] = useState(false);
 
-  // Pagination
+  const onChangeSeletedSeq = (e: SelectChangeEvent) => {
+    onChageCourseSeq(Number(e.target.value));
+    onChageCourseClassSeq(null);
+  };
+  const onChangeSelectedClassSeq = (e: SelectChangeEvent) => {
+    onChageCourseClassSeq(Number(e.target.value) || null);
+  };
   const onChangePage = (page: number) => {
     setSubmitValue(prev => {
       return { ...prev, page };
     });
   };
 
-  const onChangeCourseType = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean
-  ) => {
+  const onChangeYear = (e: SelectChangeEvent) => {
+    const { value } = e.target;
+    if( value === '전체') return setCurrentYear(getYear(new Date()));
+
+    setCurrentYear(+value);
+    setValue('year', +value);
+  }
+
+  const onChangeCourseType = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value as CourseType;
     setValue('courseType', value);
   };
@@ -134,24 +143,20 @@ export default function CourseInfoManagement() {
   };
 
   //업종구분
-  const onChangeBusinessType = (value: string) => {
+  const onChangeBusinessType = (e: SelectChangeEvent ) => {
+    const value = e.target.value
     setValue('notFound', false);
     setValue('businessType', value);
   };
   //차량등록지
-  const onChangeCarRegitRegion = (value: string) => {
+  const onChangeCarRegitRegion = (e: SelectChangeEvent) => {
+    const value = e.target.value;
     setValue('notFound', false);
     setValue('carRegitRegion', value);
   };
 
   const onChangeCompanyName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue('businessName', e.target.value);
-  };
-  const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue('phone', e.target.value);
-  };
-  const onChangeIdentify = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue('identityNumber', e.target.value);
   };
 
   //change completeType(수료여부)
@@ -174,34 +179,15 @@ export default function CourseInfoManagement() {
     if (value === StatusType.TYPE_OUT) return setValue('statusType', value);
   };
 
-  const onChangeCarNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setValue('notFound', false);
-    setValue('carNumber', value);
-  };
-
-  // 검색 (outdated , handlesumit을 이용해주세요.)
-  const handleSearch = async (e: FormEvent, isReload = false) => {
-    //FormEvent에 대해 araboza
+  const handleSubmit = (e:FormEvent,isReload = false) => {
     e.preventDefault();
-    setValue('notFound', false);
-    if (isReload) {
-      reset();
-      setSubmitValue(watch());
-      return;
-    }
-    if (searchInputRef.current) {
-      setValue('nameOrUsername', searchInputRef.current.value);
-      // setNameOrUsername(searchInputRef.current.value);
-    }
-  };
-
-  const handleSubmit = (isReload = false) => {
+    
     setValue('notFound', false);
     if (isReload) {
       reset();
       setSubmitValue(watch());
       searchInputRef.current.value = '';
+
       return;
     }
     if (searchInputRef.current) {
@@ -209,11 +195,8 @@ export default function CourseInfoManagement() {
     }
 
     const { phone, identityNumber } = watch();
-    if (phone === '' || phone?.replaceAll(' ', '') === '')
-      setValue('phone', null);
-    if (identityNumber === '' || identityNumber?.replaceAll(' ', '') === '')
-      setValue('identityNumber', null);
-
+    if (!phone || phone.trim() === '') setValue('phone', null);
+    if (!identityNumber || identityNumber.trim() === '') setValue('identityNumber', null);
     setSubmitValue(watch());
   };
 
@@ -226,57 +209,271 @@ export default function CourseInfoManagement() {
     );
   };
 
+
+  const duplicateRemoveCourses: CourseLearningInfoCoursesResponseDto[] = useMemo(() => {
+    const temp = [];
+      courses?.forEach(course => {
+        if(!temp.find(item => item.courseSeq === course.courseSeq)){
+          temp.push(course);
+        }
+      })
+      return temp;
+  },[courses]);
+
+  
+
+  const onClickExcelDownload = async () => {
+    setFileLoading(true);
+    
+    try {
+      const data  = await getExcelCourseLearning(watch());
+      const blob = new Blob([data.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      setFileLoading(false);
+      return saveAs(blob, format(new Date(), 'yyyy-MM-dd') + ' 학습현황.xlsx');
+
+    } catch (e) {
+      // snackbar({ variant: 'error', message: e });
+      console.error(e);
+      setFileLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (data) {
       data.content.length === 0 && setValue('notFound', true);
     }
+    
   }, [data]);
+
 
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
-  // user/adm/course-info/detail/{courseUserSeq}
+  
   return (
-    <Box>
-      <CourseInfoTypography variant="h5">
-        전체 수강생 학습현황
-      </CourseInfoTypography>
-      <HeadRowsTop
-        courseType={watch().courseType}
-        onChangeCourseType={onChangeCourseType}
-      />
-      <Box display="flex" gap={2}>
-        <HeadRowsLeft
-          courseSeq={watch().courseSeq}
-          onChageCourseSeq={onChageCourseSeq}
-          courseClassSeq={watch().courseClassSeq}
-          onChageCourseClassSeq={onChageCourseClassSeq}
-          register={register}
-          businessType={watch().businessType}
-          onChangeBusinessType={onChangeBusinessType}
-          carRegitRegion={watch().carRegitRegion}
-          onChangeCarRegitRegion={onChangeCarRegitRegion}
+    <form onSubmit={(e) => handleSubmit(e,false)}>
+      <Title variant="h1">전체 수강생 학습현황</Title>
+      <ContainerWrapper>
+        <LeftContainer>
+            <CourseSelectBox
+              label="교육년도 선택"
+              firstOptionLabel={null}
+              menuItem={DUMMY_YEAR_ARRAY}
+              onChange={onChangeYear}
+              value={watch().year + ''}
+              itemKey="year"
+              itemValue="year"
+              itemName="year"
+            />
+      <DoubleInputBox>
+        <CourseSelectBox
+          label="과정 선택"
+          firstOptionLabel="전체"
+          menuItem={duplicateRemoveCourses ?? []}
+          onChange={onChangeSeletedSeq}
+          value={watch().courseSeq + ''}
+          itemKey="courseSeq"
+          itemValue="courseSeq"
+          itemName="courseName"
         />
-        <HeadRowsRight
-          register={register}
-          onChangeCompanyName={onChangeCompanyName}
-          onChangePhone={onChangePhone}
-          onChangeIdentify={onChangeIdentify}
+        <CourseSelectBox
+          label="과정기수 선택"
+          firstOptionLabel="전체"
+          menuItem={steps ?? []}
+          onChange={onChangeSelectedClassSeq}
+          value={watch().courseClassSeq + ''}
+          itemKey="courseClassSeq"
+          itemValue="courseClassSeq"
+          itemName="yearAndStep"
         />
-        <HeadRowsCenter
-          ref={searchInputRef}
-          completeType={watch().completeType}
-          statusType={watch().statusType}
-          carNumber={watch().carNumber}
-          handleSearch={handleSearch}
-          onChangeCompleteType={onChangeCompleteType}
-          onChangeStatusType={onChangeStatusType}
-          onChangeCarNumber={onChangeCarNumber}
+      </DoubleInputBox>
+        
+      <DoubleInputBox>
+        <CourseSelectBox
+          label="업종"
+          firstOptionLabel="-없음-"
+          menuItem={userBusinessTypeOne}
+          onChange={onChangeBusinessType}
+          value={watch().businessType + ''}
+          itemKey="enType"
+          itemValue="enType"
+          itemName="type"
         />
+        <CourseSelectBox
+          label="차량등록지"
+          firstOptionLabel="-없음-"
+          menuItem={locationList}
+          onChange={onChangeCarRegitRegion}
+          value={watch().carRegitRegion + ''}
+          itemKey="en"
+          itemValue="en"
+          itemName="ko"
+        />
+      </DoubleInputBox>
+      <Box>
+        <Typography>학습기간</Typography>
+        <Box display="flex" gap={2} alignItems="center">
+          <TextField type="date" {...register('studyStartDate')} fullWidth /> ~
+          <TextField type="date" {...register('studyEndDate')} fullWidth />
+        </Box>
       </Box>
-      <HeadRowsBottom
-        search={watch().nameOrUsername}
-        handleSubmit={handleSubmit}
+    </LeftContainer>
+
+    <CenterContainer>
+      <CourseTextInputBox
+        onChange={onChangeCompanyName}
+        placeholder="업체명"
+        fullWidth
+        register={register}
+        registerName="businessName"
+        title="업체명"
+        />
+      <CourseTextInputBox
+        placeholder='"-" 없이 입력'
+        fullWidth
+        register={register}
+        registerName="phone"
+        title="핸드폰번호"
       />
+      <CourseTextInputBox
+        placeholder='"-" 없이 입력'
+        fullWidth
+        register={register}
+        registerName="identityNumber"
+        title="주민등록번호"
+      />
+      <CourseTextInputBox
+        placeholder="차량번호"
+        fullWidth
+        register={register}
+        registerName="carNumber"
+        title="차량번호"
+      />
+    </CenterContainer>
+
+      <Backdrop open={loading}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          sx={{ background: 'white', borderRadius: '4px', padding: '12px' }}
+        >
+          <Spinner fit={true} />
+          <Box color="rgb(194,51,51)" fontWeight="bold">
+            다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
+          </Box>
+        </Box>
+      </Backdrop>
+    </ContainerWrapper>
+
+    <RadioGroupContainer>  
+      <CourseRadioBox
+        title="과정타입선택"
+        checked1={CourseType.TYPE_TRANS_WORKER === watch().courseType}
+        checked2={CourseType.TYPE_LOW_FLOOR_BUS === watch().courseType}
+        checked3={CourseType.TYPE_PROVINCIAL === watch().courseType}
+        onChange={onChangeCourseType}
+        label1='운수종사자'
+        label2='저상버스'
+        label3='도민교통'
+        value1={CourseType.TYPE_TRANS_WORKER}
+        value2={CourseType.TYPE_LOW_FLOOR_BUS}
+        value3={CourseType.TYPE_PROVINCIAL}
+      />
+
+      <CourseRadioBox
+        title="수료여부"
+        checked1={watch().completeType === null}
+        checked2={watch().completeType === CompleteType.TYPE_COMPLETE}
+        checked3={watch().completeType === CompleteType.TYPE_INCOMPLETE}
+        onChange={onChangeCompleteType}
+        value1={null}
+        value2={CompleteType.TYPE_COMPLETE}
+        value3={CompleteType.TYPE_INCOMPLETE}
+        label1="전체"
+        label2="수료"
+        label3="미수료"
+      />
+          
+      <CourseRadioBox
+        title="퇴교여부(상태)"
+        checked1={watch().statusType === null}
+        checked2={watch().statusType === StatusType.TYPE_NORMAL}
+        checked3={watch().statusType === StatusType.TYPE_OUT}
+        onChange={onChangeStatusType}
+        value1={null}
+        value2={StatusType.TYPE_NORMAL}
+        value3={StatusType.TYPE_OUT}
+        label1="전체"
+        label2="정상"
+        label3="퇴교"
+      />
+    </RadioGroupContainer>
+  <SearchContainer>
+
+    <Box sx={{ display:'flex',flexDirection:'column' }}>
+      <Typography sx={{display:'flex',justifyContent:'space-between'}}>
+          사용자 검색
+          <Typography component='span' sx={{color:'#a7a7a7c7'}}>
+            {watch().nameOrUsername !== '' && `최근 검색어: ${watch().nameOrUsername}`}
+          </Typography>
+      </Typography>
+      <SearchInput
+        {...register('nameOrUsername')}
+        inputRef={searchInputRef}
+        placeholder="이름 혹은 아이디 입력"
+        fullWidth
+        />
+    </Box>
+
+    <BoxRow sx={{ flexDirection: 'row',marginTop: '.25rem',marginBottom:'2rem' }}>
+      <Button type="submit" variant='contained' onClick={(e) => handleSubmit(e,false)} fullWidth>
+        검색하기
+      </Button>
+      <ReloadButton
+        type='submit'
+        size='small'
+        color='neutral'
+        variant='text'
+        endIcon={<ReplayIcon htmlColor={grey[700]} />}
+        sx={{ marginLeft: '12px',border:'1px solid #c7c7c744' }}
+        onClick={(e) => handleSubmit(e,true)}
+        fullWidth
+      >
+        전체 다시 불러오기
+      </ReloadButton>
+    </BoxRow>
+
+    <Backdrop open={loading}>
+      <Box
+        display='flex'
+        flexDirection='column'
+        sx={{ background: 'white', borderRadius: '4px', padding: '12px' }}
+      >
+        <Spinner fit={true} />
+        <Box color='rgb(194,51,51)' fontWeight='bold'>
+          다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
+        </Box>
+      </Box>
+    </Backdrop>
+  </SearchContainer>
+      
+  <BoxRow sx={{ flexDirection: 'row-reverse',paddingTop:'1rem',borderTop:'1px solid #c7c7c7' }}>
+    <Button
+      variant='contained'
+      color='success'
+      disabled={fileLoading}
+      onClick={onClickExcelDownload}
+    >
+      {fileLoading ? (
+        <Spinner fit={true} />
+      ) : (
+        <Box sx={{display:'flex',alignItems:'center'}}>
+          <FileCopyIcon sx={{ marginRight: '4px' }} />
+          학습현황 엑셀다운로드
+        </Box>
+      )}
+    </Button>
+  </BoxRow>
+    <ResultContainer>
       {watch().notFound ? (
         <NotFound content="학습현황이 존재하지 않습니다!" />
       ) : (
@@ -290,10 +487,10 @@ export default function CourseInfoManagement() {
         >
           <TableHead>
             <TableRow>
-              {headRows.map(
+              {
+              headRows.map(
                 ({
                   name,
-                  align,
                   width,
                 }: {
                   name: string;
@@ -367,60 +564,20 @@ export default function CourseInfoManagement() {
           </TableBody>
         </Table>
       )}
-    </Box>
+    </ResultContainer>
+  </form>
   );
 }
 
-const UserTypo = styled(Typography)`
-  margin-bottom: 12px;
-  font-weight: 700;
-`;
-
-const SearchContainer = styled.form`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 4px 6px 0 6px;
-  margin-bottom: 24px;
-  border-radius: 4px;
-  border: 1px solid ${grey[300]};
-`;
-
-const SearchInput = styled(InputBase)`
-  width: 100%;
-`;
-
-const ReloadButton = styled(Button)`
-  margin-left: auto;
-`;
-const ConnectButton = styled(Button)`
-  margin-right: 12px;
-`;
-
-const UserTableRow = styled(TableRow)`
-  white-space: nowrap;
-`;
-
-const UserTitleTableCell = styled(TableCell)`
-  height: 1px;
-  position: relative;
-  font-weight: bold;
-`;
-
-const UserTableCell = styled(TableCell)`
-  white-space: nowrap;
-  text-align: center;
-  padding-top: 10px;
-  margin: 0;
-`;
-
-///////////////
 
 // 학습현황 글자
-const CourseInfoTypography = styled(Typography)`
+const Title = styled(Typography)`
   margin-bottom: 30px;
   font-weight: 700;
+  font-size: 32px;
 `;
+
+
 
 // 학습현황 제목. ellipsis 적용.
 const SubjectBox = styled(Box)`
@@ -461,3 +618,73 @@ const NameBox = styled(Box)`
   white-space: nowrap;
   width: 100%;
 `;
+
+
+const SearchInput = styled(InputBase)`
+  
+  height: 56px;
+  border-radius: 4px;
+  border: 1px solid #c7c7c7;
+  padding: 0 12px;
+`;
+
+const ContainerWrapper = styled(Box)`
+  display: flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 2rem;
+`
+
+const Container = styled(Box)`
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap: .25rem; 
+`
+
+const RadioGroupContainer = styled(Box)`
+
+  border-top: 1px solid #c7c7c7;
+  border-bottom: 1px solid #c7c7c7;
+  padding: .25rem 2rem;
+  margin: 1rem 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 1rem;
+`
+
+const CenterContainer = styled(Container)``;
+const LeftContainer = styled(Container)``;
+
+
+const DoubleInputBox = styled(Box)`
+display:flex;
+align-items:center;
+gap: 1rem
+  
+`
+
+
+const BoxRow = styled(Box)`
+  display: flex;
+  width: 100%;
+  gap: 16px;
+`;
+
+const SearchContainer = styled(Box)`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+`;
+
+const ResultContainer = styled(Box)`
+  
+
+`
+
+
+
+const ReloadButton = styled(Button)``;

@@ -235,10 +235,12 @@ export default function Steb3() {
                             {item.firstIdentityNumber} - ●●●●●●●
                           </StuTableRightCell>
                         </UserTableRow>
-                        {item.carNumber && (
-                          <UserTableRow>
+                        {item.carNumber.includes('0000')
+                            ? ''
+                            : (
+                            <UserTableRow>
                             <StuTableLeftCell>차량번호</StuTableLeftCell>
-                            <StuTableRightCell>{item.carNumber === '충남00아0000' ? null : item.carNumber}</StuTableRightCell>
+                            <StuTableRightCell>{item.carNumber}</StuTableRightCell>
                           </UserTableRow>
                         )}
                         <UserTableRow>

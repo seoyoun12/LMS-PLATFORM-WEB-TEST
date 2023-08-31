@@ -1,14 +1,10 @@
-import { DELETE, GET, POST, PUT } from '@common/httpClient';
+import { GET, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
-import { FetchPaginationResponse, PaginationResult } from 'types/fetch';
-import { CourseInput, CourseRes } from '@common/api/course';
+import { PaginationResult } from 'types/fetch';
+
 import {
-  CourseDetailClientResponseDto,
   CourseLearningInfoCoursesResponseDto,
   CourseLearningInfoStepResponseDto,
-  CourseModuleFindResponseDto,
-  CourseUserMyInfoResponseDto,
-  Pageable,
   UserCourseInfoDetailCourseInfoDto,
   UserCourseInfoDetailLearningStatusDto,
   UserCourseInfoDetailProgressStatusDto,
@@ -88,10 +84,9 @@ export function useLearningInfo({ page, ...rest }: CourseLearningInfoRequestDto)
   };
 }
 
-export function useLearningInfoCourses() {
-  const { data, error, mutate } = useSWR<
-    SWRResponse<CourseLearningInfoCoursesResponseDto[]>
-  >(`/course/adm/learning-info/courses`, GET, {
+export function useLearningInfoCourses(year:number) {
+  const { data, error, mutate } = useSWR<SWRResponse<CourseLearningInfoCoursesResponseDto[]>
+  >(`/course/adm/learning-info/courses?year=${year}`, GET, {
     revalidateOnFocus: false,
     onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
       if (error.status === 401) return;

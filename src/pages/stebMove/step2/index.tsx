@@ -1,6 +1,7 @@
 import { Layout } from '@layouts/Layout';
 import { Box } from '@mui/material';
-import styles from '@styles/common.module.scss';
+
+
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
@@ -20,3 +21,5 @@ export default function Step2Page() {
 }
 
 Step2Page.Layout = Layout;
+
+

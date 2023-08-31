@@ -1,33 +1,48 @@
 import { YN } from '@common/constant';
-import { GET, POST } from '@common/httpClient';
+import { GET, POST, api } from '@common/httpClient';
 import { RoleType } from 'src/staticDataDescElements/staticType';
 import { StepsBySurveyForExcel } from '../Api';
+import { FormType } from '@layouts/AdminCenter/CourseInfoManagement/CourseInfoManagement';
+
+
+
 
 // 학습현황(운수/저상) 엑셀 다운로드
-export function getExcelCourseLearning() {
-  return POST(
+export function getExcelCourseLearning(body:FormType) {
+  
+  const extractValidParams = {}
+
+  for(const key in body) {
+    if(body[key]) {
+      extractValidParams[key] = body[key];
+    }
+  }
+  return api.get(
     `/adm/excel/download/course-learning-user`,
-    {},
-    { responseType: 'blob' }
+    {
+      responseType: 'arraybuffer',
+      params:extractValidParams,
+    },
   );
 }
 
 // 학습현황(도민) 엑셀 다운로드
-export function getExcelCourseTrafficLearning() {
-  return POST(
+export function getExcelCourseTrafficLearning(body:FormType) {
+
+  const extractValidParams = {}
+  for(const key in body) {
+    if(body[key]) {
+      extractValidParams[key] = body[key];
+    }
+  }
+  return api.get(
     `/adm/excel/download/provincial-learning-status`,
-    {},
-    { responseType: 'blob' }
+    {
+      responseType: 'arraybuffer',
+      params:extractValidParams, 
+    },
   );
 }
-
-// export function getExcelSurveyDetail(surveySeq: number) {
-//   return POST(
-//     `/adm/excel/download/survey-detail/${surveySeq}`,
-//     {},
-//     { responseType: 'blob' }
-//   );
-// }
 
 // 회원관리 리스트 엑셀다운로드
 export function getExcelUserList(roleType: RoleType | string) {

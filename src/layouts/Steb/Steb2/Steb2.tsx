@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Container, FormControl, FormControlLabel, LinearProgress, MenuItem, Radio, RadioGroup, Select, TextField, Typography, styled } from '@mui/material';
+import { Box, Button, ButtonGroup, Container, FormControl, FormControlLabel, LinearProgress, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField, Typography, styled } from '@mui/material';
 import StebHeader from '../StebHeader/StebHeader';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -78,14 +78,17 @@ export default function Steb2() {
     setCurrentIndex(prev  => prev + 1) 
   }
   const prevStep = () => {
-    
     setPageIndex(prev => prev - 1);
     if(currentIndex <= 1) return
     if(currentIndex === 5 && hideCarNumber) return setCurrentIndex(3);
     if(currentIndex === 4 && disabledCompany) return setCurrentIndex(2);
     setCurrentIndex(prev  => prev - 1)
   }
-  const onChangeBusinessSubType = (value: string) => {
+
+
+  const onChangeBusinessSubType = (e:SelectChangeEvent) => {
+    const { value } = e.target;
+
     if (courseSubCategoryType.CHARTER_BUS === value) {
       setValue('businessName', '');
       setValue('businessSubType', value as courseSubCategoryType);
@@ -116,7 +119,7 @@ export default function Steb2() {
       courseSubCategoryType.CHARTER_BUS === value ||
       courseSubCategoryType.CORPORATE_TAXI === value
     ) {
-      setValue('carNumber', '충남00아0000');
+      setValue('carNumber', null);
       setValue('businessName', '');
       setValue('businessSubType', value as courseSubCategoryType);
       setDisabledCompany(false);
@@ -159,6 +162,7 @@ export default function Steb2() {
       setPageIndex(1)
       return snackbar({ variant: 'error', message: '운수구분을 선택해주세요!' });
     }
+
     //저상버스 처리
     if (!(localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS')) {
       if (String(rest.businessSubType) === '' || !rest.businessSubType) {
@@ -172,14 +176,21 @@ export default function Steb2() {
       setPageIndex(3)
       return snackbar({ variant: 'error', message: '회사명을 입력해주세요!' });
     }
+
+
+
     // localName, digit2, oneWord, digit4
-    if ((!hideCarNumber && !carNumberRegex.test(rest.carNumber))) {
-      setCurrentIndex(4);
-      setPageIndex(4);
-      return snackbar({
-        variant: 'error',
-        message: '올바른 형식의 차량번호를 입력해주세요!',
-      });
+    if(watch().businessSubType !== courseSubCategoryType.BUS ||
+       watch().businessSubType !== courseSubCategoryType.CHARTER_BUS ||
+       watch().businessSubType !== courseSubCategoryType.CORPORATE_TAXI) {
+        if ((!hideCarNumber && !carNumberRegex.test(rest.carNumber))) {
+        setCurrentIndex(4);
+        setPageIndex(4);
+        return snackbar({
+          variant: 'error',
+          message: '올바른 형식의 차량번호를 입력해주세요!',
+        });
+      }
     }
 
     if (rest.carRegisteredRegion === '' || !rest.carRegisteredRegion) {
@@ -417,7 +428,7 @@ export default function Steb2() {
                     id="businessSubType"
                     placeholder="업종 유형선택"
                     {...register('businessSubType')}
-                    onChange={e => onChangeBusinessSubType(e.target.value as string)}
+                    onChange={onChangeBusinessSubType}
                     value={getValues().businessSubType || ''}
                   >
                   {userBusinessTypeTwo
@@ -521,7 +532,6 @@ export default function Steb2() {
                 ))}
               </Select>
             
-
             <TextField
               {...carRegister('digit4')}
               onChange={(e) => {

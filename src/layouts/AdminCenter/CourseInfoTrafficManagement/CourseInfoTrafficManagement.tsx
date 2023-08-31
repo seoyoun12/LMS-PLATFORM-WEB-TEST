@@ -2,7 +2,7 @@ import { TableBody,TableHead,Typography,Button,Box,Backdrop } from '@mui/materia
 import { Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
 import { CompleteType,StatusType } from '@common/api/adm/learningInfo';
@@ -84,18 +84,8 @@ export default function CourseInfoTrafficManagement() {
   const { data, error, mutate } = useCourseInfoTraffic(10, page);
   const [loading, setLoading] = useState(false);
   const snackbar = useSnackbar();
-
-  // // 엑셀 파일명
-  // const koFileName = UserRadioExcelConfig.filter(
-  //   (ur) => ur.value === typeValue
-  // )[0]?.name;
-
-  // 엑셀
   const onClickExcelDownload = async () => {
     setLoading(true);
-
-    console.log('Traffic Watch is...', watch());
-    
     try {
       const data = await getExcelCourseTrafficLearning(watch());
       const blob = new Blob([data.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });

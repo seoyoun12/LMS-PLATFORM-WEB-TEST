@@ -1,8 +1,7 @@
-import { removeCourse, useCourseList } from "@common/api/adm/course";
+
 import { Table } from "@components/ui";
 import {
   Box,
-  Button,
   Chip,
   TableBody,
   TableHead,
@@ -11,25 +10,19 @@ import {
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import { useEffect, useState } from "react";
-import { Link } from "@components/common";
-import { grey } from "@mui/material/colors";
 import { useSnackbar } from "@hooks/useSnackbar";
 import { useDialog } from "@hooks/useDialog";
 import * as React from "react";
 import { useRouter } from "next/router";
-import styles from "@styles/common.module.scss";
-import { Container } from "@mui/material";
 import dateFormat from "dateformat";
 import { YN } from "@common/constant";
 import { Spinner } from "@components/ui";
-import { css } from "@emotion/css";
-import { courseAdmList, courseList, courseRemove } from "@common/api/course";
+import { courseAdmList } from "@common/api/course";
 import {
   courseReg,
   courseCategory,
   courseSubCategory,
 } from "@layouts/Calendar/CalendarBody/CalendarBody";
-import { CollectionsBookmark } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import { ManagementSearchHeadRow } from "@components/admin-center/ManagementSearchHeadRow";
 import { NotFound } from "@components/ui/NotFound";
@@ -50,8 +43,7 @@ const headRows: {
 ];
 
 export function CourseManagement() {
-  const snackbar = useSnackbar();
-  const dialog = useDialog();
+  
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [seq, setSeq] = useState<number | null>(null);
@@ -104,32 +96,9 @@ export function CourseManagement() {
       data.content.length === 0 && setNotFound(true);
     }
   }, [data]);
-
-  // // 삭제
-  // const onClickRemoveCourse = async (seq: number) => {
-  //   try {
-  //     const dialogConfirmed = await dialog({
-  //       title: '과정 삭제하기',
-  //       description: '정말로 삭제하시겠습니까?',
-  //       confirmText: '삭제하기',
-  //       cancelText: '취소',
-  //     });
-  //     if (dialogConfirmed) {
-  //       await courseRemove(seq);
-  //       snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-  //       await mutate();
-  //     }
-  //   } catch (e: any) {
-  //     snackbar({ variant: 'error', message: e.data.message });
-  //   }
-  // };
-
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
-  // console.log(
-  //   'asd : ',
-  //   courseReg.filter(item => item.type === data?.content[0].courseType)
-  // );
+  
   return (
     <Box>
       <CourseTitleTypography variant="h5">
@@ -217,25 +186,6 @@ export function CourseManagement() {
                     color={course.status ? "secondary" : "default"}
                   />
                 </CourseTableCell>
-
-                {/* <TableCell align="right" className={spaceNoWrap}>
-                <Button
-                  variant="text"
-                  color="neutral"
-                  size="small"
-                  onClick={() => onClickModifyCourse(course.seq)}
-                >
-                  상세
-                </Button>
-                <Button
-                  variant="text"
-                  color="warning"
-                  onClick={() => onClickRemoveCourse(course.seq)}
-                  size="small"
-                >
-                  삭제
-                </Button>
-              </TableCell> */}
               </TableRow>
             ))}
           </TableBody>

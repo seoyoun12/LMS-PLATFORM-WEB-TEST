@@ -1,14 +1,10 @@
-import { DELETE, GET, POST, PUT } from '@common/httpClient';
+import { GET, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
-import { FetchPaginationResponse, PaginationResult } from 'types/fetch';
-import { CourseInput, CourseRes } from '@common/api/course';
+import { PaginationResult } from 'types/fetch';
+
 import {
-  CourseDetailClientResponseDto,
   CourseLearningInfoCoursesResponseDto,
   CourseLearningInfoStepResponseDto,
-  CourseModuleFindResponseDto,
-  CourseUserMyInfoResponseDto,
-  Pageable,
   UserCourseInfoDetailCourseInfoDto,
   UserCourseInfoDetailLearningStatusDto,
   UserCourseInfoDetailProgressStatusDto,

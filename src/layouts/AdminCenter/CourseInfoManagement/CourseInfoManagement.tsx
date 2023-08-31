@@ -4,7 +4,6 @@ import { grey } from '@mui/material/colors';
 import { Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
@@ -24,9 +23,7 @@ import CourseSelectBox from './common/CourseSelectBox';
 import { CourseLearningInfoCoursesResponseDto } from '@common/api/Api';
 import CourseRadioBox from './common/CourseRadioBox';
 import { format, getYear } from 'date-fns';
-import { api } from '@common/httpClient';
-
-// https://api.bonobono.dev/api/v1/course/adm/learning-info/courses
+import CourseTextInputBox from './common/CourseTextInputBox';
 
 const headRows: {
   name: string;
@@ -91,17 +88,20 @@ const DUMMY_YEAR_ARRAY = Array.from({ length: getYear(new Date()) - 2022 + 1 }).
   return {year: i + 2022};
 });
 
+
 export default function CourseInfoManagement() {
 
   // const [notFound, setNotFound] = useState(false);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const [submitValue, setSubmitValue] = useState<FormType>(defaultValues);
   const { watch, setValue, reset, register } = useForm<FormType>({ defaultValues });
-  const { data, error, mutate } = useLearningInfo(submitValue);
+  const { data, error } = useLearningInfo(submitValue);
   const [loading, setLoading] = useState(false);
   const [currentYear, setCurrentYear] = useState(getYear(new Date()));
   const { courses } = useLearningInfoCourses(currentYear);
   const { steps } = useLearningInfoStep(watch().courseSeq);
+  const snackbar = useSnackbar();
+  const [fileLoading, setFileLoading] = useState(false);
 
   const onChangeSeletedSeq = (e: SelectChangeEvent) => {
     onChageCourseSeq(Number(e.target.value));
@@ -159,18 +159,6 @@ export default function CourseInfoManagement() {
     setValue('businessName', e.target.value);
   };
 
-
-
- const [year, setYear] = useState(0);
-      
-
-  const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue('phone', e.target.value);
-  };
-  const onChangeIdentify = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue('identityNumber', e.target.value);
-  };
-
   //change completeType(수료여부)
   const onChangeCompleteType = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -191,13 +179,6 @@ export default function CourseInfoManagement() {
     if (value === StatusType.TYPE_OUT) return setValue('statusType', value);
   };
 
-  const onChangeCarNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setValue('notFound', false);
-    setValue('carNumber', value);
-  };
-
-
   const handleSubmit = (e:FormEvent,isReload = false) => {
     e.preventDefault();
     
@@ -206,6 +187,7 @@ export default function CourseInfoManagement() {
       reset();
       setSubmitValue(watch());
       searchInputRef.current.value = '';
+
       return;
     }
     if (searchInputRef.current) {
@@ -238,8 +220,7 @@ export default function CourseInfoManagement() {
       return temp;
   },[courses]);
 
-  const snackbar = useSnackbar();
-  const [fileLoading, setFileLoading] = useState(false);
+  
 
   const onClickExcelDownload = async () => {
     setFileLoading(true);
@@ -257,9 +238,6 @@ export default function CourseInfoManagement() {
     }
   };
 
-  console.log(watch());
-
-
   useEffect(() => {
     if (data) {
       data.content.length === 0 && setValue('notFound', true);
@@ -267,57 +245,15 @@ export default function CourseInfoManagement() {
     
   }, [data]);
 
-  
-
 
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
-  // user/adm/course-info/detail/{courseUserSeq}
+  
   return (
-    // <HeadRowsTop
-    //     courseType={watch().courseType}
-    //     onChangeCourseType={onChangeCourseType}
-    //   /> 
-    //   <Box display="flex" gap={2}>
-    //      <HeadRowsLeft
-    //       courseSeq={watch().courseSeq}
-    //       onChageCourseSeq={onChageCourseSeq}
-    //       courseClassSeq={watch().courseClassSeq}
-    //       onChageCourseClassSeq={onChageCourseClassSeq}
-    //       register={register}
-    //       businessType={watch().businessType}
-    //       onChangeBusinessType={onChangeBusinessType}
-    //       carRegitRegion={watch().carRegitRegion}
-    //       onChangeCarRegitRegion={onChangeCarRegitRegion}
-    //     /> 
-    //      <HeadRowsRight
-    //       register={register}
-    //       onChangeCompanyName={onChangeCompanyName}
-    //       onChangePhone={onChangePhone}
-    //       onChangeIdentify={onChangeIdentify}
-    //     /> 
-    //      <HeadRowsCenter
-    //       ref={searchInputRef}
-    //       completeType={watch().completeType}
-    //       statusType={watch().statusType}
-    //       carNumber={watch().carNumber}
-    //       handleSearch={handleSearch}
-    //       onChangeCompleteType={onChangeCompleteType}
-    //       onChangeStatusType={onChangeStatusType}
-    //       onChangeCarNumber={onChangeCarNumber}
-    //     /> 
-    //     </Box> 
-    // <HeadRowsBottom
-    //     search={watch().nameOrUsername}
-    //     handleSubmit={handleSubmit}
-    //   />
     <form onSubmit={(e) => handleSubmit(e,false)}>
       <Title variant="h1">전체 수강생 학습현황</Title>
-      <ChoiceContainerWrapper>
+      <ContainerWrapper>
         <LeftContainer>
-          <Box>
-            {/* <Typography>교육연도</Typography> */}
-
             <CourseSelectBox
               label="교육년도 선택"
               firstOptionLabel={null}
@@ -328,41 +264,30 @@ export default function CourseInfoManagement() {
               itemValue="year"
               itemName="year"
             />
-
-            {/* <TextField fullWidth {...register('year')}/> */}
-          </Box>
-
-          <Box sx={{display:'flex',alignItems:'center',gap: '1rem'}}>
-            <CourseSelectBox
-              label="과정 선택"
-              firstOptionLabel="전체"
-              menuItem={duplicateRemoveCourses ?? []}
-              onChange={onChangeSeletedSeq}
-              value={watch().courseSeq + ''}
-              itemKey="courseSeq"
-              itemValue="courseSeq"
-              itemName="courseName"
-            />
-            <CourseSelectBox
-              label="과정기수 선택"
-              firstOptionLabel="전체"
-              menuItem={steps ?? []}
-              onChange={onChangeSelectedClassSeq}
-              value={watch().courseClassSeq + ''}
-              itemKey="courseClassSeq"
-              itemValue="courseClassSeq"
-              itemName="yearAndStep"
-            />
-        </Box>
-      <Box>
-        <Typography>학습기간</Typography>
-        <Box display="flex" gap={2} alignItems="center">
-          <TextField type="date" {...register('studyStartDate')} fullWidth /> ~
-          <TextField type="date" {...register('studyEndDate')} fullWidth />
-        </Box>
-      </Box>
-      
-      <Box sx={{display:'flex',alignItems:'center',gap: '1rem'}}>
+      <DoubleInputBox>
+        <CourseSelectBox
+          label="과정 선택"
+          firstOptionLabel="전체"
+          menuItem={duplicateRemoveCourses ?? []}
+          onChange={onChangeSeletedSeq}
+          value={watch().courseSeq + ''}
+          itemKey="courseSeq"
+          itemValue="courseSeq"
+          itemName="courseName"
+        />
+        <CourseSelectBox
+          label="과정기수 선택"
+          firstOptionLabel="전체"
+          menuItem={steps ?? []}
+          onChange={onChangeSelectedClassSeq}
+          value={watch().courseClassSeq + ''}
+          itemKey="courseClassSeq"
+          itemValue="courseClassSeq"
+          itemName="yearAndStep"
+        />
+      </DoubleInputBox>
+        
+      <DoubleInputBox>
         <CourseSelectBox
           label="업종"
           firstOptionLabel="-없음-"
@@ -383,31 +308,46 @@ export default function CourseInfoManagement() {
           itemValue="en"
           itemName="ko"
         />
+      </DoubleInputBox>
+      <Box>
+        <Typography>학습기간</Typography>
+        <Box display="flex" gap={2} alignItems="center">
+          <TextField type="date" {...register('studyStartDate')} fullWidth /> ~
+          <TextField type="date" {...register('studyEndDate')} fullWidth />
+        </Box>
       </Box>
     </LeftContainer>
 
     <CenterContainer>
-      <Box>
-        <Typography>업체명</Typography>
-        <TextField
-          {...register('businessName')}
-          onChange={onChangeCompanyName}
-          placeholder="업체명"
-          fullWidth
+      <CourseTextInputBox
+        onChange={onChangeCompanyName}
+        placeholder="업체명"
+        fullWidth
+        register={register}
+        registerName="businessName"
+        title="업체명"
         />
-      </Box>
-      <Box>
-        <Typography>핸드폰번호</Typography>
-        <TextField {...register('phone')}  placeholder='"-" 없이 입력' fullWidth />
-      </Box>
-      <Box>
-        <Typography>주민등록번호</Typography>
-        <TextField {...register('identityNumber')} placeholder='"-" 없이 입력' fullWidth/>
-      </Box>
-      <Box>
-        <Typography>차량번호</Typography>
-        <TextField {...register('carNumber')} fullWidth />
-      </Box>
+      <CourseTextInputBox
+        placeholder='"-" 없이 입력'
+        fullWidth
+        register={register}
+        registerName="phone"
+        title="핸드폰번호"
+      />
+      <CourseTextInputBox
+        placeholder='"-" 없이 입력'
+        fullWidth
+        register={register}
+        registerName="identityNumber"
+        title="주민등록번호"
+      />
+      <CourseTextInputBox
+        placeholder="차량번호"
+        fullWidth
+        register={register}
+        registerName="carNumber"
+        title="차량번호"
+      />
     </CenterContainer>
 
       <Backdrop open={loading}>
@@ -422,11 +362,9 @@ export default function CourseInfoManagement() {
           </Box>
         </Box>
       </Backdrop>
-    </ChoiceContainerWrapper>
-    {/*  */}
-    
-    <RadioGroupContainer>
-      
+    </ContainerWrapper>
+
+    <RadioGroupContainer>  
       <CourseRadioBox
         title="과정타입선택"
         checked1={CourseType.TYPE_TRANS_WORKER === watch().courseType}
@@ -454,7 +392,7 @@ export default function CourseInfoManagement() {
         label2="수료"
         label3="미수료"
       />
-        
+          
       <CourseRadioBox
         title="퇴교여부(상태)"
         checked1={watch().statusType === null}
@@ -468,168 +406,166 @@ export default function CourseInfoManagement() {
         label2="정상"
         label3="퇴교"
       />
-      </RadioGroupContainer>
-    <SearchContainer>
+    </RadioGroupContainer>
+  <SearchContainer>
 
-      
-        <Box sx={{ display:'flex',flexDirection:'column' }}>
-          <Typography sx={{display:'flex',justifyContent:'space-between'}}>
-              사용자 검색 
-              <Typography component='span' sx={{color:'#a7a7a7c7'}}>
-                {watch().nameOrUsername !== '' && `최근 검색어: ${watch().nameOrUsername}`}
-              </Typography>
-            </Typography>
-          <SearchInput
-            {...register('nameOrUsername')}
-            inputRef={searchInputRef}
-            placeholder="이름 혹은 아이디 입력"
-            fullWidth
-          />
-        </Box>
+    <Box sx={{ display:'flex',flexDirection:'column' }}>
+      <Typography sx={{display:'flex',justifyContent:'space-between'}}>
+          사용자 검색
+          <Typography component='span' sx={{color:'#a7a7a7c7'}}>
+            {watch().nameOrUsername !== '' && `최근 검색어: ${watch().nameOrUsername}`}
+          </Typography>
+      </Typography>
+      <SearchInput
+        {...register('nameOrUsername')}
+        inputRef={searchInputRef}
+        placeholder="이름 혹은 아이디 입력"
+        fullWidth
+        />
+    </Box>
 
-      <BoxRow sx={{ flexDirection: 'row',marginTop: '.25rem',marginBottom:'2rem' }}>
-        
-        <Button type="submit" variant='contained' onClick={(e) => handleSubmit(e,false)} fullWidth>
-          검색하기
-        </Button>
-        <ReloadButton
-          type='submit'
-          size='small'
-          color='neutral'
-          variant='text'
-          endIcon={<ReplayIcon htmlColor={grey[700]} />}
-          sx={{ marginLeft: '12px',border:'1px solid #c7c7c744' }}
-          onClick={(e) => handleSubmit(e,true)}
-          fullWidth
-        >
-          전체 다시 불러오기
-        </ReloadButton>
-      </BoxRow>
-
-      <Backdrop open={loading}>
-        <Box
-          display='flex'
-          flexDirection='column'
-          sx={{ background: 'white', borderRadius: '4px', padding: '12px' }}
-        >
-          <Spinner fit={true} />
-          <Box color='rgb(194,51,51)' fontWeight='bold'>
-            다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
-          </Box>
-        </Box>
-      </Backdrop>
-    </SearchContainer>
-      
-    <BoxRow sx={{ flexDirection: 'row-reverse',paddingTop:'1rem',borderTop:'1px solid #c7c7c7' }}>
-      <Button
-        variant='contained'
-        color='success'
-        disabled={fileLoading}
-        onClick={onClickExcelDownload}
-      >
-        {fileLoading ? (
-          <Spinner fit={true} />
-        ) : (
-          <Box sx={{display:'flex',alignItems:'center'}}>
-            <FileCopyIcon sx={{ marginRight: '4px' }} />
-            학습현황 엑셀다운로드
-          </Box>
-        )}
+    <BoxRow sx={{ flexDirection: 'row',marginTop: '.25rem',marginBottom:'2rem' }}>
+      <Button type="submit" variant='contained' onClick={(e) => handleSubmit(e,false)} fullWidth>
+        검색하기
       </Button>
+      <ReloadButton
+        type='submit'
+        size='small'
+        color='neutral'
+        variant='text'
+        endIcon={<ReplayIcon htmlColor={grey[700]} />}
+        sx={{ marginLeft: '12px',border:'1px solid #c7c7c744' }}
+        onClick={(e) => handleSubmit(e,true)}
+        fullWidth
+      >
+        전체 다시 불러오기
+      </ReloadButton>
     </BoxRow>
-      <ResultContainer>
-        {watch().notFound ? (
-          <NotFound content="학습현황이 존재하지 않습니다!" />
-        ) : (
-          <Table
-            pagination={true}
-            totalNum={data?.totalElements}
-            page={data?.number}
-            onChangePage={onChangePage}
-            size="small"
-            sx={{ tableLayout: 'fixed' }}
-          >
-            <TableHead>
-              <TableRow>
-                {
-                headRows.map(
-                  ({
-                    name,
-                    width,
-                  }: {
-                    name: string;
-                    align: string;
-                    width: string;
-                  }) => (
-                    <CourseInfoTitleTableCell
-                      key={name}
-                      align="center"
-                      width={width}
-                    >
-                      {name}
-                    </CourseInfoTitleTableCell>
-                  )
-                )}
-              </TableRow>
-            </TableHead>
 
-            <TableBody>
-              {data.content.map(user => (
-                <TableRow
-                  sx={{ cursor: 'pointer' }}
-                  key={user.username}
-                  hover
-                  onClick={() => onClickmodifyCourseInfo(user.courseUserSeq)}
-                >
-                  <CourseInfoTableCell align="center">
-                    {user.courseUserSeq}
-                  </CourseInfoTableCell>
-                  <CourseInfoTableCell align="center">
-                    <NameBox title={user.name}>{user.name}</NameBox>
-                  </CourseInfoTableCell>
-                  <CourseInfoTableCell align="center">
-                    {user.username || '실명계정'}
-                  </CourseInfoTableCell>
-                  <CourseInfoTableCell align="center">
-                    <SubjectBox>{convertBirth(user.birth)}</SubjectBox>
-                  </CourseInfoTableCell>
-                  <CourseInfoTableCell align="center">
-                    <SubjectBox>{user.phone}</SubjectBox>
-                  </CourseInfoTableCell>
-                  <CourseInfoTableCell align="center">
-                    <SubjectBox>
-                      {
-                        courseSubCategory.filter(
-                          filter => filter.type === user.businessSubType
-                        )[0]?.ko
-                      }
-                    </SubjectBox>
-                  </CourseInfoTableCell>
-                  <CourseInfoTableCell align="center">
-                    <SubjectBox>{user.courseName}</SubjectBox>
-                  </CourseInfoTableCell>
-                  <CourseInfoTableCell align="center">
-                    {user.yearAndStep}
-                  </CourseInfoTableCell>
-                  <CourseInfoTableCell align="center">
-                    {user.studyDate}
-                  </CourseInfoTableCell>
-                  <CourseInfoTableCell align="center">
-                    {user.displayTotalProgress}
-                  </CourseInfoTableCell>
-                  <CourseInfoTableCell align="center">
-                    {user.displayCompleteYn}
-                  </CourseInfoTableCell>
-                  <CourseInfoTableCell align="center">
-                    {user.displayClassLearningStatus}
-                  </CourseInfoTableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </ResultContainer>
-    </form>
+    <Backdrop open={loading}>
+      <Box
+        display='flex'
+        flexDirection='column'
+        sx={{ background: 'white', borderRadius: '4px', padding: '12px' }}
+      >
+        <Spinner fit={true} />
+        <Box color='rgb(194,51,51)' fontWeight='bold'>
+          다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
+        </Box>
+      </Box>
+    </Backdrop>
+  </SearchContainer>
+      
+  <BoxRow sx={{ flexDirection: 'row-reverse',paddingTop:'1rem',borderTop:'1px solid #c7c7c7' }}>
+    <Button
+      variant='contained'
+      color='success'
+      disabled={fileLoading}
+      onClick={onClickExcelDownload}
+    >
+      {fileLoading ? (
+        <Spinner fit={true} />
+      ) : (
+        <Box sx={{display:'flex',alignItems:'center'}}>
+          <FileCopyIcon sx={{ marginRight: '4px' }} />
+          학습현황 엑셀다운로드
+        </Box>
+      )}
+    </Button>
+  </BoxRow>
+    <ResultContainer>
+      {watch().notFound ? (
+        <NotFound content="학습현황이 존재하지 않습니다!" />
+      ) : (
+        <Table
+          pagination={true}
+          totalNum={data?.totalElements}
+          page={data?.number}
+          onChangePage={onChangePage}
+          size="small"
+          sx={{ tableLayout: 'fixed' }}
+        >
+          <TableHead>
+            <TableRow>
+              {
+              headRows.map(
+                ({
+                  name,
+                  width,
+                }: {
+                  name: string;
+                  align: string;
+                  width: string;
+                }) => (
+                  <CourseInfoTitleTableCell
+                    key={name}
+                    align="center"
+                    width={width}
+                  >
+                    {name}
+                  </CourseInfoTitleTableCell>
+                )
+              )}
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {data.content.map(user => (
+              <TableRow
+                sx={{ cursor: 'pointer' }}
+                key={user.username}
+                hover
+                onClick={() => onClickmodifyCourseInfo(user.courseUserSeq)}
+              >
+                <CourseInfoTableCell align="center">
+                  {user.courseUserSeq}
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  <NameBox title={user.name}>{user.name}</NameBox>
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  {user.username || '실명계정'}
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  <SubjectBox>{convertBirth(user.birth)}</SubjectBox>
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  <SubjectBox>{user.phone}</SubjectBox>
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  <SubjectBox>
+                    {
+                      courseSubCategory.filter(
+                        filter => filter.type === user.businessSubType
+                      )[0]?.ko
+                    }
+                  </SubjectBox>
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  <SubjectBox>{user.courseName}</SubjectBox>
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  {user.yearAndStep}
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  {user.studyDate}
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  {user.displayTotalProgress}
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  {user.displayCompleteYn}
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  {user.displayClassLearningStatus}
+                </CourseInfoTableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+    </ResultContainer>
+  </form>
   );
 }
 
@@ -692,7 +628,7 @@ const SearchInput = styled(InputBase)`
   padding: 0 12px;
 `;
 
-const ChoiceContainerWrapper = styled(Box)`
+const ContainerWrapper = styled(Box)`
   display: flex;
   align-items:flex-start;
   justify-content:space-between;
@@ -704,7 +640,6 @@ const Container = styled(Box)`
   display:flex;
   flex-direction:column;
   gap: .25rem; 
-  
 `
 
 const RadioGroupContainer = styled(Box)`
@@ -719,14 +654,17 @@ const RadioGroupContainer = styled(Box)`
   gap: 1rem;
 `
 
-const CenterContainer = styled(Container)`
-  
-`;
+const CenterContainer = styled(Container)``;
+const LeftContainer = styled(Container)``;
 
 
-const LeftContainer = styled(Container)`
+const DoubleInputBox = styled(Box)`
+display:flex;
+align-items:center;
+gap: 1rem
   
-`;
+`
+
 
 const BoxRow = styled(Box)`
   display: flex;

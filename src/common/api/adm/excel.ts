@@ -2,7 +2,8 @@ import { YN } from '@common/constant';
 import { GET, POST, api } from '@common/httpClient';
 import { RoleType } from 'src/staticDataDescElements/staticType';
 import { StepsBySurveyForExcel } from '../Api';
-import { FormType } from '@components/admin-center/CourseInfo/HeadRowsRight';
+import { FormType } from '@layouts/AdminCenter/CourseInfoManagement/CourseInfoManagement';
+
 
 
 

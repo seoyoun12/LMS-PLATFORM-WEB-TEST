@@ -44,7 +44,7 @@ const headRows: {
   { name: '상태', align: 'center', width: '5%' },
 ];
 
-interface FormType {
+export interface FormType {
   page: number;
   notFound: boolean;
   nameOrUsername: string; //이름 혹은 아이디

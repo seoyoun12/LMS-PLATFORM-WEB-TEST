@@ -13,10 +13,13 @@ export function getExcelCourseLearning(body:FormType) {
   const extractValidParams = {}
 
   for(const key in body) {
-    if(body[key]) {
+    // year 파라미터가 0일시 쿼리에서 제거
+    if(body[key] || body[key] !== 0) {
       extractValidParams[key] = body[key];
     }
   }
+
+  
   return api.get(
     `/adm/excel/download/course-learning-user`,
     {

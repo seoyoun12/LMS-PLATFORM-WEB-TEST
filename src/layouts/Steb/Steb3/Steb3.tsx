@@ -235,7 +235,7 @@ export default function Steb3() {
                             {item.firstIdentityNumber} - ●●●●●●●
                           </StuTableRightCell>
                         </UserTableRow>
-                        {item.carNumber.includes('0000')
+                        {item?.carNumber?.includes('0000')
                             ? ''
                             : (
                             <UserTableRow>

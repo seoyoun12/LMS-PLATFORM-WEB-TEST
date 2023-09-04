@@ -68,11 +68,19 @@ export interface CourseLearningInfoInput {
 }
 
 export function useLearningInfo({ page, ...rest }: CourseLearningInfoRequestDto) {
+  const extractValidParams = {}
+
+  for(const key in rest) {
+    // year 파라미터가 0일시 쿼리에서 제거
+    if(rest[key] || rest[key] !== 0) {
+      extractValidParams[key] = rest[key];
+    }
+  }
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<LearningInfoRes[]>>>(
     [
       `/course/adm/learning-info/`,
       {
-        params: { page, ...rest },
+        params: { page, ...extractValidParams },
       },
     ],
     GET
@@ -86,7 +94,7 @@ export function useLearningInfo({ page, ...rest }: CourseLearningInfoRequestDto)
 
 export function useLearningInfoCourses(year:number) {
   const { data, error, mutate } = useSWR<SWRResponse<CourseLearningInfoCoursesResponseDto[]>
-  >(`/course/adm/learning-info/courses?year=${year}`, GET, {
+  >(`/course/adm/learning-info/courses${year ? `?year=${year}` : ''}`, GET, {
     revalidateOnFocus: false,
     onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
       if (error.status === 401) return;

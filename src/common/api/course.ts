@@ -98,9 +98,7 @@ export function courseAdmList({
   elementCnt?: number;
   page: number;
 }) {
-  const { data, error, mutate } = useSWR<
-    SWRResponse<PaginationResult<Course[]>>
-  >(
+  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Course[]>>>(
     [
       `/course/adm`,
       {

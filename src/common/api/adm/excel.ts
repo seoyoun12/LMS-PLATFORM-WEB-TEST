@@ -4,9 +4,6 @@ import { RoleType } from 'src/staticDataDescElements/staticType';
 import { StepsBySurveyForExcel } from '../Api';
 import { FormType } from '@layouts/AdminCenter/CourseInfoManagement/CourseInfoManagement';
 
-
-
-
 // 학습현황(운수/저상) 엑셀 다운로드
 export function getExcelCourseLearning(body:FormType) {
   
@@ -19,7 +16,6 @@ export function getExcelCourseLearning(body:FormType) {
     }
   }
 
-  
   return api.get(
     `/adm/excel/download/course-learning-user`,
     {

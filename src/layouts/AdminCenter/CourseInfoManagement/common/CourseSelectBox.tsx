@@ -1,6 +1,5 @@
-import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
-import React, { useState } from 'react'
-
+import { Box, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
+import { useState } from 'react'
 
 interface Props<T> {
   label:string;

@@ -4,7 +4,6 @@ import styled from '@emotion/styled';
 import {
   Box,
   Button,
-  Container,
   Grid,
   TableBody,
   TableCell,
@@ -13,65 +12,11 @@ import {
   Typography,
 } from '@mui/material';
 import React from 'react';
-import {
-  FieldValues,
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormWatch,
-} from 'react-hook-form';
+
 import { useRecoilState } from 'recoil';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
-import { Table } from '@components/ui';
 import { locationList } from '@layouts/MeEdit/MeEdit';
 import { useSnackbar } from '@hooks/useSnackbar';
-
-const test = [
-  {
-    seq: 1,
-    businessName: '좋은회사입니다',
-    businessSubType: 'BUS',
-    businessType: 'PASSENGER',
-    carNumber: '12가1234',
-    carRegisteredRegion: 'GONGJU',
-    courseClassSeq: 123123,
-    firstIdentityNumber: 312312,
-    secondIdentityNumber: 1313132,
-    name: 'Hi There',
-    phone: '123123123',
-    registerType: 'TYPE_ORGANIZATION',
-    smsYn: 'Y',
-  },
-  {
-    seq: 1,
-    businessName: '좋은회22사입니다',
-    businessSubType: 'BUS',
-    businessType: 'PASSENGER',
-    carNumber: '12가1234',
-    carRegisteredRegion: 'GONGJU',
-    courseClassSeq: 123123,
-    firstIdentityNumber: 312312,
-    secondIdentityNumber: 1313132,
-    name: 'Hi There',
-    phone: '123123123',
-    registerType: 'TYPE_ORGANIZATION',
-    smsYn: 'Y',
-  },
-  {
-    seq: 1,
-    businessName: '좋은회2233사입니다',
-    businessSubType: 'BUS',
-    businessType: 'PASSENGER',
-    carNumber: '12가1234',
-    carRegisteredRegion: 'GONGJU',
-    courseClassSeq: 123123,
-    firstIdentityNumber: 312312,
-    secondIdentityNumber: 1313132,
-    name: 'Hi There',
-    phone: '123123123',
-    registerType: 'TYPE_ORGANIZATION',
-    smsYn: 'Y',
-  },
-];
 
 interface Props {
   registerType: RegisterType;

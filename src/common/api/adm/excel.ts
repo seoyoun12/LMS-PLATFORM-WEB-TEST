@@ -4,19 +4,18 @@ import { RoleType } from 'src/staticDataDescElements/staticType';
 import { StepsBySurveyForExcel } from '../Api';
 import { FormType } from '@layouts/AdminCenter/CourseInfoManagement/CourseInfoManagement';
 
-
-
-
 // 학습현황(운수/저상) 엑셀 다운로드
 export function getExcelCourseLearning(body:FormType) {
   
   const extractValidParams = {}
 
   for(const key in body) {
-    if(body[key]) {
+    // year 파라미터가 0일시 쿼리에서 제거
+    if(body[key] || body[key] !== 0) {
       extractValidParams[key] = body[key];
     }
   }
+
   return api.get(
     `/adm/excel/download/course-learning-user`,
     {

@@ -1,29 +1,10 @@
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  MenuItem,
-  Select,
-  styled,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Box,Button,Container,Grid,MenuItem,Select,styled,Table,TableBody,TableCell,TableContainer,TableRow,Typography } from '@mui/material';
 import StebHeader from '../StebHeader/StebHeader';
 import { useRecoilState } from 'recoil';
 import { courseClassEnrollInfo, courseClassEnrollList, userInfo } from '@common/recoil';
 import { locationList } from '@layouts/MeEdit/MeEdit';
 import { useRouter } from 'next/router';
-import {
-  businessType,
-  courseCategoryType,
-  getSingleCourseClass,
-  
-} from '@common/api/courseClass';
+import { businessType,courseCategoryType,getSingleCourseClass } from '@common/api/courseClass';
 import { useLayoutEffect, useState } from 'react';
 import { courseCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { Spinner } from '@components/ui';
@@ -235,7 +216,7 @@ export default function Steb3() {
                             {item.firstIdentityNumber} - ●●●●●●●
                           </StuTableRightCell>
                         </UserTableRow>
-                        {item.carNumber.includes('0000')
+                        {item?.carNumber?.includes('0000')
                             ? ''
                             : (
                             <UserTableRow>

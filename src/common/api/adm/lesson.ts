@@ -1,7 +1,7 @@
 import useSWR, { SWRResponse } from 'swr';
 import { DELETE, GET, POST, PUT } from '@common/httpClient';
 import { Lesson, LessonInput } from '@common/api/lesson';
-import { BbsType, deleteFile } from '@common/api/adm/file';
+
 
 export function useLessonList(contentSeq: number) {
   const { data, error, mutate } = useSWR<SWRResponse<Lesson[]>>(contentSeq ? `/lesson/${contentSeq}` : null, GET);

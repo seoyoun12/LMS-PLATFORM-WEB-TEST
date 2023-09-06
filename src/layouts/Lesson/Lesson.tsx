@@ -1,33 +1,23 @@
-import styled from '@emotion/styled';
-import {
-  Button,
-  Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  Typography,
-} from '@mui/material';
-import {
-  CourseDetailClientResponseDto,
-  CourseModuleFindResponseDto,
-  SurveyResponseDto,
-} from '@common/api/Api';
 import ApiClient from '@common/api/ApiClient';
 import LessonSidebar from './LessonSidebar';
 import LessonContentVideo from './LessonContentVideo';
 import LessonContentSurvey from './LessonContentSurvey';
+import styled from '@emotion/styled';
+import LessonHeader from './LessonHeader';
+import { Button,Container,Dialog,DialogActions,DialogContent,DialogContentText,Typography } from '@mui/material';
+import { CourseDetailClientResponseDto,CourseModuleFindResponseDto,SurveyResponseDto } from '@common/api/Api';
 import { LessonContentType, LESSON_CONTENT_TYPES } from './Lesson.types';
 import { useRouter } from 'next/router';
-import LessonHeader from './LessonHeader';
+
 import { Fragment, ReactElement, useEffect, useState } from 'react';
+import useLesson from '@hooks/useLesson';
+import LessonRejectPage from '@components/Lesson/LessonRejectPage';
 
 export interface LessonProps {
   courseUserSeq: number;
   contentType: LessonContentType;
   contentSeq: number;
 }
-
 
 let Content: ReactElement = <Fragment/>;
 let DialogFirst: ReactElement = <Fragment/>;
@@ -48,6 +38,22 @@ export default function Lesson(props: LessonProps) {
   const [moduleSurvey, setModuleSurvey] = useState<SurveyResponseDto | null>(null);
   const [moduleSurveyTodo, setModuleSurveyTodo] = useState<CourseModuleFindResponseDto | null>(null);
   const [currentLessonPlayTime,setCurrentLessonPlayTime] = useState(0);
+  const { getCheckAvailableLesson } = useLesson();
+  const [isAvailableLesson,setIsAvailableLesson] = useState(true);
+
+  const getAvaliableLessonCheckResult = async ({courseUserSeq, contentSeq}) => {
+    const data = await getCheckAvailableLesson({courseUserSeq, contentSeq});
+    // console.log('===get Available Data is ... ===',data);
+    setIsAvailableLesson(data);
+  }
+
+  useEffect(() => {
+    if(!course) return;
+    getAvaliableLessonCheckResult({courseUserSeq: course.courseUserSeq, contentSeq: props.contentSeq})
+    
+  },[course,props.contentSeq,isAvailableLesson])
+
+
 
   useEffect(() => {
     const { lessons } = course || { lessons: [] };
@@ -56,24 +62,15 @@ export default function Lesson(props: LessonProps) {
     setCurrentLessonPlayTime(currentLesson?.completeTime || 0);
   },[props,course])
 
-
-
-
   useEffect(() => {
     setCoursePlayFirst(true)
   }
   , [props.courseUserSeq]);
-
-
   
   useEffect(() => {
     if (props.contentType === 'LESSON') setDialog('FIRST');
   }, [props.courseUserSeq, props.contentType]);
-
   
-
-  // useEffect가 뭔지 모르나봐요 진짜 정신병걸린것 같습니다.
-  // 이정도 중증이면 당장 병원에 집어 넣어야합니다
   useEffect(() => {
     setLoading(true);
 
@@ -138,6 +135,10 @@ export default function Lesson(props: LessonProps) {
   }, [course, courseModules, courseModulesCompleted]);
 
 
+
+  // falsy값이 아닌 명확한 false값을 비교해야함
+  if(isAvailableLesson === false) return <LessonRejectPage />
+
   if (course === null) {
     return (
       <LessonContentEmptyWrapper>
@@ -145,7 +146,6 @@ export default function Lesson(props: LessonProps) {
       </LessonContentEmptyWrapper>
     );
   }
-
 
   switch (props.contentType) {
     case 'LESSON': {
@@ -253,7 +253,6 @@ export default function Lesson(props: LessonProps) {
   }
 
   if (moduleSurveyTodo && !(props.contentType === "SURVEY" && moduleSurveyTodo.surveySeq === props.contentSeq)) {
-
     DialogSurvey = (
       <Dialog
         open={dialog === 'SURVEY'}
@@ -283,8 +282,6 @@ export default function Lesson(props: LessonProps) {
     );
     
   }
-
-  // 렌더링.
 
   return (
     <>

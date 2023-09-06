@@ -1,15 +1,11 @@
-import { TableBody,TableHead,Typography,Button,Box,InputBase,TextField,Backdrop,SelectChangeEvent } from '@mui/material';
-import { saveAs } from 'file-saver';
-import { grey } from '@mui/material/colors';
-import { Table } from '@components/ui';
+import styled from '@emotion/styled';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import styled from '@emotion/styled';
-import { Spinner } from '@components/ui';
 import ReplayIcon from '@mui/icons-material/Replay';
-import { CompleteType,StatusType,useLearningInfo,useLearningInfoCourses,useLearningInfoStep } from '@common/api/adm/learningInfo';
+import CourseSelectBox from './common/CourseSelectBox';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
+import CourseRadioBox from './common/CourseRadioBox';
+import CourseTextInputBox from './common/CourseTextInputBox';
 import { CourseType } from '@common/api/adm/courseClass';
 import { NotFound } from '@components/ui/NotFound';
 import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
@@ -17,13 +13,16 @@ import { convertBirth } from '@utils/convertBirth';
 import { useForm } from 'react-hook-form';
 import { locationList } from '@layouts/MeEdit/MeEdit';
 import { userBusinessTypeOne } from '@layouts/MeEdit/TransWorker/TransWorker';
-import { useSnackbar } from '@hooks/useSnackbar';
+import { saveAs } from 'file-saver';
+import { grey } from '@mui/material/colors';
+import { Table } from '@components/ui';
+import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { Spinner } from '@components/ui';
+import { CompleteType,StatusType,useLearningInfo,useLearningInfoCourses,useLearningInfoStep } from '@common/api/adm/learningInfo';
+import { TableBody,TableHead,Typography,Button,Box,InputBase,TextField,Backdrop,SelectChangeEvent } from '@mui/material';
 import { getExcelCourseLearning } from '@common/api/adm/excel';
-import CourseSelectBox from './common/CourseSelectBox';
 import { CourseLearningInfoCoursesResponseDto } from '@common/api/Api';
-import CourseRadioBox from './common/CourseRadioBox';
 import { format, getYear } from 'date-fns';
-import CourseTextInputBox from './common/CourseTextInputBox';
 
 const headRows: {
   name: string;
@@ -81,12 +80,12 @@ const defaultValues: FormType = {
   studyEndDate: '',
   phone: null,
   identityNumber: null,
-  year: getYear(new Date()),
+  year: 0,
 };
 
 const DUMMY_YEAR_ARRAY = Array.from({ length: getYear(new Date()) - 2022 + 1 }).map((_, i) => {
   return {year: i + 2022};
-});
+}).reverse();
 
 
 export default function CourseInfoManagement() {
@@ -97,10 +96,9 @@ export default function CourseInfoManagement() {
   const { watch, setValue, reset, register } = useForm<FormType>({ defaultValues });
   const { data, error } = useLearningInfo(submitValue);
   const [loading, setLoading] = useState(false);
-  const [currentYear, setCurrentYear] = useState(getYear(new Date()));
+  const [currentYear, setCurrentYear] = useState(0);
   const { courses } = useLearningInfoCourses(currentYear);
   const { steps } = useLearningInfoStep(watch().courseSeq);
-  const snackbar = useSnackbar();
   const [fileLoading, setFileLoading] = useState(false);
 
   const onChangeSeletedSeq = (e: SelectChangeEvent) => {
@@ -242,7 +240,6 @@ export default function CourseInfoManagement() {
     if (data) {
       data.content.length === 0 && setValue('notFound', true);
     }
-    
   }, [data]);
 
 
@@ -254,61 +251,60 @@ export default function CourseInfoManagement() {
       <Title variant="h1">전체 수강생 학습현황</Title>
       <ContainerWrapper>
         <LeftContainer>
-            <CourseSelectBox
-              label="교육년도 선택"
-              firstOptionLabel={null}
-              menuItem={DUMMY_YEAR_ARRAY}
-              onChange={onChangeYear}
-              value={watch().year + ''}
-              itemKey="year"
-              itemValue="year"
-              itemName="year"
-            />
-      <DoubleInputBox>
-        <CourseSelectBox
-          label="과정 선택"
-          firstOptionLabel="전체"
-          menuItem={duplicateRemoveCourses ?? []}
-          onChange={onChangeSeletedSeq}
-          value={watch().courseSeq + ''}
-          itemKey="courseSeq"
-          itemValue="courseSeq"
-          itemName="courseName"
-        />
-        <CourseSelectBox
-          label="과정기수 선택"
-          firstOptionLabel="전체"
-          menuItem={steps ?? []}
-          onChange={onChangeSelectedClassSeq}
-          value={watch().courseClassSeq + ''}
-          itemKey="courseClassSeq"
-          itemValue="courseClassSeq"
-          itemName="yearAndStep"
-        />
-      </DoubleInputBox>
-        
-      <DoubleInputBox>
-        <CourseSelectBox
-          label="업종"
-          firstOptionLabel="-없음-"
-          menuItem={userBusinessTypeOne}
-          onChange={onChangeBusinessType}
-          value={watch().businessType + ''}
-          itemKey="enType"
-          itemValue="enType"
-          itemName="type"
-        />
-        <CourseSelectBox
-          label="차량등록지"
-          firstOptionLabel="-없음-"
-          menuItem={locationList}
-          onChange={onChangeCarRegitRegion}
-          value={watch().carRegitRegion + ''}
-          itemKey="en"
-          itemValue="en"
-          itemName="ko"
-        />
-      </DoubleInputBox>
+          <CourseSelectBox
+            label="교육년도 선택"
+            firstOptionLabel="전체"
+            menuItem={DUMMY_YEAR_ARRAY}
+            onChange={onChangeYear}
+            value={watch().year + ''}
+            itemKey="year"
+            itemValue="year"
+            itemName="year"
+          />
+        <DoubleInputBox>
+          <CourseSelectBox
+            label="과정 선택"
+            firstOptionLabel="전체"
+            menuItem={duplicateRemoveCourses ?? []}
+            onChange={onChangeSeletedSeq}
+            value={watch().courseSeq + ''}
+            itemKey="courseSeq"
+            itemValue="courseSeq"
+            itemName="courseName"
+          />
+          <CourseSelectBox
+            label="과정기수 선택"
+            firstOptionLabel="전체"
+            menuItem={steps ?? []}
+            onChange={onChangeSelectedClassSeq}
+            value={watch().courseClassSeq + ''}
+            itemKey="courseClassSeq"
+            itemValue="courseClassSeq"
+            itemName="yearAndStep"
+          />
+        </DoubleInputBox>
+        <DoubleInputBox>
+          <CourseSelectBox
+            label="업종"
+            firstOptionLabel="-없음-"
+            menuItem={userBusinessTypeOne}
+            onChange={onChangeBusinessType}
+            value={watch().businessType + ''}
+            itemKey="enType"
+            itemValue="enType"
+            itemName="type"
+          />
+          <CourseSelectBox
+            label="차량등록지"
+            firstOptionLabel="-없음-"
+            menuItem={locationList}
+            onChange={onChangeCarRegitRegion}
+            value={watch().carRegitRegion + ''}
+            itemKey="en"
+            itemValue="en"
+            itemName="ko"
+          />
+        </DoubleInputBox>
       <Box>
         <Typography>학습기간</Typography>
         <Box display="flex" gap={2} alignItems="center">
@@ -411,8 +407,8 @@ export default function CourseInfoManagement() {
 
     <Box sx={{ display:'flex',flexDirection:'column' }}>
       <Typography sx={{display:'flex',justifyContent:'space-between'}}>
-          사용자 검색
-          <Typography component='span' sx={{color:'#a7a7a7c7'}}>
+        사용자 검색
+        <Typography component='span' sx={{color:'#a7a7a7c7'}}>
             {watch().nameOrUsername !== '' && `최근 검색어: ${watch().nameOrUsername}`}
           </Typography>
       </Typography>
@@ -661,7 +657,7 @@ const LeftContainer = styled(Container)``;
 const DoubleInputBox = styled(Box)`
 display:flex;
 align-items:center;
-gap: 1rem
+gap: 1rem;
   
 `
 

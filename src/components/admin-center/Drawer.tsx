@@ -12,7 +12,7 @@ import ViewComfyAltOutlinedIcon from '@mui/icons-material/ViewComfyAltOutlined';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import ChromeReaderModeOutlinedIcon from '@mui/icons-material/ChromeReaderModeOutlined';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import { ReactNode, SyntheticEvent, useState } from 'react';
+import { ReactNode, SyntheticEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Accordion } from '@components/ui';
 import { logout } from '@common/api';
@@ -20,19 +20,18 @@ import Image from 'next/image';
 import a11yProps from '@utils/a11yProps';
 import CustomTabPanel from './drawer/CustomTabPanel';
 
-
-
-
 export type TabType = 'normal' | 'traffic';
 
 const drawerWidth = 290;
 
 export function Drawer({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const [value, setValue] = useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
 
+ // searchParams에 등록
   const handleChange = (event: SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+    setTabIndex(newValue);
+    sessionStorage.setItem('tabIndex', (newValue + 1).toString());
   };
   
   const onClickToMain = () => {
@@ -60,7 +59,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/category-traffic/upload',
         },
       ],
-      icon: <ListAltIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <ListAltIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
     {
       name: '과정관리',
@@ -76,7 +75,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/course-traffic/upload',
         },
       ],
-      icon: <SchoolOutlinedIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <SchoolOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
     {
       name: '학습현황',
@@ -87,7 +86,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/course-info-traffic',
         },
       ],
-      icon: <MenuBookIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <MenuBookIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
     {
       name: '회원관리',
@@ -98,7 +97,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/user',
         },
       ],
-      icon: <PeopleOutlineIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <PeopleOutlineIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
     {
       name: '1대1문의관리',
@@ -110,7 +109,7 @@ export function Drawer({ children }: { children: ReactNode }) {
         },
       ],
       icon: (
-        <QuestionAnswerOutlinedIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />
+        <QuestionAnswerOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />
       ),
     },
     {
@@ -128,7 +127,7 @@ export function Drawer({ children }: { children: ReactNode }) {
         },
       ],
       icon: (
-        <ChromeReaderModeOutlinedIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />
+        <ChromeReaderModeOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />
       ),
     },
     
@@ -146,7 +145,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/content/upload',
         },
       ],
-      icon: <SourceOutlinedIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <SourceOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
     
     {
@@ -158,7 +157,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/main-display',
         },
       ],
-      icon: <ViewComfyAltOutlinedIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <ViewComfyAltOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
     {
       name: '설문관리',
@@ -174,7 +173,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/survey/upload',
         },
       ],
-      icon: <SourceOutlinedIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <SourceOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
   ]
   // [저상버스, 운수종사자]
@@ -194,7 +193,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/category/upload',
         },
       ],
-      icon: <ListAltIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <ListAltIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
     {
       name: '과정관리',
@@ -210,7 +209,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/course/upload',
         },
       ],
-      icon: <SchoolOutlinedIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <SchoolOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
     {
       name: '학습현황',
@@ -221,7 +220,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/course-info',
         },
       ],
-      icon: <MenuBookIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <MenuBookIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
     {
       name: '회원관리',
@@ -232,7 +231,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/user',
         },
       ],
-      icon: <PeopleOutlineIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <PeopleOutlineIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
     {
       name: '1대1문의관리',
@@ -244,7 +243,7 @@ export function Drawer({ children }: { children: ReactNode }) {
         },
       ],
       icon: (
-        <QuestionAnswerOutlinedIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />
+        <QuestionAnswerOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />
       ),
     },
     {
@@ -261,7 +260,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/content/upload',
         },
       ],
-      icon: <SourceOutlinedIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <SourceOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
     {
       name: '일정관리',
@@ -277,7 +276,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/calendar/upload',
         },
       ],
-      icon: <CalendarMonthIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <CalendarMonthIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
 
     {
@@ -294,7 +293,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/banner/upload',
         },
       ],
-      icon: <ViewCarouselOutlinedIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <ViewCarouselOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
     {
       name: '설문관리',
@@ -310,7 +309,7 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '/admin-center/survey/upload',
         },
       ],
-      icon: <SourceOutlinedIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <SourceOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
     {
       name: '통계',
@@ -321,9 +320,14 @@ export function Drawer({ children }: { children: ReactNode }) {
           isActive: router.pathname === '',
         },
       ],
-      icon: <AnalyticsOutlinedIcon sx={{ mr: '32px', color: value === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <AnalyticsOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
   ];
+
+  useEffect(() => {
+    const tabIndex = Number(sessionStorage.getItem('tabIndex'));
+    if (tabIndex) setTabIndex(tabIndex - 1);
+  },[])
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -368,18 +372,17 @@ export function Drawer({ children }: { children: ReactNode }) {
               </Button>
             </Box>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{padding:'0 1rem'}}>
+              <Tabs value={tabIndex} onChange={handleChange} aria-label="basic tabs example" sx={{padding:'0 1rem'}}>
                 <Tab label="운수종사자" {...a11yProps(0)} sx={{flex:1}} />
                 <Tab label="도민교육" {...a11yProps(1)} sx={{flex:1}} />
               </Tabs>
-              <CustomTabPanel value={value} index={0}>
+              <CustomTabPanel value={tabIndex} index={0}>
                 <Accordion accordionList={accordionList} activeIndex={0} />
               </CustomTabPanel>
-              <CustomTabPanel value={value} index={1}>
+              <CustomTabPanel value={tabIndex} index={1}>
                 <Accordion accordionList={accordionList2} activeIndex={1} />
               </CustomTabPanel>
             </Box>
-            
           </List>
         </Box>
       </MuiDrawer>
@@ -389,13 +392,3 @@ export function Drawer({ children }: { children: ReactNode }) {
     </Box>
   );
 }
-
-
-
-
-// <CustomTabPanel value={value} index={0}>
-//   Item One
-// </CustomTabPanel>
-// <CustomTabPanel value={value} index={1}>
-//   Item Two
-// </CustomTabPanel>

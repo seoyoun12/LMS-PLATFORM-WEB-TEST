@@ -1,6 +1,6 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { Drawer } from '@components/admin-center';
-import { Drawer02 } from '@components/admin-center';
+
 import { Layout } from '@layouts/Layout';
 import { useRouter } from 'next/router';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -30,7 +30,7 @@ export const AdminCenterLayout = ({
           return router.push('/admin-center/signin');
         }
         setLoading(false);
-      } catch (e: any) {
+      } catch (e) {
         snackbar({ variant: 'error', message: e });
         router.back();
       }

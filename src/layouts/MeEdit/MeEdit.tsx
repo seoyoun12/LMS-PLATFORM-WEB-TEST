@@ -1,21 +1,11 @@
 import * as React from 'react';
-import {
-  Container,
-  Box,
-  Switch,
-  Button,
-  TextField,
-  Typography,
-  tableBodyClasses,
-} from '@mui/material';
+import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { getMyUser, modifyMyUser, useMyUser } from '@common/api/user';
+import {  modifyMyUser, useMyUser } from '@common/api/user';
 import { useRouter } from 'next/router';
-import { PasswordChangeModal } from './PasswordChangeModal/PasswordChangeModal';
 import { useDialog } from '@hooks/useDialog';
 import { YN } from '@common/constant';
 import { TransWorker } from './TransWorker';
-import { Tabs } from '@components/ui';
 import { BoxProps } from '@material-ui/core';
 import { Educator } from './Educator';
 import { logout } from '@common/api';
@@ -43,6 +33,7 @@ export const locationList = [
   { ko: '예산', en: 'YESAN' },
   { ko: '태안', en: 'TAEAN' },
   { ko: '세종', en: 'SEJONG' },
+  { ko: '충남 전체 (세종 제외)', en: 'EXCEPTSEJONG'}
   // { ko: '서울', en: 'SEOUL' },
   // { ko: '부산', en: 'BUSAN' },
   // { ko: '대구', en: 'DAEGU' },
@@ -98,7 +89,6 @@ export function MeEdit() {
   const router = useRouter();
   const { user, error } = useMyUser();
   const dialog = useDialog();
-  const [openPromptDialog, setOpenPromptDialog] = useState(false);
   const [nameInput, setNameInput] = useState('');
   const [emailChecked, setEmailChecked] = useState(false);
   const [smsChecked, setSmsChecked] = useState(false);
@@ -106,7 +96,7 @@ export function MeEdit() {
   const [tabValue, setTabValue] = useState<string>();
   const onChangeTabValue = async (newString: string) => {
     if (user?.regCategory !== newString) {
-      let confirm = window.confirm(
+      const confirm = window.confirm(
         '다른 타입의 정보를 수정하시려면 재로그인이 필요합니다. 로그아웃 하시겠습니까?'
       );
       if (confirm) {

@@ -12,7 +12,7 @@ import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
 import { convertBirth } from '@utils/convertBirth';
 import { useForm } from 'react-hook-form';
 import { locationList } from '@layouts/MeEdit/MeEdit';
-import { userBusinessTypeOne } from '@layouts/MeEdit/TransWorker/TransWorker';
+import { userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
 import { saveAs } from 'file-saver';
 import { grey } from '@mui/material/colors';
 import { Table } from '@components/ui';
@@ -30,17 +30,19 @@ const headRows: {
   width: string;
 }[] = [
   { name: 'No', align: 'center', width: '5%' },
-  { name: '이름', align: 'center', width: '6%' },
-  { name: '아이디', align: 'center', width: '6%' },
-  { name: '생년월일', align: 'center', width: '8%' },
+  { name: '이름', align: 'center', width: '4%' },
+  { name: '아이디', align: 'center', width: '4%' },
+  { name: '생년월일', align: 'center', width: '6%' },
   { name: '휴대폰번호', align: 'center', width: '8%' },
   { name: '업종', align: 'center', width: '6%' },
-  { name: '과정명', align: 'center', width: '28%' },
+  { name: '차량등록지', align: 'center', width: '7.5%' },
+  { name: '회사명', align: 'center', width: '7.5%' },
+  { name: '과정명', align: 'center', width: '22%' },
   { name: '기수', align: 'center', width: '10%' },
   { name: '학습기간', align: 'center', width: '7%' },
-  { name: '진도율', align: 'center', width: '5%' },
+  { name: '진도율', align: 'center', width: '4%' },
   { name: '수료여부', align: 'center', width: '6%' },
-  { name: '상태', align: 'center', width: '5%' },
+  { name: '상태', align: 'center', width: '3%' },
 ];
 
 export interface FormType {
@@ -242,7 +244,7 @@ export default function CourseInfoManagement() {
     }
   }, [data]);
 
-
+  
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
   
@@ -287,7 +289,7 @@ export default function CourseInfoManagement() {
           <CourseSelectBox
             label="업종"
             firstOptionLabel="-없음-"
-            menuItem={userBusinessTypeOne}
+            menuItem={userBusinessTypeTwo}
             onChange={onChangeBusinessType}
             value={watch().businessType + ''}
             itemKey="enType"
@@ -469,6 +471,7 @@ export default function CourseInfoManagement() {
       )}
     </Button>
   </BoxRow>
+
     <ResultContainer>
       {watch().notFound ? (
         <NotFound content="학습현황이 존재하지 않습니다!" />
@@ -513,6 +516,7 @@ export default function CourseInfoManagement() {
                 hover
                 onClick={() => onClickmodifyCourseInfo(user.courseUserSeq)}
               >
+                
                 <CourseInfoTableCell align="center">
                   {user.courseUserSeq}
                 </CourseInfoTableCell>
@@ -528,6 +532,7 @@ export default function CourseInfoManagement() {
                 <CourseInfoTableCell align="center">
                   <SubjectBox>{user.phone}</SubjectBox>
                 </CourseInfoTableCell>
+                
                 <CourseInfoTableCell align="center">
                   <SubjectBox>
                     {
@@ -536,6 +541,15 @@ export default function CourseInfoManagement() {
                       )[0]?.ko
                     }
                   </SubjectBox>
+                </CourseInfoTableCell>
+                                  {/* TODO: 2개 항목 따로 만들어야함 */}
+                  {/* <SubjectBox>{user.carRegisteredRegion}</SubjectBox>
+                  <SubjectBox>{user.businessName}</SubjectBox> */}
+                <CourseInfoTableCell align="center">
+                  <SubjectBox>{user.carRegisteredRegion}</SubjectBox>
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align="center">
+                  <SubjectBox>{user.businessName}</SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
                   <SubjectBox>{user.courseName}</SubjectBox>

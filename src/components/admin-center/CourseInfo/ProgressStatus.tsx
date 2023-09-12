@@ -91,8 +91,9 @@ export function ProgressStatus({ progressList, onMutate }: Props) {
     }
   };
 
+  
   // 인정시간 필요없음
-
+  // console.log(progressList[0].completeYn);
   return (
     <ProgressStatusBox>
       <TableHead sx={{ display: 'table', width: '100%' }}>
@@ -124,26 +125,33 @@ export function ProgressStatus({ progressList, onMutate }: Props) {
         </TableTopHeadCell>
         <TableTopHeadCell
           colSpan={4}
-          sx={{ borderRight: '1px solid #c4c4c4' }}
+          sx={{ borderRight: '1px solid #3c2626' }}
         ></TableTopHeadCell>
       </TableHead>
       <TableHead sx={{ display: 'table', width: '100%', marginTop: '4px' }}>
         <TableHeaderRow>
           {headRows.map(item => (
-            <TableHeadercell align={item.align} sx={{ width: item.width }}>
+            <TableHeadercell
+              key={item.name}
+              align={item.align}
+              sx={{ width: item.width }}
+              >
               {item.name}
             </TableHeadercell>
           ))}
         </TableHeaderRow>
       </TableHead>
+
       {/* <TableBody className={pt20} sx={{ display: 'table', width: '100%' }}> */}
       <TableBody>
         {progressList.map(item => (
           <ProgressStatusItem
+            key={item.totalTimeStr}
             courseUserSeq={Number(courseUserSeq)}
             item={item}
             allLoading={allLoading}
             onMutate={onMutate}
+            progressList={progressList}
           />
         ))}
       </TableBody>
@@ -193,7 +201,3 @@ const TableBody = styled(MuiTableBody)`
   border-left: 1px solid #c4c4c4;
   border-right: 1px solid #c4c4c4;
 `;
-
-const TablecompleteTimeCell = styled(MuiTableCell)`
-  width: 7%;
-`; //인정시간..? 이건빼라고하신거같은데 나중에 문의

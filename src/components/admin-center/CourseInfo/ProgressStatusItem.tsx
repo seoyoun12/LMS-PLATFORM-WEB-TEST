@@ -1,4 +1,3 @@
-import { useSnackbar } from '@hooks/useSnackbar';
 import { Button, TableCell, TableRow as MuiTableRow } from '@mui/material';
 import styled from '@emotion/styled';
 import { UserCourseInfoDetailProgressStatusDto } from '@common/api/Api';
@@ -15,14 +14,31 @@ interface Props {
   item: UserCourseInfoDetailProgressStatusDto;
   allLoading: boolean;
   onMutate: () => void;
+  progressList: UserCourseInfoDetailProgressStatusDto[];
 }
 
-export function ProgressStatusItem({ courseUserSeq, item, onMutate, allLoading }: Props) {
+// 수료처리: console.log(progressList[0].completeYn); 타겟넘버 전 N으로 본다
+// 수료취소처리: 타겟넘버 이후 Y로 본다.
+
+export function ProgressStatusItem({ courseUserSeq, item, onMutate, allLoading,progressList }: Props) {
   const dialog = useDialog();
   const [loading, setLoading] = useState(false);
 
   //강제수강처리(100%)
   const onClickForcedProgressY = async (courseProcessSeq: number) => {
+    
+    
+
+    if(item.chapter > 1) {
+      for(let i = 0; i < item.chapter - 1; i++){
+        if(progressList[i].completeYn === 'N'){
+          console.log(progressList[i]);
+          console.log(progressList[i].completeYn);
+          alert('이전 챕터를 수료처리 해주세요.');
+          return;
+        }
+      }  
+    }
     try {
       const dialogConfirmed = await dialog({
         title: '강의 이수처리',
@@ -32,17 +48,30 @@ export function ProgressStatusItem({ courseUserSeq, item, onMutate, allLoading }
       });
 
       if (!dialogConfirmed) return;
+
       setLoading(true);
       await modifyCompleteCourseInfo(Number(courseUserSeq), courseProcessSeq);
       setLoading(false);
       onMutate();
-    } catch (e: any) {
+    } catch (e) {
       console.error(e);
       setLoading(false);
     }
   };
 
   const onClickForcedProgressN = async (courseProcessSeq: number) => {
+
+    if(item.chapter < progressList.length) {
+      for(let i = item.chapter; i < progressList.length; i++){
+        if(progressList[i].completeYn === 'Y'){
+          console.log(progressList[i]);
+          console.log(progressList[i].completeYn);
+          alert('수료 취소는 순서대로 진행되어야 합니다.');
+          return;
+        }
+      }
+    }
+
     try {
       const dialogConfirmed = await dialog({
         title: '강의 미이수처리',
@@ -56,7 +85,7 @@ export function ProgressStatusItem({ courseUserSeq, item, onMutate, allLoading }
       await modifyCancelCourseInfo(Number(courseUserSeq), courseProcessSeq);
       setLoading(false);
       onMutate();
-    } catch (e: any) {
+    } catch (e) {
       console.error(e);
       setLoading(false);
     }

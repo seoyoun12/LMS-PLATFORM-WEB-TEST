@@ -29,6 +29,8 @@ interface LearningInfoRes {
   birth: string; //생년월일
   businessSubType: courseSubCategoryType; //업종
   phone: string; //폰
+  businessName: string; //업체명
+  carRegisteredRegion: string // 차량등록지역
 }
 
 interface DetailCourse {
@@ -76,6 +78,8 @@ export function useLearningInfo({ page, ...rest }: CourseLearningInfoRequestDto)
       extractValidParams[key] = rest[key];
     }
   }
+
+  
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<LearningInfoRes[]>>>(
     [
       `/course/adm/learning-info/`,

@@ -542,12 +542,12 @@ export default function CourseInfoManagement() {
                     }
                   </SubjectBox>
                 </CourseInfoTableCell>
-                                  {/* TODO: 2개 항목 따로 만들어야함 */}
-                  {/* <SubjectBox>{user.carRegisteredRegion}</SubjectBox>
-                  <SubjectBox>{user.businessName}</SubjectBox> */}
+                                  
                 <CourseInfoTableCell align="center">
                 
-                  <SubjectBox>{user.carRegisteredRegion === 'CHEONAN' && '천안'}
+                  <SubjectBox>
+                    {/* find로 긁어와도 될듯하지만~?  */}
+                {user.carRegisteredRegion === 'CHEONAN' && '천안'}
                 {user.carRegisteredRegion === 'PRINCESS' && '공주'}
                 {user.carRegisteredRegion === 'BORYEONG' && '보령'}
                 {user.carRegisteredRegion === 'ASAN' && '아산'}

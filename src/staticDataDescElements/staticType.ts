@@ -170,41 +170,6 @@ export const businessSubTypeCategoryReg = [
     type: '개별화물',
     enType: businessSubType.INDIVIDUAL_CARGO,
   },
-  // {
-  //   category: 'PASSENGER',
-  //   type: '특별교통수단',
-  //   enType: courseSubCategoryType.SPECIAL_TRANSPORTATION,
-  // },
-  // {
-  //   category: 'PASSENGER',
-  //   type: '저상버스',
-  //   enType: courseSubCategoryType.KNEELING_BUS,
-  // },
-  // {
-  //   category: 'FREIGHT',
-  //   type: '위험물',
-  //   enType: courseSubCategoryType.DANGEROUS_GOODS,
-  // },
-  // {
-  //   category: 'FREIGHT',
-  //   type: '지정폐기물',
-  //   enType: courseSubCategoryType.DESIGNATED_WASTE,
-  // },
-  // {
-  //   category: 'FREIGHT',
-  //   type: '유해화학물질',
-  //   enType: courseSubCategoryType.HAZARDOUS_CHEMICALS,
-  // },
-  // {
-  //   category: 'FREIGHT',
-  //   type: '고압가스(가연성)',
-  //   enType: courseSubCategoryType.HIGH_PRESSURE_GAS_FLAMMABLE,
-  // },
-  // {
-  //   category: 'FREIGHT',
-  //   type: '고압가스(독성)',
-  //   enType: courseSubCategoryType.HIGH_PRESSURE_GAS_TOXIC,
-  // },
 ];
 
 export enum TargetMainType {
@@ -348,7 +313,6 @@ export enum QnaSubType {
   TYPE_WEB_OR_APP = 'TYPE_WEB_OR_APP',
   TYPE_ETC = 'TYPE_ETC',
 }
-
 
 export const QnaTypeTabsConfig = [
   { name: '전체', value: '' },

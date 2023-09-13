@@ -238,6 +238,7 @@ export default function CourseInfoTrafficManagement() {
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align='center'>
                   {user.organization}
+                  
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align='center'>
                   {user.expectedToStartDtime}

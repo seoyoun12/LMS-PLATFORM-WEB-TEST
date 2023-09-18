@@ -556,7 +556,7 @@ export default function CourseInfoManagement() {
                   {user.carRegisteredRegion === 'SEOCHEON' && '서천'}
                   {user.carRegisteredRegion === 'CHEONGYANG' && '청양'}
                   {user.carRegisteredRegion === 'HONGSEONG' && '홍성'}
-                  {user.carRegisteredRegion === 'BUDGET' && '예산'}
+                  {user.carRegisteredRegion === 'YESAN' && '예산'}
                   {user.carRegisteredRegion === 'TAEAN' && '태안'}
                   {user.carRegisteredRegion === 'CHUNGNAM' && '충남'}
                   {user.carRegisteredRegion === 'SEJONG' && '세종'}

@@ -250,15 +250,22 @@ export function SignInV2() {
             </Box>
             <ViewContentBox onClick={() => setOpen(true)}>내용보기</ViewContentBox>
           </IndividualCheckBox>
+
+
+
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            disabled={loading}
+            disabled={identify1.length < 6 || identify2.length < 7 || !name}
             sx={{ mt: 1, mb: 2 }}
           >
             {loading ? <Spinner fit={true} /> : '확인'}
           </Button>
+
+
+
+
           <Modal
             title={'개인정보 수집 및 이용 전문'}
             open={open}
@@ -279,6 +286,7 @@ export function SignInV2() {
                   variant="contained"
                   onClick={() => setOpen(false)}
                   fullWidth
+                  disabled={loading}
                 >
                   확인
                 </ConfirmButton>
@@ -286,7 +294,7 @@ export function SignInV2() {
             }
           >
             {termData.split('\n').map(item => (
-              <Box>{item}</Box>
+              <Box key={item}>{item}</Box>
             ))}
           </Modal>
         </Box>
@@ -317,6 +325,12 @@ const ViewContentBox = styled(Box)`
   border-radius: 4px;
   cursor: pointer;
 `;
+
+const ConfirmButton = styled(Button)`
+  
+
+`
+
 
 const Title = dynamic(
   () =>
@@ -352,4 +366,3 @@ const Title = dynamic(
   { ssr: false }
 );
 
-const ConfirmButton = styled(Button)``;

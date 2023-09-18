@@ -547,6 +547,7 @@ export default function CourseInfoManagement() {
                 
                   <SubjectBox>
                     {/* find로 긁어와도 될듯하지만~?  */}
+                {user.carRegisteredRegion === 'EXCEPTSEJONG' && '전체(세종 제외)'}
                 {user.carRegisteredRegion === 'CHEONAN' && '천안'}
                 {user.carRegisteredRegion === 'PRINCESS' && '공주'}
                 {user.carRegisteredRegion === 'BORYEONG' && '보령'}

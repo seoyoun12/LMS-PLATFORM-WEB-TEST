@@ -7,6 +7,8 @@ import { FormType } from '@layouts/AdminCenter/CourseInfoManagement/CourseInfoMa
 // 학습현황(운수/저상) 엑셀 다운로드
 export function getExcelCourseLearning(body:FormType) {
   
+
+  // 파라미터가 공백으로 들어가지 않게끔 필터링하는 로직
   const extractValidParams = {}
 
   for(const key in body) {
@@ -24,6 +26,8 @@ export function getExcelCourseLearning(body:FormType) {
     },
   );
 }
+
+
 
 // 학습현황(도민) 엑셀 다운로드
 export function getExcelCourseTrafficLearning(body:FormType) {

@@ -63,6 +63,7 @@ export const axiosSetting = {
 export const api = Axios.create({
   baseURL: axiosSetting.server(),
   headers: axiosHeaders,
+  timeout: 30000,
 });
 triggerInterceptors();
 
@@ -101,7 +102,7 @@ export const POST_TO_ALL_DATA = async <T = any>(
   try {
     const response = await api.post<T>(url, data, config);
     return response;
-  } catch (error: any) {
+  } catch (error) {
     return handleError(error);
   }
 };
@@ -114,7 +115,7 @@ export const PUT = async <T = any>(
   try {
     const response = await api.put<T>(url, data, { params, headers });
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     return handleError(error);
   }
 };
@@ -123,12 +124,12 @@ export const DELETE = async (url: string, data: object = {}) => {
   try {
     const response = await api.delete(url, { data });
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     return handleError(error);
   }
 };
 
-const handleError = (error: AxiosError | any) => {
+const handleError = (error: AxiosError) => {
   if (error.response) {
     throw error.response;
   }

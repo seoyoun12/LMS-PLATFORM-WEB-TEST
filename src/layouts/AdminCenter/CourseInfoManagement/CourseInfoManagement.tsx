@@ -299,7 +299,7 @@ export default function CourseInfoManagement() {
           <CourseSelectBox
             label="차량등록지"
             firstOptionLabel="-없음-"
-            menuItem={locationList}
+            menuItem={[...locationList,{ ko: '충남 전체 (세종 제외)', en: 'EXCEPTSEJONG'}]}
             onChange={onChangeCarRegitRegion}
             value={watch().carRegitRegion + ''}
             itemKey="en"
@@ -491,16 +491,12 @@ export default function CourseInfoManagement() {
                 ({
                   name,
                   width,
-                }: {
-                  name: string;
-                  align: string;
-                  width: string;
                 }) => (
                   <CourseInfoTitleTableCell
                     key={name}
                     align="center"
                     width={width}
-                  >
+                    >
                     {name}
                   </CourseInfoTitleTableCell>
                 )
@@ -547,38 +543,39 @@ export default function CourseInfoManagement() {
                 
                   <SubjectBox>
                     {/* find로 긁어와도 될듯하지만~?  */}
-                {user.carRegisteredRegion === 'CHEONAN' && '천안'}
-                {user.carRegisteredRegion === 'PRINCESS' && '공주'}
-                {user.carRegisteredRegion === 'BORYEONG' && '보령'}
-                {user.carRegisteredRegion === 'ASAN' && '아산'}
-                {user.carRegisteredRegion === 'SEOSAN' && '서산'}
-                {user.carRegisteredRegion === 'NONSAN' && '논산'}
-                {user.carRegisteredRegion === 'GYERYONG' && '계룡'}
-                {user.carRegisteredRegion === 'DANGJIN' && '당진'}
-                {user.carRegisteredRegion === 'GEUMSAN' && '금산'}
-                {user.carRegisteredRegion === 'GRANT' && '부여'}
-                {user.carRegisteredRegion === 'SEOCHEON' && '서천'}
-                {user.carRegisteredRegion === 'CHEONGYANG' && '청양'}
-                {user.carRegisteredRegion === 'HONGSEONG' && '홍성'}
-                {user.carRegisteredRegion === 'BUDGET' && '예산'}
-                {user.carRegisteredRegion === 'TAEAN' && '태안'}
-                {user.carRegisteredRegion === 'CHUNGNAM' && '충남'}
-                {user.carRegisteredRegion === 'SEJONG' && '세종'}
-                {user.carRegisteredRegion === 'SEOUL' && '서울'}
-                {user.carRegisteredRegion === 'BUSAN' && '부산'}
-                {user.carRegisteredRegion === 'DAEGU' && '대구'}
-                {user.carRegisteredRegion === 'INCHEON' && '인천'}
-                {user.carRegisteredRegion === 'GWANGJU' && '광주'}
-                {user.carRegisteredRegion === 'DAEJEON' && '대전'}
-                {user.carRegisteredRegion === 'ULSAN' && '울산'}
-                {user.carRegisteredRegion === 'GAME' && '경기'}
-                {user.carRegisteredRegion === 'GANGWON' && '강원'}
-                {user.carRegisteredRegion === 'CHUNGBUK' && '충북'}
-                {user.carRegisteredRegion === 'JEONBUK' && '전북'}
-                {user.carRegisteredRegion === 'JEONNAM' && '전남'}
-                {user.carRegisteredRegion === 'GYEONGBUK' && '경북'}
-                {user.carRegisteredRegion === 'GYEONGNAM' && '경남'}
-                {user.carRegisteredRegion === 'JEJU' && '제주'}</SubjectBox>
+                  {user.carRegisteredRegion === 'CHEONAN' && '천안'}
+                  {user.carRegisteredRegion === 'PRINCESS' && '공주'}
+                  {user.carRegisteredRegion === 'BORYEONG' && '보령'}
+                  {user.carRegisteredRegion === 'ASAN' && '아산'}
+                  {user.carRegisteredRegion === 'SEOSAN' && '서산'}
+                  {user.carRegisteredRegion === 'NONSAN' && '논산'}
+                  {user.carRegisteredRegion === 'GYERYONG' && '계룡'}
+                  {user.carRegisteredRegion === 'DANGJIN' && '당진'}
+                  {user.carRegisteredRegion === 'GEUMSAN' && '금산'}
+                  {user.carRegisteredRegion === 'GRANT' && '부여'}
+                  {user.carRegisteredRegion === 'SEOCHEON' && '서천'}
+                  {user.carRegisteredRegion === 'CHEONGYANG' && '청양'}
+                  {user.carRegisteredRegion === 'HONGSEONG' && '홍성'}
+                  {user.carRegisteredRegion === 'BUDGET' && '예산'}
+                  {user.carRegisteredRegion === 'TAEAN' && '태안'}
+                  {user.carRegisteredRegion === 'CHUNGNAM' && '충남'}
+                  {user.carRegisteredRegion === 'SEJONG' && '세종'}
+                  {user.carRegisteredRegion === 'SEOUL' && '서울'}
+                  {user.carRegisteredRegion === 'BUSAN' && '부산'}
+                  {user.carRegisteredRegion === 'DAEGU' && '대구'}
+                  {user.carRegisteredRegion === 'INCHEON' && '인천'}
+                  {user.carRegisteredRegion === 'GWANGJU' && '광주'}
+                  {user.carRegisteredRegion === 'DAEJEON' && '대전'}
+                  {user.carRegisteredRegion === 'ULSAN' && '울산'}
+                  {user.carRegisteredRegion === 'GAME' && '경기'}
+                  {user.carRegisteredRegion === 'GANGWON' && '강원'}
+                  {user.carRegisteredRegion === 'CHUNGBUK' && '충북'}
+                  {user.carRegisteredRegion === 'JEONBUK' && '전북'}
+                  {user.carRegisteredRegion === 'JEONNAM' && '전남'}
+                  {user.carRegisteredRegion === 'GYEONGBUK' && '경북'}
+                  {user.carRegisteredRegion === 'GYEONGNAM' && '경남'}
+                  {user.carRegisteredRegion === 'JEJU' && '제주'}
+                </SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
                   <SubjectBox>{user.businessName}</SubjectBox>

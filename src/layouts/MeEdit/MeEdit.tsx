@@ -32,24 +32,11 @@ export const locationList = [
   { ko: '홍성', en: 'HONGSEONG' },
   { ko: '예산', en: 'YESAN' },
   { ko: '태안', en: 'TAEAN' },
-  { ko: '세종', en: 'SEJONG' },
-  { ko: '충남 전체 (세종 제외)', en: 'EXCEPTSEJONG'}
-  // { ko: '서울', en: 'SEOUL' },
-  // { ko: '부산', en: 'BUSAN' },
-  // { ko: '대구', en: 'DAEGU' },
-  // { ko: '인천', en: 'INCHEON' },
-  // { ko: '광주', en: 'GWANGJU' },
-  // { ko: '대전', en: 'DAEJEON' },
-  // { ko: '울산', en: 'ULSAN' },
-  // { ko: '경기', en: 'GYEONGGI' },
-  // { ko: '강원', en: 'GANGWON' },
-  // { ko: '충북', en: 'CHUNGBUK' },
-  // { ko: '전북', en: 'JEONBUK' },
-  // { ko: '전남', en: 'JEONNAM' },
-  // { ko: '경북', en: 'GYEONGBUK' },
-  // { ko: '경남', en: 'GYEONGNAM' },
-  // { ko: '제주', en: 'JEJU' },
+  { ko: '세종', en: 'SEJONG' }
 ];
+
+
+
 export const residenceList = [
   // { ko: '충남', en: 'CHUNGNAM' },
   { ko: '천안', en: 'CHEONAN' },

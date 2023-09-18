@@ -544,7 +544,7 @@ export default function CourseInfoManagement() {
                   <SubjectBox>
                     {/* find로 긁어와도 될듯하지만~?  */}
                   {user.carRegisteredRegion === 'CHEONAN' && '천안'}
-                  {user.carRegisteredRegion === 'PRINCESS' && '공주'}
+                  {user.carRegisteredRegion === 'GONGJU' && '공주'}
                   {user.carRegisteredRegion === 'BORYEONG' && '보령'}
                   {user.carRegisteredRegion === 'ASAN' && '아산'}
                   {user.carRegisteredRegion === 'SEOSAN' && '서산'}
@@ -552,7 +552,7 @@ export default function CourseInfoManagement() {
                   {user.carRegisteredRegion === 'GYERYONG' && '계룡'}
                   {user.carRegisteredRegion === 'DANGJIN' && '당진'}
                   {user.carRegisteredRegion === 'GEUMSAN' && '금산'}
-                  {user.carRegisteredRegion === 'GRANT' && '부여'}
+                  {user.carRegisteredRegion === 'BUYEO' && '부여'}
                   {user.carRegisteredRegion === 'SEOCHEON' && '서천'}
                   {user.carRegisteredRegion === 'CHEONGYANG' && '청양'}
                   {user.carRegisteredRegion === 'HONGSEONG' && '홍성'}
@@ -567,7 +567,7 @@ export default function CourseInfoManagement() {
                   {user.carRegisteredRegion === 'GWANGJU' && '광주'}
                   {user.carRegisteredRegion === 'DAEJEON' && '대전'}
                   {user.carRegisteredRegion === 'ULSAN' && '울산'}
-                  {user.carRegisteredRegion === 'GAME' && '경기'}
+                  {user.carRegisteredRegion === 'GYEONGGI' && '경기'}
                   {user.carRegisteredRegion === 'GANGWON' && '강원'}
                   {user.carRegisteredRegion === 'CHUNGBUK' && '충북'}
                   {user.carRegisteredRegion === 'JEONBUK' && '전북'}

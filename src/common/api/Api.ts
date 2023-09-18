@@ -1857,41 +1857,7 @@ export interface CourseUserCommonDetailsResponseDto {
   /** 교육신청자 정보 - 차량번호 */
   carNumber?: string;
 
-  /**
-   * 교육신청자 정보 - 차량 등록지
-   * 천안 - CHEONAN
-   * 공주 - PRINCESS
-   * 보령 - BORYEONG
-   * 아산 - ASAN
-   * 서산 - SEOSAN
-   * 논산 - NONSAN
-   * 계룡 - GYERYONG
-   * 당진 - DANGJIN
-   * 금산 - GEUMSAN
-   * 부여 - GRANT
-   * 서천 - SEOCHEON
-   * 청양 - CHEONGYANG
-   * 홍성 - HONGSEONG
-   * 예산 - BUDGET
-   * 태안 - TAEAN
-   * 충남 - CHUNGNAM
-   * 세종 - SEJONG
-   * 서울 - SEOUL
-   * 부산 - BUSAN
-   * 대구 - DAEGU
-   * 인천 - INCHEON
-   * 광주 - GWANGJU
-   * 대전 - DAEJEON
-   * 울산 - ULSAN
-   * 경기 - GAME
-   * 강원 - GANGWON
-   * 충북 - CHUNGBUK
-   * 전북 - JEONBUK
-   * 전남 - JEONNAM
-   * 경북 - GYEONGBUK
-   * 경남 - GYEONGNAM
-   * 제주 - JEJU
-   */
+  
   carRegisteredRegion?:
     | "CHEONAN"
     | "GONGJU"
@@ -2006,41 +1972,6 @@ export interface CourseUserCommonDetailsResponseDto {
    */
   regType?: "TYPE_INDIVIDUAL" | "TYPE_ORGANIZATION";
 
-  /**
-   * 교육신청자 정보 - 거주지
-   * 천안 - CHEONAN
-   * 공주 - PRINCESS
-   * 보령 - BORYEONG
-   * 아산 - ASAN
-   * 서산 - SEOSAN
-   * 논산 - NONSAN
-   * 계룡 - GYERYONG
-   * 당진 - DANGJIN
-   * 금산 - GEUMSAN
-   * 부여 - GRANT
-   * 서천 - SEOCHEON
-   * 청양 - CHEONGYANG
-   * 홍성 - HONGSEONG
-   * 예산 - BUDGET
-   * 태안 - TAEAN
-   * 충남 - CHUNGNAM
-   * 세종 - SEJONG
-   * 서울 - SEOUL
-   * 부산 - BUSAN
-   * 대구 - DAEGU
-   * 인천 - INCHEON
-   * 광주 - GWANGJU
-   * 대전 - DAEJEON
-   * 울산 - ULSAN
-   * 경기 - GAME
-   * 강원 - GANGWON
-   * 충북 - CHUNGBUK
-   * 전북 - JEONBUK
-   * 전남 - JEONNAM
-   * 경북 - GYEONGBUK
-   * 경남 - GYEONGNAM
-   * 제주 - JEJU
-   */
   residence?:
     | "CHEONAN"
     | "GONGJU"

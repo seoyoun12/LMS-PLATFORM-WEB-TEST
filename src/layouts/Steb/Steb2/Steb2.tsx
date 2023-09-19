@@ -72,19 +72,21 @@ export default function Steb2() {
 
   const nextStep = () => {
     setPageIndex(prev => prev + 1);
+    
     if(currentIndex > 8) return;
     if(currentIndex === 3 && hideCarNumber) return setCurrentIndex(5);
     if(currentIndex === 2 && disabledCompany) return setCurrentIndex(4);
     setCurrentIndex(prev  => prev + 1) 
   }
+
   const prevStep = () => {
+    if(currentIndex === 3 && (localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS')) return;
     setPageIndex(prev => prev - 1);
     if(currentIndex <= 1) return
     if(currentIndex === 5 && hideCarNumber) return setCurrentIndex(3);
     if(currentIndex === 4 && disabledCompany) return setCurrentIndex(2);
     setCurrentIndex(prev  => prev - 1)
   }
-
 
   const onChangeBusinessSubType = (e:SelectChangeEvent) => {
     const { value } = e.target;
@@ -127,7 +129,10 @@ export default function Steb2() {
     }
 
     //회사명 고정
-    if (courseSubCategoryType.PRIVATE_TAXI === value || courseSubCategoryType.CONSIGNMENT === value || courseSubCategoryType.INDIVIDUAL_CARGO === value) {
+    if (
+      courseSubCategoryType.PRIVATE_TAXI === value
+      || courseSubCategoryType.CONSIGNMENT === value
+      || courseSubCategoryType.INDIVIDUAL_CARGO === value) {
       setDisabledCompany(true);
       setValue(
         'businessName',
@@ -177,8 +182,6 @@ export default function Steb2() {
       return snackbar({ variant: 'error', message: '회사명을 입력해주세요!' });
     }
 
-
-
     // localName, digit2, oneWord, digit4
     if(watch().businessSubType !== courseSubCategoryType.BUS ||
        watch().businessSubType !== courseSubCategoryType.CHARTER_BUS ||
@@ -198,6 +201,7 @@ export default function Steb2() {
       setPageIndex(5)
       return snackbar({ variant: 'error', message: '차량등록지를 선택해주세요!' });
     }
+
     if (rest.residence === '' || !rest.residence) {
       setCurrentIndex(6);
       setPageIndex(6);
@@ -225,7 +229,7 @@ export default function Steb2() {
     const postData = {
       ...rest,
       businessType: watch().businessType, //TYPE_PASSENGER 이런식인줄 알았으나 PASSENGER식으로 요청해야함
-      carNumber: hideCarNumber ? '충남00아0000' : rest.carNumber,
+      carNumber: hideCarNumber ? null : rest.carNumber,
       identityNumber: firstIdentityNumber + secondIdentityNumber,
       phone: firstPhone + secondPhone + thirdPhone,
     }; //민증번호때문에 구분
@@ -328,6 +332,8 @@ export default function Steb2() {
   }, [carWatch().localName, carWatch().digit2, carWatch().digit4, carWatch().oneWord]);
 
 
+
+
   useEffect(() => {
     if (user && registerType === RegisterType.TYPE_INDIVIDUAL) {
       //if your admin or safety user that not have identity number
@@ -363,19 +369,14 @@ export default function Steb2() {
 
   useEffect(() => {
     if (enrollInfo) setValue('courseClassSeq', Number(enrollInfo.seq));
-
     if (!enrollInfo || !enrollInfo.seq) {
       window.alert('과정정보가 없거나 잘못된 과정입니다! 다시 시도해주세요.');
       router.push(`/stebMove/steb1`);
     }
   }, [enrollInfo]);
-
-  //useForm의 첫 타입설정 이펙트
   useEffect(() => {
     setValue('registerType', RegisterType.TYPE_INDIVIDUAL);
   }, []);
-
-
 
   useEffect(() => {
     confirmRef.current = confirm;
@@ -389,10 +390,20 @@ export default function Steb2() {
     };
   }, [confirm]);
   
+  
+
+  useEffect(() => {
+    if(localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS') {
+      setValue('businessSubType',courseSubCategoryType.KNEELING_BUS)
+      if(currentIndex === 2) return setCurrentIndex(3);
+    }
+  },[currentIndex])
+
   return (
     <Steb2Wrap>
       {isDesktop && <StebHeader value={2} />}
       <Steb2BodyContainer>
+        
         <Box
         display='flex'
         flexDirection='column'
@@ -421,7 +432,8 @@ export default function Steb2() {
             nextStep={nextStep}
             prevStep={prevStep}
           >
-            {!(localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS') && (
+            
+            
                 <FormControl sx={{ width:'100%' }}>
                   <Select
                     labelId="businessSubType"
@@ -440,7 +452,7 @@ export default function Steb2() {
                     ))}
                   </Select>
                 </FormControl>
-          )}
+          
           </StepCard>
         }
         {
@@ -490,9 +502,7 @@ export default function Steb2() {
                 placeholder='지역명'
                 onChange={e => carSetValue('localName',e.target.value as string)}
                 value={carGetValues().localName || ''}
-                sx={{
-                  minWidth: '80px',
-                }}
+                sx={{ minWidth: '80px' }}
                 >
                 {localList.map((item) => (
                   <MenuItem key={item.type} value={item.title}>

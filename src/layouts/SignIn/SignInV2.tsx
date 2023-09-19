@@ -4,11 +4,10 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { signIn } from '@common/api/auth';
 import { useSetRecoilState } from 'recoil';
-import { isLoginState, pageType } from '@common/recoil';
+import { isLoginState } from '@common/recoil';
 import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -20,10 +19,8 @@ import { useForm } from 'react-hook-form';
 import { Modal, Spinner } from '@components/ui';
 import Image from 'next/image';
 import styled from '@emotion/styled';
-import { transIndividualSummary } from '@utils/individualSummaries';
 import { UserRole } from '@common/api/user';
 import dynamic from 'next/dynamic';
-import { courseType } from '@common/api/courseClass';
 import { getTerms } from '@common/api/terms';
 
 export function SignInV2() {

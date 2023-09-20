@@ -63,7 +63,7 @@ export const axiosSetting = {
 export const api = Axios.create({
   baseURL: axiosSetting.server(),
   headers: axiosHeaders,
-  timeout: 300000,
+  timeout: 150000,
 });
 triggerInterceptors();
 

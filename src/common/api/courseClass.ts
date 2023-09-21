@@ -1,9 +1,8 @@
 import { YN } from '@common/constant';
 import { DELETE, GET, POST } from '@common/httpClient';
-import { FilterType } from '@layouts/Calendar/Calendar';
 import useSWR, { SWRResponse } from 'swr';
 import { ProductStatus } from './course';
-import type { CourseDetailClientResponseDto, CourseResponseDto } from '@common/api/Api';
+import type { CourseResponseDto } from '@common/api/Api';
 
 export enum businessType {
   TYPE_ALL = 'TYPE_ALL',
@@ -38,8 +37,9 @@ export enum courseSubCategoryType {
   CHARTER_BUS = 'CHARTER_BUS', //전세버스
   SPECIAL_PASSENGER = 'SPECIAL_PASSENGER', //특수여객
   CORPORATE_TAXI = 'CORPORATE_TAXI', //법인택시
-  GENERAL_CARGO = 'GENERAL_CARGO', //일반화물
   PRIVATE_TAXI = 'PRIVATE_TAXI', //개인택시
+
+  GENERAL_CARGO = 'GENERAL_CARGO', //일반화물
   INDIVIDUAL_CARGO = 'INDIVIDUAL_CARGO', //개별화물
   CONSIGNMENT = 'CONSIGNMENT', //용달화물
   SPECIAL_TRANSPORTATION = 'SPECIAL_TRANSPORTATION', //특별교통수단

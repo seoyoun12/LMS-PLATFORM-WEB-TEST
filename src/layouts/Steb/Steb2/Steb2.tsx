@@ -74,16 +74,19 @@ export default function Steb2() {
     setPageIndex(prev => prev + 1);
     
     if(currentIndex > 8) return;
-    if(currentIndex === 3 && hideCarNumber) return setCurrentIndex(5);
+    if((currentIndex === 3 && hideCarNumber) || (currentIndex === 3 && watch().businessSubType ==='KNEELING_BUS')) return setCurrentIndex(5);
+    
     if(currentIndex === 2 && disabledCompany) return setCurrentIndex(4);
+    // courseSubCategoryType.KNEELING_BUS
     setCurrentIndex(prev  => prev + 1) 
   }
-
+  console.log(currentIndex,pageIndex)
+  console.log(watch().businessSubType)
   const prevStep = () => {
     if(currentIndex === 3 && (localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS')) return;
     setPageIndex(prev => prev - 1);
     if(currentIndex <= 1) return
-    if(currentIndex === 5 && hideCarNumber) return setCurrentIndex(3);
+    if((currentIndex === 5 && hideCarNumber) || (currentIndex === 5 && watch().businessSubType ==='KNEELING_BUS')) return setCurrentIndex(3);
     if(currentIndex === 4 && disabledCompany) return setCurrentIndex(2);
     setCurrentIndex(prev  => prev - 1)
   }
@@ -104,7 +107,7 @@ export default function Steb2() {
       setDisabledCompany(false);
       return setHideCarNumber(true);
     }
-
+    
     if (courseSubCategoryType.PRIVATE_TAXI === value) {
       setValue(
         'businessName',
@@ -185,7 +188,8 @@ export default function Steb2() {
     // localName, digit2, oneWord, digit4
     if(watch().businessSubType !== courseSubCategoryType.BUS ||
        watch().businessSubType !== courseSubCategoryType.CHARTER_BUS ||
-       watch().businessSubType !== courseSubCategoryType.CORPORATE_TAXI) {
+       watch().businessSubType !== courseSubCategoryType.CORPORATE_TAXI ||
+       watch().businessSubType !== courseSubCategoryType.KNEELING_BUS) {
         if ((!hideCarNumber && !carNumberRegex.test(rest.carNumber))) {
         setCurrentIndex(4);
         setPageIndex(4);
@@ -432,8 +436,6 @@ export default function Steb2() {
             nextStep={nextStep}
             prevStep={prevStep}
           >
-            
-            
                 <FormControl sx={{ width:'100%' }}>
                   <Select
                     labelId="businessSubType"

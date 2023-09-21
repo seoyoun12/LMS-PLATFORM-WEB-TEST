@@ -189,7 +189,8 @@ export default function Steb2() {
     // localName, digit2, oneWord, digit4
     if(watch().businessSubType !== courseSubCategoryType.BUS ||
        watch().businessSubType !== courseSubCategoryType.CHARTER_BUS ||
-       watch().businessSubType !== courseSubCategoryType.CORPORATE_TAXI) {
+       watch().businessSubType !== courseSubCategoryType.CORPORATE_TAXI ||
+       watch().businessSubType !== courseSubCategoryType.KNEELING_BUS) {
         if ((!hideCarNumber && !carNumberRegex.test(rest.carNumber))) {
         setCurrentIndex(4);
         setPageIndex(4);

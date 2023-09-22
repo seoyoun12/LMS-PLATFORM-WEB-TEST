@@ -422,6 +422,10 @@ export default function CourseInfoManagement() {
         />
     </Box>
 
+
+
+
+
     <BoxRow sx={{ flexDirection: 'row',marginTop: '.25rem',marginBottom:'2rem' }}>
       <Button type="submit" variant='contained' onClick={(e) => handleSubmit(e,false)} fullWidth>
         검색하기

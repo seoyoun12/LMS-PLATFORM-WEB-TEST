@@ -3,11 +3,11 @@ import { Button } from "@mui/material";
 import { css } from "@emotion/react";
 
 export const GuideDetailWrapper = styled.div`
-  padding-bottom: 230px;
+  padding-bottom: 2rem;
 `;
 
 export const GuideDetailHeaderWrapper = styled.div`
-  margin-bottom: 30px;
+  margin-bottom: 1rem;
 `;
 
 export const GuideDetailHeaderTitleText = styled.p`

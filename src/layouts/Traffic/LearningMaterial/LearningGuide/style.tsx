@@ -1,20 +1,20 @@
 import styled from "@emotion/styled";
 import { ButtonBase, Chip } from "@mui/material";
 
-export const LearningGuideContainer = styled.div``;
+export const Container = styled.div``;
 
-export const LearningGuideChipWrapper = styled.div`
+export const ChipWrapper = styled.div`
   display: flex;
   margin-bottom: 62px;
 `;
 
-export const LearningGuideChipItem = styled(Chip)`
+export const ChipItem = styled(Chip)`
   &:not(:last-of-type) {
     margin-right: 8px;
   }
 `;
 
-export const LearningGuideContentContainer = styled.div`
+export const ContentContainer = styled.div`
   width: 100%;
   max-width: 1200px;
   display: flex;
@@ -29,7 +29,7 @@ export const LearningGuideContentContainer = styled.div`
   }
 `;
 
-export const LearningGuideItemContainer = styled(ButtonBase)`
+export const ItemContainer = styled(ButtonBase)`
   display: flex;
   flex-direction: column;
   width: 280px;
@@ -47,7 +47,7 @@ export const LearningGuideItemContainer = styled(ButtonBase)`
   }
 `;
 
-export const LearningGuideItemImageContainer = styled.div`
+export const ItemImageContainer = styled.div`
   width: 100%;
   height: 200px;
   background-color: #f6f6f6;
@@ -60,18 +60,18 @@ export const LearningGuideItemImageContainer = styled.div`
   }
 `;
 
-export const LearningGuideItemContentContainer = styled.div`
+export const ItemContentContainer = styled.div`
   width: 100%;
 `;
 
-export const LearningGuideItemContentHeaderContainer = styled.div`
+export const ItemContentHeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 4px;
 `;
 
-export const LearningGuideItemContentTitle = styled.p`
+export const ItemContentTitle = styled.p`
   width: 0;
   flex-grow: 1;
   overflow: hidden;
@@ -81,8 +81,8 @@ export const LearningGuideItemContentTitle = styled.p`
   font-weight: 500;
 `;
 
-export const LearningGuideItemContentDate = styled.p`
+export const ItemContentDate = styled.p`
   color: #858585;
 `;
 
-export const LearningGuideItemContentSubtitle = styled.p``;
+export const ItemContentSubtitle = styled.p``;

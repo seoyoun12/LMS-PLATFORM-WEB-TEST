@@ -1,9 +1,7 @@
 import { CategoryBoard } from '@components/ui/Traffic/CategoryBoard';
 import { CategoryCard}  from '@components/ui/Traffic/CategoryCard';
 import { CategoryCarousel } from '@components/ui/Traffic/CategoryCarousel';
-import { CategoryCarouselMobile } from '@components/ui/Traffic/CategoryCarouselMobile';
-import useResponsive from '@hooks/useResponsive';
-import dynamic from 'next/dynamic';
+
 
 const bannerData = [
   {
@@ -22,19 +20,11 @@ const bannerData = [
 
 
 export function Category() {
-  const isDesktop = useResponsive(1024);
-
   return (
-    <div>
-      {isDesktop ? (
-        <CategoryCarousel datas={bannerData} />
-      ) : (
-        <CategoryCarouselMobile datas={bannerData} />
-      )}
-
+    <>
+      <CategoryCarousel datas={bannerData} />
       <CategoryCard />
-
       <CategoryBoard />
-    </div>
+    </>
   );
 }

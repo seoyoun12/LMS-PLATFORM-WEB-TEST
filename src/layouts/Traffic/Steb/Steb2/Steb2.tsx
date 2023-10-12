@@ -70,8 +70,8 @@ export function Steb2() {
       watch();
 
     let isPeople = null;
-    for (let [key, obj] of Object.entries(detailCounts)) {
-      for (let [kkey, value] of Object.entries(obj)) {
+    for (const [key, obj] of Object.entries(detailCounts)) {
+      for (const [kkey, value] of Object.entries(obj)) {
         isPeople = isPeople || value;
       }
     }
@@ -159,6 +159,45 @@ export function Steb2() {
         </FormControl>
 
         <FormControl fullWidth>
+          <Typography>마감날짜</Typography>
+          <DatePicker
+            locale={ko}
+            dateFormat="yyyy-MM-dd"
+            showPopperArrow={false}
+            minDate={new Date()}
+            customInput={<TextField fullWidth />}
+            selected={new Date(watch().expectedToStartDtime)}
+            onSelect={() => {}}
+            onChange={date =>
+              setValue(
+                'expectedToStartDtime',
+                date
+                  ? dateFormat(date, 'yyyy-mm-dd')
+                  : dateFormat(new Date(), 'yyyy-mm-dd')
+              )
+            }
+          />
+        </FormControl>
+
+        <FormControl fullWidth>
+          <Typography id="student">과정 선택</Typography>
+          <Select
+            labelId="student"
+            id="student"
+            {...register('eduTargetMain')}
+            value={router.query.eduTargetMain}
+            disabled
+          >
+            {studentList.map((item, index) => (
+              <MenuItem key={item.enType} value={item.enType}>
+                {item.type}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+
+        <FormControl fullWidth>
           <Typography id="student">교육 대상자</Typography>
           <Select
             labelId="student"
@@ -175,6 +214,8 @@ export function Steb2() {
             ))}
           </Select>
         </FormControl>
+
+
         <FormControl fullWidth>
           <Typography id="student-category">교육생 세부구분</Typography>
           <Select
@@ -201,6 +242,7 @@ export function Steb2() {
               ?.category.filter(item => watch().eduTargetSub === item.enType)[0]
               ?.ageList.map(item => (
                 <CustomInput
+                  key={item.enAge}
                   ageInfo={item}
                   candidateDetailType={watch().eduTargetSub}
                   setDetailCounts={setDetailCounts}

@@ -1,6 +1,6 @@
 import { GuideBoard } from '@components/ui/Traffic/GuideBoard';
 import styled from '@emotion/styled';
-import { Container, Typography, Box } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import BackgroundImage from 'public/assets/svgs/service_background.svg';
 
 export function Guide() {
@@ -13,7 +13,6 @@ export function Guide() {
         </GuideHeaderSubtitle>
         <BackgroundImage />
       </GuideHeaderContainer>
-
       <GuideBoard />
     </>
   );

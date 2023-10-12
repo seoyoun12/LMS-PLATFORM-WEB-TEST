@@ -1,5 +1,7 @@
+// 실제 작동하는 Navigation
+
+
 import styled from '@emotion/styled';
-import styles from '@styles/common.module.scss';
 import { grey } from '@mui/material/colors';
 import { Box, MenuItem } from '@mui/material';
 import { Link } from '@components/common';
@@ -9,8 +11,7 @@ import { useRecoilState } from 'recoil';
 import { isLoginState } from '@common/recoil';
 
 const showRemoteList = [
-  // { href: '/traffic/course/[courseSeq]' },
-  // { href: '/traffic/admin-center' },
+  
   { href: '/traffic/category' },
 ];
 
@@ -46,9 +47,7 @@ export function NavBarV2() {
   const [isShowRemote, setIsShowRemote] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [showIndicatorValue, setShowIndicatorValue] = useState(null);
-  // const menuRef = useRef(anchorEl); // current에 안담겨
-  // // let open = true;
-  // let open = Boolean(anchorEl);
+  
   const open = Boolean(anchorEl);
   const [isLogin, setIsLogin] = useRecoilState(isLoginState); //과정게시판 교육영상 가리기용
 
@@ -56,7 +55,7 @@ export function NavBarV2() {
     setAnchorEl(e.currentTarget);
     setShowIndicatorValue(showValue);
   };
-  // const handleOut = (e: React.MouseEvent<HTMLDivElement>) => {
+  
   const handleOut = () => {
     setAnchorEl(null);
     setShowIndicatorValue(null);
@@ -69,11 +68,7 @@ export function NavBarV2() {
 
   return (
     <ContentContainer>
-      <HeaderBackground
-        className={`dropdown-back  ${open ? '' : 'hidden'}`}
-        // onMouseOver={handleHover}
-        // onMouseOut={handleOut}
-      ></HeaderBackground>
+      <HeaderBackground className={`dropdown-back  ${open ? '' : 'hidden'}`}/>
       <NavContainer>
         <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
           {ProvintialHeaderList.map((item, index) => (
@@ -109,29 +104,7 @@ export function NavBarV2() {
           ))}
         </Box>
       </NavContainer>
-      {/* 여기에 리모컨 */}
-      {/* {isShowRemote && (
-        <RemoteWrap>
-          <Box className="remote-box" color="primary.main">
-            <MenuItem>내 정보</MenuItem>
-            <MenuItem>일정보기</MenuItem>
-            <MenuItem>운수저상로그인</MenuItem>
-          </Box>
-          <Box className="remote-circle-box" color="primary.main">
-            <MenuItem
-              className="remote-circle"
-              onClick={() =>
-                window.scrollTo({
-                  top: 0,
-                  // behavior: 'smooth'
-                })
-              }
-            >
-              TOP
-            </MenuItem>
-          </Box>
-        </RemoteWrap>
-      )} */}
+      
     </ContentContainer>
   );
 }
@@ -238,59 +211,15 @@ const NavContainer = styled.div`
   }
 `;
 
-const HeaderTitleWrap = styled(Box)`
-  display: flex;
-  height: 100%;
-  width: calc(100% - 160px);
-  margin: auto;
-`;
 
 const HeaderBackground = styled(Box)``;
 const HeaderItem = styled(Box)`
   width: 100px;
   flex-grow: 1;
 `;
-const RemoteWrap = styled(Box)`
-  position: absolute;
-  right: 120px;
-  width: 120px;
-  top: 470px;
-  /* box-shadow: 0 0 0.5rem 2px #999797; */
-
-  .remote-box {
-    border: 2px solid #999797;
-    border-radius: 0.25rem;
-  }
-  .remote-circle-box {
-    display: flex;
-    justify-content: center;
-    margin-top: 0.5rem;
-  }
-  .remote-circle {
-    display: flex;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    overflow: hidden;
-    padding: 0;
-    border: 2px solid #999797;
-    border-radius: 20px;
-  }
-`;
 
 export const ProvintialHeaderList = [
-  // {
-  //   category: '교육이용안내',
-  //   href: '/traffic/guide?tab=TYPE_GUIDE_AUTH',
-  //   items: [
-  //     {
-  //       title: '회원가입 및 로그인',
-  //       href: '/traffic/guide?tab=TYPE_GUIDE_AUTH',
-  //     },
-  //     { title: '교육신청방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_REGI' },
-  //     { title: '학습방법', href: '/traffic/guide?tab=TYPE_GUIDE_EDU_LEARNING' },
-  //   ],
-  // },
+  
   {
     category: '학습자료',
     href: '/traffic/learning-material/learning-guide',
@@ -300,7 +229,7 @@ export const ProvintialHeaderList = [
         href: '/traffic/learning-material/learning-guide',
       },
       { title: '교육자료', href: '/traffic/learning-material/education' },
-      // { title: '교육자료영상', href: '/traffic/learning-material/video' }, // 20221226 비활성화 처리
+      
       { title: '타기관자료모음', href: '/traffic/learning-material/reference' },
     ],
   },
@@ -309,17 +238,15 @@ export const ProvintialHeaderList = [
     href: '/traffic/stebMove/steb1',
     items: [
       { title: '신청하기', href: '/traffic/stebMove/steb1' },
-      // { title: '온라인교육 수정', href: '/me/enroll-history' },  // 20221226 비활성화 처리
+      
       { title: '학습하기', href: '/traffic/class-room' },
     ],
   },
   {
     category: '마이페이지',
-    // href: '/me', // 20221226 변경
+    
     href: '/me/enroll-history',
     items: [
-      // { title: '정보보기', href: '/me' }, // 20221226 비활성화 처리
-      // { title: '정보수정', href: '/me/edit' }, // 20221226 비활성화 처리
       { title: '교육 신청내역', href: '/me/enroll-history' },
     ],
   },
@@ -331,6 +258,12 @@ export const ProvintialHeaderList = [
       { title: '자주묻는질문', href: '/traffic/service?tab=Faq' },
       { title: '교육문의', href: '/traffic/service?tab=Question' },
       { title: '문의내역조회', href: '/traffic/service?tab=Look' },
+      { title: 'hello world', href: '/traffic/service?tab=Look' },
     ],
+  },
+  {
+    category: '메타버스',
+    href: '/traffic/service?tab=Notice',
+    items: [{ title: '디지털 교통안전 교육', href: '/traffic/service?tab=Look' }],
   },
 ];

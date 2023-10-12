@@ -11,7 +11,6 @@ import { Spinner } from '@components/ui/Spinner';
 
 export const CategoryCarousel = () => {
   
-  
   const { data: BannerData } = useBannerList();
   const data = BannerData?.filter(item => item.bannerTypeEnums === 'BANNER_TYPE_PROVINCIAL');
 
@@ -36,7 +35,6 @@ export const CategoryCarousel = () => {
               return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
             })}
         </Typography>
-        
         <Typography>
           {data.length > 0 &&
             data[0].content.split('\n').map((item, idx) => {

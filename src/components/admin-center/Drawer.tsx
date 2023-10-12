@@ -147,18 +147,23 @@ export function Drawer({ children }: { children: ReactNode }) {
       ],
       icon: <SourceOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
-    
     {
-      name: '사이트 관리',
+      name: '배너관리',
       children: [
         {
-          name: '사이트 관리 목록',
-          href: '/admin-center/main-display',
-          isActive: router.pathname === '/admin-center/main-display',
+          name: '배너 목록',
+          href: '/admin-center/banner',
+          isActive: router.pathname === '/admin-center/banner',
+        },
+        {
+          name: '배너 등록',
+          href: '/admin-center/banner/upload',
+          isActive: router.pathname === '/admin-center/banner/upload',
         },
       ],
-      icon: <ViewComfyAltOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+      icon: <ViewCarouselOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
+    
     {
       name: '설문관리',
       children: [
@@ -174,6 +179,17 @@ export function Drawer({ children }: { children: ReactNode }) {
         },
       ],
       icon: <SourceOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+    },
+    {
+      name: '사이트 관리',
+      children: [
+        {
+          name: '사이트 관리 목록',
+          href: '/admin-center/main-display',
+          isActive: router.pathname === '/admin-center/main-display',
+        },
+      ],
+      icon: <ViewComfyAltOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
   ]
   // [저상버스, 운수종사자]

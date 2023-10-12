@@ -58,15 +58,16 @@ export function LearningMaterialLayout() {
             value={type}
           >
             <TabItem
+              label='영상자료'
+              onClick={() => handleClickTab('education')}
+              value='education'
+            />
+            <TabItem
               label='연령별교수학습지도안'
               onClick={() => handleClickTab('learning-guide')}
               value='learning-guide'
             />
-            <TabItem
-              label='교육자료'
-              onClick={() => handleClickTab('education')}
-              value='education'
-            />
+            
             <TabItem
               label='타기관자료모음'
               onClick={() => handleClickTab('reference')}
@@ -74,8 +75,6 @@ export function LearningMaterialLayout() {
             />
           </Tabs>
         </TabWrapper>
-
-
           {/* Content */}
       </Wrapper>
       <ContentWrapper>

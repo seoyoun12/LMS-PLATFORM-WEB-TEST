@@ -9,8 +9,8 @@ import useResponsive from '@hooks/useResponsive';
 const categoryData = [
   {
     id: 1,
-    title: '도민교통',
-    title2: '학습자료',
+    title: '교통안전교육',
+    title2: '자료실',
     href: '/traffic/learning-material/learning-guide',
     icon: 'assets/images/certificateTransIcon.png',
     color: '#00ffd2',
@@ -18,15 +18,15 @@ const categoryData = [
   },
   {
     id: 2,
-    title: '도민안전교육',
+    title: '교통안전교육',
     href: '/traffic/stebMove/steb1',
     icon: 'assets/images/calendarTransIcon.png',
     color: '#F4DB83',
-    btnText: '교육신청하기',
+    btnText: '신청',
   },
   {
     id: 3,
-    title: '도민안전교육',
+    title: '교통안전교육',
     title2: '학습하기',
     href: '/traffic/class-room',
     icon: 'assets/images/studyTransIcon.png',
@@ -35,12 +35,12 @@ const categoryData = [
   },
   {
     id: 4,
-    title: '도민안전교육',
+    title: '교통안전교육',
     title2: '수료확인',
     href: '/me/certificate',
     icon: 'assets/images/certificateTransIcon.png',
     color: '#BDB8F3',
-    btnText: '수료확인',
+    btnText: '수료 확인',
   },
 ];
 

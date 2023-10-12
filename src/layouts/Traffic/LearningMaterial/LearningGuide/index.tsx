@@ -30,7 +30,10 @@ export default function Layout({ materialType }: Props) {
                   <ItemImageContainer>
                     {/* 영상 자료에 대한 썸네일이 들어와야 함 */}
                     {item.s3Files && item.s3Files.length > 0 && (
-                      <img src={item.s3Files[0].path} alt="course thumbnail" />
+                      
+                      <img src="https://img.youtube.com/vi/aNMlq-hOIoc/maxresdefault.jpg" width={250} height={250} alt="배워서 나주자" />
+                      
+                      
                     )}
                   </ItemImageContainer>
                   <ItemContentContainer>

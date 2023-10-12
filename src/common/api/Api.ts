@@ -4626,7 +4626,7 @@ export interface LearningMaterialResponseDto {
 
   /** S3 파일 정보 */
   s3Files?: FileResponseDto[];
-
+  
   /**
    * 시퀀스
    * @format int64

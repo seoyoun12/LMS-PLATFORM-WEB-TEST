@@ -8,7 +8,8 @@ import Image from 'next/image';
 import { useBannerList } from '@common/api/banner';
 import { Spinner } from '@components/ui/Spinner';
 
-export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) => {
+
+export const CategoryCarousel = () => {
   
   
   const { data: BannerData } = useBannerList();
@@ -16,7 +17,7 @@ export const CategoryCarousel = ({ datas: deprecated }: { datas: Array<any> }) =
 
 
   if (!data) return <Spinner />;
-  if (!deprecated?.length) return <div>loading</div>;
+  
   return (
     <Box sx={{position:'relative'}}>
       <Banner>

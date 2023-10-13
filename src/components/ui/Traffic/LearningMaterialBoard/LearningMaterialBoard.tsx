@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import { Tabs } from '@components/ui/Tabs';
 import styled from 'styled-components';
 
+
+// 정신병자 코드
 enum TabValue {
   A = 'A', // 연령별 교수학습 지도안
   B = 'B', // 교육자료
@@ -11,8 +13,8 @@ enum TabValue {
 }
 
 const tabsConfig = [
-  { label: '연령별 교수학습 지도안', value: TabValue.A },
-  { label: '교육자료', value: TabValue.B },
+  { label: '교육자료', value: TabValue.A },
+  { label: '연령별 교수학습 지도안', value: TabValue.B },
   { label: '교육영상', value: TabValue.C },
   { label: '타기관자료모음', value: TabValue.D },
 ];

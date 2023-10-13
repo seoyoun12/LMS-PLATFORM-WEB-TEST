@@ -141,7 +141,7 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
     }
   };
 
-  // 삭제
+  
   const onClickRemoveLM = async (seq: number) => {
     try {
       const dialogConfirmed = await dialog({
@@ -183,7 +183,8 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
       serverFilesRemoved,
     });
   };
-  //썸네일 인풋함수
+
+  
   const onChangeYoutubeLink = (e:ChangeEvent<HTMLInputElement>) => {
     const {target: {value}} = e;
     setYoutubeLink(value)

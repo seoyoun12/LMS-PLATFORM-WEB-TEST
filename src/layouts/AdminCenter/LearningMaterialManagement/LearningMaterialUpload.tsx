@@ -23,11 +23,6 @@ export function LearningMaterialUpload() {
   ) => {
     const isFileUpload = files.length > 0;
     if (isFileUpload) {
-      // await uploadFile({
-      //   fileTypeId: learningMaterialInput.seq,
-      //   fileType: BbsType.TYPE_LEARNING_MATERIAL,
-      //   files,
-      // });
 
       files.forEach(async (r, idx) => {
         await uploadFile({
@@ -40,11 +35,7 @@ export function LearningMaterialUpload() {
     }
   };
 
-  const handleSubmit = async ({
-    files,
-    learningMaterialInput,
-    serverFilesRemoved, //s3에 저장된 파일 제거할때 쓰는 용입니다. 업로드에서는 사용할 필요 없습니다.
-  }: {
+  const handleSubmit = async ({ files,learningMaterialInput }: {
     files: File[];
     learningMaterialInput: LearningMaterialInput;
     serverFilesRemoved?: FileArrayType[];
@@ -58,7 +49,7 @@ export function LearningMaterialUpload() {
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
       router.push(`/admin-center/learning-material`);
       setLoading(false);
-    } catch (e: any) {
+    } catch (e) {
       console.error(e);
       snackbar({ variant: 'error', message: '업로드에 실패했습니다.' });
       setLoading(false);

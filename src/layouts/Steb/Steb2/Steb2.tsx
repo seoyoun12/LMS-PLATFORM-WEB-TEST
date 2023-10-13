@@ -334,8 +334,6 @@ export default function Steb2() {
   }, [carWatch().localName, carWatch().digit2, carWatch().digit4, carWatch().oneWord]);
 
 
-
-
   useEffect(() => {
     if (user && registerType === RegisterType.TYPE_INDIVIDUAL) {
       //if your admin or safety user that not have identity number

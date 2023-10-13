@@ -19,7 +19,9 @@ const nextConfig = {
       'picsum.photos',
       'dnkwhodfjmev10929056.cdn.ntruss.com',
       'cn-lms-storage.cdn.gov-ntruss.com',
-      'kr.object.gov-ncloudstorage.com'
+      'kr.object.gov-ncloudstorage.com',
+      'img.youtube.com',
+      'www.youtube.com'
     ],
   },
   experimental: {

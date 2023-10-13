@@ -250,7 +250,7 @@ export default function CourseInfoManagement() {
   
   return (
     <form onSubmit={(e) => handleSubmit(e,false)}>
-      <Title variant="h1">전체 수강생 학습현황</Title>
+      <Title variant="h1">전체 수강생 학습현황(운수/저상)</Title>
       <ContainerWrapper>
         <LeftContainer>
           <CourseSelectBox
@@ -490,12 +490,7 @@ export default function CourseInfoManagement() {
         >
           <TableHead>
             <TableRow>
-              {
-              headRows.map(
-                ({
-                  name,
-                  width,
-                }) => (
+              {headRows.map(({ name,width }) => (
                   <CourseInfoTitleTableCell
                     key={name}
                     align="center"
@@ -507,7 +502,6 @@ export default function CourseInfoManagement() {
               )}
             </TableRow>
           </TableHead>
-
           <TableBody>
             {data.content.map(user => (
               <TableRow
@@ -516,7 +510,6 @@ export default function CourseInfoManagement() {
                 hover
                 onClick={() => onClickmodifyCourseInfo(user.courseUserSeq)}
               >
-                
                 <CourseInfoTableCell align="center">
                   {user.courseUserSeq}
                 </CourseInfoTableCell>
@@ -594,7 +587,7 @@ export default function CourseInfoManagement() {
                   {user.studyDate}
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
-                  {user.displayTotalProgress}
+                <SubjectBox>{user.displayTotalProgress}</SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
                   {user.displayCompleteYn}
@@ -702,10 +695,9 @@ const LeftContainer = styled(Container)``;
 
 
 const DoubleInputBox = styled(Box)`
-display:flex;
-align-items:center;
-gap: 1rem;
-  
+  display:flex;
+  align-items:center;
+  gap: 1rem;  
 `
 
 

@@ -26,14 +26,16 @@ const headRows: {
   { name: 'No', align: 'center', width: '5%' },
   { name: '이름', align: 'center', width: '6%' },
   { name: '아이디', align: 'center', width: '6%' },
-  { name: '생년월일', align: 'center', width: '8%' },
-  // { name: '휴대폰번호', align: 'center', width: '8%' },
-  { name: '교육대상자', align: 'center', width: '10%' },
-  { name: '교육대상자세부', align: 'center', width: '13%' },
+  { name: '생년월일', align: 'center', width: '6%' },
+  { name: '교육대상자', align: 'center', width: '8%' },
+  { name: '교육대상자세부', align: 'center', width: '8%' },
   { name: '지역', align: 'center', width: '6%' },
-  { name: '소속', align: 'center', width: '14%' },
-  { name: '교육시작희망일자', align: 'center', width: '13%' },
+  { name: '소속', align: 'center', width: '10%' },
+  { name: '과정명', align: 'center', width: '8%' },
+  { name: '교육시작희망일자', align: 'center', width: '7%' },
   { name: '만료기한', align: 'center', width: '6%' },
+  { name: '진도율', align: 'center', width: '6%' },
+  { name: '수료여부', align: 'center', width: '4%' },
   { name: '상태', align: 'center', width: '5%' },
 ];
 
@@ -165,25 +167,17 @@ export default function CourseInfoTrafficManagement() {
           totalNum={data?.totalElements}
           page={data?.number}
           onChangePage={onChangePage}
-          size='small'
+          size="small"
           sx={{ tableLayout: 'fixed' }}
-        >
+          >
           <TableHead>
             <TableRow>
-              {headRows.map(
-                ({
-                  name,
-                  width,
-                }: {
-                  name: string;
-                  align: string;
-                  width: string;
-                }) => (
+              {headRows.map(({ name,width }) => (
                   <CourseInfoTitleTableCell
                     key={name}
-                    align='center'
+                    align="center"
                     width={width}
-                  >
+                    >
                     {name}
                   </CourseInfoTitleTableCell>
                 )
@@ -202,35 +196,31 @@ export default function CourseInfoTrafficManagement() {
                 <CourseInfoTableCell align='center'>
                   {user.seq}
                 </CourseInfoTableCell>
+
                 <CourseInfoTableCell align='center'>
                   {user.userInfo.name}
                 </CourseInfoTableCell>
+
                 <CourseInfoTableCell align='center'>
                   <NameBox title={user.userInfo.name}>
                     {user.userInfo.username}
                   </NameBox>
                 </CourseInfoTableCell>
+
                 <CourseInfoTableCell align='center'>
                   <SubjectBox>{convertBirth(user.userInfo.birth)}</SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align='center'>
                   <SubjectBox>
-                    {
-                      CourseTrafficTargetType.filter(
-                        (f) => f.type === user.eduTargetMain
-                      )[0].ko
-                    }
+                    {CourseTrafficTargetType.filter((f) => f.type === user.eduTargetMain)[0].ko}
                   </SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align='center'>
                   <SubjectBox>
-                    {
-                      TargetSubTypeReg.filter(
-                        (f) => f.type === user.eduTargetSub
-                      )[0].ko
-                    }
+                    {TargetSubTypeReg.filter((f) => f.type === user.eduTargetSub)[0].ko}
                   </SubjectBox>
                 </CourseInfoTableCell>
+
                 <CourseInfoTableCell align='center'>
                   <SubjectBox>
                     {locationList.filter((f) => f.en === user.region)[0].ko}
@@ -238,13 +228,22 @@ export default function CourseInfoTrafficManagement() {
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align='center'>
                   {user.organization}
-                  
                 </CourseInfoTableCell>
+                <CourseInfoTableCell align='center'>
+                  과정명 줘야함
+                </CourseInfoTableCell>
+
                 <CourseInfoTableCell align='center'>
                   {user.expectedToStartDtime}
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align='center'>
                   {user.expiredDtime}
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align='center'>
+                  진도율컴온
+                </CourseInfoTableCell>
+                <CourseInfoTableCell align='center'>
+                  수료여부
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align='center'>
                   {user.status === 1 ? '정상' : '비활성'}

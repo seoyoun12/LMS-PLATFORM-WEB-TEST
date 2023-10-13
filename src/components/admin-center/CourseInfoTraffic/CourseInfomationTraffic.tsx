@@ -1,59 +1,13 @@
-import { CourseLearningInfoInput } from '@common/api/adm/learningInfo';
-import { useSnackbar } from '@hooks/useSnackbar';
-import {
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TextField,
-} from '@mui/material';
+
+import {Box,Button,MenuItem,Select,TableBody,TableCell,TableRow,TextField,} from '@mui/material';
 import { useRouter } from 'next/router';
-import { css } from '@emotion/css';
 import styled from '@emotion/styled';
-import {
-  ProvincialEnrollResponseDto,
-  ProvincialEnrollUpdateRequestDto,
-  UserCourseInfoDetailCourseInfoDto,
-} from '@common/api/Api';
+import { ProvincialEnrollResponseDto,ProvincialEnrollUpdateRequestDto } from '@common/api/Api';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
-import { ErrorMessage } from '@hookform/error-message';
 import { Spinner } from '@components/ui';
-import {
-  businessSubType,
-  businessSubTypeCategoryReg,
-  businessSubTypeReg,
-  CourseTrafficTargetType,
-  locationList,
-  residenceList,
-  TargetSubTypeReg,
-} from 'src/staticDataDescElements/staticType';
-import { carNumberRegex } from '@utils/inputRegexes';
+import { CourseTrafficTargetType } from 'src/staticDataDescElements/staticType';
 import { eduSubArr } from '@layouts/EnrollHistory/EnrollHistoryTrafficModal/EnrollHistoryTrafficModal';
-
-interface FormType extends ProvincialEnrollUpdateRequestDto {}
-
-const filterEnrollPeoples = [
-  'age3',
-  'age4',
-  'age5',
-  'grade1',
-  'grade2',
-  'grade3',
-  'grade4',
-  'grade5',
-  'grade6',
-  'elderly',
-  'selfDriver',
-];
 
 const defaultValues: ProvincialEnrollUpdateRequestDto = {
   age3: 0,
@@ -74,12 +28,9 @@ const defaultValues: ProvincialEnrollUpdateRequestDto = {
   selfDriver: 0,
 };
 
-export function CourseInfomationTraffic({
-  enrollInfo,
-  onHandleSubmit,
-}: {
-  enrollInfo?: ProvincialEnrollResponseDto;
 
+interface Props {
+  enrollInfo?: ProvincialEnrollResponseDto;
   onHandleSubmit: ({
     enrollInput,
     provincialEnrollSeq,
@@ -89,35 +40,33 @@ export function CourseInfomationTraffic({
     provincialEnrollSeq: number;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   }) => void;
-}) {
+}
+
+
+export function CourseInfomationTraffic({ enrollInfo,onHandleSubmit }: Props) {
   const router = useRouter();
-  const snackbar = useSnackbar();
   const { enrollSeq } = router.query;
   const [loading, setLoading] = useState(false);
 
   const {
     handleSubmit,
-    formState: { errors },
     reset,
     watch,
     setValue,
   } = useForm<ProvincialEnrollUpdateRequestDto>({ defaultValues });
 
-  const handleEduPersonCount = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    const value = e.target.value;
-    if (value.length > 6) return;
-    if (value === '') return setValue(e.target.name as any, Number(value));
-    if (value.length === 0 || value === '0') {
-      return setValue(e.target.name as any, Number(value));
-    }
+  const handleEduPersonCount = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const { value, name } = e.target;
+    const dtoKey = name as keyof ProvincialEnrollUpdateRequestDto;
+      if (value.length > 6) return;
+      if (value === '') return setValue(dtoKey, Number(value));
+      if (value.length === 0 || value === '0') return setValue(dtoKey, Number(value));
+      if (!Number(value)) return;
+      setValue(dtoKey, Number(value.replace(/[^0-9]/g, '')));
+  }
+    
 
-    if (!Number(e.target.value)) return;
-    setValue(e.target.name as any, Number(value.replace(/[^0-9]/g, '')));
-  };
-
-  const onSubmit: SubmitHandler<FormType> = async (formData, event) => {
+  const onSubmit: SubmitHandler<ProvincialEnrollUpdateRequestDto> = async (formData) => {
     const resetEduTargets = {
       age3: 0,
       age4: 0,
@@ -135,15 +84,10 @@ export function CourseInfomationTraffic({
     const filteredMainType = CourseTrafficTargetType.filter(f => f.type === watch().eduTargetMain)[0]
     const filteredSubType = filteredMainType.child.filter(f => f.type === watch().eduTargetSub)[0]
     filteredSubType.applicants.forEach(fo => (resetEduTargets[fo] = watch(fo as any)));
-    // CourseTrafficTargetType.filter(f => f.type === watch().eduTargetMain)[0]
-    //   .child.filter(f => f.type === watch().eduTargetSub)[0]
-    //   .applicants.forEach(fo => (resetEduTargets[fo] = watch(fo as any)));
-
     const enrollInput = {
       ...formData,
       ...resetEduTargets,
     };
-
 
     onHandleSubmit({
       enrollInput: enrollInput,

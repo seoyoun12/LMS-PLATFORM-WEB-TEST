@@ -1,17 +1,14 @@
 // 실제 작동하는 Navigation
-
-
 import styled from '@emotion/styled';
 import { grey } from '@mui/material/colors';
 import { Box, MenuItem } from '@mui/material';
 import { Link } from '@components/common';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { isLoginState } from '@common/recoil';
 
-const showRemoteList = [
-  
+const showRemoteList = [  
   { href: '/traffic/category' },
 ];
 
@@ -224,12 +221,11 @@ export const ProvintialHeaderList = [
     category: '학습자료',
     href: '/traffic/learning-material/learning-guide',
     items: [
+      { title: '영상자료', href: '/traffic/learning-material/education' },
       {
         title: '연령별 학습지도안',
         href: '/traffic/learning-material/learning-guide',
       },
-      { title: '교육자료', href: '/traffic/learning-material/education' },
-      
       { title: '타기관자료모음', href: '/traffic/learning-material/reference' },
     ],
   },
@@ -258,11 +254,11 @@ export const ProvintialHeaderList = [
       { title: '자주묻는질문', href: '/traffic/service?tab=Faq' },
       { title: '교육문의', href: '/traffic/service?tab=Question' },
       { title: '문의내역조회', href: '/traffic/service?tab=Look' },
-      { title: 'hello world', href: '/traffic/service?tab=Look' },
     ],
   },
   {
     category: '메타버스',
+    // TODO: 메타버스 href 교체 필요
     href: '/traffic/service?tab=Notice',
     items: [{ title: '디지털 교통안전 교육', href: '/traffic/service?tab=Look' }],
   },

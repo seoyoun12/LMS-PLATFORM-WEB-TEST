@@ -70,25 +70,23 @@ export default function Steb2() {
     defaultValues: { digit2:'', digit4:'', localName:'', oneWord:'' }
   });
 
+  // 저상버스 예약시 최종 마지막 단계 스텝6 '개인정보동의' 다음 단계가 스텝3이 나옵니다
+
   const nextStep = () => {
-    setPageIndex(prev => prev + 1);
-    
-    if(currentIndex > 8) return;
-    if((currentIndex === 3 && hideCarNumber) || (currentIndex === 3 && watch().businessSubType ==='KNEELING_BUS')) return setCurrentIndex(5);
-    
     if(currentIndex === 2 && disabledCompany) return setCurrentIndex(4);
-    // courseSubCategoryType.KNEELING_BUS
+    if((currentIndex === 3 && hideCarNumber) || (currentIndex === 3 && watch().businessSubType ==='KNEELING_BUS')) return setCurrentIndex(5);    
+    if(currentIndex > 8) return;
+    setPageIndex(prev => prev + 1);
     setCurrentIndex(prev  => prev + 1) 
   }
-  console.log(currentIndex,pageIndex)
-  console.log(watch().businessSubType)
+
   const prevStep = () => {
+    if(currentIndex <= 1) return;
     if(currentIndex === 3 && (localStorage.getItem('site_course_type') === 'TYPE_LOW_FLOOR_BUS')) return;
-    setPageIndex(prev => prev - 1);
-    if(currentIndex <= 1) return
-    if((currentIndex === 5 && hideCarNumber) || (currentIndex === 5 && watch().businessSubType ==='KNEELING_BUS')) return setCurrentIndex(3);
     if(currentIndex === 4 && disabledCompany) return setCurrentIndex(2);
-    setCurrentIndex(prev  => prev - 1)
+    if((currentIndex === 5 && hideCarNumber) || (currentIndex === 5 && watch().businessSubType ==='KNEELING_BUS')) return setCurrentIndex(3);
+    setCurrentIndex(prev  => prev - 1);
+    setPageIndex(prev => prev - 1);
   }
 
   const onChangeBusinessSubType = (e:SelectChangeEvent) => {
@@ -186,19 +184,19 @@ export default function Steb2() {
     }
 
     // localName, digit2, oneWord, digit4
-    if(watch().businessSubType !== courseSubCategoryType.BUS ||
-       watch().businessSubType !== courseSubCategoryType.CHARTER_BUS ||
-       watch().businessSubType !== courseSubCategoryType.CORPORATE_TAXI ||
-       watch().businessSubType !== courseSubCategoryType.KNEELING_BUS) {
-        if ((!hideCarNumber && !carNumberRegex.test(rest.carNumber))) {
-        setCurrentIndex(4);
-        setPageIndex(4);
-        return snackbar({
-          variant: 'error',
-          message: '올바른 형식의 차량번호를 입력해주세요!',
-        });
-      }
-    }
+    // if(watch().businessSubType !== courseSubCategoryType.BUS ||
+    //    watch().businessSubType !== courseSubCategoryType.CHARTER_BUS ||
+    //    watch().businessSubType !== courseSubCategoryType.CORPORATE_TAXI ||
+    //    watch().businessSubType !== courseSubCategoryType.KNEELING_BUS) {
+    //     if ((!hideCarNumber && !carNumberRegex.test(rest.carNumber))) {
+    //     setCurrentIndex(4);
+    //     setPageIndex(4);
+    //     return snackbar({
+    //       variant: 'error',
+    //       message: '올바른 형식의 차량번호를 입력해주세요!',
+    //     });
+    //   }
+    // }
 
     if (rest.carRegisteredRegion === '' || !rest.carRegisteredRegion) {
       setCurrentIndex(5);

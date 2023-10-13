@@ -7,36 +7,16 @@ import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
 import router from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
-import {
-  Box,
-  Button,
-  Chip,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  FormLabel,
-  InputLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  Select,
-  TextField,
-} from '@mui/material';
+import {Box,Button,Chip,FormControl,FormHelperText,FormLabel,InputLabel,MenuItem,Select,TextField,} from '@mui/material';
 import { css } from '@emotion/css';
 import { Spinner } from '@components/ui';
 import { ErrorMessage } from '@hookform/error-message';
 import { FileUploader } from '@components/ui/FileUploader';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import Image from 'next/image';
-import {
-  TargetMainTypeReg,
-  TargetSubTypeChildrenReg,
-  TargetSubTypeReg,
-  TargetSubTypeTeenagerReg,
-  TargetTypeMatch,
-} from 'src/staticDataDescElements/staticType';
+import { TargetMainTypeReg,TargetSubTypeChildrenReg,TargetSubTypeReg,TargetSubTypeTeenagerReg,TargetTypeMatch } from 'src/staticDataDescElements/staticType';
 
 interface Props {
   mode?: 'upload' | 'modify';
@@ -113,19 +93,7 @@ export function CourseTrafficUploadForm({
           ?.subType
       );
       setValue('disabledEduTargetSub', true);
-      // console.log(
-      //   '지금 타겟메인의 벨류는 : ',
-      //   TargetMainTypeReg.filter(tm => tm.type === watch().eduTargetMain)[0]?.ko
-      // );
-      // console.log(
-      //   '지금 타겟서브의 벨류는 : ',
-      //   TargetSubTypeReg1.filter(tm => tm.type === watch().eduTargetSub)[0]?.ko
-      // );
-      // console.log(
-      //   '지금 타겟서브의 벨류는 : ',
-      //   TargetSubTypeReg1.filter(tm => tm.type === watch().eduTargetSub)?.ko
-      // );
-      // setValue('eduTargetSub');  [0] 안쓰면 고장. undefined. why? 저번에 제호님이 설명해주셨었는데..
+      
     } else if (watch().eduTargetMain == 'TYPE_CHILDREN') {
       setValue('disabledEduTargetSub', false);
       setValue('eduTargetSub', 'TYPE_KINDERGARTEN');
@@ -133,18 +101,7 @@ export function CourseTrafficUploadForm({
       setValue('disabledEduTargetSub', false);
       setValue('eduTargetSub', 'TYPE_MIDDLE');
     }
-    // else {
-    //   setValue('eduTargetSub', 'TYPE_ELEMENTARY');
-    //   setValue('disabledEduTargetSub', false);
-    //   // console.log(
-    //   //   '지금 타겟메인의 벨류는 : ',
-    //   //   TargetMainTypeReg.filter(tm => tm.type === watch().eduTargetMain)[0]?.ko
-    //   // );
-    //   // console.log(
-    //   //   '지금 타겟서브의 벨류는 : ',
-    //   //   TargetSubTypeReg1.filter(tm => tm.type === watch().eduTargetSub)[0]?.ko
-    //   // );
-    // }
+    
   }, [courseTraffic, watch().eduTargetMain]);
   ////
 
@@ -229,55 +186,7 @@ export function CourseTrafficUploadForm({
               ))}
             </Select>
           </FormControl>
-          {/* <FormControl fullWidth className="courseUploadInputBox">
-            <InputLabel>교육 대상자 세부 타입</InputLabel>
-            <Select
-              labelId="eduTargetSub"
-              id="eduTargetSub"
-              value={watch().eduTargetSub || ''}
-              label="교육 대상자 세부 타입"
-              onChange={handleEduTargetSub}
-              disabled={watch().disabledEduTargetSub}
-            >
-              {watch().eduTargetMain === 'TYPE_TEENAGER'
-                ? TargetSubTypeTeenagerReg.map(item => (
-                    <MenuItem key={item.type} value={item.type}>
-                      {item.ko}
-                    </MenuItem>
-                  ))
-                : TargetSubTypeReg.map(item => (
-                    <MenuItem key={item.type} value={item.type}>
-                      {item.ko}
-                    </MenuItem>
-                  ))}
-            </Select>
-          </FormControl> */}
-
-          {/* <FormControl fullWidth className="courseUploadInputBox">
-            <InputLabel>교육 대상자 세부 타입</InputLabel>
-            <Select
-              labelId="eduTargetSub"
-              id="eduTargetSub"
-              value={watch().eduTargetSub || ''}
-              label="교육 대상자 세부 타입"
-              onChange={handleEduTargetSub}
-              disabled={watch().disabledEduTargetSub}
-            >
-              {watch().eduTargetMain === 'TYPE_CHILDREN'
-                ? TargetSubTypeChildrenReg.map(item => (
-                    <MenuItem key={item.type} value={item.type}>
-                      {item.ko}
-                    </MenuItem>
-                  ))
-                : TargetSubTypeTeenagerReg.map(item => (
-                    <MenuItem key={item.type} value={item.type}>
-                      {item.ko}
-                    </MenuItem>
-                  ))}
-            </Select>
-          </FormControl> */}
-
-          {/*  */}
+          
 
           <FormControl fullWidth className='courseUploadInputBox'>
             <InputLabel>교육 대상자 세부 타입</InputLabel>
@@ -350,6 +259,7 @@ export function CourseTrafficUploadForm({
               regName='files'
               onFileChange={handleFileChange}
               accept='.jpg, .jpeg, .png'
+              // 거의 뭐 이정도면 리액트를 왜 쓰는지 모를정도로 정신나간 코드다
               children={''}
             />
 
@@ -374,6 +284,8 @@ export function CourseTrafficUploadForm({
           </Box>
 
           <FormLabel sx={{ mt: 1, mb: 1 }}>미리보기</FormLabel>
+
+          {/* TODO: // 정신나간 코드 고쳐야 함 */}
           <ThumbnailImg>
             {courseTraffic?.s3Files ? (
               <Image
@@ -453,14 +365,6 @@ const boxStyles = css`
   margin-top: 8px;
 `;
 
-const pt20 = css`
-  padding-top: 20px;
-`;
-
-const lessonTime = css`
-  width: 30%;
-  margin-top: 20px;
-`;
 const ThumbnailImg = styled.div`
   padding-bottom: 30px;
   position: relative;

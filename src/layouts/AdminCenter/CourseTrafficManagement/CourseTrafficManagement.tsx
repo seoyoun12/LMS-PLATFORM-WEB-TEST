@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Chip,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-  Typography,
-} from '@mui/material';
+import { Box,Chip,TableBody,TableHead,TableRow,TableCell,Typography, TextField, makeStyles } from '@mui/material';
 import { Spinner } from '@components/ui';
 import styled from '@emotion/styled';
 import { Table } from '@components/ui';
@@ -30,18 +21,14 @@ const headRows: {
   { name: '상태', align: 'center', width: '5%' },
 ];
 
+
 export function CourseTrafficManagement() {
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [seq, setSeq] = useState<number | null>(null);
-
+  
   const { data, error, mutate } = courseTrafficList({ page });
 
-  // console.log('data : ', data);
-
-  // console.log('data.content : ', data?.content);
-
-  // pagination
   useEffect(() => {
     const { page } = router.query;
     setPage(!isNaN(Number(page)) ? Number(page) : 0);
@@ -72,6 +59,12 @@ export function CourseTrafficManagement() {
         과정 목록(도민)
       </CourseTrafficTitleTypography>
 
+      <TextField placeholder='과정 검색'
+        InputProps={{style: {
+          height: '44px',
+          marginBottom: '20px'
+        }}}
+        />
       <Table
         pagination={true}
         totalNum={data.totalElements}
@@ -112,13 +105,7 @@ export function CourseTrafficManagement() {
                   )[0].ko
                 }
               </CourseTrafficTableCell>
-              {/* <CourseTrafficTableCell align="center">
-                {
-                  CourseTrafficTargetType.filter(item =>
-                    item.child.filter(item => item.type === courseTraffic.eduTargetSub)
-                  )[0].ko
-                }
-              </CourseTrafficTableCell> */}
+             
               <CourseTrafficTableCell align="center">
                 {
                   CourseTrafficTargetType.filter(
@@ -128,13 +115,7 @@ export function CourseTrafficManagement() {
                   )[0].ko
                 }
               </CourseTrafficTableCell>
-              {/* <CourseTrafficTableCell align="center">
-                {
-                  CourseTrafficTargetType.filter(item =>
-                    item.child.filter(item => item.type === courseTraffic.eduTargetSub)
-                  )[0].ko
-                }
-              </CourseTrafficTableCell> */}
+             
               <CourseTrafficTableCell align="center">
                 <SubjectBox>{courseTraffic.title}</SubjectBox>
               </CourseTrafficTableCell>

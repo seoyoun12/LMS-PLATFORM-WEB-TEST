@@ -1,21 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  styled,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box,Button,Container,FormControl,FormHelperText,InputLabel,MenuItem,Paper,Select,styled,TableBody,TableCell,TableContainer,TableRow,TextField,Typography } from '@mui/material';
 import { StebHeader } from '../StebHeader';
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -23,28 +6,20 @@ import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { courseClassTrafficInfo } from '@common/recoil';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { useIsLoginStatus } from '@hooks/useIsLoginStatus';
 import { locationList } from '@layouts/MeEdit/MeEdit';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import dateFormat from 'dateformat';
 import { ko } from 'date-fns/locale';
-import { CourseClassTraffic } from '@common/recoil/courseClassTraffic/atom';
 import { enrollProvincial } from '@common/api/provincialEnroll';
 import { ProvincialEnrollSaveRequestDto } from '@common/api/Api';
 import { Spinner } from '@components/ui';
 import { EduTargetMainType } from '@common/api/learningMaterial';
-// import { enrollCourseUserProvincial } from '@common/api/courseUser';
-// import { CourseUserProvincialSaveRequestDto } from '@common/api/Api';
 
 // 도민과정 교육신청 steb2
 
 interface detailCounts {
   [prop: string]: { [prop: string]: number };
-}
-
-interface FormDatas {
-  locate: string;
 }
 
 export function Steb2() {

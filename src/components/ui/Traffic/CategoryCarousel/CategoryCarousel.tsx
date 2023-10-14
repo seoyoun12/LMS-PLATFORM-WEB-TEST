@@ -8,12 +8,9 @@ import Image from 'next/image';
 import { useBannerList } from '@common/api/banner';
 import { Spinner } from '@components/ui/Spinner';
 
-
 export const CategoryCarousel = () => {
-  
   const { data: BannerData } = useBannerList();
   const data = BannerData?.filter(item => item.bannerTypeEnums === 'BANNER_TYPE_PROVINCIAL');
-
 
   if (!data) return <Spinner />;
   
@@ -21,7 +18,7 @@ export const CategoryCarousel = () => {
     <Box sx={{position:'relative'}}>
       <Banner>
         {data.length > 0 && data[0].s3Files.length > 0
-        ? <>
+        && <>
         <ContentBox>
         <BasicImage
           src={data[0].s3Files[0].path}
@@ -57,10 +54,8 @@ export const CategoryCarousel = () => {
           />
         </ImageWrapper>
         </>
-        : <Box width="100%" height="100%" sx={{ background: '#d6d6d6' }} />
         }
       </Banner>
-      
     </Box>
   );
 };
@@ -68,8 +63,8 @@ export const CategoryCarousel = () => {
 const Banner = styled.div`
   width: 100%;  
   position: relative;
+  overflow:hidden;
 `
-
 
 const ImageWrapper = styled(Box)`
  @media (min-width: 1024px) {
@@ -86,10 +81,10 @@ const ContentBox = styled(Box)`
   display:flex;
   width: 100%;
   bottom: -40px;
-  // center
   left: 50%;
-  /* transform: translateX(-35%); */
   z-index: 20;
+  overflow:hidden;
+
   @media (max-width: 1024px) {
     position: relative;
     width: 100%;

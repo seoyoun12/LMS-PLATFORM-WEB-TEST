@@ -3,10 +3,7 @@ import { ButtonBase, Chip } from "@mui/material";
 
 export const Container = styled.div``;
 
-export const ChipWrapper = styled.div`
-  display: flex;
-  margin-bottom: 62px;
-`;
+
 
 export const ChipItem = styled(Chip)`
   &:not(:last-of-type) {
@@ -15,18 +12,14 @@ export const ChipItem = styled(Chip)`
 `;
 
 export const ContentContainer = styled.div`
+  padding: 0rem 2rem;
   width: 100%;
   max-width: 1200px;
-  display: flex;
-  flex-wrap: wrap;
+  display : grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   justify-content: center;
-  margin: 62px auto 0 auto;
-  padding: 0;
-
-  @media (max-width: 768px) {
-    padding: 32px 12px;
-    margin: 0;
-  }
+  
 `;
 
 export const ItemContainer = styled(ButtonBase)`
@@ -50,14 +43,11 @@ export const ItemContainer = styled(ButtonBase)`
 export const ItemImageContainer = styled.div`
   width: 100%;
   height: 200px;
-  background-color: #f6f6f6;
-  border-radius: 8px;
-  margin-bottom: 10px;
-
-  > img {
-    width: 100%;
-    height: 100%;
-  }
+  margin: 0 auto;
+  border: 3px solid red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const ItemContentContainer = styled.div`

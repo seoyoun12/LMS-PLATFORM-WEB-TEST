@@ -1,27 +1,22 @@
 import { useCallback } from 'react';
 import { ContentWrapper,HeaderContainer,HeaderSubtitle,HeaderTitle,TabItem,Tabs,TabWrapper,Wrapper } from '@layouts/Traffic/LearningMaterial/style';
-import BackgroundImage from 'public/assets/images/learning_material_background.svg';
 import { useRouter } from 'next/router';
+import { getMaterialType } from '@layouts/Traffic/LearningMaterial/util';
+import BackgroundImage from 'public/assets/images/learning_material_background.svg';
 import EducationLayout from '@layouts/Traffic/LearningMaterial/Education';
 import LearningGuideLayout from '@layouts/Traffic/LearningMaterial/LearningGuide';
 import ReferenceLayout from '@layouts/Traffic/LearningMaterial/Reference';
 import VideoLayout from '@layouts/Traffic/LearningMaterial/Video';
-import { getMaterialType } from '@layouts/Traffic/LearningMaterial/util';
 import LearningGuideDetailLayout from '@layouts/Traffic/LearningMaterial/LearningGuide/Detail';
 
 export type MaterialTabType ='education'| 'learning-guide'| 'reference'| 'video'| 'media';
 
 export function LearningMaterialLayout() {
   const router = useRouter();
-  const { type, id } = router.query as {
-    type: MaterialTabType;
-    id?: string;
-  };
-  
+  const { type, id } = router.query as { type: MaterialTabType; id?: string; };
   const handleClickTab = (tabValue: MaterialTabType) => router.push(`/traffic/learning-material/${tabValue}`);
   
   const contentRender = useCallback(() => {
-    
     switch (type) {
       case 'learning-guide':
         return <EducationLayout materialType={getMaterialType(type)} />;
@@ -40,8 +35,7 @@ export function LearningMaterialLayout() {
   return (
     <>
       <Wrapper>
-        
-              {/* Header */}
+          {/* Header */}
         <HeaderContainer>
           <HeaderTitle>학습자료</HeaderTitle>
           <HeaderSubtitle>
@@ -50,7 +44,7 @@ export function LearningMaterialLayout() {
           <BackgroundImage />
         </HeaderContainer>
 
-              {/* Tabs  */}
+          {/* Tabs  */}
         <TabWrapper>
           <Tabs
             variant='scrollable'
@@ -67,7 +61,6 @@ export function LearningMaterialLayout() {
               onClick={() => handleClickTab('learning-guide')}
               value='learning-guide'
             />
-            
             <TabItem
               label='타기관자료모음'
               onClick={() => handleClickTab('reference')}

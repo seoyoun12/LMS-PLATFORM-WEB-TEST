@@ -25,7 +25,6 @@ interface detailCounts {
 export function Steb2() {
   const router = useRouter();
   const snackbar = useSnackbar();
-  const ref = useRef<boolean>(false);
   const [trafficInfo, setTrafficInfo] = useRecoilState(courseClassTrafficInfo);
   const [loading, setLoading] = useState(false);
 
@@ -33,33 +32,36 @@ export function Steb2() {
     HIGH_SCHOOL: { grade1: 0, grade2: 0, grade3: 0 },
   });
 
-  const { register, setValue, watch, reset } = useForm<ProvincialEnrollSaveRequestDto>({
+  const { register, setValue, watch, } = useForm<ProvincialEnrollSaveRequestDto>({
     defaultValues: {
       expectedToStartDtime: dateFormat(new Date(), 'yyyy-mm-dd'),
+      expectedToEndTime: dateFormat(new Date(), 'yyyy-mm-dd'),
     },
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { region, organization, expectedToStartDtime, eduTargetMain, eduTargetSub } =
-      watch();
-
-    let isPeople = null;
-    for (const [key, obj] of Object.entries(detailCounts)) {
-      for (const [kkey, value] of Object.entries(obj)) {
-        isPeople = isPeople || value;
-      }
+    if (!watch().region) {
+      snackbar({ variant: 'error', message: '지역을 선택해주세요.' });
+      return;
+    }
+    if (!watch().organization) {
+      snackbar({ variant: 'error', message: '소속을 입력해주세요.' });
+      return;
+    }
+    if (!watch().expectedToStartDtime) {
+      snackbar({ variant: 'error', message: '교육 시작일을 선택해주세요.' });
+      return;
+    }
+    if (!watch().expectedToEndTime) {
+      snackbar({ variant: 'error', message: '교육 종료일을 선택해주세요.' });
+      return;
+    }
+    if (!watch().eduTargetSub) {
+      snackbar({ variant: 'error', message: '교육 대상자를 선택해주세요.' });
+      return;
     }
 
-    if (
-      !region ||
-      !organization ||
-      !expectedToStartDtime ||
-      !eduTargetMain ||
-      !eduTargetSub
-    )
-      return window.alert('모두 입력해 주세요!');
-    if (!isPeople || isPeople <= 0) return window.alert('교육생 명수를 기입해주세요!');
 
     try {
       const obj = watch();
@@ -121,7 +123,6 @@ export function Steb2() {
             minDate={new Date()}
             customInput={<TextField fullWidth />}
             selected={new Date(watch().expectedToStartDtime)}
-            onSelect={() => {}}
             onChange={date =>
               setValue(
                 'expectedToStartDtime',
@@ -141,37 +142,17 @@ export function Steb2() {
             showPopperArrow={false}
             minDate={new Date()}
             customInput={<TextField fullWidth />}
-            selected={new Date(watch().expectedToStartDtime)}
-            onSelect={() => {}}
+            selected={new Date(watch().expectedToEndTime)}
+            
             onChange={date =>
-              setValue(
-                'expectedToStartDtime',
+              setValue('expectedToEndTime',
                 date
-                  ? dateFormat(date, 'yyyy-mm-dd')
-                  : dateFormat(new Date(), 'yyyy-mm-dd')
+                ? dateFormat(date, 'yyyy-mm-dd')
+                : dateFormat(new Date(), 'yyyy-mm-dd')
               )
             }
           />
         </FormControl>
-
-        <FormControl fullWidth>
-          <Typography id="student">과정 선택</Typography>
-          <Select
-            labelId="student"
-            id="student"
-            {...register('eduTargetMain')}
-            value={router.query.eduTargetMain}
-            disabled
-          >
-            {studentList.map((item, index) => (
-              <MenuItem key={item.enType} value={item.enType}>
-                {item.type}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-
         <FormControl fullWidth>
           <Typography id="student">교육 대상자</Typography>
           <Select
@@ -180,16 +161,14 @@ export function Steb2() {
             {...register('eduTargetMain')}
             value={router.query.eduTargetMain}
             disabled
-            // label="student"
           >
-            {studentList.map((item, index) => (
+            {studentList.map((item) => (
               <MenuItem key={item.enType} value={item.enType}>
                 {item.type}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
-
 
         <FormControl fullWidth>
           <Typography id="student-category">교육생 세부구분</Typography>
@@ -200,13 +179,14 @@ export function Steb2() {
           >
             {studentList
               .filter(studentList => watch().eduTargetMain === studentList.enType)[0]
-              ?.category.map(({ type, enType, ageList }) => (
+              ?.category.map(({ type, enType }) => (
                 <MenuItem key={enType} value={enType}>
                   {type}
                 </MenuItem>
               ))}
           </Select>
         </FormControl>
+
         <TableContainer
           component={Paper}
           sx={{ display: 'flex', justifyContent: 'center' }}
@@ -226,6 +206,23 @@ export function Steb2() {
               ))}
           </TableBody>
         </TableContainer>
+
+        <FormControl fullWidth>
+          <Typography id="lecture">과정 선택</Typography>
+          <Select
+            labelId="lecture"
+            id="lecture"
+            // TODO:// 실제 과정이 보여질 수 있게 수정 필요
+            // {...register('lecture')}
+          >
+            {Array.from({length: 4}).map((_,index) => (
+              <MenuItem key={index} value={index}>
+                {index}번 올빼미 기상
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
         <Button variant="contained" type="submit" fullWidth disabled={loading}>
           {loading ? <Spinner fit={true} /> : '교육 신청하기'}
         </Button>
@@ -239,12 +236,7 @@ const Steb2Wrap = styled(Box)`
   }
 `;
 
-function CustomInput({
-  ageInfo,
-  setDetailCounts,
-  detailCounts,
-  candidateDetailType,
-}: {
+function CustomInput({ageInfo,setDetailCounts,detailCounts,candidateDetailType,}: {
   ageInfo: { age: string; enAge: string };
   detailCounts: detailCounts;
   setDetailCounts: React.Dispatch<React.SetStateAction<detailCounts>>;
@@ -288,9 +280,7 @@ export const studentList = [
         type: '유치원',
         enType: 'TYPE_KINDERGARTEN',
         ageList: [
-          // { age: '만3세', enAge: 'thirdYearOldChild' },
-          // { age: '만4세', enAge: 'fourthYearOldChild' },
-          // { age: '만5세', enAge: 'fifthYearOldChild' },
+          
           { age: '만3세', enAge: 'age3' },
           { age: '만4세', enAge: 'age4' },
           { age: '만5세', enAge: 'age5' },
@@ -300,12 +290,6 @@ export const studentList = [
         type: '초등학교',
         enType: 'TYPE_ELEMENTARY',
         ageList: [
-          // { age: '1학년', enAge: 'firstGrade' },
-          // { age: '2학년', enAge: 'secondGrade' },
-          // { age: '3학년', enAge: 'thirdGrade' },
-          // { age: '4학년', enAge: 'fourthGrade' },
-          // { age: '5학년', enAge: 'fifthGrade' },
-          // { age: '6학년', enAge: 'sixthGrade' },
           { age: '1학년', enAge: 'grade1' },
           { age: '2학년', enAge: 'grade2' },
           { age: '3학년', enAge: 'grade3' },
@@ -324,9 +308,6 @@ export const studentList = [
         type: '중학교',
         enType: 'TYPE_MIDDLE',
         ageList: [
-          // { age: '1학년', enAge: 'firstGrade' },
-          // { age: '2학년', enAge: 'secondGrade' },
-          // { age: '3학년', enAge: 'thirdGrade' },
           { age: '1학년', enAge: 'grade1' },
           { age: '2학년', enAge: 'grade2' },
           { age: '3학년', enAge: 'grade3' },
@@ -336,9 +317,6 @@ export const studentList = [
         type: '고등학교',
         enType: 'TYPE_HIGH',
         ageList: [
-          // { age: '1학년', enAge: 'firstGrade' },
-          // { age: '2학년', enAge: 'secondGrade' },
-          // { age: '3학년', enAge: 'thirdGrade' },
           { age: '1학년', enAge: 'grade1' },
           { age: '2학년', enAge: 'grade2' },
           { age: '3학년', enAge: 'grade3' },

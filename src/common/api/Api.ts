@@ -6350,7 +6350,8 @@ export interface ProvincialEnrollSaveRequestDto {
    * @example yyyy-MM-dd
    */
   expectedToStartDtime?: string;
-
+  expectedToEndTime?: string;
+  
   /**
    * 1학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
    * @format int32

@@ -17,6 +17,7 @@ export function StebHeader({ value }: { value: number }) {
         .filter(item => item.value === value)
         .map(item => (
           <Box
+            key={item.value}
             sx={{
               color: 'white',
               textAlign: 'center',

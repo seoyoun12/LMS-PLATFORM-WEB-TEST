@@ -262,18 +262,10 @@ export function CategoryTrafficUploadForm({
         </FormControl>
 
         <ButtonBox>
-          <SubmitBtn variant="contained" type="submit" disabled={loading}>
-            {loading ? (
-              <Spinner fit={true} />
-            ) : mode === "upload" ? (
-              "업로드하기"
-            ) : (
-              "수정하기"
-            )}
+          <SubmitBtn variant='contained' type='submit' disabled={loading}>
+            { loading ? <Spinner fit={true} /> : mode === 'upload' ? '업로드하기' : '수정하기' }
           </SubmitBtn>
-          {mode === "upload" ? (
-            ""
-          ) : (
+          {mode !== "upload" &&
             <DeleteBtn
               color="warning"
               variant="contained"
@@ -282,7 +274,7 @@ export function CategoryTrafficUploadForm({
             >
               {loading ? <Spinner fit={true} /> : "삭제"}
             </DeleteBtn>
-          )}
+          }
         </ButtonBox>
       </Box>
     </Container>

@@ -1,26 +1,10 @@
-import {
-  BoardType,
-  CategoryBoardInput,
-  removeCategoryBoard,
-} from '@common/api/categoryBoard';
+import { BoardType,CategoryBoardInput,removeCategoryBoard } from '@common/api/categoryBoard';
 import { YN } from '@common/constant';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Editor as EditorType } from '@toast-ui/react-editor';
 import styled from '@emotion/styled';
 import '@toast-ui/editor/dist/toastui-editor.css';
-import {
-  Box,
-  Button,
-  Chip,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box,Button,Chip,FormControl,FormControlLabel,FormHelperText,FormLabel,Radio,RadioGroup,TextField} from '@mui/material';
 import { TuiEditor } from '@components/common/TuiEditor';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { css } from '@emotion/css';
@@ -42,7 +26,6 @@ interface Props {
   mode?: 'upload' | 'modify';
   category?: CategoryBoardInput;
   courseSeq?: number;
-  // onHandleSubmit: ({ categoryBoardInput, files, categorySeq, isFileDelete , courseSeq } :{
   onHandleSubmit: ({
     categoryBoardInput,
     files,
@@ -52,7 +35,6 @@ interface Props {
   }: {
     categoryBoardInput: CategoryBoardInput;
     files?: File[];
-    // isFileDelete: boolean;
     categorySeq?: number;
     courseSeq?: number;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -65,11 +47,6 @@ interface FormType extends CategoryBoardInput {
 
 const defaultValues = {
   boardType: BoardType.TYPE_NOTICE,
-  // TYPE_NOTICE -> 공지사항
-  // TYPE_FAQ -> 자주묻는질문
-  // TYPE_GUIDE_AUTH -> 회원가입 및 로그인
-  // TYPE_GUIDE_EDU_REGI -> 교육신청방법
-  // TYPE_GUIDE_EDU_LEARNING -> 학습방법
   noticeYn: YN.YES,
   publicYn: YN.YES,
   status: ProductStatus.APPROVE,
@@ -240,7 +217,6 @@ export function CategoryUploadForm({
         />
 
         <FormLabel sx={{ mt: 2, mb: 1 }}>첨부파일업로드</FormLabel>
-        {/* <div className="board-uploader" style={{ border: '1px solid black' }}> */}
         <div className="board-uploader">
           <FileUploader
             register={register}
@@ -329,14 +305,8 @@ export function CategoryUploadForm({
           />
         </FormControl> */}
         <ButtonBox>
-          <SubmitBtn variant="contained" type="submit" disabled={loading}>
-            {loading ? (
-              <Spinner fit={true} />
-            ) : mode === 'upload' ? (
-              '업로드하기'
-            ) : (
-              '수정하기'
-            )}
+          <SubmitBtn variant='contained' type='submit' disabled={loading}>
+            { loading ? <Spinner fit={true} /> : mode === 'upload' ? '업로드하기' : '수정하기' }
           </SubmitBtn>
           {mode === 'upload' ? (
             ''

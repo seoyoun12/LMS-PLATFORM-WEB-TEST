@@ -4,14 +4,13 @@ import { Link } from '@components/common';
 import Image from 'next/image';
 
 import useResponsive from '@hooks/useResponsive';
-
-
 const categoryData = [
   {
     id: 1,
     title: '교통안전교육',
     title2: '자료실',
-    href: '/traffic/learning-material/learning-guide',
+    
+    href: '/traffic/learning-material/education',
     icon: 'assets/images/certificateTransIcon.png',
     color: '#00ffd2',
     btnText: '학습자료',

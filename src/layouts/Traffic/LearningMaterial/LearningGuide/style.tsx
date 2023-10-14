@@ -2,9 +2,6 @@ import styled from "@emotion/styled";
 import { ButtonBase, Chip } from "@mui/material";
 
 export const Container = styled.div``;
-
-
-
 export const ChipItem = styled(Chip)`
   &:not(:last-of-type) {
     margin-right: 8px;
@@ -19,7 +16,6 @@ export const ContentContainer = styled.div`
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
   justify-content: center;
-  
 `;
 
 export const ItemContainer = styled(ButtonBase)`

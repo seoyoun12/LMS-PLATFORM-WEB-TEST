@@ -350,7 +350,7 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
             <ThumbnameWrapper>
               <SubTitle>썸네일 이미지</SubTitle>
               <Image
-                src={`https://img.youtube.com/vi/${youtubeLink.split('v=')[1]}/maxresdefault.jpg`}
+                src={`https://img.youtube.com/vi/${youtubeLink.split('&')[0].split('v=')[1]}/maxresdefault.jpg`}
                 alt="썸네일"
                 objectFit='contain'
                 width={200}
@@ -408,8 +408,8 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
               >
                 {}
               </FileUploader>
-              {fileArray
-                ? fileArray.map((r) => 
+              {fileArray &&
+                fileArray.map((r) => 
                     <Chip
                       key={r.randomSeq}
                       icon={<OndemandVideoOutlinedIcon />}
@@ -424,7 +424,7 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
                       sx={{ pl: '5px', ml: '5px', mb: '1px', maxWidth: '700px' }}
                     />
                   )
-                : null}
+              }
             </div>
             </>
           )}
@@ -533,7 +533,6 @@ const SubTitle = styled(Typography)`
   margin-top: 4px;
   margin-bottom: 4px;
   font-weight: 500;
-  font-size: 18px;
-            
-
+  font-size: 16px;
+  color:#a7a7a7;
 `

@@ -1,22 +1,19 @@
 import { courseTrafficRemove } from '@common/api/adm/course-traffic';
-import {
-  ProvincialBoardResponseDto,
-  ProvincialBoardSaveRequestDto,
-} from '@common/api/Api';
+import { ProvincialBoardResponseDto,ProvincialBoardSaveRequestDto } from '@common/api/Api';
+import { Box,Button,Chip,FormControl,FormHelperText,FormLabel,InputLabel,MenuItem,Select,TextField } from '@mui/material';
+import { TargetMainTypeReg,TargetSubTypeChildrenReg,TargetSubTypeReg,TargetSubTypeTeenagerReg,TargetTypeMatch } from 'src/staticDataDescElements/staticType';
 import { useDialog } from '@hooks/useDialog';
 import { useSnackbar } from '@hooks/useSnackbar';
-import router from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import styled from '@emotion/styled';
-import {Box,Button,Chip,FormControl,FormHelperText,FormLabel,InputLabel,MenuItem,Select,TextField,} from '@mui/material';
 import { css } from '@emotion/css';
 import { Spinner } from '@components/ui';
 import { ErrorMessage } from '@hookform/error-message';
 import { FileUploader } from '@components/ui/FileUploader';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import Image from 'next/image';
-import { TargetMainTypeReg,TargetSubTypeChildrenReg,TargetSubTypeReg,TargetSubTypeTeenagerReg,TargetTypeMatch } from 'src/staticDataDescElements/staticType';
+import styled from '@emotion/styled';
+import router from 'next/router';
 
 interface Props {
   mode?: 'upload' | 'modify';
@@ -58,30 +55,24 @@ export function CourseTrafficUploadForm({
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    control,
     reset,
     watch,
     setValue,
     resetField,
+    formState: { errors },
   } = useForm<FormType>({ defaultValues });
 
   // 교육 대상자 타입
-  const handleEduTargetMain = async (e: { target: { value: any } }) => {
+  const handleEduTargetMain = async (e: { target: { value } }) => {
     setValue('eduTargetMain', e.target.value);
-    // console.log('courseTraffic.eduTargetMain : ', watch().eduTargetMain);
+    
   };
 
   // 교육 대상자 세부 타입
-  const handleEduTargetSub = async (e: { target: { value: any } }) => {
+  const handleEduTargetSub = async (e: { target: { value } }) => {
     setValue('eduTargetSub', e.target.value);
-    // console.log('courseTraffic.eduTargetSub : ', watch().eduTargetSub);
   };
 
-  // 교육 대상자 타입이 청소년이 될 시
-  // const handleEduTarget;
-
-  // 교육 대상자 타입에 따른 세부 타입 지정
   useEffect(() => {
     if (
       watch().eduTargetMain == 'TYPE_ELDERLY' ||
@@ -141,7 +132,7 @@ export function CourseTrafficUploadForm({
         snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
         router.push(`/admin-center/course-traffic`);
       }
-    } catch (e: any) {
+    } catch (e) {
       snackbar({ variant: 'error', message: e.data.message });
     }
   };
@@ -238,9 +229,7 @@ export function CourseTrafficUploadForm({
 
           <FormControl className={textField}>
             <TextField
-              {...register('youtubeLink', {
-                required: '유튜브 링크를 입력해주세요.',
-              })}
+              {...register('youtubeLink', {required: '유튜브 링크를 입력해주세요.',})}
               size='small'
               label='유튜브 링크'
               variant='outlined'
@@ -260,8 +249,8 @@ export function CourseTrafficUploadForm({
               onFileChange={handleFileChange}
               accept='.jpg, .jpeg, .png'
               // 거의 뭐 이정도면 리액트를 왜 쓰는지 모를정도로 정신나간 코드다
-              children={''}
-            />
+              // children={''}
+            >{' '}</FileUploader>
 
             {fileName ? (
               <Chip
@@ -292,9 +281,10 @@ export function CourseTrafficUploadForm({
                 className='thumbnailImg'
                 src={courseTraffic.s3Files[0]?.path || ''}
                 layout='fill'
+                alt='썸네일'
               />
             ) : (
-              <Image src={thumbnail} layout='fill' />
+              <Image src={thumbnail} layout='fill' alt='썸네일'/>
             )}
           </ThumbnailImg>
         </InputContainer>

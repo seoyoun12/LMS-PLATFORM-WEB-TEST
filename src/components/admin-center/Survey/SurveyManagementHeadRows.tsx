@@ -4,7 +4,7 @@ import { grey } from '@mui/material/colors';
 import React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import ReplayIcon from '@mui/icons-material/Replay';
-import { CompleteType, StatusType } from '@common/api/adm/learningInfo';
+
 
 interface Props {
   //   searchInputRef: React.MutableRefObject<HTMLInputElement>;
@@ -12,6 +12,8 @@ interface Props {
   handleSearch: (e: React.FormEvent, isReload?: boolean) => Promise<void>;
 }
 
+
+// 정신병자 코드
 export const SurveyManagementHeadRows = React.forwardRef(function (
   { handleSearch, search }: Props,
   searchInputRef: React.MutableRefObject<HTMLInputElement>

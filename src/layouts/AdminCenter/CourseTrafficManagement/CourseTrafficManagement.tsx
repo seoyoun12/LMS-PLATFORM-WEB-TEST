@@ -1,4 +1,4 @@
-import { Box,Chip,TableBody,TableHead,TableRow,TableCell,Typography, TextField, makeStyles } from '@mui/material';
+import { Box,Chip,TableBody,TableHead,TableRow,TableCell,Typography, TextField } from '@mui/material';
 import { Spinner } from '@components/ui';
 import styled from '@emotion/styled';
 import { Table } from '@components/ui';
@@ -16,8 +16,9 @@ const headRows: {
   { name: 'No', align: 'center', width: '5%' },
   { name: '교육대상자 분류', align: 'center', width: '12%' },
   { name: '교육대상자 세부 분류', align: 'center', width: '12%' },
-  { name: '제목', align: 'center', width: '54%' },
+  { name: '과정명', align: 'center', width: '54%' },
   { name: '생성날짜', align: 'center', width: '10%' },
+  { name: '노출여부', align: 'center', width: '5%' },
   { name: '상태', align: 'center', width: '5%' },
 ];
 
@@ -122,6 +123,17 @@ export function CourseTrafficManagement() {
               <CourseTrafficTableCell align="center">
                 {dateFormat(courseTraffic.createdDtime, 'isoDate')}
               </CourseTrafficTableCell>
+              
+              <CourseTrafficTableCell align="center">
+                {/* <Chip
+                  label={courseTraffic.show ? '정상' : '중지'}
+                  variant="outlined"
+                  size="small"
+                  color={courseTraffic.show ? 'secondary' : 'default'}
+                /> */}
+                show
+              </CourseTrafficTableCell>
+
               <CourseTrafficTableCell align="center">
                 <Chip
                   label={courseTraffic.status ? '정상' : '중지'}

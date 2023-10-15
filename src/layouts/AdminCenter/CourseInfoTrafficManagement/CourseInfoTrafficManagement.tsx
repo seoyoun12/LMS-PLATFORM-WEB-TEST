@@ -1,4 +1,4 @@
-import { TableBody,TableHead,Typography,Button,Box,Backdrop } from '@mui/material';
+import { TableBody,TableHead,Typography,Button,Box,Backdrop, Input, TextField } from '@mui/material';
 import { Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -17,6 +17,8 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { saveAs } from 'file-saver';
 import { format } from 'date-fns';
+import SelectBox from '../CourseTrafficManagement/common/SelectBox';
+import RadioBox from '../CourseTrafficManagement/common/RadioBox';
 
 const headRows: {
   name: string;
@@ -111,13 +113,10 @@ export default function CourseInfoTrafficManagement() {
 
   // 수정페이지로
   const onClickmodifyCourseInfo = async (seq: number) => {
-    window.open(
-      `/admin-center/course-info-traffic/modify/${seq}`,
-      // '',
-      '_blank'
-    );
+    window.open(`/admin-center/course-info-traffic/modify/${seq}`,'_blank');
   };
 
+  const test = () => {console.log('hello world')}
 
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
@@ -127,6 +126,122 @@ export default function CourseInfoTrafficManagement() {
       <CourseInfoTypography variant='h5'>
         전체 수강생 학습현황(도민)
       </CourseInfoTypography>
+
+
+      <SearchForm>
+        <SearchFormContainer>
+          <SearchFormLeft sx={{flex:1}}>
+            <InputBox>
+              <SelectBox
+                id="startedDate"
+                label="교육시작년도"
+                options={Array.from({length: 2}, (_, i) => i)}
+                onChange={test}
+                value={0}
+                name='startedDate'
+              />
+              <SelectBox
+                id="region"
+                label="지역"
+                options={Array.from({length: 2}, (_, i) => i)}
+                onChange={test}
+                value={0}
+                name='region'
+              />
+            </InputBox>
+
+            
+            <InputBox>
+              <SelectBox
+                id="targetType"
+                label="교육대상자"
+                options={Array.from({length: 2}, (_, i) => i)}
+                onChange={test}
+                value={0}
+                name='targetType'
+              />
+              <SelectBox
+                id="targetSubType"
+                label="교육대상자세부"
+                options={Array.from({length: 2}, (_, i) => i)}
+                onChange={test}
+                value={0}
+                name='targetSubType'
+              />
+            </InputBox>
+
+            <InputBox>
+              <SelectBox
+                id="course"
+                label="과정선택"
+                options={Array.from({length: 2}, (_, i) => i)}
+                onChange={test}
+                value={0}
+                name='course'
+              />
+            </InputBox>
+
+            
+              <Box sx={{display:'flex', flexDirection:'column', width:'100%'}}>
+                <Typography>학습기간</Typography>
+                <Box sx={{display:'flex', gap:'1rem'}}>
+                  <TextField type="date" fullWidth />
+                  <TextField type="date" fullWidth />
+                </Box>
+              </Box>
+            </SearchFormLeft>
+
+
+ 
+          <SearchFormRight sx={{flex:1}}>
+              <TextField label='소속' placeholder='소속명' fullWidth />
+          </SearchFormRight>
+
+        </SearchFormContainer>
+         {/* 과정타입선택,수료여부 */}
+         <RadioFormContainer>
+            <RadioBox
+              defaultValue='전체'
+              name='courseType'
+              id='courseType'
+              label='과정타입선택'
+              radios={['운수종사자', '저상버스', '도민교통']}
+              value='전체'
+              onChange={test}
+            />
+            <RadioBox
+              defaultValue='전체'
+              name='courseType'
+              id='courseType'
+              label='수료여부'
+              radios={['전체', '수료', '미수료', '도민']}
+              value='전체'
+              onChange={test}
+            />
+          </RadioFormContainer>
+        <Box>
+          <TextField label='사용자 검색' placeholder='이름 혹은 아이디 입력' fullWidth />
+        </Box>
+
+        <ButtonBox>
+          <Button variant='contained' color='primary' sx={{flex:1}}>검색하기</Button>
+          <Button variant='outlined' color='primary' sx={{flex:1}}>전체 다시 불러오기</Button>
+        </ButtonBox>
+
+      </SearchForm>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       <Box display='flex' mb={2}>
         <Button
@@ -256,6 +371,73 @@ export default function CourseInfoTrafficManagement() {
     </Box>
   );
 }
+
+
+const ButtonBox = styled(Box)`
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0rem;
+`;
+
+
+const InputBox = styled(Box)`
+  display: flex;
+  gap: 1rem;
+`;
+
+
+const SearchFormContainer = styled(Box)`
+  display: flex;
+  gap: 2rem;
+`
+
+const RadioFormContainer = styled(SearchFormContainer)`
+  position: relative;
+  margin: 1.25rem auto;
+  padding: 1rem 15%;
+  
+  width: 100%;
+  justify-content:center;
+  align-items: center;
+  
+  &:after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  top:0;
+  left:0;
+  background-color: #c7c7c7c7;
+  }
+  &:before {
+    content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  bottom:0;
+  left:0;
+  background-color: #c7c7c7c7;
+  }
+`;
+
+const SearchFormLeft = styled(Box)`
+  flex:1;
+  
+`
+
+const SearchFormRight = styled(Box)`
+  flex:1;
+`
+
+const SearchForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+`;
+
+
 
 const CourseInfoTypography = styled(Typography)`
   margin-bottom: 30px;

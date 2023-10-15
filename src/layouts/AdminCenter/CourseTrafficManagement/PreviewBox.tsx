@@ -5,7 +5,7 @@ import React from 'react'
 
 interface Props {
   preview: string | ArrayBuffer | null;
-  selectedFile: File | null;
+  selectedFile: string | number | File;
   onRemoveFile: () => void
 }
 
@@ -14,7 +14,7 @@ export default function PreviewBox({ preview, selectedFile, onRemoveFile }: Prop
     <Wrapper>
       <Typography component='h3'>썸네일 미리보기</Typography>
       <Image src={preview.toString()} width={320} height={180} alt="preview" objectFit="contain" />
-      <Typography>{selectedFile?.name}</Typography>
+      <Typography>{selectedFile instanceof File && selectedFile?.name}</Typography>
       <Button variant="outlined" color="error" onClick={onRemoveFile}>삭제</Button>
     </Wrapper>
   )

@@ -63,10 +63,7 @@ export function CourseInfoTrafficModify() {
 
   return (
     <Box>
-      <CourseInfomationTraffic
-        enrollInfo={data}
-        onHandleSubmit={handleSubmit}
-      />
+      <CourseInfomationTraffic/>
       {/* <LearningStatus learningStatusList={data?.learningStatusList} />
       <ProgressStatus
         progressList={data.progressStatusList}

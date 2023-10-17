@@ -1,9 +1,17 @@
 import styled from '@emotion/styled'
+import useToggle from '@hooks/useToggle'
 import { Link } from '@mui/icons-material'
 import { Box, Button } from '@mui/material'
+import CourseContentListModal from './CourseContentListModal'
+
+
 
 export default function CourseContentTab() {
+  const { toggle, onToggle } = useToggle()
   return (
+    <>
+    <CourseContentListModal toggle={toggle} onToggle={onToggle} />
+    
     <Wrapper>
       <Table>
         <Row>
@@ -22,9 +30,16 @@ export default function CourseContentTab() {
         </Row>
       </Table>
       <Box sx={{position:'relative'}}>
-      <ContentLinkButton variant='contained' startIcon={<Link/>}>콘텐츠 연결</ContentLinkButton>
+      <ContentLinkButton
+        variant='contained'
+        startIcon={<Link/>}
+        onClick={onToggle}
+        >
+          콘텐츠 연결
+      </ContentLinkButton>
       </Box>
     </Wrapper>
+    </>
   )
 }
 

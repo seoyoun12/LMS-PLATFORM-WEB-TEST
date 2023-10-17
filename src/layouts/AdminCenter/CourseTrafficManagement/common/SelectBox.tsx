@@ -19,7 +19,7 @@ export default function SelectBox({ id, label, name, options, value, sx, onChang
     <FormControl fullWidth>
     <InputLabel id={id}>{label}</InputLabel>
     <SelectContainer name={name} label={label} labelId={id} value={value} onChange={onChange} sx={{...sx}} disabled={disabled}  >
-      {options.map(option => <MenuItem key={option} value={option}>{ConvertEnum(option)}</MenuItem>) }
+      {options?.map(option => <MenuItem key={option} value={option}>{ConvertEnum(option)}</MenuItem>) }
     </SelectContainer>
   </FormControl>
   )

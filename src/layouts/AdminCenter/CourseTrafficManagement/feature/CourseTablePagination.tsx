@@ -1,17 +1,18 @@
-import { getCourseListResponse } from '@hooks/useDominCourse';
+
+import { CourseResponse } from '@hooks/useDominCourse';
 import { TablePagination } from '@mui/material';
 
 interface Props {
   page: number;
   rowsPerPage: number;
-  courseList: getCourseListResponse | null;
+  count: number | null;
   setPage: (page: number) => void;
   setRowsPerPage: (rowsPerPage: number) => void; 
 }
 
-export default function CourseTablePagination({page,rowsPerPage,courseList,setPage,setRowsPerPage}:Props) {
+export default function CourseTablePagination({page,count,rowsPerPage,setPage,setRowsPerPage}:Props) {
 
-  const onChangePage = async (_,page: number) => {
+  const onChangePage = (_,page: number) => {
     setPage(page);
   };
   const onChangeRowsPerPage = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +22,7 @@ export default function CourseTablePagination({page,rowsPerPage,courseList,setPa
   return (
     <TablePagination
         page={page}
-        count={courseList?.totalElements}
+        count={count ?? 0}
         rowsPerPage={rowsPerPage}
         onPageChange={onChangePage}
         onRowsPerPageChange={onChangeRowsPerPage}

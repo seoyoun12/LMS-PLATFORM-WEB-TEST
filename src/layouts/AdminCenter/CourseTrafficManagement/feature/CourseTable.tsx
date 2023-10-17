@@ -3,9 +3,9 @@ import CourseTableHeaders from './CourseTableHeaders'
 import CourseListItem from './CourseListItem'
 import styled from '@emotion/styled'
 import { Box } from '@mui/material'
-import { getCourseListResponse } from '@hooks/useDominCourse'
+import { CourseResponse } from '@hooks/useDominCourse'
 interface Props{
-  courseList: getCourseListResponse | null;
+  courseList: CourseResponse | null;
 }
 
 export default function CourseTable({ courseList }:Props) {

@@ -20,12 +20,7 @@ export function CourseUpload() {
     }
   };
 
-  const handleSubmit = async ({
-    files,
-    courseInput,
-    
-    setLoading,
-  }: {
+  const handleSubmit = async ({ files, courseInput, setLoading }: {
     files: File[];
     courseInput: CourseInput;
     isFileDelete: boolean;

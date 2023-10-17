@@ -1,7 +1,7 @@
-import { CourseTabs } from "@components/admin-center/CourseTabs";
+import CourseUploadTab from "./CourseUploadTab";
 
 
 export function CourseTrafficUpload() { 
-  return ( <CourseTabs /> );
+  return ( <CourseUploadTab /> );
 }
 

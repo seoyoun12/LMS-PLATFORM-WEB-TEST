@@ -2,32 +2,33 @@ import { SelectChangeEvent } from "@mui/material"
 import { ChangeEvent, useCallback, useState } from "react"
 
 
-interface Props{
-  initialValue: string | number | File | null;
+interface Props<T>{
+  initialValue: T;
   type: 'string' | 'number' | 'file';
 }
 
 
-export function useNewInput({initialValue,type}: Props) {
+export function useNewInput<T>({initialValue,type}: Props<T>) {
     const [value , setValue] = useState(initialValue)
     const [preview , setPreview] = useState<string | ArrayBuffer | null>('')
     
 
     const onChangeValue = (e: ChangeEvent<HTMLInputElement> | SelectChangeEvent<string> ) => {
-      if(typeof e === 'string' || typeof e === 'number') setValue(e)
+      if(typeof e === 'string' || typeof e === 'number') setValue(e as T)
       else if(e instanceof Object){
-        setValue(e.target.value);
+        setValue(e.target.value as T);
       }
     }
 
     const onChangeFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+      if(typeof e === 'string') return 
       const file = e.target.files[0];
       if(file) {
         const reader = new FileReader();
         reader.onload = e => {
           const preview = e.target.result;
           if(preview) {
-            setValue(file); // metadata
+            setValue(file as T); // metadata
             setPreview(preview); // base64
           }
         }
@@ -42,8 +43,11 @@ export function useNewInput({initialValue,type}: Props) {
     
     return {
       value,
+      setValue,
       preview,
       onChange: type === 'file' ? onChangeFile : onChangeValue,
-      onRemoveFile
+      onRemoveFile,
+      setPreview
+      
     }
 }

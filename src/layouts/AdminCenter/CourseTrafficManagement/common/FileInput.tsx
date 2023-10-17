@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material'
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import { ChangeEvent } from 'react';
 
+
 interface Props {
   onChangeFile: (e: ChangeEvent<HTMLInputElement>) => void
 

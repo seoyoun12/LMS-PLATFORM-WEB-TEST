@@ -24,7 +24,7 @@ export function CourseTrafficManagement() {
     <RefreshButton endIcon={<Refresh />} >전체 다시 불러오기</RefreshButton>
     <CourseTable courseList={courseList} />
     <CourseTablePagination
-        courseList={courseList}
+        count={courseList?.totalElements ?? 0}
         page={page}
         setPage={setPage}
         rowsPerPage={rowsPerPage}

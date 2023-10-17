@@ -11,7 +11,12 @@ export const ConvertEnum = (str: string) => {
     if(str === 'TYPE_ELEMENTARY') return '초등학교'
     if(str === 'TYPE_MIDDLE') return '중학교'
     if(str === 'TYPE_HIGH') return '고등학교'
-    
+    // 진도율 :: COURSE_MODULE_PROGRESS_RATE
+    // 시험 :: COURSE_MODULE_TEST
+    // 설문 :: COURSE_MODULE_SURVEY
+    if(str === 'COURSE_MODULE_PROGRESS_RATE') return '진도율'
+    if(str === 'COURSE_MODULE_TEST') return '시험'
+    if(str === 'COURSE_MODULE_SURVEY') return '설문'
     return str;
 }
 

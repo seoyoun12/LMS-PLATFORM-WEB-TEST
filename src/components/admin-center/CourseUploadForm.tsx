@@ -1,6 +1,6 @@
 import '@toast-ui/editor/dist/toastui-editor.css';
-import { Editor as EditorType } from '@toast-ui/react-editor';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+
+import { ChangeEvent, useEffect, useState } from 'react';
 import {
   Box,
   Button,

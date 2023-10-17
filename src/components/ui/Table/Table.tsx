@@ -133,7 +133,7 @@ export function Table({
               <TablePagination
                 rowsPerPageOptions={[10, 25, { label: 'All', value: -1 }]}
                 colSpan={3}
-                count={totalNum}
+                count={totalNum ?? 0}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 sx={{

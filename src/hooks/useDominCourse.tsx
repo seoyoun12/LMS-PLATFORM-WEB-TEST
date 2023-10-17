@@ -1,7 +1,9 @@
-// 도민 과정 생성 / 삭제 / 수정 / 조회 기능을 묶어놓은 커스텀훅
-import { GET, POST } from '@common/httpClient'
+// 도민 과정 CRUD 기능을 묶어놓은 커스텀훅
+
+import { GET, POST, PUT,DELETE } from '@common/httpClient'
 import { useState } from 'react';
 import { useSnackbar } from './useSnackbar';
+import { ContentResponse } from './useDominContent';
 
 
 export enum CourseType {
@@ -26,7 +28,7 @@ export enum SubType {
    TYPE_ELDERLY = 'TYPE_ELDERLY',
 }
 
-interface PostRequest {
+export interface PostRequestBody {
   courseType: CourseType; // 도민, 저상, 운수
   courseName: string; // 과정명
   displayYn: "Y" | "N"; 
@@ -42,7 +44,23 @@ interface Response {
   elementCnt?: number; // default 10
   page: number;
 }
-
+export interface IContent {
+  seq: number,
+  code: null | string | number,
+  contentType: string,
+  contentName: string,
+  contentWidth: null,
+  contentHeight: null,
+  lessonCnt: number,
+  questionCnt: number,
+  examCnt: number,
+  homeworkCnt: number,
+  courseSeq: number | null,
+  courseName: string | null,
+  createdDtime: string,
+  modifiedDtime: string,
+  status: number
+}
 export interface Content {
   seq: number;
   courseBusinessType: string | null;
@@ -64,39 +82,50 @@ export interface Content {
   status: number;
 }
 
-export interface getCourseListResponse {
-        content: Content[],
-        pageable: {
-            sort: {
-                sorted: boolean,
-                unsorted: boolean,
-                empty: boolean
-            },
-            offset: number,
-            pageNumber: number,
-            pageSize: number,
-            paged: boolean,
-            unpaged: boolean
-        },
-        totalElements: number,
-        totalPages: number,
-        last: boolean,
-        number: number,
-        sort: {
-            sorted: boolean,
-            unsorted: boolean,
-            empty: boolean
-        },
-        size: number,
-        numberOfElements: number, // 아이템 개수
-        first: true,
-        empty: boolean
+export interface CourseResponse {
+  content: Content[],
+  pageable: {
+      sort: {
+          sorted: boolean,
+          unsorted: boolean,
+          empty: boolean
+      },
+      offset: number,
+      pageNumber: number,
+      pageSize: number,
+      paged: boolean,
+      unpaged: boolean
+  },
+  totalElements: number,
+  totalPages: number,
+  last: boolean,
+  number: number,
+  sort: {
+      sorted: boolean,
+      unsorted: boolean,
+      empty: boolean
+  },
+  size: number,
+  numberOfElements: number, // 아이템 개수
+  first: true,
+  empty: boolean
+}
+interface CreateCourseResponse {
+  data: {
+    seq: number;
+  }
+}
+
+export interface LinkCourseWithContent {
+  courseSeq: number;
+  contentSeq: number;
+
 }
 
 
-
 export default function useDominCourse() {
-  const [data, setData] = useState<getCourseListResponse | null>(null);
+  const [data, setData] = useState<CourseResponse | null>(null);
+  const [course, setCourse] = useState<Content | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const snackBar = useSnackbar();
 
@@ -111,7 +140,7 @@ export default function useDominCourse() {
           elementCnt,
         }
       });
-      const data:getCourseListResponse = res.data;
+      const data:CourseResponse = res.data;
       setData(data);
       return res;  
     } catch (error) {
@@ -122,13 +151,15 @@ export default function useDominCourse() {
     } finally {
       setIsLoading(false);
     }
-    
   }
-  const postDominCourse = async (data:PostRequest) => {
+
+  const getDominCourse = async (seq:number) => {
     setIsLoading(true);
     try {
-      const res = await POST<PostRequest>('/course/adm/provincial',data);
-      return res;  
+      const res = await GET(`/course/adm/${seq}`);
+      const data:Content = res.data;
+      setCourse(data);
+      return res;
     } catch (error) {
       snackBar({
         message: '데이터를 불러오는데 실패했습니다.',
@@ -139,8 +170,92 @@ export default function useDominCourse() {
     }
   }
 
+  const postDominCourse = async (data:PostRequestBody) => {
+    setIsLoading(true);
+    try {
+      const res = await POST<CreateCourseResponse>('/course/adm/provincial',data);
+      return res.data;
+    } catch (error) {
+      snackBar({
+        message: '과정 생성에 실패하였습니다.',
+        variant: 'error',
+      })
+    }finally{
+      setIsLoading(false);
+    }
+  }
 
+  const putDominCourse = async (data:PostRequestBody,seq:number) => {
+    setIsLoading(true);
+    try {
+      const res = await PUT<Content>(`/course/adm/provincial/${seq}`,data);
+      return res;  
+    } catch (error) {
+      snackBar({
+        message: '과정 수정에 실패하였습니다.',
+        variant: 'error',
+      })
+    }finally{
+      setIsLoading(false);
+    }
+  }
 
-  return { postDominCourse,getDominCourseList,data,isLoading }
+  const dislinkCourseWithContent = async (courseSeq:number) => {
+    try {
+
+      // 쓰면 안됨
+      await DELETE(`/course/adm/link/content/${courseSeq}`);  
+      snackBar({
+        message: '과정을 해제하였습니다.',
+        variant: 'success',
+      })
+    } catch (error) {
+      console.error(error);
+      snackBar({
+        message: error.data.message,
+        variant: 'error',
+      })
+    }
+  }
+
+  const linkCourseWithContent = async ({courseSeq,contentSeq}: LinkCourseWithContent) => {
+    try {
+
+      // 쓰면 안됨
+      const res:ContentResponse = await POST(`/course/adm/link/content`,{
+        courseSeq,
+        contentSeq
+      });
+      
+      snackBar({
+        message: '과정을 연결하였습니다.',
+        variant: 'success',
+      })
+      return res;  
+    } catch (error) {
+      console.error(error);
+      snackBar({
+        message: error.data.message,
+        variant: 'error',
+      })
+    }
+  }
+
+  const deleteDominCourse = async (seq:number) => {
+    setIsLoading(true);
+    try {
+      const res = await DELETE(`/course/adm/${seq}`);
+      return res;  
+    } catch (error) {
+      snackBar({
+        message: '과정 삭제에 실패하였습니다.',
+        variant: 'error',
+      })
+    }finally{
+      setIsLoading(false);
+    }
+  }
+
+  return { linkCourseWithContent, dislinkCourseWithContent,postDominCourse,putDominCourse,getDominCourseList,getDominCourse,deleteDominCourse,data,isLoading,course }
   
 }

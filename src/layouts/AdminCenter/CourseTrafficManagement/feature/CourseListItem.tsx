@@ -3,11 +3,11 @@ import { Content } from '@hooks/useDominCourse';
 import { Box, Button } from '@mui/material';
 import { ConvertEnum } from '@utils/convertEnumToHangle';
 import { useRouter } from 'next/router';
-import React from 'react'
 
 interface Props {
   item: Content
 }
+
 
 export default function CourseListItem({item}:Props) {
   const navigation = useRouter();
@@ -16,7 +16,7 @@ export default function CourseListItem({item}:Props) {
     navigation.push(`/admin-center/course-traffic/modify/${item.seq}`);
   }
   return (
-    <Row key={item.seq} onClick={onClickItem}>
+    <Row key={item.seq} onClick={onClickItem} >
       <InRow bgcolor="#ffe" flex={0.1}>{item.seq}</InRow>
       <InRow flex={0.12}>{ConvertEnum(item.provincialEduTargetMain)}</InRow>
       <InRow flex={0.13}>{ConvertEnum(item.provincialEduTargetSub)}</InRow>
@@ -31,6 +31,10 @@ export default function CourseListItem({item}:Props) {
 const Row = styled(Box)`
   display:flex;
   width:100%;
+  cursor:pointer;
+  &:hover{
+    color: #2d63e2;
+  }
 `;
 
 const InRow = styled(Box)<{flex:number,bgcolor?:string}>`

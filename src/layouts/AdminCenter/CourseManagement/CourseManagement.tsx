@@ -1,12 +1,6 @@
 
 import { Table } from "@components/ui";
-import {
-  Box,
-  Chip,
-  TableBody,
-  TableHead,
-  Typography,
-} from "@mui/material";
+import { Box,Chip,TableBody,TableHead,Typography } from "@mui/material";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import { useEffect, useState } from "react";
@@ -16,11 +10,7 @@ import dateFormat from "dateformat";
 import { YN } from "@common/constant";
 import { Spinner } from "@components/ui";
 import { courseAdmList } from "@common/api/course";
-import {
-  courseReg,
-  courseCategory,
-  courseSubCategory,
-} from "@layouts/Calendar/CalendarBody/CalendarBody";
+import { courseReg,courseCategory,courseSubCategory } from "@layouts/Calendar/CalendarBody/CalendarBody";
 import styled from "@emotion/styled";
 import { ManagementSearchHeadRow } from "@components/admin-center/ManagementSearchHeadRow";
 import { NotFound } from "@components/ui/NotFound";
@@ -49,13 +39,7 @@ export function CourseManagement() {
   const [searchTitle, setSearchTitle] = useState<string>(""); //이름 혹은 아이디
   const searchInputRef = React.useRef<HTMLInputElement | null>(null);
 
-  const { data, error, mutate } = courseAdmList({
-    page,
-    courseTitle: searchTitle,
-  });
-  // const { data, error, mutate } = courseList({ page });
-
-  // pagination
+  const { data, error, mutate } = courseAdmList({page,courseTitle: searchTitle,courseType:"TYPE_TRANS_WORKER"});
   useEffect(() => {
     const { page } = router.query;
     setPage(!isNaN(Number(page)) ? Number(page) : 0);

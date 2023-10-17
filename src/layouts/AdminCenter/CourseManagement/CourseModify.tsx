@@ -7,7 +7,7 @@ import { ContentList, Library } from '@layouts/AdminCenter';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { EvaluationInfo } from '@layouts/AdminCenter/CourseManagement/EvaluationInfo';
 import { Forum } from '@layouts/AdminCenter/CourseManagement/Forum';
-import { Course, courseDetail, CourseInput, courseModify } from '@common/api/course';
+import { courseDetail, CourseInput, courseModify } from '@common/api/course';
 import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
 import { CourseModule } from './CourseModule';
 
@@ -23,9 +23,6 @@ enum TabValue {
 const tabsConfig = [
   { label: '과정 정보', value: TabValue.CourseInfo },
   { label: '콘텐츠 목록', value: TabValue.ContentList },
-  // { label: '평가 정보', value: TabValue.EvaluationInfo },
-  // { label: '토론', value: TabValue.Forum },
-  // { label: '강의자료', value: TabValue.Library },
   { label: '과정모듈', value: TabValue.CourseModule },
 ];
 
@@ -35,12 +32,7 @@ export function CourseModify() {
   const { courseSeq, tab } = router.query;
   const { data, error } = courseDetail(Number(courseSeq));
 
-  const handleSubmit = async ({
-    files,
-    // isFileDelete,
-    courseInput,
-    setLoading,
-  }: // seq
+  const handleSubmit = async ({files,courseInput,setLoading,}: 
   {
     files: File[];
     // isFileDelete: boolean;
@@ -57,7 +49,7 @@ export function CourseModify() {
         router.push('/admin-center/course');
         setLoading(false);
       }
-    } catch (e: any) {
+    } catch (e) {
       console.error(e);
       snackbar({ variant: 'error', message: '업로드에 실패했습니다.' });
       // snackbar({ variant: 'error', message: e.data.message });
@@ -92,7 +84,7 @@ export function CourseModify() {
   return (
     <Container className={styles.globalContainer}>
       <Box sx={{ mb: '30px' }}>
-        <Tabs tabsConfig={tabsConfig} variant={'standard'} />
+        <Tabs tabsConfig={tabsConfig} variant='standard' />
       </Box>
       {
         {

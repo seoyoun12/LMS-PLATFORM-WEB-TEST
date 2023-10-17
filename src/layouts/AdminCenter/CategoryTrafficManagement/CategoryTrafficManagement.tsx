@@ -1,21 +1,10 @@
+import dateFormat from 'dateformat';
+import styled from '@emotion/styled';
 import { categoryBoardList } from '@common/api/categoryBoard';
-import {
-  Box,
-  Chip,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Box,Chip,FormControlLabel,Radio,RadioGroup,TableBody,TableCell,TableHead,TableRow,Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Spinner, Table } from '@components/ui';
-import dateFormat from 'dateformat';
-import styled from '@emotion/styled';
 import { ProductStatus } from '@common/api/course';
 
 const headRows: {
@@ -44,10 +33,7 @@ export function CategoryTrafficManagement() {
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [typeValue, setTypeValue] = useState('TYPE_NOTICE_PROVINCIAL');
-  const { data, error, mutate } = categoryBoardList({
-    boardType: typeValue,
-    page,
-  });
+  const { data, error, mutate } = categoryBoardList({ boardType: typeValue,page });
 
   // 수정
   const onClickmodifyCategoryTrafficBoard = async (seq: number) => {
@@ -103,15 +89,7 @@ export function CategoryTrafficManagement() {
         <TableHead>
           <TableRow>
             {headRows.map(
-              ({
-                name,
-                align,
-                width,
-              }: {
-                name: string;
-                align: string;
-                width: string;
-              }) => (
+              ({ name, width }: { name: string; width: string;}) => (
                 <CategoryTrafficTitleTableCell key={name} align="center" width={width}>
                   {name}
                 </CategoryTrafficTitleTableCell>

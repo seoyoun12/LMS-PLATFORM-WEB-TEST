@@ -156,7 +156,7 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
         router.push(`/admin-center/learning-material`);
         // await mutate();
       }
-    } catch (e: any) {
+    } catch (e) {
       snackbar({ variant: 'error', message: e.data.message });
     }
   };
@@ -233,6 +233,7 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
 
   return (
     <Container>
+      <Title>학습자료 등록</Title>
       <Box
         component='form'
         encType='multipart/form-data'
@@ -345,9 +346,8 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
               size='small'
               variant='outlined'
             />
-            {
-            (youtubeLink && youtubeLink.split('v=')[1]) && (
-            <ThumbnameWrapper>
+            {(youtubeLink && youtubeLink.split('v=')[1]) && (
+            <ThumbnailWrapper>
               <SubTitle>썸네일 이미지</SubTitle>
               <Image
                 src={`https://img.youtube.com/vi/${youtubeLink.split('&')[0].split('v=')[1]}/maxresdefault.jpg`}
@@ -356,7 +356,7 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
                 width={200}
                 height={140}
                 />
-            </ThumbnameWrapper>
+            </ThumbnailWrapper>
             )}
           </>
           )}
@@ -421,7 +421,12 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
                           isServerFile: r.isServerFile,
                         })
                       }
-                      sx={{ pl: '5px', ml: '5px', mb: '1px', maxWidth: '700px' }}
+                      sx={{
+                        pl: '5px',
+                        ml: '5px',
+                        mb: '1px',
+                        maxWidth: '700px'
+                      }}
                     />
                   )
               }
@@ -473,11 +478,21 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
 }
 
 const Container = styled.div`
+  position:relative; 
   margin-bottom: 8px;
   .form-control {
     margin: 12px auto 12px 0;
   }
 `;
+
+
+const Title = styled(Typography)`
+  margin-left: -2rem;
+  margin-bottom: 2rem;
+  font-weight: bold;
+  font-size: 18px;
+
+`
 
 const InputContainer = styled.div`
   display: flex;
@@ -525,7 +540,7 @@ const pt20 = css`
   /* padding-top: 20px; */
 `;
 
-const ThumbnameWrapper = styled.div`
+const ThumbnailWrapper = styled.div`
   margin-top: 8px;
 `
 

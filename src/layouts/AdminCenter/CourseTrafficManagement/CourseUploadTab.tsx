@@ -7,7 +7,7 @@ import ButtonGroup from "./feature/ButtonGroup";
 import InfoMessage from "./feature/InfoMessage";
 import useSelect from "@hooks/useSelect";
 import { useNewInput } from "@hooks/useNewInput";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import useDominCourse, { CourseType, MainType, PostRequestBody, SubType } from "@hooks/useDominCourse";
 import { ConvertDetailEnum } from "@utils/convertEnumToHangle";
 import { useSnackbar } from "@hooks/useSnackbar";

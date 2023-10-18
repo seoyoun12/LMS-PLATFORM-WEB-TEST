@@ -49,8 +49,8 @@ export function ContentConnectModal({ open, handleClose, courseSeq }: Props) {
 
   const handleConnect = async (contentSeq: number) => {
     try {
-      await connectCourseToContent({ courseSeq: courseSeq, contentSeq });
-      await mutate();
+      await connectCourseToContent({ courseSeq: courseSeq, contentSeq }); // post 
+      await mutate(); // get
       snackbar({ variant: 'success', message: '연결이 완료되었습니다.' });
     } catch (e) {
       snackbar({ variant: 'error', message: e.data.message });
@@ -69,7 +69,7 @@ export function ContentConnectModal({ open, handleClose, courseSeq }: Props) {
 
       if (dialogConfirmed) {
         await disConnectContent(courseSeq);
-        await mutate();
+        await mutate(); // get
         snackbar({ variant: 'success', message: '해제가 완료되었습니다.' });
       }
     } catch (e) {

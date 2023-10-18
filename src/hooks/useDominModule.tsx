@@ -65,26 +65,7 @@ export default function useDominModule() {
   const snackBar = useSnackbar();
 
 
-  const getModules = async(elementCnt = 0,page = 1) => {
-    setIsLoading(true)
-    try {
-      const res = await GET('/course-module/adm/all',{
-        params: {
-          page,
-          elementCnt
-        }
-      })
-      const data:ModuleResponse = res.data;
-      setData(data);
-    } catch (error) {
-      snackBar({
-        message: '모듈 불러오기 실패',
-        variant: 'error'
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  
 
   const getModuleLinkedCourse = async(courseSeq:number) => {
     setIsLoading(true)
@@ -155,5 +136,5 @@ export default function useDominModule() {
     }
   }
 
-  return { data, module, getModules, getModuleLinkedCourse, postModule, putModule, deleteModule, getModuleDetail, isLoading}
+  return { data, module, getModuleLinkedCourse, postModule, putModule, deleteModule, getModuleDetail, isLoading}
 }

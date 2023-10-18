@@ -8,11 +8,9 @@ import CourseModuleListModal from "./CourseModuleListModal";
 import useToggle from "@hooks/useToggle";
 import { useRouter } from "next/router";
 
-
-
 export default function CourseModuleTab() {
 
-  const { data:modules,module:linkedModule, getModuleLinkedCourse, getModules } = useDominModule();
+  const { data:modules,module:linkedModule, getModuleLinkedCourse } = useDominModule();
   const { toggle, onToggle } = useToggle();
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -24,13 +22,6 @@ export default function CourseModuleTab() {
     getModuleLinkedCourse(+boardSeq)
     //eslint-disable-next-line
   },[navigation])
-  
-  useEffect(() => {
-    getModules(page,rowsPerPage)
-    //eslint-disable-next-line
-  },[page,rowsPerPage])
-
-  
 
   return (
     <>
@@ -84,9 +75,6 @@ export default function CourseModuleTab() {
    </>
    );
 }
-
-
-
 
 const ModuleLinkButton = styled(Button)`
   position:absolute;

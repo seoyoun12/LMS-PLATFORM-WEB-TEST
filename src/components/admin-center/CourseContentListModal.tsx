@@ -5,7 +5,7 @@ import CourseTablePagination from '@layouts/AdminCenter/CourseTrafficManagement/
 import { Close, Refresh, Search } from '@material-ui/icons';
 import { Box, Button, FormControl, InputAdornment, Modal, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ContentLinkButtonGroup from './ContentLinkButtonGroup';
 import CourseContentTableHeaders from './CourseContentTableHeaders';
 
@@ -27,10 +27,10 @@ export const modalStyle = {
 };
 
 export default function CourseContentListModal({toggle,onToggle}:Props) {
-  const { data,isLoading, pageConfig, getContents, } = useDominContent();
-  const { linkCourseWithContent, dislinkCourseWithContent } = useDominCourse();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const { data,isLoading, pageConfig } = useDominContent({page,elementCnt:rowsPerPage});
+  const { linkCourseWithContent, dislinkCourseWithContent } = useDominCourse();
   const navigation = useRouter();
   const [thisSeq,setThisSeq] = useState(navigation.query.boardSeq);
   
@@ -38,10 +38,7 @@ export default function CourseContentListModal({toggle,onToggle}:Props) {
     setThisSeq(navigation.query.boardSeq)
   },[navigation])
 
-  useEffect(() => {
-    getContents(page,rowsPerPage);
-    //eslint-disable-next-line
-  },[page,rowsPerPage])
+
   
 
   if(isLoading) return <div>로딩중</div>
@@ -85,6 +82,7 @@ export default function CourseContentListModal({toggle,onToggle}:Props) {
                   onLink={() => linkCourseWithContent({courseSeq:+thisSeq,contentSeq: content.seq})}
                   onDislink={() => dislinkCourseWithContent(+thisSeq)}
                   courseSeq={content.courseSeq}
+                  thisSeq={+thisSeq}
                 />
               </InRow>
             </Row>

@@ -3,7 +3,7 @@
 import { GET, POST, PUT,DELETE } from '@common/httpClient'
 import { useState } from 'react';
 import { useSnackbar } from './useSnackbar';
-import { ContentResponse } from './useDominContent';
+import useDominContent, { ContentResponse } from './useDominContent';
 
 
 export enum CourseType {
@@ -127,6 +127,7 @@ export default function useDominCourse() {
   const [data, setData] = useState<CourseResponse | null>(null);
   const [course, setCourse] = useState<Content | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { contentsMudate } = useDominContent();
   const snackBar = useSnackbar();
 
   const getDominCourseList = async ({courseType,page,courseTitle,elementCnt}: Response) => {
@@ -189,6 +190,7 @@ export default function useDominCourse() {
     setIsLoading(true);
     try {
       const res = await PUT<Content>(`/course/adm/provincial/${seq}`,data);
+      
       return res;  
     } catch (error) {
       snackBar({
@@ -205,6 +207,7 @@ export default function useDominCourse() {
 
       // 쓰면 안됨
       await DELETE(`/course/adm/link/content/${courseSeq}`);  
+      await contentsMudate();
       snackBar({
         message: '과정을 해제하였습니다.',
         variant: 'success',
@@ -226,7 +229,7 @@ export default function useDominCourse() {
         courseSeq,
         contentSeq
       });
-      
+      await contentsMudate();
       snackBar({
         message: '과정을 연결하였습니다.',
         variant: 'success',
@@ -245,6 +248,7 @@ export default function useDominCourse() {
     setIsLoading(true);
     try {
       const res = await DELETE(`/course/adm/${seq}`);
+      await contentsMudate();
       return res;  
     } catch (error) {
       snackBar({

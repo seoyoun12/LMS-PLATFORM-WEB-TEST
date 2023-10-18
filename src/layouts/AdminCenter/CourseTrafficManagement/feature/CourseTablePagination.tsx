@@ -1,5 +1,3 @@
-
-import { CourseResponse } from '@hooks/useDominCourse';
 import { TablePagination } from '@mui/material';
 
 interface Props {

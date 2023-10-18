@@ -11,11 +11,7 @@ export async function modifyContent({ contentSeq, contentInput }: { contentSeq: 
   return await PUT(`/content/adm/${contentSeq}`, contentInput);
 }
 
-export function useContentList({ page, elementCnt, contentName }: {
-  page: number;
-  contentName?: string | null;
-  elementCnt?: number;
-}) {
+export function useContentList({ page, elementCnt, contentName }: {page: number;contentName?: string | null;elementCnt?: number }) {
   const { data, error, mutate } = useSWR<FetchPaginationResponse<Content[]>>([
     `/content/adm`, {
       params: { page, elementCnt, contentName }

@@ -64,9 +64,6 @@ export default function useDominModule() {
   const [isLoading, setIsLoading] = useState(false);
   const snackBar = useSnackbar();
 
-
-  
-
   const getModuleLinkedCourse = async(courseSeq:number) => {
     setIsLoading(true)
     try {

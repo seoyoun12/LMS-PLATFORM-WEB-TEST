@@ -12,6 +12,7 @@ interface Props {
 export default function Layout({ materialType }: Props) {
   const { data } = useGetLearningMaterial(materialType, '');
   const router = useRouter();
+  
   const handleClickPost = (id: number) => router.push(`/traffic/learning-material/education/${id}`);
   
   return (
@@ -27,16 +28,13 @@ export default function Layout({ materialType }: Props) {
                 onClick={() => handleClickPost(item.seq)}
               >
                 <ItemImageContainer>
-                  {/* 영상 자료에 대한 썸네일이 들어와야 함 */}
-                  {item.s3Files && item.s3Files.length > 0 && (
-                    <Image
-                      src="https://img.youtube.com/vi/aNMlq-hOIoc/maxresdefault.jpg"
-                      width={300}
-                      height={300}
-                      objectFit='contain'
-                      alt="배워서 나주자"
-                      />
-                  )}
+                  <Image
+                    src={`https://img.youtube.com/vi/${item.origin?.split('&')[0].split('v=')[1]}/maxresdefault.jpg`}
+                    width={320}
+                    height={180}
+                    objectFit='contain'
+                    alt="영상자료 썸네일"
+                    />
                 </ItemImageContainer>
                 <ItemContentContainer>
                   <ItemContentHeaderContainer>

@@ -25,9 +25,17 @@ export const ItemContainer = styled(ButtonBase)`
   margin: 0 26px 30px 0;
   text-align: left;
   align-items: flex-start;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+  padding: 1rem;
+  border-radius: 8px;
 
   &:nth-of-type(4n) {
     margin-right: 0;
+  }
+  &:hover {
+    transform: scale(1.02);
+    transition: transform 0.25s;
+    cursor: pointer;
   }
 
   @media (max-width: 786px) {
@@ -38,12 +46,17 @@ export const ItemContainer = styled(ButtonBase)`
 
 export const ItemImageContainer = styled.div`
   width: 100%;
-  height: 200px;
+  
   margin: 0 auto;
-  border: 3px solid red;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.33);
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
+  img {
+    border-radius: 4px;
+  }
+  
 `;
 
 export const ItemContentContainer = styled.div`
@@ -63,12 +76,17 @@ export const ItemContentTitle = styled.p`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 18px;
+  margin-top: .25rem;
+  font-weight: 700;
 `;
 
 export const ItemContentDate = styled.p`
   color: #858585;
+  
 `;
 
-export const ItemContentSubtitle = styled.p``;
+export const ItemContentSubtitle = styled.p`
+  color: #a7a7a7ff;
+  font-size: 14px;
+`;

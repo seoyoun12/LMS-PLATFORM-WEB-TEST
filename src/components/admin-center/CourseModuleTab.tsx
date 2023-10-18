@@ -61,7 +61,7 @@ export default function CourseModuleTab() {
         startIcon={<Link/>}
         onClick={onToggle}
         >
-          모듈 연결
+        모듈 연결
       </ModuleLinkButton>
       </Box>
         <CourseTablePagination

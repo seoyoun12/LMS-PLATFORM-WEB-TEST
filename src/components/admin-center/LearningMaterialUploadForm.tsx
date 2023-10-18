@@ -50,6 +50,7 @@ interface FormType extends LearningMaterialInput {
 const defaultValues = {
   materialType: MaterialType.TYPE_BY_AGE,
   materialSubType: MaterialSubType.TYPE_CHILDREN,
+  origin: '',
   status: ProductStatus.APPROVE,
   files: [],
 };
@@ -335,6 +336,15 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
         {watch().materialType === 'TYPE_EDUCATIONAL' && (
             <>
             <TextField
+              {
+                ...register('origin', {
+                  required: '유튜브 링크를 입력해주세요.',
+                  pattern: {
+                    value: /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/,
+                    message: '유튜브 링크를 입력해주세요.',
+                  },
+                })
+              }
               value={youtubeLink}
               onChange={onChangeYoutubeLink}
               sx={{ marginTop: '12px' }}

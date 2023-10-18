@@ -1,9 +1,9 @@
-import { Box,Button,Container,FormControl,FormHelperText,InputLabel,MenuItem,Paper,Select,styled,TableBody,TableCell,TableContainer,TableRow,TextField,Typography } from '@mui/material';
+import { Box,Button,Container,FormControl,FormHelperText,InputLabel,MenuItem,Paper,Select,SelectChangeEvent,styled,TableBody,TableCell,TableContainer,TableRow,TextField,Typography } from '@mui/material';
 import { StebHeader } from '../StebHeader';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { courseClassTrafficInfo } from '@common/recoil';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { locationList } from '@layouts/MeEdit/MeEdit';
@@ -15,6 +15,7 @@ import { enrollProvincial } from '@common/api/provincialEnroll';
 import { ProvincialEnrollSaveRequestDto } from '@common/api/Api';
 import { Spinner } from '@components/ui';
 import { EduTargetMainType } from '@common/api/learningMaterial';
+import { addMonths } from 'date-fns';
 
 // 도민과정 교육신청 steb2
 
@@ -25,12 +26,9 @@ interface detailCounts {
 export function Steb2() {
   const router = useRouter();
   const snackbar = useSnackbar();
-  const [trafficInfo, setTrafficInfo] = useRecoilState(courseClassTrafficInfo);
+  const setTrafficInfo = useSetRecoilState(courseClassTrafficInfo);
   const [loading, setLoading] = useState(false);
-
-  const [detailCounts, setDetailCounts] = useState<detailCounts>({
-    HIGH_SCHOOL: { grade1: 0, grade2: 0, grade3: 0 },
-  });
+  const [detailCounts, setDetailCounts] = useState<detailCounts>({ HIGH_SCHOOL: { grade1: 0, grade2: 0, grade3: 0 }});
 
   const { register, setValue, watch, } = useForm<ProvincialEnrollSaveRequestDto>({
     defaultValues: {
@@ -61,23 +59,27 @@ export function Steb2() {
       snackbar({ variant: 'error', message: '교육 대상자를 선택해주세요.' });
       return;
     }
-
-
     try {
       const obj = watch();
       Object.assign(obj, detailCounts[watch().eduTargetSub]);
       setLoading(true);
-      const test = await enrollProvincial(obj);
+      await enrollProvincial(obj);
       setTrafficInfo({ ...watch(), peopleCounts: { ...detailCounts } });
       router.push('steb3');
-    } catch (e: any) {
+    } catch (e) {
       snackbar({ variant: 'error', message: e.data.message });
       setLoading(false);
     }
   };
 
+  //  TODO: 세부타입 선택시 해당 세부타입에 맞는 과정 request
+  const onChangeDetailEduTarget = async(e:SelectChangeEvent<unknown>) => {
+    console.log(e.target.value) 
+  }
+
   useEffect(() => {
     setValue('eduTargetMain', router.query.eduTargetMain as EduTargetMainType);
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -124,11 +126,8 @@ export function Steb2() {
             customInput={<TextField fullWidth />}
             selected={new Date(watch().expectedToStartDtime)}
             onChange={date =>
-              setValue(
-                'expectedToStartDtime',
-                date
-                  ? dateFormat(date, 'yyyy-mm-dd')
-                  : dateFormat(new Date(), 'yyyy-mm-dd')
+              setValue( 'expectedToStartDtime',
+                date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd')
               )
             }
           />
@@ -142,7 +141,7 @@ export function Steb2() {
             showPopperArrow={false}
             minDate={new Date()}
             customInput={<TextField fullWidth />}
-            selected={new Date(watch().expectedToEndTime)}
+            selected={addMonths(new Date(watch().expectedToEndTime),1)}
             
             onChange={date =>
               setValue('expectedToEndTime',
@@ -161,7 +160,7 @@ export function Steb2() {
             {...register('eduTargetMain')}
             value={router.query.eduTargetMain}
             disabled
-          >
+            >
             {studentList.map((item) => (
               <MenuItem key={item.enType} value={item.enType}>
                 {item.type}
@@ -176,6 +175,8 @@ export function Steb2() {
             labelId="student-category"
             id="student-category"
             {...register('eduTargetSub')}
+            
+            onChange={(e) => onChangeDetailEduTarget(e)}
           >
             {studentList
               .filter(studentList => watch().eduTargetMain === studentList.enType)[0]
@@ -187,9 +188,7 @@ export function Steb2() {
           </Select>
         </FormControl>
 
-        <TableContainer
-          component={Paper}
-          sx={{ display: 'flex', justifyContent: 'center' }}
+        <TableContainer component={Paper} sx={{ display: 'flex', justifyContent: 'center' }}
         >
           <TableBody sx={{ width: '80%' }}>
             {studentList

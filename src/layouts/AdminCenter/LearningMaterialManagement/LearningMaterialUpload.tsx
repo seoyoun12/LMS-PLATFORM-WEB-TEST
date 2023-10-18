@@ -1,6 +1,6 @@
 import { BbsType, uploadFile } from '@common/api/adm/file';
 import { LearningMaterialInput,learningMaterialUpload } from '@common/api/learningMaterial';
-import { FileArrayType, LearningMaterialUploadForm } from '@components/admin-center/LearningMaterialUploadForm';
+import { LearningMaterialUploadForm } from '@components/admin-center/LearningMaterialUploadForm';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { Container } from '@mui/material';
 import router from 'next/router';

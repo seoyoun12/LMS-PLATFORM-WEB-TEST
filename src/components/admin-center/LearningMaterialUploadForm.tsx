@@ -48,7 +48,7 @@ interface FormType extends LearningMaterialInput {
 }
 
 const defaultValues = {
-  materialType: MaterialType.TYPE_BY_AGE,
+  materialType: MaterialType.TYPE_EDUCATIONAL,
   materialSubType: MaterialSubType.TYPE_CHILDREN,
   origin: '',
   status: ProductStatus.APPROVE,
@@ -190,8 +190,6 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
     const {target: {value}} = e;
     setYoutubeLink(value)
   };
-
-
   
   //업로드 상태에서 학습자료 타입 변경시 가지고있던 files 초기화 교육영상쪽은 사라지지않는 버그가 있음.
   useEffect(() => {

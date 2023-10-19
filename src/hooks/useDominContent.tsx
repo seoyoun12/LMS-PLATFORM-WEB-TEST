@@ -97,37 +97,15 @@ interface Params {
 
 
 export default function useDominContent({page,elementCnt}:Params = {page:0,elementCnt:10}) {
-  const { mutate: contentsMudate,data } = useSWR<ContentResponse>([`/content/adm?page=${page}&elementCnt=${elementCnt}`,{page,elementCnt}],GET);
-
+  const { mutate: contentsMudate,data: contentsList } = useSWR<ContentResponse>([`/content/adm?page=${page}&elementCnt=${elementCnt}`,{page,elementCnt}],GET);
+  
   
   // const [Content, setContent] = useState<Content | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [pageConfig, setPageConfig] = useState<PageConfig | null>(null);
   const snackbar = useSnackbar();
   
-  // const getContents = async(page:number,elementCnt = 10) => {
-  //   setIsLoading(true);
-  //   try {
-  //     const res = await GET<ContentResponse>('/content/adm',{
-  //       params:{
-  //         page,
-  //         elementCnt
-  //       }
-  //     })
-  //     setInitData(res);
-  //     setPageConfig({
-  //       totalElements: res.data.totalElements,
-  //       totalPages: res.data.totalPages
-  //     })
-  //     setIsLoading(false);
-  //   } catch (error) {
-  //     snackbar({
-  //       message: error.message,
-  //       variant: 'error'
-  //     })
-  //     setIsLoading(false);
-  //   }
-  // }
+
   const getContent = async() => {
     try {
       
@@ -158,5 +136,5 @@ export default function useDominContent({page,elementCnt}:Params = {page:0,eleme
   }
  }
   
-  return { data, isLoading, pageConfig,contentsMudate }
+  return { data:contentsList, isLoading, pageConfig, contentsMudate }
 }

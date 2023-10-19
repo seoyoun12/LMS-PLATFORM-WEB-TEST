@@ -20,6 +20,7 @@ export default function CourseModuleTab() {
     const boardSeq = navigation.query.boardSeq;
     if(!boardSeq) return;
     getModuleLinkedCourse(+boardSeq)
+    
     //eslint-disable-next-line
   },[navigation])
 

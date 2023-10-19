@@ -7,21 +7,13 @@ import { format } from 'date-fns';
 import { Box, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import Youtube from 'react-youtube';
-import { Viewer } from '@toast-ui/react-editor'
-import { useEffect, useRef } from 'react';
 import { TuiViewer } from '@components/common/TuiEditor';
 
 export default function LearningGuideDetailLayout() {
   const router = useRouter();
   const { id } = router.query as { type: MaterialTabType; id: string; };
   const { data } = useGetLearningMaterialDetail(id);
-  const editorRef = useRef<Viewer>(null);
-
   
-  // useEffect(() => {
-  //   if(!data?.data) return;
-  //     editorRef.current.getInstance().setMarkdown(data?.data.content);  
-  // },[data])
 
   if (!data?.data) {
     return <NotFound content="해당하는 게시글이 없습니다." />;

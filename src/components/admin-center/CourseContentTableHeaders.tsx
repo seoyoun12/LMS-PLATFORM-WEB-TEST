@@ -1,38 +1,31 @@
-import styled from '@emotion/styled'
-import { Box } from '@mui/system'
-import React, { memo } from 'react'
+import styled from "@emotion/styled";
+import { Box } from "@mui/material";
+import { memo } from "react";
 
 const CourseContentTableHeaders = () => {
   return (
-  <Row>
-    <InRow flex={0.1} >ID</InRow>
-    <InRow flex={0.25} >콘텐츠명</InRow>
-    <InRow flex={0.15} >연결된 과정 ID</InRow>
-    <InRow flex={0.3} >연결된 과정명</InRow>
-    <InRow flex={0.2} ></InRow>
+    <Row>
+    <InRow flex={0.1}>ID</InRow>
+    <InRow flex={0.4}>콘텐츠명</InRow>
+    <InRow flex={0.2}>유형</InRow>
+    <InRow flex={0.2}>생성일</InRow>
+    <InRow flex={0.1}>상태</InRow>
   </Row>
   )
 }
+
 export default memo(CourseContentTableHeaders);
 
-const Row = styled(Box)`
-  display:flex;
-  width:100%;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  height: 40px;
-  
-`
 
-const InRow = styled(Box)<{flex?:number}>`
-  flex:${props => props.flex || 1};
+
+const Row = styled(Box)<{rounded?:string;}>`
+  display: flex;
+  border-bottom: 1px solid #c7c7c7c7;
+  padding: .5rem 0;
+  border-radius: ${props => props.rounded || '0px'};
+`
+const InRow = styled(Box)<{flex:number}>`
+  flex: ${props => props.flex || 1};
   text-align: center;
-  display:flex;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 1px solid #ccc;
-  height:100%;
   font-size: 14px;
-  
 `

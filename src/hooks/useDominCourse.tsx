@@ -28,7 +28,7 @@ export enum SubType {
    TYPE_ELDERLY = 'TYPE_ELDERLY',
 }
 
-export interface PostRequestBody {
+export interface CreateCourseRequestBody {
   courseType: CourseType; // 도민, 저상, 운수
   courseName: string; // 과정명
   displayYn: "Y" | "N"; 
@@ -36,6 +36,37 @@ export interface PostRequestBody {
   provincialEduTargetMain: MainType;
   provincialEduTargetSub: SubType;
   status: number;
+}
+
+export interface CourseResponse {
+      content: Content
+      courseCategoryType: "TYPE_SUP_COMMON"
+      courseName : "운수종사자_화물"
+      courseSubCategoryType: "INDIVIDUAL_CARGO"
+      courseType: "TYPE_TRANS_WORKER"
+      createdDtime: "2023-08-02 1:0:25"
+      displayYn: "Y"
+      lessonTime: 30
+      lessons: {
+          seq: number,
+          contentSeq: number,
+          contentType: "CONTENT_MP4",
+          lessons: []
+          lessonNm: number
+          modifiedDtime : "2023-08-02 13:04:33"
+          provincialEduTargetMain: null
+          provincialEduTargetSub:  null
+          provincialUseYn:  "N"
+          s3Files: any[]
+          status: 1
+        }[]
+        modifiedDtime : string
+        provincialEduTargetMain : null
+        provincialEduTargetSub : null
+        provincialUseYn : "Y" | "N"
+        s3Files : any[]
+        seq : 71
+        status : 1
 }
 
 interface Response {
@@ -80,31 +111,15 @@ export interface Content {
   provincialEduTargetMain: MainType;
   provincialEduTargetSub: SubType;
   status: number;
+  contentType: string;
 }
 
-export interface CourseResponse {
+export interface CourseListResponse {
   content: Content[],
-  pageable: {
-      sort: {
-          sorted: boolean,
-          unsorted: boolean,
-          empty: boolean
-      },
-      offset: number,
-      pageNumber: number,
-      pageSize: number,
-      paged: boolean,
-      unpaged: boolean
-  },
   totalElements: number,
   totalPages: number,
   last: boolean,
   number: number,
-  sort: {
-      sorted: boolean,
-      unsorted: boolean,
-      empty: boolean
-  },
   size: number,
   numberOfElements: number, // 아이템 개수
   first: true,
@@ -116,6 +131,39 @@ interface CreateCourseResponse {
   }
 }
 
+export interface CreateApplicationCourseResponseBody {
+  age3?: number,
+  age4?: number,
+  age5?: number,
+  courseSeq?: number,
+  eduTargetMain?: MainType,
+  eduTargetSub?: SubType,
+  elderly?: number,
+  expectedToStartDtime?: string,
+  expiredDtime?: string,
+  grade1?: number,
+  grade2?: number,
+  grade3?: number,
+  grade4?: number,
+  grade5?: number,
+  grade6?: number,
+  organization?: string,
+  region?: string,
+  selfDriver?: number
+}
+
+interface CourseApplication {
+      contentName: string,
+      contentSeq: number,
+      courseName: string,
+      createdDtime: string,
+      displayYn: string,
+      modifiedDtime: string,
+      provincialEduTargetMain: MainType,
+      provincialEduTargetSub: SubType,
+      provincialUseYn: "Y" | "N"
+      seq: number;
+    }
 export interface LinkCourseWithContent {
   courseSeq: number;
   contentSeq: number;
@@ -124,8 +172,9 @@ export interface LinkCourseWithContent {
 
 
 export default function useDominCourse() {
-  const [data, setData] = useState<CourseResponse | null>(null);
-  const [course, setCourse] = useState<Content | null>(null);
+  const [data, setData] = useState<CourseListResponse | null>(null);
+  const [course, setCourse] = useState<CourseResponse | null>(null);
+  const [courseApplication, setCourseApplication] = useState<CourseApplication[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { contentsMudate } = useDominContent();
   const snackBar = useSnackbar();
@@ -141,7 +190,7 @@ export default function useDominCourse() {
           elementCnt,
         }
       });
-      const data:CourseResponse = res.data;
+      const data:CourseListResponse = res.data;
       setData(data);
       return res;  
     } catch (error) {
@@ -158,7 +207,7 @@ export default function useDominCourse() {
     setIsLoading(true);
     try {
       const res = await GET(`/course/adm/${seq}`);
-      const data:Content = res.data;
+      const data:CourseResponse = res.data;
       setCourse(data);
       return res;
     } catch (error) {
@@ -171,7 +220,7 @@ export default function useDominCourse() {
     }
   }
 
-  const postDominCourse = async (data:PostRequestBody) => {
+  const postDominCourse = async (data:CreateCourseRequestBody) => {
     setIsLoading(true);
     try {
       const res = await POST<CreateCourseResponse>('/course/adm/provincial',data);
@@ -186,7 +235,7 @@ export default function useDominCourse() {
     }
   }
 
-  const putDominCourse = async (data:PostRequestBody,seq:number) => {
+  const putDominCourse = async (data:CreateCourseRequestBody,seq:number) => {
     setIsLoading(true);
     try {
       const res = await PUT<Content>(`/course/adm/provincial/${seq}`,data);
@@ -260,6 +309,57 @@ export default function useDominCourse() {
     }
   }
 
-  return { linkCourseWithContent, dislinkCourseWithContent,postDominCourse,putDominCourse,getDominCourseList,getDominCourse,deleteDominCourse,data,isLoading,course }
-  
+  const getCourseForUser = async (provincialEduTargetSub:MainType) => {
+    setIsLoading(true);
+    try {
+      const res = await GET('/course/provincial',{
+        params: {
+          provincialEduTargetSub
+        }
+      });
+
+      const data:CourseApplication[] = res.data;
+      setCourseApplication(data)
+      return res;
+    } catch (error) {
+      snackBar({
+        message: '신청가능 목록을 불러오는데 실패했습니다.',
+        variant: 'error',
+      })
+    }finally{
+      setIsLoading(false);
+    }
+  }
+  const postApplicationCourseForUser = async (body:CreateApplicationCourseResponseBody) => {
+    setIsLoading(true);
+    try {
+      await POST('/course-user/enroll/provincial',body);
+      snackBar({ 
+        message: `신청이 완료되었습니다`,
+        variant: 'success',
+      })
+    } catch (error) {
+      snackBar({
+        message: '신청에 실패했습니다.',
+        variant: 'error',
+      })
+    }finally{
+      setIsLoading(false);
+    }
+  }
+  return {
+    linkCourseWithContent, 
+    dislinkCourseWithContent, 
+    postDominCourse, 
+    putDominCourse, 
+    getDominCourseList, 
+    getDominCourse, 
+    deleteDominCourse, 
+    getCourseForUser,
+    postApplicationCourseForUser,
+    data, 
+    isLoading, 
+    course,
+    courseApplication
+  }
 }

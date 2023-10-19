@@ -1,4 +1,4 @@
-import { Box,Button,Container,FormControl,FormHelperText,InputLabel,MenuItem,Paper,Select,SelectChangeEvent,styled,TableBody,TableCell,TableContainer,TableRow,TextField,Typography } from '@mui/material';
+import { Box,Button,Container,FormControl,FormHelperText,InputLabel,MenuItem,Paper,Select,styled,TableBody,TableCell,TableContainer,TableRow,TextField,Typography } from '@mui/material';
 import { StebHeader } from '../StebHeader';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -11,11 +11,12 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import dateFormat from 'dateformat';
 import { ko } from 'date-fns/locale';
-import { enrollProvincial } from '@common/api/provincialEnroll';
 import { ProvincialEnrollSaveRequestDto } from '@common/api/Api';
 import { Spinner } from '@components/ui';
 import { EduTargetMainType } from '@common/api/learningMaterial';
 import { addMonths } from 'date-fns';
+import useDominCourse, { CreateApplicationCourseResponseBody, MainType } from '@hooks/useDominCourse';
+import { ConvertEnum } from '@utils/convertEnumToHangle';
 
 // 도민과정 교육신청 steb2
 
@@ -29,13 +30,17 @@ export function Steb2() {
   const setTrafficInfo = useSetRecoilState(courseClassTrafficInfo);
   const [loading, setLoading] = useState(false);
   const [detailCounts, setDetailCounts] = useState<detailCounts>({ HIGH_SCHOOL: { grade1: 0, grade2: 0, grade3: 0 }});
-
-  const { register, setValue, watch, } = useForm<ProvincialEnrollSaveRequestDto>({
+  const { postApplicationCourseForUser, getCourseForUser,courseApplication } = useDominCourse();
+  
+  const { register, setValue, watch, } = useForm<ProvincialEnrollSaveRequestDto & {courseSeq: string}>({
     defaultValues: {
       expectedToStartDtime: dateFormat(new Date(), 'yyyy-mm-dd'),
-      expectedToEndTime: dateFormat(new Date(), 'yyyy-mm-dd'),
+      expectedToEndDtime: dateFormat( addMonths(new Date(), 1), 'yyyy-mm-dd'),
     },
   });
+
+
+  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,7 +56,7 @@ export function Steb2() {
       snackbar({ variant: 'error', message: '교육 시작일을 선택해주세요.' });
       return;
     }
-    if (!watch().expectedToEndTime) {
+    if (!watch().expectedToEndDtime) {
       snackbar({ variant: 'error', message: '교육 종료일을 선택해주세요.' });
       return;
     }
@@ -60,28 +65,29 @@ export function Steb2() {
       return;
     }
     try {
-      const obj = watch();
-      Object.assign(obj, detailCounts[watch().eduTargetSub]);
+      const obj = watch() as CreateApplicationCourseResponseBody & {courseSeq: string};
       setLoading(true);
-      await enrollProvincial(obj);
-      setTrafficInfo({ ...watch(), peopleCounts: { ...detailCounts } });
+      
+      await postApplicationCourseForUser(obj);
+      setTrafficInfo({ ...watch(), peopleCounts: { ...detailCounts },courseSeq: watch().courseSeq});
       router.push('steb3');
     } catch (e) {
       snackbar({ variant: 'error', message: e.data.message });
       setLoading(false);
     }
   };
-
-  //  TODO: 세부타입 선택시 해당 세부타입에 맞는 과정 request
-  const onChangeDetailEduTarget = async(e:SelectChangeEvent<unknown>) => {
-    console.log(e.target.value) 
-  }
-
   useEffect(() => {
     setValue('eduTargetMain', router.query.eduTargetMain as EduTargetMainType);
     // eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    if(!watch().eduTargetSub) return;
+    getCourseForUser(watch().eduTargetSub as MainType);
+  },[watch().eduTargetSub])
+
+  
+  console.log(courseApplication);
   return (
     <Steb2Wrap>
       <StebHeader value={2} />
@@ -141,11 +147,11 @@ export function Steb2() {
             showPopperArrow={false}
             minDate={new Date()}
             customInput={<TextField fullWidth />}
-            selected={addMonths(new Date(watch().expectedToEndTime),1)}
+            selected={new Date(watch().expectedToEndDtime)}
             
             onChange={date =>
               setValue(
-                'expectedToEndTime',
+                'expectedToEndDtime',
                 date
                 ? dateFormat(date, 'yyyy-mm-dd')
                 : dateFormat(new Date(), 'yyyy-mm-dd')
@@ -208,14 +214,13 @@ export function Steb2() {
         <FormControl fullWidth>
           <Typography id="lecture">과정 선택</Typography>
           <Select
-            labelId="lecture"
-            id="lecture"
-            // TODO:// 실제 과정이 보여질 수 있게 수정 필요
-            // {...register('lecture')}
+            labelId="courseSeq"
+            id="courseSeq"
+            {...register('courseSeq')}
           >
-            {Array.from({length: 4}).map((_,index) => (
-              <MenuItem key={index} value={index}>
-                {index}번 올빼미 기상
+            {courseApplication?.map((course) => (
+              <MenuItem key={course.seq} value={course.seq}>
+                {`${course.seq}. ${ConvertEnum(course.courseName)}`}
               </MenuItem>
             ))}
           </Select>

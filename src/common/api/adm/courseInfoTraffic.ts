@@ -6,10 +6,13 @@ import {
   ProvincialEnrollUpdateRequestDto,
 } from '../Api';
 
+
+// TODO: 전체 학습자 수강현황 조회 앤드포인트 변경
 export function useCourseInfoTraffic(elementCnt: number, page: number) {
   const { data, error, mutate } = useSWR<
     SWRResponse<PaginationResult<ProvincialEnrollResponseDto[]>>
   >(
+    // course-user/provincial/
     [
       `/provincial/enroll/adm`,
       {

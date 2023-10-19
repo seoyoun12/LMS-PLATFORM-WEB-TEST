@@ -73,11 +73,11 @@ export function Steb3() {
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>마감날짜</TableLeftCell>
-                <TableCell>들어올 때는 마음대로 들어오지만...</TableCell>
+                <TableCell>{trafficInfo?.expectedToEndDtime}</TableCell>
               </TableCustomRow>
               <TableCustomRow>
-                <TableLeftCell>과정선택</TableLeftCell>
-                <TableCell>나는 충남이 좋다 내 노후는 충남에서 보내야겠어</TableCell>
+                <TableLeftCell>신청과정</TableLeftCell>
+                <TableCell>{trafficInfo?.courseSeq}</TableCell>
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>교육대상자</TableLeftCell>

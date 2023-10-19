@@ -7,11 +7,13 @@ import { Box, Button, FormControl, InputAdornment, Modal, TextField, Typography 
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import ContentLinkButtonGroup from './ContentLinkButtonGroup';
-import CourseContentTableHeaders from './CourseContentTableHeaders';
+import CourseContentModalTableHeaders from './CourseContentModalTableHeaders';
 
 interface Props {
   toggle: boolean;
-  onToggle: () => void
+  onToggle: () => void;
+  getDominCourse: (seq:number) => Promise<any>;
+  seq:number;
 }
 
 export const modalStyle = {
@@ -24,15 +26,17 @@ export const modalStyle = {
   borderRadius: '8px',
   boxShadow: 12,
   p: 4,
+  
 };
 
-export default function CourseContentListModal({toggle,onToggle}:Props) {
+export default function CourseContentListModal({toggle,onToggle,getDominCourse,seq}:Props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { data,isLoading, pageConfig } = useDominContent({page,elementCnt:rowsPerPage});
   const { linkCourseWithContent, dislinkCourseWithContent } = useDominCourse();
   const navigation = useRouter();
   const [thisSeq,setThisSeq] = useState(navigation.query.boardSeq);
+
   
   useEffect(() => {
     setThisSeq(navigation.query.boardSeq)
@@ -45,7 +49,7 @@ export default function CourseContentListModal({toggle,onToggle}:Props) {
   return (
     <Modal
       open={toggle}
-      onClose={onToggle}
+      onClose={async () => {onToggle(); await getDominCourse(seq)}}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -69,7 +73,7 @@ export default function CourseContentListModal({toggle,onToggle}:Props) {
       </Title>
       
       <Table>
-        <CourseContentTableHeaders />
+        <CourseContentModalTableHeaders />
         {
           data?.data.content.map((content) => (
             <Row key={content.seq}>

@@ -231,18 +231,6 @@ export default function CourseInfoTrafficManagement() {
       </SearchForm>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
       <Box display='flex' mb={2}>
         <Button
           variant='contained'
@@ -384,7 +372,6 @@ const InputBox = styled(Box)`
   display: flex;
   gap: 1rem;
 `;
-
 
 const SearchFormContainer = styled(Box)`
   display: flex;

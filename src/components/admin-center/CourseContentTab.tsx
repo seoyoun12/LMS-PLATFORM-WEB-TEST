@@ -3,39 +3,48 @@ import useToggle from '@hooks/useToggle'
 import { Link } from '@mui/icons-material'
 import { Box, Button } from '@mui/material'
 import CourseContentListModal from './CourseContentListModal'
+import CourseContentTableHeaders from './CourseContentTableHeaders'
+import useDominCourse from '@hooks/useDominCourse'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 
 
 export default function CourseContentTab() {
   const { toggle, onToggle } = useToggle()
+  const { getDominCourse, course,isLoading } = useDominCourse();
+  const navigation = useRouter();
+
+  
+  useEffect(() => {
+    if(!navigation.query.boardSeq) return;
+    getDominCourse(+navigation.query.boardSeq);
+  },[navigation])
+  
+  if(isLoading) return <div>콘텐츠를 불러오고 있습니다. 잠시만 기다려주세요.</div>
+  
   return (
     <>
-    <CourseContentListModal toggle={toggle} onToggle={onToggle} />
+    <CourseContentListModal toggle={toggle} onToggle={onToggle} getDominCourse={getDominCourse} seq={+navigation.query.boardSeq} />
     
     <Wrapper>
       <Table>
-        <Row>
-          <InRow flex={0.1}>ID</InRow>
-          <InRow flex={0.4}>콘텐츠명</InRow>
-          <InRow flex={0.2}>유형</InRow>
-          <InRow flex={0.2}>생성일</InRow>
-          <InRow flex={0.1}>상태</InRow>
-        </Row>
-        <Row rounded="8px">
-          <InRow flex={0.1}>65</InRow>
-          <InRow flex={0.4}>잼민이 교육</InRow>
-          <InRow flex={0.2}>CONTENT_MP2554</InRow>
-          <InRow flex={0.2}>2452-10-11</InRow>
-          <InRow flex={0.1}>정상</InRow>
-        </Row>
+        <CourseContentTableHeaders />
+        {
+          (course && course.content) && 
+            <Row rounded="8px">
+            <InRow flex={0.1}>{course.content.seq}</InRow>
+            <InRow flex={0.4}>{course.content.contentName}</InRow>
+            <InRow flex={0.2}>{course.content.contentType}</InRow>
+            <InRow flex={0.2}>{course.content.createdDtime}</InRow>
+            <InRow flex={0.1}>{course.content.status === 1 ? '정상' : '중지'}</InRow>
+          </Row>
+        }
+        
       </Table>
       <Box sx={{position:'relative'}}>
-      <ContentLinkButton
-        variant='contained'
-        startIcon={<Link/>}
-        onClick={onToggle}
-        >
-          콘텐츠 연결
+      <ContentLinkButton variant='contained' startIcon={<Link/>} onClick={onToggle}>
+        콘텐츠 연결
       </ContentLinkButton>
       </Box>
     </Wrapper>

@@ -144,7 +144,8 @@ export function Steb2() {
             selected={addMonths(new Date(watch().expectedToEndTime),1)}
             
             onChange={date =>
-              setValue('expectedToEndTime',
+              setValue(
+                'expectedToEndTime',
                 date
                 ? dateFormat(date, 'yyyy-mm-dd')
                 : dateFormat(new Date(), 'yyyy-mm-dd')
@@ -175,8 +176,6 @@ export function Steb2() {
             labelId="student-category"
             id="student-category"
             {...register('eduTargetSub')}
-            
-            onChange={(e) => onChangeDetailEduTarget(e)}
           >
             {studentList
               .filter(studentList => watch().eduTargetMain === studentList.enType)[0]

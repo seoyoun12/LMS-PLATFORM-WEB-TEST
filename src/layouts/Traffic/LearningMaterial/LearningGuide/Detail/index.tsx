@@ -7,11 +7,9 @@ import { format } from 'date-fns';
 import { Box, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import Youtube from 'react-youtube';
-import '@toast-ui/editor/dist/toastui-editor.css';
 import { Viewer } from '@toast-ui/react-editor'
 import { useEffect, useRef } from 'react';
-
-
+import { TuiViewer } from '@components/common/TuiEditor';
 
 export default function LearningGuideDetailLayout() {
   const router = useRouter();
@@ -19,12 +17,11 @@ export default function LearningGuideDetailLayout() {
   const { data } = useGetLearningMaterialDetail(id);
   const editorRef = useRef<Viewer>(null);
 
-  console.log(id);
-  useEffect(() => {
-    if(!data?.data) return;
-      editorRef.current.getInstance().setMarkdown(data?.data.content);
-    
-  },[data])
+  
+  // useEffect(() => {
+  //   if(!data?.data) return;
+  //     editorRef.current.getInstance().setMarkdown(data?.data.content);  
+  // },[data])
 
   if (!data?.data) {
     return <NotFound content="해당하는 게시글이 없습니다." />;
@@ -51,8 +48,7 @@ export default function LearningGuideDetailLayout() {
           
         <LectureMaterialsWrapper>
           <SubTitle>보충자료</SubTitle>
-          <Viewer
-            ref={editorRef}
+          <TuiViewer
             initialValue={data.data.content}
             usageStatistics={false}
           />  

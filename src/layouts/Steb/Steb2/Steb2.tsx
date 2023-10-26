@@ -1,5 +1,4 @@
 import { Box, Button, ButtonGroup, Container, FormControl, FormControlLabel, LinearProgress, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField, Typography, styled } from '@mui/material';
-import StebHeader from '../StebHeader/StebHeader';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
@@ -19,6 +18,8 @@ import { userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
 import { locationList, residenceList } from '@layouts/MeEdit/MeEdit';
 import { UserRole, useMyUser } from '@common/api/user';
 import { blue } from '@mui/material/colors';
+import StebHeader from '../StebHeader/StebHeader';
+
 
 interface FormType {
   localName: string;
@@ -31,6 +32,7 @@ const localList = [
   { title: '충남', type: 'NAM' },
   { title: '세종', type: 'SEJONG' },
 ];
+
 const oneWordList = ['아', '바', '사', '자', '배'];
 
 const Placeholder = ({ children }) => {

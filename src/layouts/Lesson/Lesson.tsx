@@ -50,10 +50,7 @@ export default function Lesson(props: LessonProps) {
   useEffect(() => {
     if(!course) return;
     getAvaliableLessonCheckResult({courseUserSeq: course.courseUserSeq, contentSeq: props.contentSeq})
-    
-  },[course,props.contentSeq,isAvailableLesson])
-
-
+  },[course,props.contentSeq])
 
   useEffect(() => {
     const { lessons } = course || { lessons: [] };
@@ -98,8 +95,7 @@ export default function Lesson(props: LessonProps) {
                   case 'COURSE_MODULE_TEST':
                     return cm.submitYn === 'Y';
                   case 'COURSE_MODULE_SURVEY':
-                    return course.surveyList.findIndex(v => v.surveySeq === cm.surveySeq && v.surveyCompletedYn === 'Y') !== -1;
-                    
+                    return course.surveyList.findIndex(v => v.surveySeq === cm.surveySeq && v.surveyCompletedYn === 'Y') !== -1;   
                 }
               })
             );

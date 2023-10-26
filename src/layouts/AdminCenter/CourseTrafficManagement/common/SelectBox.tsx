@@ -12,12 +12,13 @@ interface Props{
   name?: string;
   sx?: CSSProperties;
   disabled?: boolean;
+  size?: 'small' | 'normal';
 }
 
-export default function SelectBox({ id, label, name, options, value, sx, onChange,disabled}:Props) {
+export default function SelectBox({ id, label, name, options, value, sx, onChange,disabled,size}:Props) {
   return (
     <FormControl fullWidth>
-    <InputLabel id={id}>{label}</InputLabel>
+    <InputLabel id={id} size={size}>{label}</InputLabel>
     <SelectContainer name={name} label={label} labelId={id} value={value} onChange={onChange} sx={{...sx}} disabled={disabled}  >
       {options?.map(option => <MenuItem key={option} value={option}>{ConvertEnum(option)}</MenuItem>) }
     </SelectContainer>

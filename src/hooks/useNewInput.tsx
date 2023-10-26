@@ -4,7 +4,7 @@ import { ChangeEvent, useCallback, useState } from "react"
 
 interface Props<T>{
   initialValue: T;
-  type: 'string' | 'number' | 'file';
+  type: 'string' | 'number' | 'file' | 'date';
 }
 
 
@@ -13,11 +13,13 @@ export function useNewInput<T>({initialValue,type}: Props<T>) {
     const [preview , setPreview] = useState<string | ArrayBuffer | null>('')
     
 
-    const onChangeValue = (e: ChangeEvent<HTMLInputElement> | SelectChangeEvent<string> ) => {
-      if(typeof e === 'string' || typeof e === 'number') setValue(e as T)
-      else if(e instanceof Object){
+    const onChangeValue = (e: ChangeEvent<HTMLInputElement> | SelectChangeEvent<string> | string ) => {
+      if(typeof e === 'string' || typeof e === 'number') {
+        setValue(e as T)
+      } else if(e instanceof Object){
         setValue(e.target.value as T);
       }
+      
     }
 
     const onChangeFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +38,7 @@ export function useNewInput<T>({initialValue,type}: Props<T>) {
       }
     },[])
 
-    const onRemoveFile = () => {
+    const onReset = () => {
       setValue(null);
       setPreview(null);
     }
@@ -46,7 +48,7 @@ export function useNewInput<T>({initialValue,type}: Props<T>) {
       setValue,
       preview,
       onChange: type === 'file' ? onChangeFile : onChangeValue,
-      onRemoveFile,
+      onReset,
       setPreview
       
     }

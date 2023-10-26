@@ -7,15 +7,15 @@ interface Props {
   title: string;
   label1: string;
   label2: string;
-  label3: string;
+  label3?: string;
 
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value1: string | number | null;
   value2: string | number | null;
-  value3: string | number | null;
+  value3?: string | number | null;
   checked1: boolean;
   checked2: boolean;
-  checked3: boolean;
+  checked3?: boolean;
 }
 
 function CourseRadioBox({ onChange, value1, value2, value3, checked1, checked2, checked3, title, label1, label2, label3 }: Props) {

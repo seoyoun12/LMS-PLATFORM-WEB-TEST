@@ -5,13 +5,13 @@ import React, { memo } from 'react'
 const CourseTableHeaders = () => {
   return (
     <Row>
-        <InRow fontWeight='bold' bgcolor="#ffe" flex={0.1}>No</InRow>
-        <InRow fontWeight='bold' bgcolor="#ffe" flex={0.12}>과정분류</InRow>
-        <InRow fontWeight='bold' bgcolor="#ffe" flex={0.13}>교육분류</InRow>
-        <InRow fontWeight='bold' bgcolor="#ffe" flex={0.4}>과정명</InRow>
-        <InRow fontWeight='bold' bgcolor="#ffe" flex={0.15}>생성일</InRow>
-        <InRow fontWeight='bold' bgcolor="#ffe" flex={0.05}>노출여부</InRow>
-        <InRow fontWeight='bold' bgcolor="#ffe" flex={0.05}>상태</InRow>
+        <InRow fontWeight='bold' bgcolor="#fdfdf5" flex={0.1}>No</InRow>
+        <InRow fontWeight='bold' bgcolor="#fdfdf5" flex={0.12}>과정분류</InRow>
+        <InRow fontWeight='bold' bgcolor="#fdfdf5" flex={0.13}>교육분류</InRow>
+        <InRow fontWeight='bold' bgcolor="#fdfdf5" flex={0.4}>과정명</InRow>
+        <InRow fontWeight='bold' bgcolor="#fdfdf5" flex={0.15}>생성일</InRow>
+        <InRow fontWeight='bold' bgcolor="#fdfdf5" flex={0.05}>노출여부</InRow>
+        <InRow fontWeight='bold' bgcolor="#fdfdf5" flex={0.05}>상태</InRow>
       </Row>
   )
 }

@@ -83,9 +83,6 @@ const inputByType: {
               {...register('limitProgress')}
               onChange={e => {
                 const numberValue = Number(e.target.value);
-                // console.log(numberValue, 'xx');
-                // if (e.target.value === '') return setValue('limitProgress', 0);
-                // if (!Max100Regex.test(e.target.value)) return;
                 if (numberValue > 100) return setValue('limitProgress', 100);
                 setValue('limitProgress', numberValue);
               }}

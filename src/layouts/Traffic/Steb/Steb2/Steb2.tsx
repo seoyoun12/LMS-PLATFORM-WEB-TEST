@@ -15,7 +15,7 @@ import { ProvincialEnrollSaveRequestDto } from '@common/api/Api';
 import { Spinner } from '@components/ui';
 import { EduTargetMainType } from '@common/api/learningMaterial';
 import { addMonths } from 'date-fns';
-import useDominCourse, { CreateApplicationCourseResponseBody, MainType } from '@hooks/useDominCourse';
+import useDominCourse, { CreateApplicationCourseResponseBody, SubType } from '@hooks/useDominCourse';
 import { ConvertEnum } from '@utils/convertEnumToHangle';
 
 // 도민과정 교육신청 steb2
@@ -28,6 +28,7 @@ export function Steb2() {
   const router = useRouter();
   const snackbar = useSnackbar();
   const setTrafficInfo = useSetRecoilState(courseClassTrafficInfo);
+  
   const [loading, setLoading] = useState(false);
   const [detailCounts, setDetailCounts] = useState<detailCounts>({ HIGH_SCHOOL: { grade1: 0, grade2: 0, grade3: 0 }});
   const { postApplicationCourseForUser, getCourseForUser,courseApplication } = useDominCourse();
@@ -38,9 +39,6 @@ export function Steb2() {
       expectedToEndDtime: dateFormat( addMonths(new Date(), 1), 'yyyy-mm-dd'),
     },
   });
-
-
-  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -64,10 +62,13 @@ export function Steb2() {
       snackbar({ variant: 'error', message: '교육 대상자를 선택해주세요.' });
       return;
     }
+
     try {
-      const obj = watch() as CreateApplicationCourseResponseBody & {courseSeq: string};
-      setLoading(true);
       
+      const obj = {...detailCounts[watch().eduTargetSub],...watch()} as CreateApplicationCourseResponseBody & {courseSeq: string};
+      
+      console.log(obj);
+      setLoading(true);
       await postApplicationCourseForUser(obj);
       setTrafficInfo({ ...watch(), peopleCounts: { ...detailCounts },courseSeq: watch().courseSeq});
       router.push('steb3');
@@ -83,11 +84,10 @@ export function Steb2() {
 
   useEffect(() => {
     if(!watch().eduTargetSub) return;
-    getCourseForUser(watch().eduTargetSub as MainType);
+    getCourseForUser(watch().eduTargetSub as SubType);
   },[watch().eduTargetSub])
 
   
-  console.log(courseApplication);
   return (
     <Steb2Wrap>
       <StebHeader value={2} />
@@ -148,14 +148,8 @@ export function Steb2() {
             minDate={new Date()}
             customInput={<TextField fullWidth />}
             selected={new Date(watch().expectedToEndDtime)}
-            
             onChange={date =>
-              setValue(
-                'expectedToEndDtime',
-                date
-                ? dateFormat(date, 'yyyy-mm-dd')
-                : dateFormat(new Date(), 'yyyy-mm-dd')
-              )
+              setValue('expectedToEndDtime',date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd'))
             }
           />
         </FormControl>
@@ -193,8 +187,11 @@ export function Steb2() {
           </Select>
         </FormControl>
 
-        <TableContainer component={Paper} sx={{ display: 'flex', justifyContent: 'center' }}
-        >
+
+
+
+
+        <TableContainer component={Paper} sx={{ display: 'flex', justifyContent: 'center' }}>
           <TableBody sx={{ width: '80%' }}>
             {studentList
               .filter(item => watch().eduTargetMain === item.enType)[0]
@@ -211,13 +208,11 @@ export function Steb2() {
           </TableBody>
         </TableContainer>
 
+
+
         <FormControl fullWidth>
           <Typography id="lecture">과정 선택</Typography>
-          <Select
-            labelId="courseSeq"
-            id="courseSeq"
-            {...register('courseSeq')}
-          >
+          <Select labelId="courseSeq" id="courseSeq" {...register('courseSeq')}>
             {courseApplication?.map((course) => (
               <MenuItem key={course.seq} value={course.seq}>
                 {`${course.seq}. ${ConvertEnum(course.courseName)}`}
@@ -239,22 +234,26 @@ const Steb2Wrap = styled(Box)`
   }
 `;
 
-function CustomInput({ageInfo,setDetailCounts,detailCounts,candidateDetailType,}: {
+
+
+// 난 송강호야! 기생충이지!
+function CustomInput({ ageInfo,setDetailCounts,detailCounts,candidateDetailType }: {
   ageInfo: { age: string; enAge: string };
   detailCounts: detailCounts;
   setDetailCounts: React.Dispatch<React.SetStateAction<detailCounts>>;
   candidateDetailType: string;
 }) {
-  const keyName: string = ageInfo.enAge;
 
+  
   return (
     <TableRow>
       <TableCell sx={{ width: '50%' }}>{ageInfo.age}</TableCell>
       <TableCell>
         <TextField
+          fullWidth
           name={ageInfo.enAge}
           placeholder="0~000명"
-          value={detailCounts[candidateDetailType]?.[keyName]}
+          value={detailCounts[candidateDetailType]?.[ageInfo.enAge]}
           onChange={e => {
             if (e.target.value.length > 10) return;
             if (/^[0-9]+$/.test(e.target.value))
@@ -266,8 +265,7 @@ function CustomInput({ageInfo,setDetailCounts,detailCounts,candidateDetailType,}
                   },
                 };
               });
-          }}
-          fullWidth
+            }}
         />
       </TableCell>
     </TableRow>
@@ -283,7 +281,6 @@ export const studentList = [
         type: '유치원',
         enType: 'TYPE_KINDERGARTEN',
         ageList: [
-          
           { age: '만3세', enAge: 'age3' },
           { age: '만4세', enAge: 'age4' },
           { age: '만5세', enAge: 'age5' },

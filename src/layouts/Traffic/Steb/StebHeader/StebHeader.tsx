@@ -1,5 +1,5 @@
-import { CNCalendar } from '@layouts/Calendar';
-import { Box, Container, styled, Typography } from '@mui/material';
+
+import { Box, styled, Typography } from '@mui/material';
 import Filter1Icon from '@mui/icons-material/Filter1';
 import Filter2Icon from '@mui/icons-material/Filter2';
 import Filter3Icon from '@mui/icons-material/Filter3';
@@ -70,10 +70,7 @@ export function StebHeader({ value }: { value: number }) {
                 <Filter3Icon fontSize="large" />
                 <span>신청완료</span>
               </Box>
-              {/* <Box display="flex" flexDirection="column" alignItems={'center'} sx={{ opacity: 3 === value ? 1 : 0.5 }}>
-                <Filter3Icon fontSize="large" />
-                <span>신청완료</span>
-              </Box> */}
+
             </Box>
           </Box>
         ))}

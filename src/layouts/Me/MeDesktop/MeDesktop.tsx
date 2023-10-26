@@ -75,9 +75,7 @@ export function MeDesktop() {
     //   }`
     // );
     window.open(
-      `/course/${res.courseUserSeq}/lesson/${
-        !res.recentLessonSeq ? 1 : res.recentLessonSeq
-      }`,
+      `/course/${res.courseUserSeq}/lesson/${!res.recentLessonSeq ? 1 : res.recentLessonSeq}`,
       // '',
       '_blank'
     );

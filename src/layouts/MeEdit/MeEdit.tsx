@@ -123,14 +123,6 @@ export function MeEdit() {
   if (!user) return <div></div>; //태그없으면 에러뜸
   return (
     <Box>
-      {/* <Tabs tabsConfig={tabsConfig} variant={'fullWidth'} gap={5} rendering={false} onChange={onChangeTabValue} value={tabValue} /> */}
-      {/* <Tabs tabsConfig={tabsConfig} variant={"fullWidth"} gap={5} rendering={false} onChange={onChange} value={value} /> */}
-      {/* <TabPanel value={tabValue} index={tabsConfig[0].value}>
-        <TransWorker type="transport" locationList={locationList} />
-      </TabPanel>
-      <TabPanel value={tabValue} index={tabsConfig[1].value}>
-        <Educator locationList={locationList} />
-      </TabPanel> */}
       {typeof window !== 'undefined' &&
       localStorage.getItem('site_course_type') === courseType.TYPE_PROVINCIAL ? (
         <Educator locationList={locationList} />

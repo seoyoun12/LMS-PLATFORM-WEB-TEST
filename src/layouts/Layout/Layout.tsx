@@ -24,12 +24,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   const [userPageType, setUserPageType] = useRecoilState(pageType);
   const [user, setUser] = useState<MyUser>(null);
   const [userInfoData, setUserInfo] = useRecoilState(userInfo);
+  
   useEffect(() => {
-    if (router.route.includes('/traffic')) {
-      setUserPageType(pageRegType.TYPE_TRAFFIC_SAFETY_EDU);
-    } else {
-      setUserPageType(pageRegType.TYPE_TRANS_EDU);
-    }
+    router.route.includes('/traffic')
+    ? setUserPageType(pageRegType.TYPE_TRAFFIC_SAFETY_EDU)
+    : setUserPageType(pageRegType.TYPE_TRANS_EDU);
+    
   }, [router, setUserPageType]);
 
   //추후 훅스로 이동
@@ -104,8 +104,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             });
           }
         }
-      } catch (e: any) {
-        console.dir(e);
+      } catch (e) {
         if (e.data?.status === 401) {
           window.alert('중복로그인이 확인되어 로그아웃 됩니다.');
           localStorage.removeItem('ACCESS_TOKEN');
@@ -129,25 +128,10 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     if (isTraffic && user) {
       if (router.route === '/') return; 
       if (isCommon) return;
-      const imTrans = user.roles.some(
-        item => item === UserRole.ROLE_TRANS_USER || item === UserRole.ROLE_TRANS_MANAGER
-      );
-      if (!imTrans) return;
-      window.alert('잘못된 접근입니다! 로그아웃 후 해당 페이지로 다시 로그인하세요!');
-      router.push('/category');
     }
-    
     else if (!isTraffic && user) {
       if (router.route === '/') return; 
       if (isCommon) return; 
-      const imSafe = user.roles.some(
-        item =>
-          item === UserRole.ROLE_TRAFFIC_SAFETY_USER ||
-          item === UserRole.ROLE_TRAFFIC_SAFETY_MANAGER
-      );
-      if (!imSafe) return;
-      window.alert('잘못된 접근입니다! 로그아웃 후 해당 페이지로 다시 로그인하세요!');
-      router.push('/traffic/category');
     }
   }, [router, user]);
 
@@ -165,7 +149,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       >
         <Header isDesktop={isDesktop} />
       </AppBar>
-      <main className="fit">{children}</main>
+        <main className="fit">{children}</main>
       <Footer />
     </div>
   );

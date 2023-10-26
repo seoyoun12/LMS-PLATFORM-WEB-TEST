@@ -1,5 +1,6 @@
-import { GET } from '@common/httpClient'
+import { GET, POST } from '@common/httpClient'
 import useSWR from 'swr';
+import { useSnackbar } from './useSnackbar';
 
 interface Props {
   page: number;
@@ -62,11 +63,43 @@ interface SurveyResponse {
   }
 }
 
+export enum ModuleType {
+  COURSE_MODULE_PROGRESS_RATE = 'COURSE_MODULE_PROGRESS_RATE',
+  COURSE_MODULE_TEST = 'COURSE_MODULE_TEST',
+  COURSE_MODULE_SURVEY  ='COURSE_MODULE_SURVEY'
+}
+
+interface ConnectSurveyToCourseRequest {
+  examSeq?: number,
+  limitProgress?: number,
+  limitScore?: number,
+  moduleName?: string,
+  moduleType?: ModuleType,
+  status?: number,
+  submitYn?: "Y" | "N",
+  surveySeq?: number
+}
 
 export default function useDominCourseModuleSurvey({ page, rowsPerPage }: Props = {page:0, rowsPerPage:10}) {
     
   const { data, error, mutate } = useSWR<SurveyResponse>(`/survey/adm?page=${page}&elementCnt=${rowsPerPage}`,GET)
+  const snackBar = useSnackbar();
 
+  const postConnectSurveyToCourse = async (courseSeq: number, body: ConnectSurveyToCourseRequest) => {
+    try {
+      await POST(`/course-module/adm/${courseSeq}`,body)
+      snackBar({
+        message: '해당 과정과 연결되었습니다.',
+        variant: 'success'
+      })
+    } catch (error) {
+      snackBar({
+        message: '연결에 실패하였습니다.',
+        variant: 'error'
+      })
+    }
+    
+  }
 
-  return {data, error, mutate}
+  return {data, error, mutate, postConnectSurveyToCourse}
 }

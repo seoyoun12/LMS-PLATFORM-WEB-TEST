@@ -9,9 +9,8 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { ContentConnectModal } from '@components/admin-center/ContentConnectModal';
-import { courseDetail, useCourse } from '@common/api/course';
-import { ContentTypeHuman } from '@common/api/content';
-import { Link } from '@components/common';
+import { courseDetail } from '@common/api/course';
+
 import dateFormat from 'dateformat';
 
 const headRows: {

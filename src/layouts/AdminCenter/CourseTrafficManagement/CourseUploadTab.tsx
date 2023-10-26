@@ -8,7 +8,7 @@ import InfoMessage from "./feature/InfoMessage";
 import useSelect from "@hooks/useSelect";
 import { useNewInput } from "@hooks/useNewInput";
 import { Box, TextField } from "@mui/material";
-import useDominCourse, { CourseType, MainType, PostRequestBody, SubType } from "@hooks/useDominCourse";
+import useDominCourse, { CourseType, CreateCourseRequestBody, MainType, SubType } from "@hooks/useDominCourse";
 import { ConvertDetailEnum } from "@utils/convertEnumToHangle";
 import { useSnackbar } from "@hooks/useSnackbar";
 import { useRouter } from "next/router";
@@ -19,14 +19,16 @@ export default function CourseUploadTab() {
 
   const { value: educationType,setValue:setEducationType, onChange: onChangeEducationType } = useSelect<MainType>({defaultValue: MainType.TYPE_CHILDREN});
   const { value: educationDetailType,setValue:setEducationDetailType, onChange: onChangeEducationDetailType } = useSelect<SubType>({defaultValue: SubType.TYPE_KINDERGARTEN});
+  
   const { value: status,setValue:setStatus, onChange: onChangeStatus } = useSelect({defaultValue: '정상' });
   const { value: show,setValue:setShow, onChange: onChangeShow } = useSelect({defaultValue:'보이기'});
-  const { value: selectedFile, onChange: onChangeFile, onRemoveFile, preview,setPreview } = useNewInput<File>({initialValue: null,type:'file'});
+  const { value: selectedFile, onChange: onChangeFile, onReset, preview,setPreview } = useNewInput<File>({initialValue: null,type:'file'});
   const { value: courseName, setValue: setCourseName, onChange: onChangeCourseName } = useNewInput({initialValue: '',type:'string'});
   const { value: lectureTime, setValue: setLectureTime, onChange: onChangeLectureTime } = useNewInput({initialValue: 0,type:'number'});
   const { course, postDominCourse, getDominCourse,putDominCourse,deleteDominCourse } = useDominCourse();
   const [boardSeq, setBoardSeq] = useState<number | null>(null);
   const navigation = useRouter();
+  
   const snackbar = useSnackbar();
   
   const onUpdateThumbnail = async (seq: number) => {
@@ -39,7 +41,7 @@ export default function CourseUploadTab() {
     }
 
   const onClickUpload = async () => {
-    const body:PostRequestBody = {
+    const body:CreateCourseRequestBody = {
       courseType: CourseType.TYPE_PROVINCIAL,
       courseName: courseName as string,
       lessonTime: lectureTime as number,
@@ -47,6 +49,7 @@ export default function CourseUploadTab() {
       provincialEduTargetSub: educationDetailType,
       status: status === '정상' ? 1 : 0,
       displayYn: show === '보이기' ? 'Y' : 'N',
+      year: new Date().getFullYear(),
     }
     try {
       if(boardSeq) {
@@ -83,6 +86,7 @@ export default function CourseUploadTab() {
     } 
   }
   
+  // 
   useEffect(() => {
     const boardSequence = navigation.query?.boardSeq;
     if(boardSequence){
@@ -93,6 +97,7 @@ export default function CourseUploadTab() {
   },[navigation])
 
 
+  // course가 바뀔때마다 기본값 세팅
   useEffect(() => {
     if(!course) return;
     setCourseName(course.courseName);
@@ -147,7 +152,7 @@ export default function CourseUploadTab() {
           />
       </FiledSet>
 
-      { preview && <PreviewBox preview={preview} selectedFile={selectedFile} onRemoveFile={onRemoveFile} /> }
+      { preview && <PreviewBox preview={preview} selectedFile={selectedFile} onReset={onReset} /> }
       
       <RadioBox
         name="status"

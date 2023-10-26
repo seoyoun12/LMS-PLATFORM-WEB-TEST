@@ -17,7 +17,7 @@ export default function CourseListItem({item}:Props) {
   }
   return (
     <Row key={item.seq} onClick={onClickItem} >
-      <InRow bgcolor="#ffe" flex={0.1}>{item.seq}</InRow>
+      <InRow bgcolor="#fdfdf5" flex={0.1}>{item.seq}</InRow>
       <InRow flex={0.12}>{ConvertEnum(item.provincialEduTargetMain)}</InRow>
       <InRow flex={0.13}>{ConvertEnum(item.provincialEduTargetSub)}</InRow>
       <InRow flex={0.4}>{item.courseName}</InRow>

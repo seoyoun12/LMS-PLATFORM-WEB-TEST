@@ -1,24 +1,17 @@
 import { RegisterType } from '@common/api/courseClass';
 import { useCourseUser } from '@common/api/courseUser';
-import { EduTargetMainType, EduTargetSubType } from '@common/api/learningMaterial';
-import { useEnrollProvincialList } from '@common/api/provincialEnroll';
-import { Modal, Spinner } from '@components/ui';
+import { Spinner } from '@components/ui';
 import { NotFound } from '@components/ui/NotFound';
 import styled from '@emotion/styled';
-import { Box, Button, Container, Grid, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import { Box, Container, Grid } from '@mui/material';
+import { useState } from 'react';
 import { EnrollHistoryCard } from './EnrollHistoryCard/EnrollHistoryCard';
 import { EnrollHistoryModal } from './EnrollHistoryModal/EnrollHistoryModal';
-import { EnrollHistoryTrafficModal } from './EnrollHistoryTrafficModal/EnrollHistoryTrafficModal';
 import Image from 'next/image';
 
 export function EnrollHistory() {
-  const router = useRouter();
-  const { data, error, mutate } = useCourseUser();
-  // 리스트
-  const { enrollData, enrollError, enrollMutate } = useEnrollProvincialList();
-
+  
+  const { data } = useCourseUser();
   const [open, setOpen] = useState(false);
   const [trafficOpen, setTrafficOpen] = useState(false);
   const [modalData, setModalData] = useState<{
@@ -26,51 +19,21 @@ export function EnrollHistory() {
     courseUserSeq: number;
     regType: RegisterType;
   }>();
-  const [trafficModalData, setTrafficModalData] = useState<{
-    enrollSeq: number;
-    enrollOrganization: string;
-  }>();
+
 
   const handleClose = async () => {
     setOpen(false);
     setTrafficOpen(false);
-    await enrollMutate(); // provincialEnroll.ts에 enrolllMutate로 되어있다. 20221227 변경
   };
 
-  const imageRenderer = (eduTargetMain: EduTargetMainType) => {
-    if (eduTargetMain === "TYPE_CHILDREN")return `/assets/images/domin.jpg`
-    if (eduTargetMain === "TYPE_TEENAGER") return `/assets/images/teen.jpg`
-    if (eduTargetMain === "TYPE_SELF_DRIVING") return `/assets/images/self.jpg`
-    if (eduTargetMain === "TYPE_ELDERLY") return `/assets/images/old.png`
-  }
-
-  const titleRenderer = (eduTargetMain: EduTargetMainType, eduTargetSub: EduTargetSubType) => {
-    if (eduTargetMain === "TYPE_CHILDREN"){
-      if(eduTargetSub === 'TYPE_KINDERGARTEN') return '어린이 - 유치원'
-      if(eduTargetSub === 'TYPE_ELEMENTARY') return '어린이 - 초등학교'
-    }
-    if (eduTargetMain === "TYPE_TEENAGER") {
-      if(eduTargetSub === 'TYPE_MIDDLE') return '청소년 - 중학교'
-      if(eduTargetSub === 'TYPE_HIGH') return '청소년 - 고등학교'
-    }
-    if (eduTargetMain === "TYPE_SELF_DRIVING") {
-      if(eduTargetSub === 'TYPE_SELF_DRIVER') return '자가운전자'
-    }
-    if (eduTargetMain === "TYPE_ELDERLY") {
-      if(eduTargetSub === 'TYPE_ELDERLY') return '어르신'
-    }
-  }
-
   if (!data) return <Spinner />;
-  if (!enrollData) return <Spinner />;
+  
 
   return (
     <Box>
       <Image src={'/assets/images/main_edu_application.png'} alt='신청내역' width={1920} height={282} layout='intrinsic'/>
       <EnrollHistoryWrap>
-        {data.length <= 0 && enrollData.length <= 0 && (
-          <NotFound content='신청한 과정이 존재하지 않습니다!' />
-        )}
+        {data.length <= 0 && <NotFound content='신청한 과정이 존재하지 않습니다!' />}
         <Grid
           container
           rowSpacing={4}
@@ -104,35 +67,8 @@ export function EnrollHistory() {
                 </Box>
               </Grid>
             ))}
-          {enrollData.map((r) => (
-            <Grid item xs={1} sm={1} md={1} lg={1} key={r.seq}>
-              <Box
-                onClick={() => {
-                  setTrafficOpen(true);
-                  setTrafficModalData({
-                    enrollSeq: r.seq,
-                    enrollOrganization: r.organization,
-                  });
-                  // setModalData({
-                  //   title: r.organization,
-                  //   courseUserSeq: r.seq,
-                  //   regType:
-                  //     r.regType === RegisterType.TYPE_INDIVIDUAL
-                  //       ? RegisterType.TYPE_INDIVIDUAL
-                  //       : RegisterType.TYPE_ORGANIZATION,
-                  // });
-                }}
-              >
-                <EnrollHistoryCard
-                  title={titleRenderer(r.eduTargetMain , r.eduTargetSub)}
-                  image={imageRenderer(r.eduTargetMain)}
-                  content1={'자세히보기'}
-                  seq={r.seq}
-                  item={{}}
-                />
-              </Box>
-            </Grid>
-          ))}
+            {/* 도민데이터 */}
+          
         </Grid>
       </EnrollHistoryWrap>
       {open && (
@@ -148,14 +84,7 @@ export function EnrollHistory() {
           }
         />
       )}
-      {trafficOpen && (
-        <EnrollHistoryTrafficModal
-          open={trafficOpen}
-          handleClose={handleClose}
-          enrollSeq={trafficModalData.enrollSeq}
-          enrollOrganization={trafficModalData.enrollOrganization}
-        />
-      )}
+      
     </Box>
   );
 }
@@ -164,38 +93,4 @@ const EnrollHistoryWrap = styled(Container)`
   margin-top: 2rem;
   margin-bottom: 2rem;
   padding: 0 16px;
-`;
-
-const MyCourseContainer = styled(Box)`
-  width: 100%;
-  height: 262px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  line-height: 42px;
-  color: white;
-  background-image: url('/assets/images/currentStudy.png');
-`;
-const MyCourseTitle = styled(Box)`
-  font-size: 48px;
-  font-weight: 500;
-  @media (max-width: 768px) {
-    font-size: 36px;
-    font-weight: 500;
-  }
-`;
-const MyCourseSubTitle = styled(Box)`
-  font-size: 17px;
-  font-weight: 500;
-  @media (max-width: 768px) {
-    font-size: 14px;
-    font-weight: 500;
-  }
-`;
-const CourseContainer = styled(Box)`
-  max-width: 1200px;
-  padding-top: 2.5rem;
-  padding-bottom: 3rem;
-  margin: auto;
 `;

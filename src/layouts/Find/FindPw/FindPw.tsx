@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { Box } from '@mui/material';
 import { useState } from 'react';
-import { StepHeader } from '../../Traffic/SignUp/StepHeader';
 import { Step1 } from './Step1';
 import { Step2 } from './Step2';
 import Filter1Icon from '@mui/icons-material/Filter1';

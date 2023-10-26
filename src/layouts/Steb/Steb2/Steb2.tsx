@@ -183,20 +183,6 @@ export default function Steb2() {
       return snackbar({ variant: 'error', message: '회사명을 입력해주세요!' });
     }
 
-    // localName, digit2, oneWord, digit4
-    // if(watch().businessSubType !== courseSubCategoryType.BUS ||
-    //    watch().businessSubType !== courseSubCategoryType.CHARTER_BUS ||
-    //    watch().businessSubType !== courseSubCategoryType.CORPORATE_TAXI ||
-    //    watch().businessSubType !== courseSubCategoryType.KNEELING_BUS) {
-    //     if ((!hideCarNumber && !carNumberRegex.test(rest.carNumber))) {
-    //     setCurrentIndex(4);
-    //     setPageIndex(4);
-    //     return snackbar({
-    //       variant: 'error',
-    //       message: '올바른 형식의 차량번호를 입력해주세요!',
-    //     });
-    //   }
-    // }
 
     if (rest.carRegisteredRegion === '' || !rest.carRegisteredRegion) {
       setCurrentIndex(5);
@@ -518,9 +504,7 @@ export default function Steb2() {
               placeholder='차종 번호2자리'
               inputProps={{ inputMode: 'numeric' }}
               fullWidth
-              sx={{
-                minWidth: '80px',
-              }}
+              sx={{ minWidth: '80px' }}
               />
             
               <Select

@@ -2,22 +2,25 @@ import { ModuleType } from "@hooks/useDominModule";
 import CourseModuleProgressRateForm from "./CourseModuleProgressRateForm";
 import CourseModuleSurveyForm from "./CourseModuleSurveyForm";
 import CourseModuleExamForm from "./CourseModuleExamForm";
+import { ChangeEvent } from "react";
 
 interface Props {
   moduleType: ModuleType;
   progressRate: number;
-  onChangeProgressRate: (e: React.ChangeEvent<HTMLInputElement>) => void; 
+  onChangeProgressRate: (e: ChangeEvent<HTMLInputElement>) => void; 
   limitScore: number;
-  onChangeLimitScore: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeLimitScore: (e: ChangeEvent<HTMLInputElement>) => void;
   submitYn: "Y" | "N";
-  onChangeSubmitYn: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeSubmitYn: (e: ChangeEvent<HTMLInputElement>) => void;
   surveySeq: number;
-  onChangeSurveySeq: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeSurveySeq: (e: ChangeEvent<HTMLInputElement>) => void;
+  moduleName: string;
+  onChangeModuleName: (e: ChangeEvent<HTMLInputElement> | string ) => void;
 }
 
-export default function CourseModuleChoiceInputs({ moduleType,progressRate,onChangeProgressRate,limitScore,onChangeLimitScore,submitYn,onChangeSubmitYn,surveySeq,onChangeSurveySeq }: Props) {
+export default function CourseModuleChoiceInputs({ moduleName,onChangeModuleName, moduleType,progressRate,onChangeProgressRate,limitScore,onChangeLimitScore,submitYn,onChangeSubmitYn,surveySeq,onChangeSurveySeq }: Props) {
   return (
-    <div>
+    <>
       {
         moduleType === ModuleType.COURSE_MODULE_PROGRESS_RATE &&
         <CourseModuleProgressRateForm onChangeProgressRate={onChangeProgressRate} progressRate={progressRate} />
@@ -35,8 +38,10 @@ export default function CourseModuleChoiceInputs({ moduleType,progressRate,onCha
           onChangeProgressRate={onChangeProgressRate}
           surveySeq={surveySeq}
           onChangeSurveySeq={onChangeSurveySeq}
+          moduleName={moduleName}
+          onChangeModuleName={onChangeModuleName}
           />
       }
-    </div>
+    </>
   )
 }

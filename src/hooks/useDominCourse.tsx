@@ -1,7 +1,7 @@
 // 도민 과정 CRUD 기능을 묶어놓은 커스텀훅
 
 import { GET, POST, PUT,DELETE } from '@common/httpClient'
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useSnackbar } from './useSnackbar';
 import useDominContent, { ContentResponse } from './useDominContent';
 
@@ -29,6 +29,7 @@ export enum SubType {
 }
 
 export interface CreateCourseRequestBody {
+
   courseType: CourseType; // 도민, 저상, 운수
   courseName: string; // 과정명
   displayYn: "Y" | "N"; 
@@ -36,6 +37,7 @@ export interface CreateCourseRequestBody {
   provincialEduTargetMain: MainType;
   provincialEduTargetSub: SubType;
   status: number;
+  year: number;
 }
 
 export interface CourseResponse {
@@ -175,6 +177,7 @@ export default function useDominCourse() {
   const [data, setData] = useState<CourseListResponse | null>(null);
   const [course, setCourse] = useState<CourseResponse | null>(null);
   const [courseApplication, setCourseApplication] = useState<CourseApplication[] | null>(null);
+  
   const [isLoading, setIsLoading] = useState(false);
   const { contentsMudate } = useDominContent();
   const snackBar = useSnackbar();
@@ -222,6 +225,7 @@ export default function useDominCourse() {
 
   const postDominCourse = async (data:CreateCourseRequestBody) => {
     setIsLoading(true);
+
     try {
       const res = await POST<CreateCourseResponse>('/course/adm/provincial',data);
       return res.data;
@@ -253,8 +257,6 @@ export default function useDominCourse() {
 
   const dislinkCourseWithContent = async (courseSeq:number) => {
     try {
-
-      // 쓰면 안됨
       await DELETE(`/course/adm/link/content/${courseSeq}`);  
       await contentsMudate();
       snackBar({
@@ -272,8 +274,6 @@ export default function useDominCourse() {
 
   const linkCourseWithContent = async ({courseSeq,contentSeq}: LinkCourseWithContent) => {
     try {
-
-      // 쓰면 안됨
       const res:ContentResponse = await POST(`/course/adm/link/content`,{
         courseSeq,
         contentSeq
@@ -309,7 +309,7 @@ export default function useDominCourse() {
     }
   }
 
-  const getCourseForUser = async (provincialEduTargetSub:MainType) => {
+  const getCourseForUser = async (provincialEduTargetSub: SubType) => {
     setIsLoading(true);
     try {
       const res = await GET('/course/provincial',{
@@ -330,7 +330,8 @@ export default function useDominCourse() {
       setIsLoading(false);
     }
   }
-  const postApplicationCourseForUser = async (body:CreateApplicationCourseResponseBody) => {
+  
+  const postApplicationCourseForUser = useCallback(async (body:CreateApplicationCourseResponseBody) => {
     setIsLoading(true);
     try {
       await POST('/course-user/enroll/provincial',body);
@@ -346,7 +347,11 @@ export default function useDominCourse() {
     }finally{
       setIsLoading(false);
     }
-  }
+    //eslint-disable-next-line
+  },[])
+
+
+
   return {
     linkCourseWithContent, 
     dislinkCourseWithContent, 

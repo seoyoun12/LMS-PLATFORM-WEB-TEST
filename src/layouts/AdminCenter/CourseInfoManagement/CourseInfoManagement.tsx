@@ -23,6 +23,7 @@ import { TableBody,TableHead,Typography,Button,Box,InputBase,TextField,Backdrop,
 import { getExcelCourseLearning } from '@common/api/adm/excel';
 import { CourseLearningInfoCoursesResponseDto } from '@common/api/Api';
 import { format, getYear } from 'date-fns';
+import { DUMMY_YEAR_ARRAY } from '@common/constant';
 
 const headRows: {
   name: string;
@@ -85,9 +86,6 @@ const defaultValues: FormType = {
   year: 0,
 };
 
-const DUMMY_YEAR_ARRAY = Array.from({ length: getYear(new Date()) - 2022 + 1 }).map((_, i) => {
-  return {year: i + 2022};
-}).reverse();
 
 
 export default function CourseInfoManagement() {

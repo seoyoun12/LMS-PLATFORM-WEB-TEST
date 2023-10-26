@@ -23,9 +23,7 @@ LessonPage.Layout = Layout;
 
 export const getServerSideProps: GetServerSideProps<LessonProps> = async context => {
   const courseUserSeq = Number(context.params.courseUserSeq);
-  const contentType = context.params.contentType
-    .toString()
-    .toUpperCase() as LessonContentType;
+  const contentType = context.params.contentType.toString().toUpperCase() as LessonContentType;
   const contentSeq = Number(context.params.contentSeq);
 
   if (

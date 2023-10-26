@@ -1,11 +1,11 @@
+// 도민교통교육 교육대상자 선택 card 화면
 import { EduTargetMainType } from '@common/api/learningMaterial';
-import { NotFound } from '@components/ui/NotFound';
-import { Box, Container, styled, Typography } from '@mui/material';
+import { Box, styled, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { StebHeader } from '../StebHeader';
 
-// 도민교통교육 교육대상자 선택 card 화면
+
 export function Steb1() {
   return (
     <Steb1Wrap>
@@ -16,10 +16,6 @@ export function Steb1() {
             <a>
               <EduTargetCard sx={{ borderBottom: `2px solid ${r.borderBottomColor}` }}>
                 <EduTargetCardImgWrap>
-                  {/* <NotFound
-                    content="이미지가 존재하지 않습니다."
-                    style={{ height: '100%' }}
-                  /> */}
                   <Image src={r.imgPath || ''} alt="eduImg" layout="fill" />
                 </EduTargetCardImgWrap>
                 <EduTargetCardTitleWrap>
@@ -60,10 +56,6 @@ const EduTargetCardsWrap = styled(Box)`
     transition: transform 0.2s ease-in-out;
   }
 `;
-
-// const EduTargetCardLink = styled(Link)`
-//   cursor: pointer;
-// `;
 
 const EduTargetCard = styled(Box)`
   width: 250px;

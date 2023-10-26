@@ -1,24 +1,26 @@
-import { TableBody,TableHead,Typography,Button,Box,Backdrop, Input, TextField } from '@mui/material';
+import { TableBody,TableHead,Typography,Button,Box,Backdrop, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, InputLabel, Select, MenuItem } from '@mui/material';
 import { Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { useState } from 'react';
+import { CSSProperties, FormEvent, useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { Spinner } from '@components/ui';
-import { CompleteType,StatusType } from '@common/api/adm/learningInfo';
-import { CourseType } from '@common/api/adm/courseClass';
-import { NotFound } from '@components/ui/NotFound';
-import { convertBirth } from '@utils/convertBirth';
-import { useForm } from 'react-hook-form';
-import { useCourseInfoTraffic } from '@common/api/adm/courseInfoTraffic';
-import { CourseTrafficTargetType,locationList,TargetSubTypeReg } from 'src/staticDataDescElements/staticType';
-import { getExcelCourseTrafficLearning } from '@common/api/adm/excel';
+import { CompleteType } from '@common/api/adm/learningInfo';
+
+import { CourseInfoTrafficParams, useCourseInfoTraffic } from '@common/api/adm/courseInfoTraffic';
 import { useSnackbar } from '@hooks/useSnackbar';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { saveAs } from 'file-saver';
-import { format } from 'date-fns';
+import { format, getYear } from 'date-fns';
 import SelectBox from '../CourseTrafficManagement/common/SelectBox';
-import RadioBox from '../CourseTrafficManagement/common/RadioBox';
+
+import { ConvertEnum } from '@utils/convertEnumToHangle';
+import { residenceList } from '@layouts/MeEdit/MeEdit';
+import useSelect from '@hooks/useSelect';
+import useDominCourse, { MainType, SubType } from '@hooks/useDominCourse';
+import { useNewInput } from '@hooks/useNewInput';
+import { RefreshOutlined } from '@material-ui/icons';
+
 
 const headRows: {
   name: string;
@@ -27,226 +29,289 @@ const headRows: {
 }[] = [
   { name: 'No', align: 'center', width: '5%' },
   { name: '이름', align: 'center', width: '6%' },
-  { name: '아이디', align: 'center', width: '6%' },
-  { name: '생년월일', align: 'center', width: '6%' },
-  { name: '교육대상자', align: 'center', width: '8%' },
-  { name: '교육대상자세부', align: 'center', width: '8%' },
+  { name: '아이디', align: 'center', width: '7%' },
+  // { name: '생년월일', align: 'center', width: '6%' },
+  { name: '교육대상자', align: 'center', width: '6%' },
+  { name: '교육대상자세부', align: 'center', width: '10%' },
   { name: '지역', align: 'center', width: '6%' },
   { name: '소속', align: 'center', width: '10%' },
-  { name: '과정명', align: 'center', width: '8%' },
-  { name: '교육시작희망일자', align: 'center', width: '7%' },
-  { name: '만료기한', align: 'center', width: '6%' },
-  { name: '진도율', align: 'center', width: '6%' },
-  { name: '수료여부', align: 'center', width: '4%' },
-  { name: '상태', align: 'center', width: '5%' },
+  { name: '과정명', align: 'center', width: '10%' },
+  { name: '교육시작희망일자', align: 'center', width: '6%' },
+  { name: '만료기한', align: 'center', width: '8%' },
+  { name: '진도율', align: 'center', width: '5%' },
+  { name: '수료여부', align: 'center', width: '6%' },
+  { name: '상태', align: 'center', width: '6%' },
 ];
 
-interface FormType {
-  page: number;
-  notFound: boolean;
-  nameOrUsername: string; //이름 혹은 아이디
-  courseType: CourseType; //운수종사자 저상 도민 타입
-  completeType: CompleteType | null; //수료타입
-  statusType: StatusType | null; //퇴교여부 타입
-  courseSeq: number | null; //과정 시퀀스
-  courseClassSeq: number | null; //과정 클래스 시퀀스
-  businessName: string; //업체명
-  businessType: string | null; //업종 PASSENGER , FREIGHT
-  carRegitRegion: string | null; //차량등록지
-  carNumber: string | null; //차량번호
-  studyStartDate: string; //학습시작일
-  studyEndDate: string; //학습종료일
-  phone: string | null; //전화번호
-  identityNumber: string | null; //주민번호 (-포함)
+const paramsDefaultValue: CourseInfoTrafficParams = {
+  year : '',
+  residence : '',
+  provincialEduTargetMain : '',
+  provincialEduTargetSub : '',
+  expectedToStartDtime: '',
+  expectedToEndDtime: '',
+  organization: '',
+  nameOrUsername: '',
+  completeType: '',
+  page: 0,
+  elementCnt: 10,
+  courseSeq: ''
 }
 
-const defaultValues: FormType = {
-  page: 0,
-  notFound: false,
-  courseType: CourseType.TYPE_TRANS_WORKER,
-  nameOrUsername: '',
-  completeType: null,
-  statusType: null,
-  courseSeq: null,
-  courseClassSeq: null,
-  businessName: '',
-  businessType: null,
-  carRegitRegion: null,
-  carNumber: null,
-  studyStartDate: '',
-  studyEndDate: '',
-  phone: null,
-  identityNumber: null,
-};
 
 export default function CourseInfoTrafficManagement() {
+  const { value: year, onChange: onChangeYear } = useSelect({defaultValue: ''})
+  const { value: residence, onChange: onChangeResidence } = useSelect({defaultValue: ''})
+  const { value: provincialEduTargetMain, onChange: onChangeProvincialEduTargetMain } = useSelect<MainType | ''>({defaultValue: ''})
+  const { value: provincialEduTargetSub, onChange: onChangeProvincialEduTargetSub } = useSelect<SubType | ''>({defaultValue: ''})
+  const { value: courseSeq,setValue:setCourseSeq } = useSelect({defaultValue: ''});
+  const { value: expectedToStartDtime, onReset:onResetStartTime,onChange: onChangeExpectedToStartDtime } = useNewInput({initialValue: '',type:'date'})
+  const { value: expectedToEndDtime, onReset:onResetEndTime,onChange: onChangeExptectedToEndDtime } = useNewInput({initialValue: '',type:'date'})
+  const { value: organization,setValue:setOrganization, onReset:onResetOrganization,onChange: onChangeOrganization} = useNewInput({initialValue: '',type:'string'})
+  const { value: nameOrUsername, onReset:onResetNameOrUsername,onChange: onChangeNameOrUsername} = useNewInput({initialValue: '',type:'string'})
+  const { value: completeType, onChange: onChangeCompleteType} = useSelect<CompleteType | ''>({defaultValue: ''})
   
-  
-  const [submitValue, setSubmitValue] = useState<FormType>(defaultValues);
-  const { watch } = useForm<FormType>({defaultValues});
   const [page, setPage] = useState<number>(0);
-  const { data, error, mutate } = useCourseInfoTraffic(10, page);
   const [loading, setLoading] = useState(false);
+  const [params, setParams] = useState(paramsDefaultValue);
+  const { data, error, mutate } = useCourseInfoTraffic(params);
+  const { courseApplication, getCourseForUser } = useDominCourse();
+  
   const snackbar = useSnackbar();
+
+  
+  
   const onClickExcelDownload = async () => {
     setLoading(true);
-    try {
-      const data = await getExcelCourseTrafficLearning(watch());
-      const blob = new Blob([data.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      setLoading(false);
-      return saveAs(blob, format(new Date(), 'yyyy-MM-dd') + ' 학습현황.xlsx');
+    // try {
+    //   const data = await getExcelCourseTrafficLearning(watch());
+    //   const blob = new Blob([data.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    //   setLoading(false);
+    //   return saveAs(blob, format(new Date(), 'yyyy-MM-dd') + ' 학습현황.xlsx');
       
-    } catch (e) {
-      snackbar({ variant: 'error', message: '다운로드 실패' });
-      setLoading(false);
-    }
+    // } catch (e) {
+    //   snackbar({ variant: 'error', message: '다운로드 실패' });
+    //   setLoading(false);
+    // }
   };
 
-  // Pagination
   const onChangePage = (page: number) => {
-    setSubmitValue((prev) => {
-      return { ...prev, page };
-    });
     setPage(page);
-  };
-
-
-  // 수정페이지로
+  }
+  
+  const onSubmitSearch = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setParams({
+      year,
+      residence,
+      provincialEduTargetMain,
+      provincialEduTargetSub,
+      expectedToStartDtime,
+      expectedToEndDtime,
+      organization,
+      nameOrUsername,
+      completeType,
+      page,
+      courseSeq,
+      elementCnt: 10
+    })
+    await mutate()
+  }
+  
+  // 수정페이지로 이동
   const onClickmodifyCourseInfo = async (seq: number) => {
     window.open(`/admin-center/course-info-traffic/modify/${seq}`,'_blank');
   };
 
-  const test = () => {console.log('hello world')}
+  const onClickResetQuery = useCallback(() => {
+    setParams(paramsDefaultValue)
+    onChangeYear('')
+    onChangeResidence('')
+    onChangeProvincialEduTargetMain('')
+    onChangeProvincialEduTargetSub('')
+    setPage(0);
+    onResetStartTime()
+    onResetEndTime()
+    onResetOrganization()
+    onResetNameOrUsername()
+    onChangeCompleteType('')
+    setOrganization('')
+    setCourseSeq('')
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
+  useEffect(() => {
+    if(!provincialEduTargetSub) return;
+    getCourseForUser(provincialEduTargetSub)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[provincialEduTargetSub])
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
+
   
+
   return (
     <Box>
-      <CourseInfoTypography variant='h5'>
-        전체 수강생 학습현황(도민)
-      </CourseInfoTypography>
+      <Title variant='h5'> 전체 수강생 학습현황(도민) </Title>
 
+      <SearchForm onSubmit={onSubmitSearch}>
 
-      <SearchForm>
-        <SearchFormContainer>
+        <Container>
+          {/* 서치폼 왼쪽 */}
           <SearchFormLeft sx={{flex:1}}>
+
+            {/* 교육시작년도 - 지역 */}
             <InputBox>
               <SelectBox
-                id="startedDate"
+                id="year"
                 label="교육시작년도"
-                options={Array.from({length: 2}, (_, i) => i)}
-                onChange={test}
-                value={0}
-                name='startedDate'
+                options={Array.from({length:getYear(new Date()) - 2022 + 1 }, (_, i) => i + 2022)}
+                onChange={onChangeYear}
+                value={year}
+                name='year'
               />
               <SelectBox
-                id="region"
+                id="residence"
                 label="지역"
-                options={Array.from({length: 2}, (_, i) => i)}
-                onChange={test}
-                value={0}
-                name='region'
+                options={residenceList.map((residence) => residence.en)}
+                onChange={onChangeResidence}
+                value={residence}
+                name='residence'
               />
             </InputBox>
 
-            
+
+
+
+            {/* 교육대상자 / 교육대상자 세부 */}
             <InputBox>
               <SelectBox
-                id="targetType"
+                id="provincialEduTargetMain"
                 label="교육대상자"
-                options={Array.from({length: 2}, (_, i) => i)}
-                onChange={test}
-                value={0}
-                name='targetType'
+                options={Object.keys(MainType)}
+                onChange={onChangeProvincialEduTargetMain}
+                value={provincialEduTargetMain}
+                name='provincialEduTargetMain'
               />
               <SelectBox
-                id="targetSubType"
+                id="provincialEduTargetSub"
                 label="교육대상자세부"
-                options={Array.from({length: 2}, (_, i) => i)}
-                onChange={test}
-                value={0}
-                name='targetSubType'
+                options={Object.keys(SubType)}
+                onChange={onChangeProvincialEduTargetSub}
+                value={provincialEduTargetSub}
+                name='provincialEduTargetSub'
               />
             </InputBox>
 
+
+
+
+            {/* 과정명 */}
             <InputBox>
-              <SelectBox
-                id="course"
-                label="과정선택"
-                options={Array.from({length: 2}, (_, i) => i)}
-                onChange={test}
-                value={0}
-                name='course'
-              />
+              <FormControl fullWidth>
+                <InputLabel id="courseSeq">과정명</InputLabel>
+                <SelectContainer
+                  name='courseSeq'
+                  label='과정명'
+                  labelId='courseSeq'
+                  value={courseSeq}
+                  onChange={(e) => setCourseSeq(e.target.value as string)}
+                  sx={{width:'100%',marginBottom:'1rem'}}
+                  disabled={!provincialEduTargetSub}
+                  >
+                  {
+                  courseApplication?.map(course =>(
+                    <MenuItem key={course.seq} value={course.seq}>{course.courseName}</MenuItem>
+                    ))
+                  }
+                </SelectContainer>
+              </FormControl>
             </InputBox>
 
-            
+
+
+              {/* 학습기간 */}
               <Box sx={{display:'flex', flexDirection:'column', width:'100%'}}>
                 <Typography>학습기간</Typography>
                 <Box sx={{display:'flex', gap:'1rem'}}>
-                  <TextField type="date" fullWidth />
-                  <TextField type="date" fullWidth />
-                </Box>
+                  <TextField
+                    name="expectedToStartDtime"
+                    type="date"
+                    fullWidth
+                    value={expectedToStartDtime}
+                    onChange={onChangeExpectedToStartDtime}
+                    />
+                  <TextField
+                    name="expectedToEndDtime"
+                    type="date"
+                    fullWidth
+                    value={expectedToEndDtime}
+                    onChange={onChangeExptectedToEndDtime}
+                    />
+                  </Box>
               </Box>
             </SearchFormLeft>
 
 
- 
-          <SearchFormRight sx={{flex:1}}>
-              <TextField label='소속' placeholder='소속명' fullWidth />
+
+          {/* 서치폼 오른쪽 */}
+          <SearchFormRight sx={{flex: 1}}>
+            <TextField
+              label='소속'
+              placeholder='소속명'
+              fullWidth
+              value={organization}
+              onChange={onChangeOrganization}
+              />
           </SearchFormRight>
+        </Container>
 
-        </SearchFormContainer>
          {/* 과정타입선택,수료여부 */}
-         <RadioFormContainer>
-            <RadioBox
-              defaultValue='전체'
-              name='courseType'
-              id='courseType'
-              label='과정타입선택'
-              radios={['운수종사자', '저상버스', '도민교통']}
-              value='전체'
-              onChange={test}
-            />
-            <RadioBox
-              defaultValue='전체'
-              name='courseType'
-              id='courseType'
-              label='수료여부'
-              radios={['전체', '수료', '미수료', '도민']}
-              value='전체'
-              onChange={test}
-            />
-          </RadioFormContainer>
-        <Box>
-          <TextField label='사용자 검색' placeholder='이름 혹은 아이디 입력' fullWidth />
-        </Box>
+         <DevideBox>
+          <RadioFormContainer>
+            <FormControl>
+              <FormLabel id="completed-check">수료여부</FormLabel>
+                <RadioGroup defaultValue='' onChange={onChangeCompleteType} sx={{display:'flex', flexDirection:'row'}}>
+                  <FormControlLabel value={''} control={<Radio />} label="전체" />
+                  <FormControlLabel value={CompleteType.TYPE_COMPLETE} control={<Radio />} label="수료" />
+                  <FormControlLabel value={CompleteType.TYPE_INCOMPLETE} control={<Radio />} label="미수료" />
+                </RadioGroup>
+              </FormControl>
+            </RadioFormContainer>
+          </DevideBox>
 
-        <ButtonBox>
-          <Button variant='contained' color='primary' sx={{flex:1}}>검색하기</Button>
-          <Button variant='outlined' color='primary' sx={{flex:1}}>전체 다시 불러오기</Button>
-        </ButtonBox>
+
+          {/* 사용자,닉네임 검색 인풋 */}
+          <TextField
+            label='사용자 검색'
+            placeholder='이름 혹은 아이디 입력'
+            fullWidth
+            value={nameOrUsername}
+            onChange={onChangeNameOrUsername}
+            />
+
+
+        <ButtonGroup>
+          <Button type="submit" variant='contained' color='primary' sx={{flex:1}}>검색하기</Button>
+          <Button onClick={onClickResetQuery} variant='outlined' color='primary' sx={{flex:1,gap:'1rem'}}>
+            <RefreshOutlined />
+            <Typography>검색 조건 초기화</Typography>
+          </Button>
+        </ButtonGroup>
+
 
       </SearchForm>
-
 
       <Box display='flex' mb={2}>
         <Button
           variant='contained'
           color='success'
           sx={{ marginLeft: 'auto' }}
-          
           onClick={onClickExcelDownload}
         >
-          {loading ? (
-            <Spinner fit={true} />
-          ) : (
-            <>
-              <FileCopyIcon sx={{ marginRight: '4px' }} />
-              회원목록 엑셀다운로드
-            </>
-          )}
+          {loading ? <Spinner fit={true} /> : <><FileCopyIcon sx={{ marginRight: '4px' }} /> 회원목록 엑셀다운로드</>}
         </Button>
       </Box>
 
@@ -258,13 +323,10 @@ export default function CourseInfoTrafficManagement() {
         >
           <Spinner fit={true} />
           <Box color='rgb(194,51,51)' fontWeight='bold'>
-            다운로드가 오래걸릴수 있습니다 페이지를 이탈하지 마세요.
+            다운로드가 오래걸릴수 있습니다. 잠시만 기다려주세요.
           </Box>
         </Box>
       </Backdrop>
-      {watch().notFound ? (
-        <NotFound content='학습현황이 존재하지 않습니다!' />
-      ) : (
         <Table
           pagination={true}
           totalNum={data?.totalElements}
@@ -275,7 +337,8 @@ export default function CourseInfoTrafficManagement() {
           >
           <TableHead>
             <TableRow>
-              {headRows.map(({ name,width }) => (
+              {
+              headRows.map(({ name,width }) => (
                   <CourseInfoTitleTableCell
                     key={name}
                     align="center"
@@ -289,79 +352,83 @@ export default function CourseInfoTrafficManagement() {
           </TableHead>
 
           <TableBody>
-            {data.content.map((user) => (
+            {data.content.map((applicant) => (
               <TableRow
                 sx={{ cursor: 'pointer' }}
-                key={user.seq}
+                key={applicant.courseUserSeq}
                 hover
-                onClick={() => onClickmodifyCourseInfo(user.seq)}
+                onClick={() => onClickmodifyCourseInfo(applicant.courseUserSeq)}
               >
                 <CourseInfoTableCell align='center'>
-                  {user.seq}
+                  {applicant.courseUserSeq}
                 </CourseInfoTableCell>
 
                 <CourseInfoTableCell align='center'>
-                  {user.userInfo.name}
+                  { applicant.name }
                 </CourseInfoTableCell>
 
                 <CourseInfoTableCell align='center'>
-                  <NameBox title={user.userInfo.name}>
-                    {user.userInfo.username}
+                  <NameBox title={applicant.name}>
+                    {applicant.username}
                   </NameBox>
                 </CourseInfoTableCell>
 
-                <CourseInfoTableCell align='center'>
-                  <SubjectBox>{convertBirth(user.userInfo.birth)}</SubjectBox>
-                </CourseInfoTableCell>
+                {/* <CourseInfoTableCell align='center'>
+                  <SubjectBox>{convertBirth(applicant.userInfo.birth)}</SubjectBox>
+                </CourseInfoTableCell> */}
                 <CourseInfoTableCell align='center'>
                   <SubjectBox>
-                    {CourseTrafficTargetType.filter((f) => f.type === user.eduTargetMain)[0].ko}
+                    {ConvertEnum(applicant.provincialEduTargetMain)}
                   </SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align='center'>
                   <SubjectBox>
-                    {TargetSubTypeReg.filter((f) => f.type === user.eduTargetSub)[0].ko}
+                    {ConvertEnum(applicant.provincialEduTargetSub)}
                   </SubjectBox>
                 </CourseInfoTableCell>
 
                 <CourseInfoTableCell align='center'>
                   <SubjectBox>
-                    {locationList.filter((f) => f.en === user.region)[0].ko}
+                    {ConvertEnum(applicant.residence)}
                   </SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align='center'>
-                  {user.organization}
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align='center'>
-                  과정명 줘야함
+                  {applicant.organization}
                 </CourseInfoTableCell>
 
                 <CourseInfoTableCell align='center'>
-                  {user.expectedToStartDtime}
+                  {applicant.courseName}
+                </CourseInfoTableCell>
+
+                <CourseInfoTableCell align='center'>
+                  {/* yyyy-mm-ddT00:00 형식에서 yyyy-mm-dd만 추출 */}
+                  {applicant.studyDate.split(' ')[0].substring(0,10)}
+                </CourseInfoTableCell>
+
+                <CourseInfoTableCell align='center'>
+                  {/* yyyy-mm-ddT00:00 형식에서 yyyy-mm-dd만 추출 */}
+                  {applicant.studyDate.split(' ')[2].substring(0,10)}
+                </CourseInfoTableCell>
+
+                <CourseInfoTableCell align='center'>
+                  {applicant.displayTotalProgress}
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align='center'>
-                  {user.expiredDtime}
+                  {applicant.displayCompleteYn}
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align='center'>
-                  진도율컴온
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align='center'>
-                  수료여부
-                </CourseInfoTableCell>
-                <CourseInfoTableCell align='center'>
-                  {user.status === 1 ? '정상' : '비활성'}
+                  {applicant.displayLearningStatus}
                 </CourseInfoTableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      )}
     </Box>
   );
 }
 
 
-const ButtonBox = styled(Box)`
+const ButtonGroup = styled(Box)`
   display: flex;
   gap: 1rem;
   margin: 1rem 0rem;
@@ -373,20 +440,21 @@ const InputBox = styled(Box)`
   gap: 1rem;
 `;
 
-const SearchFormContainer = styled(Box)`
+const Container = styled(Box)`
   display: flex;
   gap: 2rem;
 `
 
-const RadioFormContainer = styled(SearchFormContainer)`
-  position: relative;
-  margin: 1.25rem auto;
-  padding: 1rem 15%;
-  
+const DevideBox = styled(Box)`
+  position:relative;
+  height: 100px;
   width: 100%;
+  display: flex;
   justify-content:center;
   align-items: center;
-  
+  padding: 1rem;
+  margin: 1rem auto;
+
   &:after {
   content: '';
   display: block;
@@ -397,6 +465,7 @@ const RadioFormContainer = styled(SearchFormContainer)`
   left:0;
   background-color: #c7c7c7c7;
   }
+
   &:before {
     content: '';
   display: block;
@@ -407,11 +476,15 @@ const RadioFormContainer = styled(SearchFormContainer)`
   left:0;
   background-color: #c7c7c7c7;
   }
+`
+
+const RadioFormContainer = styled(Container)`
+  position: relative;
+  margin: 1.25rem auto;
 `;
 
 const SearchFormLeft = styled(Box)`
   flex:1;
-  
 `
 
 const SearchFormRight = styled(Box)`
@@ -426,7 +499,7 @@ const SearchForm = styled.form`
 
 
 
-const CourseInfoTypography = styled(Typography)`
+const Title = styled(Typography)`
   margin-bottom: 30px;
   font-weight: 700;
 `;
@@ -442,8 +515,8 @@ const SubjectBox = styled(Box)`
 // 학습현황 테이블의 title부분
 const CourseInfoTitleTableCell = styled(TableCell)`
   font-weight: bold;
-  background: #f5f5f5;
-  border-right: 1px solid #f0f0f0;
+  background: #fcf9f9;
+  
   border-top: 1px solid #f0f0f0;
 
   &:last-child {
@@ -454,8 +527,8 @@ const CourseInfoTitleTableCell = styled(TableCell)`
 // 학습현황 테이블의 본문
 const CourseInfoTableCell = styled(TableCell)`
   margin: 0;
-  border-right: 1px solid #f0f0f0;
-  padding: 4px 4px;
+  
+  padding: 16px;
   height: 10px;
 
   &:first-of-type {
@@ -469,4 +542,9 @@ const NameBox = styled(Box)`
   overflow: hidden;
   white-space: nowrap;
   width: 100%;
+`;
+
+const SelectContainer = styled(Select)<{sx:CSSProperties}>`
+  width: ${({sx}) => sx.width || '100%'};
+  margin-bottom: ${({sx}) => sx.marginBottom || '1rem'};
 `;

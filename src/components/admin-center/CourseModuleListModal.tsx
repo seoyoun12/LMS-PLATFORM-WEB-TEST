@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { Box, Button, FormControl, InputAdornment, Modal, TextField, Typography } from '@mui/material'
 import { modalStyle } from './CourseContentListModal';
 import { Close } from '@mui/icons-material';
-import useDominModule, { Module, ModuleType, PostModuleRequest } from '@hooks/useDominModule';
+import  { Module, ModuleType } from '@hooks/useDominModule';
 import { Keyboard } from '@material-ui/icons';
 import SelectBox from '@layouts/AdminCenter/CourseTrafficManagement/common/SelectBox';
 import useSelect from '@hooks/useSelect';
@@ -10,6 +10,7 @@ import { useNewInput } from '@hooks/useNewInput';
 import RadioBox from '@layouts/AdminCenter/CourseTrafficManagement/common/RadioBox';
 import { Dispatch, SetStateAction } from 'react';
 import CourseModuleChoiceInputs from './CourseModuleChoiceInputs';
+import useDominCourseModuleSurvey from '@hooks/useDominCourseModuleSurvey';
 
 interface Props {
   toggle: boolean;
@@ -26,31 +27,32 @@ interface Props {
 export default function CourseModuleListModal({ courseSeq, toggle,onToggle }:Props) {
   const { value: moduleType, onChange: onChangeModuleType } = useSelect<ModuleType>({defaultValue:ModuleType.COURSE_MODULE_PROGRESS_RATE});
   const { value: submitYn, onChange: onChangeSubmitYn } = useSelect<"Y" | "N">({defaultValue:'Y'})
-  const { value: moduleName,  onChange:onChangeModuleName } = useNewInput({initialValue:'', type:'string'})
+  const { value: moduleName,  setValue: setModuleName,onChange:onChangeModuleName } = useNewInput<string>({initialValue:'', type:'string'})
+  const { value: search, onChange: onChangeSearch } = useNewInput({initialValue:'', type:'string'})
   const { value: status, onChange: onChangeStatus, } = useNewInput<string>({initialValue:'정상', type:'string'})
   const { value: limitProgress, onChange: onChangeLimitProgress } = useNewInput( {initialValue:0, type:'number'} )
   const { value: limitScore, onChange: onChangeLimitScore } = useNewInput( {initialValue:0, type:'number'} )
   const { value: surveySeq, onChange: onChangeSurveySeq } = useNewInput( {initialValue:0, type:'number'} )
-  const { postModule } = useDominModule();
+  const { postConnectSurveyToCourse } = useDominCourseModuleSurvey({page:0, rowsPerPage:10})
 
-  const onClickCreateModule = async () => {
-    const body: PostModuleRequest = {
-      examSeq: 0, 
-      limitProgress,
-      limitScore,
-      moduleName: moduleName,
-      moduleType: moduleType,
-      status: status === '정상' ? 1 : 0,
-      submitYn,
-      surveySeq
-    }
+
+  const onClickConnectSurveyToCourse = async () => {
+    if(!courseSeq) return; 
     try {
-      await postModule(courseSeq,body);
+      await postConnectSurveyToCourse(courseSeq,{
+        examSeq: 0, 
+        limitProgress,
+        limitScore,
+        moduleName: moduleName,
+        moduleType: moduleType,
+        status: status === '정상' ? 1 : 0,
+        submitYn,
+        surveySeq
+      })
     } catch (error) {
-      
+      console.log(error)
     }
   }
-
 
   return (
     <Modal
@@ -77,8 +79,8 @@ export default function CourseModuleListModal({ courseSeq, toggle,onToggle }:Pro
             <TextField
               placeholder='모듈명'
               InputProps={{ endAdornment: <InputAdornment position="end"><Keyboard /></InputAdornment>}}
-              value={moduleName}
-              onChange={onChangeModuleName}
+              value={search}
+              onChange={onChangeSearch}
               />
           </FormControl>
           {/* moduleType에 따라 달라지는 인풋모음 */}
@@ -92,6 +94,9 @@ export default function CourseModuleListModal({ courseSeq, toggle,onToggle }:Pro
             onChangeSubmitYn={onChangeSubmitYn}
             surveySeq={surveySeq}
             onChangeSurveySeq={onChangeSurveySeq}
+            moduleName={moduleName}
+            onChangeModuleName={onChangeModuleName}
+            
             />
           <RadioBox
             id='status'
@@ -102,7 +107,7 @@ export default function CourseModuleListModal({ courseSeq, toggle,onToggle }:Pro
             name='status'
             defaultValue='정상'
           />
-          <Button onClick={onClickCreateModule} variant='contained' sx={{width:'100%',boxShadow:'3px 3px 3px #b7b7b7'}}>생성</Button>
+          <Button onClick={onClickConnectSurveyToCourse} variant='contained' sx={{width:'100%',boxShadow:'3px 3px 3px #b7b7b7'}}>생성</Button>
       </CreateModuleWrapper>      
     </Box>
   </Modal>

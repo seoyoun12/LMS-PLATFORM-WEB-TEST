@@ -90,7 +90,7 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
     const files = (e.target as HTMLInputElement).files;
     if (!files?.length) return null;
     if (!isEducationRoute) {
-      //단일파일 업로드. 기존에 서버에 저장된 파일을 제거합니다.
+
       const prevServerFile = watch().s3Files?.map((r) => ({
         seq: r.seq,
         randomSeq: 32,
@@ -184,7 +184,6 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
       serverFilesRemoved,
     });
   };
-
   
   const onChangeYoutubeLink = (e:ChangeEvent<HTMLInputElement>) => {
     const {target: {value}} = e;
@@ -371,7 +370,6 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
           </FormControl>
         </InputContainer>
         
-
         {openOrigin ? (
           <FormControl className={textField}>
             <TextField

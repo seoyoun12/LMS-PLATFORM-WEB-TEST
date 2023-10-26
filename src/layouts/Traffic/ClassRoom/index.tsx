@@ -114,6 +114,7 @@ export default function ClassRoomLayout() {
               .filter(f => chipAllowed?.eduTargetMain.includes(f.eduMainType))
               .map(r => (
                 <MediaChipItem
+                
                 label={r.eduMainTypeKo}
                 color="primary"
                 variant={eduMain === r.eduMainType ? 'filled' : 'outlined'}

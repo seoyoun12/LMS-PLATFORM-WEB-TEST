@@ -14,13 +14,6 @@ export enum businessSubType {
   GENERAL_CARGO = 'GENERAL_CARGO', //일반화물 - 화물
   CONSIGNMENT = 'CONSIGNMENT', //용달화물 - 화물
   INDIVIDUAL_CARGO = 'INDIVIDUAL_CARGO', //개별화물 - 화물
-  // SPECIAL_TRANSPORTATION = 'SPECIAL_TRANSPORTATION', //특별교통수단
-  // KNEELING_BUS = 'KNEELING_BUS', //저상버스
-  // DANGEROUS_GOODS = 'DANGEROUS_GOODS', //위험물
-  // DESIGNATED_WASTE = 'DESIGNATED_WASTE', //지정폐기물
-  // HAZARDOUS_CHEMICALS = 'HAZARDOUS_CHEMICALS', //유해화학물질
-  // HIGH_PRESSURE_GAS_FLAMMABLE = 'HIGH_PRESSURE_GAS_FLAMMABLE', //고압가스(가연성)
-  // HIGH_PRESSURE_GAS_TOXIC = 'HIGH_PRESSURE_GAS_TOXIC', //고압가스(독성)
 }
 export const businessTypeReg = [ 
   { type: businessType.PASSENGER, ko: '여객' },
@@ -36,13 +29,6 @@ export const businessSubTypeReg = [ // 업종
   { type: businessSubType.GENERAL_CARGO, ko: '일반화물' },
   { type: businessSubType.CONSIGNMENT, ko: '용달화물' },
   { type: businessSubType.INDIVIDUAL_CARGO, ko: '개별화물' },
-  // { type: businessSubType.SPECIAL_TRANSPORTATION, ko: '특별교통수단' },
-  // { type: businessSubType.KNEELING_BUS, ko: ' 저상버스' },
-  // { type: businessSubType.DANGEROUS_GOODS, ko: '위험물' },
-  // { type: businessSubType.DESIGNATED_WASTE, ko: '지정폐기물' },
-  // { type: businessSubType.HAZARDOUS_CHEMICALS, ko: '유해화학물질' },
-  // { type: businessSubType.HIGH_PRESSURE_GAS_FLAMMABLE, ko: '고압가스(가연성)' },
-  // { type: businessSubType.HIGH_PRESSURE_GAS_TOXIC, ko: '고압가스(독성)' },
 ];
 
 export const businessSubTypePassengerReg = [
@@ -77,21 +63,6 @@ export const locationList = [ // 차량등록지
   { ko: '예산', en: 'YESAN' },
   { ko: '태안', en: 'TAEAN' },
   { ko: '세종', en: 'SEJONG' },
-  // { ko: '서울', en: 'SEOUL' },
-  // { ko: '부산', en: 'BUSAN' },
-  // { ko: '대구', en: 'DAEGU' },
-  // { ko: '인천', en: 'INCHEON' },
-  // { ko: '광주', en: 'GWANGJU' },
-  // { ko: '대전', en: 'DAEJEON' },
-  // { ko: '울산', en: 'ULSAN' },
-  // { ko: '경기', en: 'GYEONGGI' },
-  // { ko: '강원', en: 'GANGWON' },
-  // { ko: '충북', en: 'CHUNGBUK' },
-  // { ko: '전북', en: 'JEONBUK' },
-  // { ko: '전남', en: 'JEONNAM' },
-  // { ko: '경북', en: 'GYEONGBUK' },
-  // { ko: '경남', en: 'GYEONGNAM' },
-  // { ko: '제주', en: 'JEJU' },
 ];
 export const residenceList = [ // 거주지
   // { ko: '충남', en: 'CHUNGNAM' },
@@ -242,10 +213,7 @@ export const UserListConfig = [
 ];
 
 export const UserRadioConfig = [
-  {
-    name: '전체',
-    value: '',
-  },
+  { name: '전체',value: '' },
   { name: '저상/운수 일반회원', value: RoleType.ROLE_TRANS_USER },
   { name: '저상/운수 관리자', value: RoleType.ROLE_TRANS_MANAGER },
   { name: '도민 일반회원', value: RoleType.ROLE_TRAFFIC_SAFETY_USER },
@@ -254,19 +222,13 @@ export const UserRadioConfig = [
 ];
 
 export const UserRadioExcelConfig = [
-  {
-    name: '전체',
-    value: '',
-  },
+  { name: '전체', value: '' },
   { name: '저상/운수_일반회원', value: RoleType.ROLE_TRANS_USER },
   { name: '저상/운수_관리자', value: RoleType.ROLE_TRANS_MANAGER },
   { name: '도민_일반회원', value: RoleType.ROLE_TRAFFIC_SAFETY_USER },
   { name: '도민_관리자', value: RoleType.ROLE_TRAFFIC_SAFETY_MANAGER },
   { name: '통합_관리자', value: RoleType.ROLE_ADMIN }, // 차후 도민
 ];
-
-
-// 제호님 도움! 
 
 export const CourseTrafficTargetType = [
   { 

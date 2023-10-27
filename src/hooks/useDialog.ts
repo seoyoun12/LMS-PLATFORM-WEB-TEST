@@ -15,4 +15,4 @@ export const DialogContext = createContext<
 export const useDialog = () => useContext(DialogContext);
 
 
-// holy genkins...
+// genkins is shit

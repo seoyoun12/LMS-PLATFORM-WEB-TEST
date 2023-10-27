@@ -34,22 +34,31 @@ export function removeCourse({ courseSeq }: { courseSeq: number }) {
   return DELETE(`/course/adm/${courseSeq}`);
 }
 
+// COURSE_TYPE_TRANS_WORKER
+// COURSE_TYPE_ROW_FLOOR_BUS
+// COURSE_TYPE_PROVINCIAL
+// TYPE_TRANS_WORKER,
+// TYPE_LOW_FLOOR_BUS,
+// TYPE_PROVINCIAL
+
 export function useCourseList({
   page,
   courseTitle,
   elementCnt,
   chapter,
+  courseType = 'TYPE_TRANS_WORKER'
 }: {
   page: number;
   courseTitle?: string | null;
   elementCnt?: number;
   chapter?: string;
+  courseType?: string;
 }) {
   const { data, error } = useSWR<FetchPaginationResponse<CourseDetailClientResponseDto[]>>(
     [
       `/course/adm`,
       {
-        params: { page, courseTitle, elementCnt, chapter },
+        params: { page, courseTitle, elementCnt, chapter,courseType },
       },
     ],
     GET

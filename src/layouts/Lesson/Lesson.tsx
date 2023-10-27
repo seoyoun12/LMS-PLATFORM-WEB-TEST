@@ -40,15 +40,21 @@ export default function Lesson(props: LessonProps) {
   const [currentLessonPlayTime,setCurrentLessonPlayTime] = useState(0);
   const { getCheckAvailableLesson } = useLesson();
   const [isAvailableLesson,setIsAvailableLesson] = useState(true);
-
+  // https://edu.ctti.or.kr/course/40689/survey/8
   const getAvaliableLessonCheckResult = async ({courseUserSeq, contentSeq}) => {
     const data = await getCheckAvailableLesson({courseUserSeq, contentSeq});
     // console.log('===get Available Data is ... ===',data);
     setIsAvailableLesson(data);
   }
+  console.log(router.query);
 
+
+  
   useEffect(() => {
+    const contentType = router.query.contentType;
+    
     if(!course) return;
+      if(contentType === 'survey') return;
     getAvaliableLessonCheckResult({courseUserSeq: course.courseUserSeq, contentSeq: props.contentSeq})
     
   },[course,props.contentSeq,isAvailableLesson])

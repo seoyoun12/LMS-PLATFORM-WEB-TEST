@@ -6,7 +6,7 @@ import React from 'react'
 
 function LessonRejectPage() {
   const router = useRouter();
-  const onBackMyCoursePage = () => {
+  const onClickBackMyCoursePage = () => {
     // me/my-course?tab=ing
     router.push('/me/my-course?tab=ing');
   }
@@ -23,7 +23,7 @@ function LessonRejectPage() {
         이전 강의를 모두 시청한 뒤 접속해주세요.
         </RejectInfomationMessage>
         
-      <RejectButton onClick={onBackMyCoursePage}>나의 수강페이지로 이동</RejectButton>
+      <RejectButton onClick={onClickBackMyCoursePage}>나의 수강페이지로 이동</RejectButton>
     </Container>
   )
 }

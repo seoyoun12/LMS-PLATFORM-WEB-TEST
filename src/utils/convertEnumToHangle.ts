@@ -46,6 +46,9 @@ export const ConvertEnum = (str: string) => {
     if(str === 'GYEONGBUK') return  '경북';
     if(str === 'GYEONGNAM') return  '경남';
     if(str === 'JEJU') return  '제주';
+    if(str === 'COURSE_MODULE_PROGRESS_RATE') return '진도율'
+    if(str === 'COURSE_MODULE_TEST') return '시험'
+    if(str === 'COURSE_MODULE_SURVEY') return '설문'
     return str;
 }
 

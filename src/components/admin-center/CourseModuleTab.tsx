@@ -7,20 +7,32 @@ import { useEffect, useState } from "react";
 import CourseModuleListModal from "./CourseModuleListModal";
 import useToggle from "@hooks/useToggle";
 import { useRouter } from "next/router";
+import { ConvertEnum } from "@utils/convertEnumToHangle";
+import useDominCourseModule from "@hooks/useDominCourseModule";
 
 export default function CourseModuleTab() {
 
   const { data:modules,module:linkedModule, getModuleLinkedCourse } = useDominModule();
+  const { deleteModuleConnection } = useDominCourseModule();
   const { toggle, onToggle } = useToggle();
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const navigation = useRouter()
 
+
+  const onClickDisconnectModule = async (courseModuleSequence: number) => {
+    try {
+      await deleteModuleConnection(courseModuleSequence);
+      await getModuleLinkedCourse(+navigation.query.boardSeq)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     const boardSeq = navigation.query.boardSeq;
     if(!boardSeq) return;
     getModuleLinkedCourse(+boardSeq)
-    
     //eslint-disable-next-line
   },[navigation])
 
@@ -42,16 +54,18 @@ export default function CourseModuleTab() {
         <Row>
           <InRow flex={0.1}>ID</InRow>
           <InRow flex={0.4}>모듈명</InRow>
-          <InRow flex={0.4}>모듈타입</InRow>
+          <InRow flex={0.3}>모듈타입</InRow>
           <InRow flex={0.1}>상태</InRow>
+          <InRow flex={0.1}>모듈해제</InRow>
         </Row>
     {
       linkedModule?.map((module) => (
         <Row key={module.courseModuleSeq} rounded="8px">
           <InRow flex={0.1}>{module.courseModuleSeq}</InRow>
           <InRow flex={0.4}>{module.moduleName}</InRow>
-          <InRow flex={0.4}>{module.moduleType}</InRow>
+          <InRow flex={0.3}>{ConvertEnum(module.moduleType)}</InRow>
           <InRow flex={0.1}>{module.status > 0 ? '정상' : '중지'}</InRow>
+          <InRow flex={0.1}><DisConnectButton onClick={() => onClickDisconnectModule(module.courseModuleSeq)} variant="contained">해제하기</DisConnectButton></InRow>
         </Row>
       ))
     }
@@ -77,6 +91,11 @@ export default function CourseModuleTab() {
    );
 }
 
+const DisConnectButton = styled(Button)`
+  
+  
+`
+
 const ModuleLinkButton = styled(Button)`
   position:absolute;
   top:0;
@@ -92,7 +111,9 @@ const Row = styled(Box)<{rounded?:string;}>`
 `
 const InRow = styled(Box)<{flex:number}>`
   flex: ${props => props.flex || 1};
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 14px;
 `
 

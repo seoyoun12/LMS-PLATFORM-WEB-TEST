@@ -335,6 +335,11 @@ export function Drawer({ children }: { children: ReactNode }) {
           href: '/admin-center/statistics/survey',
           isActive: router.pathname === '',
         },
+        {
+          name: '전체통계',
+          href: '/admin-center/statistics/overall',
+          isActive: router.pathname === '',
+        },
       ],
       icon: <AnalyticsOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import useDominCourseModuleSurvey from '@hooks/useDominCourseModuleSurvey';
+import useDominCourseModule from '@hooks/useDominCourseModule';
 import RadioBox from '@layouts/AdminCenter/CourseTrafficManagement/common/RadioBox'
 import { Box, FormControl, InputAdornment, TextField } from '@mui/material'
 import { format } from 'date-fns';
@@ -20,7 +20,7 @@ export default function CourseModuleSurveyForm({ moduleName,onChangeModuleName, 
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { data } = useDominCourseModuleSurvey({page, rowsPerPage});
+  const { data } = useDominCourseModule({page, rowsPerPage});
 
   return (
     <FormControl fullWidth sx={{display:'flex',justifyContent:'center', alignItems:'center', flexDirection:'column', gap:'2rem'}}>

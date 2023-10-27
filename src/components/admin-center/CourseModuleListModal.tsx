@@ -10,7 +10,7 @@ import { useNewInput } from '@hooks/useNewInput';
 import RadioBox from '@layouts/AdminCenter/CourseTrafficManagement/common/RadioBox';
 import { Dispatch, SetStateAction } from 'react';
 import CourseModuleChoiceInputs from './CourseModuleChoiceInputs';
-import useDominCourseModuleSurvey from '@hooks/useDominCourseModuleSurvey';
+import useDominCourseModule from '@hooks/useDominCourseModule';
 
 interface Props {
   toggle: boolean;
@@ -33,7 +33,7 @@ export default function CourseModuleListModal({ courseSeq, toggle,onToggle }:Pro
   const { value: limitProgress, onChange: onChangeLimitProgress } = useNewInput( {initialValue:0, type:'number'} )
   const { value: limitScore, onChange: onChangeLimitScore } = useNewInput( {initialValue:0, type:'number'} )
   const { value: surveySeq, onChange: onChangeSurveySeq } = useNewInput( {initialValue:0, type:'number'} )
-  const { postConnectSurveyToCourse } = useDominCourseModuleSurvey({page:0, rowsPerPage:10})
+  const { postConnectSurveyToCourse } = useDominCourseModule({page:0, rowsPerPage:10})
 
 
   const onClickConnectSurveyToCourse = async () => {
@@ -107,7 +107,13 @@ export default function CourseModuleListModal({ courseSeq, toggle,onToggle }:Pro
             name='status'
             defaultValue='정상'
           />
-          <Button onClick={onClickConnectSurveyToCourse} variant='contained' sx={{width:'100%',boxShadow:'3px 3px 3px #b7b7b7'}}>생성</Button>
+          <Button
+            onClick={onClickConnectSurveyToCourse}
+            variant='contained'
+            sx={{width:'100%',boxShadow:'3px 3px 3px #b7b7b7'}}
+            >
+            생성
+          </Button>
       </CreateModuleWrapper>      
     </Box>
   </Modal>

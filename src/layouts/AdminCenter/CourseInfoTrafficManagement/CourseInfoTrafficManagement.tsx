@@ -95,8 +95,23 @@ export default function CourseInfoTrafficManagement() {
     // }
   };
 
-  const onChangePage = (page: number) => {
+  const onChangePage = async (page: number) => {
     setPage(page);
+    setParams({
+      year,
+      residence,
+      provincialEduTargetMain,
+      provincialEduTargetSub,
+      expectedToStartDtime,
+      expectedToEndDtime,
+      organization,
+      nameOrUsername,
+      completeType,
+      page,
+      courseSeq,
+      elementCnt: 10
+    })
+    await mutate();
   }
   
   const onSubmitSearch = async (e: FormEvent<HTMLFormElement>) => {
@@ -292,7 +307,6 @@ export default function CourseInfoTrafficManagement() {
             onChange={onChangeNameOrUsername}
             />
 
-
         <ButtonGroup>
           <Button type="submit" variant='contained' color='primary' sx={{flex:1}}>검색하기</Button>
           <Button onClick={onClickResetQuery} variant='outlined' color='primary' sx={{flex:1,gap:'1rem'}}>
@@ -372,10 +386,6 @@ export default function CourseInfoTrafficManagement() {
                     {applicant.username}
                   </NameBox>
                 </CourseInfoTableCell>
-
-                {/* <CourseInfoTableCell align='center'>
-                  <SubjectBox>{convertBirth(applicant.userInfo.birth)}</SubjectBox>
-                </CourseInfoTableCell> */}
                 <CourseInfoTableCell align='center'>
                   <SubjectBox>
                     {ConvertEnum(applicant.provincialEduTargetMain)}
@@ -497,8 +507,6 @@ const SearchForm = styled.form`
   margin-bottom: 20px;
 `;
 
-
-
 const Title = styled(Typography)`
   margin-bottom: 30px;
   font-weight: 700;
@@ -516,7 +524,6 @@ const SubjectBox = styled(Box)`
 const CourseInfoTitleTableCell = styled(TableCell)`
   font-weight: bold;
   background: #fcf9f9;
-  
   border-top: 1px solid #f0f0f0;
 
   &:last-child {

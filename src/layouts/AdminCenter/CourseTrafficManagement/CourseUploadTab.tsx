@@ -17,30 +17,37 @@ import { BbsType, uploadFile } from "@common/api/adm/file";
 
 export default function CourseUploadTab() {  
 
-  const { value: educationType,setValue:setEducationType, onChange: onChangeEducationType } = useSelect<MainType>({defaultValue: MainType.TYPE_CHILDREN});
+  const { value: educationType, setValue:setEducationType, onChange: onChangeEducationType } = useSelect<MainType>({defaultValue: MainType.TYPE_CHILDREN});
   const { value: educationDetailType,setValue:setEducationDetailType, onChange: onChangeEducationDetailType } = useSelect<SubType>({defaultValue: SubType.TYPE_KINDERGARTEN});
-  
   const { value: status,setValue:setStatus, onChange: onChangeStatus } = useSelect({defaultValue: '정상' });
   const { value: show,setValue:setShow, onChange: onChangeShow } = useSelect({defaultValue:'보이기'});
-  const { value: selectedFile, onChange: onChangeFile, onReset, preview,setPreview } = useNewInput<File>({initialValue: null,type:'file'});
+  
+  const { value: selectedFile, onChange: onChangeFile, onReset: onReset,setValue: setSelectedFile, preview, setPreview } = useNewInput<File>({initialValue: null,type:'file'});
   const { value: courseName, setValue: setCourseName, onChange: onChangeCourseName } = useNewInput({initialValue: '',type:'string'});
   const { value: lectureTime, setValue: setLectureTime, onChange: onChangeLectureTime } = useNewInput({initialValue: 0,type:'number'});
-  const { course, postDominCourse, getDominCourse,putDominCourse,deleteDominCourse } = useDominCourse();
+
+  const { course, postDominCourse, getDominCourse,putDominCourse,deleteDominCourse,isLoading } = useDominCourse();
+
   const [boardSeq, setBoardSeq] = useState<number | null>(null);
+
   const navigation = useRouter();
-  
   const snackbar = useSnackbar();
-  
+
   const onUpdateThumbnail = async (seq: number) => {
-      
+    try {
       await uploadFile({
         fileTypeId: seq,
         fileType: BbsType.TYPE_COURSE,
         files: [selectedFile],
       });
+    } catch (error) {
+      console.log(error);
     }
+  }
 
   const onClickUpload = async () => {
+    if(!selectedFile) return snackbar({ message: '썸네일을 업로드 해주세요.', variant:'error' })
+      
     const body:CreateCourseRequestBody = {
       courseType: CourseType.TYPE_PROVINCIAL,
       courseName: courseName as string,
@@ -52,22 +59,24 @@ export default function CourseUploadTab() {
       year: new Date().getFullYear(),
     }
     try {
-      if(boardSeq) {
-        await putDominCourse(body,boardSeq);
-        selectedFile && await onUpdateThumbnail(boardSeq);
+      if(boardSeq) {   
+        await putDominCourse(body,boardSeq)
+        await onUpdateThumbnail(boardSeq)
+        navigation.push('/admin-center/course-traffic');
       } else {
-        const course = await postDominCourse(body);
-        console.log('course',course);
+        const course = await postDominCourse(body)
         await onUpdateThumbnail(course.seq);
+        navigation.push('/admin-center/course-traffic');
       }
-      navigation.push('/admin-center/course-traffic');
     } catch (error) {
+      console.log(error);
       snackbar({
-        message: '과정 등록에 실패했습니다.',
+        message: error?.data?.message ?? '썸네일이 등록되지 않았거나, 알 수 없는 이유로 과정 등록에 실패하였습니다.',
         variant:'error'
       })
     }
   }
+
   const onClickDelete = async (seq:number) => {
     try {
       if(window.confirm('해당 과정을 삭제하시겠습니까?')){
@@ -106,10 +115,12 @@ export default function CourseUploadTab() {
     setEducationDetailType(course.provincialEduTargetSub);
     setStatus(course.status === 1 ? '정상' : '중지');
     setShow(course.displayYn === 'Y' ? '보이기' : '숨김');
-    setPreview(course.s3Files[0]?.path)
+    // 썸네일을 받는 현재 구조가 리스트로 받고 있기 때문에 가장 마지막 배열 인덱스를 가져온다.
+    setPreview(course.s3Files[course.s3Files.length - 1]?.path);
+    setSelectedFile(course.s3Files[course.s3Files.length - 1]);
+
     // eslint-disable-next-line
   },[course])
-
 
   return (
     <Wrapper>
@@ -175,8 +186,10 @@ export default function CourseUploadTab() {
       
       <ButtonGroup
         onClick={onClickUpload}
-        onClickDelete={boardSeq ? () => onClickDelete(boardSeq) : null} />
-
+        onClickDelete={boardSeq ? () => onClickDelete(boardSeq) : null}
+        disabled={isLoading}
+        />
+        
     </Wrapper>
   );
 }

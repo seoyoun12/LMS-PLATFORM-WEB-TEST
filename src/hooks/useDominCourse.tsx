@@ -225,7 +225,6 @@ export default function useDominCourse() {
 
   const postDominCourse = async (data:CreateCourseRequestBody) => {
     setIsLoading(true);
-
     try {
       const res = await POST<CreateCourseResponse>('/course/adm/provincial',data);
       return res.data;
@@ -234,6 +233,7 @@ export default function useDominCourse() {
         message: '과정 생성에 실패하였습니다.',
         variant: 'error',
       })
+      throw new Error(error.data.message ?? '과정 생성에 실패하였습니다.');
     }finally{
       setIsLoading(false);
     }
@@ -250,12 +250,14 @@ export default function useDominCourse() {
         message: '과정 수정에 실패하였습니다.',
         variant: 'error',
       })
+      throw new Error(error.data.message ?? '과정 수정에 실패하였습니다.');
     }finally{
       setIsLoading(false);
     }
   }
 
   const dislinkCourseWithContent = async (courseSeq:number) => {
+    setIsLoading(true);
     try {
       await DELETE(`/course/adm/link/content/${courseSeq}`);  
       await contentsMudate();
@@ -269,10 +271,15 @@ export default function useDominCourse() {
         message: error.data.message,
         variant: 'error',
       })
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
+
   }
 
   const linkCourseWithContent = async ({courseSeq,contentSeq}: LinkCourseWithContent) => {
+    setIsLoading(true);
     try {
       const res:ContentResponse = await POST(`/course/adm/link/content`,{
         courseSeq,
@@ -283,6 +290,7 @@ export default function useDominCourse() {
         message: '과정을 연결하였습니다.',
         variant: 'success',
       })
+
       return res;  
     } catch (error) {
       console.error(error);
@@ -290,6 +298,9 @@ export default function useDominCourse() {
         message: error.data.message,
         variant: 'error',
       })
+
+    }finally{
+      setIsLoading(false);
     }
   }
 

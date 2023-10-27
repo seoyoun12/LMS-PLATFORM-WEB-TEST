@@ -1,4 +1,4 @@
-import { GET, POST } from '@common/httpClient'
+import { DELETE, GET, POST } from '@common/httpClient'
 import useSWR from 'swr';
 import { useSnackbar } from './useSnackbar';
 
@@ -80,7 +80,7 @@ interface ConnectSurveyToCourseRequest {
   surveySeq?: number
 }
 
-export default function useDominCourseModuleSurvey({ page, rowsPerPage }: Props = {page:0, rowsPerPage:10}) {
+export default function useDominCourseModule({ page, rowsPerPage }: Props = {page:0, rowsPerPage:10}) {
     
   const { data, error, mutate } = useSWR<SurveyResponse>(`/survey/adm?page=${page}&elementCnt=${rowsPerPage}`,GET)
   const snackBar = useSnackbar();
@@ -94,12 +94,28 @@ export default function useDominCourseModuleSurvey({ page, rowsPerPage }: Props 
       })
     } catch (error) {
       snackBar({
-        message: '연결에 실패하였습니다.',
+        message: `${error.data.message}`,
         variant: 'error'
       })
     }
-    
+  }
+  // CourseModuleSequence ->
+
+  const deleteModuleConnection = async (courseModuleSequence) => {
+    try {
+      await DELETE(`/course-module/adm/${courseModuleSequence}`);
+      snackBar({
+        message: '해당 과정과 연결이 해제되었습니다.',
+        variant: 'success'
+      })
+      
+    } catch (error) {
+      snackBar({
+        message: `${error.data.message}`,
+        variant: 'error'
+      })
+    }
   }
 
-  return {data, error, mutate, postConnectSurveyToCourse}
+  return {data, error, mutate, postConnectSurveyToCourse, deleteModuleConnection}
 }

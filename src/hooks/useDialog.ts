@@ -13,6 +13,3 @@ export const DialogContext = createContext<
 >(Promise.resolve);
 
 export const useDialog = () => useContext(DialogContext);
-
-
-// genkins is shit

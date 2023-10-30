@@ -90,7 +90,8 @@ export function NavBarV2() {
                         className="link-items"
                         href={menuItem.href}
                         key={menuItem.title}
-                      >
+                        target={menuItem.href === 'https://zep.us/@ctti' ? `_blank noreferrer` : `_self`}
+                        >
                         <MenuItem className="link-item">{menuItem.title}</MenuItem>
                       </Link>
                     );

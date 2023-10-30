@@ -62,11 +62,12 @@ export function Steb2() {
       snackbar({ variant: 'error', message: '교육 대상자를 선택해주세요.' });
       return;
     }
+    if(!watch().courseSeq){
+      return snackbar({ variant: 'error', message: '과정을 선택해주세요.' });
+    }
 
     try {
-      
       const obj = {...detailCounts[watch().eduTargetSub],...watch()} as CreateApplicationCourseResponseBody & {courseSeq: string};
-      
       console.log(obj);
       setLoading(true);
       await postApplicationCourseForUser(obj);
@@ -77,6 +78,8 @@ export function Steb2() {
       setLoading(false);
     }
   };
+
+
   useEffect(() => {
     setValue('eduTargetMain', router.query.eduTargetMain as EduTargetMainType);
     // eslint-disable-next-line
@@ -85,6 +88,8 @@ export function Steb2() {
   useEffect(() => {
     if(!watch().eduTargetSub) return;
     getCourseForUser(watch().eduTargetSub as SubType);
+
+    //eslint-disable-next-line
   },[watch().eduTargetSub])
 
   

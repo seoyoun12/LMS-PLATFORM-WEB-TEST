@@ -77,7 +77,7 @@ const DrawerItem = styled(Box)<{iswide?:string}>`
   cursor: pointer;
   &:hover {
     background-color: #fff;
-    color: #161D2B;
+    color: #161D2B; // 남색
     transition: all .3s ease;
     text-decoration: underline;
     text-underline-offset: 4px;

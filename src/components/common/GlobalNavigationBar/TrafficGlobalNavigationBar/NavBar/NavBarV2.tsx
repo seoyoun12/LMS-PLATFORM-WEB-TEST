@@ -258,8 +258,7 @@ export const ProvintialHeaderList = [
   },
   {
     category: '메타버스',
-    // TODO: 메타버스 href 교체 필요
-    href: '/traffic/service?tab=Notice',
-    items: [{ title: '디지털 교통안전 교육', href: '/traffic/service?tab=Look' }],
+    href: 'https://zep.us/@ctti',
+    items: [{ title: '디지털 교통안전 교육', href: 'https://zep.us/@ctti' }],
   },
 ];

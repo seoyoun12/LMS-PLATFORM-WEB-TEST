@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  styled,
-  Table,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Box,Button,Container,styled,Table,TableCell,TableContainer,TableRow,Typography } from '@mui/material';
 import { StebHeader } from '../StebHeader';
 import { useRecoilState } from 'recoil';
 import { courseClassTrafficInfo, userInfo } from '@common/recoil';
@@ -17,7 +7,6 @@ import { locationList } from '@layouts/MeEdit/MeEdit';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import { useRouter } from 'next/router';
 import { studentList } from '../Steb2/Steb2';
-import { Step3StudentList } from './Step3StudentList';
 
 export function Steb3() {
   const router = useRouter();
@@ -143,11 +132,9 @@ export function Steb3() {
             {/* TODO: 도민 접속시 traffic/me로 가게끔 수정 */}
             <Button
               variant="contained"
-              onClick={() => router.push(`/me`)}
+              onClick={() => router.push(`/traffic/me`)}
               fullWidth
-              sx={{
-                boxShadow:'1px 2px 3px 0px rgba(0,0,0,0.55)'
-              }}
+              sx={{ boxShadow:'1px 2px 3px 0px rgba(0,0,0,0.55)' }}
             >
               마이페이지로 이동
             </Button>

@@ -52,7 +52,5 @@ export default function useDominMe() {
   const { data:myCourseList, error:myCourseListError, isValidating:isMyCourseListValidating } = useSWR<SWRResponse<MyCourse[]>>('/provincial/enroll',GET)
   const { data:myLearningStatus, error: myLearningStatusError, isValidating:isMyLearningStatusValidating } = useSWR<SWRResponse<MyLearningStatus[]>>('/user/myinfo/provincial/learning-status',GET)
   
-  return {  myCourseList,myCourseListError, isMyCourseListValidating,
-            myLearningStatus, myLearningStatusError, isMyLearningStatusValidating
-         }
+  return {  myCourseList, myCourseListError, isMyCourseListValidating,myLearningStatus, myLearningStatusError, isMyLearningStatusValidating }
 }

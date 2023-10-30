@@ -26,7 +26,11 @@ export default function StatusList({ list, tabIndex, positive}:Props) {
             <ShowDetailLink
               href={`/course/${item.courseUserSeq}/lesson/${item.recentLessonSeq}`}
               as={`/course/${item.courseUserSeq}/lesson/${item.recentLessonSeq}`}
-              >강의 시청</ShowDetailLink>
+              >
+                <a target="_blank" rel="noopener noreferrer">
+                  강의 시청
+                </a>
+              </ShowDetailLink>
           </Item>
             )}
         })
@@ -37,10 +41,16 @@ export default function StatusList({ list, tabIndex, positive}:Props) {
 }
 
 const Title = styled(Typography)`
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 500;
   margin-top: .25rem;
   margin-bottom: 1rem;
+  
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #161D2B;
 `
 
 const ShowDetailLink = styled(Link)`
@@ -54,6 +64,7 @@ const ShowDetailLink = styled(Link)`
 const Item = styled(Box)`
   
   width: 250px;
+  
   display: flex;
   flex-direction: column;
   align-items: flex-start;

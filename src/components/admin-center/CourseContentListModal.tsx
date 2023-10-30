@@ -61,7 +61,7 @@ export default function CourseContentListModal({toggle,onToggle,getDominCourse,s
       
       <Title id="modal-modal-title" variant="h6" sx={{width:'100%'}}>
         콘텐츠 연결
-        <Button onClick={onToggle} endIcon={<Close />} sx={{color:'#222'}} />
+        <Button onClick={async () => {onToggle(); await getDominCourse(seq)}} endIcon={<Close />} sx={{color:'#222'}} />
       </Title>
       
       

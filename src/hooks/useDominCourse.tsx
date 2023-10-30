@@ -362,9 +362,7 @@ export default function useDominCourse() {
     }
     //eslint-disable-next-line
   },[])
-
-
-
+  
   return {
     linkCourseWithContent, 
     dislinkCourseWithContent, 

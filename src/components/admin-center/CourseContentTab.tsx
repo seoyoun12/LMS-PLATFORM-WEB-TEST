@@ -15,13 +15,20 @@ export default function CourseContentTab() {
   const { getDominCourse, course,isLoading } = useDominCourse();
   const navigation = useRouter();
 
+  const onClickMoveToModifyContentPage = async (seq: number) => {
+    navigation.push(`/admin-center/content/modify/${seq}`);
+  };
   
   useEffect(() => {
     if(!navigation.query.boardSeq) return;
     getDominCourse(+navigation.query.boardSeq);
+
+    //eslint-disable-next-line
   },[navigation])
   
   if(isLoading) return <div>콘텐츠를 불러오고 있습니다. 잠시만 기다려주세요.</div>
+  
+
   
   return (
     <>
@@ -32,7 +39,7 @@ export default function CourseContentTab() {
         <CourseContentTableHeaders />
         {
           (course && course.content) && 
-            <Row rounded="8px">
+            <Row rounded="8px" onClick={() => onClickMoveToModifyContentPage(course.content.seq)}>
             <InRow flex={0.1}>{course.content.seq}</InRow>
             <InRow flex={0.4}>{course.content.contentName}</InRow>
             <InRow flex={0.2}>{course.content.contentType}</InRow>
@@ -64,6 +71,7 @@ const Row = styled(Box)<{rounded?:string;}>`
   border-bottom: 1px solid #c7c7c7c7;
   padding: .5rem 0;
   border-radius: ${props => props.rounded || '0px'};
+  cursor: pointer;
 `
 const InRow = styled(Box)<{flex:number}>`
   flex: ${props => props.flex || 1};

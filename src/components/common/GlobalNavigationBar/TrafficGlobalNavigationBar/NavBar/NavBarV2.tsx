@@ -234,17 +234,17 @@ export const ProvintialHeaderList = [
     href: '/traffic/stebMove/steb1',
     items: [
       { title: '신청하기', href: '/traffic/stebMove/steb1' },
-      
       { title: '학습하기', href: '/traffic/class-room' },
     ],
   },
   {
     category: '마이페이지',
-    
-    href: '/me/enroll-history',
+    href: '/traffic/me/my-course',
     items: [
-      { title: '교육 신청내역', href: '/me/enroll-history' },
-    ],
+      { title: '교육 신청내역', href: '/traffic/me/my-course' },
+      { title: '학습현황', href: '/traffic/me/learning-status' },
+      { title: '증명서 발급', href: '/traffic/me/cert' },
+   ],
   },
   {
     category: '고객센터',

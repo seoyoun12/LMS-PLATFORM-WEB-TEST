@@ -200,9 +200,6 @@ export default function CourseInfoTrafficManagement() {
               />
             </InputBox>
 
-
-
-
             {/* 교육대상자 / 교육대상자 세부 */}
             <InputBox>
               <SelectBox
@@ -222,8 +219,6 @@ export default function CourseInfoTrafficManagement() {
                 name='provincialEduTargetSub'
               />
             </InputBox>
-
-
 
 
             {/* 과정명 */}

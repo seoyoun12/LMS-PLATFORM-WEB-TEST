@@ -135,9 +135,6 @@ export default function Lesson(props: LessonProps) {
     setModuleSurveyTodo(surveyTodo);
     // if (course.totalProgress >= 100 && surveyTodo) setDialog("SURVEY");
   }, [course, courseModules, courseModulesCompleted]);
-
-
-
   // falsy값이 아닌 명확한 false값을 비교해야함
   if(isAvailableLesson === false) return <LessonRejectPage />
 
@@ -182,7 +179,9 @@ export default function Lesson(props: LessonProps) {
       );
 
       DialogFirst = (
-        <Dialog
+        course.courseType === 'TYPE_PROVINCIAL'
+        ? null
+        : <Dialog
           open={dialog === 'FIRST'}
           onClose={() => {
             setDialog(null);

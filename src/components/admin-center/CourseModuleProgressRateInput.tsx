@@ -1,17 +1,14 @@
 
-import { Box, InputAdornment, TextField } from '@mui/material'
+import { InputAdornment, TextField } from '@mui/material'
 
 interface Props {
   progressRate: number;
   onChangeProgressRate: (e: React.ChangeEvent<HTMLInputElement>) => void; 
 }
 
-export default function CourseModuleProgressRateForm({progressRate, onChangeProgressRate}: Props) {
-  
-  
+export default function CourseModuleProgressRateInput({progressRate, onChangeProgressRate}: Props) {
   
   return (
-    <Box>
       <TextField
         fullWidth
         variant="outlined"
@@ -21,6 +18,5 @@ export default function CourseModuleProgressRateForm({progressRate, onChangeProg
         onChange={onChangeProgressRate}
         InputProps={{ endAdornment: <InputAdornment position="end">%</InputAdornment>}}
         />
-    </Box>
   )
 }

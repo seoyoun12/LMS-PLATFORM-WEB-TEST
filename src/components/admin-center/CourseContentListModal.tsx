@@ -22,11 +22,15 @@ export const modalStyle = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   minWidth: '1000px',
+  maxWidth: '1200px',
+  width:'100%',
+
   bgcolor: 'background.paper',
   borderRadius: '8px',
   boxShadow: 12,
   p: 4,
-  
+  height: '600px',
+  overflow: 'scroll',
 };
 
 export default function CourseContentListModal({toggle,onToggle,getDominCourse,seq}:Props) {
@@ -55,17 +59,17 @@ export default function CourseContentListModal({toggle,onToggle,getDominCourse,s
     >
     <Box sx={modalStyle}>
       
-      <Title id="modal-modal-title" variant="h6">
+      <Title id="modal-modal-title" variant="h6" sx={{width:'100%'}}>
         콘텐츠 연결
         <Button onClick={onToggle} endIcon={<Close />} sx={{color:'#222'}} />
       </Title>
       
-      <Box>
+      
         <FormControl fullWidth>
           <TextField placeholder='콘텐츠 검색'
           InputProps={{ endAdornment: <InputAdornment position="end"><Search /></InputAdornment>}} />
         </FormControl>
-      </Box>
+      
       
       <Title marginTop="32px" marginBottom="16px">
         콘텐츠 목록

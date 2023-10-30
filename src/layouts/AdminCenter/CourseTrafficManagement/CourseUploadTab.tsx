@@ -95,6 +95,7 @@ export default function CourseUploadTab() {
     } 
   }
   
+  console.log(isLoading);
   // 
   useEffect(() => {
     const boardSequence = navigation.query?.boardSeq;

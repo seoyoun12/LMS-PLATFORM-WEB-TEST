@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import useDominCourseModule from '@hooks/useDominCourseModule';
 import RadioBox from '@layouts/AdminCenter/CourseTrafficManagement/common/RadioBox'
+import CourseTablePagination from '@layouts/AdminCenter/CourseTrafficManagement/feature/CourseTablePagination';
 import { Box, FormControl, InputAdornment, TextField } from '@mui/material'
 import { format } from 'date-fns';
 import React, { useState } from 'react'
@@ -9,10 +10,10 @@ interface Props {
   onChangeSubmitYn: (e: React.ChangeEvent<HTMLInputElement>) => void;
   submitYn: "Y" | "N";
   progressRate: number;
-  onChangeProgressRate: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  surveySeq: number;
-  onChangeSurveySeq: (e: React.ChangeEvent<HTMLInputElement>) => void;
   moduleName: string;
+  surveySeq: number;
+  onChangeProgressRate: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeSurveySeq: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeModuleName: (e: string) => void;
 }
 
@@ -42,22 +43,23 @@ export default function CourseModuleSurveyForm({ moduleName,onChangeModuleName, 
         onChange={onChangeProgressRate}
         InputProps={{ endAdornment: <InputAdornment position="end">%</InputAdornment>}}
       />
+      <SurveyWrapper>
         <SurveyHead>
-          <SurveyHeadItem>아이디</SurveyHeadItem>
-          <SurveyHeadItem>설문지 제목</SurveyHeadItem>
-          <SurveyHeadItem>상태</SurveyHeadItem>
-          <SurveyHeadItem>생성일</SurveyHeadItem>
-          <SurveyHeadItem>선택</SurveyHeadItem>
+          <SurveyHeadItem flex={0.1}>아이디</SurveyHeadItem>
+          <SurveyHeadItem flex={0.5}>설문지 제목</SurveyHeadItem>
+          <SurveyHeadItem flex={0.1}>상태</SurveyHeadItem>
+          <SurveyHeadItem flex={0.2}>생성일</SurveyHeadItem>
+          <SurveyHeadItem flex={0.1}>선택</SurveyHeadItem>
         </SurveyHead>
       {
         data?.data.content.map((survey) => (
-          <Survey key={survey.seq}>
-            <Item>{survey.seq}</Item>
-            <Item>{survey.title}</Item>
-            <Item>{survey.status === 1 ? '활성' : '비활성'}</Item>
+          <SurveyBody key={survey.seq}>
+            <Item flex={0.1}>{survey.seq}</Item>
+            <Item flex={0.5}>{survey.title}</Item>
+            <Item flex={0.1}>{survey.status === 1 ? '활성' : '비활성'}</Item>
             {/* dateformat */}
-            <Item>{format(new Date(survey.createdDtime), 'yy년 M월 dd일')}</Item>
-            <Item>
+            <Item flex={0.2}>{format(new Date(survey.createdDtime), 'yy년 M월 dd일')}</Item>
+            <Item flex={0.1}>
               <CustomRadio
                 type="radio"
                 className="option-input radio"
@@ -70,13 +72,27 @@ export default function CourseModuleSurveyForm({ moduleName,onChangeModuleName, 
                 checked={+surveySeq === survey.seq}
                 />
             </Item>
-          </Survey>
+          </SurveyBody>
         ))
       }
+      <CourseTablePagination
+        page={page}
+        count={data?.data.totalElements ?? 0}
+        rowsPerPage={rowsPerPage}
+        setPage={setPage}
+        setRowsPerPage={setRowsPerPage}
+      />
+      </SurveyWrapper>
     </FormControl>
   )
 }
 
+
+const SurveyWrapper = styled(Box)`
+  width: 100%;
+  height: 400px;
+  overflow-y: scroll;
+`
 
 
 const CustomRadio = styled.input`
@@ -118,28 +134,26 @@ const CustomRadio = styled.input`
   }
 `;
 
-const Survey = styled(Box)`
+const SurveyBody = styled(Box)`
   display:flex;
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  border-bottom: 1px solid #d8d8d8;
-  padding-bottom: .5rem;
-  
+  height: 48px;
+  border-bottom: 1px solid #d8d8d8; 
 `
 
 
 
-const Item = styled(Box)`
-  flex:1;
+const Item = styled(Box)<{flex: number}>`
+  flex: ${props => props.flex};
   display:flex;
   align-items: center;
   justify-content: center; 
   
 `
 
-const SurveyHead = styled(Survey)`
-  
+const SurveyHead = styled(SurveyBody)`
   
 `
 const SurveyHeadItem = styled(Item)`

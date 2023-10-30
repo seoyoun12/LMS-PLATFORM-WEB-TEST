@@ -102,7 +102,6 @@ export function NavBarV2() {
           ))}
         </Box>
       </NavContainer>
-      
     </ContentContainer>
   );
 }

@@ -190,7 +190,10 @@ export default function CourseInfoTrafficManagement() {
               <SelectBox
                 id="residence"
                 label="지역"
-                options={residenceList.map((residence) => residence.en)}
+                options={
+                  residenceList.sort((a,b) => a.ko.localeCompare(b.ko))
+                  .map((residence) => residence.en)
+                }
                 onChange={onChangeResidence}
                 value={residence}
                 name='residence'

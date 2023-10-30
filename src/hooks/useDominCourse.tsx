@@ -183,6 +183,7 @@ export default function useDominCourse() {
   const snackBar = useSnackbar();
 
   const getDominCourseList = async ({courseType,page,courseTitle,elementCnt}: Response) => {
+    
     setIsLoading(true);
     try {
       const res = await GET('/course/adm',{
@@ -201,9 +202,11 @@ export default function useDominCourse() {
         message: '데이터를 불러오는데 실패했습니다.',
         variant: 'error',
       })
-    } finally {
+    }finally{
+      console.log('dominList')
       setIsLoading(false);
     }
+    
   }
 
   const getDominCourse = async (seq:number) => {
@@ -218,7 +221,8 @@ export default function useDominCourse() {
         message: '데이터를 불러오는데 실패했습니다.',
         variant: 'error',
       })
-    }finally{
+      setIsLoading(false);
+    } finally {
       setIsLoading(false);
     }
   }
@@ -230,11 +234,9 @@ export default function useDominCourse() {
       return res.data;
     } catch (error) {
       snackBar({
-        message: '과정 생성에 실패하였습니다.',
+        message: error.data.message ?? '과정 생성에 실패하였습니다.',
         variant: 'error',
       })
-      throw new Error(error.data.message ?? '과정 생성에 실패하였습니다.');
-    }finally{
       setIsLoading(false);
     }
   }
@@ -247,11 +249,11 @@ export default function useDominCourse() {
       return res;  
     } catch (error) {
       snackBar({
-        message: '과정 수정에 실패하였습니다.',
+        message: error.data.message ?? '과정 수정에 실패하였습니다.',
         variant: 'error',
       })
-      throw new Error(error.data.message ?? '과정 수정에 실패하였습니다.');
-    }finally{
+      setIsLoading(false); 
+    } finally {
       setIsLoading(false);
     }
   }
@@ -266,7 +268,6 @@ export default function useDominCourse() {
         variant: 'success',
       })
     } catch (error) {
-      console.error(error);
       snackBar({
         message: error.data.message,
         variant: 'error',
@@ -290,16 +291,14 @@ export default function useDominCourse() {
         message: '과정을 연결하였습니다.',
         variant: 'success',
       })
-
       return res;  
     } catch (error) {
-      console.error(error);
       snackBar({
         message: error.data.message,
         variant: 'error',
       })
-
-    }finally{
+      setIsLoading(false);
+    } finally {
       setIsLoading(false);
     }
   }
@@ -315,7 +314,8 @@ export default function useDominCourse() {
         message: '과정 삭제에 실패하였습니다.',
         variant: 'error',
       })
-    }finally{
+      setIsLoading(false);
+    } finally {
       setIsLoading(false);
     }
   }
@@ -337,7 +337,8 @@ export default function useDominCourse() {
         message: '신청가능 목록을 불러오는데 실패했습니다.',
         variant: 'error',
       })
-    }finally{
+      setIsLoading(false);
+    } finally {
       setIsLoading(false);
     }
   }
@@ -355,7 +356,8 @@ export default function useDominCourse() {
         message: '신청에 실패했습니다.',
         variant: 'error',
       })
-    }finally{
+      setIsLoading(false);
+    } finally {
       setIsLoading(false);
     }
     //eslint-disable-next-line

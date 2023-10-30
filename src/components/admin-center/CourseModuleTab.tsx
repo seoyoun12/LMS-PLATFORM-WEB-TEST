@@ -11,19 +11,19 @@ import { ConvertEnum } from "@utils/convertEnumToHangle";
 import useDominCourseModule from "@hooks/useDominCourseModule";
 
 export default function CourseModuleTab() {
-
-  const { data:modules,module:linkedModule, getModuleLinkedCourse } = useDominModule();
+  const navigation = useRouter();
+  const { data: linkedModule, getModuleLinkedCourse } = useDominModule({courseSeq: navigation.query.boardSeq ? +navigation.query.boardSeq : null});
   const { deleteModuleConnection } = useDominCourseModule();
   const { toggle, onToggle } = useToggle();
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const navigation = useRouter()
+  
 
 
   const onClickDisconnectModule = async (courseModuleSequence: number) => {
     try {
       await deleteModuleConnection(courseModuleSequence);
-      await getModuleLinkedCourse(+navigation.query.boardSeq)
+      await getModuleLinkedCourse()
     } catch (error) {
       console.log(error)
     }
@@ -32,21 +32,20 @@ export default function CourseModuleTab() {
   useEffect(() => {
     const boardSeq = navigation.query.boardSeq;
     if(!boardSeq) return;
-    getModuleLinkedCourse(+boardSeq)
-    //eslint-disable-next-line
+    
+    
+  //eslint-disable-next-line
   },[navigation])
 
   return (
     <>
       <CourseModuleListModal
-        contents={modules?.content}
         toggle={toggle}
         onToggle={onToggle}
         page={page}
         setPage={setPage}
         rowsPerPage={rowsPerPage}
         setRowsPerPage={setRowsPerPage}
-        count={modules?.totalElements}
         courseSeq={+navigation?.query.boardSeq}
       />
     <Wrapper>
@@ -59,7 +58,7 @@ export default function CourseModuleTab() {
           <InRow flex={0.1}>모듈해제</InRow>
         </Row>
     {
-      linkedModule?.map((module) => (
+      linkedModule?.data?.map((module) => (
         <Row key={module.courseModuleSeq} rounded="8px">
           <InRow flex={0.1}>{module.courseModuleSeq}</InRow>
           <InRow flex={0.4}>{module.moduleName}</InRow>
@@ -84,7 +83,7 @@ export default function CourseModuleTab() {
           setPage={setPage}
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
-          count={modules?.totalElements}
+          count={linkedModule?.data?.length ?? 0}
         />
    </Wrapper>
    </>

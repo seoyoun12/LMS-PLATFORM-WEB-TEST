@@ -38,7 +38,7 @@ export const locationList = [
 
 
 export const residenceList = [
-  // { ko: '충남', en: 'CHUNGNAM' },
+  { ko: '충남', en: 'CHUNGNAM' },
   { ko: '천안', en: 'CHEONAN' },
   { ko: '공주', en: 'GONGJU' },
   { ko: '보령', en: 'BORYEONG' },

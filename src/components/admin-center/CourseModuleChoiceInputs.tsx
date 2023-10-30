@@ -1,5 +1,5 @@
 import { ModuleType } from "@hooks/useDominModule";
-import CourseModuleProgressRateForm from "./CourseModuleProgressRateForm";
+import CourseModuleProgressRateInput from "./CourseModuleProgressRateInput";
 import CourseModuleSurveyForm from "./CourseModuleSurveyForm";
 import CourseModuleExamForm from "./CourseModuleExamForm";
 import { ChangeEvent } from "react";
@@ -23,7 +23,7 @@ export default function CourseModuleChoiceInputs({ moduleName,onChangeModuleName
     <>
       {
         moduleType === ModuleType.COURSE_MODULE_PROGRESS_RATE &&
-        <CourseModuleProgressRateForm onChangeProgressRate={onChangeProgressRate} progressRate={progressRate} />
+        <CourseModuleProgressRateInput onChangeProgressRate={onChangeProgressRate} progressRate={progressRate} />
       }
       {
         moduleType === ModuleType.COURSE_MODULE_TEST &&

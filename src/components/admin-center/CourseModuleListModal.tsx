@@ -2,22 +2,20 @@ import styled from '@emotion/styled'
 import { Box, Button, FormControl, InputAdornment, Modal, TextField, Typography } from '@mui/material'
 import { modalStyle } from './CourseContentListModal';
 import { Close } from '@mui/icons-material';
-import  { Module, ModuleType } from '@hooks/useDominModule';
+import  useDominModule, { Module, ModuleType } from '@hooks/useDominModule';
 import { Keyboard } from '@material-ui/icons';
 import SelectBox from '@layouts/AdminCenter/CourseTrafficManagement/common/SelectBox';
 import useSelect from '@hooks/useSelect';
 import { useNewInput } from '@hooks/useNewInput';
 import RadioBox from '@layouts/AdminCenter/CourseTrafficManagement/common/RadioBox';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
 import CourseModuleChoiceInputs from './CourseModuleChoiceInputs';
 import useDominCourseModule from '@hooks/useDominCourseModule';
 
 interface Props {
   toggle: boolean;
-  contents: Module[];
   page: number
   rowsPerPage: number;
-  count: number;
   courseSeq: number;
   onToggle: () => void;
   setPage: Dispatch<SetStateAction<number>>
@@ -25,21 +23,22 @@ interface Props {
 }
 
 export default function CourseModuleListModal({ courseSeq, toggle,onToggle }:Props) {
+
   const { value: moduleType, onChange: onChangeModuleType } = useSelect<ModuleType>({defaultValue:ModuleType.COURSE_MODULE_PROGRESS_RATE});
   const { value: submitYn, onChange: onChangeSubmitYn } = useSelect<"Y" | "N">({defaultValue:'Y'})
-  const { value: moduleName,  setValue: setModuleName,onChange:onChangeModuleName } = useNewInput<string>({initialValue:'', type:'string'})
+  const { value: moduleName, onChange:onChangeModuleName } = useNewInput<string>({initialValue:'', type:'string'})
   const { value: search, onChange: onChangeSearch } = useNewInput({initialValue:'', type:'string'})
   const { value: status, onChange: onChangeStatus, } = useNewInput<string>({initialValue:'정상', type:'string'})
   const { value: limitProgress, onChange: onChangeLimitProgress } = useNewInput( {initialValue:0, type:'number'} )
   const { value: limitScore, onChange: onChangeLimitScore } = useNewInput( {initialValue:0, type:'number'} )
   const { value: surveySeq, onChange: onChangeSurveySeq } = useNewInput( {initialValue:0, type:'number'} )
-  const { postConnectSurveyToCourse } = useDominCourseModule({page:0, rowsPerPage:10})
-
-
-  const onClickConnectSurveyToCourse = async () => {
+  const { postConnectModuleToCourse } = useDominCourseModule({page:0, rowsPerPage:10})
+  const { getModuleLinkedCourse } = useDominModule({ courseSeq });
+  // 
+  const onClickConnectModuleToCourse = async () => {
     if(!courseSeq) return; 
     try {
-      await postConnectSurveyToCourse(courseSeq,{
+      await postConnectModuleToCourse(courseSeq,{
         examSeq: 0, 
         limitProgress,
         limitScore,
@@ -49,10 +48,15 @@ export default function CourseModuleListModal({ courseSeq, toggle,onToggle }:Pro
         submitYn,
         surveySeq
       })
+      
+      await getModuleLinkedCourse();
+      onToggle();
     } catch (error) {
       console.log(error)
     }
   }
+
+  
 
   return (
     <Modal
@@ -108,7 +112,7 @@ export default function CourseModuleListModal({ courseSeq, toggle,onToggle }:Pro
             defaultValue='정상'
           />
           <Button
-            onClick={onClickConnectSurveyToCourse}
+            onClick={onClickConnectModuleToCourse}
             variant='contained'
             sx={{width:'100%',boxShadow:'3px 3px 3px #b7b7b7'}}
             >

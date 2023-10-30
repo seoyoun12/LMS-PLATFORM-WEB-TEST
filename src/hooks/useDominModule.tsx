@@ -1,6 +1,7 @@
 import { DELETE, GET, POST, PUT } from "@common/httpClient";
 import { useState } from "react"
 import { useSnackbar } from "./useSnackbar";
+import useSWR, { SWRResponse } from "swr";
 
 // COURSE_MODULE_PROGRESS_RATE
 
@@ -58,24 +59,22 @@ export interface PostModuleRequest{
   surveySeq: number
 }
 
-export default function useDominModule() {
-  const [data, setData] = useState<ModuleResponse | null>(null);
-  const [module, setModule] = useState<Module[] | null>(null);
+interface Props {
+  courseSeq: number | null;
+}
+
+export default function useDominModule({ courseSeq }: Props) {
+  
+  
   const [isLoading, setIsLoading] = useState(false);
+  const { data, mutate } = useSWR<SWRResponse<Module[]>>(courseSeq ? `/course-module/adm?courseSeq=${courseSeq}` : null, GET);
+
   const snackBar = useSnackbar();
 
-  const getModuleLinkedCourse = async(courseSeq:number) => {
+  const getModuleLinkedCourse = async() => {
     setIsLoading(true)
     try {
-      const res = await GET('/course-module/adm', {
-        params: {
-          courseSeq
-        }
-      });
-      const data = res.data;
-
-      setModule(data);
-
+      await mutate();
     } catch (error) {
       snackBar({
         message: '모듈 불러오기 실패',
@@ -95,9 +94,9 @@ export default function useDominModule() {
 
   const postModule = async(courseSeq:number,body:PostModuleRequest) => {
     try {
-      const res = await POST(`/course-module/adm/${courseSeq}`,body
-      )
-
+      const res = await POST(`/course-module/adm/${courseSeq}`,body);
+      await mutate();
+      
       return res;
     } catch (error) {
       snackBar({
@@ -108,10 +107,8 @@ export default function useDominModule() {
   }
   const putModule = async(courseSeq:number, body:PutRequest) => {
     try {
-      const res = await  PUT(`/course-module/adm/${courseSeq}`,{
-        courseModuleSaveRequestDto: body
-        
-      })
+      const res = await  PUT(`/course-module/adm/${courseSeq}`,{ courseModuleSaveRequestDto: body })
+      await mutate();
       return res;
     } catch (error) {
       snackBar({
@@ -123,7 +120,7 @@ export default function useDominModule() {
   const deleteModule = async(moduleSeq:number) => {
     try {
       const res = await DELETE(`/course-module/adm/${moduleSeq}`)
-
+      await mutate();
       return res;
     } catch (error) {
       snackBar({
@@ -133,5 +130,5 @@ export default function useDominModule() {
     }
   }
 
-  return { data, module, getModuleLinkedCourse, postModule, putModule, deleteModule, getModuleDetail, isLoading}
+  return { data, getModuleLinkedCourse, postModule, putModule, deleteModule, getModuleDetail, isLoading}
 }

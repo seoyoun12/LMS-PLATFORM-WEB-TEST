@@ -82,12 +82,15 @@ interface ConnectSurveyToCourseRequest {
 
 export default function useDominCourseModule({ page, rowsPerPage }: Props = {page:0, rowsPerPage:10}) {
     
-  const { data, error, mutate } = useSWR<SurveyResponse>(`/survey/adm?page=${page}&elementCnt=${rowsPerPage}`,GET)
+  const { data, error } = useSWR<SurveyResponse>(`/survey/adm?page=${page}&elementCnt=${rowsPerPage}`,GET)  
   const snackBar = useSnackbar();
 
-  const postConnectSurveyToCourse = async (courseSeq: number, body: ConnectSurveyToCourseRequest) => {
+
+  const postConnectModuleToCourse = async (courseSeq: number, body: ConnectSurveyToCourseRequest) => {
     try {
-      await POST(`/course-module/adm/${courseSeq}`,body)
+      await POST(`/course-module/adm/${courseSeq}`,body);
+      
+
       snackBar({
         message: '해당 과정과 연결되었습니다.',
         variant: 'success'
@@ -117,5 +120,5 @@ export default function useDominCourseModule({ page, rowsPerPage }: Props = {pag
     }
   }
 
-  return {data, error, mutate, postConnectSurveyToCourse, deleteModuleConnection}
+  return {data, error, postConnectModuleToCourse, deleteModuleConnection}
 }

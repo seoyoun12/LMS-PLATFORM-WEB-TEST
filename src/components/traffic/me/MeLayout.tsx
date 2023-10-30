@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material'
 import MeDrawer from '../drawer/MeDrawer'
 import { Footer, GlobalNavigationBar } from '@components/common'
 import { memo } from 'react'
+import MeTopNavigation from './common/MeTopNavigation'
 
 interface Props {
   children: React.ReactNode;
@@ -12,15 +13,15 @@ interface Props {
 export const MeLayout = ({children,title}: Props) => {
   return (
     <>
-    <GlobalNavigationBar />
-      <Wrapper>
-      <Title>{title ?? '타이틀을 입력해주세요'}</Title>
-        <MeDrawer />
-        <Box sx={{ flex:1,position:'relative' }}>
-          {children}
-        </Box>
-      </Wrapper>
-    <Footer />
+      <MeTopNavigation />
+        <Wrapper>
+          <Title>{title ?? '타이틀을 입력해주세요'}</Title>
+          <MeDrawer />
+          <Box sx={{ flex:1,position:'relative' }}>
+            {children}
+          </Box>
+        </Wrapper>
+      <Footer />
     </>
   )
 }

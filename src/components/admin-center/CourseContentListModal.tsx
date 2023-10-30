@@ -24,7 +24,6 @@ export const modalStyle = {
   minWidth: '1000px',
   maxWidth: '1200px',
   width:'100%',
-
   bgcolor: 'background.paper',
   borderRadius: '8px',
   boxShadow: 12,
@@ -46,9 +45,6 @@ export default function CourseContentListModal({toggle,onToggle,getDominCourse,s
     setThisSeq(navigation.query.boardSeq)
   },[navigation])
 
-
-  
-
   if(isLoading) return <div>로딩중</div>
   return (
     <Modal
@@ -63,7 +59,6 @@ export default function CourseContentListModal({toggle,onToggle,getDominCourse,s
         콘텐츠 연결
         <Button onClick={async () => {onToggle(); await getDominCourse(seq)}} endIcon={<Close />} sx={{color:'#222'}} />
       </Title>
-      
       
         <FormControl fullWidth>
           <TextField placeholder='콘텐츠 검색'

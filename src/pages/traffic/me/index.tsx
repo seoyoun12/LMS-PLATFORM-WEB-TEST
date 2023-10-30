@@ -17,7 +17,6 @@ export default function MePage() {
               isLinkVideo
             />
         }
-        
       </MeLayout>
     
     

@@ -43,7 +43,7 @@ const myInfoList = [
     regCategory: ['TYPE_TRANS_EDU'],
   },
   {
-    label: '온라인 교육 신청내역',
+    label: '교육 신청내역',
     value: '/enroll-history',
     regCategory: ['TYPE_TRANS_EDU', 'TYPE_TRAFFIC_SAFETY_EDU'],
   },

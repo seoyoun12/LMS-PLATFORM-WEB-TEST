@@ -147,7 +147,7 @@ export function MeMobile() {
               }}
               fullWidth
             >
-              온라인 교육 신청내역
+              교육 신청내역
             </Button>
           </Link>
         </SideBar>

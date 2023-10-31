@@ -52,9 +52,7 @@ export function CategoryBoardQuestion() {
     <NtContainer>
       <InfoContainer>
         <InfoTitle> <Circle fontSize='small'/> 전화 문의</InfoTitle>
-
-        <Typography sx={{paddingLeft:'2rem'}}>보다 빠른 문의를 원하시면 <Phone/> 02-123-4567로 전화주세요</Typography>
-
+        <Typography sx={{paddingLeft:'2rem'}}>보다 빠른 문의를 원하시면  <Typography sx={{fontWeight:'bold',display:'inline-block'}}> ☎ 041-854-2101~2로 전화주세요</Typography></Typography>
       </InfoContainer>
 
       <InfoTitle> <Circle fontSize='small'/> 1:1문의하기</InfoTitle>

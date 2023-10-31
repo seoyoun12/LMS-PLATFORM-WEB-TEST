@@ -5,15 +5,26 @@ import React from 'react'
 import Details from './Details';
 import { ConvertEnum } from '@utils/convertEnumToHangle';
 import { Close } from '@material-ui/icons';
+import { DetailCourse } from '@pages/traffic/me/my-course';
 
 
 
 interface Props {
   onClose: () => void;
-  detailCourse: MyCourse;
+  detailCourse: DetailCourse;
+  // courseUserSeq: number;
+  // recentLessonSeq: number;
 }
 
 export default function CourseDetailModal({onClose, detailCourse}: Props) {
+
+
+  const onClickNavigateToLesson = () => {
+    window.open(`/course/${detailCourse.courseUserSeq}/lesson/${detailCourse.recentLessonSeq}`,'_blank');
+  }
+
+  console.log(detailCourse);
+
   return (
     <Modal
       open={!!detailCourse}
@@ -46,37 +57,47 @@ export default function CourseDetailModal({onClose, detailCourse}: Props) {
             <Details
               title="상태" value={detailCourse.status === 1 ? '진행중' : '종료'}
             />
-            {
-              detailCourse.age3 && 
-              Array.from({length:3})
-              .map((_,index) => (
-                <Details
-                  key={index}
-                  title={`${index+3}세`}
-                  value={detailCourse[`age${index+3} 명`] }
-                />
-              ))
+
+            { detailCourse.age3 && Array.from({ length:3 })
+              .map((_,index) => (<Details key={index} title={`${index+3}세`} value={detailCourse[`age${index+3}`]}/>))
             }
-            {
-              detailCourse.grade1 && 
-              Array.from({length:6})
-              .map((_,index) => (
-                <Details
-                  key={index}
-                  title={`${index+1}학년`}
-                  value={detailCourse[`grade${index+1} 명`]}
-                />
-              ))
+            
+            { detailCourse.grade1 && Array.from({length:6})
+              .map((_,index) => <Details key={index} title={`${index+1}학년`} value={detailCourse[`grade${index+1}`]}/>)
             }
+
+            <StyledButton
+            onClick={onClickNavigateToLesson}
+            >학습하기</StyledButton>
       </InnerWrapper>
 
     </Modal>
   )
 }
 
+const StyledButton = styled(Button)`
+  margin-top: 1rem;
+  background-color: #fff;
+  color: rgba(191,49,51,0.78);
+  border: 1px solid rgba(191,49,51,0.78);
+  border-radius: 8px;
+  padding: .5rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  &:hover {
+    background-color: rgb(191,49,51);
+    color: #fff;
+    transition: all .3s;
+  }
+`;
+
+
 const TitleBox = styled(Box)`
   width: 100%;
-  align-self: flex-start;
+  position: absolute;
+  top:0;
+  left:0;
+  padding: 1rem;
   font-size: 20px;
   font-weight: 700;
   display: flex;
@@ -85,6 +106,9 @@ const TitleBox = styled(Box)`
 `
 
 const InnerWrapper = styled(Box)`
+  width: 968px;
+  height: 700px;
+  overflow-y: scroll;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -96,7 +120,7 @@ const InnerWrapper = styled(Box)`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 600px;
+  
 
   @media screen and (max-width: 768px) {
     width: 90%;

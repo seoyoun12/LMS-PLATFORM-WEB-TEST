@@ -2,12 +2,10 @@ import styled from '@emotion/styled';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react'
 
 interface Props<T> {
   list: T[]
   isLinkVideo?: boolean
-  
 }
 
 export default function MyCourseGridTemplate<T extends {seq?: number, courseName?: string,courseThumbnail?: string, courseUserSeq?: number,thumbnailImage?:string,recentLessonSeq?: number, courseTitle?: string  }>({list,isLinkVideo}: Props<T>) {

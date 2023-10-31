@@ -23,7 +23,13 @@ export default function MyCourseGridTemplate<T extends {seq?: number, courseName
               href={isLinkVideo ? `/course/${course.courseUserSeq}/lesson/${course.recentLessonSeq}` : `/traffic/me/my-course?seq=${course.seq}`}
               as={isLinkVideo ?  `/course/${course.courseUserSeq}/lesson/${course.recentLessonSeq}` :  `/traffic/me/my-course/${course.seq}`}
               target={isLinkVideo ? '_blank' : '_self'}
-              >{isLinkVideo ? '강의 시청' :'자세히 보기'}</ShowDetailLink>
+              >
+                {
+                  isLinkVideo
+                  ? <a target="_blank" rel="noreferrer">학습하기</a>
+                  : <a>자세히 보기</a>
+                }
+              </ShowDetailLink>
           </Item>
         ))
       }

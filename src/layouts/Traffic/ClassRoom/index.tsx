@@ -12,12 +12,11 @@ import { useRouter } from 'next/router';
 
 export default function ClassRoomLayout() {
   const { myLearningStatus } = useDominMe();
-  const navigation = useRouter();
 
   const onClickMoveToLesson = (courseUserSeq: number, lessonSeq: number) => {
     // something invisible...
     console.log(lessonSeq)
-    navigation.push(`/course/${courseUserSeq}/lesson/${lessonSeq}`);
+    window.open(`/course/${courseUserSeq}/lesson/${lessonSeq}`,'_blank');
   }  
 
   return (

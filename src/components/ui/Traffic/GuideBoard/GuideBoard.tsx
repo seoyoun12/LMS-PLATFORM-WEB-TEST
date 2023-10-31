@@ -1,7 +1,6 @@
 import { Box, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { Tabs } from '@components/ui/Tabs';
 import { GuideBoardAuth } from './GuideBoardAuth';
 import { GuideBoardEduRegi } from './GuideBoardEduRegi';
 import { GuideBoardEduLearning } from './GuideBoardEduLearning';
@@ -25,7 +24,9 @@ export function GuideBoard() {
 
   return (
     <GuideContainer>
+      
       <Box sx={{ mb: '30px' }}>
+      
         <CSRTabs2
           tabsConfig={tabsConfig}
           variant={'fullWidth'}

@@ -373,7 +373,7 @@ export function Educator({ locationList }: Props) {
         </Button> */}
         <Link
           href="/find/pw"
-          onClick={async e => {
+          onClick={e => {
             e.preventDefault();
           }}
         >
@@ -398,39 +398,6 @@ export function Educator({ locationList }: Props) {
           </Button>
         </Link>
 
-        {/* <LocationBox>
-          <FormControl fullWidth>
-            <InputLabel id="location">지역</InputLabel>
-            <Select
-              labelId="location"
-              id="location"
-              value={location || ''}
-              onChange={e =>
-                setLocation(e.target.value as userRegistrationType)
-              }
-              label="location"
-            >
-              {locationList.map(item => (
-                <MenuItem key={item.en} value={item.en}>
-                  {item.ko}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </LocationBox>
-        <DivisionBox>
-          <TextField
-            label="소속(학교,기관,단체)"
-            placeholder="예) oo유치원 / oo고등학교 / 대한노인회 공주지회"
-            onChange={handleCompanyChange}
-            value={company || ''}
-            error={companyErr}
-            fullWidth
-          />
-          <FormHelperText sx={{ color: 'red' }}>
-            {companyErr && '올바른 입력형식이 아닙니다'}
-          </FormHelperText>
-        </DivisionBox> */}
 
         <PhoneBox>
           <TextField

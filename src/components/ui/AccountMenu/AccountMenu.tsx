@@ -4,11 +4,8 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { logout } from '@common/api';
 import { useSetRecoilState } from 'recoil';
@@ -27,7 +24,7 @@ export function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const setIsLoginState = useSetRecoilState(isLoginState);
   const open = Boolean(anchorEl);
-  const { user, error } = useMyUser();
+  const { user } = useMyUser();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -109,7 +106,7 @@ export function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <Link href="/me" underline="none" color={grey[900]}>
+        <Link href={`${user?.regCategory === 'TYPE_TRAFFIC_SAFETY_EDU' ? '/traffic/me' : '/me'} `} underline="none" color={grey[900]}>
           <MenuItem>
             {/* <Avatar />  */}
             <ListItemIcon>
@@ -118,11 +115,7 @@ export function AccountMenu() {
             내 정보
           </MenuItem>
         </Link>
-        {/* <MenuItem color={grey[900]}>
-          <Avatar /> My account
-        </MenuItem> */}
-        {/* <Divider /> */}
-        <Link href="/me/edit" underline="none" color={grey[900]}>
+        <Link href={`${user?.regCategory === 'TYPE_TRAFFIC_SAFETY_EDU' ? '/traffic/me/edit' : '/me/edit'}`} underline="none" color={grey[900]}>
           <MenuItem color={grey[900]}>
             <ListItemIcon>
               <EditIcon fontSize="small" />
@@ -130,7 +123,7 @@ export function AccountMenu() {
             내 정보수정
           </MenuItem>
         </Link>
-        <Link href="/me/my-course" underline="none" color={grey[900]}>
+        <Link href={`${user?.regCategory === 'TYPE_TRAFFIC_SAFETY_EDU' ? '/traffic/me/my-course' : '/me/my-course'}`} underline="none" color={grey[900]}>
           <MenuItem color={grey[900]}>
             <ListItemIcon>
               <RateReviewIcon fontSize="small" />
@@ -138,7 +131,8 @@ export function AccountMenu() {
             학습현황
           </MenuItem>
         </Link>
-        <MenuItem color={grey[900]} onClick={logOut}>
+        <MenuItem color={
+          grey[900]} onClick={logOut}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

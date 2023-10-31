@@ -6,8 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 // import { Box } from '@mui/material';
 // import { ModalQuiz } from '@components/ui/Modal';
 
-const CDN_URL =
-  'https://cn-lms-storage.cdn.gov-ntruss.com/common/js/ncplayer-1.2.5.umd.min-c808bb53.js';
+const CDN_URL = 'https://cn-lms-storage.cdn.gov-ntruss.com/common/js/ncplayer-1.2.5.umd.min-c808bb53.js';
 
 type Events = { [Key in `on${Capitalize<EventType>}`]?: (e: Event) => void };
 

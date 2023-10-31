@@ -1,4 +1,4 @@
-import { removeCourse, useCourseList } from '@common/api/adm/course';
+
 import { Table } from '@components/ui';
 import { Box, Button, Chip, TableBody, TableHead, Typography } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
@@ -16,7 +16,7 @@ import dateFormat from 'dateformat';
 import { YN } from '@common/constant';
 import { Spinner } from '@components/ui';
 import { css } from '@emotion/css';
-import { courseAdmList, courseList, courseRemove } from '@common/api/course';
+
 import { useSurveyAdm } from '@common/api/adm/survey';
 import styled from '@emotion/styled';
 import { SurveyManagementHeadRows } from '@components/admin-center/Survey/SurveyManagementHeadRows';

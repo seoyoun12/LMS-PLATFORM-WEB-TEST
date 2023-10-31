@@ -2,14 +2,14 @@ import ApiClient from '@common/api/ApiClient';
 import { learningStatus } from '@common/recoil';
 import styled from '@emotion/styled';
 import { useDialog } from '@hooks/useDialog';
-import { Box, Button, Container } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import Image from 'next/image';
-import React from 'react';
 import { useRecoilState } from 'recoil';
 
 export default function LessonHeader() {
   const dialog = useDialog();
   const [lessonVideoInfo, setLessonVideoInfo] = useRecoilState(learningStatus);
+
   const onCloseWindow = async () => {
     const isConfirm = await dialog({
       title: '학습종료하기',
@@ -18,6 +18,7 @@ export default function LessonHeader() {
       confirmText: '확인',
       cancelText: '취소',
     });
+
     if (!isConfirm) return;
     // return;
 
@@ -44,37 +45,36 @@ export default function LessonHeader() {
   };
 
   return (
-    <HeaderWrap>
-      <HeaderContainer maxWidth="xl">
+    <Wrapper>
+      <Container maxWidth="xl">
         <Box className="lesson-header-img">
           <Image
             src="/assets/images/cttsLogo.png"
             layout="fill"
-            alt="Your Name"
+            alt="충청남도교통연수원 로고"
             priority
           />
         </Box>
         <Button variant="contained" onClick={onCloseWindow}>
           학습종료
         </Button>
-      </HeaderContainer>
-    </HeaderWrap>
+      </Container>
+    </Wrapper>
   );
 }
 
-const HeaderWrap = styled(Box)`
+const Wrapper = styled(Box)`
   border-bottom: 1px solid #3498db;
 `;
-const HeaderContainer = styled(Container)`
+const Container = styled(Box)`
   display: flex;
+  width: 100%;
+  margin: 0 auto; 
   justify-content: space-between;
   align-items: center;
   padding: 12px 1rem;
   .lesson-header-img {
     position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     width: 224px;
     height: 40px;
   }

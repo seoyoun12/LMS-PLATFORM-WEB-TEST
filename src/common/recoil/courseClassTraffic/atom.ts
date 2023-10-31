@@ -1,6 +1,4 @@
-import { locationList } from '@layouts/MeEdit/MeEdit';
-import { useState } from 'react';
-import { atom, useRecoilState } from 'recoil';
+import { atom } from 'recoil';
 
 export const courseClassTrafficInfo = atom<CourseClassTraffic | null>({
   key: 'courseClassTraffic',
@@ -11,27 +9,13 @@ export interface PeopleCounts {
   [prop: string]: { [prop: string]: number };
 }
 export interface CourseClassTraffic {
-  // locate: string; //지엮
-  // division: string; // 소속
-  // date: string; //신청날짜
-  // student: string;
-  // category: string;
-  region?: string; //지엮
-  organization?: string; // 소속
-  expectedToStartDtime?: string; //신청날짜
+  region?: string;
+  organization?: string;
+  expectedToStartDtime?: string;
+  expectedToEndDtime?: string;
   eduTargetMain?: string;
   eduTargetSub?: string;
-
+  courseSeq?: string;
   peopleCounts: PeopleCounts;
-  // firstGrade: number;
-  // secondGrade: number;
-  // thirdGrade: number;
-  // fourthGrade: number;
-  // fifthGrade: number;
-  // sixthGrade: number;
-  // fifthYearOldChild: number;
-  // fourthYearOldChild: number;
-  // thirdYearOldChild: number;
-  // oldMan: number;
-  // selfDriver: number;
+  courseName?: string;
 }

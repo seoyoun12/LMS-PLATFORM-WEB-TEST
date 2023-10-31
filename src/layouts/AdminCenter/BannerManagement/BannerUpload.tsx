@@ -1,29 +1,10 @@
 import { BbsType, uploadFile } from '@common/api/adm/file';
-import {
-  BannerRes,
-  bannerTypeEnums,
-  BannerTypeEnums,
-  createBannerAdm,
-} from '@common/api/banner';
+import { BannerRes,bannerTypeEnums,BannerTypeEnums,createBannerAdm } from '@common/api/banner';
 import { ProductStatus } from '@common/api/course';
 import { FileUploader } from '@components/ui/FileUploader';
 import styled from '@emotion/styled';
 import { useSnackbar } from '@hooks/useSnackbar';
-import {
-  Box,
-  Button,
-  Chip,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  Select,
-  TextareaAutosize,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box,Button,Chip,FormControl,FormControlLabel,FormLabel,MenuItem,Radio,RadioGroup,Select,TextareaAutosize,TextField,Typography } from '@mui/material';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
@@ -34,8 +15,6 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import { useRouter } from 'next/router';
 import { Spinner } from '@components/ui';
-// import { TuiEditor } from '@components/common/TuiEditor';
-// import { Editor as EditorType } from '@toast-ui/react-editor';
 
 interface FormType {
   title: string;
@@ -56,6 +35,10 @@ const defaultValues = {
   bannerTypeEnums: BannerTypeEnums.BANNER_TYPE_TRANSPORT_WORKER,
 };
 
+const colors = [
+
+]
+
 export function BannerUpload() {
   const snackbar = useSnackbar();
   const router = useRouter();
@@ -66,15 +49,13 @@ export function BannerUpload() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
     control,
-    reset,
     resetField,
     setValue,
     watch,
   } = useForm<FormType>({ defaultValues });
 
-  const handleBannerTypeEnums = async (e: any) => {
+  const handleBannerTypeEnums = async (e) => {
     setValue('bannerTypeEnums', e.target.value);
   };
 
@@ -103,7 +84,7 @@ export function BannerUpload() {
       // console.log('submit data : ', data);
       snackbar({ variant: 'success', message: '성공적으로 완료되었습니다.' });
       router.push(`/admin-center/banner`);
-    } catch (e: any) {
+    } catch (e) {
       snackbar({ variant: 'error', message: e.data.message });
     }
   };
@@ -124,22 +105,6 @@ export function BannerUpload() {
     setIsFileDelete(true);
     snackbar({ variant: 'success', message: 'img delete successful' });
   };
-
-  // const onChangeEditorContent = (
-  //   target:
-  //     | 'title'
-  //     | 'content'
-  //     | 'startDate'
-  //     | 'endDate'
-  //     | 'status'
-  //     | 'toUrl'
-  //     | 'files'
-  //     | `files.${number}`
-  // ) => {
-  //   if (!editorRef.current) return;
-  //   const markdownContent = editorRef.current.getInstance().getMarkdown();
-  //   setValue(target, markdownContent);
-  // };
 
   return (
     <BannnerUploadContainer>
@@ -164,36 +129,31 @@ export function BannerUpload() {
             ))}
           </Select>
         </FormControl>
-        <Box display="flex" justifyContent="space-between">
-          <Box display="flex" flexDirection="column" gap="4px">
-            {/* <Box width={450} height={70}>
-              <TuiEditor
-                // initialValue={( watch().content) || ' '}
-                previewStyle="vertical"
-                initialEditType="wysiwyg"
-                useCommandShortcut={true}
-                onChange={onChangeEditorContent}
-                ref={editorRef}
-              />
-            </Box> */}
-            <TextareaAutosize
+        <Box sx={{width:'100%',display:'flex',justifyContent:'space-between',gap: '12px'}}>
+          <Box display="flex" flexDirection="column" gap="4px" sx={{flex:1}}>
+            
+            <textarea
               placeholder="배너제목"
-              style={{ width: '450px', minHeight: '70px', fontSize: '24px' }}
+              style={{ width:'100%', minHeight: '70px', fontSize: '24px' }}
               {...register('title', { required: '콘텐츠를 입력해주세요.' })}
               spellCheck={false}
             />
 
-            <TextareaAutosize
+            <textarea
               placeholder="콘텐츠 내용"
-              style={{ width: '450px', minHeight: '260px' }}
+              style={{ width:'100%', minHeight: '260px' }}
               {...register('content', { required: '콘텐츠를 입력해주세요.' })}
               spellCheck={false}
             />
+
           </Box>
 
           <SlideInfo>
-            <Box fontSize="24px" fontWeight="bold">
-              {/* {editorRef.current?.getInstance().getMarkdown()} */}
+            <Box
+              fontSize="24px"
+              fontWeight="bold"
+              sx={{flex:1}}
+              >
               {watch()
                 .title?.split('\n')
                 .map((item, idx) => {
@@ -201,7 +161,10 @@ export function BannerUpload() {
                   return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
                 })}
             </Box>
-            <Box>
+
+            <Box
+              sx={{flex:1}}
+              >
               {watch()
                 .content?.split('\n')
                 .map((item, idx) => {
@@ -209,6 +172,7 @@ export function BannerUpload() {
                   return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
                 })}
             </Box>
+            
           </SlideInfo>
         </Box>
         <Typography fontWeight="bold" color="red" fontSize="14px">
@@ -222,15 +186,6 @@ export function BannerUpload() {
           {`<a href="사이트 주소" style='color:색상' >링크을 넣을 텍스트</a>`}으로 링크를
           줄수 있습니다.
         </Typography>
-        {/* <TextField
-          placeholder="배너 제목"
-          {...register('title', { required: '배너이름을 입력해주세요.' })}
-        />
-        <TextField
-          placeholder="콘텐츠 내용"
-          {...register('content', { required: '콘텐츠를 입력해주세요.' })}
-        /> */}
-        {/*mui의 textarea나 tui의 폼을 사용 */}
         <Typography fontWeight="bold">게시 시작날짜</Typography>
         <DatePicker
           locale={ko}
@@ -332,18 +287,19 @@ const ButtonBox = styled(Box)`
 `;
 
 const SlideInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   color: #fff;
   background: #9b9b9b;
-  width: 450px;
-  height: 330px;
-
+  width:50%;
+  
   h1 {
     font-size: 34px;
     font-weight: 900;
     word-break: keep-all;
     padding: 16px 0 8px 0;
   }
-
   p {
     font-size: 16px;
     padding: 8px 0;

@@ -32,7 +32,7 @@ export function Accordion({ accordionList,activeIndex }: Props) {
 
   return (
     <>
-      {accordionList.map(({ date, name, icon, children }) => (
+      {accordionList.map(({ name, icon, children }) => (
         <MuiAccordion
           key={name}
           disableGutters

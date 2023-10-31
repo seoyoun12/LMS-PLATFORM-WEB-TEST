@@ -56,7 +56,7 @@ export function SurveyModify() {
     (async function () {
       try {
         const { data } = await getSingleSurvey(Number(surveySeq));
-        let arr = data.surveyQuestionList.map(item => {
+        const arr = data.surveyQuestionList.map(item => {
           const randomSeq = Math.floor(Math.random() * 1000);
           const { seq } = item;
           return { ...item, dummySeq: randomSeq };
@@ -114,7 +114,7 @@ export function SurveyModify() {
       }
       //객관식
       let stopLoop = false;
-      let converted = Object.values(watch().surveyMultipleChoice)
+      const converted = Object.values(watch().surveyMultipleChoice)
         .filter(value => {
           if (!value) stopLoop = true;
           if (stopLoop) return false;
@@ -126,7 +126,7 @@ export function SurveyModify() {
           };
         });
       //배열로 된 inputs를 변환합니다.
-      let convertedChoice = {};
+      const convertedChoice = {};
       converted.forEach(item => {
         const key = Object.keys(item)[0];
         convertedChoice[key] = item[key];
@@ -152,7 +152,7 @@ export function SurveyModify() {
   // console.log(watch(), questions);
 
   const onClickModifySubmit = async () => {
-    let arr = questions.map(item => {
+    const arr = questions.map(item => {
       return {
         content: item.content,
         questionType: item.questionType,
@@ -303,7 +303,7 @@ export function SurveyModify() {
           </Button>
 
           {questions.map(item => (
-            <SurveyQuestionItem item={item} setQuestions={setQuestions} />
+            <SurveyQuestionItem key={item.content} item={item} setQuestions={setQuestions} />
           ))}
         </Box>
         <ButtonBox>

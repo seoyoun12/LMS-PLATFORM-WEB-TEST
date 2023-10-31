@@ -1,25 +1,6 @@
-import { DELETE, GET, POST, PUT } from '@common/httpClient';
-import useSWR, { SWRResponse } from 'swr';
-import {
-  ProvincialEnrollResponseDto,
-  ProvincialEnrollSaveRequestDto,
-  ProvincialEnrollUpdateRequestDto,
-} from './Api';
+import { DELETE, GET, PUT } from '@common/httpClient';
 
-export function enrollProvincial(requestDto: ProvincialEnrollSaveRequestDto) {
-  return POST<any>(`/provincial/enroll`, requestDto);
-}
-
-export function useEnrollProvincialList() {
-  const { data, error, mutate } = useSWR<
-    SWRResponse<ProvincialEnrollResponseDto[]>
-  >(`/provincial/enroll`, GET);
-  return {
-    enrollData: data?.data,
-    enrollError: error,
-    enrollMutate: mutate,
-  };
-}
+import { ProvincialEnrollResponseDto,ProvincialEnrollUpdateRequestDto } from './Api';
 
 export function getEnrollProvincialDetail(enrollSeq: number) {
   return GET<{ data: ProvincialEnrollResponseDto }>(

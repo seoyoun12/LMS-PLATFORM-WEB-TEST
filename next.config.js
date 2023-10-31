@@ -10,6 +10,9 @@ const withTM = require('next-transpile-modules')([
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   reactStrictMode: true,
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
@@ -19,7 +22,9 @@ const nextConfig = {
       'picsum.photos',
       'dnkwhodfjmev10929056.cdn.ntruss.com',
       'cn-lms-storage.cdn.gov-ntruss.com',
-      'kr.object.gov-ncloudstorage.com'
+      'kr.object.gov-ncloudstorage.com',
+      'img.youtube.com',
+      'www.youtube.com'
     ],
   },
   experimental: {

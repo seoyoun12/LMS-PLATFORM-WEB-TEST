@@ -1,25 +1,10 @@
-import {
-  BoardType,
-  CategoryBoardInput,
-  removeCategoryBoard,
-} from "@common/api/categoryBoard";
+import { BoardType,CategoryBoardInput,removeCategoryBoard } from "@common/api/categoryBoard";
 import { YN } from "@common/constant";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Editor as EditorType } from "@toast-ui/react-editor";
 import styled from "@emotion/styled";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import {
-  Box,
-  Button,
-  Chip,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-} from "@mui/material";
+import { Box,Button,Chip,FormControl,FormControlLabel,FormHelperText,FormLabel,Radio,RadioGroup,TextField } from "@mui/material";
 import { TuiEditor } from "@components/common/TuiEditor";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { css } from "@emotion/css";
@@ -121,7 +106,7 @@ export function CategoryTrafficUploadForm({
         snackbar({ variant: "success", message: "성공적으로 삭제되었습니다." });
         router.push(`/admin-center/category-traffic`);
       }
-    } catch (e: any) {
+    } catch (e) {
       snackbar({ variant: "error", message: e.data.message });
     }
   };
@@ -277,18 +262,10 @@ export function CategoryTrafficUploadForm({
         </FormControl>
 
         <ButtonBox>
-          <SubmitBtn variant="contained" type="submit" disabled={loading}>
-            {loading ? (
-              <Spinner fit={true} />
-            ) : mode === "upload" ? (
-              "업로드하기"
-            ) : (
-              "수정하기"
-            )}
+          <SubmitBtn variant='contained' type='submit' disabled={loading}>
+            { loading ? <Spinner fit={true} /> : mode === 'upload' ? '업로드하기' : '수정하기' }
           </SubmitBtn>
-          {mode === "upload" ? (
-            ""
-          ) : (
+          {mode !== "upload" &&
             <DeleteBtn
               color="warning"
               variant="contained"
@@ -297,7 +274,7 @@ export function CategoryTrafficUploadForm({
             >
               {loading ? <Spinner fit={true} /> : "삭제"}
             </DeleteBtn>
-          )}
+          }
         </ButtonBox>
       </Box>
     </Container>

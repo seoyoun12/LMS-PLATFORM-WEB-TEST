@@ -95,7 +95,7 @@ export function SurveyUpload() {
   }, [questions]);
 
   const onClickSubmit = async () => {
-    let arr = questions.map(item => {
+    const arr = questions.map(item => {
       return {
         content: item.content,
         questionType: item.questionType,
@@ -209,8 +209,8 @@ export function SurveyUpload() {
           <Button variant="contained" onClick={onClickAddQuestion} fullWidth>
             추가
           </Button>
-          {questions.map(item => (
-            <SurveyQuestionItem item={item} setQuestions={setQuestions} />
+          {questions.map((item,index) => (
+            <SurveyQuestionItem key={index} item={item} setQuestions={setQuestions} />
           ))}
         </Box>
         <ButtonBox>

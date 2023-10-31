@@ -2,11 +2,7 @@ import { Modal, Spinner } from '@components/ui';
 import styled from '@emotion/styled';
 import { Backdrop,Box,Button,FormControl,MenuItem,Select,Table,TableBody,TableCell,TableRow as MuiTableRow,TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
-import {
-  cancelEnrollProvincial,
-  getEnrollProvincialDetail,
-  updateEnrollProvincial,
-} from '@common/api/provincialEnroll';
+import { cancelEnrollProvincial,getEnrollProvincialDetail,updateEnrollProvincial } from '@common/api/provincialEnroll';
 import { ProvincialEnrollResponseDto } from '@common/api/Api';
 import { EduTargetMain } from '@common/api/learningMaterial';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -82,7 +78,6 @@ export function EnrollHistoryTrafficModal({ open,handleClose,enrollSeq,enrollOrg
     (async function () {
       try {
         const { data } = await getEnrollProvincialDetail(enrollSeq);
-        
         reset(data);
       } catch (e) {
         console.log(e);

@@ -31,10 +31,10 @@ export function SurveyQuestionItem({ item, setQuestions }: Props) {
 
   //exchange
   const objToJsx = (objParam: SurveyMultipleChoiceRes): React.ReactNode => {
-    let arr: string[] = [];
+    const arr: string[] = [];
     const { createdDtime, modifiedDtime, seq, status, ...rest } = objParam || {};
     if (Object.keys(rest).length === 0) return <Box>주관식 입니다.</Box>;
-    for (let [key, obj] of Object.entries(rest)) {
+    for (const [key, obj] of Object.entries(rest)) {
       if (!obj) break;
       arr.push(obj);
     }

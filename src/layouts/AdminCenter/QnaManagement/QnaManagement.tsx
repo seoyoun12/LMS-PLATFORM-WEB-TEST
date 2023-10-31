@@ -35,11 +35,11 @@ const headRows: {
 }[] = [
   { name: 'No', align: 'center', width: '5%' },
   { name: '문의유형', align: 'center', width: '12%' },
-  { name: '회원아이디(회원이름)', align: 'center', width: '17%' },
+  { name: '회원아이디(회원이름)', align: 'center', width: '13%' },
   { name: '제목', align: 'center', width: '44%' },
   { name: '작성일', align: 'center', width: '8.5%' },
   { name: '답변여부', align: 'center', width: '8.5%' },
-  { name: '상태', align: 'center', width: '5%' },
+  { name: '상태', align: 'center', width: '9%' },
 ];
 
 export function QnaManagement() {

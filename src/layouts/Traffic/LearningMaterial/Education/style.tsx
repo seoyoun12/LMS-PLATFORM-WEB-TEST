@@ -62,6 +62,10 @@ export const EducationItemFilesItem = styled.div``;
 export const EducationItemFileChip = styled(Chip)`
   height: 36.5px;
   padding: 0px;
+  cursor: pointer;
 `;
 
-export const EducationItemFileButton = styled(Button)``;
+export const EducationItemFileButton = styled(Button)`
+  padding: 0px;
+  border-radius: 15px;
+`;

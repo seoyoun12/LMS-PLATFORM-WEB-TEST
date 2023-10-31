@@ -70,13 +70,7 @@ export function useCourseList({
   };
 }
 
-export const connectCourseToContent = async ({
-  courseSeq,
-  contentSeq,
-}: {
-  courseSeq: number;
-  contentSeq: number;
-}) => {
+export const connectCourseToContent = async ({ courseSeq,contentSeq }: {courseSeq: number;contentSeq: number;}) => {
   return await POST(`/course/adm/link/content`, { courseSeq, contentSeq });
 };
 

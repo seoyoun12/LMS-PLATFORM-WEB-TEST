@@ -2,6 +2,7 @@ import { SelectChangeEvent } from "@mui/material"
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react"
 
 
+// 재사용, 확장 불가능한 쓰레기 커스텀훅이니 useNewInput 커스텀훅을 사용해주세요
 
 export function useInput<T>(initialState: T): [T, Dispatch<SetStateAction<T>> ,(e: T) => void] {
     const [value , setValue] = useState(initialState)

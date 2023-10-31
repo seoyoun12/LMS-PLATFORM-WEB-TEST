@@ -9,8 +9,8 @@ export default function useLesson() {
   const getCheckAvailableLesson = async ({courseUserSeq, contentSeq}) => {
     try {
       const res:SWRResponse<boolean,Error> = await GET(`/course-progress/lesson/check/${courseUserSeq}/${contentSeq}`);
+      return res.data;
       
-      return res.data  
     } catch (error) {
       return error
     }   

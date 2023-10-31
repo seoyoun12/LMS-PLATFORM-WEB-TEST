@@ -1,290 +1,271 @@
-import { CourseLearningInfoInput } from '@common/api/adm/learningInfo';
-import { useSnackbar } from '@hooks/useSnackbar';
-import {
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TextField,
-} from '@mui/material';
-import { useRouter } from 'next/router';
-import { css } from '@emotion/css';
-import styled from '@emotion/styled';
-import {
-  ProvincialEnrollResponseDto,
-  ProvincialEnrollUpdateRequestDto,
-  UserCourseInfoDetailCourseInfoDto,
-} from '@common/api/Api';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
-import { courseSubCategory } from '@layouts/Calendar/CalendarBody/CalendarBody';
-import { ErrorMessage } from '@hookform/error-message';
-import { Spinner } from '@components/ui';
-import {
-  businessSubType,
-  businessSubTypeCategoryReg,
-  businessSubTypeReg,
-  CourseTrafficTargetType,
-  locationList,
-  residenceList,
-  TargetSubTypeReg,
-} from 'src/staticDataDescElements/staticType';
-import { carNumberRegex } from '@utils/inputRegexes';
-import { eduSubArr } from '@layouts/EnrollHistory/EnrollHistoryTrafficModal/EnrollHistoryTrafficModal';
+import styled from "@emotion/styled";
+import useDominDetailCourse from "@hooks/useDominDetailCourse";
+import SelectBox from "@layouts/AdminCenter/CourseTrafficManagement/common/SelectBox";
+import Field from "./common/Field";
+import { useNewInput } from "@hooks/useNewInput";
+import { makeCountArrayBySubType } from "@utils/makeCountArrayBySubtype";
+import CourseAudientsCountInputList from "./common/CourseAudientsCountInputList";
+import TableHeader from "./common/TableHeader";
+import TableBody from "./common/TableBody";
+import ProgressTableBody from "./common/ProgressTableBody";
+import ProgressTitle from "./common/ProgressTitle";
+import { ConvertEnum } from "@utils/convertEnumToHangle";
+import { Box, Button } from "@mui/material";
+import { useRouter } from "next/router";
+import { ChangeEvent, useEffect, useState } from "react";
 
-interface FormType extends ProvincialEnrollUpdateRequestDto {}
 
-const filterEnrollPeoples = [
-  'age3',
-  'age4',
-  'age5',
-  'grade1',
-  'grade2',
-  'grade3',
-  'grade4',
-  'grade5',
-  'grade6',
-  'elderly',
-  'selfDriver',
-];
+export interface CourseAudientCount {
+  [key: string]: string;
+}
 
-const defaultValues: ProvincialEnrollUpdateRequestDto = {
-  age3: 0,
-  age4: 0,
-  age5: 0,
-  eduTargetMain: 'TYPE_CHILDREN',
-  eduTargetSub: 'TYPE_KINDERGARTEN',
-  elderly: 0,
-  expectedToStartDtime: 'yyyy-MM-dd',
-  grade1: 0,
-  grade2: 0,
-  grade3: 0,
-  grade4: 0,
-  grade5: 0,
-  grade6: 0,
-  organization: 'string',
-  region: 'CHEONAN',
-  selfDriver: 0,
-};
-
-export function CourseInfomationTraffic({
-  enrollInfo,
-  onHandleSubmit,
-}: {
-  enrollInfo?: ProvincialEnrollResponseDto;
-
-  onHandleSubmit: ({
-    enrollInput,
-    provincialEnrollSeq,
-    setLoading,
-  }: {
-    enrollInput: ProvincialEnrollUpdateRequestDto;
-    provincialEnrollSeq: number;
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  }) => void;
-}) {
-  const router = useRouter();
-  const snackbar = useSnackbar();
-  const { enrollSeq } = router.query;
-  const [loading, setLoading] = useState(false);
-
-  const {
-    handleSubmit,
-    formState: { errors },
-    reset,
-    watch,
-    setValue,
-  } = useForm<ProvincialEnrollUpdateRequestDto>({ defaultValues });
-
-  const handleEduPersonCount = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    const value = e.target.value;
-    if (value.length > 6) return;
-    if (value === '') return setValue(e.target.name as any, Number(value));
-    if (value.length === 0 || value === '0') {
-      return setValue(e.target.name as any, Number(value));
+export function CourseInfomationTraffic() {
+  
+  const [editTarget, setEditTarget] = useState(false);
+  const navigation = useRouter();
+  const { detailCourseInfo, updateAplicantCourseInfo } = useDominDetailCourse({courseUserSeq: navigation?.query?.enrollSeq as string})
+  const { value: courseSubType,setValue:setCourseSubType, onChange: onChangeCourseSubType } = useNewInput({initialValue: detailCourseInfo?.userProvincialCourseInfoDetailCourseInfoDto?.eduTargetSub,type:'string'});
+  const [courseAudientCount, setCourseAudientCount] = useState<CourseAudientCount>({});
+  const [enrollSeq, setEnrollSeq] = useState<string>('');
+  const onClickEdit = async() => {
+    setEditTarget(prev => !prev);
+    if(editTarget) {
+      if(window.confirm('수정하시겠습니까?')){
+        return await updateAplicantCourseInfo({
+          eduTargetSub: courseSubType,
+          ...courseAudientCount
+        })
+      }
     }
-
-    if (!Number(e.target.value)) return;
-    setValue(e.target.name as any, Number(value.replace(/[^0-9]/g, '')));
-  };
-
-  const onSubmit: SubmitHandler<FormType> = async (formData, event) => {
-    const resetEduTargets = {
-      age3: 0,
-      age4: 0,
-      age5: 0,
-      grade1: 0,
-      grade2: 0,
-      grade3: 0,
-      grade4: 0,
-      grade5: 0,
-      grade6: 0,
-      elderly: 0,
-      selfDriver: 0,
-    };
-
-    const filteredMainType = CourseTrafficTargetType.filter(f => f.type === watch().eduTargetMain)[0]
-    const filteredSubType = filteredMainType.child.filter(f => f.type === watch().eduTargetSub)[0]
-    filteredSubType.applicants.forEach(fo => (resetEduTargets[fo] = watch(fo as any)));
-    // CourseTrafficTargetType.filter(f => f.type === watch().eduTargetMain)[0]
-    //   .child.filter(f => f.type === watch().eduTargetSub)[0]
-    //   .applicants.forEach(fo => (resetEduTargets[fo] = watch(fo as any)));
-
-    const enrollInput = {
-      ...formData,
-      ...resetEduTargets,
-    };
+  }
 
 
-    onHandleSubmit({
-      enrollInput: enrollInput,
-      provincialEnrollSeq: Number(enrollSeq),
-      setLoading,
-    });
-  };
-  //초기화
+  const onChangeCourseAudientCount = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCourseAudientCount(prev => ({...prev, [name]: value}))
+  }
+  
+  
   useEffect(() => {
-    reset(enrollInfo);
-  }, []);
+   if(!detailCourseInfo) return;
+    const { eduTargetSub,age3, age4, age5, elderly, grade1, grade2, grade3, grade4, grade5, grade6, selfDriver } = detailCourseInfo.userProvincialCourseInfoDetailCourseInfoDto;
+    setCourseAudientCount({
+      age3: age3?.toString() || '',
+      age4: age4?.toString() || '',
+      age5: age5?.toString() || '',
+      elderly: elderly?.toString() || '',
+      grade1: grade1?.toString() || '',
+      grade2: grade2?.toString() || '',
+      grade3: grade3?.toString() || '',
+      grade4: grade4?.toString() || '',
+      grade5: grade5?.toString() || '',
+      grade6: grade6?.toString() || '',
+      selfDriver: selfDriver?.toString() || ''
+    })
+    setCourseSubType(eduTargetSub);
+      // eslint-disable-next-line
+  },[detailCourseInfo])
 
+  useEffect(() => {
+    if(!navigation.query) return;
+    setEnrollSeq(navigation.query.enrollSeq as string);
+  },[navigation.query])
+
+  if(!detailCourseInfo) return <div>유저 상세 정보를 가져오고 있습니다...</div>
+  
+  const { learningStatusList, progressStatusList, userProvincialCourseInfoDetailCourseInfoDto: courseApplicant } = detailCourseInfo;
   return (
-    <CourseInfomationBox component="form" onSubmit={handleSubmit(onSubmit)}>
-      {/* <CourseInfomationBox component="form" onSubmit={onSubmit}> useForm을 사용하지 않을때.*/}
-      <TableHeadFull colSpan={4} sx={{ display: 'table', width: '100%' }}>
-        수강정보
-      </TableHeadFull>
-      <TableBody sx={{ display: 'table', width: '100%' }}>
-        <TableRow>
-          <TableLeftCell align="center">회원명</TableLeftCell>
-          <TableRightCell>{enrollInfo?.userInfo?.name}</TableRightCell>
-          <TableLeftCell align="center">회원아이디</TableLeftCell>
-          <TableRightCell>
-            {enrollInfo?.userInfo?.username
-              ? enrollInfo?.userInfo?.username
-              : '-'}
-          </TableRightCell>
-        </TableRow>
-        <TableRow>
-          <TableLeftCell align="center">소속</TableLeftCell>
-          <TableRightCell>{enrollInfo?.organization}</TableRightCell>
-          <TableLeftCell align="center">등록일</TableLeftCell>
-          <TableRightCell>{enrollInfo?.createdDtime}</TableRightCell>
-        </TableRow>
-        <TableRow>
-          <TableLeftCell align="center">신청희망날짜</TableLeftCell>
-          <TableRightCell>{enrollInfo?.expectedToStartDtime}</TableRightCell>
-          <TableLeftCell align="center">수강 종료기간</TableLeftCell>
-          <TableRightCell>{enrollInfo?.expiredDtime}</TableRightCell>
-        </TableRow>
-      </TableBody>
+    <Wrapper>
+      <Table>
+        <TableTitle>수강정보</TableTitle>
+        <Field
+          isDouble
+          title1="과정명"
+          value1={courseApplicant.courseName}
+          title2="회원아이디"
+          value2={courseApplicant.username}
+        />
+        <Field
+          isDouble
+          title1="기관명"
+          value1={courseApplicant.organization}
+          title2="지역"
+          value2={courseApplicant.region}
+          />
+        <Field
+          isDouble
+          title1="회원명"
+          value1={courseApplicant.name}
+          title2="등록일"
+          value2={courseApplicant.regDate}
+          />
+        <Field
+          isDouble
+          title1="수강 시작일"
+          value1={courseApplicant.studyDate.split(' ')[0]}
+          title2="수강 종료일"
+          value2={courseApplicant.studyDate.split(' ')[2]}
+          />
+        <Field
+          isDouble
+          title1="상태"
+          value1={courseApplicant.learningStatus}
+          title2="수료여부"
+          value2={courseApplicant.completeYn === 'Y' ? '수료' : '미수료'}
+          />
+      </Table>
+    
+      <Table>
+        <TableTitle>신청대상자 정보</TableTitle>
+        <Field
+          title1="교육대상자"
+          value1={ConvertEnum(courseApplicant.eduTargetMain)}
+          />
+        <Field title1="교육대상자 세부">
+          <SelectBox
+            id="educationDetailType"
+            label={`${courseSubType ? ConvertEnum(courseSubType) : '교육 대상자 세부타입'}`}
+            value={courseSubType}
+            onChange={onChangeCourseSubType}
+            options={makeCountArrayBySubType(courseApplicant.eduTargetMain)}
+            sx={{ width:'240px', marginBottom:'0px', height: '100%', fontSize: '14px' }}
+            size="small"
+            disabled={!editTarget}
+          />
+        </Field>
+        <CourseAudientsCountInputList
+          courseSubType={courseSubType}
+          editTarget={editTarget}
+          courseAudientCount={courseAudientCount}
+          onChangeCourseAudientCount={onChangeCourseAudientCount}
+          />
+      </Table>
+      <Button
+        variant={editTarget ? "contained" : "outlined"}
+        onClick={onClickEdit}
+        sx={{margin:'0 auto'}}>
+        {editTarget ? '수정완료' : '수정하기'}
+      </Button>
 
-      <TableHeadFull
-        colSpan={4}
-        sx={{ display: 'table', width: '100%', mt: '10px' }}
-      >
-        신청대상자 정보
-      </TableHeadFull>
+      <Table>
+        <TableTitle>학습현황</TableTitle>
+        <TableHeader titleArray={['항목','이수(과락)기준','성적','제출일','제출여부']} />
+        <TableBody list={learningStatusList} />
+      </Table>
 
-      <TableBody sx={{ display: 'table', width: '100%' }}>
-        <TableRow>
-          <TableLeftCell align="center">교육대상자</TableLeftCell>
-          <TableRightCell>
-            {
-              CourseTrafficTargetType.filter(
-                f => f.type === enrollInfo.eduTargetMain
-              )[0].ko
-            }
-          </TableRightCell>
-        </TableRow>
-        <TableRow>
-          <TableLeftCell align="center">교육대상자 세부</TableLeftCell>
-          <TableRightCell>
-            <Select
-              onChange={e => setValue('eduTargetSub', e.target.value as any)}
-              value={watch().eduTargetSub}
-            >
-              {CourseTrafficTargetType.filter(
-                f => f.type === enrollInfo.eduTargetMain
-              )[0].child.map(m => (
-                <MenuItem key={m.type} value={m.type}>
-                  {m.ko}
-                </MenuItem>
-              ))}
-            </Select>
-          </TableRightCell>
-        </TableRow>
-        {CourseTrafficTargetType.filter(
-          f => f.type === watch().eduTargetMain
-        )[0]
-          .child.filter(f => f.type === watch().eduTargetSub)[0]
-          .applicants.map(m => (
-            <TableRow key={m}>
-              <TableLeftCell align="center">
-                {eduSubArr.filter(f => f.subType === m)[0].subKo}
-              </TableLeftCell>
-              <TableRightCell>
-                <TextField
-                  onChange={handleEduPersonCount}
-                  name={m}
-                  defaultValue={enrollInfo[m] || 0}
-                  value={watch(m as any) || 0}
-                  InputProps={{ endAdornment: <Box>명</Box> }}
-                />
-              </TableRightCell>
-            </TableRow>
-          ))}
-      </TableBody>
-
-      <ButtonBox>
-        <SubmitBtn variant="contained" type="submit" disabled={loading}>
-          {loading ? <Spinner fit={true} /> : '수정하기'}
-        </SubmitBtn>
-      </ButtonBox>
-    </CourseInfomationBox>
+      <Table>
+        <ProgressTitle courseUserSeq={enrollSeq} />
+        <TableHeader titleArray={['챕터','강의명','강의시간','학습시간','진도율','완료여부','완료처리일','처리']} />
+        <ProgressTableBody progressStatusList={progressStatusList} courseUserSeq={enrollSeq} />
+      </Table>
+    </Wrapper>
   );
 }
 
-const CourseInfomationBox = styled(Box)``;
+export const DecideButtonGroup = styled(Box)`
+  position: absolute;
+  right: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+`
 
-const TableHeadFull = styled(TableCell)`
-  width: 100%;
-  background: #f5f5f5;
-  border: 1px solid #c4c4c4;
+export const DecideButton = styled(Button)<{large?:string}>`
+  border-radius: 4px;
+  background-color: rgba(191,49,51,0.94);
+  color: #fff;
   font-weight: bold;
-`;
-
-const TableLeftCell = styled(TableCell)`
-  width: 10%;
-  background: #f5f5f5;
-  border-right: 1px solid #c4c4c4;
-  border-bottom: 1px solid #c4c4c4;
-  &:first-of-type {
-    border-left: 1px solid #c4c4c4;
-    width: 10%;
+  font-size: ${({large}) => large === 'large' ? '1rem' : '.75rem'};
+  box-shadow: 0 0 2px #000;
+  border: 1px solid rgba(191,49,51,0.94);
+  &:hover {
+    background-color: #fdfdf5;
+    transition: all .3s;
+    color: rgba(191,49,51,0.94); 
   }
+`
+
+
+const Wrapper = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  gap: 3rem;
+  margin-bottom: 2rem;
 `;
 
-const TableRightCell = styled(TableCell)`
-  width: 40%;
-  border-bottom: 1px solid #c4c4c4;
-  border-right: 1px solid #c4c4c4;
-  font: 14px;
+const Table = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  box-shadow: 0 0 2px #888;
+  overflow:hidden;
+  border-radius: 8px;
+`
+
+
+export const TableTitle = styled(Box)`
+  width: 100%;
+  font-size: 1.15rem;
+  font-weight: bold;
+  align-self: flex-start;
+  padding: 0 0.5rem;
+  color: #222;
+  background-color: #fdfdf5;
+  height: 48px;
+  vertical-align: middle;
+  line-height: 48px;
+  border-bottom: 1px solid #dfdfdf;
+  
 `;
 
-const ButtonBox = styled(Box)`
-  margin: 10px 0 10px 0;
-  text-align: center;
+export const Row = styled(Box)`
+  display: flex;
+  flex-direction: row;  
+  height: 48px;
+  
 `;
 
-const SubmitBtn = styled(Button)`
-  width: 8%;
+export const InRow = styled(Row)`
+  width: 100%;
+  height: 48px;
+  
 `;
+
+
+
+export const InRowTitle = styled(Row)<{bgcolor?:string,fontweight?:number;}>`
+  flex: 0.2;
+  border-right: 1px solid #fafafa;
+  justify-content: center;
+  align-items: center;
+  font-weight: ${({fontweight}) => fontweight || 'bold'};
+  background-color: ${({bgcolor}) => bgcolor || '#fdfdf5'};
+  
+`;
+
+export const InRowContent = styled(Row)<{fontweight?:number,bgcolor?:string;}>`
+  flex: 0.8;
+  border-right: 1px solid #fafafa;
+  padding: 8px;
+  font-weight: ${({fontweight}) => fontweight || 400};
+  background-color: ${({bgcolor}) => bgcolor || '#fff'};
+  height: 48px;
+  
+`;
+
+export const OutRow = styled(Row)`
+  width: 100%;
+  border-top: 1px solid #dfdfdf;
+  
+  vertical-align: middle;
+  height: 48px;
+  
+`;
+

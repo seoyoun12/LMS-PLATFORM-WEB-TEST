@@ -1,4 +1,4 @@
-import { AdminCenterLayout, CourseInfoModify } from '@layouts/AdminCenter';
+import { AdminCenterLayout } from '@layouts/AdminCenter';
 import { CourseInfoTrafficModify } from '@layouts/AdminCenter/CourseInfoTrafficManagement/CourseInfoTrafficModify';
 
 export default function CourseInfoModifyPage() {

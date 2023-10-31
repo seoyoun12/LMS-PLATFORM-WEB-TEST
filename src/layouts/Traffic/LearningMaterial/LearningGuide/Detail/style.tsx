@@ -3,11 +3,30 @@ import { Button } from "@mui/material";
 import { css } from "@emotion/react";
 
 export const GuideDetailWrapper = styled.div`
-  padding-bottom: 230px;
+  padding-bottom: 2rem;
+  border-bottom: 3px solid #c7c7c7c7;
+  margin-bottom: 1rem;
 `;
 
 export const GuideDetailHeaderWrapper = styled.div`
-  margin-bottom: 30px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap : 1rem;
+  margin-bottom: 3rem;
+  width: 100%;
+  padding-bottom: 4px;
+  border-bottom: 3px solid #c7c7c7c7;
+  
+  .post-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+  }
+  .post-date {
+    color: #a7a7a7a7;
+    font-size: 12px;
+  }
 `;
 
 export const GuideDetailHeaderTitleText = styled.p`

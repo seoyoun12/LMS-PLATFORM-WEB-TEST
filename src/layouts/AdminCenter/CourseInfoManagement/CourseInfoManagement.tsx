@@ -23,6 +23,7 @@ import { TableBody,TableHead,Typography,Button,Box,InputBase,TextField,Backdrop,
 import { getExcelCourseLearning } from '@common/api/adm/excel';
 import { CourseLearningInfoCoursesResponseDto } from '@common/api/Api';
 import { format, getYear } from 'date-fns';
+import { DUMMY_YEAR_ARRAY } from '@common/constant';
 
 const headRows: {
   name: string;
@@ -85,9 +86,6 @@ const defaultValues: FormType = {
   year: 0,
 };
 
-const DUMMY_YEAR_ARRAY = Array.from({ length: getYear(new Date()) - 2022 + 1 }).map((_, i) => {
-  return {year: i + 2022};
-}).reverse();
 
 
 export default function CourseInfoManagement() {
@@ -250,7 +248,7 @@ export default function CourseInfoManagement() {
   
   return (
     <form onSubmit={(e) => handleSubmit(e,false)}>
-      <Title variant="h1">전체 수강생 학습현황</Title>
+      <Title variant="h1">전체 수강생 학습현황(운수/저상)</Title>
       <ContainerWrapper>
         <LeftContainer>
           <CourseSelectBox
@@ -423,9 +421,6 @@ export default function CourseInfoManagement() {
     </Box>
 
 
-
-
-
     <BoxRow sx={{ flexDirection: 'row',marginTop: '.25rem',marginBottom:'2rem' }}>
       <Button type="submit" variant='contained' onClick={(e) => handleSubmit(e,false)} fullWidth>
         검색하기
@@ -490,12 +485,7 @@ export default function CourseInfoManagement() {
         >
           <TableHead>
             <TableRow>
-              {
-              headRows.map(
-                ({
-                  name,
-                  width,
-                }) => (
+              {headRows.map(({ name,width }) => (
                   <CourseInfoTitleTableCell
                     key={name}
                     align="center"
@@ -507,7 +497,6 @@ export default function CourseInfoManagement() {
               )}
             </TableRow>
           </TableHead>
-
           <TableBody>
             {data.content.map(user => (
               <TableRow
@@ -516,7 +505,6 @@ export default function CourseInfoManagement() {
                 hover
                 onClick={() => onClickmodifyCourseInfo(user.courseUserSeq)}
               >
-                
                 <CourseInfoTableCell align="center">
                   {user.courseUserSeq}
                 </CourseInfoTableCell>
@@ -594,7 +582,7 @@ export default function CourseInfoManagement() {
                   {user.studyDate}
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
-                  {user.displayTotalProgress}
+                <SubjectBox>{user.displayTotalProgress}</SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">
                   {user.displayCompleteYn}
@@ -702,10 +690,9 @@ const LeftContainer = styled(Container)``;
 
 
 const DoubleInputBox = styled(Box)`
-display:flex;
-align-items:center;
-gap: 1rem;
-  
+  display:flex;
+  align-items:center;
+  gap: 1rem;  
 `
 
 

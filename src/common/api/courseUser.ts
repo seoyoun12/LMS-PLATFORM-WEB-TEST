@@ -106,10 +106,3 @@ export function getIsExistUser(courseClassSeq: number) {
     data: { available: boolean; duplicated: boolean; message: string | null };
   }>(`/course-user/exists/${courseClassSeq}`);
 }
-
-// 운수저상쪽 로직은 courseClass에 있음 여기로 가져와야함.
-// export function enrollCourseUserProvincial(
-//   requestDto: Partial<CourseUserProvincialSaveRequestDto>
-// ) {
-//   return POST(`/course-user/enroll/provincial`, requestDto);
-// }

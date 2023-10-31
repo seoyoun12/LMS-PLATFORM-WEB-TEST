@@ -1,5 +1,4 @@
 import { Box, Button, ButtonGroup, Container, FormControl, FormControlLabel, LinearProgress, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField, Typography, styled } from '@mui/material';
-import StebHeader from '../StebHeader/StebHeader';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
@@ -19,6 +18,8 @@ import { userBusinessTypeTwo } from '@layouts/MeEdit/TransWorker/TransWorker';
 import { locationList, residenceList } from '@layouts/MeEdit/MeEdit';
 import { UserRole, useMyUser } from '@common/api/user';
 import { blue } from '@mui/material/colors';
+import StebHeader from '../StebHeader/StebHeader';
+
 
 interface FormType {
   localName: string;
@@ -31,6 +32,7 @@ const localList = [
   { title: '충남', type: 'NAM' },
   { title: '세종', type: 'SEJONG' },
 ];
+
 const oneWordList = ['아', '바', '사', '자', '배'];
 
 const Placeholder = ({ children }) => {
@@ -49,8 +51,7 @@ export default function Steb2() {
   const [hideCarNumber, setHideCarNumber] = useState(false); //차량번호 숨기기
   const [fixedBusinessType, setFixedBusinessType] = useState<userBusinessType>(); //업체정보 운수구분 고정용(여객-여객,화물-화물)
   const [loading, setLoading] = useState(false);
-  const confirmRef = useRef<boolean>();
-  // const [CheckElementList, setCheckElementList] = useState<NodeListOf<Element>>();
+  const confirmRef = useRef<boolean>()
   const [currentIndex,setCurrentIndex] = useState(1);
   const [pageIndex,setPageIndex] = useState(1);
   const [disabledCompany, setDisabledCompany] = useState(false);
@@ -182,21 +183,6 @@ export default function Steb2() {
       setPageIndex(3)
       return snackbar({ variant: 'error', message: '회사명을 입력해주세요!' });
     }
-
-    // localName, digit2, oneWord, digit4
-    // if(watch().businessSubType !== courseSubCategoryType.BUS ||
-    //    watch().businessSubType !== courseSubCategoryType.CHARTER_BUS ||
-    //    watch().businessSubType !== courseSubCategoryType.CORPORATE_TAXI ||
-    //    watch().businessSubType !== courseSubCategoryType.KNEELING_BUS) {
-    //     if ((!hideCarNumber && !carNumberRegex.test(rest.carNumber))) {
-    //     setCurrentIndex(4);
-    //     setPageIndex(4);
-    //     return snackbar({
-    //       variant: 'error',
-    //       message: '올바른 형식의 차량번호를 입력해주세요!',
-    //     });
-    //   }
-    // }
 
     if (rest.carRegisteredRegion === '' || !rest.carRegisteredRegion) {
       setCurrentIndex(5);
@@ -332,8 +318,6 @@ export default function Steb2() {
   useEffect(() => {
     regFunc();
   }, [carWatch().localName, carWatch().digit2, carWatch().digit4, carWatch().oneWord]);
-
-
 
 
   useEffect(() => {
@@ -520,9 +504,7 @@ export default function Steb2() {
               placeholder='차종 번호2자리'
               inputProps={{ inputMode: 'numeric' }}
               fullWidth
-              sx={{
-                minWidth: '80px',
-              }}
+              sx={{ minWidth: '80px' }}
               />
             
               <Select

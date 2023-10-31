@@ -7,21 +7,12 @@ import {
   ProvincialBoardUpdateRequestDto,
 } from "../Api";
 
-// list
-export function courseTrafficList({
-  elementCnt,
-  page,
-}: {
-  elementCnt?: number;
-  page: number;
-}) {
-  const { data, error, mutate } = useSWR<
-    SWRResponse<PaginationResult<ProvincialBoardResponseDto[]>>
-  >(
-    [
-      `/provincial/board/adm`,
+// 
+export function courseTrafficList({ elementCnt,page,courseTitle,courseType }: {elementCnt?: number;page: number; courseTitle:string; courseType:string;}) {
+  const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<ProvincialBoardResponseDto[]>>>(
+    [`/course/adm`,
       {
-        params: { elementCnt, page },
+        params: { elementCnt, page,courseTitle,courseType, },
       },
     ],
     GET

@@ -1,44 +1,41 @@
 import styled from "@emotion/styled";
 import { ButtonBase, Chip } from "@mui/material";
 
-export const LearningGuideContainer = styled.div``;
-
-export const LearningGuideChipWrapper = styled.div`
-  display: flex;
-  margin-bottom: 62px;
-`;
-
-export const LearningGuideChipItem = styled(Chip)`
+export const Container = styled.div``;
+export const ChipItem = styled(Chip)`
   &:not(:last-of-type) {
     margin-right: 8px;
   }
 `;
 
-export const LearningGuideContentContainer = styled.div`
+export const ContentContainer = styled.div`
+  padding: 0rem 2rem;
   width: 100%;
   max-width: 1200px;
-  display: flex;
-  flex-wrap: wrap;
+  display : grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   justify-content: center;
-  margin: 62px auto 0 auto;
-  padding: 0;
-
-  @media (max-width: 768px) {
-    padding: 32px 12px;
-    margin: 0;
-  }
 `;
 
-export const LearningGuideItemContainer = styled(ButtonBase)`
+export const ItemContainer = styled(ButtonBase)`
   display: flex;
   flex-direction: column;
   width: 280px;
   margin: 0 26px 30px 0;
   text-align: left;
   align-items: flex-start;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+  padding: 1rem;
+  border-radius: 8px;
 
   &:nth-of-type(4n) {
     margin-right: 0;
+  }
+  &:hover {
+    transform: scale(1.02);
+    transition: transform 0.25s;
+    cursor: pointer;
   }
 
   @media (max-width: 786px) {
@@ -47,42 +44,49 @@ export const LearningGuideItemContainer = styled(ButtonBase)`
   }
 `;
 
-export const LearningGuideItemImageContainer = styled.div`
+export const ItemImageContainer = styled.div`
   width: 100%;
-  height: 200px;
-  background-color: #f6f6f6;
-  border-radius: 8px;
-  margin-bottom: 10px;
-
-  > img {
-    width: 100%;
-    height: 100%;
+  
+  margin: 0 auto;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.33);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img {
+    border-radius: 4px;
   }
+  
 `;
 
-export const LearningGuideItemContentContainer = styled.div`
+export const ItemContentContainer = styled.div`
   width: 100%;
 `;
 
-export const LearningGuideItemContentHeaderContainer = styled.div`
+export const ItemContentHeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 4px;
 `;
 
-export const LearningGuideItemContentTitle = styled.p`
+export const ItemContentTitle = styled.p`
   width: 0;
   flex-grow: 1;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 18px;
+  margin-top: .25rem;
+  font-weight: 700;
 `;
 
-export const LearningGuideItemContentDate = styled.p`
+export const ItemContentDate = styled.p`
   color: #858585;
+  
 `;
 
-export const LearningGuideItemContentSubtitle = styled.p``;
+export const ItemContentSubtitle = styled.p`
+  color: #a7a7a7ff;
+  font-size: 14px;
+`;

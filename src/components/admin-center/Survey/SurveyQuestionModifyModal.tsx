@@ -139,7 +139,7 @@ export function SurveyQuestionModifyModal({
       return snackbar({ variant: 'error', message: '모든 문항을 작성해주세요.' });
 
     //배열로 된 inputs를 변환합니다.
-    let convertedChoice = {};
+    const convertedChoice = {};
     inputsWatch().inputs.forEach(item => {
       const key = Object.keys(item)[1];
       convertedChoice[key] = item[key];

@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
-import { Tab, Tabs } from '@mui/material';
+import { Tab, Tabs as MeterialTabs } from '@mui/material';
 
-export const LearningMaterialWrapper = styled.div``;
+export const Wrapper = styled.div``;
 
-export const LearningMaterialHeaderContainer = styled.div`
+export const HeaderContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -22,7 +22,7 @@ export const LearningMaterialHeaderContainer = styled.div`
   }
 `;
 
-export const LearningMaterialHeaderTitle = styled.p`
+export const HeaderTitle = styled.p`
   font-size: 48px;
   font-weight: 500;
   color: #fff;
@@ -30,7 +30,7 @@ export const LearningMaterialHeaderTitle = styled.p`
   margin-bottom: 10px;
 `;
 
-export const LearningMaterialHeaderSubtitle = styled.p`
+export const HeaderSubtitle = styled.p`
   font-size: 17px;
   font-weight: 500;
   color: #fff;
@@ -38,12 +38,12 @@ export const LearningMaterialHeaderSubtitle = styled.p`
   word-break: break-word;
 `;
 
-export const LearningMaterialTabWrapper = styled.div`
+export const TabWrapper = styled.div`
   border-bottom: 1px solid #bfbfbf;
   margin-bottom: 40px;
 `;
 
-export const LearningMaterialTabs = styled(Tabs)`
+export const Tabs = styled(MeterialTabs)`
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
@@ -51,13 +51,13 @@ export const LearningMaterialTabs = styled(Tabs)`
   justify-content: center;
 `;
 
-export const LearningMaterialTabItem = styled(Tab)`
+export const TabItem = styled(Tab)`
   width: 0;
   flex-grow: 1;
   color: #000;
 `;
 
-export const LearningMaterialContentWrapper = styled.div`
+export const ContentWrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto;
 `;

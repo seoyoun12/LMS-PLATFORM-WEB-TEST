@@ -9,23 +9,14 @@ import {
 import { GetServerSideProps } from 'next';
 
 export default function LessonPage(props: LessonProps) {
-  return (
-    <>
-      <Head>
-        <title>충남교통연수원</title>
-      </Head>
-      <Lesson {...props} />
-    </>
-  );
+  return  <Lesson {...props} />
 }
 
 LessonPage.Layout = Layout;
 
 export const getServerSideProps: GetServerSideProps<LessonProps> = async context => {
   const courseUserSeq = Number(context.params.courseUserSeq);
-  const contentType = context.params.contentType
-    .toString()
-    .toUpperCase() as LessonContentType;
+  const contentType = context.params.contentType.toString().toUpperCase() as LessonContentType;
   const contentSeq = Number(context.params.contentSeq);
 
   if (

@@ -45,9 +45,8 @@ const headRows: {
 
 const typeTabsConfig = [
   { name: '전체', value: '' },
+  { name: '영상자료', value: 'TYPE_EDUCATIONAL' },
   { name: '연령별 교수학습 지도안', value: 'TYPE_BY_AGE' },
-  { name: '교육자료', value: 'TYPE_EDUCATIONAL' },
-  // { name: '교육영상', value: 'TYPE_VIDEO' },
   { name: '타기관자료모음', value: 'TYPE_OTHER_ORGAN' },
 ];
 
@@ -60,10 +59,7 @@ const subTypeTabsConfig = [
 
 export function LearningMaterialManagement() {
   const router = useRouter();
-  const snackbar = useSnackbar();
-  const dialog = useDialog();
   const [page, setPage] = useState(0);
-  const [seq, setSeq] = useState<number | null>(null);
   const [typeValue, setTypeValue] = useState('');
   const [subTypeValue, setSubTypeValue] = useState('');
   const [subType, setSubType] = useState<boolean>(true);
@@ -81,32 +77,6 @@ export function LearningMaterialManagement() {
     await mutate();
   };
 
-  // // 삭제
-  // const onClickRemoveLM = async (seq: number) => {
-  //   try {
-  //     const dialogConfirmed = await dialog({
-  //       title: '학습자료 삭제하기',
-  //       description: '정말로 삭제하시겠습니까?',
-  //       confirmText: '삭제하기',
-  //       cancelText: '취소',
-  //     });
-  //     if (dialogConfirmed) {
-  //       await learningMaterialRemove(seq);
-  //       snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-  //       await mutate();
-  //     }
-  //   } catch (e: any) {
-  //     snackbar({ variant: 'error', message: e.data.message });
-  //   }
-  // };
-
-  // console.log('학습자료 데이터 : ', data);
-  // console.log('학습자료 데이터2 : ', data.content[0].s3Files);
-  // const filedata = data.content[0].s3Files
-  const fileData = data?.content.map(f => f.s3Files[0]?.name);
-  // console.log('파일 데이터 : ', fileData);
-
-  // Pagination
   useEffect(() => {
     const { page } = router.query;
     setPage(!isNaN(Number(page)) ? Number(page) : 0);

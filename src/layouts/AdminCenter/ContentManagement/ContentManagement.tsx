@@ -1,22 +1,8 @@
-import {
-  Box,
-  Button,
-  Chip,
-  Container,
-  TableBody,
-  TableHead,
-  Typography,
-} from '@mui/material';
-import styles from '@styles/common.module.scss';
+import { Box,Chip,TableBody,TableHead,Typography } from '@mui/material';
 import { Table } from '@components/ui';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { Link } from '@components/common';
-import { grey } from '@mui/material/colors';
 import dateFormat from 'dateformat';
-import * as React from 'react';
-import { useSnackbar } from '@hooks/useSnackbar';
-import { useDialog } from '@hooks/useDialog';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { ProductStatus } from '@common/api/course';
@@ -37,8 +23,6 @@ const headRows: {
 ];
 
 export function ContentManagement() {
-  const snackbar = useSnackbar();
-  const dialog = useDialog();
   const router = useRouter();
   const [page, setPage] = useState(0);
   const { data, error } = useContentList({ page });
@@ -61,23 +45,6 @@ export function ContentManagement() {
     router.push(`/admin-center/content/modify/${seq}`);
   };
 
-  // const onRemoveCourse = async (contentSeq: number) => {
-  //   try {
-  //     const dialogConfirmed = await dialog({
-  //       title: '콘텐츠 삭제하기',
-  //       description: '정말로 삭제하시겠습니까?',
-  //       confirmText: '삭제하기',
-  //       cancelText: '취소',
-  //     });
-  //     if (dialogConfirmed) {
-  //       // await removeCourse({ contentSeq });
-  //       snackbar({ variant: 'success', message: '성공적으로 삭제되었습니다.' });
-  //       // await mutate([ `/content/adm`, { params: { page } } ]);
-  //     }
-  //   } catch (e: any) {
-  //     snackbar({ variant: 'error', message: e.data.message });
-  //   }
-  // };
 
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
@@ -132,21 +99,7 @@ export function ContentManagement() {
                 />
               </ContentTableCell>
 
-              {/* <TableCell style={{ width: 120 }} align="right">
-                <Link href={`/admin-center/content/modify/${content.seq}`}>
-                  <Button variant="text" color="neutral" size="small">
-                    상세
-                  </Button>
-                </Link>
-                <Button
-                  variant="text"
-                  color="warning"
-                  onClick={() => onRemoveCourse(content.seq)}
-                  size="small"
-                >
-                  삭제
-                </Button>
-              </TableCell> */}
+             
             </TableRow>
           ))}
         </TableBody>

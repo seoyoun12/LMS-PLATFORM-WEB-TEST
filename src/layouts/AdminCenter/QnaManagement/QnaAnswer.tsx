@@ -1,10 +1,9 @@
-import { BbsType, deleteFile, uploadFile } from '@common/api/adm/file';
+import { BbsType, uploadFile } from '@common/api/adm/file';
 import {
   uploadQnaAnswer,
   QnaAnswerInput,
   QnaAnswer,
   qnaDetail,
-  Qna,
 } from '@common/api/qna';
 import { QnaAnswerForm } from '@components/admin-center/QnaAnswerForm';
 import { QnaQuestionForm } from '@components/admin-center/QnaQuestionForm';

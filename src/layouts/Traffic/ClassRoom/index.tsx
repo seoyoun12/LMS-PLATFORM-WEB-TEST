@@ -1,104 +1,22 @@
-import {
-  MaterialType,
-  useTrafficMediaBoard,
-  EduTargetSubType,
-  EduTargetMain,
-  EduTargetMainType,
-  getTrafficMediaBoardRole,
-} from '@common/api/learningMaterial';
-import { GET } from '@common/httpClient';
-import { isLoginState, userInfo } from '@common/recoil';
-import { NotFound } from '@components/ui/NotFound';
-import { format } from 'date-fns';
-import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import {
-  MediaChipItem,
-  MediaMainChipWrap,
-  MediaContainer,
-  MediaContentContainer,
-  MediaItemContainer,
-  MediaItemContentContainer,
-  MediaItemContentHeaderContainer,
-  MediaItemContentSubtitle,
-  MediaItemContentTitle,
-  MediaItemImageContainer,
-  MediaSubChipWrap,
-  MediaHeaderContainer,
-  MediaHeaderTitle,
-  MediaHeaderSubtitle,
-  MediaBodyContainer,
-  MediaChipsWrap
-} from './style';
+
+import { MediaContainer,MediaHeaderContainer,MediaHeaderTitle,MediaHeaderSubtitle  } from './style';
 import BackgroundImage from 'public/assets/images/learning_material_background.svg';
+import useDominMe from '@hooks/useDominMe';
+import { Box, Typography } from '@mui/material';
+import styled from '@emotion/styled';
+import Image from 'next/image';
+import { Spinner } from '@components/ui';
+import { differenceInDays } from 'date-fns';
 
-// interface MediaLayoutProps {
-//   materialType: MaterialType;
-// }
-
-// export default function MediaLayout({ materialType }: MediaLayoutProps) {
 export default function ClassRoomLayout() {
-  const router = useRouter();
-  const [eduMain, setEduMain] = useState<EduTargetMainType>('TYPE_CHILDREN');
-  const [eduSub, setEduSub] = useState<EduTargetSubType>('TYPE_KINDERGARTEN');
-  const [chipAllowed, setChipAllowed] = useState<{
-    eduTargetMain: EduTargetMainType[];
-    eduTargetSub: EduTargetSubType[];
-  }>();
+  const { myLearningStatus } = useDominMe();
 
-  // if (!isLogin) return <NotFound content="로그인이 필요한 서비스입니다." />;
-  const { data } = useTrafficMediaBoard(eduSub);
-
-  const handleClickPost = (id: number) => {
-    router.push(`/traffic/class-room/${id}`);
-  };
-
-  const handleMainChipClick = (eduMainType: EduTargetMainType) => {
-    const getChildAllowedSub = eduArr
-      .filter(f => f.eduMainType === eduMainType)[0]
-      .child.filter(f => chipAllowed.eduTargetSub.includes(f.eduSubType));
-    setEduMain(eduMainType);
-    setEduSub(getChildAllowedSub[0].eduSubType);
-  };
-
-  // 권한
-
-  useEffect(() => {
-    (async function () {
-      try {
-        const roleData = await getTrafficMediaBoardRole();
-        const roleDataMainRoles = roleData.data.mainRoles;
-        const roleDataSubRoles = roleData.data.subRoles;
-        //indexOf의 첫 아이템의 위치가 반환됩니다. 필터의 idx가 계속 돌면 첫 아이템 위치랑 같을 경우에만 반환하므로 결국엔 중복이 제거됩니다. new Set()을 사용해도 동일한 결과를 줍니다.
-        const eduMainRemoveDuplication = roleDataMainRoles.filter(
-          (f, idx) => roleDataMainRoles.indexOf(f) === idx
-        ) as EduTargetMainType[];
-        const eduSubRemoveDeplication = roleDataSubRoles.filter(
-          (f, idx) => roleDataSubRoles.indexOf(f) === idx
-        ) as EduTargetSubType[];
-        setChipAllowed({
-          eduTargetMain: eduMainRemoveDuplication,
-          eduTargetSub: eduSubRemoveDeplication,
-        });
-        const getEduMain = eduArr.filter(r => {
-          let flag = false;
-          r.child.forEach(c => {
-            if (c.eduSubType === roleData.data.subRoles[0]) flag = true;
-          });
-          return flag;
-        });
-        const getChildAllowedSub = getEduMain[0].child.filter(f =>
-          roleDataSubRoles.includes(f.eduSubType)
-        );
-        setEduMain(getEduMain[0].eduMainType);
-        setEduSub(getChildAllowedSub[0].eduSubType);
-      } catch (e) {
-        console.log(e);
-      }
-    })();
-  }, []);
-
+  const onClickMoveToLesson = (courseUserSeq: number, lessonSeq: number) => {
+    // something invisible...
+    console.log(lessonSeq)
+    window.open(`/course/${courseUserSeq}/lesson/${lessonSeq}`,'_blank');
+  }  
+  console.log('hello ClassROOM!!!')
   return (
     <MediaContainer>
       
@@ -107,128 +25,89 @@ export default function ClassRoomLayout() {
         <MediaHeaderSubtitle>온라인 교육을 학습할 수 있습니다.</MediaHeaderSubtitle>
         <BackgroundImage />
       </MediaHeaderContainer>
-      <MediaBodyContainer>
-        <MediaChipsWrap>
-          <MediaMainChipWrap>
-            {eduArr
-              .filter(f => chipAllowed?.eduTargetMain.includes(f.eduMainType))
-              .map(r => (
-                <MediaChipItem
-                label={r.eduMainTypeKo}
-                color="primary"
-                variant={eduMain === r.eduMainType ? 'filled' : 'outlined'}
-                onClick={() => handleMainChipClick(r.eduMainType)}
-                />
-                ))}
-          </MediaMainChipWrap>
-          <MediaSubChipWrap>
-            {eduArr
-              .filter(f => f.eduMainType === eduMain)[0]
-              .child.filter(f => chipAllowed?.eduTargetSub.includes(f.eduSubType))
-              .map(r => (
-                <MediaChipItem
-                label={r.eduSubTypeKo}
-                color="success"
-                variant={eduSub === r.eduSubType ? 'filled' : 'outlined'}
-                onClick={() => setEduSub(r.eduSubType)}
-                />
-                ))}
-          </MediaSubChipWrap>
-        </MediaChipsWrap>
-        <MediaContentContainer>
-          {!data || data.length <= 0 ? (
-            <NotFound
-            style={{ height: '300px' }}
-            content="권한이 없거나 신청한 과정이 존재하지 않습니다!"
-            />
-            ) : (
-              <>
-              {data &&
-                data.map((item, index) => (
-                  <MediaItemContainer key={index} onClick={() => handleClickPost(item.seq)}>
-                    <MediaItemImageContainer>
-                      {(item.s3Files && item.s3Files.length > 0 && (
-                        <img src={item.s3Files[0].path} alt="course thumbnail" />
-                        )) || (
-                          <NotFound
-                          style={{ height: '100%' }}
-                          content="이미지를 찾을 수 없음."
-                          />
-                          )}
-                    </MediaItemImageContainer>
 
-                    <MediaItemContentContainer>
-                      <MediaItemContentHeaderContainer>
-                        <MediaItemContentTitle>{item.title}</MediaItemContentTitle>
-                        {/*<LearningGuideItemContentDate>*/}
-                        {/*  조회수: 0*/}
-                        {/*</LearningGuideItemContentDate>*/}
-                      </MediaItemContentHeaderContainer>
-                      <MediaItemContentSubtitle>
-                        {format(new Date(item.createdDtime), 'yyyy. MM. dd')}
-                      </MediaItemContentSubtitle>
-                    </MediaItemContentContainer>
-                  </MediaItemContainer>
-                ))}
-            </>
-          )}
-        </MediaContentContainer>
-      </MediaBodyContainer>
+
+      <Wrapper>
+        {
+          myLearningStatus
+          ? myLearningStatus.data.map((item) => {
+            if(item.progressStatus === 'TYPE_PROGRESSING')
+            return (
+              <Item key={item.courseUserSeq} onClick={() => onClickMoveToLesson(item.courseUserSeq,item.recentLessonSeq)}>
+                <Image src={item.thumbnailImage} width={240} height={184} alt="과정 썸네일 이미지" style={{borderRadius: '8px'}} />
+                <ItemTitle className='title'>{item.courseTitle}</ItemTitle>
+                <ItemProgrss>수강 종료까지 {differenceInDays( new Date(item.studyEndDate), new Date())}일 남았습니다.</ItemProgrss>
+                <ItemProgrss>현재 수강률: {item.progress}% </ItemProgrss>
+              </Item>
+            )
+          })
+          : <Spinner />
+        }  
+        
+      </Wrapper>
     </MediaContainer>
   );
 }
 
-const eduArr: {
-  eduMainType: EduTargetMainType;
-  eduMainTypeKo: string;
-  child: { eduSubType: EduTargetSubType; eduSubTypeKo: string }[];
-}[] = [
-  {
-    eduMainType: 'TYPE_CHILDREN',
-    eduMainTypeKo: '어린이',
-    child: [
-      {
-        eduSubType: 'TYPE_KINDERGARTEN',
-        eduSubTypeKo: '유치원',
-      },
-      {
-        eduSubType: 'TYPE_ELEMENTARY',
-        eduSubTypeKo: '초등학교',
-      },
-    ],
-  },
-  {
-    eduMainType: 'TYPE_TEENAGER',
-    eduMainTypeKo: '청소년',
-    child: [
-      {
-        eduSubType: 'TYPE_MIDDLE',
-        eduSubTypeKo: '중학교',
-      },
-      {
-        eduSubType: 'TYPE_HIGH',
-        eduSubTypeKo: '고등학교',
-      },
-    ],
-  },
-  {
-    eduMainType: 'TYPE_ELDERLY',
-    eduMainTypeKo: '어르신',
-    child: [
-      {
-        eduSubType: 'TYPE_ELDERLY',
-        eduSubTypeKo: '어르신',
-      },
-    ],
-  },
-  {
-    eduMainType: 'TYPE_SELF_DRIVING',
-    eduMainTypeKo: '자가운전자',
-    child: [
-      {
-        eduSubType: 'TYPE_SELF_DRIVER',
-        eduSubTypeKo: '자가운전자',
-      },
-    ],
-  },
-];
+
+const ItemText = styled(Typography)`
+  align-self: flex-start;
+`
+
+const ItemTitle = styled(ItemText)`
+  width: 240px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+  font-size: 1.15rem;
+  color: #161D2B;
+  margin-top: .5rem;
+`
+
+const ItemProgrss = styled(ItemText)`
+  font-size: .85rem;
+  font-weight: bold;
+  color: #c7c7c7;
+  margin-top: .25rem;
+`
+
+const Item = styled(Box)`
+  max-width: 300px;
+  width: 300px;
+  height: 300px;
+  box-shadow: 0 0 2px 0 rgba(0,0,0,0.4);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 2rem;
+  gap: .25rem;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid #2d63e278;
+    transition: all 0.6s ease;
+    transform: scale(1.05);
+    .title {
+      color: #2d63e2;
+    }
+  }
+`
+
+const Wrapper = styled(Box)`
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 0 auto;
+  padding: 2rem 0;
+  @media (max-width: 768px) {
+    padding: 32px 12px;
+    margin: 0;
+  }
+`;

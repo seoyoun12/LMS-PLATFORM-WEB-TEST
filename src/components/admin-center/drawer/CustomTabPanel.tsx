@@ -18,6 +18,7 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       sx={{
         marginTop: 2,
+        
       }}
       {...other}
     >

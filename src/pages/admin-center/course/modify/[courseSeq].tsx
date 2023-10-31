@@ -6,18 +6,4 @@ export default function CourseModifyPage() {
   );
 }
 
-// TODO: 나중에 getServerSideProps 적용해보기
-// export const getServerSideProps = (ctx: GetServerSidePropsContext) => {
-//   const { courseSeq } = ctx.query;
-//   const { data, isError, isLoading } = useCourse(Number(courseSeq));
-//
-//   return {
-//     props: {
-//       data,
-//       isError,
-//       isLoading
-//     }
-//   };
-// };
-
 CourseModifyPage.Layout = AdminCenterLayout;

@@ -1,4 +1,4 @@
-import { useCourseList } from '@common/api/adm/course';
+
 import { Modal, Spinner, Table } from '@components/ui';
 import styled from '@emotion/styled';
 import { ErrorMessage } from '@hookform/error-message';

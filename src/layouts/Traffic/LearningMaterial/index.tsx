@@ -1,143 +1,78 @@
-import React, { useCallback } from 'react';
-import {
-  LearningMaterialContentWrapper,
-  LearningMaterialHeaderContainer,
-  LearningMaterialHeaderSubtitle,
-  LearningMaterialHeaderTitle,
-  LearningMaterialTabItem,
-  LearningMaterialTabs,
-  LearningMaterialTabWrapper,
-  LearningMaterialWrapper,
-} from '@layouts/Traffic/LearningMaterial/style';
-import BackgroundImage from 'public/assets/images/learning_material_background.svg';
+import { useCallback } from 'react';
+import { ContentWrapper,HeaderContainer,HeaderSubtitle,HeaderTitle,TabItem,Tabs,TabWrapper,Wrapper } from '@layouts/Traffic/LearningMaterial/style';
 import { useRouter } from 'next/router';
+import { getMaterialType } from '@layouts/Traffic/LearningMaterial/util';
+import BackgroundImage from 'public/assets/images/learning_material_background.svg';
 import EducationLayout from '@layouts/Traffic/LearningMaterial/Education';
 import LearningGuideLayout from '@layouts/Traffic/LearningMaterial/LearningGuide';
 import ReferenceLayout from '@layouts/Traffic/LearningMaterial/Reference';
 import VideoLayout from '@layouts/Traffic/LearningMaterial/Video';
-import { getMaterialType } from '@layouts/Traffic/LearningMaterial/util';
 import LearningGuideDetailLayout from '@layouts/Traffic/LearningMaterial/LearningGuide/Detail';
-import { useRecoilState } from 'recoil';
-import { isLoginState } from '@common/recoil';
 
-export type MaterialTabType =
-  | 'education'
-  | 'learning-guide'
-  | 'reference'
-  | 'video'
-  | 'media';
+export type MaterialTabType ='education'| 'learning-guide'| 'reference'| 'video'| 'media';
 
 export function LearningMaterialLayout() {
   const router = useRouter();
-  const { type, id } = router.query as {
-    type: MaterialTabType;
-    id?: string;
-  };
-  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
-  // const [tab, setTab] = useState<MaterialTabType>(type);
-
-  // const tabsConfig = [
-  //   {
-  //     label: '연령별교수학습지도안',
-  //     onClick: () => handleClickTab('education'),
-  //     value: 'education',
-  //   },
-  //   {
-  //     label: '교육자료',
-  //     onClick: () => handleClickTab('learning_guide'),
-  //     value: 'learning_guide',
-  //   },
-  //   {
-  //     label: '교육영상',
-  //     onClick: () => handleClickTab('video'),
-  //     value: 'video',
-  //   },
-  //   {
-  //     label: '타기관자료모음',
-  //     onClick: () => handleClickTab('reference'),
-  //     value: 'reference',
-  //   },
-  //   {
-  //     label: '교육영상게시판',
-  //     onClick: () => handleClickTab('media'),
-  //     value: 'media',
-  //   },
-  // ];
-
-  const handleClickTab = (tabValue: MaterialTabType) => {
-    router.push(`/traffic/learning-material/${tabValue}`);
-  };
-
+  const { type, id } = router.query as { type: MaterialTabType; id?: string; };
+  const handleClickTab = (tabValue: MaterialTabType) => router.push(`/traffic/learning-material/${tabValue}`);
+  
   const contentRender = useCallback(() => {
-    // education(교육자료) , learning-guide(지도안) 아닌가? 바뀐것같다.
     switch (type) {
       case 'learning-guide':
         return <EducationLayout materialType={getMaterialType(type)} />;
       case 'education':
-        if (id) {
-          return <LearningGuideDetailLayout />;
-        }
-        return <LearningGuideLayout materialType={getMaterialType(type)} />;
+        // id가 있으면 path: education/{id} 형식인 detail페이지로 들어가고 아니면 리스트 보여주는 것 같음.. ㅁㅊ;
+        return id ? <LearningGuideDetailLayout /> : <LearningGuideLayout materialType={getMaterialType(type)} />;
       case 'reference':
         return <ReferenceLayout materialType={getMaterialType(type)} />;
       case 'video':
         return <VideoLayout materialType={getMaterialType(type)} />;
       default:
-        return <></>;
+        return <></>
     }
-  }, [type]);
+  }, [type,id]);
 
   return (
     <>
-      <LearningMaterialWrapper>
-        <LearningMaterialHeaderContainer>
-          <LearningMaterialHeaderTitle>학습자료</LearningMaterialHeaderTitle>
-          <LearningMaterialHeaderSubtitle>
+      <Wrapper>
+          {/* Header */}
+        <HeaderContainer>
+          <HeaderTitle>학습자료</HeaderTitle>
+          <HeaderSubtitle>
             학습에 필요한 것을 도와드립니다!
-          </LearningMaterialHeaderSubtitle>
+          </HeaderSubtitle>
           <BackgroundImage />
-        </LearningMaterialHeaderContainer>
-        <LearningMaterialTabWrapper>
-          <LearningMaterialTabs
+        </HeaderContainer>
+
+          {/* Tabs  */}
+        <TabWrapper>
+          <Tabs
             variant='scrollable'
             allowScrollButtonsMobile={true}
             value={type}
           >
-            <LearningMaterialTabItem
+            <TabItem
+              label='영상자료'
+              onClick={() => handleClickTab('education')}
+              value='education'
+            />
+            <TabItem
               label='연령별교수학습지도안'
               onClick={() => handleClickTab('learning-guide')}
               value='learning-guide'
             />
-            <LearningMaterialTabItem
-              label='교육자료'
-              onClick={() => handleClickTab('education')}
-              value='education'
-            />
-            {/* <LearningMaterialTabItem
-              label="교육영상"
-              onClick={() => handleClickTab('video')}
-              value="video"
-            /> */}
-            {/* 비활성화 */}
-            <LearningMaterialTabItem
+            <TabItem
               label='타기관자료모음'
               onClick={() => handleClickTab('reference')}
               value='reference'
             />
-            {/* {isLogin && (
-              <LearningMaterialTabItem
-                label="교육영상게시판"
-                onClick={() => handleClickTab('media')}
-                value="media"
-              />
-            )} */}
-          </LearningMaterialTabs>
-        </LearningMaterialTabWrapper>
-      </LearningMaterialWrapper>
-
-      <LearningMaterialContentWrapper>
+          </Tabs>
+        </TabWrapper>
+          {/* Content */}
+      </Wrapper>
+      <ContentWrapper>
         {contentRender()}
-      </LearningMaterialContentWrapper>
+      </ContentWrapper>
     </>
   );
 }

@@ -3,7 +3,7 @@ import styles from '@styles/common.module.scss';
 import { Container } from '@mui/material';
 import { CourseInput, CourseRes, courseUpload } from '@common/api/course';
 import { BbsType, uploadFile } from '@common/api/adm/file';
-import type { CourseDetailResponseDto } from '@common/api/Api';
+
 import { useSnackbar } from '@hooks/useSnackbar';
 import router from 'next/router';
 
@@ -20,12 +20,7 @@ export function CourseUpload() {
     }
   };
 
-  const handleSubmit = async ({
-    files,
-    courseInput,
-    isFileDelete,
-    setLoading,
-  }: {
+  const handleSubmit = async ({ files, courseInput, setLoading }: {
     files: File[];
     courseInput: CourseInput;
     isFileDelete: boolean;
@@ -38,7 +33,7 @@ export function CourseUpload() {
       snackbar({ variant: 'success', message: '업로드 되었습니다.' });
       router.push(`/admin-center/course`);
       setLoading(false);
-    } catch (e: any) {
+    } catch (e) {
       console.error(e);
       snackbar({ variant: 'error', message: '업로드에 실패했습니다.' });
       setLoading(false);

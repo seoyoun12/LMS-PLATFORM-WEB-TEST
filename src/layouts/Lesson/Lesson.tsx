@@ -40,14 +40,11 @@ export default function Lesson(props: LessonProps) {
   const [currentLessonPlayTime,setCurrentLessonPlayTime] = useState(0);
   const { getCheckAvailableLesson } = useLesson();
   const [isAvailableLesson,setIsAvailableLesson] = useState(true);
-  // https://edu.ctti.or.kr/course/40689/survey/8
+
   const getAvaliableLessonCheckResult = async ({courseUserSeq, contentSeq}) => {
     const data = await getCheckAvailableLesson({courseUserSeq, contentSeq});
-    // console.log('===get Available Data is ... ===',data);
     setIsAvailableLesson(data);
   }
-  console.log(router.query);
-
 
   
   useEffect(() => {
@@ -56,10 +53,7 @@ export default function Lesson(props: LessonProps) {
     if(!course) return;
       if(contentType === 'survey') return;
     getAvaliableLessonCheckResult({courseUserSeq: course.courseUserSeq, contentSeq: props.contentSeq})
-    
-  },[course,props.contentSeq,isAvailableLesson])
-
-
+  },[course,props.contentSeq])
 
   useEffect(() => {
     const { lessons } = course || { lessons: [] };
@@ -104,8 +98,7 @@ export default function Lesson(props: LessonProps) {
                   case 'COURSE_MODULE_TEST':
                     return cm.submitYn === 'Y';
                   case 'COURSE_MODULE_SURVEY':
-                    return course.surveyList.findIndex(v => v.surveySeq === cm.surveySeq && v.surveyCompletedYn === 'Y') !== -1;
-                    
+                    return course.surveyList.findIndex(v => v.surveySeq === cm.surveySeq && v.surveyCompletedYn === 'Y') !== -1;   
                 }
               })
             );
@@ -139,9 +132,6 @@ export default function Lesson(props: LessonProps) {
     setModuleSurveyTodo(surveyTodo);
     // if (course.totalProgress >= 100 && surveyTodo) setDialog("SURVEY");
   }, [course, courseModules, courseModulesCompleted]);
-
-
-
   // falsy값이 아닌 명확한 false값을 비교해야함
   if(isAvailableLesson === false) return <LessonRejectPage />
 
@@ -186,7 +176,9 @@ export default function Lesson(props: LessonProps) {
       );
 
       DialogFirst = (
-        <Dialog
+        course.courseType === 'TYPE_PROVINCIAL'
+        ? null
+        : <Dialog
           open={dialog === 'FIRST'}
           onClose={() => {
             setDialog(null);

@@ -4626,7 +4626,7 @@ export interface LearningMaterialResponseDto {
 
   /** S3 파일 정보 */
   s3Files?: FileResponseDto[];
-
+  
   /**
    * 시퀀스
    * @format int64
@@ -6350,7 +6350,8 @@ export interface ProvincialEnrollSaveRequestDto {
    * @example yyyy-MM-dd
    */
   expectedToStartDtime?: string;
-
+  expectedToEndDtime?: string;
+  
   /**
    * 1학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
    * @format int32

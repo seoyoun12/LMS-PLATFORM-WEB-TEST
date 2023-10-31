@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  styled,
-  Table,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Box,Button,Container,styled,Table,TableCell,TableContainer,TableRow,Typography } from '@mui/material';
 import { StebHeader } from '../StebHeader';
 import { useRecoilState } from 'recoil';
 import { courseClassTrafficInfo, userInfo } from '@common/recoil';
@@ -16,9 +6,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { locationList } from '@layouts/MeEdit/MeEdit';
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import { useRouter } from 'next/router';
-import { useEffect, useLayoutEffect, useState } from 'react';
 import { studentList } from '../Steb2/Steb2';
-import { Step3StudentList } from './Step3StudentList';
 
 export function Steb3() {
   const router = useRouter();
@@ -31,20 +19,16 @@ export function Steb3() {
         <HeaderTypo variant="h5">신청완료</HeaderTypo>
         <CompleteRegi>
           <CheckIcon sx={{ fontSize: '6rem', color: 'primary.main' }} />
-          <Box>
-            <Typography component="span" sx={{ fontSize: '1.5rem' }}>
+            <Typography component="p" sx={{ fontSize: '1.35rem' }}>
               교육신청이{' '}
-            </Typography>
             <Typography component="span" fontWeight="bold" sx={{ fontSize: '1.5rem' }}>
               완료{' '}
             </Typography>
-            <Typography component="span" sx={{ fontSize: '1.5rem' }}>
               되었습니다.
             </Typography>
-          </Box>
         </CompleteRegi>
 
-        <RegiType>
+        <Box>
           <Typography
             variant="h5"
             fontWeight="bold"
@@ -59,7 +43,7 @@ export function Steb3() {
             <span>신청교육</span>
           </Typography>
           <TableContainer>
-            <Table sx={{ borderTop: '4px solid #3498db' }}>
+            <Table sx={{border: '1px solid #c7c7c7'}}>
               <TableCustomRow>
                 <TableLeftCell>지역</TableLeftCell>
                 <TableCell>
@@ -75,6 +59,14 @@ export function Steb3() {
               <TableCustomRow>
                 <TableLeftCell>신청기간</TableLeftCell>
                 <TableCell>{trafficInfo?.expectedToStartDtime}</TableCell>
+              </TableCustomRow>
+              <TableCustomRow>
+                <TableLeftCell>마감날짜</TableLeftCell>
+                <TableCell>{trafficInfo?.expectedToEndDtime}</TableCell>
+              </TableCustomRow>
+              <TableCustomRow>
+                <TableLeftCell>신청과정</TableLeftCell>
+                <TableCell>{trafficInfo?.courseName}</TableCell>
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>교육대상자</TableLeftCell>
@@ -98,18 +90,30 @@ export function Steb3() {
                   )}
                 </TableCell>
               </TableCustomRow>
+              { studentList
+                .filter(item => item.enType === trafficInfo?.eduTargetMain)[0]
+                ?.category.filter(fil => fil.enType === trafficInfo?.eduTargetSub)
+                .map((item) => {
+                  return (
+                        item.ageList.map((ages,index) => (
+                          <TableCustomRow key={index}>
+                            <TableLeftCell>{ages.age}</TableLeftCell>
+                            <TableCell>
+                              { trafficInfo?.peopleCounts?.[item.enType]?.[ages.enAge] ?? 0 }명
+                            </TableCell>
+                          </TableCustomRow>
+                        ))
+                  )})}
             </Table>
           </TableContainer>
-        </RegiType>
+          
+        </Box>
 
-        <StudentList>
-          <Step3StudentList
-            students={trafficInfo?.peopleCounts}
-            trafficInfo={trafficInfo}
-          />
-        </StudentList>
+        
+
+        
         <BottomBox>
-          <Box padding="2rem" borderBottom="2px solid #888888" mb={2} textAlign="center">
+          <Box padding="2rem 0" borderBottom="2px solid #888888" mb={2} textAlign="center">
             <Typography>{userInfoData.name}님의 교육신청이 완료되었습니다.</Typography>
             <Typography>알차고 실속있는 서비스로 찾아뵙겠습니다.</Typography>
           </Box>
@@ -119,13 +123,18 @@ export function Steb3() {
               color="neutral"
               onClick={() => router.push(`/traffic/category`)}
               fullWidth
+              sx={{
+                boxShadow:'1px 2px 3px 0px rgba(0,0,0,0.55)'
+              }}
             >
               홈으로
             </Button>
+            {/* TODO: 도민 접속시 traffic/me로 가게끔 수정 */}
             <Button
               variant="contained"
-              onClick={() => router.push(`/me`)}
+              onClick={() => router.push(`/traffic/me`)}
               fullWidth
+              sx={{ boxShadow:'1px 2px 3px 0px rgba(0,0,0,0.55)' }}
             >
               마이페이지로 이동
             </Button>
@@ -154,8 +163,7 @@ const CompleteRegi = styled(Box)`
   margin: auto;
   align-items: center;
 `;
-const RegiType = styled(Box)``;
-const StudentList = styled(Box)``;
+
 
 const TableCustomRow = styled(TableRow)`
   border-bottom: 2px solid #c3c3c3;
@@ -166,6 +174,6 @@ const TableLeftCell = styled(TableCell)`
 `;
 
 const BottomBox = styled(Box)`
-  width: 420px;
+  width: 100%;
   margin: auto;
 `;

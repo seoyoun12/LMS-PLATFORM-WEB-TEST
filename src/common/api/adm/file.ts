@@ -52,17 +52,7 @@ export const completeFileUpload = (completeFileInput: CompleteFileInput) => {
   return POST(`/file/multipart/complete`, completeFileInput);
 };
 
-export const uploadFile = ({
-  fileType,
-  fileTypeId,
-  files,
-  idx
-}: {
-  fileType: BbsType;
-  fileTypeId: number;
-  files: File[];
-  idx?:number
-}) => {
+export const uploadFile = ({ fileType,fileTypeId,files,idx }: { fileType: BbsType;fileTypeId: number;files: File[];idx?:number }) => {
   const formData = new FormData();
   if(idx){
     const file = !!files?.length ? files[idx] : new Blob([]);

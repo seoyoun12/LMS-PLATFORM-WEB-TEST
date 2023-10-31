@@ -292,9 +292,11 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                 </RadioGroup>
               )}
             />
+
+
+          {/*  */}
             <Typography>상호작용</Typography>
             <Controller
-              
               control={control}
               name="interaction"
               render={({ field }) => (
@@ -337,7 +339,6 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                     width: '100%'
                   }}
                 >
-                  {/* 450 451 452 , 441,442 */}
                   <Button
                     variant="contained"
                     color="primary"
@@ -350,6 +351,10 @@ export function LessonEditModal({ open, handleClose, lesson, error }: Props) {
                     <Typography> + 추가 / 수정 하기 (총 {quizList ? quizList.length : 0}개)</Typography>
                   </Button>
                 </Box>
+                {/*  */}
+
+
+                
             </Box>
             : <Box
             sx={{

@@ -91,18 +91,21 @@ export function courseList({
 // 20220808 courseAdmList
 export function courseAdmList({
   courseTitle,
+  courseType,
   elementCnt,
   page,
 }: {
   courseTitle?: string;
+  courseType: string;
   elementCnt?: number;
+  
   page: number;
 }) {
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<Course[]>>>(
     [
       `/course/adm`,
       {
-        params: { courseTitle, elementCnt, page },
+        params: { courseType,courseTitle, elementCnt, page },
       },
     ],
     GET

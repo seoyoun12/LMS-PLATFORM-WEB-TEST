@@ -2,10 +2,10 @@ import useSWR, { SWRResponse } from "swr";
 import { GET } from "@common/httpClient";
 import { UserMyinfoCertificatesResponseDto } from '@common/api/Api';
 
+
+
 export function useGetUserMyinfoCertificates() {
-  const { data, mutate, error } = useSWR<
-    SWRResponse<UserMyinfoCertificatesResponseDto[]>
-  >("/user/myinfo/certificates", GET);
+  const { data, mutate, error } = useSWR<SWRResponse<UserMyinfoCertificatesResponseDto[]>>("/user/myinfo/certificates", GET);
 
   return {
     certificateList: data,
@@ -13,3 +13,4 @@ export function useGetUserMyinfoCertificates() {
     error,
   };
 }
+

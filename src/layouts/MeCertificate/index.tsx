@@ -17,7 +17,6 @@ const MeCertificate: NextPage = () => {
   const [showCertificateFetchState, setShowCertificateFetchState] = useState<FetchState>('READY');
   const [downloadCertificateFetchState, setDownloadCertificateFetchState] = useState<FetchState>('READY');
 
-
   const handleClickShowCertificates = async (item: UserMyinfoCertificatesResponseDto) => {
     if (!item.courseUserSeq || showCertificateFetchState === 'FETCHING') return;
   
@@ -68,7 +67,6 @@ const MeCertificate: NextPage = () => {
 
   const handleClickPrintCertificate = () => {
     if (!selectedCertificate?.courseUserSeq) return;
-    
 
     const win = window.open();
     self.focus();
@@ -143,13 +141,7 @@ const MeCertificate: NextPage = () => {
         )}
       </MeCertificateContentContainer>
       <Backdrop
-        open={
-          showCertificateFetchState === 'SUCCESS' ||
-          showCertificateFetchState === 'READY' ||
-          showCertificateFetchState === 'FAILURE'
-            ? false
-            : true
-        }
+        open={!(showCertificateFetchState === 'SUCCESS' || showCertificateFetchState === 'READY' || showCertificateFetchState === 'FAILURE')}
       >
         <Spinner />
       </Backdrop>

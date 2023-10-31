@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { isLoginState } from '@common/recoil';
+import { SettingsInputHdmiRounded } from '@mui/icons-material';
 
 const showRemoteList = [  
   { href: '/traffic/category' },
@@ -44,9 +45,10 @@ export function NavBarV2() {
   const [isShowRemote, setIsShowRemote] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [showIndicatorValue, setShowIndicatorValue] = useState(null);
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState); //과정게시판 교육영상 가리기용 <<< ????????????
   
   const open = Boolean(anchorEl);
-  const [isLogin, setIsLogin] = useRecoilState(isLoginState); //과정게시판 교육영상 가리기용
+  
 
   const handleHover = (e: React.MouseEvent<HTMLDivElement>, showValue: number) => {
     setAnchorEl(e.currentTarget);
@@ -61,8 +63,9 @@ export function NavBarV2() {
   useEffect(() => {
     const show = showRemoteList.some(e => router.route.includes(e.href));
     setIsShowRemote(show);
+    
   }, [router]);
-
+  
   return (
     <ContentContainer>
       <HeaderBackground className={`dropdown-back  ${open ? '' : 'hidden'}`}/>

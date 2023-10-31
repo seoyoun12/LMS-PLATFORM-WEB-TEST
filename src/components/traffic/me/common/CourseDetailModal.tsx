@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { MyCourse } from '@hooks/useDominMe';
 import { Box, Button, Modal } from '@mui/material'
 import React from 'react'
 import Details from './Details';
@@ -22,8 +21,6 @@ export default function CourseDetailModal({onClose, detailCourse}: Props) {
   const onClickNavigateToLesson = () => {
     window.open(`/course/${detailCourse.courseUserSeq}/lesson/${detailCourse.recentLessonSeq}`,'_blank');
   }
-
-  console.log(detailCourse);
 
   return (
     <Modal

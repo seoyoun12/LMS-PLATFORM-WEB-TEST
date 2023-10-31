@@ -1,14 +1,12 @@
 
-import { MediaContainer,MediaHeaderContainer,MediaHeaderTitle,MediaHeaderSubtitle,MediaBodyContainer  } from './style';
+import { MediaContainer,MediaHeaderContainer,MediaHeaderTitle,MediaHeaderSubtitle  } from './style';
 import BackgroundImage from 'public/assets/images/learning_material_background.svg';
-
 import useDominMe from '@hooks/useDominMe';
 import { Box, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { Spinner } from '@components/ui';
 import { differenceInDays } from 'date-fns';
-import { useRouter } from 'next/router';
 
 export default function ClassRoomLayout() {
   const { myLearningStatus } = useDominMe();
@@ -18,7 +16,7 @@ export default function ClassRoomLayout() {
     console.log(lessonSeq)
     window.open(`/course/${courseUserSeq}/lesson/${lessonSeq}`,'_blank');
   }  
-
+  console.log('hello ClassROOM!!!')
   return (
     <MediaContainer>
       

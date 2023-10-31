@@ -6,8 +6,8 @@ import { Box, Button } from '@mui/material';
 import {  POST } from '@common/httpClient';
 import createDownloadLink from '@utils/createDownloadLink';
 import DownloadIcon from 'public/assets/images/ic_download.svg';
-import { TuiViewer } from '@components/common/TuiEditor';
 import styled from '@emotion/styled';
+import { TuiViewer } from '@components/common/TuiEditor';
 import { useState } from 'react';
 interface ReferenceLayoutProps {
   materialType: MaterialType;
@@ -22,11 +22,9 @@ export default function ReferenceLayout({ materialType }: ReferenceLayoutProps) 
     const url = window.URL.createObjectURL(new Blob([data]));
     createDownloadLink(url, name)
   };
-  
   const onClickToggleContent = (id: number) => {
     setSelectedPost(id === selectedPost ? null : id);
   }
-
   return (
     <ReferenceWrapper>
       <TableWrapper>
@@ -40,10 +38,8 @@ export default function ReferenceLayout({ materialType }: ReferenceLayoutProps) 
 
       {data &&
         data.data.map(value => (
-          <ReferenceItemWrapper key={value.seq}>
-            <ReferenceItemHeaderWrapper
-              onClick={() => onClickToggleContent(value.seq)}
-            >
+          <ReferenceItemWrapper key={value.seq} onClick={() => onClickToggleContent(value.seq)}>
+            <ReferenceItemHeaderWrapper>
               <TableItem width="10%">{value.seq}</TableItem>
               <TableItem width="55%" textAlign="left">
                 {value.title}
@@ -57,18 +53,18 @@ export default function ReferenceLayout({ materialType }: ReferenceLayoutProps) 
               </TableItem>
               <TableItem width="10%">
                 <Button
-                  onClick={() => handleClickDownload(value.s3Files[0].name, value.s3Files[0].seq)}
+                  onClick={() =>
+                    handleClickDownload(value.s3Files[0].name, value.s3Files[0].seq)
+                  }
                 >
                   <DownloadIcon />
                 </Button>
               </TableItem>
             </ReferenceItemHeaderWrapper>
-              {
-                selectedPost === value.seq && (
-                  <ContentBox>
-                    <TuiViewer initialValue={value.content ?? '본문이 비어있는 글입니다.'} />
-                  </ContentBox>
-                )
+            {selectedPost === value.seq &&
+              <ContentBox> 
+                <TuiViewer initialValue={value.content} />
+              </ContentBox>
               }
           </ReferenceItemWrapper>
         ))}
@@ -78,10 +74,24 @@ export default function ReferenceLayout({ materialType }: ReferenceLayoutProps) 
 
 const ContentBox = styled(Box)`
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-top: 1px solid #e5e5e5;
-  padding-bottom: .5rem;
+  justify-content: center;
+  padding: 20px 0;
+  animation: dropdown 0.3s ease-in-out;
+  /* dropdown keyframes */
+  @keyframes dropdown {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  
+
 `;

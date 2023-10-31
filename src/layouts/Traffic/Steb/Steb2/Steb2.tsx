@@ -33,7 +33,7 @@ export function Steb2() {
   const [detailCounts, setDetailCounts] = useState<detailCounts>({ HIGH_SCHOOL: { grade1: 0, grade2: 0, grade3: 0 }});
   const { postApplicationCourseForUser, getCourseForUser,courseApplication } = useDominCourse();
   
-  const { register, setValue, watch, } = useForm<ProvincialEnrollSaveRequestDto & {courseSeq: string}>({
+  const { register, setValue, watch, } = useForm<ProvincialEnrollSaveRequestDto & {courseSeq: string, courseName: string}>({
     defaultValues: {
       expectedToStartDtime: dateFormat(new Date(), 'yyyy-mm-dd'),
       expectedToEndDtime: dateFormat( addMonths(new Date(), 1), 'yyyy-mm-dd'),
@@ -67,18 +67,17 @@ export function Steb2() {
     }
 
     try {
-      const obj = {...detailCounts[watch().eduTargetSub],...watch()} as CreateApplicationCourseResponseBody & {courseSeq: string};
+      const obj = {...detailCounts[watch().eduTargetSub],...watch()} as CreateApplicationCourseResponseBody & {courseSeq: string, courseName: string};
       console.log(obj);
       setLoading(true);
       await postApplicationCourseForUser(obj);
-      setTrafficInfo({ ...watch(), peopleCounts: { ...detailCounts },courseSeq: watch().courseSeq});
+      setTrafficInfo({ ...watch(), peopleCounts: { ...detailCounts },courseSeq: watch().courseSeq,courseName: watch().courseName});
       router.push('steb3');
     } catch (e) {
       snackbar({ variant: 'error', message: e.data.message });
       setLoading(false);
     }
   };
-  console.log(courseApplication)
 
   useEffect(() => {
     setValue('eduTargetMain', router.query.eduTargetMain as EduTargetMainType);
@@ -220,9 +219,13 @@ export function Steb2() {
           <Select labelId="courseSeq" id="courseSeq" {...register('courseSeq')}>
             {courseApplication?.map((course) => {
               if(course.status)
-                return <MenuItem key={course.seq} value={course.seq}> {`${course.seq}. ${ConvertEnum(course.courseName)}`}</MenuItem>
-              
-              
+                return <MenuItem
+                          onClick={() => setValue('courseName',course.courseName)}
+                          key={course.seq}
+                          value={course.seq}
+                          >
+                        {`${course.seq}. ${ConvertEnum(course.courseName)}`
+                        }</MenuItem>
             })}
           </Select>
         </FormControl>

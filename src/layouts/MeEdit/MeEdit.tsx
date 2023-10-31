@@ -16,7 +16,7 @@ const tabsConfig = [
   { label: '도민교통안전교육자', value: 'TYPE_TRAFFIC_SAFETY_EDU' },
 ];
 export const locationList = [
-  { ko: '충남', en: 'CHUNGNAM' },
+  // { ko: '충남', en: 'CHUNGNAM' },
   { ko: '천안', en: 'CHEONAN' },
   { ko: '공주', en: 'GONGJU' },
   { ko: '보령', en: 'BORYEONG' },
@@ -38,7 +38,7 @@ export const locationList = [
 
 
 export const residenceList = [
-  { ko: '충남', en: 'CHUNGNAM' },
+  // { ko: '충남', en: 'CHUNGNAM' },
   { ko: '천안', en: 'CHEONAN' },
   { ko: '공주', en: 'GONGJU' },
   { ko: '보령', en: 'BORYEONG' },

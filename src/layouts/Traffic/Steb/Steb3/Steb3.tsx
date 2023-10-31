@@ -66,7 +66,7 @@ export function Steb3() {
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>신청과정</TableLeftCell>
-                <TableCell>{trafficInfo?.courseSeq}</TableCell>
+                <TableCell>{trafficInfo?.courseName}</TableCell>
               </TableCustomRow>
               <TableCustomRow>
                 <TableLeftCell>교육대상자</TableLeftCell>
@@ -176,9 +176,4 @@ const TableLeftCell = styled(TableCell)`
 const BottomBox = styled(Box)`
   width: 100%;
   margin: auto;
-`;
-
-const Wrapper = styled(Box)`
-  width: 100%;
-
 `;

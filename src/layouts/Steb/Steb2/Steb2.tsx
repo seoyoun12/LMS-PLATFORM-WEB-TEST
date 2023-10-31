@@ -51,8 +51,7 @@ export default function Steb2() {
   const [hideCarNumber, setHideCarNumber] = useState(false); //차량번호 숨기기
   const [fixedBusinessType, setFixedBusinessType] = useState<userBusinessType>(); //업체정보 운수구분 고정용(여객-여객,화물-화물)
   const [loading, setLoading] = useState(false);
-  const confirmRef = useRef<boolean>();
-  // const [CheckElementList, setCheckElementList] = useState<NodeListOf<Element>>();
+  const confirmRef = useRef<boolean>()
   const [currentIndex,setCurrentIndex] = useState(1);
   const [pageIndex,setPageIndex] = useState(1);
   const [disabledCompany, setDisabledCompany] = useState(false);

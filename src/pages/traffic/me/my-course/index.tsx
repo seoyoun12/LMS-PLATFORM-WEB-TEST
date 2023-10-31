@@ -47,7 +47,7 @@ export default function MyCourse() {
   return (
     <>
     {detailCourse && <CourseDetailModal detailCourse={detailCourse}  onClose={onRemoveDetailCourse} />}
-    <Me title="온라인 교육 신청내역">
+    <Me title="신청내역">
       <MyCourseGridTemplate list={myCourseList?.data} />
     </Me>
     </>

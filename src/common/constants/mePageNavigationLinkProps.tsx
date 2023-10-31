@@ -13,6 +13,6 @@ export const mePageNavigationLinkProps = [
   },
   {
     href: "/traffic/me/my-course",
-    text: '온라인 교육 신청내역'
+    text: '신청내역'
   }
 ]

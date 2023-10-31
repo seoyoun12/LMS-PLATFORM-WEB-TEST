@@ -17,4 +17,5 @@ export interface CourseClassTraffic {
   eduTargetSub?: string;
   courseSeq?: string;
   peopleCounts: PeopleCounts;
+  courseName?: string;
 }

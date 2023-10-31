@@ -1,25 +1,8 @@
 import { NextPage } from 'next';
-import {
-  MeCertificateContainer,
-  MeCertificateContentContainer,
-  MeCertificateItemConfirmButton,
-  MeCertificateItemContainer,
-  MeCertificateItemContentContainer,
-  MeCertificateItemContentTitle,
-  MeCertificateItemImageContainer,
-  PrintModal,
-  PrintModalButton,
-  PrintModalButtonWrapper,
-  PrintModalImage,
-  PrintModalWrapper,
-} from '@components/MeCertificate/style';
+import { MeCertificateContainer,MeCertificateContentContainer,MeCertificateItemConfirmButton,MeCertificateItemContainer,MeCertificateItemContentContainer,MeCertificateItemContentTitle,MeCertificateItemImageContainer,PrintModal,PrintModalButton,PrintModalButtonWrapper,PrintModalImage,PrintModalWrapper } from '@components/MeCertificate/style';
 import { useGetUserMyinfoCertificates } from '@common/api/user/myinfo/certificates';
 import { GET, POST_TO_ALL_DATA } from '@common/httpClient';
-import {
-  UserMyinfoCertificatesConfirmResponseDto,
-  UserMyinfoCertificatesResponseDto,
-} from '@common/api/Api';
-
+import { UserMyinfoCertificatesConfirmResponseDto,UserMyinfoCertificatesResponseDto } from '@common/api/Api';
 import { NotFound } from '@components/ui/NotFound';
 import { useState } from 'react';
 import { AxiosResponse } from 'axios';
@@ -30,25 +13,18 @@ import Image from 'next/image';
 
 const MeCertificate: NextPage = () => {
   const { certificateList, mutate } = useGetUserMyinfoCertificates();
-  const [selectedCertificate, setSelectedCertificate] =
-    useState<UserMyinfoCertificatesConfirmResponseDto | null>(null);
-  const [showCertificateFetchState, setShowCertificateFetchState] =
-    useState<FetchState>('READY');
-  const [downloadCertificateFetchState, setDownloadCertificateFetchState] =
-    useState<FetchState>('READY');
+  const [selectedCertificate, setSelectedCertificate] = useState<UserMyinfoCertificatesConfirmResponseDto | null>(null);
+  const [showCertificateFetchState, setShowCertificateFetchState] = useState<FetchState>('READY');
+  const [downloadCertificateFetchState, setDownloadCertificateFetchState] = useState<FetchState>('READY');
 
 
   const handleClickShowCertificates = async (item: UserMyinfoCertificatesResponseDto) => {
-    if (!item.courseUserSeq || showCertificateFetchState === 'FETCHING') {
-      return;
-    }
-
+    if (!item.courseUserSeq || showCertificateFetchState === 'FETCHING') return;
+  
     setShowCertificateFetchState('FETCHING');
 
     try {
-      const { data } = await GET<AxiosResponse<UserMyinfoCertificatesConfirmResponseDto>>(
-        `/user/myinfo/certificates/confirm/${item.courseUserSeq}`
-      );
+      const { data } = await GET<AxiosResponse<UserMyinfoCertificatesConfirmResponseDto>>(`/user/myinfo/certificates/confirm/${item.courseUserSeq}`);
       mutate();
       setSelectedCertificate(data);
       setShowCertificateFetchState('SUCCESS');
@@ -60,12 +36,8 @@ const MeCertificate: NextPage = () => {
   };
 
   const handleClickDownloadCertificate = async () => {
-    if (
-      !selectedCertificate?.courseUserSeq ||
-      downloadCertificateFetchState === 'FETCHING'
-    ) {
-      return;
-    }
+    if ( !selectedCertificate?.courseUserSeq || downloadCertificateFetchState === 'FETCHING') return;
+    
 
     setDownloadCertificateFetchState('FETCHING');
     alert('수료 조건을 충족하여 증명서가 발급됩니다.');
@@ -95,9 +67,8 @@ const MeCertificate: NextPage = () => {
   };
 
   const handleClickPrintCertificate = () => {
-    if (!selectedCertificate?.courseUserSeq) {
-      return;
-    }
+    if (!selectedCertificate?.courseUserSeq) return;
+    
 
     const win = window.open();
     self.focus();
@@ -106,15 +77,10 @@ const MeCertificate: NextPage = () => {
     win.document.write('<html lang="ko"><head>');
     win.document.write('<meta charset="UTF-8">');
     win.document.write('</head><body>');
-    win.document.write(
-      `<img src="${selectedCertificate.certImagePath}" style="width: 100%;" />`
-    );
+    win.document.write(`<img src="${selectedCertificate.certImagePath}" style="width: 100%;" />`);
     win.document.write('</body></html>');
     win.document.close();
-    setTimeout(function () {
-      win.print();
-      win.close();
-    }, 250);
+    setTimeout(function () { win.print(); win.close();}, 250);
   };
 
   return (

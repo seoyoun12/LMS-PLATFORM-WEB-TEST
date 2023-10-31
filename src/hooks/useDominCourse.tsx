@@ -165,6 +165,7 @@ interface CourseApplication {
       provincialEduTargetSub: SubType,
       provincialUseYn: "Y" | "N"
       seq: number;
+      status: number;
     }
 export interface LinkCourseWithContent {
   courseSeq: number;

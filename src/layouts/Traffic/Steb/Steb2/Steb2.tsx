@@ -78,7 +78,7 @@ export function Steb2() {
       setLoading(false);
     }
   };
-
+  console.log(courseApplication)
 
   useEffect(() => {
     setValue('eduTargetMain', router.query.eduTargetMain as EduTargetMainType);
@@ -218,11 +218,12 @@ export function Steb2() {
         <FormControl fullWidth>
           <Typography id="lecture">과정 선택</Typography>
           <Select labelId="courseSeq" id="courseSeq" {...register('courseSeq')}>
-            {courseApplication?.map((course) => (
-              <MenuItem key={course.seq} value={course.seq}>
-                {`${course.seq}. ${ConvertEnum(course.courseName)}`}
-              </MenuItem>
-            ))}
+            {courseApplication?.map((course) => {
+              if(course.status)
+                return <MenuItem key={course.seq} value={course.seq}> {`${course.seq}. ${ConvertEnum(course.courseName)}`}</MenuItem>
+              
+              
+            })}
           </Select>
         </FormControl>
 

@@ -43,7 +43,7 @@ export function TrafficGlobalNavigationBar() {
             }}
             >
           <HeaderBar />
-          <>{/* {isHideNavbar || <NavBar />} */}</>
+          {/* {isHideNavbar || <NavBar />} */}
         </AppBar>
       }
     </>

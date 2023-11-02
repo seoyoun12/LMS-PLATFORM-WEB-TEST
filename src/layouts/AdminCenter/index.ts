@@ -1,5 +1,3 @@
-// 어드민이 느린 이유.. 진짜.... 진짜 hjc은 대단한 사람이다 ㅋㅋㅋㅋㅋㅋㅋㅋ
-
 import dynamic from "next/dynamic";
 
 export { AdminCenter } from "./AdminCenter";

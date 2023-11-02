@@ -1,4 +1,6 @@
 
+import styled from '@emotion/styled';
+import { Box } from '@mui/material';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2'
 
@@ -16,30 +18,46 @@ export const data = {
       backgroundColor: [
         // '#5D7CFC',
         '#5D7CFC',
-        '#83dcf5',
+        '#ff6384',
       ],
       borderColor: [
         '#355bf2',
         '#06d4a4',
       ],
-      borderWidth: 4,
+      borderWidth: 1,
     },
     
   ],
 };
 
-export default function PieChart() {
+interface Props {
+  width: number;
+  height: number;
+}
 
-  return <Pie data={data}  options={{
-    plugins: {
-      
-      legend: {
-        labels: {
-          font: {
-            size: 18,
+export default function PieChart({ width, height }: Props) {
+
+  return (
+    <Wrapper width={width} height={height}>
+    <Pie data={data}  options={{
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              size: 18,
+            },
           },
         },
-      },
-    }
-  }}  />
+      }
+    }}
+    />
+    </Wrapper>
+  )
+  
+  
 }
+
+const Wrapper = styled(Box)<{width: number; height: number;}>`
+  width: ${({ width }) => width}px;
+  height: ${({ height }) => height}px;
+`

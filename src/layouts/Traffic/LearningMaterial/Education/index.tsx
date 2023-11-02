@@ -5,7 +5,7 @@ import { TableHeader,TableItem,TableWrapper } from '@layouts/Traffic/LearningMat
 import { format } from 'date-fns';
 import { TuiViewer } from '@components/common/TuiEditor';
 import { downloadFile } from '@common/api/file';
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import ArrowDown from 'public/assets/images/ic_arrow_down.svg';
 import SaveIcon from '@mui/icons-material/Save';
 import createDownloadLink from '@utils/createDownloadLink';
@@ -76,7 +76,9 @@ export default function EducationLayout({ materialType }: Props) {
                   </EducationItemFileButton>
                 }
               </EducationItemFilesItem>
+              
             </EducationItemContentWrapper>
+            
           </EducationItemWrapper>
         ))}
     </EducationWrapper>

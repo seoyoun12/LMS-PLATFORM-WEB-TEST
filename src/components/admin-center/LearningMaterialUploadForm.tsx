@@ -21,7 +21,7 @@ import Image from 'next/image';
 const LearningMaterialTypeReg = [
   { type: MaterialType.TYPE_BY_AGE, ko: '연령별 교수학습 지도안' },
   { type: MaterialType.TYPE_EDUCATIONAL, ko: '영상자료' },
-  { type: MaterialType.TYPE_OTHER_ORGAN, ko: '타기관자료 모음' },
+  { type: MaterialType.TYPE_OTHER_ORGAN, ko: '타기관자료모음' },
 ];
 
 export interface FileArrayType {
@@ -222,7 +222,7 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
         setIsEducationRoute(true);
       }
       if (learningMaterial.materialType === 'TYPE_OTHER_ORGAN') {
-        setOpenTui(false);
+        setOpenTui(true);
         setTitle('타기관자료모음');
         setIsEducationRoute(false);
       }
@@ -269,10 +269,10 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
                   <FormControlLabel
                     value={MaterialType.TYPE_OTHER_ORGAN}
                     control={<Radio />}
-                    label='타기관자료 모음'
+                    label='타기관자료모음'
                     onClick={() => {
                       onClickOpenSubType();
-                      setOpenTui(false);
+                      setOpenTui(true);
                     }}
                   />
                 </RadioGroup>

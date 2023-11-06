@@ -24,7 +24,9 @@ const nextConfig = {
       'cn-lms-storage.cdn.gov-ntruss.com',
       'kr.object.gov-ncloudstorage.com',
       'img.youtube.com',
-      'www.youtube.com'
+      'www.youtube.com',
+      'youtu.be',
+      'youtube.com',
     ],
   },
   experimental: {

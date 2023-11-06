@@ -107,23 +107,70 @@ export async function learningMaterialRemove(seq: number) {
   return await DELETE(`/learning-material/adm/${seq}`);
 }
 
+
+interface EducationContent {
+  seq: number,
+  materialType: string
+  materialSubType: string
+  title: string
+  content: string
+  origin: string
+  s3Files: unknown
+  createdDtime: string
+  modifiedDtime: string
+  status: number
+}
+
+interface LearningMaterialResponse {
+content: EducationContent[],
+pageable: {
+    sort: {
+      unsorted: boolean;
+      sorted: boolean;
+      empty: boolean;
+    },
+    offset: number,
+    pageSize: number,
+    pageNumber: number,
+    paged: boolean,
+    unpaged: boolean
+  },
+totalPages: number,
+totalElements: number,
+last: boolean,
+number: number,
+sort: {
+    unsorted: boolean,
+    sorted: boolean,
+    empty: boolean
+  },
+size: number,
+numberOfElements: number,
+first: boolean,
+empty: boolean
+}
+
+
 export function useGetLearningMaterial(
   materialType: MaterialType,
-  materialSubType: MaterialSubType | ''
+  materialSubType: MaterialSubType | '',
+  page: number,
+  elementCnt: number
 ) {
-  const data = useSWR<SWRResponse<LearningMaterialResponseDto[]>>(
+  const data = useSWR<SWRResponse<LearningMaterialResponse>>(
     [
       `/learning-material`,
       {
         params: {
           materialType,
           materialSubType,
+          page,
+          elementCnt
         },
       },
     ],
     GET
   );
-
   return data;
 }
 

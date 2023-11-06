@@ -9,12 +9,15 @@ import { Typography } from '@mui/material';
 import ArrowDown from 'public/assets/images/ic_arrow_down.svg';
 import SaveIcon from '@mui/icons-material/Save';
 import createDownloadLink from '@utils/createDownloadLink';
+import CourseTablePagination from '@layouts/AdminCenter/CourseTrafficManagement/feature/CourseTablePagination';
 interface Props {
   materialType: MaterialType;
 }
 
 export default function EducationLayout({ materialType }: Props) {
-  const { data } = useGetLearningMaterial(materialType, '');
+  const [page, setPage] = useState(0);
+  const [elementCnt, setElementCnt] = useState(9);
+  const { data } = useGetLearningMaterial(materialType, '',page, elementCnt);
   const [selectedPost, setSelectedPost] = useState<number | null>(null);
   const handleClickPost = (id: number) => setSelectedPost(id === selectedPost ? null : id);
 
@@ -42,7 +45,7 @@ export default function EducationLayout({ materialType }: Props) {
         </TableHeader>
       </TableWrapper>
       {data &&
-        data.data.map(value => (
+        data.data?.content?.map(value => (
           <EducationItemWrapper
             open={selectedPost === value.seq}
             key={value.title}
@@ -81,6 +84,13 @@ export default function EducationLayout({ materialType }: Props) {
             
           </EducationItemWrapper>
         ))}
+        <CourseTablePagination
+          count={data?.data?.totalElements}
+          page={page}
+          rowsPerPage={elementCnt}
+          setPage={setPage}
+          setRowsPerPage={setElementCnt}
+        />
     </EducationWrapper>
   );
 }

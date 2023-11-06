@@ -65,6 +65,7 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
   const [openTui, setOpenTui] = useState<boolean>(true);
   const [title, setTitle] = useState<string | null>(null);
   const [youtubeLink, setYoutubeLink] = useState<string | null>(null);
+  const [youtubeThumbnailLink, setYoutubeThumbnailLink] = useState(null);
   const snackbar = useSnackbar();
   const dialog = useDialog();
 
@@ -189,7 +190,21 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
     const {target: {value}} = e;
     setYoutubeLink(value)
   };
-  
+
+  useEffect(() => {
+    if(!youtubeLink) return setYoutubeThumbnailLink(null);
+    if(!youtubeLink || (!youtubeLink.includes('youtu.be/') && !youtubeLink.includes('v='))) return;
+    console.log('change!!');
+    
+    youtubeLink?.includes('youtu.be/')
+    ? setYoutubeThumbnailLink(`https://img.youtube.com/vi/${youtubeLink?.split('youtu.be/')[1]?.split('?')[0]}/maxresdefault.jpg`)
+    : setYoutubeThumbnailLink(`https://img.youtube.com/vi/${youtubeLink?.split('v=')[1]?.split('&')[0]}/maxresdefault.jpg`)
+    
+    
+  },[youtubeLink])
+  console.log(`https://img.youtube.com/vi/${youtubeLink?.split('youtu.be/')[1]?.split('\?')[0]}/maxresdefault.jpg`)
+
+
   //업로드 상태에서 학습자료 타입 변경시 가지고있던 files 초기화 교육영상쪽은 사라지지않는 버그가 있음.
   useEffect(() => {
     if (mode === 'upload') setFileArray([]);
@@ -229,6 +244,7 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
     }
   }, [mode, learningMaterial, reset]);
 
+  
   return (
     <Container>
       <Title>학습자료 등록</Title>
@@ -337,7 +353,7 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
                 ...register('origin', {
                   required: '유튜브 링크를 입력해주세요.',
                   pattern: {
-                    value: /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/,
+                    value: /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/,
                     message: '유튜브 링크를 입력해주세요.',
                   },
                 })
@@ -356,13 +372,16 @@ export function LearningMaterialUploadForm({mode = 'upload',learningMaterial,onH
             {(youtubeLink && youtubeLink.split('v=')[1]) && (
             <ThumbnailWrapper>
               <SubTitle>썸네일 이미지</SubTitle>
+              {
+              youtubeThumbnailLink &&
               <Image
-                src={`https://img.youtube.com/vi/${youtubeLink.split('&')[0].split('v=')[1]}/maxresdefault.jpg`}
+                src={youtubeThumbnailLink}
                 alt="썸네일"
                 objectFit='contain'
                 width={200}
                 height={140}
                 />
+                }
             </ThumbnailWrapper>
             )}
           </>

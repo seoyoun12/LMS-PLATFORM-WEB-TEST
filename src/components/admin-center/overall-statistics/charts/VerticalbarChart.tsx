@@ -84,8 +84,9 @@ export const options:ChartOptions<'bar'> = {
     }
   }
 };
-//        '#5D7CFC',
-//'#ff6384',
+
+
+// arr.list.map((item) => ConvertEnum(item.userBusinessTypeTwoEnum));
 const labels = ['버스', '전세버스', '특수여객', '법인택시', '개인택시', '일반화물', '용달화물', '개별화물'];
 
 
@@ -95,11 +96,13 @@ export const verticalbarChartData = {
     {
       label: '이수자',
       backgroundColor: '#5D7CFC',
+      // arr.list.map((item) => item.completedCnt)
       data: [65, 59, 80, 81, 56, 55, 40, 30],
     },
     {
       label: '미이수자',
       backgroundColor: '#ff6384',
+      // arr.list.map((item) => item.inCompletedCnt)
       data: [28, 48, 40, 19, 86, 27, 90, 100],
     },
   ],

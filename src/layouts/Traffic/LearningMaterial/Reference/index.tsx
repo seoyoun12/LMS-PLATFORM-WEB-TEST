@@ -9,13 +9,15 @@ import DownloadIcon from 'public/assets/images/ic_download.svg';
 import styled from '@emotion/styled';
 import { TuiViewer } from '@components/common/TuiEditor';
 import { useState } from 'react';
+import CourseTablePagination from '@layouts/AdminCenter/CourseTrafficManagement/feature/CourseTablePagination';
 interface ReferenceLayoutProps {
   materialType: MaterialType;
 }
 
 export default function ReferenceLayout({ materialType }: ReferenceLayoutProps) {
-  
-  const { data } = useGetLearningMaterial(materialType, '');
+  const [page, setPage] = useState(0);
+  const [elementCnt, setElementCnt] = useState(9);
+  const { data } = useGetLearningMaterial(materialType, '',page, elementCnt);
   const [selectedPost, setSelectedPost] = useState(null);
   const handleClickDownload = async (name: string, seq: number) => {
     const data = await POST<string>(`/file/${seq}`,{},{ responseType: 'blob' });
@@ -37,7 +39,7 @@ export default function ReferenceLayout({ materialType }: ReferenceLayoutProps) 
       </TableWrapper>
 
       {data &&
-        data.data.map(value => (
+        data.data?.content?.map(value => (
           <ReferenceItemWrapper key={value.seq} onClick={() => onClickToggleContent(value.seq)}>
             <ReferenceItemHeaderWrapper>
               <TableItem width="10%">{value.seq}</TableItem>
@@ -68,6 +70,13 @@ export default function ReferenceLayout({ materialType }: ReferenceLayoutProps) 
               }
           </ReferenceItemWrapper>
         ))}
+      <CourseTablePagination
+        page={page}
+        setPage={setPage}
+        count={data?.data.totalElements || 0}
+        rowsPerPage={elementCnt}
+        setRowsPerPage={setElementCnt}
+      />
     </ReferenceWrapper>
   );
 }

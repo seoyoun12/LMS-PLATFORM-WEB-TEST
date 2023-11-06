@@ -1,27 +1,10 @@
 
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ChartOptions,
-  ChartData,
-} from 'chart.js';
+import { Chart as ChartJS,CategoryScale,LinearScale,BarElement,Title,Tooltip,Legend,ChartOptions,ChartData } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import styled from '@emotion/styled';
 import { Box } from '@mui/material';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register( CategoryScale,LinearScale,BarElement,Title,Tooltip,Legend );
 
 export const options:ChartOptions<'bar'> = {
   indexAxis: 'y' as const,
@@ -32,32 +15,31 @@ export const options:ChartOptions<'bar'> = {
   scales: {
     x: {
       grid: {
-        display: true,
+        display: false,
       },
       ticks: {
         font: {
-          size: 22,
+          size: 14,
           weight: 'bold',
         }
       }
     },
     y: {
       grid: {
-        display: true,
+        display: false,
       },
       ticks: {
         font: {
           size: 18,
           weight: 'bold',
         },
-        
       }
     },
   },
-  
   layout: {
-    padding: 10,
-    
+    padding: {
+      top: 40,
+    },
   },
   responsive: true,
   plugins: {
@@ -72,22 +54,24 @@ export const options:ChartOptions<'bar'> = {
       bodyAlign: 'left',
     },
     legend: {
-      position: 'right' as const,
+      position: 'top' as const,
       fullSize: true,
       labels: {
+        usePointStyle: true,
+        boxPadding: 10,
         font: {
           size: 22,
         },
+        boxWidth: 12,
+        boxHeight: 12,
       }
     },
-    
-    
   },
 };
 
 export const labels = ['천안','공주','보령','아산','서산','논산','계룡','당진','금산','부여','서천','청양','홍성','예산','태안','세종','서울','부산','대구','인천','광주','대전','울산','경기','강원','충북','전북','전남','경북','경남','제주'];
 
-export const data:ChartData<'bar'> = {
+export const horizontalbarChartData:ChartData<'bar'> = {
   labels,
   datasets: [
     {
@@ -115,7 +99,7 @@ export const data:ChartData<'bar'> = {
 export default function HorizontalbarChart() {
   return (
     <Wrapper height={1600}>
-      <Bar options={options} data={data} />
+      <Bar options={options} data={horizontalbarChartData} />
     </Wrapper>
   ) 
 }

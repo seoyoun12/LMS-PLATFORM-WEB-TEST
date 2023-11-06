@@ -4,6 +4,8 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, Typography } fr
 import Whole from './statistics/Whole'
 import CompletedCourseForBusiness from './statistics/CompletedCourseForBusiness'
 import RegistrationAddress from './statistics/RegistrationAddress'
+import FluctuationByPeriod from './statistics/FluctuationByPeriod'
+import FluctuationByBusiness from './statistics/FluctuationByBusiness'
 
 export default function Overall() {
   return (
@@ -52,8 +54,9 @@ export default function Overall() {
         <Whole />
         <CompletedCourseForBusiness />
         <RegistrationAddress />
+        <FluctuationByPeriod />
+        <FluctuationByBusiness />
       </Main>
-      
     </Wrapper>
   )
 }
@@ -66,11 +69,9 @@ const InfoMessage = styled(Typography)`
 const ConfirmSearchButton = styled(Button)`
   width: 140px;
   height:48px;
-  
   color:white;
   font-size: 1.15rem;
   margin-left: 1rem;
-
 `
 
 const StyledSelect = styled(Select)`

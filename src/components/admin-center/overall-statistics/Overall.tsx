@@ -8,17 +8,25 @@ import FluctuationByPeriod from './statistics/FluctuationByPeriod'
 import FluctuationByBusiness from './statistics/FluctuationByBusiness'
 import YearlyAgeByBusiness from './statistics/YearlyAgeByBusiness'
 import ComparisonAgeByYearly from './statistics/ComparisonAgeByYearly'
+import useStatistics from '@hooks/useStatistics'
 
 export default function Overall() {
+
+  const { data, mutate } = useStatistics({});
+
+
+  if(!data) return <div>loading...</div>
   return (
     <Wrapper>
+      
       <Header>
-      <Title>현황 통계</Title>
-      <ExcelDownloadButton>
-        <Typography>(전체) 통계 엑셀 다운로드</Typography>
-        <Download />
-      </ExcelDownloadButton>
+        <Title>현황 통계</Title>
+        <ExcelDownloadButton>
+          <Typography>(전체) 통계 엑셀 다운로드</Typography>
+          <Download />
+        </ExcelDownloadButton>
       </Header>
+
       <Main>
         <SelectGroup>
 
@@ -53,7 +61,7 @@ export default function Overall() {
           
         </SelectGroup>
         <InfoMessage>"교육년도, 과정, 과정기수"를 선택하고 "통계 확인"을 눌러 확인하세요.</InfoMessage>
-        <Whole />
+        <Whole data={data.data.statisticsTransEduIntegratedResponseDto} />
         <CompletedCourseForBusiness />
         <RegistrationAddress />
         <FluctuationByPeriod />

@@ -2,9 +2,14 @@ import styled from '@emotion/styled'
 import { Box, Typography } from '@mui/material'
 import PieChart from '../charts/PieChart'
 import StatisticsLayout from './StatisticsLayout'
+import { TotalUserCnt } from '@hooks/useStatistics'
 
 
-export default function Whole() {
+interface Props{
+  data: TotalUserCnt
+}
+
+export default function Whole({data}: Props) {
   return (
     <StatisticsLayout title="통합 (이수자 수/ 이수율)">
       <StatisticBox>
@@ -14,15 +19,20 @@ export default function Whole() {
         <Summary>  
           <SummaryItem>
             <SummaryTitle>전체 수강 인원</SummaryTitle>
-            <SummaryText>10000 (100%)</SummaryText>
+            <SummaryText>{data.totalCourseUserCnt} (100%)</SummaryText>
           </SummaryItem>
           <SummaryItem>
             <SummaryTitle>이수자</SummaryTitle>
-            <SummaryText>7000 (70%)</SummaryText>
+            <SummaryText>
+              {data.completedCourseUserCnt}
+              ({data.completedCourseUserCnt === 0 ? 0 : (data.completedCourseUserCnt / data.totalCourseUserCnt * 100).toFixed(2)}%)
+            </SummaryText>
           </SummaryItem>
           <SummaryItem>
             <SummaryTitle>미이수자</SummaryTitle>
-            <SummaryText>3000 (30%)</SummaryText>
+            <SummaryText>
+              {data.inCompletedCourseUserCnt}
+              ({data.inCompletedCourseUserCnt === 0 ? 0 : (data.inCompletedCourseUserCnt / data.totalCourseUserCnt * 100).toFixed(2)}%)</SummaryText>
           </SummaryItem>
         </Summary>
       </StatisticBox>

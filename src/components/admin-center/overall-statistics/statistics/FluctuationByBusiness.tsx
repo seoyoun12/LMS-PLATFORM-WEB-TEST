@@ -3,8 +3,13 @@ import StatisticsLayout from './StatisticsLayout'
 import MultipleLineChart from '../charts/MultipleLineChart'
 import styled from '@emotion/styled'
 import { Box } from '@mui/material'
+import { FluctuationByPeriod } from '@hooks/useStatistics'
 
-export default function FluctuationByBusiness() {
+interface Props {
+  data: FluctuationByPeriod[]
+}
+
+export default function FluctuationByBusiness({ data }: Props) {
   return (
     <StatisticsLayout title="업종별 증감">
       <ChartWrapper>

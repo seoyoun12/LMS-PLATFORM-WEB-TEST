@@ -1,79 +1,91 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import StatisticsLayout from './StatisticsLayout'
-import HorizontalbarChart, { horizontalbarChartData, labels } from '../charts/HorizontalbarChart'
+import HorizontalbarChart from '../charts/HorizontalbarChart'
 import styled from '@emotion/styled'
 import { Box } from '@mui/material'
+import { RegistrationAddress as  IRegistrationAddress } from '@hooks/useStatistics'
+import { ChartData } from 'chart.js'
+import { ConvertEnum } from '@utils/convertEnumToHangle'
+import { toPersent } from '@utils/toPersent'
 
-export default function RegistrationAddress() {
-  const [categoryCount, setCategoryCount] = useState([]);
 
+interface Props {
+  data: IRegistrationAddress
+}
+
+export default function RegistrationAddress({ data }: Props) {
+  const [chartData, setChartData] = useState<ChartData<'bar'>>()
+  const [labels, setLabels] = useState<string[]>([])
   useEffect(() => {
-   const result = horizontalbarChartData.datasets.reduce((acc, dataset) => {
-      dataset.data.forEach((count, index) => {
-        acc[index] = (acc[index] || 0) + count;
-      })
-      return acc
-    },[])
-    setCategoryCount(result)
-  },[])
+   const labels = data.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => ConvertEnum(item.userRegistrationTypeEnum));
+    const chartData = {
+      labels,
+      datasets: [
+        {
+          label: '이수자',
+          backgroundColor: '#5D7CFC',
+          data: data.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => item.completedCnt),
+        },
+        {
+          label: '미이수자',
+          backgroundColor: '#ff6384',
+          data: data.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => item.inCompletedCnt),
+        },
+      ],
+    };
+    setLabels(labels)
+    setChartData(chartData)
+  },[data])
+
+  if(!chartData) return <div>loading...</div>
+
   return (
     <StatisticsLayout title="차량등록지별 (이수자수 / 이수율)">
       <Wrapper>
-        <Box sx={{flex:1,alignSelf:'flex-start'}}>
-          <HorizontalbarChart />
+        <Box sx={{ flex:1, alignSelf:'flex-start' }}>
+          <HorizontalbarChart chartData={chartData} />
         </Box>
         <Summary>
 
           <SummaryCategory>
-            <SummaryCategoryTitle>
-              <Box sx={{flex: 1, textAlign: 'center'}}>총 수강인원</Box>
-            </SummaryCategoryTitle>
+            <SummaryCategoryTitle>총 수강인원 </SummaryCategoryTitle>
             {
-              labels.map((label, index) => {
-                return <SummaryItem key={label} width={260}>
-                        <SummaryItemTitle >{label}</SummaryItemTitle>
-                        <SummaryItemContent >{categoryCount[index]}</SummaryItemContent>
-                      </SummaryItem>
-              })}
+              labels?.map((label, index) => 
+                <SummaryItem key={label} width={260}>
+                  <SummaryItemTitle >{label}</SummaryItemTitle>
+                  <SummaryItemContent >{data.statisticsTransEduCarRegisteredRegionResponseDtoList[index].totalCnt}</SummaryItemContent>
+                </SummaryItem>
+              )
+            }
           </SummaryCategory>
 
           <SummaryCategory>
-            <SummaryCategoryTitle>
-              <Box sx={{flex: 1, textAlign: 'center'}}>이수자</Box>
-            </SummaryCategoryTitle>
+            <SummaryCategoryTitle>이수자</SummaryCategoryTitle>
             {
-              horizontalbarChartData.datasets.map((dataset) => {
-                if(dataset.label === '이수자') {
-                  
-                  return dataset.data.map((count, index) => {
-                    // 해당 카테고리의 총원 수에서 이수자의 수를 나누어서 퍼센테이지를 구한 값입니다.
-                    const persentage = Math.round(count / categoryCount[index] * 100);
-                    return <SummaryItem key={index} width={200}>
-                            <SummaryItemContent>{count} ({persentage}%)</SummaryItemContent>
-                          </SummaryItem>
-                  })
-                }}
-              )}
+              chartData.datasets.map((dataset) => 
+                dataset.label === '이수자' &&
+                  dataset.data.map((count, index) => 
+                    <SummaryItem key={index} width={200}>
+                      <SummaryItemContent>{count} ({toPersent(data.statisticsTransEduCarRegisteredRegionResponseDtoList[index].totalCnt, count as number, 0)}%)</SummaryItemContent>
+                    </SummaryItem>
+                  ))
+            }
           </SummaryCategory>
+
           <SummaryCategory>
-            <SummaryCategoryTitle>
-              <SummaryItemContent>미이수자</SummaryItemContent>
-            </SummaryCategoryTitle>
+            <SummaryCategoryTitle>미이수자</SummaryCategoryTitle>
             {
-              horizontalbarChartData.datasets.map((dataset) => {
-                if(dataset.label === '미이수자') {
-                  return dataset.data.map((count, index) => {
-                    // 해당 카테고리의 총원 수에서 미이수자의 수를 나누어서 퍼센테이지를 구한 값입니다.
-                    const persentage = Math.round(count / categoryCount[index] * 100);
-                    return <SummaryItem key={index} width={200}>
-                            <SummaryItemContent persentage={persentage}>{count} ({persentage}%)</SummaryItemContent>
-                          </SummaryItem>
-                  })
-                }}
-              )}
+            chartData.datasets.map((dataset) => 
+              dataset.label === '미이수자' &&
+                dataset.data.map((count, index) =>   
+                  <SummaryItem key={index} width={200}>
+                    <SummaryItemContent>{count} ({toPersent(data.statisticsTransEduCarRegisteredRegionResponseDtoList[index].totalCnt, count as number, 0)}%)</SummaryItemContent>
+                  </SummaryItem>
+                ))
+            }
           </SummaryCategory>
+
         </Summary>
-
       </Wrapper>
     </StatisticsLayout>
   )
@@ -109,6 +121,7 @@ const SummaryCategoryTitle = styled(Box)`
   align-items: center;
   font-weight: bold;
   font-size: 1.15rem;
+  text-align:center;
 `
 
 const SummaryItem = styled(Box)<{width?: number}>`

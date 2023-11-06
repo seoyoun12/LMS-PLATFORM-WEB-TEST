@@ -14,7 +14,7 @@ export default function Whole({data}: Props) {
     <StatisticsLayout title="통합 (이수자 수/ 이수율)">
       <StatisticBox>
         <Box sx={{flex:1,borderRight:'2px solid #ccc',marginRight: '2rem',display:'flex',justifyContent:'center'}}>
-          <PieChart width={360} height={360} />
+          <PieChart data={data} width={360} height={360} />
         </Box>
         <Summary>  
           <SummaryItem>

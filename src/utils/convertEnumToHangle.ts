@@ -49,6 +49,14 @@ export const ConvertEnum = (str: string) => {
     if(str === 'COURSE_MODULE_PROGRESS_RATE') return '진도율'
     if(str === 'COURSE_MODULE_TEST') return '시험'
     if(str === 'COURSE_MODULE_SURVEY') return '설문'
+    if(str === 'BUS') return '버스'
+    if(str === 'CHARTER_BUS') return '전세버스'
+    if(str === 'SPECIAL_PASSENGER') return '특수여객'
+    if(str === 'CORPORATE_TAXI') return '법인택시'
+    if(str === 'GENERAL_CARGO') return '용달화물'
+    if(str === 'PRIVATE_TAXI') return '개인택시'
+    if(str === 'INDIVIDUAL_CARGO') return '개별화물'
+    if(str === 'KNEELING_BUS') return '저상버스'
     return str;
 }
 

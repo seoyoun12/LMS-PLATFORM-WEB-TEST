@@ -3,10 +3,15 @@ import StatisticsLayout from './StatisticsLayout'
 import HorizontalbarChart from '../charts/HorizontalbarChart'
 import { Box } from '@mui/material'
 import styled from '@emotion/styled'
+import { AgeRangeByBusiness } from '@hooks/useStatistics'
 
 const labels = ['버스','전세버스','특수여객','법인택시']
 
-export default function YearlyAgeByBusiness() {
+interface Props {
+  data: AgeRangeByBusiness[]
+}
+
+export default function YearlyAgeByBusiness({ data }: Props) {
   return (
     <StatisticsLayout title="연간 업종별 연령대 통계">
       <ChartGrid>
@@ -14,7 +19,7 @@ export default function YearlyAgeByBusiness() {
           labels.map((label, index) => (
             <Box key={label}>
             <ChartTitle>{label}</ChartTitle>
-            <HorizontalbarChart key={index} height={500} width={600} />
+            <HorizontalbarChart chartData={undefined}  width={600} />
             </Box>
           ))
         }

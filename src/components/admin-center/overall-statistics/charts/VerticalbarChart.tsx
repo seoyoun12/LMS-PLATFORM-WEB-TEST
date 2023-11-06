@@ -1,5 +1,5 @@
 
-import { Chart as ChartJS,CategoryScale,LinearScale,BarElement,Title,Tooltip,Legend, ChartOptions } from 'chart.js';
+import { Chart as ChartJS,CategoryScale,LinearScale,BarElement,Title,Tooltip,Legend, ChartOptions, ChartData } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 
 ChartJS.register( CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -47,14 +47,13 @@ export const options:ChartOptions<'bar'> = {
       usePointStyle: true,
       bodyAlign: 'left',
       callbacks: {
-        label: (context) => {
-          const target = Array.from({length: verticalbarChartData.datasets[0].data.length}, () => 0);
-          verticalbarChartData.datasets.forEach((dataset) =>
-            dataset.data.forEach((count,index) => target[index] = target[index] + count))
-
-          return `${context.label}: ${ Math.round(context.parsed.y / target[context.dataIndex] * 100)} %`;
-        }
-      }
+        labelPointStyle: (context) => {
+          return {
+            pointStyle: 'rectRounded',
+            rotation: 0,
+          };
+        },
+      },
     },
     legend: {
       position: 'top' as const,
@@ -86,33 +85,13 @@ export const options:ChartOptions<'bar'> = {
 };
 
 
-// arr.list.map((item) => ConvertEnum(item.userBusinessTypeTwoEnum));
-const labels = ['버스', '전세버스', '특수여객', '법인택시', '개인택시', '일반화물', '용달화물', '개별화물'];
+interface Props {
+  chartData: ChartData<'bar'> 
+}
 
 
-export const verticalbarChartData = {
-  labels,
-  datasets: [
-    {
-      label: '이수자',
-      backgroundColor: '#5D7CFC',
-      // arr.list.map((item) => item.completedCnt)
-      data: [65, 59, 80, 81, 56, 55, 40, 30],
-    },
-    {
-      label: '미이수자',
-      backgroundColor: '#ff6384',
-      // arr.list.map((item) => item.inCompletedCnt)
-      data: [28, 48, 40, 19, 86, 27, 90, 100],
-    },
-  ],
-};
-
-
-
-
-export default function VerticalbarChart() {
+export default function VerticalbarChart({chartData}: Props) {
   return (
-    <Bar data={verticalbarChartData} options={options} />
+    <Bar data={chartData} options={options} />
   )
 }

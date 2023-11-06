@@ -60,8 +60,15 @@ export interface Period {
   studentCnt: number
 }
 
-export interface FluctuationByBusiness extends Fluctuation{
+export interface FluctuationInBusiness extends Fluctuation{
   userBusinessSubType: string
+}
+
+export interface FluctuationInBusinessResponse {
+  statisticsTransEduCategoryResponseDtoList: FluctuationInBusiness[],
+  sumCompletedCntSum: number,
+  sumInCompletedCnt: number,
+  sumTotalCntSum: number
 }
 
 export interface FluctuationByPeriod extends Period {
@@ -74,12 +81,7 @@ export interface StatisticsResponse {
   statisticsTransEduCarRegisteredRegionResultResponseDto: RegistrationAddress,
   statisticsTransEduCategoryAgeResponseDto: AgeRangeByBusiness[],
   statisticsTransEduCategoryIncreaseResponseDto: FluctuationByPeriod[],
-  statisticsTransEduCategoryResponseDto: {
-    statisticsTransEduCategoryResponseDtoList: FluctuationByBusiness[],
-    sumCompletedCntSum: number,
-    sumInCompletedCnt: number,
-    sumTotalCntSum: number
-  },
+  statisticsTransEduCategoryResponseDto: FluctuationInBusinessResponse,
   statisticsTransEduIntegratedResponseDto: TotalUserCnt,
   statisticsTransEduStepResponseDto: Period[],
   statisticsTransEduYearAgeResponseDto: AgeRangeByYearly[],

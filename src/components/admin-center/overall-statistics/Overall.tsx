@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { Download } from '@mui/icons-material'
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
 import Whole from './statistics/Whole'
-import CompletedCourseForBusiness from './statistics/CompletedCourseForBusiness'
+import FluctuationInBusiness from './statistics/FluctuationInBusiness'
 import RegistrationAddress from './statistics/RegistrationAddress'
 import FluctuationByPeriod from './statistics/FluctuationByPeriod'
 import FluctuationByBusiness from './statistics/FluctuationByBusiness'
@@ -14,7 +14,7 @@ export default function Overall() {
 
   const { data, mutate } = useStatistics({});
 
-
+  
   if(!data) return <div>loading...</div>
   return (
     <Wrapper>
@@ -62,12 +62,12 @@ export default function Overall() {
         </SelectGroup>
         <InfoMessage>"교육년도, 과정, 과정기수"를 선택하고 "통계 확인"을 눌러 확인하세요.</InfoMessage>
         <Whole data={data.data.statisticsTransEduIntegratedResponseDto} />
-        <CompletedCourseForBusiness />
-        <RegistrationAddress />
-        <FluctuationByPeriod />
-        <FluctuationByBusiness />
-        <YearlyAgeByBusiness />
-        <ComparisonAgeByYearly />
+        <FluctuationInBusiness data={data.data.statisticsTransEduCategoryResponseDto} />
+        <RegistrationAddress data={data.data.statisticsTransEduCarRegisteredRegionResultResponseDto} />
+        <FluctuationByPeriod data={data.data.statisticsTransEduStepResponseDto} />
+        <FluctuationByBusiness data={data.data.statisticsTransEduCategoryIncreaseResponseDto} />
+        <YearlyAgeByBusiness data={data.data.statisticsTransEduCategoryAgeResponseDto} />
+        <ComparisonAgeByYearly data={data.data.statisticsTransEduYearAgeResponseDto} />
       </Main>
     </Wrapper>
   )
@@ -112,7 +112,6 @@ const Header = styled(Box)`
   display:flex;
   justify-content: space-between;
   align-items: center;
-  
   margin-top: 3rem;
 `;
 
@@ -127,7 +126,6 @@ const ExcelDownloadButton = styled(Button)`
   padding: .5rem 1rem;
 
   &:hover {
-    
     background-color: #306719;
   }
 `
@@ -143,6 +141,4 @@ const Wrapper = styled(Box)`
   flex-direction: column;
   align-items: center;
   padding: 0 3rem;
-
-
 `

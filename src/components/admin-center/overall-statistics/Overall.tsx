@@ -6,6 +6,8 @@ import CompletedCourseForBusiness from './statistics/CompletedCourseForBusiness'
 import RegistrationAddress from './statistics/RegistrationAddress'
 import FluctuationByPeriod from './statistics/FluctuationByPeriod'
 import FluctuationByBusiness from './statistics/FluctuationByBusiness'
+import YearlyAgeByBusiness from './statistics/YearlyAgeByBusiness'
+import ComparisonAgeByYearly from './statistics/ComparisonAgeByYearly'
 
 export default function Overall() {
   return (
@@ -56,6 +58,8 @@ export default function Overall() {
         <RegistrationAddress />
         <FluctuationByPeriod />
         <FluctuationByBusiness />
+        <YearlyAgeByBusiness />
+        <ComparisonAgeByYearly />
       </Main>
     </Wrapper>
   )

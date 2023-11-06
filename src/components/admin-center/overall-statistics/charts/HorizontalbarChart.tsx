@@ -95,17 +95,23 @@ export const horizontalbarChartData:ChartData<'bar'> = {
   ],
 };
 
+interface Props {
+  width?: number;
+  height?: number;
 
-export default function HorizontalbarChart() {
+
+}
+
+export default function HorizontalbarChart({ width, height }: Props) {
   return (
-    <Wrapper height={1600}>
+    <Wrapper height={height ?? 1600} width={width ?? '100%'}>
       <Bar options={options} data={horizontalbarChartData} />
     </Wrapper>
   ) 
 }
 
 
-const Wrapper = styled(Box)<{width?: number; height: number;}>`
+const Wrapper = styled(Box)<{width?: number | string; height: number;}>`
   width: ${({ width }) => width ? width + 'px' : '100%'};
   height: ${({ height }) => height + 'px'};
 `

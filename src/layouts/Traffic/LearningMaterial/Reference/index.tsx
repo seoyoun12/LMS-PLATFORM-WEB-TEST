@@ -100,7 +100,4 @@ const ContentBox = styled(Box)`
       transform: translateY(0);
     }
   }
-  
-  
-
 `;

@@ -70,13 +70,13 @@ export default function ComparisonAgeByYearly({ data }: Props) {
 
   useEffect(() => {
     
-    if(!data) return;
+    if(!data || data.length === 0) return;
 
     const labels = data.map((item) => item.year).reverse();
     // key: birthYear10To19: 0 ... birthYear90To99: 2
     // item {birthYear10To19:0 ... birthYear90To99:2}
     // item[key] = item['birthYear10To19'] ...
-    const datasets = Object.keys(data?.[0]).filter((key) => key !== 'year').map((key, index) => ({
+    const datasets = Object.keys(data?.[0])?.filter((key) => key !== 'year')?.map((key, index) => ({
       label: ConvertEnum(key),
       data: data.map((item) => item[key]).reverse(),
       borderColor: rainbowColor[index],

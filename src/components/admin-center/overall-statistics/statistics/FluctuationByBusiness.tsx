@@ -156,7 +156,7 @@ export default function FluctuationByBusiness({ data }: Props) {
 
 
   useEffect(() => {
-    if(!data) return;
+    if(!data || data.length === 0) return;
     const labelsArr = ['기수/업종', ...data.reduce((acc, cur) => {
       if(acc.includes(cur.userBusinessSubType)) return acc;
       else return [...acc, cur.userBusinessSubType];

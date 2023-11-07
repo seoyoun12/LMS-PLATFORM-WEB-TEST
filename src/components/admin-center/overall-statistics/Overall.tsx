@@ -97,9 +97,13 @@ export default function Overall() {
               onChange={(e) => onChangeQueries(e)}
               variant="outlined"
               labelId='period'>
-              <MenuItem value="2023">2023</MenuItem>
-              <MenuItem value="2022">2022</MenuItem>
-              <MenuItem value="2021">2021</MenuItem>
+              {
+                period ?
+                period.data.map((period, i) => (
+                  <MenuItem key={i} value={period.courseClassSeq}>{period.yearAndStep}</MenuItem>
+                ))
+                : <MenuItem value={0}>과정을 선택해주세요.</MenuItem>
+              }
             </StyledSelect>
           </FormControl>
 

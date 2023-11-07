@@ -18,7 +18,7 @@ export default function YearlyAgeByBusiness({ data }: Props) {
   const [labels, setLabels] = useState(null);
 
   useEffect(() => {
-    if(!data) return;
+    if(!data || data.length === 0) return;
 
     const labels = data.map((item) => ConvertEnum(item.userBusinessSubType));
 

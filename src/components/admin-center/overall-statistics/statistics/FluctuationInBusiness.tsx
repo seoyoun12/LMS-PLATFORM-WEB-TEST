@@ -17,7 +17,7 @@ export default function FluctuationInBusiness({ data }: Props) {
   const [labels, setLabels] = useState<string[]>([]);
   
   useEffect(() => {
-    if(!data) return;
+    if(!data || data.statisticsTransEduCategoryResponseDtoList.length === 0) return;
       const labels = data.statisticsTransEduCategoryResponseDtoList.map((item) => ConvertEnum(item.userBusinessSubType))
       const chartData:ChartData<'bar'> = {
         labels,

@@ -74,14 +74,14 @@ export default function HorizontalbarChart({ chartData, width, height,suggestMax
         bodySpacing: 8,
         usePointStyle: true,
         bodyAlign: 'left',
-        callbacks: {
-          label: (context) => {
-            const label = context.dataset.label || '';
-            const value = context.parsed.y || 0;
-            return `${label} : ${value}명`;
+        // callbacks: {
+        //   label: (context) => {
+        //     const label = context.dataset.label || '';
+        //     const value = context.parsed.y || 0;
+        //     return `${label} : ${value}명`;
           
-          }
-        }
+        //   }
+        // }
       },
       legend: {
         position: 'top' as const,

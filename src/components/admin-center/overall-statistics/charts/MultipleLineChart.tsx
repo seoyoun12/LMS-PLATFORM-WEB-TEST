@@ -4,38 +4,45 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 ChartJS.register(LinearScale,CategoryScale,BarElement,PointElement,LineElement,Legend,Tooltip,LineController,BarController);
 
-const options:ChartOptions = {
+
+
+interface Props {
+  data: ChartData | null;
+  suggestMax?: number[];
+}
+
+export default function MultipleLineChart({ data, suggestMax }: Props) {
+
+  const options:ChartOptions = {
     responsive: true,
     plugins: {
 
-      // datalabels: {
-      //   anchor: 'end',
-      //   align: 'end',
-      //   color: '#000',
-      //   font: {
-      //     size: 14,
-      //     weight: 'bold',
-      //   },
-      //   formatter: (value) => {
-      //     return value + '명';
-      //   }
-      // },
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+        color: '#000',
+        font: {
+          size: 14,
+          weight: 300,
+        },
+        
+      },
 
-      // tooltip: {
-      //   position: 'nearest',
-      //   titleFont: { size: 12 },
-      //   padding: 14,
-      //   backgroundColor: '#25262b',
-      //   boxPadding: 5,
-      //   bodySpacing: 8,
-      //   usePointStyle: true,
-      //   bodyAlign: 'left',
-      //   callbacks: {
-      //     label: (context) => {
-      //       return `${context.label}: ${context.parsed.y}명`;
-      //     }
-      //   }
-      // },
+      tooltip: {
+        position: 'nearest',
+        titleFont: { size: 12 },
+        padding: 14,
+        backgroundColor: '#25262b',
+        boxPadding: 5,
+        bodySpacing: 8,
+        usePointStyle: true,
+        bodyAlign: 'left',
+        callbacks: {
+          label: (context) => {
+            return `${context.label}: ${context.parsed.y}명`;
+          }
+        }
+      },
     
       legend: {
         position: 'top',
@@ -61,21 +68,16 @@ const options:ChartOptions = {
             weight: 'bold',
           }
         },
+        
       },
       y: {
+        suggestedMax: suggestMax && Math.max(...suggestMax) * 1.2,
         grid: {
           display: true
         }
       }
     }
 };
-
-interface Props {
-  data: ChartData | null;
-}
-
-export default function MultipleLineChart({ data }: Props) {
-
   return (
     <Chart
       data={data}

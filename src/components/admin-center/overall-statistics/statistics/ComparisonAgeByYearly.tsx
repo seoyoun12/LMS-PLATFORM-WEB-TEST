@@ -82,6 +82,7 @@ export default function ComparisonAgeByYearly({ data }: Props) {
       borderColor: rainbowColor[index],
       backgroundColor: rainbowColor[index],
       fill: false,
+      pointRadius: 12,
     }))
 
     const chartData: ChartData<'bar'> = {
@@ -93,13 +94,19 @@ export default function ComparisonAgeByYearly({ data }: Props) {
     setLabels(labels);
   },[data])
 
-  console.log(data);
+  
   
   return (
     <StatisticsLayout title="연도별 연령비교">
       {
         chartData
-        ? <MultipleLineChart data={chartData} />
+        ? <MultipleLineChart data={chartData}
+        suggestMax={
+          chartData.datasets.map(
+            (dataset) => dataset.data.map(
+              d => d)).flatMap(d => d)
+        }
+        />
         : <Typography sx={{fontSize: 20, fontWeight: 'bold'}}>해당 조건을 만족하는 데이터가 존재하지 않습니다.</Typography>
       }
     </StatisticsLayout>

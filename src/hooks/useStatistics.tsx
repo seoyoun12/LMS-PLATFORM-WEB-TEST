@@ -71,27 +71,49 @@ export interface FluctuationInBusinessResponse {
   sumTotalCntSum: number
 }
 
-export interface FluctuationByPeriod extends Period {
+export interface FluctuationByBusiness extends Period{
   courseSeq: number,
+  step: number,
+  studentCnt: number,
   userBusinessSubType: string
 }
-
 
 export interface StatisticsResponse {
   statisticsTransEduCarRegisteredRegionResultResponseDto: RegistrationAddress,
   statisticsTransEduCategoryAgeResponseDto: AgeRangeByBusiness[],
-  statisticsTransEduCategoryIncreaseResponseDto: FluctuationByPeriod[],
+  statisticsTransEduCategoryIncreaseResponseDto: FluctuationByBusiness[],
   statisticsTransEduCategoryResponseDto: FluctuationInBusinessResponse,
   statisticsTransEduIntegratedResponseDto: TotalUserCnt,
   statisticsTransEduStepResponseDto: Period[],
   statisticsTransEduYearAgeResponseDto: AgeRangeByYearly[],
 }
 
+interface Courses {
+    businessSubType: string,
+    categoryType: string,
+    courseName: string,
+    courseSeq: number,
+    courseType: string,
+    displayCourseName: string,
+    year: number
+  }
+
+  interface PeriodInCourse {
+    courseClassSeq: number,
+    yearAndStep: string
+  }
+
 
 export default function useStatistics({courseClassSeq, courseSeq, year}: Props) {
   const {data ,mutate} = useSWR<SWRResponse<StatisticsResponse>>(['/adm/statistics/trans-edu/integrated',{ params: {courseClassSeq, courseSeq, year} }], GET)
+  
+  const {data: course, mutate: courseMutate} = useSWR<SWRResponse<Courses[]>>(year ? [ '/course/adm/learning-info/courses',{ params: {year} }] : null, GET)
+  const {data: period, mutate: periodMutate} = useSWR<SWRResponse<PeriodInCourse[]>>(courseSeq ? `/course/adm/learning-info/step/${courseSeq}` : null, GET)
+  // 개설된 과정 전체 조회 /course/adm/learning-info/courses?year={year} => year를 주면 courseSeq를 준다
+  // 개설된 과정에 대한 기수 전체 조회 /course/adm/leaning-info/step/{courseSeq} => courseSeq를 주면 courseClassSeq를 준다
 
 
 
-  return {data, mutate}
+
+  return {data, mutate, course, courseMutate, period, periodMutate}
 }

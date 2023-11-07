@@ -1,38 +1,21 @@
 import { Chart as ChartJS,LinearScale, CategoryScale,BarElement,PointElement,LineElement,Legend,Tooltip,LineController,BarController, ChartData, ChartOptions } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { Box, Typography } from '@mui/material';
 
 ChartJS.register(LinearScale,CategoryScale,BarElement,PointElement,LineElement,Legend,Tooltip,LineController,BarController);
 
-const labels = Array.from({length: 20}, (_, i) => `${100 + i}기`);
 
-const data:ChartData = {
-  labels: labels,
-  datasets: [
-    {
-      type: 'bar',
-      label: '수강자 수 (막대)',
-      datalabels: {
-        display: false,
-      },
-      borderColor: '#EB5757',
-      backgroundColor: '#EB5757',
-      data: [65, 59, 44, 40, 52, 24, 40, 30, 20, 10, 14, 18, 24, 30, 20, 44, 64, 72, 70, 19],
-      
-      order: 1
-    },
-    {
-      type: 'line',
-      label: '수강자 수 (선)',
-      data: [65, 59, 44, 40, 52, 24, 40, 30, 20, 10, 14, 18, 24, 30, 20, 44, 64, 72, 70, 19],
-      borderColor: '#F2C94C',
-      backgroundColor: '#F2C94C',
-      pointRadius: 8,
-      order: 0
-    }
-  ]
-};
-const options:ChartOptions = {
+
+
+interface Props {
+  data: ChartData | null;
+  suggestMax?: number[];
+}
+
+export default function BarLineChart({ data, suggestMax }: Props) {
+
+  const options:ChartOptions = {
     responsive: true,
     plugins: {
 
@@ -44,9 +27,9 @@ const options:ChartOptions = {
           size: 14,
           weight: 'bold',
         },
-        formatter: (value) => {
-          return value + '명';
-        }
+        // formatter: (value) => {
+        //   return value + '기';
+        // }
       },
 
       tooltip: {
@@ -64,7 +47,7 @@ const options:ChartOptions = {
           }
         }
       },
-    
+      
       legend: {
         position: 'top',
         labels: {
@@ -90,13 +73,28 @@ const options:ChartOptions = {
         },
       },
       y: {
+        suggestedMax: suggestMax && Math.max(...suggestMax) * 1.2,
         grid: {
           display: true
         }
       }
+    },
+    layout: {
+      padding: {
+        top: 50
+      }
     }
 };
 
-export default function BarLineChart() {
-  return <Chart type="bar" options={options} data={data} plugins={[ChartDataLabels]} />;
+  if(!data) {
+    return (
+      <Box>
+        <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: '1rem'}}>
+          해당 조건을 만족하는 데이터가 존재하지 않습니다.</Typography>
+      </Box>
+      )
+  } else {
+    return <Chart type="bar" options={options} data={data} plugins={[ChartDataLabels]} />;
+  }
+  
 }

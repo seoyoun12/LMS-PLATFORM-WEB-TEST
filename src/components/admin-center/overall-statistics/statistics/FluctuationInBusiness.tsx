@@ -6,7 +6,6 @@ import styled from '@emotion/styled'
 import { FluctuationInBusinessResponse } from '@hooks/useStatistics'
 import { ChartData } from 'chart.js'
 import { ConvertEnum } from '@utils/convertEnumToHangle'
-import { toPersent } from '@utils/toPersent'
 import FluctuationBusinessCard from '../components/FluctuationBusinessCard'
 
 interface Props {
@@ -20,7 +19,7 @@ export default function FluctuationInBusiness({ data }: Props) {
   useEffect(() => {
     if(!data) return;
       const labels = data.statisticsTransEduCategoryResponseDtoList.map((item) => ConvertEnum(item.userBusinessSubType))
-      const chartData = {
+      const chartData:ChartData<'bar'> = {
         labels,
         datasets: [
           {
@@ -28,12 +27,16 @@ export default function FluctuationInBusiness({ data }: Props) {
             backgroundColor: '#5D7CFC',
             // data: [1,2,3]
             data: data.statisticsTransEduCategoryResponseDtoList.map((item) => item.completedCnt),
+            maxBarThickness: 60,
+            
           },
           {
             label: '미이수자',
             backgroundColor: '#ff6384',
             // data:[10,20,30]
             data: data.statisticsTransEduCategoryResponseDtoList.map((item) => item.inCompletedCnt),
+            maxBarThickness: 60,
+            
           },
         ],
       };
@@ -41,42 +44,58 @@ export default function FluctuationInBusiness({ data }: Props) {
       setChartData(chartData)
   },[data])
 
-  if(!chartData) return <div>loading...</div>
+    
   
   return (
     <StatisticsLayout title="업종별 (이수자수/ 아수율)">
-      <VerticalbarChart chartData={chartData} />
+    {
+      (chartData && data.sumTotalCntSum > 0)
+      ? <>
+      <Box sx={{margin: '0 auto', width:'80%'}}>
+      <VerticalbarChart chartData={chartData} suggestMax={data.statisticsTransEduCategoryResponseDtoList.map((item) => item.totalCnt)} />
+      </Box>
 
       <Title sx={{marginTop: '4rem',marginBottom: '1rem'}}>
       { labels?.map((label) => <TitleCard key={label}> {label} </TitleCard>) }
       </Title>
-      <CardWrapper>
-        {
-          chartData.datasets.map((dataset) => 
-            dataset.data.map((d) => 
-              dataset.label === '이수자' && <FluctuationBusinessCard key={d} d={d} label={dataset.label} motherCount={data.sumTotalCntSum} childCount={d}/>
-            ))
-        }
-      </CardWrapper>
 
-      <CardWrapper>
-        {
-          chartData.datasets.map((dataset) => 
-            dataset.data.map((d) => 
-              dataset.label === '미이수자' && <FluctuationBusinessCard key={d} d={d} label={dataset.label} motherCount={data.sumTotalCntSum} childCount={d} />
-            ))
+      <CategoryListWrapper sx={{display:'flex',width:'100%',gap:'1rem'}}>
+      {
+        data.statisticsTransEduCategoryResponseDtoList.map((item) =>(
+          <Card key={item.userBusinessSubType} >
+            <FluctuationBusinessCard
+              d={item.completedCnt}
+              label='이수자'
+              motherCount={item.totalCnt}
+              childCount={item.completedCnt}
+            />
+            <FluctuationBusinessCard
+              d={item.inCompletedCnt}
+              label='미이수자'
+              motherCount={item.totalCnt}
+              childCount={item.inCompletedCnt}
+            />
+          </Card>
+        ))}
+        </CategoryListWrapper>
+        </>
+        : <Typography sx={{ fontSize: 20, fontWeight:'bold' }}>해당 조건을 만족하는 데이터가 존재하지 않습니다.</Typography>
         }
-      </CardWrapper>
-    </StatisticsLayout>
+      </StatisticsLayout>
   )
 }
 
-const CardWrapper = styled(Box)`
-  display: flex;
-  flex:1;
+const CategoryListWrapper = styled(Box)`
   width: 100%;
-  gap: 1rem; 
-  margin-bottom: .25rem;
+  display:flex;
+  gap: 1rem;
+`
+
+const Card = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  flex:1;
+  gap: .5rem;
 `   
 
 

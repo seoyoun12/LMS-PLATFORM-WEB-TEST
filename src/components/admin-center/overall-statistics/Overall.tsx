@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { Download } from '@mui/icons-material'
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material'
 import Whole from './statistics/Whole'
 import FluctuationInBusiness from './statistics/FluctuationInBusiness'
 import RegistrationAddress from './statistics/RegistrationAddress'
@@ -9,12 +9,40 @@ import FluctuationByBusiness from './statistics/FluctuationByBusiness'
 import YearlyAgeByBusiness from './statistics/YearlyAgeByBusiness'
 import ComparisonAgeByYearly from './statistics/ComparisonAgeByYearly'
 import useStatistics from '@hooks/useStatistics'
+import { useState } from 'react'
+
+interface Queries {
+  year: number;
+  courseClassSeq?: number;
+  courseSeq?: number;
+}
+const currentYear = new Date().getFullYear();
+const defaultYearArray = Array.from({length: (currentYear - 2021) + 1}, (_, i) => 2021 + i)
 
 export default function Overall() {
-
-  const { data, mutate } = useStatistics({});
-
+  const [queries, setQueries] = useState<Queries>(null)
+  const { data, mutate, course, courseMutate, period, periodMutate } = useStatistics({
+    year: queries?.year || null,
+    courseSeq: queries?.courseSeq || null,
+    courseClassSeq: queries?.courseClassSeq || null
+  });
   
+
+
+
+  const onChangeQueries = async(e: SelectChangeEvent<unknown>) => {
+    const { name,value } = e.target;
+
+    setQueries({
+      ...queries,
+      [name]: value
+    })
+
+    name === 'year' && await courseMutate();
+    name === 'courseSeq' && await periodMutate();
+  }
+
+
   if(!data) return <div>loading...</div>
   return (
     <Wrapper>
@@ -32,25 +60,43 @@ export default function Overall() {
 
           <FormControl>
             <InputLabel id="year">교육년도</InputLabel>
-            <StyledSelect variant="outlined" labelId='year'>
-              <MenuItem value="2023">2023</MenuItem>
-              <MenuItem value="2022">2022</MenuItem>
-              <MenuItem value="2021">2021</MenuItem>
+            <StyledSelect
+              name="year"
+              onChange={(e) => onChangeQueries(e)}
+              variant="outlined"
+              labelId='year'>
+              {
+                defaultYearArray.map((year, i) => (
+                  <MenuItem key={i} value={year}>{year}</MenuItem>
+                ))
+              }
             </StyledSelect>
           </FormControl>
 
           <FormControl>
             <InputLabel id="course">과정</InputLabel>
-            <StyledSelect variant="outlined" labelId='course'>
-              <MenuItem value="2023">2023</MenuItem>
-              <MenuItem value="2022">2022</MenuItem>
-              <MenuItem value="2021">2021</MenuItem>
+            <StyledSelect
+              name="courseSeq"
+              onChange={(e) => onChangeQueries(e)}
+              variant="outlined"
+              labelId='course'>
+              {
+                course ?
+                course.data.map((course, i) => (
+                  <MenuItem key={i} value={course.courseSeq}>{course.courseName}</MenuItem>
+                ))
+                : <MenuItem value={0}>연도를 선택해주세요.</MenuItem>
+              }
             </StyledSelect>
           </FormControl>
 
           <FormControl>
             <InputLabel id="period">과정기수</InputLabel>
-            <StyledSelect variant="outlined" labelId='period'>
+            <StyledSelect
+              name="courseClassSeq"
+              onChange={(e) => onChangeQueries(e)}
+              variant="outlined"
+              labelId='period'>
               <MenuItem value="2023">2023</MenuItem>
               <MenuItem value="2022">2022</MenuItem>
               <MenuItem value="2021">2021</MenuItem>

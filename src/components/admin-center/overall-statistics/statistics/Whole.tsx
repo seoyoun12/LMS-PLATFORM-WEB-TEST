@@ -10,9 +10,13 @@ interface Props{
 }
 
 export default function Whole({data}: Props) {
+
+  
   return (
     <StatisticsLayout title="통합 (이수자 수/ 이수율)">
-      <StatisticBox>
+      {
+        data?.totalCourseUserCnt
+        ? <StatisticBox>
         <Box sx={{flex:1,borderRight:'2px solid #ccc',marginRight: '2rem',display:'flex',justifyContent:'center'}}>
           <PieChart data={data} width={360} height={360} />
         </Box>
@@ -36,6 +40,8 @@ export default function Whole({data}: Props) {
           </SummaryItem>
         </Summary>
       </StatisticBox>
+      : <Typography sx={{ fontSize: 20, fontWeight:'bold' }}>해당 조건을 만족하는 데이터가 존재하지 않습니다.</Typography>
+    }
     </StatisticsLayout>
     
   )

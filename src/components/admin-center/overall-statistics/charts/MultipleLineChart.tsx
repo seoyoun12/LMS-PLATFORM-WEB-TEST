@@ -37,11 +37,11 @@ export default function MultipleLineChart({ data, suggestMax }: Props) {
         bodySpacing: 8,
         usePointStyle: true,
         bodyAlign: 'left',
-        callbacks: {
-          label: (context) => {
-            return `${context.label}: ${context.parsed.y}명`;
-          }
-        }
+        // callbacks: {
+        //   label: (context) => {
+        //     return `${context.label}: ${context.parsed.y}명`;
+        //   }
+        // }
       },
     
       legend: {

@@ -10,6 +10,7 @@ import YearlyAgeByBusiness from './statistics/YearlyAgeByBusiness'
 import ComparisonAgeByYearly from './statistics/ComparisonAgeByYearly'
 import useStatistics from '@hooks/useStatistics'
 import { useState } from 'react'
+import { Spinner } from '@components/ui'
 
 interface Queries {
   year: number;
@@ -43,7 +44,7 @@ export default function Overall() {
   }
 
 
-  if(!data) return <div>loading...</div>
+  
   return (
     <Wrapper>
       
@@ -54,20 +55,21 @@ export default function Overall() {
           <Download />
         </ExcelDownloadButton>
       </Header>
-
+    {
+      data &&
       <Main>
         <SelectGroup>
-
           <FormControl>
             <InputLabel id="year">교육년도</InputLabel>
             <StyledSelect
               name="year"
               onChange={(e) => onChangeQueries(e)}
+              value={queries?.year || ''}
               variant="outlined"
               labelId='year'>
               {
                 defaultYearArray.map((year, i) => (
-                  <MenuItem key={i} value={year}>{year}</MenuItem>
+                  <MenuItem key={i} value={year || ''}>{year}</MenuItem>
                 ))
               }
             </StyledSelect>
@@ -79,11 +81,12 @@ export default function Overall() {
               name="courseSeq"
               onChange={(e) => onChangeQueries(e)}
               variant="outlined"
+              value={queries?.courseSeq || ''}
               labelId='course'>
               {
                 course ?
                 course.data.map((course, i) => (
-                  <MenuItem key={i} value={course.courseSeq}>{course.courseName}</MenuItem>
+                  <MenuItem key={i} value={course.courseSeq || ''}>{course.courseName}</MenuItem>
                 ))
                 : <MenuItem value={0}>연도를 선택해주세요.</MenuItem>
               }
@@ -94,13 +97,14 @@ export default function Overall() {
             <InputLabel id="period">과정기수</InputLabel>
             <StyledSelect
               name="courseClassSeq"
+              value={queries?.courseClassSeq || ''}
               onChange={(e) => onChangeQueries(e)}
               variant="outlined"
               labelId='period'>
               {
                 period ?
                 period.data.map((period, i) => (
-                  <MenuItem key={i} value={period.courseClassSeq}>{period.yearAndStep}</MenuItem>
+                  <MenuItem key={i} value={period.courseClassSeq || ''}>{period.yearAndStep}</MenuItem>
                 ))
                 : <MenuItem value={0}>과정을 선택해주세요.</MenuItem>
               }
@@ -119,6 +123,7 @@ export default function Overall() {
         <YearlyAgeByBusiness data={data.data.statisticsTransEduCategoryAgeResponseDto} />
         <ComparisonAgeByYearly data={data.data.statisticsTransEduYearAgeResponseDto} />
       </Main>
+      }
     </Wrapper>
   )
 }

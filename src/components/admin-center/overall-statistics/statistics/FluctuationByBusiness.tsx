@@ -292,12 +292,12 @@ export default function FluctuationByBusiness({ data }: Props) {
           ))
         }
       </Summary>
-      <Box sx={{width:'100%', display: 'flex', flexDirection:'column', justifyContent:'flex-start',alignItems:'flex-start'}}>
+      <Box sx={{width:'90%', display: 'flex', flexDirection:'column', justifyContent:'flex-start',alignItems:'flex-start'}}>
         {
           period.map((period) => 
             <Box key={period} sx={{display:'flex', alignItems:'center', justifyContent:'flex-start',width:'100%'}}>
               <Column>
-                <Typography sx={{fontSize: 20, fontWeight:'bold'}}>{period}</Typography>
+                <Typography sx={{fontSize: 20, fontWeight:'bold'}}>{period} 기</Typography>
               </Column>
               {
                 data.map((item,index) => (
@@ -322,7 +322,7 @@ const Column = styled(Box)`
   display:flex;
   justify-content: center;
   align-items: center;
-  background-color: #161D2B;
+  background-color: #07225f;
   color:#fff;
   flex: 1;
   border: 1px solid #c7c7c7c7;
@@ -335,7 +335,7 @@ const ChartWrapper = styled(Box)`
 `
 
 const Summary = styled(Box)`
-  width: 100%;
+  width: 90%;
   flex: .3;
   display: flex;
   justify-content: center;

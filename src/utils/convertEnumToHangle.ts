@@ -53,7 +53,7 @@ export const ConvertEnum = (str: string) => {
     if(str === 'CHARTER_BUS') return '전세버스'
     if(str === 'SPECIAL_PASSENGER') return '특수여객'
     if(str === 'CORPORATE_TAXI') return '법인택시'
-    if(str === 'GENERAL_CARGO') return '용달화물'
+    if(str === 'GENERAL_CARGO') return '일반화물'
     if(str === 'PRIVATE_TAXI') return '개인택시'
     if(str === 'INDIVIDUAL_CARGO') return '개별화물'
     if(str === 'KNEELING_BUS') return '저상버스'

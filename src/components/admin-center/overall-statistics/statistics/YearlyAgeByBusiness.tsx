@@ -56,12 +56,10 @@ export default function YearlyAgeByBusiness({ data }: Props) {
         {
           chartDataArray
           ? chartDataArray.map((chart, index) => (
-            <>
             <ChartCard key={labels[index]}>
               <ChartTitle>{labels[index]}</ChartTitle>
               <HorizontalbarChart chartData={chart} width={540} height={400} />
             </ChartCard>
-            </>
           ))
           : <InfoMessage>해당 조건을 만족하는 데이터가 존재하지 않습니다.</InfoMessage>
         }

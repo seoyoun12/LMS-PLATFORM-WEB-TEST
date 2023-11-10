@@ -1,4 +1,4 @@
-import { FormLabel, Radio, Typography } from '@mui/material'
+import { FormLabel, InputLabel, Radio, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import React from 'react'
 

@@ -179,13 +179,11 @@ export default function CourseInfoManagement() {
 
   const handleSubmit = (e:FormEvent,isReload = false) => {
     e.preventDefault();
-    
     setValue('notFound', false);
     if (isReload) {
       reset();
       setSubmitValue(watch());
       searchInputRef.current.value = '';
-
       return;
     }
     if (searchInputRef.current) {
@@ -208,7 +206,7 @@ export default function CourseInfoManagement() {
   };
 
 
-  const duplicateRemoveCourses: CourseLearningInfoCoursesResponseDto[] = useMemo(() => {
+  const duplicateRemovedCourses: CourseLearningInfoCoursesResponseDto[] = useMemo(() => {
     const temp = [];
       courses?.forEach(course => {
         if(!temp.find(item => item.courseSeq === course.courseSeq)){
@@ -247,7 +245,7 @@ export default function CourseInfoManagement() {
   if (!data) return <Spinner />;
   
   return (
-    <form onSubmit={(e) => handleSubmit(e,false)}>
+    <>
       <Title variant="h1">전체 수강생 학습현황(운수/저상)</Title>
       <ContainerWrapper>
         <LeftContainer>
@@ -265,7 +263,7 @@ export default function CourseInfoManagement() {
           <CourseSelectBox
             label="과정 선택"
             firstOptionLabel="전체"
-            menuItem={duplicateRemoveCourses ?? []}
+            menuItem={duplicateRemovedCourses ?? []}
             onChange={onChangeSeletedSeq}
             value={watch().courseSeq + ''}
             itemKey="courseSeq"
@@ -370,9 +368,9 @@ export default function CourseInfoManagement() {
         label1='운수종사자'
         label2='저상버스'
         label3='도민교통'
-        value1={CourseType.TYPE_TRANS_WORKER}
-        value2={CourseType.TYPE_LOW_FLOOR_BUS}
-        value3={CourseType.TYPE_PROVINCIAL}
+        value1={CourseType.TYPE_TRANS_WORKER ?? ''}
+        value2={CourseType.TYPE_LOW_FLOOR_BUS ?? ''}
+        value3={CourseType.TYPE_PROVINCIAL ?? ''}
       />
 
       <CourseRadioBox
@@ -381,9 +379,9 @@ export default function CourseInfoManagement() {
         checked2={watch().completeType === CompleteType.TYPE_COMPLETE}
         checked3={watch().completeType === CompleteType.TYPE_INCOMPLETE}
         onChange={onChangeCompleteType}
-        value1={null}
-        value2={CompleteType.TYPE_COMPLETE}
-        value3={CompleteType.TYPE_INCOMPLETE}
+        value1={''}
+        value2={CompleteType.TYPE_COMPLETE ?? ''}
+        value3={CompleteType.TYPE_INCOMPLETE ?? ''}
         label1="전체"
         label2="수료"
         label3="미수료"
@@ -395,9 +393,9 @@ export default function CourseInfoManagement() {
         checked2={watch().statusType === StatusType.TYPE_NORMAL}
         checked3={watch().statusType === StatusType.TYPE_OUT}
         onChange={onChangeStatusType}
-        value1={null}
-        value2={StatusType.TYPE_NORMAL}
-        value3={StatusType.TYPE_OUT}
+        value1={''}
+        value2={StatusType.TYPE_NORMAL ?? ''}
+        value3={StatusType.TYPE_OUT ?? ''}
         label1="전체"
         label2="정상"
         label3="퇴교"
@@ -405,12 +403,13 @@ export default function CourseInfoManagement() {
     </RadioGroupContainer>
   <SearchContainer>
 
-    <Box sx={{ display:'flex',flexDirection:'column' }}>
+    <form onSubmit={handleSubmit} style={{ display:'flex',flexDirection:'column' }}>
+      
       <Typography sx={{display:'flex',justifyContent:'space-between'}}>
         사용자 검색
         <Typography component='span' sx={{color:'#a7a7a7c7'}}>
             {watch().nameOrUsername !== '' && `최근 검색어: ${watch().nameOrUsername}`}
-          </Typography>
+        </Typography>
       </Typography>
       <SearchInput
         {...register('nameOrUsername')}
@@ -418,12 +417,12 @@ export default function CourseInfoManagement() {
         placeholder="이름 혹은 아이디 입력"
         fullWidth
         />
-    </Box>
-
-
     <BoxRow sx={{ flexDirection: 'row',marginTop: '.25rem',marginBottom:'2rem' }}>
-      <Button type="submit" variant='contained' onClick={(e) => handleSubmit(e,false)} fullWidth>
-        검색하기
+      <Button
+        type="submit"
+        variant='contained'
+        fullWidth
+        >검색하기
       </Button>
       <ReloadButton
         type='submit'
@@ -438,6 +437,63 @@ export default function CourseInfoManagement() {
         전체 다시 불러오기
       </ReloadButton>
     </BoxRow>
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <Backdrop open={loading}>
       <Box
@@ -485,9 +541,9 @@ export default function CourseInfoManagement() {
         >
           <TableHead>
             <TableRow>
-              {headRows.map(({ name,width }) => (
+              {headRows.map(({ name,width },index) => (
                   <CourseInfoTitleTableCell
-                    key={name}
+                    key={index}
                     align="center"
                     width={width}
                     >
@@ -498,10 +554,11 @@ export default function CourseInfoManagement() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.content.map(user => (
+            {data.content.map((user,index) => (
               <TableRow
+
                 sx={{ cursor: 'pointer' }}
-                key={user.username}
+                key={index}
                 hover
                 onClick={() => onClickmodifyCourseInfo(user.courseUserSeq)}
               >
@@ -596,7 +653,7 @@ export default function CourseInfoManagement() {
         </Table>
       )}
     </ResultContainer>
-  </form>
+  </>
   );
 }
 

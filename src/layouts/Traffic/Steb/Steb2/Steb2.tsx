@@ -135,6 +135,7 @@ export function Steb2() {
             minDate={new Date()}
             customInput={<TextField fullWidth />}
             selected={new Date(watch().expectedToStartDtime)}
+            readOnly
             onChange={date =>
               setValue( 'expectedToStartDtime',
                 date ? dateFormat(date, 'yyyy-mm-dd') : dateFormat(new Date(), 'yyyy-mm-dd')

@@ -16,7 +16,7 @@ export default function ClassRoomLayout() {
     console.log(lessonSeq)
     window.open(`/course/${courseUserSeq}/lesson/${lessonSeq}`,'_blank');
   }  
-  console.log('hello ClassROOM!!!')
+  
   return (
     <MediaContainer>
       

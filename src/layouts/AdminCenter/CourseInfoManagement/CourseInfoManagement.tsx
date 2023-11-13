@@ -180,6 +180,7 @@ export default function CourseInfoManagement() {
   const handleSubmit = (e:FormEvent,isReload = false) => {
     e.preventDefault();
     setValue('notFound', false);
+    
     if (isReload) {
       reset();
       setSubmitValue(watch());

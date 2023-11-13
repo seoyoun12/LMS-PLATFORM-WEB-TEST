@@ -2,18 +2,28 @@ import styled from '@emotion/styled';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 interface Props<T> {
   list: T[]
   isLinkVideo?: boolean
 }
 
-export default function MyCourseGridTemplate<T extends {seq?: number, courseName?: string,courseThumbnail?: string, courseUserSeq?: number,thumbnailImage?:string,recentLessonSeq?: number, courseTitle?: string  }>({list,isLinkVideo}: Props<T>) {
+export default function MyCourseGridTemplate<T extends { seq?: number, courseName?: string,courseThumbnail?: string, courseUserSeq?: number,thumbnailImage?:string,recentLessonSeq?: number, courseTitle?: string  }>({list,isLinkVideo}: Props<T>) {
+  const [sortedlist , setSortedlist] = useState(list);
+  
+
+
+  useEffect(() => {
+    const sortedList = list[0].seq ? list.slice().sort((a, b) => b.seq - a.seq) : list.slice().sort((a, b) => b.courseUserSeq - a.courseUserSeq);
+    setSortedlist(sortedList);
+  },[list])
+
   
   return (
     <List>
       {
-        list?.map((course) => (
+        sortedlist.map((course) => (
           <Item key={course.seq ?? course.courseUserSeq}>
               {(course.courseThumbnail || course.thumbnailImage) && <Image src={course.courseThumbnail || course.thumbnailImage} width={280} height={180} alt="과정 썸네일" style={{borderRadius:'16px'}} />}
             <Title>{course.courseName ?? course.courseTitle}</Title>

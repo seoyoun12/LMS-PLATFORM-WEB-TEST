@@ -51,7 +51,7 @@ export default function RegistrationAddress({ data }: Props) {
           <HorizontalbarChart
             chartData={chartData}
             suggestMax={data.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => item.totalCnt)}
-            height={labels.length * 80}
+            height={labels.length * 60}
             />
         </Box>
         <Summary>

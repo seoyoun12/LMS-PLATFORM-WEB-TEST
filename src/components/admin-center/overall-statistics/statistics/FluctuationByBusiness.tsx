@@ -335,8 +335,10 @@ const ChartWrapper = styled(Box)`
 `
 
 const Summary = styled(Box)`
+  margin-top: 4rem;
   width: 90%;
   flex: .3;
+  
   display: flex;
   justify-content: center;
   align-items: center;

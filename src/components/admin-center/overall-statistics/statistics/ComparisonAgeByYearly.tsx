@@ -82,7 +82,7 @@ export default function ComparisonAgeByYearly({ data }: Props) {
       borderColor: rainbowColor[index],
       backgroundColor: rainbowColor[index],
       fill: false,
-      pointRadius: 12,
+      pointRadius: 6,
     }))
 
     const chartData: ChartData<'bar'> = {

@@ -22,7 +22,7 @@ const defaultYearArray = Array.from({length: (currentYear - 2021) + 1}, (_, i) =
 
 export default function Overall() {
   const [queries, setQueries] = useState<Queries>(null)
-  const { data, mutate, course, courseMutate, period, periodMutate } = useStatistics({
+  const { data, mutate, course, courseMutate, period, periodMutate,isCourseValidating,isStepValidating } = useStatistics({
     year: queries?.year || null,
     courseSeq: queries?.courseSeq || null,
     courseClassSeq: queries?.courseClassSeq || null
@@ -55,9 +55,11 @@ export default function Overall() {
           <Download />
         </ExcelDownloadButton>
       </Header>
-    {
-      data &&
-      <Main>
+      {
+      (isStepValidating || isCourseValidating)
+      ? <Spinner />
+      : data
+      ? <Main>
         <SelectGroup>
           <FormControl>
             <InputLabel id="year">교육년도</InputLabel>
@@ -123,6 +125,7 @@ export default function Overall() {
         <YearlyAgeByBusiness data={data.data.statisticsTransEduCategoryAgeResponseDto} />
         <ComparisonAgeByYearly data={data.data.statisticsTransEduYearAgeResponseDto} />
       </Main>
+      : null
       }
     </Wrapper>
   )

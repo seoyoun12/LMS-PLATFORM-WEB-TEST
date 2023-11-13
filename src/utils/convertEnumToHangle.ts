@@ -57,6 +57,7 @@ export const ConvertEnum = (str: string) => {
     if(str === 'PRIVATE_TAXI') return '개인택시'
     if(str === 'INDIVIDUAL_CARGO') return '개별화물'
     if(str === 'KNEELING_BUS') return '저상버스'
+    if(str === 'CONSIGNMENT') return '용달화물'
     if(str === 'birthYear10To19') return '10년생'
     if(str === 'birthYear20To29') return '20년생'
     if(str === 'birthYear30To39') return '30년생'

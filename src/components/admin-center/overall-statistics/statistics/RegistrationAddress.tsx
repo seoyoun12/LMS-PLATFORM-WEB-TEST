@@ -48,7 +48,11 @@ export default function RegistrationAddress({ data }: Props) {
         chartData && data.sumTotalCntSum > 0
         ? <Wrapper>
         <Box sx={{ flex:1, alignSelf:'flex-start' }}>
-          <HorizontalbarChart chartData={chartData} suggestMax={data.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => item.totalCnt)} />
+          <HorizontalbarChart
+            chartData={chartData}
+            suggestMax={data.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => item.totalCnt)}
+            height={labels.length * 80}
+            />
         </Box>
         <Summary>
 

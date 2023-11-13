@@ -4,13 +4,17 @@ import { NotFound } from '@components/ui/NotFound';
 import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { useState } from 'react';
+import CourseTablePagination from '@layouts/AdminCenter/CourseTrafficManagement/feature/CourseTablePagination';
 
 interface Props {
   materialType: MaterialType;
 }
 
 export default function Layout({ materialType }: Props) {
-  const { data } = useGetLearningMaterial(materialType, '');
+  const [page, setPage] = useState(0);
+  const [elementCnt, setElementCnt] = useState(9)
+  const { data } = useGetLearningMaterial(materialType, '',page, elementCnt);
   const router = useRouter();
   
   const handleClickPost = (id: number) => router.push(`/traffic/learning-material/education/${id}`);
@@ -19,10 +23,10 @@ export default function Layout({ materialType }: Props) {
     <Container>
       
       <ContentContainer>
-        {data?.data.length <= 0
+        {data?.data.content?.length <= 0
         ? <NotFound content="자료가 존재하지 않습니다!" />
-        : data?.data &&
-            data.data.map((item, index) => (
+        : data?.data?.content &&
+            data.data.content.map((item, index) => (
               <ItemContainer
                 key={index}
                 onClick={() => handleClickPost(item.seq)}
@@ -49,6 +53,14 @@ export default function Layout({ materialType }: Props) {
               </ItemContainer>
             ))}
       </ContentContainer>
+      <CourseTablePagination
+        page={page}
+        setPage={setPage}
+        count={data?.data.totalElements || 0}
+        rowsPerPage={elementCnt}
+        setRowsPerPage={setElementCnt}
+
+      />
     </Container>
   );
 }

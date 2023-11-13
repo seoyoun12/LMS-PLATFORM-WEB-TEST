@@ -5,16 +5,20 @@ import { TableHeader,TableItem,TableWrapper } from '@layouts/Traffic/LearningMat
 import { format } from 'date-fns';
 import { TuiViewer } from '@components/common/TuiEditor';
 import { downloadFile } from '@common/api/file';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import ArrowDown from 'public/assets/images/ic_arrow_down.svg';
 import SaveIcon from '@mui/icons-material/Save';
 import createDownloadLink from '@utils/createDownloadLink';
+import CourseTablePagination from '@layouts/AdminCenter/CourseTrafficManagement/feature/CourseTablePagination';
+import { Download } from '@mui/icons-material';
 interface Props {
   materialType: MaterialType;
 }
 
 export default function EducationLayout({ materialType }: Props) {
-  const { data } = useGetLearningMaterial(materialType, '');
+  const [page, setPage] = useState(0);
+  const [elementCnt, setElementCnt] = useState(9);
+  const { data } = useGetLearningMaterial(materialType, '',page, elementCnt);
   const [selectedPost, setSelectedPost] = useState<number | null>(null);
   const handleClickPost = (id: number) => setSelectedPost(id === selectedPost ? null : id);
 
@@ -37,12 +41,13 @@ export default function EducationLayout({ materialType }: Props) {
       <TableWrapper>
         <TableHeader>
           <TableItem width="10%">번호</TableItem>
-          <TableItem width="65%">제목</TableItem>
+          <TableItem width="55%">제목</TableItem>
           <TableItem width="25%">등록일</TableItem>
+          <TableItem width="10%">파일받기</TableItem>
         </TableHeader>
       </TableWrapper>
       {data &&
-        data.data.map(value => (
+        data.data?.content?.map(value => (
           <EducationItemWrapper
             open={selectedPost === value.seq}
             key={value.title}
@@ -50,7 +55,7 @@ export default function EducationLayout({ materialType }: Props) {
           >
             <EducationItemHeaderWrapper>
               <TableItem width="10%">{value.seq}</TableItem>
-              <TableItem width="65%" textAlign="left">
+              <TableItem width="55%" textAlign="left">
                 {value.title}
               </TableItem>
               <TableItem width="25%">
@@ -62,6 +67,15 @@ export default function EducationLayout({ materialType }: Props) {
                   </EducationItemHeaderDateText>
                   <ArrowDown />
                 </EducationItemHeaderDateWrapper>
+              </TableItem>
+              <TableItem width="10%">
+                {value.s3Files[0]?.name &&
+                  <EducationItemFileButton onClick={() => onDownloadFile(value)}>
+                    <Box sx={{width:'100%',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                      <Download />
+                    </Box>
+                  </EducationItemFileButton>
+                }
               </TableItem>
             </EducationItemHeaderWrapper>
             <EducationItemContentWrapper>
@@ -81,6 +95,13 @@ export default function EducationLayout({ materialType }: Props) {
             
           </EducationItemWrapper>
         ))}
+        <CourseTablePagination
+          count={data?.data?.totalElements}
+          page={page}
+          rowsPerPage={elementCnt}
+          setPage={setPage}
+          setRowsPerPage={setElementCnt}
+        />
     </EducationWrapper>
   );
 }

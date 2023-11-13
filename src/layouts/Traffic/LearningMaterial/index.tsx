@@ -21,7 +21,7 @@ export function LearningMaterialLayout() {
       case 'learning-guide':
         return <EducationLayout materialType={getMaterialType(type)} />;
       case 'education':
-        // id가 있으면 path: education/{id} 형식인 detail페이지로 들어가고 아니면 리스트 보여주는 것 같음.. ㅁㅊ;
+        // id가 있으면 path: education/{id} 형식인 detail페이지로 들어가고 아니면 리스트 보여주는 것 같다........;
         return id ? <LearningGuideDetailLayout /> : <LearningGuideLayout materialType={getMaterialType(type)} />;
       case 'reference':
         return <ReferenceLayout materialType={getMaterialType(type)} />;

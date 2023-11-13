@@ -1,30 +1,20 @@
-import {
-  VideoItemContentWrapper,
-  VideoItemHeaderDateText,
-  VideoItemHeaderDateWrapper,
-  VideoItemHeaderWrapper,
-  VideoItemWrapper,
-  VideoWrapper,
+import {VideoItemContentWrapper,VideoItemHeaderDateText,VideoItemHeaderDateWrapper,VideoItemHeaderWrapper,VideoItemWrapper,VideoWrapper,
 } from "@layouts/Traffic/LearningMaterial/Video/style";
-import React, { useState } from "react";
-import {
-  MaterialType,
-  useGetLearningMaterial,
-} from "@common/api/learningMaterial";
-import {
-  TableHeader,
-  TableItem,
-  TableWrapper,
-} from "@layouts/Traffic/LearningMaterial/style";
+import { useState } from "react";
+import {MaterialType,useGetLearningMaterial } from "@common/api/learningMaterial";
+import {TableHeader,TableItem,TableWrapper } from "@layouts/Traffic/LearningMaterial/style";
 import ArrowDown from "public/assets/images/ic_arrow_down.svg";
 import { format } from "date-fns";
+import CourseTablePagination from "@layouts/AdminCenter/CourseTrafficManagement/feature/CourseTablePagination";
 
 interface VideoLayoutProps {
   materialType: MaterialType;
 }
 
 export default function VideoLayout({ materialType }: VideoLayoutProps) {
-  const { data } = useGetLearningMaterial(materialType, "");
+  const [page, setPage] = useState(0);
+  const [elementCnt, setElementCnt] = useState(9);
+  const { data } = useGetLearningMaterial(materialType, "",page, elementCnt);
 
   const [selectedPost, setSelectedPost] = useState<number | null>(null);
 
@@ -47,7 +37,7 @@ export default function VideoLayout({ materialType }: VideoLayoutProps) {
       </TableWrapper>
 
       {data &&
-        data.data.map((value) => (
+        data?.data?.content.map((value) => (
           <VideoItemWrapper
             open={selectedPost === value.seq}
             key={value.seq}
@@ -79,6 +69,13 @@ export default function VideoLayout({ materialType }: VideoLayoutProps) {
             </VideoItemContentWrapper>
           </VideoItemWrapper>
         ))}
+        <CourseTablePagination
+          count={data?.data.totalElements || 0}
+          page={page}
+          setPage={setPage}
+          rowsPerPage={elementCnt}
+          setRowsPerPage={setElementCnt}
+          />
     </VideoWrapper>
   );
 }

@@ -11,7 +11,7 @@ export default function LearningStatus() {
   const { myLearningStatus } = useDominMe();
   const [tabIndex, setTabIndex] = useState(0);
     
-  console.log(myLearningStatus?.data);
+  
   const onChangeTab = (event: React.SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
   }

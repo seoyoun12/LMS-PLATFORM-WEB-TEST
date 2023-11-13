@@ -49,6 +49,23 @@ export const ConvertEnum = (str: string) => {
     if(str === 'COURSE_MODULE_PROGRESS_RATE') return '진도율'
     if(str === 'COURSE_MODULE_TEST') return '시험'
     if(str === 'COURSE_MODULE_SURVEY') return '설문'
+    if(str === 'BUS') return '버스'
+    if(str === 'CHARTER_BUS') return '전세버스'
+    if(str === 'SPECIAL_PASSENGER') return '특수여객'
+    if(str === 'CORPORATE_TAXI') return '법인택시'
+    if(str === 'GENERAL_CARGO') return '일반화물'
+    if(str === 'PRIVATE_TAXI') return '개인택시'
+    if(str === 'INDIVIDUAL_CARGO') return '개별화물'
+    if(str === 'KNEELING_BUS') return '저상버스'
+    if(str === 'birthYear10To19') return '10년생'
+    if(str === 'birthYear20To29') return '20년생'
+    if(str === 'birthYear30To39') return '30년생'
+    if(str === 'birthYear40To49') return '40년생'
+    if(str === 'birthYear50To59') return '50년생'
+    if(str === 'birthYear60To69') return '60년생'
+    if(str === 'birthYear70To79') return '70년생'
+    if(str === 'birthYear80To89') return '80년생'
+    if(str === 'birthYear90To99') return '90년생'
     return str;
 }
 

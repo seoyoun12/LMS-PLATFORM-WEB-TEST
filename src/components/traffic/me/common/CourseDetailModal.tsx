@@ -1,18 +1,12 @@
 import styled from '@emotion/styled';
 import { Box, Button, Modal } from '@mui/material'
-import React from 'react'
 import Details from './Details';
 import { ConvertEnum } from '@utils/convertEnumToHangle';
 import { Close } from '@material-ui/icons';
 import { DetailCourse } from '@pages/traffic/me/my-course';
-
-
-
 interface Props {
   onClose: () => void;
   detailCourse: DetailCourse;
-  // courseUserSeq: number;
-  // recentLessonSeq: number;
 }
 
 export default function CourseDetailModal({onClose, detailCourse}: Props) {
@@ -59,7 +53,7 @@ export default function CourseDetailModal({onClose, detailCourse}: Props) {
               .map((_,index) => (<Details key={index} title={`${index+3}세`} value={detailCourse[`age${index+3}`]}/>))
             }
             
-            { detailCourse.grade1 && Array.from({length:6})
+            { detailCourse.grade1 && Array.from({length: !detailCourse.grade4 ? 3 : 6})
               .map((_,index) => <Details key={index} title={`${index+1}학년`} value={detailCourse[`grade${index+1}`]}/>)
             }
 
@@ -116,7 +110,8 @@ const InnerWrapper = styled(Box)`
   display:flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-top: 48px;
   
 
   @media screen and (max-width: 768px) {

@@ -24,7 +24,7 @@ export default function CourseTablePagination({page,count,rowsPerPage,setPage,se
         rowsPerPage={rowsPerPage}
         onPageChange={onChangePage}
         onRowsPerPageChange={onChangeRowsPerPage}
-        rowsPerPageOptions={[1, 2, 5, 10, 25]}
+        rowsPerPageOptions={[1, 2, 5, 9, 10, 25]}
         labelRowsPerPage={<span>페이지당 행의 개수</span>}
         labelDisplayedRows={({ page }) => {return `현재 페이지: ${page + 1}`;}}
         backIconButtonProps={{ color: "secondary" }}

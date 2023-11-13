@@ -158,7 +158,7 @@ export function BannerUpload() {
                 .title?.split('\n')
                 .map((item, idx) => {
                   if (idx > 1) return;
-                  return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
+                  return <div key={idx} style={{color:'#222'}} dangerouslySetInnerHTML={{ __html: item }} />;
                 })}
             </Box>
 
@@ -169,7 +169,7 @@ export function BannerUpload() {
                 .content?.split('\n')
                 .map((item, idx) => {
                   if (idx > 8) return;
-                  return <div key={idx} dangerouslySetInnerHTML={{ __html: item }} />;
+                  return <div key={idx} style={{color:'#222'}} dangerouslySetInnerHTML={{ __html: item }} />;
                 })}
             </Box>
             

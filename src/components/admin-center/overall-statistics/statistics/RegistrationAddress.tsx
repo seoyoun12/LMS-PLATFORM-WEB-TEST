@@ -1,60 +1,99 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
 import StatisticsLayout from './StatisticsLayout'
-import HorizontalbarChart, { labels } from '../charts/HorizontalbarChart'
+import HorizontalbarChart from '../charts/HorizontalbarChart'
 import styled from '@emotion/styled'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
+import { RegistrationAddress as  IRegistrationAddress } from '@hooks/useStatistics'
+import { ChartData } from 'chart.js'
+import { ConvertEnum } from '@utils/convertEnumToHangle'
+import { toPersent } from '@utils/toPersent'
 
-export default function RegistrationAddress() {
+
+interface Props {
+  data: IRegistrationAddress
+}
+
+export default function RegistrationAddress({ data }: Props) {
+  const [chartData, setChartData] = useState<ChartData<'bar'>>();
+  const [labels, setLabels] = useState<string[]>([]);
+
+  useEffect(() => {
+    if(!data) return;
+   const labels = data.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => ConvertEnum(item.userRegistrationTypeEnum));
+    const chartData:ChartData<'bar'> = {
+      labels,
+      datasets: [
+        {
+          label: '이수자',
+          backgroundColor: '#5D7CFC',
+          data: data.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => item.completedCnt),
+          maxBarThickness: 30,
+          
+        },
+        {
+          label: '미이수자',
+          backgroundColor: '#ff6384',
+          data: data.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => item.inCompletedCnt),
+          maxBarThickness: 30,
+        },
+      ],
+    };
+    setLabels(labels)
+    setChartData(chartData)
+  },[data])
+
   return (
     <StatisticsLayout title="차량등록지별 (이수자수 / 이수율)">
-      <Wrapper>
-        <Box sx={{flex:1,alignSelf:'flex-start'}}>
-          <HorizontalbarChart />
+      {
+        chartData && data.sumTotalCntSum > 0
+        ? <Wrapper>
+        <Box sx={{ flex:1, alignSelf:'flex-start' }}>
+          <HorizontalbarChart chartData={chartData} suggestMax={data.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => item.totalCnt)} />
         </Box>
         <Summary>
 
-        <SummaryCategory>
-          <SummaryCategoryTitle>
-            <Box sx={{flex: 1, textAlign: 'center'}}>총 수강인원</Box>
-          </SummaryCategoryTitle>
-          {
-            labels.map((label, index) => (
-              <SummaryItem key={index} width={260}>
-                <SummaryItemTitle >{label}</SummaryItemTitle>
-                <SummaryItemContent >{Math.floor(Math.random() * 100)}</SummaryItemContent>
-              </SummaryItem>
-            ))
-          }
-        </SummaryCategory>
+          <SummaryCategory>
+            <SummaryCategoryTitle>총 수강인원 </SummaryCategoryTitle>
+            {
+              labels?.map((label, index) => 
+                <SummaryItem key={label} width={260}>
+                  <SummaryItemTitle >{label}</SummaryItemTitle>
+                  <SummaryItemContent >{data.statisticsTransEduCarRegisteredRegionResponseDtoList[index]?.totalCnt}</SummaryItemContent>
+                </SummaryItem>
+              )
+            }
+          </SummaryCategory>
 
-        <SummaryCategory>
-          <SummaryCategoryTitle>
-            <Box sx={{flex: 1, textAlign: 'center'}}>이수자</Box>
-          </SummaryCategoryTitle>
-          {
-            labels.map((label, index) => (
-              <SummaryItem key={index} width={200}>
-                <SummaryItemContent>1234 (100%)</SummaryItemContent>
-              </SummaryItem>
-            ))
-          }
-        </SummaryCategory>
+          <SummaryCategory>
+            <SummaryCategoryTitle>이수자</SummaryCategoryTitle>
+            {
+              chartData.datasets.map((dataset) => 
+                dataset.label === '이수자' &&
+                  dataset.data.map((count, index) => 
+                    <SummaryItem key={index} width={200}>
+                      <SummaryItemContent>{count} ({toPersent(data.statisticsTransEduCarRegisteredRegionResponseDtoList[index]?.totalCnt, count as number, 0)}%)</SummaryItemContent>
+                    </SummaryItem>
+                  ))
+            }
+          </SummaryCategory>
 
-        <SummaryCategory>
-          <SummaryCategoryTitle>
-            <SummaryItemContent>미이수자</SummaryItemContent>
-          </SummaryCategoryTitle>
-          {
-            labels.map((label, index) => (
-              <SummaryItem key={index} width={200}>
-                <SummaryItemContent>1234 (100%)</SummaryItemContent>
-              </SummaryItem>
-            ))
-          }
-        </SummaryCategory>
+          <SummaryCategory>
+            <SummaryCategoryTitle>미이수자</SummaryCategoryTitle>
+            {
+            chartData.datasets.map((dataset) => 
+              dataset.label === '미이수자' &&
+                dataset.data.map((count, index) =>   
+                  <SummaryItem key={index} width={200}>
+                    <SummaryItemContent>{count} ({toPersent(data.statisticsTransEduCarRegisteredRegionResponseDtoList[index]?.totalCnt, count as number, 0)}%)</SummaryItemContent>
+                  </SummaryItem>
+                ))
+            }
+          </SummaryCategory>
+
         </Summary>
-
       </Wrapper>
+      : <Typography sx={{ fontSize: 20, fontWeight:'bold' }}>해당 조건을 만족하는 데이터가 존재하지 않습니다.</Typography>
+      }
     </StatisticsLayout>
   )
 }
@@ -89,6 +128,7 @@ const SummaryCategoryTitle = styled(Box)`
   align-items: center;
   font-weight: bold;
   font-size: 1.15rem;
+  text-align:center;
 `
 
 const SummaryItem = styled(Box)<{width?: number}>`
@@ -102,9 +142,10 @@ const SummaryItem = styled(Box)<{width?: number}>`
 `
 
 
-const SummaryItemContent = styled(Box)`
+const SummaryItemContent = styled(Box)<{persentage?: number}>`
   width: 100%;
   text-align: center;
+  color: ${({persentage}) => persentage ? persentage > 9 ? '#ff0000' : '#000' : '#000'};
 `;
 
 const SummaryItemTitle = styled(SummaryItemContent)`

@@ -13,11 +13,12 @@ interface Props{
 }
 
 export default function StatusList({ list, tabIndex, positive}:Props) {
+  // const sortedList = list[0].seq ? list.slice().sort((a, b) => b.seq - a.seq) : list.slice().sort((a, b) => b.courseUserSeq - a.courseUserSeq);
   return (
     <CustomTabPanel value={tabIndex} index={0}>
       <List>
       {
-        list?.map((item) => {
+        list?.sort((a,b) => b.courseUserSeq - a.courseUserSeq ).map((item) => {
           if(positive ? item.progressStatus === 'TYPE_PROGRESSING': item.progressStatus !== 'TYPE_PROGRESSING') {
             return (
             <Item key={item.courseUserSeq}>

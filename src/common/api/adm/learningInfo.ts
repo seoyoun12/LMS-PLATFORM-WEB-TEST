@@ -69,31 +69,39 @@ export interface CourseLearningInfoInput {
   residence?: string;
 }
 
-export function useLearningInfo({ page, ...rest }: CourseLearningInfoRequestDto) {
-  const extractValidParams = {}
-
-  for(const key in rest) {
-    // year 파라미터가 0일시 쿼리에서 제거
-    if(rest[key] || rest[key] !== 0) {
-      extractValidParams[key] = rest[key];
+const extractValidParams = (rest: {[key: string]: string | number}) => {
+  const validParams = {}
+    for(const key in rest) {
+      if(rest[key] || rest[key] !== 0) {
+        validParams[key] = rest[key];
+      }
     }
-  }
+  return validParams
+}
 
+export function useLearningInfo({ page, ...rest }: CourseLearningInfoRequestDto) {
   
+  const validParams = extractValidParams(rest);
+
+
   const { data, error, mutate } = useSWR<SWRResponse<PaginationResult<LearningInfoRes[]>>>(
     [
       `/course/adm/learning-info/`,
       {
-        params: { page, ...extractValidParams },
+        params: { page, ...validParams },
       },
     ],
     GET
   );
+
+
   return {
     data: data?.data,
     error,
     mutate,
   };
+
+
 }
 
 export function useLearningInfoCourses(year:number) {

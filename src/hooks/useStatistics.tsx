@@ -1,12 +1,7 @@
 import { GET } from "@common/httpClient"
 import useSWR, { SWRResponse } from "swr"
 
-interface Props {
-  courseClassSeq?: number;
-  courseSeq?: number;
-  year?: number
 
-}
 
 
 export interface Fluctuation{
@@ -104,6 +99,12 @@ interface Courses {
   }
 
 
+  interface Props {
+    courseClassSeq?: number;
+    courseSeq?: number;
+    year?: number
+  }
+
 export default function useStatistics({courseClassSeq, courseSeq, year}: Props) {
   
   const {data ,mutate} = useSWR<SWRResponse<StatisticsResponse>>([
@@ -112,12 +113,15 @@ export default function useStatistics({courseClassSeq, courseSeq, year}: Props) 
      GET
      )
   
+  // 해당년도에 해당하는 course list를 가져오는 함수
   const {data: course, mutate: courseMutate,isValidating:isCourseValidating} =
   useSWR<SWRResponse<Courses[]>>(year ? [ '/course/adm/learning-info/courses',{ params: {year} }] : null, GET,{
     revalidateOnMount: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   })
+
+  // 해당 courseSeq에 해당하는 period list를 가져오는 함수
   const {data: period, mutate: periodMutate,isValidating:isStepValidating} = useSWR<SWRResponse<PeriodInCourse[]>>(courseSeq ? `/course/adm/learning-info/step/${courseSeq}` : null, GET,{
     revalidateOnMount: false,
     revalidateOnFocus: false,

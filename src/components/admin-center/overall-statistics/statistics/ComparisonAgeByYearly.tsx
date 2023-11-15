@@ -24,44 +24,7 @@ const rainbowColor = [
   '#00FFFF',
 ]
 
-const dummy = [
-  {
-  year: 2023,
-  birthYear90To99: 2,
-  birthYear80To89: 8,
-  birthYear70To79: 42,
-  birthYear60To69: 14,
-  birthYear50To59: 19,
-  birthYear40To49: 55,
-  birthYear30To39: 12,
-  birthYear20To29: 4,
-  birthYear10To19: 0
-  },
-  {
-    year: 2022,
-    birthYear90To99: 44,
-    birthYear80To89: 94,
-    birthYear70To79: 4,
-    birthYear60To69: 32,
-    birthYear50To59: 84,
-    birthYear40To49: 23,
-    birthYear30To39: 66,
-    birthYear20To29: 22,
-    birthYear10To19: 41
-  },
-  {
-    year: 2021,
-    birthYear90To99: 14,
-    birthYear80To89: 3,
-    birthYear70To79: 22,
-    birthYear60To69: 55,
-    birthYear50To59: 100,
-    birthYear40To49: 48,
-    birthYear30To39: 21,
-    birthYear20To29: 4,
-    birthYear10To19: 0
-  }
-]
+
 export default function ComparisonAgeByYearly({ data }: Props) {
   const [chartData, setChartData] = useState<ChartData<'bar'>>(null)
   const [labels, setLabels] = useState(null);

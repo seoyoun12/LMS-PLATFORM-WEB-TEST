@@ -169,7 +169,7 @@ export default function FluctuationByBusiness({ data }: Props) {
     const labels = labelsArr.map((period) => ConvertEnum(period));
 
     const chartData:ChartData = {
-      labels,
+      labels: null,
       datasets: [
         {
           type: 'line',
@@ -245,6 +245,18 @@ export default function FluctuationByBusiness({ data }: Props) {
         },
         {
           type: 'line',
+          label: '용달화물',
+          datalabels: {
+            display:true,
+          },
+          borderColor: '#1ff93c',
+          backgroundColor: '#1ff93c',
+          pointRadius: 8,
+          data: extractStudentTotalCount('userBusinessSubType','CONSIGNMENT'),
+          order: 6
+        },
+        {
+          type: 'line',
           label: '개별화물',
           datalabels: {
             display:true,
@@ -265,7 +277,7 @@ export default function FluctuationByBusiness({ data }: Props) {
           backgroundColor: '#1ff96b',
           pointRadius: 8,
           data: extractStudentTotalCount('userBusinessSubType','KNEELING_BUS'),
-          order: 7
+          order: 8
         },
       ]
     };

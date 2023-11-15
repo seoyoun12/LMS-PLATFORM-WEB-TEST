@@ -18,17 +18,17 @@ interface Queries {
   courseSeq?: number;
 }
 const currentYear = new Date().getFullYear();
-const defaultYearArray = Array.from({length: (currentYear - 2021) + 1}, (_, i) => 2021 + i)
+const defaultYearArray = Array.from({length: (currentYear - 2021) + 1}, (_, i) => 2021 + i).reverse()
 
 export default function Overall() {
   const [queries, setQueries] = useState<Queries>(null)
-  const [submitValue, setSubmitValue] = useState<Queries>({
-    year: null,
-    courseClassSeq: null,
-    courseSeq: null,
-  })
-  const { data, mutate, course, courseMutate, period, periodMutate,isCourseValidating,isStepValidating }
-  = useStatistics(queries);
+
+  const { data, mutate, course, courseMutate, period, periodMutate, isCourseValidating, isStepValidating }
+  = useStatistics({
+    courseClassSeq: queries?.courseClassSeq || null,
+    courseSeq: queries?.courseSeq || null,
+    year: queries?.year || null
+  });
   
 
   const onChangeQueries = async(e: SelectChangeEvent<unknown>) => {
@@ -54,7 +54,7 @@ export default function Overall() {
         </ExcelDownloadButton>
       </Header>
       {
-      (isStepValidating || isCourseValidating || data.isValidating)
+      (isStepValidating || isCourseValidating)
       ? <Spinner />
       : data
       ? <Main>
@@ -107,7 +107,7 @@ export default function Overall() {
               {
                 period ?
                 period.data.map((period, i) => (
-                  <MenuItem key={i} value={period.courseClassSeq || ''}>{period.yearAndStep}</MenuItem>
+                  <MenuItem key={i} value={period?.courseClassSeq || ''}>{period?.yearAndStep}</MenuItem>
                 ))
                 : <MenuItem value={0}>과정을 선택해주세요.</MenuItem>
               }

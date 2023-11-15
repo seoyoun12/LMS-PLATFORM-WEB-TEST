@@ -15,7 +15,7 @@ export default function FluctuationByPeriod({ data }: Props) {
   
   useEffect(() => {
     if(!data || data.length === 0) return;
-    const labels = data.map((period) => period.step);
+    const labels = data.map((period) => `${period.step}기`);
     const chartData:ChartData<'bar' | 'line'> = {
       labels: labels,
       datasets: [

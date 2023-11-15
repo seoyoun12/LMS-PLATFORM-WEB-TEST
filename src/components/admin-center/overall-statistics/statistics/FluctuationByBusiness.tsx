@@ -169,7 +169,7 @@ export default function FluctuationByBusiness({ data }: Props) {
     const labels = labelsArr.map((period) => ConvertEnum(period));
 
     const chartData:ChartData = {
-      labels: null,
+      labels,
       datasets: [
         {
           type: 'line',

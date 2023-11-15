@@ -46,6 +46,7 @@ export default function Overall() {
   
   return (
     <Wrapper>
+      
       <Header>
         <Title>현황 통계</Title>
         <ExcelDownloadButton>
@@ -53,27 +54,29 @@ export default function Overall() {
           <Download />
         </ExcelDownloadButton>
       </Header>
+
+
       {
       (isStepValidating || isCourseValidating)
       ? <Spinner />
       : data
       ? <Main>
-        <SelectGroup>
+        <SelectForm>
             <FormControl>
-            <InputLabel id="year">교육년도</InputLabel>
-            <StyledSelect
-              label="교육년도"
-              name="year"
-              onChange={(e) => onChangeQueries(e)}
-              value={queries?.year || ''}
-              variant="outlined"
-              >
-              {
-                defaultYearArray.map((year, i) => (
-                  <MenuItem key={i} value={year || ''}>{year}</MenuItem>
-                ))
-              }
-            </StyledSelect>
+              <InputLabel id="year">교육년도</InputLabel>
+              <StyledSelect
+                label="교육년도"
+                name="year"
+                onChange={(e) => onChangeQueries(e)}
+                value={queries?.year || ''}
+                variant="outlined"
+                >
+                {
+                  defaultYearArray.map((year, i) => (
+                    <MenuItem key={i} value={year || ''}>{year}</MenuItem>
+                  ))
+                }
+              </StyledSelect>
             </FormControl>
 
           <FormControl>
@@ -113,10 +116,9 @@ export default function Overall() {
               }
             </StyledSelect>
           </FormControl>
-
           <ConfirmSearchButton variant="contained">통계 확인</ConfirmSearchButton>
-          
-        </SelectGroup>
+        </SelectForm>
+
         <InfoMessage>"교육년도, 과정, 과정기수"를 선택하고 "통계 확인"을 눌러 확인하세요.</InfoMessage>
         <Whole data={data.data.statisticsTransEduIntegratedResponseDto} />
         <FluctuationInBusiness data={data.data.statisticsTransEduCategoryResponseDto} />
@@ -150,7 +152,7 @@ const StyledSelect = styled(Select)`
   
 `
 
-const SelectGroup = styled(Box)`
+const SelectForm = styled(Box)`
   align-self: flex-start;
   display:flex;
   gap: 1rem;

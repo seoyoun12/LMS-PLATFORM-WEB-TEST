@@ -34,7 +34,7 @@ export default function StatisticsLayout({title,children}:Props) {
 const Wrapper = styled(Box)<{dropdown: string}>`
   align-self: flex-start;
   max-height: ${({dropdown}) => dropdown === 'drop' ? '1200px' : '76px'};
-  overflow: hidden;
+  overflow: scroll;
   width: 100%;
   display: flex;
   flex-direction: column;

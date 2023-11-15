@@ -105,7 +105,12 @@ interface Courses {
 
 
 export default function useStatistics({courseClassSeq, courseSeq, year}: Props) {
-  const {data ,mutate} = useSWR<SWRResponse<StatisticsResponse>>(['/adm/statistics/trans-edu/integrated',{ params: {courseClassSeq, courseSeq, year} }], GET)
+  
+  const {data ,mutate} = useSWR<SWRResponse<StatisticsResponse>>([
+    '/adm/statistics/trans-edu/integrated',
+    { params: {courseClassSeq, courseSeq, year} }],
+     GET
+     )
   
   const {data: course, mutate: courseMutate,isValidating:isCourseValidating} =
   useSWR<SWRResponse<Courses[]>>(year ? [ '/course/adm/learning-info/courses',{ params: {year} }] : null, GET,{
@@ -113,7 +118,11 @@ export default function useStatistics({courseClassSeq, courseSeq, year}: Props) 
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   })
-  const {data: period, mutate: periodMutate,isValidating:isStepValidating} = useSWR<SWRResponse<PeriodInCourse[]>>(courseSeq ? `/course/adm/learning-info/step/${courseSeq}` : null, GET)
+  const {data: period, mutate: periodMutate,isValidating:isStepValidating} = useSWR<SWRResponse<PeriodInCourse[]>>(courseSeq ? `/course/adm/learning-info/step/${courseSeq}` : null, GET,{
+    revalidateOnMount: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
   // 개설된 과정 전체 조회 /course/adm/learning-info/courses?year={year} => year를 주면 courseSeq를 준다
   // 개설된 과정에 대한 기수 전체 조회 /course/adm/leaning-info/step/{courseSeq} => courseSeq를 주면 courseClassSeq를 준다
 

@@ -22,18 +22,17 @@ const defaultYearArray = Array.from({length: (currentYear - 2021) + 1}, (_, i) =
 
 export default function Overall() {
   const [queries, setQueries] = useState<Queries>(null)
-  const { data, mutate, course, courseMutate, period, periodMutate,isCourseValidating,isStepValidating } = useStatistics({
-    year: queries?.year || null,
-    courseSeq: queries?.courseSeq || null,
-    courseClassSeq: queries?.courseClassSeq || null
-  });
+  const [submitValue, setSubmitValue] = useState<Queries>({
+    year: null,
+    courseClassSeq: null,
+    courseSeq: null,
+  })
+  const { data, mutate, course, courseMutate, period, periodMutate,isCourseValidating,isStepValidating }
+  = useStatistics(queries);
   
-
-
 
   const onChangeQueries = async(e: SelectChangeEvent<unknown>) => {
     const { name,value } = e.target;
-
     setQueries({
       ...queries,
       [name]: value
@@ -47,7 +46,6 @@ export default function Overall() {
   
   return (
     <Wrapper>
-      
       <Header>
         <Title>현황 통계</Title>
         <ExcelDownloadButton>
@@ -56,30 +54,32 @@ export default function Overall() {
         </ExcelDownloadButton>
       </Header>
       {
-      (isStepValidating || isCourseValidating)
+      (isStepValidating || isCourseValidating || data.isValidating)
       ? <Spinner />
       : data
       ? <Main>
         <SelectGroup>
-          <FormControl>
+            <FormControl>
             <InputLabel id="year">교육년도</InputLabel>
             <StyledSelect
+              label="교육년도"
               name="year"
               onChange={(e) => onChangeQueries(e)}
               value={queries?.year || ''}
               variant="outlined"
-              labelId='year'>
+              >
               {
                 defaultYearArray.map((year, i) => (
                   <MenuItem key={i} value={year || ''}>{year}</MenuItem>
                 ))
               }
             </StyledSelect>
-          </FormControl>
+            </FormControl>
 
           <FormControl>
             <InputLabel id="course">과정</InputLabel>
             <StyledSelect
+              label="과정"
               name="courseSeq"
               onChange={(e) => onChangeQueries(e)}
               variant="outlined"
@@ -98,6 +98,7 @@ export default function Overall() {
           <FormControl>
             <InputLabel id="period">과정기수</InputLabel>
             <StyledSelect
+              label="과정기수"
               name="courseClassSeq"
               value={queries?.courseClassSeq || ''}
               onChange={(e) => onChangeQueries(e)}

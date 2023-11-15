@@ -13,8 +13,8 @@ export default function FluctuationBusinessCard({d, label, motherCount, childCou
   return (
     <CardContainer>
       <DescriptionCard>
-        <Box sx={{display: 'flex', flexDirection: 'column'}}>
-          <Typography textAlign='center'>{label}</Typography>
+        <Box sx={{display: 'flex', flexDirection: 'column',alignItems:'center'}}>
+          <Typography>{label}</Typography>
           <Typography>{d}
             <PersentageSpan>
               ({toPersent(motherCount,childCount,0)}%)

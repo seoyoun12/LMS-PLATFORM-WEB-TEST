@@ -23,7 +23,7 @@ const defaultYearArray = Array.from({length: (currentYear - 2021) + 1}, (_, i) =
 export default function Overall() {
   const [queries, setQueries] = useState<Queries>(null)
   const [submitValue, setSubmitValue] = useState(null);
-  const { data, mutate, course, courseMutate, period, periodMutate, isCourseValidating, isStepValidating }
+  const { data, mutate, course, period, isCourseValidating, isStepValidating }
   = useStatistics(submitValue);
   
 
@@ -37,7 +37,7 @@ export default function Overall() {
     // name === 'year' && await courseMutate();
     // name === 'courseSeq' && await periodMutate();
   }
-  
+
   return (
     <Wrapper>
       

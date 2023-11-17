@@ -27,6 +27,7 @@ export function CourseInfomationTraffic() {
   const { value: courseSubType,setValue:setCourseSubType, onChange: onChangeCourseSubType } = useNewInput({initialValue: detailCourseInfo?.userProvincialCourseInfoDetailCourseInfoDto?.eduTargetSub,type:'string'});
   const [courseAudientCount, setCourseAudientCount] = useState<CourseAudientCount>({});
   const [enrollSeq, setEnrollSeq] = useState<string>('');
+
   const onClickEdit = async() => {
     setEditTarget(prev => !prev);
     if(editTarget) {
@@ -39,7 +40,6 @@ export function CourseInfomationTraffic() {
     }
   }
 
-
   const onChangeCourseAudientCount = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setCourseAudientCount(prev => ({...prev, [name]: value}))
@@ -48,21 +48,17 @@ export function CourseInfomationTraffic() {
   
   useEffect(() => {
    if(!detailCourseInfo) return;
-    const { eduTargetSub,age3, age4, age5, elderly, grade1, grade2, grade3, grade4, grade5, grade6, selfDriver } = detailCourseInfo.userProvincialCourseInfoDetailCourseInfoDto;
-    setCourseAudientCount({
-      age3: age3?.toString() || '',
-      age4: age4?.toString() || '',
-      age5: age5?.toString() || '',
-      elderly: elderly?.toString() || '',
-      grade1: grade1?.toString() || '',
-      grade2: grade2?.toString() || '',
-      grade3: grade3?.toString() || '',
-      grade4: grade4?.toString() || '',
-      grade5: grade5?.toString() || '',
-      grade6: grade6?.toString() || '',
-      selfDriver: selfDriver?.toString() || ''
-    })
-    setCourseSubType(eduTargetSub);
+    
+    const { userProvincialCourseInfoDetailCourseInfoDto } = detailCourseInfo;
+    
+    for (const key in userProvincialCourseInfoDetailCourseInfoDto) {
+      userProvincialCourseInfoDetailCourseInfoDto[key]
+      ? setCourseAudientCount(prev => ({...prev, [key]: userProvincialCourseInfoDetailCourseInfoDto[key]}))
+      : setCourseAudientCount(prev => ({...prev, [key]: ''}))
+      
+    }
+    
+    setCourseSubType(userProvincialCourseInfoDetailCourseInfoDto.eduTargetSub);
       // eslint-disable-next-line
   },[detailCourseInfo])
 

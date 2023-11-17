@@ -8,15 +8,14 @@ export interface Fluctuation{
 }
 
 export interface AgeRange {
-  birthYear10To19: number,
-  birthYear20To29: number,
-  birthYear30To39: number,
-  birthYear40To49: number,
-  birthYear50To59: number,
-  birthYear60To69: number,
-  birthYear70To79: number,
-  birthYear80To89: number,
-  birthYear90To99: number,
+  age20s: number,
+  age30s: number,
+  age40s: number,
+  age50s: number,
+  age60s: number,
+  age70s: number,
+  age80s: number,
+  age90s: number,
 }
 
 export interface AgeRangeByBusiness extends AgeRange{

@@ -117,19 +117,19 @@ export default function Overall() {
         </SelectForm>
 
         {
-      (!data || isCourseValidating || isStepValidating)
-      ? <Spinner />
-      : <>
-          <InfoMessage>"교육년도, 과정, 과정기수"를 선택하고 "통계 확인"을 눌러 확인하세요.</InfoMessage>
-          <Whole data={data.data.statisticsTransEduIntegratedResponseDto} />
-          <FluctuationInBusiness data={data.data.statisticsTransEduCategoryResponseDto} />
-          <RegistrationAddress data={data.data.statisticsTransEduCarRegisteredRegionResultResponseDto} />
-          <FluctuationByPeriod data={data.data.statisticsTransEduStepResponseDto} />
-          <FluctuationByBusiness data={data.data.statisticsTransEduCategoryIncreaseResponseDto} />
-          <YearlyAgeByBusiness data={data.data.statisticsTransEduCategoryAgeResponseDto} />
-          <ComparisonAgeByYearly data={data.data.statisticsTransEduYearAgeResponseDto} />
-        </>
-}
+          (!data || isCourseValidating || isStepValidating)
+          ? <Spinner />
+          : <>
+              <InfoMessage>"교육년도, 과정, 과정기수"를 선택하고 "통계 확인"을 눌러 확인하세요.</InfoMessage>
+              <Whole data={data.data.statisticsTransEduIntegratedResponseDto} />
+              <FluctuationInBusiness data={data.data.statisticsTransEduCategoryResponseDto} />
+              <RegistrationAddress data={data.data.statisticsTransEduCarRegisteredRegionResultResponseDto} />
+              <FluctuationByPeriod data={data.data.statisticsTransEduStepResponseDto} />
+              <FluctuationByBusiness data={data.data.statisticsTransEduCategoryIncreaseResponseDto} />
+              <YearlyAgeByBusiness data={data.data.statisticsTransEduCategoryAgeResponseDto} />
+              <ComparisonAgeByYearly data={data.data.statisticsTransEduYearAgeResponseDto} />
+            </>
+          }
       </Main>
       
       

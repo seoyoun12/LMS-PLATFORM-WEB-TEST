@@ -29,8 +29,6 @@ export default function ComparisonAgeByYearly({ data }: Props) {
   const [chartData, setChartData] = useState<ChartData<'bar'>>(null)
   const [labels, setLabels] = useState(null);
 
-  
-
   useEffect(() => {
     
     if(!data || data.length === 0) return;

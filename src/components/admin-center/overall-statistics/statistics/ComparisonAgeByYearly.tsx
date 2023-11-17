@@ -57,8 +57,6 @@ export default function ComparisonAgeByYearly({ data }: Props) {
     });
     setLabels(labels.reverse());
   },[data])
-
-  
   
   return (
     <StatisticsLayout title="연도별 연령비교">

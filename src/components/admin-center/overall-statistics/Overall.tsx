@@ -23,7 +23,7 @@ const defaultYearArray = Array.from({length: (currentYear - 2021) + 1}, (_, i) =
 export default function Overall() {
   const [queries, setQueries] = useState<Queries>(null)
   const [submitValue, setSubmitValue] = useState(null);
-  const { data, mutate, course, period, isCourseValidating, isStepValidating }
+  const { data, mutate, course, getCourses, period, isStepValidating }
   = useStatistics(submitValue);
   
 
@@ -33,10 +33,10 @@ export default function Overall() {
       ...queries,
       [name]: value
     })
-
-    // name === 'year' && await courseMutate();
-    // name === 'courseSeq' && await periodMutate();
   }
+
+
+  
 
   return (
     <Wrapper>
@@ -57,13 +57,13 @@ export default function Overall() {
             <StyledSelect
               label="교육년도"
               name="year"
-              onChange={(e) => onChangeQueries(e)}
+              onChange={onChangeQueries}
               value={queries?.year || ''}
               variant="outlined"
               >
               {
                 defaultYearArray.map((year, i) => (
-                  <MenuItem key={i} value={year || ''}>{year}</MenuItem>
+                  <MenuItem key={i} value={year || ''} onClick={() => getCourses(year)}>{year}</MenuItem>
                 ))
               }
             </StyledSelect>
@@ -80,7 +80,7 @@ export default function Overall() {
               labelId='course'>
               {
                 course ?
-                course.data.map((course, i) => (
+                course.map((course, i) => (
                   <MenuItem key={i} value={course.courseSeq || ''}>{course.courseName}</MenuItem>
                 ))
                 : <MenuItem value={0}>연도를 선택해주세요.</MenuItem>
@@ -117,7 +117,7 @@ export default function Overall() {
         </SelectForm>
 
         {
-          (!data || isCourseValidating || isStepValidating)
+          (!data || isStepValidating)
           ? <Spinner />
           : <>
               <InfoMessage>"교육년도, 과정, 과정기수"를 선택하고 "통계 확인"을 눌러 확인하세요.</InfoMessage>

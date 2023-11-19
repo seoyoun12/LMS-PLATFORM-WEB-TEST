@@ -6,7 +6,7 @@ import { CSSProperties } from 'react'
 interface Props{
   id: string;
   label: string;
-  options: any[]; // MUI의 컴포넌트가 제네릭을 받지 못하기 때문에 any으로 처리
+  options: any[];
   value: number | string;
   onChange: (e: SelectChangeEvent) => void;
   name?: string;

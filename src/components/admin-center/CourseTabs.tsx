@@ -17,7 +17,7 @@ export function CourseTabs() {
   return (
     <TabContext value={tabIndex+''}>
     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-      <TabList onChange={onChangeTabIndex} aria-label="lab API tabs example">
+      <TabList onChange={onChangeTabIndex}>
         <Tab label="과정" value="1" />
         <Tab label="콘텐츠" value="2" />
         <Tab label="모듈" value="3" />

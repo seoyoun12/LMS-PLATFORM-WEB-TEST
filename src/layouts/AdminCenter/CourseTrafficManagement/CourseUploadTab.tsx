@@ -69,7 +69,6 @@ export default function CourseUploadTab() {
         navigation.push('/admin-center/course-traffic');
       }
     } catch (error) {
-      console.log(error);
       snackbar({
         message: error?.data?.message ?? '썸네일이 등록되지 않았거나, 알 수 없는 이유로 과정 등록에 실패하였습니다.',
         variant:'error'
@@ -94,9 +93,7 @@ export default function CourseUploadTab() {
       })  
     } 
   }
-  
-  console.log(isLoading);
-  // 
+
   useEffect(() => {
     const boardSequence = navigation.query?.boardSeq;
     if(boardSequence){
@@ -190,7 +187,6 @@ export default function CourseUploadTab() {
         onClickDelete={boardSeq ? () => onClickDelete(boardSeq) : null}
         disabled={isLoading}
         />
-        
     </Wrapper>
   );
 }

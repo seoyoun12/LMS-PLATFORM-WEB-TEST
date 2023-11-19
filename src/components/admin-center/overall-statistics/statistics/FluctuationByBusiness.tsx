@@ -149,8 +149,10 @@ export default function FluctuationByBusiness({ data }: Props) {
   const [chartData, setChartData] = useState(null);
   const [labels, setLabels] = useState(null);
   const [period, setPeriod] = useState<number[]>(null);
+
   const extractStudentTotalCount = useCallback((target: keyof IFluctuationByBusiness, condition) => 
-    data.filter((period) => period[target] === condition).map((period) => period.studentCnt)
+    data.filter((period) => period[target] === condition)
+    .map((period) => period.studentCnt)
   ,[data])
 
 

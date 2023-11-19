@@ -34,7 +34,8 @@ export default function CourseModuleListModal({ courseSeq, toggle,onToggle }:Pro
   const { value: surveySeq, onChange: onChangeSurveySeq } = useNewInput( {initialValue:0, type:'number'} )
   const { postConnectModuleToCourse } = useDominCourseModule({page:0, rowsPerPage:10})
   const { getModuleLinkedCourse } = useDominModule({ courseSeq });
-  // 
+   
+
   const onClickConnectModuleToCourse = async () => {
     if(!courseSeq) return; 
     try {

@@ -47,14 +47,17 @@ export default function EducationLayout({ materialType }: Props) {
         </TableHeader>
       </TableWrapper>
       {data &&
-        data.data?.content?.map(value => (
+        data.data?.content?.map((value,index) => (
           <EducationItemWrapper
             open={selectedPost === value.seq}
             key={value.title}
             onClick={() => handleClickPost(value.seq)}
           >
             <EducationItemHeaderWrapper>
-              <TableItem width="10%">{value.seq}</TableItem>
+              <TableItem width="10%">
+                {/* {data.data.content.length - index} 역순*/}
+                {index + 1}
+                </TableItem>
               <TableItem width="55%" textAlign="left">
                 {value.title}
               </TableItem>

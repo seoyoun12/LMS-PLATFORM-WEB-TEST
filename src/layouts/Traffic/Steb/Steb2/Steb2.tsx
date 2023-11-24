@@ -226,7 +226,7 @@ export function Steb2() {
                           key={course.seq}
                           value={course.seq}
                           >
-                        {`${course.seq}. ${ConvertEnum(course.courseName)}`
+                        {`${ConvertEnum(course.courseName)}`
                         }</MenuItem>
             })}
           </Select>

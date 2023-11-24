@@ -1,12 +1,10 @@
 import { SelectChangeEvent } from "@mui/material"
 import { ChangeEvent, useCallback, useState } from "react"
 
-
 interface Props<T>{
   initialValue: T;
   type: 'string' | 'number' | 'file' | 'date';
 }
-
 
 export function useNewInput<T>({initialValue,type}: Props<T>) {
     const [value , setValue] = useState(initialValue)
@@ -19,7 +17,6 @@ export function useNewInput<T>({initialValue,type}: Props<T>) {
       } else if(e instanceof Object){
         setValue(e.target.value as T);
       }
-      
     }
 
     const onChangeFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +47,5 @@ export function useNewInput<T>({initialValue,type}: Props<T>) {
       onChange: type === 'file' ? onChangeFile : onChangeValue,
       onReset,
       setPreview
-      
     }
 }

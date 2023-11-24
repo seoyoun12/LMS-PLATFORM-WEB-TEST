@@ -58,15 +58,14 @@ export const ConvertEnum = (str: string) => {
     if(str === 'INDIVIDUAL_CARGO') return '개별화물'
     if(str === 'KNEELING_BUS') return '저상버스'
     if(str === 'CONSIGNMENT') return '용달화물'
-    if(str === 'birthYear10To19') return '10년생'
-    if(str === 'birthYear20To29') return '20년생'
-    if(str === 'birthYear30To39') return '30년생'
-    if(str === 'birthYear40To49') return '40년생'
-    if(str === 'birthYear50To59') return '50년생'
-    if(str === 'birthYear60To69') return '60년생'
-    if(str === 'birthYear70To79') return '70년생'
-    if(str === 'birthYear80To89') return '80년생'
-    if(str === 'birthYear90To99') return '90년생'
+    if(str === 'age20s') return '20~29세'
+    if(str === 'age30s') return '30~39세'
+    if(str === 'age40s') return '40~49세'
+    if(str === 'age50s') return '50~59세'
+    if(str === 'age60s') return '60~69세'
+    if(str === 'age70s') return '70~79세'
+    if(str === 'age80s') return '80~89세'
+    if(str === 'age90s') return '90~99세'
     return str;
 }
 

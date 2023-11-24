@@ -28,38 +28,34 @@ export default function CourseContentTab() {
   
   if(isLoading) return <div>콘텐츠를 불러오고 있습니다. 잠시만 기다려주세요.</div>
   
-
-  
   return (
     <>
-    <CourseContentListModal toggle={toggle} onToggle={onToggle} getDominCourse={getDominCourse} seq={+navigation.query.boardSeq} />
-    
-    <Wrapper>
-      <Table>
-        <CourseContentTableHeaders />
-        {
-          (course && course.content) && 
-            <Row rounded="8px" onClick={() => onClickMoveToModifyContentPage(course.content.seq)}>
-            <InRow flex={0.1}>{course.content.seq}</InRow>
-            <InRow flex={0.4}>{course.content.contentName}</InRow>
-            <InRow flex={0.2}>{course.content.contentType}</InRow>
-            <InRow flex={0.2}>{course.content.createdDtime}</InRow>
-            <InRow flex={0.1}>{course.content.status === 1 ? '정상' : '중지'}</InRow>
-          </Row>
-        }
-        
-      </Table>
-      <Box sx={{position:'relative'}}>
-      <ContentLinkButton variant='contained' startIcon={<Link/>} onClick={onToggle}>
-        콘텐츠 연결
-      </ContentLinkButton>
-      </Box>
-    </Wrapper>
+      <CourseContentListModal toggle={toggle} onToggle={onToggle} getDominCourse={getDominCourse} seq={+navigation.query.boardSeq} />
+      <Wrapper>
+        <Table>
+          <CourseContentTableHeaders />
+          {
+            (course && course.content) && 
+              <Row rounded="8px" onClick={() => onClickMoveToModifyContentPage(course.content.seq)}>
+              <InRow flex={0.1}>{course.content.seq}</InRow>
+              <InRow flex={0.4}>{course.content.contentName}</InRow>
+              <InRow flex={0.2}>{course.content.contentType}</InRow>
+              <InRow flex={0.2}>{course.content.createdDtime}</InRow>
+              <InRow flex={0.1}>{course.content.status === 1 ? '정상' : '중지'}</InRow>
+            </Row>
+          }
+        </Table>
+        <Box sx={{position:'relative'}}>
+          <StyledLink variant='contained' startIcon={<Link/>} onClick={onToggle}>
+            콘텐츠 연결
+          </StyledLink>
+        </Box>
+      </Wrapper>
     </>
   )
 }
 
-const ContentLinkButton = styled(Button)`
+const StyledLink = styled(Button)`
   position:absolute;
   top:0;
   right:0; 

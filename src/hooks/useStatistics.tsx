@@ -1,8 +1,6 @@
 import { GET } from "@common/httpClient"
+import { useState } from "react"
 import useSWR, { SWRResponse } from "swr"
-
-
-
 
 export interface Fluctuation{
     completedCnt: number,
@@ -11,29 +9,25 @@ export interface Fluctuation{
 }
 
 export interface AgeRange {
-  birthYear10To19: number,
-  birthYear20To29: number,
-  birthYear30To39: number,
-  birthYear40To49: number,
-  birthYear50To59: number,
-  birthYear60To69: number,
-  birthYear70To79: number,
-  birthYear80To89: number,
-  birthYear90To99: number,
+  age20s: number,
+  age30s: number,
+  age40s: number,
+  age50s: number,
+  age60s: number,
+  age70s: number,
+  age80s: number,
+  age90s: number,
 }
 
 export interface AgeRangeByBusiness extends AgeRange{
   userBusinessSubType: string
 }
-
 export interface AgeRangeByYearly extends AgeRange{
   year: number
 }
-
 export interface FluctuationByCarRegistrationAddress extends Fluctuation{
   userRegistrationTypeEnum: string
 }
-
 export interface RegistrationAddress {
   exceptSejongCompletedCntSum: number,
   exceptSejongInCompletedCntSum: number,
@@ -58,14 +52,12 @@ export interface Period {
 export interface FluctuationInBusiness extends Fluctuation{
   userBusinessSubType: string
 }
-
 export interface FluctuationInBusinessResponse {
   statisticsTransEduCategoryResponseDtoList: FluctuationInBusiness[],
   sumCompletedCntSum: number,
   sumInCompletedCnt: number,
   sumTotalCntSum: number
 }
-
 export interface FluctuationByBusiness extends Period{
   courseSeq: number,
   step: number,
@@ -100,38 +92,40 @@ interface Courses {
 
 
   interface Props {
-    courseClassSeq?: number;
-    courseSeq?: number;
-    year?: number
+    courseClassSeq: number |null;
+    courseSeq: number | null;
+    year: number | null;
   }
 
-export default function useStatistics({courseClassSeq, courseSeq, year}: Props) {
-  
-  const {data ,mutate} = useSWR<SWRResponse<StatisticsResponse>>([
+export default function useStatistics(props: Props) {
+  const [course, setCourse] = useState<Courses[]>(null);
+  const {data ,mutate} = useSWR<SWRResponse<StatisticsResponse>>(props?.year ? [
     '/adm/statistics/trans-edu/integrated',
-    { params: {courseClassSeq, courseSeq, year} }],
+    { params: {courseClassSeq: props?.courseClassSeq, courseSeq: props.courseSeq, year: props.year} }] : null,
      GET
      )
   
   // 해당년도에 해당하는 course list를 가져오는 함수
-  const {data: course, mutate: courseMutate,isValidating:isCourseValidating} =
-  useSWR<SWRResponse<Courses[]>>(year ? [ '/course/adm/learning-info/courses',{ params: {year} }] : null, GET,{
-    revalidateOnMount: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  })
+  // const {data: course, mutate: courseMutate,isValidating:isCourseValidating} =
+  // useSWR<SWRResponse<Courses[]>>(props?.year ? [ '/course/adm/learning-info/courses',{ params: {year:props.year} }] : null, GET)
 
   // 해당 courseSeq에 해당하는 period list를 가져오는 함수
-  const {data: period, mutate: periodMutate,isValidating:isStepValidating} = useSWR<SWRResponse<PeriodInCourse[]>>(courseSeq ? `/course/adm/learning-info/step/${courseSeq}` : null, GET,{
-    revalidateOnMount: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  })
+  const {data: period, mutate: periodMutate,isValidating:isStepValidating} = useSWR<SWRResponse<PeriodInCourse[]>>(props?.courseSeq ? `/course/adm/learning-info/step/${props.courseSeq}` : null, GET)
   // 개설된 과정 전체 조회 /course/adm/learning-info/courses?year={year} => year를 주면 courseSeq를 준다
   // 개설된 과정에 대한 기수 전체 조회 /course/adm/leaning-info/step/{courseSeq} => courseSeq를 주면 courseClassSeq를 준다
 
+  const getCourses = async (year: number) => {
+    try {
+      const { data } = await GET('/course/adm/learning-info/courses', {params: { year }})
+      setCourse(data);
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
+  
 
 
 
-  return {data, mutate, course, courseMutate, period, periodMutate, isCourseValidating, isStepValidating}
+  return {data, mutate, course, getCourses, period, periodMutate, isStepValidating}
 }

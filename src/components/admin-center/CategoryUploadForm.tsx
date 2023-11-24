@@ -282,28 +282,7 @@ export function CategoryUploadForm({
           />
         </FormControl>
 
-        {/* <FormControl className={pt20}>
-          <FormLabel focused={false}>상태</FormLabel>
-          <Controller
-            rules={{ required: true }}
-            control={control}
-            name="status"
-            render={({ field }) => (
-              <RadioGroup row {...field}>
-                <FormControlLabel
-                  value={ProductStatus.APPROVE}
-                  control={<Radio />}
-                  label="정상"
-                />
-                <FormControlLabel
-                  value={ProductStatus.REJECT}
-                  control={<Radio />}
-                  label="중지"
-                />{' '}
-              </RadioGroup>
-            )}
-          />
-        </FormControl> */}
+      
         <ButtonBox>
           <SubmitBtn variant='contained' type='submit' disabled={loading}>
             { loading ? <Spinner fit={true} /> : mode === 'upload' ? '업로드하기' : '수정하기' }

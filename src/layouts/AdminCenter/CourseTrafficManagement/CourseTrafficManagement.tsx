@@ -13,7 +13,13 @@ export function CourseTrafficManagement() {
   const { getDominCourseList, data:courseList } = useDominCourse();
 
   useEffect(() => {
-    getDominCourseList({courseType:CourseType.TYPE_PROVINCIAL,page,elementCnt:rowsPerPage});
+
+    getDominCourseList({
+      page,
+      courseType:CourseType.TYPE_PROVINCIAL,
+      elementCnt: rowsPerPage
+    });
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[rowsPerPage,page])
 

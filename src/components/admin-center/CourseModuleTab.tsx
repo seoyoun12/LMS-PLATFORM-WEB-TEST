@@ -57,26 +57,26 @@ export default function CourseModuleTab() {
           <InRow flex={0.1}>상태</InRow>
           <InRow flex={0.1}>모듈해제</InRow>
         </Row>
-    {
-      linkedModule?.data?.map((module) => (
-        <Row key={module.courseModuleSeq} rounded="8px">
-          <InRow flex={0.1}>{module.courseModuleSeq}</InRow>
-          <InRow flex={0.4}>{module.moduleName}</InRow>
-          <InRow flex={0.3}>{ConvertEnum(module.moduleType)}</InRow>
-          <InRow flex={0.1}>{module.status > 0 ? '정상' : '중지'}</InRow>
-          <InRow flex={0.1}><DisConnectButton onClick={() => onClickDisconnectModule(module.courseModuleSeq)} variant="contained">해제하기</DisConnectButton></InRow>
-        </Row>
-      ))
-    }
+        {
+          linkedModule?.data?.map((module) => (
+            <Row key={module.courseModuleSeq} rounded="8px">
+              <InRow flex={0.1}>{module.courseModuleSeq}</InRow>
+              <InRow flex={0.4}>{module.moduleName}</InRow>
+              <InRow flex={0.3}>{ConvertEnum(module.moduleType)}</InRow>
+              <InRow flex={0.1}>{module.status > 0 ? '정상' : '중지'}</InRow>
+              <InRow flex={0.1}><DisConnectButton onClick={() => onClickDisconnectModule(module.courseModuleSeq)} variant="contained">해제하기</DisConnectButton></InRow>
+            </Row>
+          ))
+        }
       </Table>
       <Box sx={{position:'relative'}}>
-      <ModuleLinkButton
-        variant='contained'
-        startIcon={<Link/>}
-        onClick={onToggle}
-        >
-        모듈 연결
-      </ModuleLinkButton>
+        <StyledLink
+          variant='contained'
+          startIcon={<Link/>}
+          onClick={onToggle}
+          >
+          모듈 연결
+        </StyledLink>
       </Box>
         <CourseTablePagination
           page={page -1}
@@ -90,12 +90,9 @@ export default function CourseModuleTab() {
    );
 }
 
-const DisConnectButton = styled(Button)`
-  
-  
-`
+const DisConnectButton = styled(Button)``; 
 
-const ModuleLinkButton = styled(Button)`
+const StyledLink = styled(Button)`
   position:absolute;
   top:0;
   right:0; 

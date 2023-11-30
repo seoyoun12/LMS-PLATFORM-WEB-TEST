@@ -102,7 +102,12 @@ export default function useStatistics(props: Props) {
   const {data ,mutate} = useSWR<SWRResponse<StatisticsResponse>>(props?.year ? [
     '/adm/statistics/trans-edu/integrated',
     { params: {courseClassSeq: props?.courseClassSeq, courseSeq: props.courseSeq, year: props.year} }] : null,
-     GET
+     GET,{
+      // revalidateIfStale: false,
+      // revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      // revalidateOnMount: false,
+     }
      )
   
   // 해당년도에 해당하는 course list를 가져오는 함수
@@ -110,7 +115,9 @@ export default function useStatistics(props: Props) {
   // useSWR<SWRResponse<Courses[]>>(props?.year ? [ '/course/adm/learning-info/courses',{ params: {year:props.year} }] : null, GET)
 
   // 해당 courseSeq에 해당하는 period list를 가져오는 함수
-  const {data: period, mutate: periodMutate,isValidating:isStepValidating} = useSWR<SWRResponse<PeriodInCourse[]>>(props?.courseSeq ? `/course/adm/learning-info/step/${props.courseSeq}` : null, GET)
+  const {data: period, mutate: periodMutate,isValidating:isStepValidating} = useSWR<SWRResponse<PeriodInCourse[]>>(
+    props?.courseSeq ? `/course/adm/learning-info/step/${props.courseSeq}` : null,
+    GET,)
   // 개설된 과정 전체 조회 /course/adm/learning-info/courses?year={year} => year를 주면 courseSeq를 준다
   // 개설된 과정에 대한 기수 전체 조회 /course/adm/leaning-info/step/{courseSeq} => courseSeq를 주면 courseClassSeq를 준다
 
@@ -120,8 +127,7 @@ export default function useStatistics(props: Props) {
       setCourse(data);
     } catch (error) {
       console.log(error)
-    }
-    
+    } 
   }
   
 

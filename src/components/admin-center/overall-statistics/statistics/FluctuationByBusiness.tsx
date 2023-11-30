@@ -314,7 +314,7 @@ export default function FluctuationByBusiness({ data }: Props) {
                 <Typography sx={{fontSize: 20, fontWeight:'bold'}}>{period} 기</Typography>
               </Column>
               {
-                data.map((item,index) => (
+                data?.map((item,index) => (
                   data[index].step === period && 
                   <Box key={item.userBusinessSubType} sx={{ flex:1, border:'1px solid #c7c7c7c7', boxSizing:'border-box', height: '40px', }}>
                     <Typography sx={{fontSize: 20, fontWeight:'bold', textAlign:'center'}}>{item.studentCnt}</Typography>

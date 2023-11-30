@@ -19,21 +19,21 @@ export default function RegistrationAddress({ data }: Props) {
 
   useEffect(() => {
     if(!data) return;
-   const labels = data.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => ConvertEnum(item.userRegistrationTypeEnum));
+   const labels = data?.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => ConvertEnum(item.userRegistrationTypeEnum));
     const chartData:ChartData<'bar'> = {
       labels,
       datasets: [
         {
           label: '이수자',
           backgroundColor: '#5D7CFC',
-          data: data.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => item.completedCnt),
+          data: data?.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => item.completedCnt),
           maxBarThickness: 30,
           
         },
         {
           label: '미이수자',
           backgroundColor: '#ff6384',
-          data: data.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => item.inCompletedCnt),
+          data: data?.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => item.inCompletedCnt),
           maxBarThickness: 30,
         },
       ],
@@ -45,12 +45,12 @@ export default function RegistrationAddress({ data }: Props) {
   return (
     <StatisticsLayout title="차량등록지별 (이수자수 / 이수율)">
       {
-        chartData && data.sumTotalCntSum > 0
+        chartData && data?.sumTotalCntSum > 0
         ? <Wrapper>
         <Box sx={{ flex:1, alignSelf:'flex-start' }}>
           <HorizontalbarChart
             chartData={chartData}
-            suggestMax={data.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => item.totalCnt)}
+            suggestMax={data?.statisticsTransEduCarRegisteredRegionResponseDtoList.map((item) => item.totalCnt)}
             height={labels.length * 60}
             />
         </Box>
@@ -62,7 +62,7 @@ export default function RegistrationAddress({ data }: Props) {
               labels?.map((label, index) => 
                 <SummaryItem key={label} width={260}>
                   <SummaryItemTitle >{label}</SummaryItemTitle>
-                  <SummaryItemContent >{data.statisticsTransEduCarRegisteredRegionResponseDtoList[index]?.totalCnt}</SummaryItemContent>
+                  <SummaryItemContent >{data?.statisticsTransEduCarRegisteredRegionResponseDtoList[index]?.totalCnt}</SummaryItemContent>
                 </SummaryItem>
               )
             }
@@ -73,9 +73,9 @@ export default function RegistrationAddress({ data }: Props) {
             {
               chartData.datasets.map((dataset) => 
                 dataset.label === '이수자' &&
-                  dataset.data.map((count, index) => 
+                  dataset.data?.map((count, index) => 
                     <SummaryItem key={index} width={200}>
-                      <SummaryItemContent>{count} ({toPersent(data.statisticsTransEduCarRegisteredRegionResponseDtoList[index]?.totalCnt, count as number, 0)}%)</SummaryItemContent>
+                      <SummaryItemContent>{count} ({toPersent(data?.statisticsTransEduCarRegisteredRegionResponseDtoList[index]?.totalCnt, count as number, 0)}%)</SummaryItemContent>
                     </SummaryItem>
                   ))
             }
@@ -86,9 +86,9 @@ export default function RegistrationAddress({ data }: Props) {
             {
             chartData.datasets.map((dataset) => 
               dataset.label === '미이수자' &&
-                dataset.data.map((count, index) =>   
+                dataset.data?.map((count, index) =>   
                   <SummaryItem key={index} width={200}>
-                    <SummaryItemContent>{count} ({toPersent(data.statisticsTransEduCarRegisteredRegionResponseDtoList[index]?.totalCnt, count as number, 0)}%)</SummaryItemContent>
+                    <SummaryItemContent>{count} ({toPersent(data?.statisticsTransEduCarRegisteredRegionResponseDtoList[index]?.totalCnt, count as number, 0)}%)</SummaryItemContent>
                   </SummaryItem>
                 ))
             }

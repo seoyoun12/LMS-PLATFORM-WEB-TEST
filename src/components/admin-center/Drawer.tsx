@@ -19,6 +19,7 @@ import { logout } from '@common/api';
 import Image from 'next/image';
 import a11yProps from '@utils/a11yProps';
 import CustomTabPanel from './drawer/CustomTabPanel';
+import { Sms, SmsOutlined } from '@mui/icons-material';
 
 export type TabType = 'normal' | 'traffic';
 
@@ -342,6 +343,22 @@ export function Drawer({ children }: { children: ReactNode }) {
         },
       ],
       icon: <AnalyticsOutlinedIcon sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
+    },
+    {
+      name: '문자메시지 관리',
+      children: [
+        {
+          name: '자동 문자 발송 설정',
+          href: '/admin-center/sms/message-settings',
+          isActive: router.pathname === '',
+        },
+        {
+          name: '수동 문자 발송',
+          href: '/admin-center/sms/send-message',
+          isActive: router.pathname === '',
+        },
+      ],
+      icon: <SmsOutlined sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },
   ];
 

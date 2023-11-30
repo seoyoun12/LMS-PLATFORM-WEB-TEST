@@ -30,7 +30,7 @@ export default function VideoLayout({ materialType }: VideoLayoutProps) {
     <VideoWrapper>
       <TableWrapper>
         <TableHeader>
-          <TableItem width="10%"></TableItem>
+          <TableItem width="10%">번호</TableItem>
           <TableItem width="65%">제목</TableItem>
           <TableItem width="25%">등록일</TableItem>
         </TableHeader>

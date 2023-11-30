@@ -52,7 +52,7 @@ export default function FluctuationByPeriod({ data }: Props) {
     <StatisticsLayout title="기수별 증감">
       {
         (chartData && chartData.datasets[0].data.length > 0)
-        ? <BarLineChart data={chartData} suggestMax={data.map((item) => item.studentCnt)} />
+        ? <BarLineChart data={chartData} suggestMax={data?.map((item) => item.studentCnt)} />
         : <Typography sx={{ fontSize: 20, fontWeight:'bold' }}>해당 조건을 만족하는 데이터가 존재하지 않습니다.</Typography>
       }
       

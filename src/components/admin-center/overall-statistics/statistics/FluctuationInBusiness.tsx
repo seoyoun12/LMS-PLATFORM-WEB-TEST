@@ -49,10 +49,10 @@ export default function FluctuationInBusiness({ data }: Props) {
   return (
     <StatisticsLayout title="업종별 (이수자수/ 아수율)">
     {
-      (chartData && data.sumTotalCntSum > 0)
+      (chartData && data?.sumTotalCntSum > 0)
       ? <>
       <Box sx={{margin: '0 auto', width:'80%'}}>
-      <VerticalbarChart chartData={chartData} suggestMax={data.statisticsTransEduCategoryResponseDtoList.map((item) => item.totalCnt)} />
+      <VerticalbarChart chartData={chartData} suggestMax={data?.statisticsTransEduCategoryResponseDtoList.map((item) => item.totalCnt)} />
       </Box>
 
       <Title sx={{marginTop: '4rem',marginBottom: '1rem'}}>
@@ -61,7 +61,7 @@ export default function FluctuationInBusiness({ data }: Props) {
 
       <CategoryListWrapper sx={{display:'flex',width:'100%',gap:'1rem'}}>
       {
-        data.statisticsTransEduCategoryResponseDtoList.map((item) =>(
+        data?.statisticsTransEduCategoryResponseDtoList.map((item) =>(
           <Card key={item.userBusinessSubType} >
             <FluctuationBusinessCard
               d={item.completedCnt}

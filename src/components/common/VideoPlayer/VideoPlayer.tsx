@@ -6,6 +6,9 @@ import { useEffect, useRef, useState } from 'react';
 // import { Box } from '@mui/material';
 // import { ModalQuiz } from '@components/ui/Modal';
 
+
+// CDN을 고쳐야 한다면 이것을 마이그레이션 하셔야 합니다. 
+// https://www.ncloud.com/support/notice/all
 const CDN_URL = 'https://cn-lms-storage.cdn.gov-ntruss.com/common/js/ncplayer-1.2.5.umd.min-c808bb53.js';
 
 type Events = { [Key in `on${Capitalize<EventType>}`]?: (e: Event) => void };
@@ -44,7 +47,7 @@ export function VideoPlayer(props: Props) {
     []
   );
 
-  // 솔직히 newFolderGames는 개발하면 안된다. 진짜 해도 해도 너무한다
+  
   useEffect(() => {
     if (!scriptLoaded || !window.ncplayer) return;
 

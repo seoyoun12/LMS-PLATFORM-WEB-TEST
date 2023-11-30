@@ -23,20 +23,16 @@ const defaultYearArray = Array.from({length: (currentYear - 2021) + 1}, (_, i) =
 export default function Overall() {
   const [queries, setQueries] = useState<Queries>(null)
   const [submitValue, setSubmitValue] = useState(null);
-  const { data, mutate, course, getCourses, period, isStepValidating }
-  = useStatistics(submitValue);
+  const { data, mutate, course, getCourses, period } = useStatistics(submitValue);
   
-
   const onChangeQueries = async(e: SelectChangeEvent<unknown>) => {
     const { name,value } = e.target;
     setQueries({
       ...queries,
       [name]: value
     })
+    
   }
-
-
-  
 
   return (
     <Wrapper>
@@ -48,7 +44,6 @@ export default function Overall() {
           <Download />
         </ExcelDownloadButton>
       </Header>
-
 
        <Main>
         <SelectForm>
@@ -74,16 +69,22 @@ export default function Overall() {
             <StyledSelect
               label="과정"
               name="courseSeq"
-              onChange={(e) => onChangeQueries(e)}
+              onChange={onChangeQueries}
               variant="outlined"
               value={queries?.courseSeq || ''}
-              labelId='course'>
+              labelId='course'
+              disabled={!queries?.year}
+              >
               {
-                course ?
-                course.map((course, i) => (
-                  <MenuItem key={i} value={course.courseSeq || ''}>{course.courseName}</MenuItem>
-                ))
-                : <MenuItem value={0}>연도를 선택해주세요.</MenuItem>
+                course?.map((course, i) => (
+                  <MenuItem
+                    key={i} value={course.courseSeq || ''}
+                    onClick={() => {
+                      setQueries({...queries, courseSeq: course.courseSeq})
+                      setSubmitValue({...queries, courseSeq: course.courseSeq})
+                    }}
+                    >{course.courseName}</MenuItem>
+                )) 
               }
             </StyledSelect>
           </FormControl>
@@ -94,15 +95,18 @@ export default function Overall() {
               label="과정기수"
               name="courseClassSeq"
               value={queries?.courseClassSeq || ''}
-              onChange={(e) => onChangeQueries(e)}
+              onChange={onChangeQueries}
               variant="outlined"
-              labelId='period'>
+              labelId='period'
+              disabled={!queries?.courseSeq}
+              >
               {
-                period ?
-                period.data.map((period, i) => (
-                  <MenuItem key={i} value={period?.courseClassSeq || ''}>{period?.yearAndStep}</MenuItem>
+                period?.data.map((period, i) => (
+                  <MenuItem
+                    key={i} value={period?.courseClassSeq || ''}
+                    onClick={() => setQueries({...queries, courseClassSeq: period?.courseClassSeq})}
+                    >{period?.yearAndStep}</MenuItem>
                 ))
-                : <MenuItem value={0}>과정을 선택해주세요.</MenuItem>
               }
             </StyledSelect>
           </FormControl>
@@ -115,21 +119,14 @@ export default function Overall() {
           >통계 확인
           </ConfirmSearchButton>
         </SelectForm>
-
-        {
-          (!data || isStepValidating)
-          ? <Spinner />
-          : <>
-              <InfoMessage>"교육년도, 과정, 과정기수"를 선택하고 "통계 확인"을 눌러 확인하세요.</InfoMessage>
-              <Whole data={data.data.statisticsTransEduIntegratedResponseDto} />
-              <FluctuationInBusiness data={data.data.statisticsTransEduCategoryResponseDto} />
-              <RegistrationAddress data={data.data.statisticsTransEduCarRegisteredRegionResultResponseDto} />
-              <FluctuationByPeriod data={data.data.statisticsTransEduStepResponseDto} />
-              <FluctuationByBusiness data={data.data.statisticsTransEduCategoryIncreaseResponseDto} />
-              <YearlyAgeByBusiness data={data.data.statisticsTransEduCategoryAgeResponseDto} />
-              <ComparisonAgeByYearly data={data.data.statisticsTransEduYearAgeResponseDto} />
-            </>
-          }
+        <InfoMessage>"교육년도, 과정, 과정기수"를 선택하고 "통계 확인"을 눌러 확인하세요.</InfoMessage>
+        <Whole data={data?.data?.statisticsTransEduIntegratedResponseDto} />
+        <FluctuationInBusiness data={data?.data?.statisticsTransEduCategoryResponseDto} />
+        <RegistrationAddress data={data?.data?.statisticsTransEduCarRegisteredRegionResultResponseDto} />
+        <FluctuationByPeriod data={data?.data?.statisticsTransEduStepResponseDto} />
+        <FluctuationByBusiness data={data?.data?.statisticsTransEduCategoryIncreaseResponseDto} />
+        <YearlyAgeByBusiness data={data?.data?.statisticsTransEduCategoryAgeResponseDto} />
+        <ComparisonAgeByYearly data={data?.data?.statisticsTransEduYearAgeResponseDto} />
       </Main>
       
       
@@ -140,6 +137,7 @@ export default function Overall() {
 const InfoMessage = styled(Typography)`
   font-size: 0.9rem;
   margin-bottom: 2rem;
+  color: #BF3133;
 `
 
 const ConfirmSearchButton = styled(Button)`

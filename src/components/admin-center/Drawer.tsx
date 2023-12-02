@@ -19,7 +19,7 @@ import { logout } from '@common/api';
 import Image from 'next/image';
 import a11yProps from '@utils/a11yProps';
 import CustomTabPanel from './drawer/CustomTabPanel';
-import { Sms, SmsOutlined } from '@mui/icons-material';
+import { SmsOutlined } from '@mui/icons-material';
 
 export type TabType = 'normal' | 'traffic';
 

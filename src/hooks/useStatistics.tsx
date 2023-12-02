@@ -1,6 +1,7 @@
 import { GET } from "@common/httpClient"
 import { useState } from "react"
 import useSWR, { SWRResponse } from "swr"
+import { PublicConfiguration } from "swr/_internal"
 
 export interface Fluctuation{
     completedCnt: number,
@@ -35,7 +36,7 @@ export interface RegistrationAddress {
   statisticsTransEduCarRegisteredRegionResponseDtoList: FluctuationByCarRegistrationAddress[],
   sumCompletedCntSum: number,
   sumInCompletedCnt: number,
-  sumTotalCntSum: 0
+  sumTotalCntSum: number
 }
 
 export interface TotalUserCnt {
@@ -98,17 +99,25 @@ interface Courses {
   }
 
 export default function useStatistics(props: Props) {
+  
   const [course, setCourse] = useState<Courses[]>(null);
-  const {data ,mutate} = useSWR<SWRResponse<StatisticsResponse>>(props?.year ? [
-    '/adm/statistics/trans-edu/integrated',
-    { params: {courseClassSeq: props?.courseClassSeq, courseSeq: props.courseSeq, year: props.year} }] : null,
-     GET,{
-      // revalidateIfStale: false,
-      // revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      // revalidateOnMount: false,
-     }
-     )
+  const [statistics, setStatistics] = useState<StatisticsResponse>(null);
+  const [isStatisticsLoading, setIsStatisticsLoading] = useState(false);
+  
+  const getStatistics = async (params: Props) => {
+    setIsStatisticsLoading(true);
+    try {
+      const { data } = await GET('/adm/statistics/trans-edu/integrated',{
+        params
+      });
+      setStatistics(data);
+      setIsStatisticsLoading(false);
+    } catch (error) {
+      console.log(error)
+      setIsStatisticsLoading(false);
+    }
+  }
+  
   
   // 해당년도에 해당하는 course list를 가져오는 함수
   // const {data: course, mutate: courseMutate,isValidating:isCourseValidating} =
@@ -133,5 +142,5 @@ export default function useStatistics(props: Props) {
 
 
 
-  return {data, mutate, course, getCourses, period, periodMutate, isStepValidating}
+  return {data:statistics, course, getCourses, period, periodMutate, isStepValidating, getStatistics, isStatisticsLoading}
 }

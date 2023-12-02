@@ -56,8 +56,9 @@ export const ConvertEnum = (str: string) => {
     if(str === 'GENERAL_CARGO') return '일반화물'
     if(str === 'PRIVATE_TAXI') return '개인택시'
     if(str === 'INDIVIDUAL_CARGO') return '개별화물'
-    if(str === 'KNEELING_BUS') return '저상버스'
     if(str === 'CONSIGNMENT') return '용달화물'
+    if(str === 'KNEELING_BUS') return '저상버스'
+    
     if(str === 'age20s') return '20대'
     if(str === 'age30s') return '30대'
     if(str === 'age40s') return '40대'
@@ -66,6 +67,15 @@ export const ConvertEnum = (str: string) => {
     if(str === 'age70s') return '70대'
     if(str === 'age80s') return '80대'
     if(str === 'age90s') return '90대'
+    if(str === 'DAILY_START_NOTIFICATION') return '교육 시작 알림 메시지'
+    if(str === 'DAILY_COURSE_END_NOTIFICATION') return '교육 종료 알림 메시지'
+    if(str === 'DAILY_INCOMPLETE_COURSE_NOTIFICATION') return '교육 미수료 알림 메시지'
+    if(str === 'ENROLLMENT_CONFIRMATION') return '교육 신청 알림 메시지'
+    if(str === 'COURSE_COMPLETION_NOTIFICATION') return '교육 이수 알림 메시지'
+    if(str === 'COURSE_MODIFICATION_NOTIFICATION') return '교육 수정 알림 메시지'
+    if(str === 'COURSE_CANCELLATION_NOTIFICATION') return '교육 취소 알림 메시지'
+    if(str === 'ADDITIONAL_ENROLLMENT_NOTIFICATION') return '추가 교육 신청 알림 메시지'
+    if(str === 'QNA_ANSWER_NOTIFICATION') return 'Q&A 답변 알림 메시지'
     return str;
 }
 

@@ -1,7 +1,7 @@
 import { GET } from "@common/httpClient"
 import { useState } from "react"
 import useSWR, { SWRResponse } from "swr"
-import { PublicConfiguration } from "swr/_internal"
+
 
 export interface Fluctuation{
     completedCnt: number,

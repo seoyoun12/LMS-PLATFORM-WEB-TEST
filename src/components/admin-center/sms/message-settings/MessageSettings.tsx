@@ -22,7 +22,7 @@ type MessageCategory = keyof typeof MessageType;
 
 export default function MessageSettings() {
   const snackbar = useSnackbar();
-  const { data, error, mutate, isLoading, putSMSSettings } = useSms();
+  const { data, error, mutate, putSMSSettings } = useSms();
   const [selectMessage, setSelectMessage] = useState([0,0]);
   const [formattedString, setFormattedString] = useState<Record<MessageCategory ,string>>({
     DAILY_START_NOTIFICATION: '',
@@ -194,7 +194,7 @@ export default function MessageSettings() {
     initFormattingData();
   }, [data])
 
-  if(isLoading) return <div>loading...</div>
+  
 
   return (
     <div>

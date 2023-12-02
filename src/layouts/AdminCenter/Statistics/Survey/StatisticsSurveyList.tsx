@@ -59,6 +59,8 @@ export function StatisticsSurveyList() {
     });
   };
 
+  console.log(error);
+
   const onClickModify = (seq: number) => {
     router.push(`/admin-center/statistics/survey/detail/${seq}`);
   };

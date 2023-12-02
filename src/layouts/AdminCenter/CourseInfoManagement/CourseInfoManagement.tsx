@@ -24,6 +24,7 @@ import { getExcelCourseLearning } from '@common/api/adm/excel';
 import { CourseLearningInfoCoursesResponseDto } from '@common/api/Api';
 import { format, getYear } from 'date-fns';
 import { DUMMY_YEAR_ARRAY } from '@common/constant';
+import { ConvertEnum } from '@utils/convertEnumToHangle';
 
 const headRows: {
   name: string;
@@ -96,8 +97,8 @@ export default function CourseInfoManagement() {
   const { watch, setValue, reset, register } = useForm<FormType>({ defaultValues });
   const { data, error } = useLearningInfo(submitValue);
   const [loading, setLoading] = useState(false);
-  const [currentYear, setCurrentYear] = useState(0);
-  const { courses } = useLearningInfoCourses(currentYear);
+  const [currentYear, setCurrentYear] = useState<number | ''>('');
+  const { courses } = useLearningInfoCourses(+currentYear);
   const { steps } = useLearningInfoStep(watch().courseSeq);
   const [fileLoading, setFileLoading] = useState(false);
 
@@ -177,7 +178,7 @@ export default function CourseInfoManagement() {
     if (value === StatusType.TYPE_OUT) return setValue('statusType', value);
   };
 
-  const handleSubmit = (e:FormEvent,isReload = false) => {
+  const handleSubmit = (e:FormEvent<HTMLFormElement> | MouseEvent,isReload = false) => {
     e.preventDefault();
     setValue('notFound', false);
     
@@ -187,13 +188,16 @@ export default function CourseInfoManagement() {
       searchInputRef.current.value = '';
       return;
     }
+
     if (searchInputRef.current) {
       setValue('nameOrUsername', searchInputRef.current.value);
     }
 
+
+
     const { phone, identityNumber } = watch();
     if (!phone || phone.trim() === '') setValue('phone', null);
-    if (!identityNumber || identityNumber.trim() === '') setValue('identityNumber', null);
+    if (!identityNumber?.trim()) setValue('identityNumber', null);
     setSubmitValue(watch());
   };
 
@@ -214,6 +218,7 @@ export default function CourseInfoManagement() {
           temp.push(course);
         }
       })
+
       return temp;
   },[courses]);
 
@@ -244,39 +249,47 @@ export default function CourseInfoManagement() {
   
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
+
+
+  console.log(watch());
   
+
+
   return (
     <>
       <Title variant="h1">전체 수강생 학습현황(운수/저상)</Title>
       <ContainerWrapper>
         <LeftContainer>
           <CourseSelectBox
+            register={register}
+            registerName="year"
             label="교육년도 선택"
-            firstOptionLabel="전체"
             menuItem={DUMMY_YEAR_ARRAY}
             onChange={onChangeYear}
-            value={watch().year + ''}
+            value={watch().year ?? ''}
             itemKey="year"
             itemValue="year"
             itemName="year"
           />
         <DoubleInputBox>
           <CourseSelectBox
+            register={register}
+            registerName="courseSeq"
             label="과정 선택"
-            firstOptionLabel="전체"
             menuItem={duplicateRemovedCourses ?? []}
             onChange={onChangeSeletedSeq}
-            value={watch().courseSeq + ''}
+            value={watch().courseSeq ?? ''}
             itemKey="courseSeq"
             itemValue="courseSeq"
             itemName="courseName"
           />
           <CourseSelectBox
+            register={register}
+            registerName="courseClassSeq"
             label="과정기수 선택"
-            firstOptionLabel="전체"
             menuItem={steps ?? []}
             onChange={onChangeSelectedClassSeq}
-            value={watch().courseClassSeq + ''}
+            value={watch().courseClassSeq ?? ''}
             itemKey="courseClassSeq"
             itemValue="courseClassSeq"
             itemName="yearAndStep"
@@ -284,21 +297,24 @@ export default function CourseInfoManagement() {
         </DoubleInputBox>
         <DoubleInputBox>
           <CourseSelectBox
+            register={register}
+            registerName="businessType"
             label="업종"
-            firstOptionLabel="-없음-"
             menuItem={userBusinessTypeTwo}
             onChange={onChangeBusinessType}
-            value={watch().businessType + ''}
+            value={watch().businessType ?? ''}
             itemKey="enType"
             itemValue="enType"
             itemName="type"
           />
           <CourseSelectBox
             label="차량등록지"
-            firstOptionLabel="-없음-"
+            register={register}
+            registerName="carRegitRegion"
+            
             menuItem={[...locationList,{ ko: '충남 전체 (세종 제외)', en: 'EXCEPTSEJONG'}]}
             onChange={onChangeCarRegitRegion}
-            value={watch().carRegitRegion + ''}
+            value={watch().carRegitRegion ?? ''}
             itemKey="en"
             itemValue="en"
             itemName="ko"
@@ -315,12 +331,14 @@ export default function CourseInfoManagement() {
 
     <CenterContainer>
       <CourseTextInputBox
+      
         onChange={onChangeCompanyName}
         placeholder="업체명"
         fullWidth
         register={register}
         registerName="businessName"
         title="업체명"
+        value={watch().businessName}
         />
       <CourseTextInputBox
         placeholder='"-" 없이 입력'
@@ -328,6 +346,8 @@ export default function CourseInfoManagement() {
         register={register}
         registerName="phone"
         title="핸드폰번호"
+        value={watch().phone}
+        onChange={(e) => setValue('phone', e.target.value)}
       />
       <CourseTextInputBox
         placeholder='"-" 없이 입력'
@@ -335,6 +355,8 @@ export default function CourseInfoManagement() {
         register={register}
         registerName="identityNumber"
         title="주민등록번호"
+        value={watch().identityNumber}
+        onChange={(e) => setValue('identityNumber', e.target.value)}
       />
       <CourseTextInputBox
         placeholder="차량번호"
@@ -342,6 +364,8 @@ export default function CourseInfoManagement() {
         register={register}
         registerName="carNumber"
         title="차량번호"
+        value={watch().carNumber}
+        onChange={(e) => setValue('carNumber', e.target.value)}
       />
     </CenterContainer>
 
@@ -369,9 +393,9 @@ export default function CourseInfoManagement() {
         label1='운수종사자'
         label2='저상버스'
         label3='도민교통'
-        value1={CourseType.TYPE_TRANS_WORKER ?? ''}
-        value2={CourseType.TYPE_LOW_FLOOR_BUS ?? ''}
-        value3={CourseType.TYPE_PROVINCIAL ?? ''}
+        value1={CourseType.TYPE_TRANS_WORKER}
+        value2={CourseType.TYPE_LOW_FLOOR_BUS}
+        value3={CourseType.TYPE_PROVINCIAL}
       />
 
       <CourseRadioBox
@@ -381,8 +405,8 @@ export default function CourseInfoManagement() {
         checked3={watch().completeType === CompleteType.TYPE_INCOMPLETE}
         onChange={onChangeCompleteType}
         value1={''}
-        value2={CompleteType.TYPE_COMPLETE ?? ''}
-        value3={CompleteType.TYPE_INCOMPLETE ?? ''}
+        value2={CompleteType.TYPE_COMPLETE}
+        value3={CompleteType.TYPE_INCOMPLETE}
         label1="전체"
         label2="수료"
         label3="미수료"
@@ -395,8 +419,8 @@ export default function CourseInfoManagement() {
         checked3={watch().statusType === StatusType.TYPE_OUT}
         onChange={onChangeStatusType}
         value1={''}
-        value2={StatusType.TYPE_NORMAL ?? ''}
-        value3={StatusType.TYPE_OUT ?? ''}
+        value2={StatusType.TYPE_NORMAL}
+        value3={StatusType.TYPE_OUT}
         label1="전체"
         label2="정상"
         label3="퇴교"
@@ -417,10 +441,12 @@ export default function CourseInfoManagement() {
         inputRef={searchInputRef}
         placeholder="이름 혹은 아이디 입력"
         fullWidth
+        value={watch().nameOrUsername}
+        onChange={(e) => setValue('nameOrUsername', e.target.value)}
         />
     <BoxRow sx={{ flexDirection: 'row',marginTop: '.25rem',marginBottom:'2rem' }}>
       <Button
-        type="submit"
+        type='submit'
         variant='contained'
         fullWidth
         >검색하기
@@ -432,28 +458,13 @@ export default function CourseInfoManagement() {
         variant='text'
         endIcon={<ReplayIcon htmlColor={grey[700]} />}
         sx={{ marginLeft: '12px',border:'1px solid #c7c7c744' }}
-        onClick={(e) => handleSubmit(e,true)}
+        onClick={(e) => handleSubmit(e as any,true)}
         fullWidth
       >
         전체 다시 불러오기
       </ReloadButton>
     </BoxRow>
     </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -557,7 +568,6 @@ export default function CourseInfoManagement() {
           <TableBody>
             {data.content.map((user,index) => (
               <TableRow
-
                 sx={{ cursor: 'pointer' }}
                 key={index}
                 hover
@@ -590,41 +600,8 @@ export default function CourseInfoManagement() {
                 </CourseInfoTableCell>
                                   
                 <CourseInfoTableCell align="center">
-                
                   <SubjectBox>
-                    {/* find로 긁어와도 될듯하지만~?  */}
-                  {user.carRegisteredRegion === 'CHEONAN' && '천안'}
-                  {user.carRegisteredRegion === 'GONGJU' && '공주'}
-                  {user.carRegisteredRegion === 'BORYEONG' && '보령'}
-                  {user.carRegisteredRegion === 'ASAN' && '아산'}
-                  {user.carRegisteredRegion === 'SEOSAN' && '서산'}
-                  {user.carRegisteredRegion === 'NONSAN' && '논산'}
-                  {user.carRegisteredRegion === 'GYERYONG' && '계룡'}
-                  {user.carRegisteredRegion === 'DANGJIN' && '당진'}
-                  {user.carRegisteredRegion === 'GEUMSAN' && '금산'}
-                  {user.carRegisteredRegion === 'BUYEO' && '부여'}
-                  {user.carRegisteredRegion === 'SEOCHEON' && '서천'}
-                  {user.carRegisteredRegion === 'CHEONGYANG' && '청양'}
-                  {user.carRegisteredRegion === 'HONGSEONG' && '홍성'}
-                  {user.carRegisteredRegion === 'YESAN' && '예산'}
-                  {user.carRegisteredRegion === 'TAEAN' && '태안'}
-                  {user.carRegisteredRegion === 'CHUNGNAM' && '충남'}
-                  {user.carRegisteredRegion === 'SEJONG' && '세종'}
-                  {user.carRegisteredRegion === 'SEOUL' && '서울'}
-                  {user.carRegisteredRegion === 'BUSAN' && '부산'}
-                  {user.carRegisteredRegion === 'DAEGU' && '대구'}
-                  {user.carRegisteredRegion === 'INCHEON' && '인천'}
-                  {user.carRegisteredRegion === 'GWANGJU' && '광주'}
-                  {user.carRegisteredRegion === 'DAEJEON' && '대전'}
-                  {user.carRegisteredRegion === 'ULSAN' && '울산'}
-                  {user.carRegisteredRegion === 'GYEONGGI' && '경기'}
-                  {user.carRegisteredRegion === 'GANGWON' && '강원'}
-                  {user.carRegisteredRegion === 'CHUNGBUK' && '충북'}
-                  {user.carRegisteredRegion === 'JEONBUK' && '전북'}
-                  {user.carRegisteredRegion === 'JEONNAM' && '전남'}
-                  {user.carRegisteredRegion === 'GYEONGBUK' && '경북'}
-                  {user.carRegisteredRegion === 'GYEONGNAM' && '경남'}
-                  {user.carRegisteredRegion === 'JEJU' && '제주'}
+                  {ConvertEnum(user.carRegisteredRegion)}
                 </SubjectBox>
                 </CourseInfoTableCell>
                 <CourseInfoTableCell align="center">

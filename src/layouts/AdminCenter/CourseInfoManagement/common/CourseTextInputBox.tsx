@@ -18,13 +18,15 @@ interface Props {
   registerName:string;
   registerName2?:string;
   type?:string
+  value?: string | number;
 }
 
-function CourseTextInputBox({register,type, placeholder2,doubleInput,registerName2, registerName, title, onChange, placeholder,fullWidth }: Props) {
+function CourseTextInputBox({register,type,value, placeholder2,doubleInput,registerName2, registerName, title, onChange, placeholder,fullWidth }: Props) {
   return (
     <Box display={doubleInput ? 'flex' : 'block'} gap={2} alignItems="center">
       <Typography sx={{width:'100%'}}>{title}</Typography>
       <TextField
+        value={value}
         type={type ? type : 'text'}
         {...register(registerName)}
         onChange={onChange}

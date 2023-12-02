@@ -29,7 +29,7 @@ interface SMSResponse {
 
 export default function useSms() {
   // SWR ver 2.0 >= Example
-  const {data:{data} = {data: [] as SMSResponse[]}, error, mutate: smsMutate, isLoading} = useSWR<SWRResponse<SMSResponse[]>>(`/adm/message`, GET,{
+  const {data:{data} = {data: [] as SMSResponse[]}, error, mutate: smsMutate} = useSWR<SWRResponse<SMSResponse[]>>(`/adm/message`, GET,{
     fallback: [],
   });
   const snackbar = useSnackbar();
@@ -50,8 +50,6 @@ export default function useSms() {
   return {
     data,
     error,
-    isLoading,
-
     mutate: smsMutate,
     putSMSSettings
   }

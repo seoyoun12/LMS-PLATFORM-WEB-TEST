@@ -7,15 +7,15 @@ import { ConvertEnum } from '@utils/convertEnumToHangle';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react'
 
 const rules = {
-  DAILY_START_NOTIFICATION: ['|수강자명|', '|교육종료일|', '|수강과정명|', '|수강교육명|', '|링크|'],
-  DAILY_COURSE_END_NOTIFICATION: ['|수강자명|', '|수강과정명|', '|수강교육명|','|링크|'],
-  DAILY_INCOMPLETE_COURSE_NOTIFICATION: ['|수강자명|', '|링크|'],
-  ENROLLMENT_CONFIRMATION: ['|수강자명|', '|수강교육명|', '|예약날짜|', '|교육일정|', '|교육업종|', '|교육과정|', '|교육시간|', '|교육전체차시수|','|링크|'],
-  COURSE_COMPLETION_NOTIFICATION: ['|수강자명|','|교육명|', '|수강자명|', '|회사명|', '|차량번호|', '|교육시작일|', '|교육과정|', '|교육시간|','|링크|'],
-  COURSE_MODIFICATION_NOTIFICATION: ['|수강자명|','|수정내용|','|수강내역|','|링크|'],
-  COURSE_CANCELLATION_NOTIFICATION: ['|수강자명|','|과정명|','|링크|'],
-  ADDITIONAL_ENROLLMENT_NOTIFICATION: ['|수강자명|', '|교육종료일|', '|수강과정명|', '|수강교육명|','|링크|'],
-  QNA_ANSWER_NOTIFICATION: ['|질문제목|','|링크|'],
+  DAILY_START_NOTIFICATION: ['|수강자명|', '|교육종료일|', '|수강과정명|', '|수강교육명|', '|바로가기|', '|예약날짜|', '|교육일정|', '|교육업종|', '|교육과정|', '|교육시간|', '|교육전체차시수|', '|교육명|', '|회사명|', '|차량번호|', '|교육시작일|', '|수정내용|', '|수강내역|', '|과정명|', '|질문제목|'],
+  DAILY_COURSE_END_NOTIFICATION: ['|수강자명|', '|교육종료일|', '|수강과정명|', '|수강교육명|', '|바로가기|', '|예약날짜|', '|교육일정|', '|교육업종|', '|교육과정|', '|교육시간|', '|교육전체차시수|', '|교육명|', '|회사명|', '|차량번호|', '|교육시작일|', '|수정내용|', '|수강내역|', '|과정명|', '|질문제목|'],
+  DAILY_INCOMPLETE_COURSE_NOTIFICATION: ['|수강자명|', '|교육종료일|', '|수강과정명|', '|수강교육명|', '|바로가기|', '|예약날짜|', '|교육일정|', '|교육업종|', '|교육과정|', '|교육시간|', '|교육전체차시수|', '|교육명|', '|회사명|', '|차량번호|', '|교육시작일|', '|수정내용|', '|수강내역|', '|과정명|', '|질문제목|'],
+  ENROLLMENT_CONFIRMATION: ['|수강자명|', '|교육종료일|', '|수강과정명|', '|수강교육명|', '|바로가기|', '|예약날짜|', '|교육일정|', '|교육업종|', '|교육과정|', '|교육시간|', '|교육전체차시수|', '|교육명|', '|회사명|', '|차량번호|', '|교육시작일|', '|수정내용|', '|수강내역|', '|과정명|', '|질문제목|'],
+  COURSE_COMPLETION_NOTIFICATION: ['|수강자명|', '|교육종료일|', '|수강과정명|', '|수강교육명|', '|바로가기|', '|예약날짜|', '|교육일정|', '|교육업종|', '|교육과정|', '|교육시간|', '|교육전체차시수|', '|교육명|', '|회사명|', '|차량번호|', '|교육시작일|', '|수정내용|', '|수강내역|', '|과정명|', '|질문제목|'],
+  COURSE_MODIFICATION_NOTIFICATION: ['|수강자명|', '|교육종료일|', '|수강과정명|', '|수강교육명|', '|바로가기|', '|예약날짜|', '|교육일정|', '|교육업종|', '|교육과정|', '|교육시간|', '|교육전체차시수|', '|교육명|', '|회사명|', '|차량번호|', '|교육시작일|', '|수정내용|', '|수강내역|', '|과정명|', '|질문제목|'],
+  COURSE_CANCELLATION_NOTIFICATION: ['|수강자명|', '|교육종료일|', '|수강과정명|', '|수강교육명|', '|바로가기|', '|예약날짜|', '|교육일정|', '|교육업종|', '|교육과정|', '|교육시간|', '|교육전체차시수|', '|교육명|', '|회사명|', '|차량번호|', '|교육시작일|', '|수정내용|', '|수강내역|', '|과정명|', '|질문제목|'],
+  ADDITIONAL_ENROLLMENT_NOTIFICATION: ['|수강자명|', '|교육종료일|', '|수강과정명|', '|수강교육명|', '|바로가기|', '|예약날짜|', '|교육일정|', '|교육업종|', '|교육과정|', '|교육시간|', '|교육전체차시수|', '|교육명|', '|회사명|', '|차량번호|', '|교육시작일|', '|수정내용|', '|수강내역|', '|과정명|', '|질문제목|'],
+  QNA_ANSWER_NOTIFICATION: ['|수강자명|', '|교육종료일|', '|수강과정명|', '|수강교육명|', '|바로가기|', '|예약날짜|', '|교육일정|', '|교육업종|', '|교육과정|', '|교육시간|', '|교육전체차시수|', '|교육명|', '|회사명|', '|차량번호|', '|교육시작일|', '|수정내용|', '|수강내역|', '|과정명|', '|질문제목|'],
 }
 
 type MessageCategory = keyof typeof MessageType;
@@ -89,29 +89,28 @@ export default function MessageSettings() {
       variant: 'success'
     })
   }
-  
 
-  const onRuleValidationCheck = (key: MessageCategory,content: string) => {
-    const findRules = rules[key];
-    let isValid = true;
-    findRules.forEach(rule => {
-      if(!content.includes(rule)) {
-        snackbar({
-          message: `${ConvertEnum(key)}에 ${rule}이(가) 없습니다
-          해당 문단에는 반드시 ${rule}이(가) 포함되어야 합니다.
-          `,
-          variant: 'warning',
-        });
-        // initFormattingData();
-        isValid = false;
-      }
-    })
-    return isValid;
-  }
+  // const onRuleValidationCheck = (key: MessageCategory,content: string) => {
+  //   const findRules = rules[key];
+  //   let isValid = true;
+  //   findRules.forEach(rule => {
+  //     if(!content.includes(rule)) {
+  //       snackbar({
+  //         message: `${ConvertEnum(key)}에 ${rule}이(가) 없습니다
+  //         해당 문단에는 반드시 ${rule}이(가) 포함되어야 합니다.
+  //         `,
+  //         variant: 'warning',
+  //       });
+  //       // initFormattingData();
+  //       isValid = false;
+  //     }
+  //   })
+  //   return isValid;
+  // }
 
   const onChangeMessageContent = (e:ChangeEvent<HTMLTextAreaElement>, key: MessageCategory) => {
     const {target:{value}} = e;
-    if(!onRuleValidationCheck(key, value)) return;
+    // if(!onRuleValidationCheck(key, value)) return;
     
     const formattedString = value.replace(/\|([^|]+)\|/g, 
     (match, p1) => `<span style="color: red;">${p1}</span>`
@@ -127,58 +126,59 @@ export default function MessageSettings() {
     }))
   }
   
-  const onKeydownPreventDeleteBackPipe = (e: KeyboardEvent<HTMLTextAreaElement> , key:MessageCategory) => {
-    if (e.ctrlKey || e.metaKey) {
-      if(!onRuleValidationCheck(key, messageContent[key])) return;
-      snackbar({
-        message: '문단 규칙을 위해 컨트롤 키는 누를 수 없습니다',
-        variant: 'info'
-      })
-      e.preventDefault();
-      return 
-    }
-    const [selectionStart, selectionEnd] = selectMessage;
-    if (e.key === 'Backspace') {
-      if(selectionStart === selectionEnd) {
-        if(messageContent[key][selectionStart-1] === '|') {
-          if(!onRuleValidationCheck(key, messageContent[key])) return;
-          snackbar({
-            message: '\'|\'은 삭제할 수 없습니다',
-            variant: 'info'
-          })
-          e.preventDefault();
-        }
-        if(!onRuleValidationCheck(key, messageContent[key])) return;
+  // const onKeydownPreventDeleteBackPipe = (e: KeyboardEvent<HTMLTextAreaElement> , key:MessageCategory) => {
+  //   if (e.ctrlKey || e.metaKey) {
+  //     // if(!onRuleValidationCheck(key, messageContent[key])) return;
+  //     snackbar({
+  //       message: '문단 규칙을 위해 컨트롤 키는 누를 수 없습니다',
+  //       variant: 'info'
+  //     })
+  //     e.preventDefault();
+  //     return 
+  //   }
+  //   const [selectionStart, selectionEnd] = selectMessage;
+  //   if (e.key === 'Backspace') {
+  //     if(selectionStart === selectionEnd) {
+  //       if(messageContent[key][selectionStart-1] === '|') {
+  //         // if(!onRuleValidationCheck(key, messageContent[key])) return;
+  //         snackbar({
+  //           message: '\'|\'은 삭제할 수 없습니다',
+  //           variant: 'info'
+  //         })
+  //         e.preventDefault();
+  //       }
+  //       // if(!onRuleValidationCheck(key, messageContent[key])) return;
 
-      } else {
-        const wholeWord = messageContent[key].slice(selectionStart, selectionEnd);
-        if(wholeWord.includes('|')) {
+  //     } else {
+  //       const wholeWord = messageContent[key].slice(selectionStart, selectionEnd);
+  //       if(wholeWord.includes('|')) {
           
-          e.preventDefault();
-          snackbar({
-            message: '\'|\'를 포함하여 문단을 삭제할 수 없습니다',
-            variant: 'info'
-          })
-          if(!onRuleValidationCheck(key, messageContent[key])) return;
-        }
-        if (e.ctrlKey) {
-          e.preventDefault();
-          if(!onRuleValidationCheck(key, messageContent[key])) return;
-        }
-      }
-    }
-  }
+  //         e.preventDefault();
+  //         snackbar({
+  //           message: '\'|\'를 포함하여 문단을 삭제할 수 없습니다',
+  //           variant: 'info'
+  //         })
+  //         // if(!onRuleValidationCheck(key, messageContent[key])) return;
+  //       }
+  //       if (e.ctrlKey) {
+  //         e.preventDefault();
+  //         // if(!onRuleValidationCheck(key, messageContent[key])) return;
+  //       }
+  //     }
+  //   }
+  // }
+
   const onClickUpdateMessageContent = async (key: MessageType) => {
 
-    const findRules = rules[key];
-    const content = messageContent[key];
-    const convertRuleToUnicode = findRules.reduce((prev, curr) => {
-      return prev.replace(curr, '%s');
-    },content);
+    // const findRules = rules[key];
+    // const content = messageContent[key];
+    // const convertRuleToUnicode = findRules.reduce((prev, curr) => {
+    //   return prev.replace(curr, '%s');
+    // },content);
     
-    console.log({key,content})
+    // console.log({key,content})
     const body: SMSRequestBody = {
-      content: convertRuleToUnicode,
+      content: messageContent[key],
       messageEnums: key
     };
 
@@ -194,11 +194,15 @@ export default function MessageSettings() {
     initFormattingData();
   }, [data])
 
-  
-
   return (
     <div>
       <Heading>자동 문자 발송 설정</Heading>
+       <RuleBox>
+        <RuleTitle>사용할 수 있는 토큰 규칙</RuleTitle>
+        <Rule> |교육명| |교육일정| |교육업종| |교육과정| |교육시간| |교육전체차시수| |교육시작일| |교육종료일|{'\n'}
+               |수강과정명| |수강교육명| |수강자명| |수강내역|{'\n'}
+               |과정명| |바로가기| |예약날짜| |회사명| |차량번호| |수정내용| |질문제목|</Rule>
+       </RuleBox>
       <CardList>
       {
         data.map(smsSetting => (
@@ -220,11 +224,11 @@ export default function MessageSettings() {
               <MessageTextarea
                 value={messageContent[smsSetting.messageEnums]}
                 onChange={(e) => onChangeMessageContent(e, smsSetting.messageEnums)}
-                onKeyDown={(e) =>onKeydownPreventDeleteBackPipe(e as KeyboardEvent<HTMLTextAreaElement>, smsSetting.messageEnums)}
+                // onKeyDown={(e) =>onKeydownPreventDeleteBackPipe(e as KeyboardEvent<HTMLTextAreaElement>, smsSetting.messageEnums)}
                 minRows={5}
                 onSelect={(e) => {
                   const {currentTarget:{selectionStart, selectionEnd}} = e;
-                  console.log(selectionStart, selectionEnd);
+                  // console.log(selectionStart, selectionEnd);
                   setSelectMessage([selectionStart, selectionEnd]);
                 }}
                 onCut={(e) => {
@@ -296,7 +300,6 @@ const MessageViewer = styled.div`
   white-space: pre-line;
   `;
 
-
 const Heading = styled.h1`
   font-size: 1.5rem;
   font-weight: bold;
@@ -309,10 +312,43 @@ const CategoryCard = styled(Box)`
   border-radius: 8px;
 `
 
-
-
 const CategoryTitle = styled.h2`
   font-size: 1.15rem;
   font-weight: bold;
   margin-bottom: .5rem;
+`
+
+const RuleBox = styled.div`
+  position: relative;
+  margin-bottom: 1rem;
+  width: 100%;
+  padding-bottom: 1rem;
+
+  &::before {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    content: '';
+    display: block;
+    height: 1px;
+    background-color: #c7c7c7;
+    margin-bottom: 1rem;
+
+  }
+  
+`
+
+const RuleTitle = styled.h3`
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: .5rem;
+`
+
+const Rule = styled.p`
+  margin-bottom: .5rem;
+  color: #f41;
+  font-weight: bold;
+  white-space: pre-line;
+  font-size: .9rem;
+
 `

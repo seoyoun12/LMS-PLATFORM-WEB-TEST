@@ -69,11 +69,9 @@ export default function MessageSettings() {
     })
   }
   const onClickRollbackContent = (key: MessageCategory) => {
-    const findRules = rules[key];
-    const replaceUnicode = findRules.reduce((prev, curr) => {
-      return prev.replace('%s', curr)
-    },messageContent[key]);
-    const formattedString = replaceUnicode.replace(/\|([^|]+)\|/g,
+    
+    const content = data.find(smsSetting => smsSetting.messageEnums === key)?.content;
+    const formattedString = content.replace(/\|([^|]+)\|/g,
     (match, p1) => `<span style="color: red;">${p1}</span>`
     )
     setFormattedString(prev => ({
@@ -82,14 +80,17 @@ export default function MessageSettings() {
     }))
     setMessageContent(prev => ({
       ...prev,
-      [key]: replaceUnicode
+      [key]: content
     }))
+    
     snackbar({
       message: '양식을 최근 저장된 내용으로 되돌렸습니다',
       variant: 'success'
     })
   }
 
+
+  
   // const onRuleValidationCheck = (key: MessageCategory,content: string) => {
   //   const findRules = rules[key];
   //   let isValid = true;

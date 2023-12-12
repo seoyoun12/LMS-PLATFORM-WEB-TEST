@@ -11,633 +11,633 @@ import ComparisonAgeByYearly from './statistics/ComparisonAgeByYearly'
 import useStatistics, { StatisticsResponse } from '@hooks/useStatistics'
 import { useEffect, useState } from 'react'
 
-const DUMMY_STATISTICS:StatisticsResponse = {
-  statisticsTransEduIntegratedResponseDto: {
-      totalCourseUserCnt: Math.floor(Math.random() * 100000),
-      completedCourseUserCnt: Math.floor(Math.random() * 100000),
-      inCompletedCourseUserCnt: Math.floor(Math.random() * 100000),
-  },
-  statisticsTransEduCategoryResponseDto: {
-      statisticsTransEduCategoryResponseDtoList: [
-          {
-              userBusinessSubType: 'GENERAL_CARGO',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          }
-      ],
-      sumCompletedCntSum: Math.floor(Math.random() * 100),
-      sumInCompletedCnt: Math.floor(Math.random() * 100),
-      sumTotalCntSum: Math.floor(Math.random() * 100),
-  },
-  statisticsTransEduCarRegisteredRegionResultResponseDto: {
-      statisticsTransEduCarRegisteredRegionResponseDtoList: [
-          {
-              userRegistrationTypeEnum: 'HONGSEONG',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'SEOUL',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'GANGWON',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'JEJU',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'GYEONGSANG',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'JEOLLABUK',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'JEOLLANAM',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'CHUNGCHEONG',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'BUSAN',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'DAEGU',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'INCHEON',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'GWANGJU',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'DAEJEON',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'ULSAN',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'SEJONG',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'GANGWON',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'CHUNGCHEONG',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'JEOLLABUK',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'JEOLLANAM',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'GYEONGSANG',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          },
-          {
-              userRegistrationTypeEnum: 'JEJU',
-              completedCnt: Math.floor(Math.random() * 100),
-              inCompletedCnt: Math.floor(Math.random() * 100),
-              totalCnt: Math.floor(Math.random() * 100),
-          }
-      ],
-      sumCompletedCntSum: Math.floor(Math.random() * 10000),
-      sumInCompletedCnt: Math.floor(Math.random() * 10000),
-      sumTotalCntSum: Math.floor(Math.random() * 100000),
-      exceptSejongCompletedCntSum: Math.floor(Math.random() * 100),
-      exceptSejongInCompletedCntSum: Math.floor(Math.random() * 100),
-      exceptSejongTotalCntSum: Math.floor(Math.random() * 100),
-  },
-  statisticsTransEduStepResponseDto: [
-      {
-          step: Math.floor(Math.random() * 100),
-          studentCnt: Math.floor(Math.random() * 1000)
-      },
-      {
-        step: Math.floor(Math.random() * 100),
-        studentCnt: Math.floor(Math.random() * 1000)
-    },
-    {
-      step: Math.floor(Math.random() * 100),
-      studentCnt: Math.floor(Math.random() * 1000)
-  },
-  {
-    step: Math.floor(Math.random() * 100),
-    studentCnt: Math.floor(Math.random() * 1000)
-},{
-  step: Math.floor(Math.random() * 100),
-  studentCnt: Math.floor(Math.random() * 1000)
-},{
-  step: Math.floor(Math.random() * 100),
-  studentCnt: Math.floor(Math.random() * 1000)
-},{
-  step: Math.floor(Math.random() * 100),
-  studentCnt: Math.floor(Math.random() * 1000)
-},{
-  step: Math.floor(Math.random() * 100),
-  studentCnt: Math.floor(Math.random() * 1000)
-},{
-  step: Math.floor(Math.random() * 100),
-  studentCnt: Math.floor(Math.random() * 1000)
-}
-  ],
-  statisticsTransEduCategoryIncreaseResponseDto: [
-      {
-          userBusinessSubType: 'GENERAL_CARGO',
-          courseSeq: Math.floor(Math.random() * 10),
-          step: 1,
-          studentCnt: Math.floor(Math.random() * 1000),
-      },
-      {
-          userBusinessSubType: 'BUS',
-          courseSeq: Math.floor(Math.random() * 10),
-          step: 1,
-          studentCnt: Math.floor(Math.random() * 1000)
-      },
-      {
-          userBusinessSubType: 'CHARTER_BUS',
-          courseSeq: Math.floor(Math.random() * 10),
-          step: 1,
-          studentCnt: Math.floor(Math.random() * 1000)
-      },
-      {
-          userBusinessSubType: 'SPECIAL_PASSENGER',
-          courseSeq: Math.floor(Math.random() * 10),
-          step: 1,
-          studentCnt: Math.floor(Math.random() * 1000)
-      },
-      {
-          userBusinessSubType: 'CORPORATE_TAXI',
-          courseSeq: Math.floor(Math.random() * 10),
-          step: 1,
-          studentCnt: Math.floor(Math.random() * 1000)
-      },
-      {
-          userBusinessSubType: 'PRIVATE_TAXI',
-          courseSeq: Math.floor(Math.random() * 10),
-          step: 1,
-          studentCnt: Math.floor(Math.random() * 1000)
-      },
-      {
-          userBusinessSubType: 'INDIVIDUAL_CARGO',
-          courseSeq: Math.floor(Math.random() * 10),
-          step: 1,
-          studentCnt: Math.floor(Math.random() * 1000)
-      },
-      {
-          userBusinessSubType: 'CONSIGNMENT',
-          courseSeq: Math.floor(Math.random() * 10),
-          step: 1,
-          studentCnt: Math.floor(Math.random() * 1000)
-      },
+// const DUMMY_STATISTICS:StatisticsResponse = {
+//   statisticsTransEduIntegratedResponseDto: {
+//       totalCourseUserCnt: Math.floor(Math.random() * 100000),
+//       completedCourseUserCnt: Math.floor(Math.random() * 100000),
+//       inCompletedCourseUserCnt: Math.floor(Math.random() * 100000),
+//   },
+//   statisticsTransEduCategoryResponseDto: {
+//       statisticsTransEduCategoryResponseDtoList: [
+//           {
+//               userBusinessSubType: 'GENERAL_CARGO',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           }
+//       ],
+//       sumCompletedCntSum: Math.floor(Math.random() * 100),
+//       sumInCompletedCnt: Math.floor(Math.random() * 100),
+//       sumTotalCntSum: Math.floor(Math.random() * 100),
+//   },
+//   statisticsTransEduCarRegisteredRegionResultResponseDto: {
+//       statisticsTransEduCarRegisteredRegionResponseDtoList: [
+//           {
+//               userRegistrationTypeEnum: 'HONGSEONG',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'SEOUL',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'GANGWON',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'JEJU',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'GYEONGSANG',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'JEOLLABUK',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'JEOLLANAM',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'CHUNGCHEONG',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'BUSAN',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'DAEGU',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'INCHEON',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'GWANGJU',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'DAEJEON',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'ULSAN',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'SEJONG',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'GANGWON',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'CHUNGCHEONG',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'JEOLLABUK',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'JEOLLANAM',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'GYEONGSANG',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           },
+//           {
+//               userRegistrationTypeEnum: 'JEJU',
+//               completedCnt: Math.floor(Math.random() * 100),
+//               inCompletedCnt: Math.floor(Math.random() * 100),
+//               totalCnt: Math.floor(Math.random() * 100),
+//           }
+//       ],
+//       sumCompletedCntSum: Math.floor(Math.random() * 10000),
+//       sumInCompletedCnt: Math.floor(Math.random() * 10000),
+//       sumTotalCntSum: Math.floor(Math.random() * 100000),
+//       exceptSejongCompletedCntSum: Math.floor(Math.random() * 100),
+//       exceptSejongInCompletedCntSum: Math.floor(Math.random() * 100),
+//       exceptSejongTotalCntSum: Math.floor(Math.random() * 100),
+//   },
+//   statisticsTransEduStepResponseDto: [
+//       {
+//           step: Math.floor(Math.random() * 100),
+//           studentCnt: Math.floor(Math.random() * 1000)
+//       },
+//       {
+//         step: Math.floor(Math.random() * 100),
+//         studentCnt: Math.floor(Math.random() * 1000)
+//     },
+//     {
+//       step: Math.floor(Math.random() * 100),
+//       studentCnt: Math.floor(Math.random() * 1000)
+//   },
+//   {
+//     step: Math.floor(Math.random() * 100),
+//     studentCnt: Math.floor(Math.random() * 1000)
+// },{
+//   step: Math.floor(Math.random() * 100),
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },{
+//   step: Math.floor(Math.random() * 100),
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },{
+//   step: Math.floor(Math.random() * 100),
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },{
+//   step: Math.floor(Math.random() * 100),
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },{
+//   step: Math.floor(Math.random() * 100),
+//   studentCnt: Math.floor(Math.random() * 1000)
+// }
+//   ],
+//   statisticsTransEduCategoryIncreaseResponseDto: [
+//       {
+//           userBusinessSubType: 'GENERAL_CARGO',
+//           courseSeq: Math.floor(Math.random() * 10),
+//           step: 1,
+//           studentCnt: Math.floor(Math.random() * 1000),
+//       },
+//       {
+//           userBusinessSubType: 'BUS',
+//           courseSeq: Math.floor(Math.random() * 10),
+//           step: 1,
+//           studentCnt: Math.floor(Math.random() * 1000)
+//       },
+//       {
+//           userBusinessSubType: 'CHARTER_BUS',
+//           courseSeq: Math.floor(Math.random() * 10),
+//           step: 1,
+//           studentCnt: Math.floor(Math.random() * 1000)
+//       },
+//       {
+//           userBusinessSubType: 'SPECIAL_PASSENGER',
+//           courseSeq: Math.floor(Math.random() * 10),
+//           step: 1,
+//           studentCnt: Math.floor(Math.random() * 1000)
+//       },
+//       {
+//           userBusinessSubType: 'CORPORATE_TAXI',
+//           courseSeq: Math.floor(Math.random() * 10),
+//           step: 1,
+//           studentCnt: Math.floor(Math.random() * 1000)
+//       },
+//       {
+//           userBusinessSubType: 'PRIVATE_TAXI',
+//           courseSeq: Math.floor(Math.random() * 10),
+//           step: 1,
+//           studentCnt: Math.floor(Math.random() * 1000)
+//       },
+//       {
+//           userBusinessSubType: 'INDIVIDUAL_CARGO',
+//           courseSeq: Math.floor(Math.random() * 10),
+//           step: 1,
+//           studentCnt: Math.floor(Math.random() * 1000)
+//       },
+//       {
+//           userBusinessSubType: 'CONSIGNMENT',
+//           courseSeq: Math.floor(Math.random() * 10),
+//           step: 1,
+//           studentCnt: Math.floor(Math.random() * 1000)
+//       },
       
       
       
     
-      {
-        userBusinessSubType: 'GENERAL_CARGO',
-        courseSeq: Math.floor(Math.random() * 10),
-        step: 2,
-        studentCnt: Math.floor(Math.random() * 1000),
-    },
-    {
-        userBusinessSubType: 'BUS',
-        courseSeq: Math.floor(Math.random() * 10),
-        step: 2,
-        studentCnt: Math.floor(Math.random() * 1000)
-    },
-    {
-        userBusinessSubType: 'CHARTER_BUS',
-        courseSeq: Math.floor(Math.random() * 10),
-        step: 2,
-        studentCnt: Math.floor(Math.random() * 1000)
-    },
-    {
-        userBusinessSubType: 'SPECIAL_PASSENGER',
-        courseSeq: Math.floor(Math.random() * 10),
-        step: 2,
-        studentCnt: Math.floor(Math.random() * 1000)
-    },
-    {
-        userBusinessSubType: 'CORPORATE_TAXI',
-        courseSeq: Math.floor(Math.random() * 10),
-        step: 2,
-        studentCnt: Math.floor(Math.random() * 1000)
-    },
-    {
-        userBusinessSubType: 'PRIVATE_TAXI',
-        courseSeq: Math.floor(Math.random() * 10),
-        step: 2,
-        studentCnt: Math.floor(Math.random() * 1000)
-    },
-    {
-        userBusinessSubType: 'INDIVIDUAL_CARGO',
-        courseSeq: Math.floor(Math.random() * 10),
-        step: 2,
-        studentCnt: Math.floor(Math.random() * 1000)
-    },
-    {
-        userBusinessSubType: 'CONSIGNMENT',
-        courseSeq: Math.floor(Math.random() * 10),
-        step: 2,
-        studentCnt: Math.floor(Math.random() * 1000)
-    },
-    {
-      userBusinessSubType: 'GENERAL_CARGO',
-      courseSeq: Math.floor(Math.random() * 10),
-      step: 3,
-      studentCnt: Math.floor(Math.random() * 1000),
-  },
-  {
-      userBusinessSubType: 'BUS',
-      courseSeq: Math.floor(Math.random() * 10),
-      step: 3,
-      studentCnt: Math.floor(Math.random() * 1000)
-  },
-  {
-      userBusinessSubType: 'CHARTER_BUS',
-      courseSeq: Math.floor(Math.random() * 10),
-      step: 3,
-      studentCnt: Math.floor(Math.random() * 1000)
-  },
-  {
-      userBusinessSubType: 'SPECIAL_PASSENGER',
-      courseSeq: Math.floor(Math.random() * 10),
-      step: 3,
-      studentCnt: Math.floor(Math.random() * 1000)
-  },
-  {
-      userBusinessSubType: 'CORPORATE_TAXI',
-      courseSeq: Math.floor(Math.random() * 10),
-      step: 3,
-      studentCnt: Math.floor(Math.random() * 1000)
-  },
-  {
-      userBusinessSubType: 'PRIVATE_TAXI',
-      courseSeq: Math.floor(Math.random() * 10),
-      step: 3,
-      studentCnt: Math.floor(Math.random() * 1000)
-  },
-  {
-      userBusinessSubType: 'INDIVIDUAL_CARGO',
-      courseSeq: Math.floor(Math.random() * 10),
-      step: 3,
-      studentCnt: Math.floor(Math.random() * 1000)
-  },
-  {
-      userBusinessSubType: 'CONSIGNMENT',
-      courseSeq: Math.floor(Math.random() * 10),
-      step: 3,
-      studentCnt: Math.floor(Math.random() * 1000)
-  },
-  {
-    userBusinessSubType: 'GENERAL_CARGO',
-    courseSeq: Math.floor(Math.random() * 10),
-    step: 4,
-    studentCnt: Math.floor(Math.random() * 1000),
-},
-{
-    userBusinessSubType: 'BUS',
-    courseSeq: Math.floor(Math.random() * 10),
-    step: 4,
-    studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-    userBusinessSubType: 'CHARTER_BUS',
-    courseSeq: Math.floor(Math.random() * 10),
-    step: 4,
-    studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-    userBusinessSubType: 'SPECIAL_PASSENGER',
-    courseSeq: Math.floor(Math.random() * 10),
-    step: 4,
-    studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-    userBusinessSubType: 'CORPORATE_TAXI',
-    courseSeq: Math.floor(Math.random() * 10),
-    step: 4,
-    studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-    userBusinessSubType: 'PRIVATE_TAXI',
-    courseSeq: Math.floor(Math.random() * 10),
-    step: 4,
-    studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-    userBusinessSubType: 'INDIVIDUAL_CARGO',
-    courseSeq: Math.floor(Math.random() * 10),
-    step: 4,
-    studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-    userBusinessSubType: 'CONSIGNMENT',
-    courseSeq: Math.floor(Math.random() * 10),
-    step: 4,
-    studentCnt: Math.floor(Math.random() * 1000)
-},{
-  userBusinessSubType: 'GENERAL_CARGO',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 5,
-  studentCnt: Math.floor(Math.random() * 1000),
-},
-{
-  userBusinessSubType: 'BUS',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 5,
-  studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-  userBusinessSubType: 'CHARTER_BUS',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 5,
-  studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-  userBusinessSubType: 'SPECIAL_PASSENGER',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 5,
-  studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-  userBusinessSubType: 'CORPORATE_TAXI',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 5,
-  studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-  userBusinessSubType: 'PRIVATE_TAXI',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 5,
-  studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-  userBusinessSubType: 'INDIVIDUAL_CARGO',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 5,
-  studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-  userBusinessSubType: 'CONSIGNMENT',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 5,
-  studentCnt: Math.floor(Math.random() * 1000)
-},{
-  userBusinessSubType: 'GENERAL_CARGO',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 6,
-  studentCnt: Math.floor(Math.random() * 1000),
-},
-{
-  userBusinessSubType: 'BUS',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 6,
-  studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-  userBusinessSubType: 'CHARTER_BUS',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 6,
-  studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-  userBusinessSubType: 'SPECIAL_PASSENGER',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 6,
-  studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-  userBusinessSubType: 'CORPORATE_TAXI',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 6,
-  studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-  userBusinessSubType: 'PRIVATE_TAXI',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 6,
-  studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-  userBusinessSubType: 'INDIVIDUAL_CARGO',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 6,
-  studentCnt: Math.floor(Math.random() * 1000)
-},
-{
-  userBusinessSubType: 'CONSIGNMENT',
-  courseSeq: Math.floor(Math.random() * 10),
-  step: 6,
-  studentCnt: Math.floor(Math.random() * 1000)
-}
-  ],
-  statisticsTransEduCategoryAgeResponseDto: [
-      {
-          userBusinessSubType: 'GENERAL_CARGO',
-          age20s: 93,
-          age30s: 23,
-          age40s: 44,
-          age50s: 51,
-          age60s: 44,
-          age70s: 81,
-          age80s: 23,
-          age90s: 45
-      },
-      {
-          userBusinessSubType: 'BUS',
-          age20s: Math.floor(Math.random() * 1000),
-          age30s: Math.floor(Math.random() * 1000),
-          age40s: Math.floor(Math.random() * 1000),
-          age50s: Math.floor(Math.random() * 1000),
-          age60s: Math.floor(Math.random() * 1000),
-          age70s: Math.floor(Math.random() * 1000),
-          age80s: Math.floor(Math.random() * 1000),
-          age90s: 0
-      },
-      {
-          userBusinessSubType: 'CHARTER_BUS',
-          age20s: Math.floor(Math.random() * 1000),
-          age30s: Math.floor(Math.random() * 1000),
-          age40s: Math.floor(Math.random() * 1000),
-          age50s: Math.floor(Math.random() * 1000),
-          age60s: Math.floor(Math.random() * 1000),
-          age70s: Math.floor(Math.random() * 1000),
-          age80s: Math.floor(Math.random() * 1000),
-          age90s: 0
-      },
-      {
-          userBusinessSubType: 'SPECIAL_PASSENGER',
-          age20s: Math.floor(Math.random() * 1000),
-          age30s: Math.floor(Math.random() * 1000),
-          age40s: Math.floor(Math.random() * 1000),
-          age50s: Math.floor(Math.random() * 1000),
-          age60s: Math.floor(Math.random() * 1000),
-          age70s: Math.floor(Math.random() * 1000),
-          age80s: Math.floor(Math.random() * 1000),
-          age90s: 0
-      },
-      {
-          userBusinessSubType: 'CORPORATE_TAXI',
-          age20s: Math.floor(Math.random() * 1000),
-          age30s: Math.floor(Math.random() * 1000),
-          age40s: Math.floor(Math.random() * 1000),
-          age50s: Math.floor(Math.random() * 1000),
-          age60s: Math.floor(Math.random() * 1000),
-          age70s: Math.floor(Math.random() * 1000),
-          age80s: Math.floor(Math.random() * 1000),
-          age90s: 0
-      },
-      {
-          userBusinessSubType: 'PRIVATE_TAXI',
-          age20s: Math.floor(Math.random() * 1000),
-          age30s: Math.floor(Math.random() * 1000),
-          age40s: Math.floor(Math.random() * 1000),
-          age50s: Math.floor(Math.random() * 1000),
-          age60s: Math.floor(Math.random() * 1000),
-          age70s: Math.floor(Math.random() * 1000),
-          age80s: Math.floor(Math.random() * 1000),
-          age90s: 0
-      },
-      {
-          userBusinessSubType: 'INDIVIDUAL_CARGO',
-          age20s: Math.floor(Math.random() * 1000),
-          age30s: Math.floor(Math.random() * 1000),
-          age40s: Math.floor(Math.random() * 1000),
-          age50s: Math.floor(Math.random() * 1000),
-          age60s: Math.floor(Math.random() * 1000),
-          age70s: Math.floor(Math.random() * 1000),
-          age80s: Math.floor(Math.random() * 1000),
-          age90s: 0
-      },
+//       {
+//         userBusinessSubType: 'GENERAL_CARGO',
+//         courseSeq: Math.floor(Math.random() * 10),
+//         step: 2,
+//         studentCnt: Math.floor(Math.random() * 1000),
+//     },
+//     {
+//         userBusinessSubType: 'BUS',
+//         courseSeq: Math.floor(Math.random() * 10),
+//         step: 2,
+//         studentCnt: Math.floor(Math.random() * 1000)
+//     },
+//     {
+//         userBusinessSubType: 'CHARTER_BUS',
+//         courseSeq: Math.floor(Math.random() * 10),
+//         step: 2,
+//         studentCnt: Math.floor(Math.random() * 1000)
+//     },
+//     {
+//         userBusinessSubType: 'SPECIAL_PASSENGER',
+//         courseSeq: Math.floor(Math.random() * 10),
+//         step: 2,
+//         studentCnt: Math.floor(Math.random() * 1000)
+//     },
+//     {
+//         userBusinessSubType: 'CORPORATE_TAXI',
+//         courseSeq: Math.floor(Math.random() * 10),
+//         step: 2,
+//         studentCnt: Math.floor(Math.random() * 1000)
+//     },
+//     {
+//         userBusinessSubType: 'PRIVATE_TAXI',
+//         courseSeq: Math.floor(Math.random() * 10),
+//         step: 2,
+//         studentCnt: Math.floor(Math.random() * 1000)
+//     },
+//     {
+//         userBusinessSubType: 'INDIVIDUAL_CARGO',
+//         courseSeq: Math.floor(Math.random() * 10),
+//         step: 2,
+//         studentCnt: Math.floor(Math.random() * 1000)
+//     },
+//     {
+//         userBusinessSubType: 'CONSIGNMENT',
+//         courseSeq: Math.floor(Math.random() * 10),
+//         step: 2,
+//         studentCnt: Math.floor(Math.random() * 1000)
+//     },
+//     {
+//       userBusinessSubType: 'GENERAL_CARGO',
+//       courseSeq: Math.floor(Math.random() * 10),
+//       step: 3,
+//       studentCnt: Math.floor(Math.random() * 1000),
+//   },
+//   {
+//       userBusinessSubType: 'BUS',
+//       courseSeq: Math.floor(Math.random() * 10),
+//       step: 3,
+//       studentCnt: Math.floor(Math.random() * 1000)
+//   },
+//   {
+//       userBusinessSubType: 'CHARTER_BUS',
+//       courseSeq: Math.floor(Math.random() * 10),
+//       step: 3,
+//       studentCnt: Math.floor(Math.random() * 1000)
+//   },
+//   {
+//       userBusinessSubType: 'SPECIAL_PASSENGER',
+//       courseSeq: Math.floor(Math.random() * 10),
+//       step: 3,
+//       studentCnt: Math.floor(Math.random() * 1000)
+//   },
+//   {
+//       userBusinessSubType: 'CORPORATE_TAXI',
+//       courseSeq: Math.floor(Math.random() * 10),
+//       step: 3,
+//       studentCnt: Math.floor(Math.random() * 1000)
+//   },
+//   {
+//       userBusinessSubType: 'PRIVATE_TAXI',
+//       courseSeq: Math.floor(Math.random() * 10),
+//       step: 3,
+//       studentCnt: Math.floor(Math.random() * 1000)
+//   },
+//   {
+//       userBusinessSubType: 'INDIVIDUAL_CARGO',
+//       courseSeq: Math.floor(Math.random() * 10),
+//       step: 3,
+//       studentCnt: Math.floor(Math.random() * 1000)
+//   },
+//   {
+//       userBusinessSubType: 'CONSIGNMENT',
+//       courseSeq: Math.floor(Math.random() * 10),
+//       step: 3,
+//       studentCnt: Math.floor(Math.random() * 1000)
+//   },
+//   {
+//     userBusinessSubType: 'GENERAL_CARGO',
+//     courseSeq: Math.floor(Math.random() * 10),
+//     step: 4,
+//     studentCnt: Math.floor(Math.random() * 1000),
+// },
+// {
+//     userBusinessSubType: 'BUS',
+//     courseSeq: Math.floor(Math.random() * 10),
+//     step: 4,
+//     studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//     userBusinessSubType: 'CHARTER_BUS',
+//     courseSeq: Math.floor(Math.random() * 10),
+//     step: 4,
+//     studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//     userBusinessSubType: 'SPECIAL_PASSENGER',
+//     courseSeq: Math.floor(Math.random() * 10),
+//     step: 4,
+//     studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//     userBusinessSubType: 'CORPORATE_TAXI',
+//     courseSeq: Math.floor(Math.random() * 10),
+//     step: 4,
+//     studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//     userBusinessSubType: 'PRIVATE_TAXI',
+//     courseSeq: Math.floor(Math.random() * 10),
+//     step: 4,
+//     studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//     userBusinessSubType: 'INDIVIDUAL_CARGO',
+//     courseSeq: Math.floor(Math.random() * 10),
+//     step: 4,
+//     studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//     userBusinessSubType: 'CONSIGNMENT',
+//     courseSeq: Math.floor(Math.random() * 10),
+//     step: 4,
+//     studentCnt: Math.floor(Math.random() * 1000)
+// },{
+//   userBusinessSubType: 'GENERAL_CARGO',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 5,
+//   studentCnt: Math.floor(Math.random() * 1000),
+// },
+// {
+//   userBusinessSubType: 'BUS',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 5,
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//   userBusinessSubType: 'CHARTER_BUS',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 5,
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//   userBusinessSubType: 'SPECIAL_PASSENGER',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 5,
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//   userBusinessSubType: 'CORPORATE_TAXI',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 5,
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//   userBusinessSubType: 'PRIVATE_TAXI',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 5,
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//   userBusinessSubType: 'INDIVIDUAL_CARGO',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 5,
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//   userBusinessSubType: 'CONSIGNMENT',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 5,
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },{
+//   userBusinessSubType: 'GENERAL_CARGO',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 6,
+//   studentCnt: Math.floor(Math.random() * 1000),
+// },
+// {
+//   userBusinessSubType: 'BUS',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 6,
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//   userBusinessSubType: 'CHARTER_BUS',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 6,
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//   userBusinessSubType: 'SPECIAL_PASSENGER',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 6,
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//   userBusinessSubType: 'CORPORATE_TAXI',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 6,
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//   userBusinessSubType: 'PRIVATE_TAXI',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 6,
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//   userBusinessSubType: 'INDIVIDUAL_CARGO',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 6,
+//   studentCnt: Math.floor(Math.random() * 1000)
+// },
+// {
+//   userBusinessSubType: 'CONSIGNMENT',
+//   courseSeq: Math.floor(Math.random() * 10),
+//   step: 6,
+//   studentCnt: Math.floor(Math.random() * 1000)
+// }
+//   ],
+//   statisticsTransEduCategoryAgeResponseDto: [
+//       {
+//           userBusinessSubType: 'GENERAL_CARGO',
+//           age20s: 93,
+//           age30s: 23,
+//           age40s: 44,
+//           age50s: 51,
+//           age60s: 44,
+//           age70s: 81,
+//           age80s: 23,
+//           age90s: 45
+//       },
+//       {
+//           userBusinessSubType: 'BUS',
+//           age20s: Math.floor(Math.random() * 1000),
+//           age30s: Math.floor(Math.random() * 1000),
+//           age40s: Math.floor(Math.random() * 1000),
+//           age50s: Math.floor(Math.random() * 1000),
+//           age60s: Math.floor(Math.random() * 1000),
+//           age70s: Math.floor(Math.random() * 1000),
+//           age80s: Math.floor(Math.random() * 1000),
+//           age90s: 0
+//       },
+//       {
+//           userBusinessSubType: 'CHARTER_BUS',
+//           age20s: Math.floor(Math.random() * 1000),
+//           age30s: Math.floor(Math.random() * 1000),
+//           age40s: Math.floor(Math.random() * 1000),
+//           age50s: Math.floor(Math.random() * 1000),
+//           age60s: Math.floor(Math.random() * 1000),
+//           age70s: Math.floor(Math.random() * 1000),
+//           age80s: Math.floor(Math.random() * 1000),
+//           age90s: 0
+//       },
+//       {
+//           userBusinessSubType: 'SPECIAL_PASSENGER',
+//           age20s: Math.floor(Math.random() * 1000),
+//           age30s: Math.floor(Math.random() * 1000),
+//           age40s: Math.floor(Math.random() * 1000),
+//           age50s: Math.floor(Math.random() * 1000),
+//           age60s: Math.floor(Math.random() * 1000),
+//           age70s: Math.floor(Math.random() * 1000),
+//           age80s: Math.floor(Math.random() * 1000),
+//           age90s: 0
+//       },
+//       {
+//           userBusinessSubType: 'CORPORATE_TAXI',
+//           age20s: Math.floor(Math.random() * 1000),
+//           age30s: Math.floor(Math.random() * 1000),
+//           age40s: Math.floor(Math.random() * 1000),
+//           age50s: Math.floor(Math.random() * 1000),
+//           age60s: Math.floor(Math.random() * 1000),
+//           age70s: Math.floor(Math.random() * 1000),
+//           age80s: Math.floor(Math.random() * 1000),
+//           age90s: 0
+//       },
+//       {
+//           userBusinessSubType: 'PRIVATE_TAXI',
+//           age20s: Math.floor(Math.random() * 1000),
+//           age30s: Math.floor(Math.random() * 1000),
+//           age40s: Math.floor(Math.random() * 1000),
+//           age50s: Math.floor(Math.random() * 1000),
+//           age60s: Math.floor(Math.random() * 1000),
+//           age70s: Math.floor(Math.random() * 1000),
+//           age80s: Math.floor(Math.random() * 1000),
+//           age90s: 0
+//       },
+//       {
+//           userBusinessSubType: 'INDIVIDUAL_CARGO',
+//           age20s: Math.floor(Math.random() * 1000),
+//           age30s: Math.floor(Math.random() * 1000),
+//           age40s: Math.floor(Math.random() * 1000),
+//           age50s: Math.floor(Math.random() * 1000),
+//           age60s: Math.floor(Math.random() * 1000),
+//           age70s: Math.floor(Math.random() * 1000),
+//           age80s: Math.floor(Math.random() * 1000),
+//           age90s: 0
+//       },
       
-  ],
-  statisticsTransEduYearAgeResponseDto: [
-      {
-          year: 2023,
-          age20s: Math.floor(Math.random() * 1000),
-          age30s: Math.floor(Math.random() * 1000),
-          age40s: Math.floor(Math.random() * 1000),
-          age50s: Math.floor(Math.random() * 1000),
-          age60s: Math.floor(Math.random() * 1000),
-          age70s: Math.floor(Math.random() * 1000),
-          age80s: Math.floor(Math.random() * 1000),
-          age90s: 0
-      },
-      {
-        year: 2022,
-        age20s: Math.floor(Math.random() * 1000),
-        age30s: Math.floor(Math.random() * 1000),
-        age40s: Math.floor(Math.random() * 1000),
-        age50s: Math.floor(Math.random() * 1000),
-        age60s: Math.floor(Math.random() * 1000),
-        age70s: Math.floor(Math.random() * 1000),
-        age80s: Math.floor(Math.random() * 1000),
-        age90s: 0
-    },
-    {
-      year: 2021,
-      age20s: Math.floor(Math.random() * 1000),
-      age30s: Math.floor(Math.random() * 1000),
-      age40s: Math.floor(Math.random() * 1000),
-      age50s: Math.floor(Math.random() * 1000),
-      age60s: Math.floor(Math.random() * 1000),
-      age70s: Math.floor(Math.random() * 1000),
-      age80s: Math.floor(Math.random() * 1000),
-      age90s: 0
-  },
-  {
-    year: 2020,
-    age20s: Math.floor(Math.random() * 1000),
-    age30s: Math.floor(Math.random() * 1000),
-    age40s: Math.floor(Math.random() * 1000),
-    age50s: Math.floor(Math.random() * 1000),
-    age60s: Math.floor(Math.random() * 1000),
-    age70s: Math.floor(Math.random() * 1000),
-    age80s: Math.floor(Math.random() * 1000),
-    age90s: 0
-},{
-  year: 2019,
-  age20s: Math.floor(Math.random() * 1000),
-  age30s: Math.floor(Math.random() * 1000),
-  age40s: Math.floor(Math.random() * 1000),
-  age50s: Math.floor(Math.random() * 1000),
-  age60s: Math.floor(Math.random() * 1000),
-  age70s: Math.floor(Math.random() * 1000),
-  age80s: Math.floor(Math.random() * 1000),
-  age90s: 0
-},{
-  year: 2018,
-  age20s: Math.floor(Math.random() * 1000),
-  age30s: Math.floor(Math.random() * 1000),
-  age40s: Math.floor(Math.random() * 1000),
-  age50s: Math.floor(Math.random() * 1000),
-  age60s: Math.floor(Math.random() * 1000),
-  age70s: Math.floor(Math.random() * 1000),
-  age80s: Math.floor(Math.random() * 1000),
-  age90s: 0
-}
-  ]
-}
+//   ],
+//   statisticsTransEduYearAgeResponseDto: [
+//       {
+//           year: 2023,
+//           age20s: Math.floor(Math.random() * 1000),
+//           age30s: Math.floor(Math.random() * 1000),
+//           age40s: Math.floor(Math.random() * 1000),
+//           age50s: Math.floor(Math.random() * 1000),
+//           age60s: Math.floor(Math.random() * 1000),
+//           age70s: Math.floor(Math.random() * 1000),
+//           age80s: Math.floor(Math.random() * 1000),
+//           age90s: 0
+//       },
+//       {
+//         year: 2022,
+//         age20s: Math.floor(Math.random() * 1000),
+//         age30s: Math.floor(Math.random() * 1000),
+//         age40s: Math.floor(Math.random() * 1000),
+//         age50s: Math.floor(Math.random() * 1000),
+//         age60s: Math.floor(Math.random() * 1000),
+//         age70s: Math.floor(Math.random() * 1000),
+//         age80s: Math.floor(Math.random() * 1000),
+//         age90s: 0
+//     },
+//     {
+//       year: 2021,
+//       age20s: Math.floor(Math.random() * 1000),
+//       age30s: Math.floor(Math.random() * 1000),
+//       age40s: Math.floor(Math.random() * 1000),
+//       age50s: Math.floor(Math.random() * 1000),
+//       age60s: Math.floor(Math.random() * 1000),
+//       age70s: Math.floor(Math.random() * 1000),
+//       age80s: Math.floor(Math.random() * 1000),
+//       age90s: 0
+//   },
+//   {
+//     year: 2020,
+//     age20s: Math.floor(Math.random() * 1000),
+//     age30s: Math.floor(Math.random() * 1000),
+//     age40s: Math.floor(Math.random() * 1000),
+//     age50s: Math.floor(Math.random() * 1000),
+//     age60s: Math.floor(Math.random() * 1000),
+//     age70s: Math.floor(Math.random() * 1000),
+//     age80s: Math.floor(Math.random() * 1000),
+//     age90s: 0
+// },{
+//   year: 2019,
+//   age20s: Math.floor(Math.random() * 1000),
+//   age30s: Math.floor(Math.random() * 1000),
+//   age40s: Math.floor(Math.random() * 1000),
+//   age50s: Math.floor(Math.random() * 1000),
+//   age60s: Math.floor(Math.random() * 1000),
+//   age70s: Math.floor(Math.random() * 1000),
+//   age80s: Math.floor(Math.random() * 1000),
+//   age90s: 0
+// },{
+//   year: 2018,
+//   age20s: Math.floor(Math.random() * 1000),
+//   age30s: Math.floor(Math.random() * 1000),
+//   age40s: Math.floor(Math.random() * 1000),
+//   age50s: Math.floor(Math.random() * 1000),
+//   age60s: Math.floor(Math.random() * 1000),
+//   age70s: Math.floor(Math.random() * 1000),
+//   age80s: Math.floor(Math.random() * 1000),
+//   age90s: 0
+// }
+//   ]
+// }
 
 
 interface Queries {
@@ -764,13 +764,13 @@ export default function Overall() {
           :
           <>
             <InfoMessage>"교육년도, 과정, 과정기수"를 선택하고 "통계 확인"을 눌러 확인하세요.</InfoMessage>
-            <Whole data={DUMMY_STATISTICS.statisticsTransEduIntegratedResponseDto} />
-            <FluctuationInBusiness data={DUMMY_STATISTICS.statisticsTransEduCategoryResponseDto} />
-            <RegistrationAddress data={DUMMY_STATISTICS.statisticsTransEduCarRegisteredRegionResultResponseDto} />
-            <FluctuationByPeriod data={DUMMY_STATISTICS.statisticsTransEduStepResponseDto} />
-            <FluctuationByBusiness data={DUMMY_STATISTICS.statisticsTransEduCategoryIncreaseResponseDto} />
-            <YearlyAgeByBusiness data={DUMMY_STATISTICS.statisticsTransEduCategoryAgeResponseDto} />
-            <ComparisonAgeByYearly data={DUMMY_STATISTICS.statisticsTransEduYearAgeResponseDto} />
+            <Whole data={data?.statisticsTransEduIntegratedResponseDto} />
+            <FluctuationInBusiness data={data?.statisticsTransEduCategoryResponseDto} />
+            <RegistrationAddress data={data?.statisticsTransEduCarRegisteredRegionResultResponseDto} />
+            <FluctuationByPeriod data={data?.statisticsTransEduStepResponseDto} />
+            <FluctuationByBusiness data={data?.statisticsTransEduCategoryIncreaseResponseDto} />
+            <YearlyAgeByBusiness data={data?.statisticsTransEduCategoryAgeResponseDto} />
+            <ComparisonAgeByYearly data={data?.statisticsTransEduYearAgeResponseDto} />
           </>
         }
       </Main>

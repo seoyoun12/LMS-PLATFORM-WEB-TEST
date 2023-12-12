@@ -30,5 +30,3 @@ const SelectContainer = styled(Select)<{sx:CSSProperties}>`
   width: ${({sx}) => sx.width || '100%'};
   margin-bottom: ${({sx}) => sx.marginBottom || '1rem'};
 `;
-
-// username 님 ㅎㅇㅎㅇ

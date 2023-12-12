@@ -23,20 +23,20 @@ export default function Whole({data}: Props) {
         <Summary>  
           <SummaryItem>
             <SummaryTitle>전체 수강 인원</SummaryTitle>
-            <SummaryText>{data.totalCourseUserCnt} (100%)</SummaryText>
+            <SummaryText>{data?.totalCourseUserCnt} (100%)</SummaryText>
           </SummaryItem>
           <SummaryItem>
             <SummaryTitle>이수자</SummaryTitle>
             <SummaryText>
-              {data.completedCourseUserCnt}
-              ({data.completedCourseUserCnt === 0 ? 0 : (data.completedCourseUserCnt / data.totalCourseUserCnt * 100).toFixed(2)}%)
+              {data?.completedCourseUserCnt}
+              ({data?.completedCourseUserCnt === 0 ? 0 : (data?.completedCourseUserCnt / data?.totalCourseUserCnt * 100).toFixed(2)}%)
             </SummaryText>
           </SummaryItem>
           <SummaryItem>
             <SummaryTitle>미이수자</SummaryTitle>
             <SummaryText>
-              {data.inCompletedCourseUserCnt}
-              ({data.inCompletedCourseUserCnt === 0 ? 0 : (data.inCompletedCourseUserCnt / data.totalCourseUserCnt * 100).toFixed(2)}%)</SummaryText>
+              {data?.inCompletedCourseUserCnt}
+              ({data?.inCompletedCourseUserCnt === 0 ? 0 : (data?.inCompletedCourseUserCnt / data?.totalCourseUserCnt * 100).toFixed(2)}%)</SummaryText>
           </SummaryItem>
         </Summary>
       </StatisticBox>

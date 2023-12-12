@@ -23,7 +23,7 @@ export default function YearlyAgeByBusiness({ data }: Props) {
     const labels = data.map((item) => ConvertEnum(item.userBusinessSubType));
 
     const chartData: ChartData<'bar'>[] = data.map((item) => ({
-      labels: ['10년생','20년생','30년생','40년생','50년생','60년생','70년생','80년생','90년생'],
+      labels: ['20대','30대','40대','50대','60대','70대','80대','90대'],
       datasets: [
         {
           label: '교육생 수',
@@ -47,7 +47,7 @@ export default function YearlyAgeByBusiness({ data }: Props) {
     setLabels(labels)
   },[data])
   
-  console.log(data);
+  
   return (
     <StatisticsLayout title="연간 업종별 연령대 통계">
       <ChartGrid>

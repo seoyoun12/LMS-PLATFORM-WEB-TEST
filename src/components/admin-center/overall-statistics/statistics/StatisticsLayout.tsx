@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function StatisticsLayout({title,children}:Props) {
-  const {toggle: isDropped, onToggle: onToggleDropdown} = useToggle()
+  const {toggle: isDropped, onToggle: onToggleDropdown} = useToggle(true)
   
   return (
     <Wrapper dropdown={isDropped ? 'drop' : 'flip'}>

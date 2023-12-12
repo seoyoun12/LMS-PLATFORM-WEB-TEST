@@ -3,8 +3,8 @@ import { useCallback, useState } from 'react'
 
 
 
-function useToggle() {
-  const [toggle,setToggle] = useState(false);
+function useToggle(defaultValue = false) {
+  const [toggle,setToggle] = useState(defaultValue);
 
   const onToggle = useCallback(() => {
     setToggle(prev => !prev)

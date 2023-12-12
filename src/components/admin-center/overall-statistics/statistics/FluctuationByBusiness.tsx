@@ -6,140 +6,6 @@ import { Box, Typography } from '@mui/material'
 import { FluctuationByBusiness as IFluctuationByBusiness } from '@hooks/useStatistics'
 import { ChartData } from 'chart.js'
 import { ConvertEnum } from '@utils/convertEnumToHangle'
-
-
-
-// const llll = ['A','B','C','D','E']
-
-// const dddd:IFluctuationByBusiness[] = [
-//   {
-//     step: 106,
-//     userBusinessSubType: 'A',
-//     studentCnt: 442,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 107,
-//     userBusinessSubType: 'A',
-//     studentCnt: 222,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 108,
-//     userBusinessSubType: 'A',
-//     studentCnt: 302,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 109,
-//     userBusinessSubType: 'A',
-//     studentCnt: 129,
-//     courseSeq: 1
-//   },
-  
-
-//   {
-//     step: 106,
-//     userBusinessSubType: 'B',
-//     studentCnt: 442,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 107,
-//     userBusinessSubType: 'B',
-//     studentCnt: 222,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 108,
-//     userBusinessSubType: 'B',
-//     studentCnt: 302,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 109,
-//     userBusinessSubType: 'B',
-//     studentCnt: 129,
-//     courseSeq: 1
-//   },
-
-//   {
-//     step: 106,
-//     userBusinessSubType: 'C',
-//     studentCnt: 442,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 107,
-//     userBusinessSubType: 'C',
-//     studentCnt: 222,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 108,
-//     userBusinessSubType: 'C',
-//     studentCnt: 302,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 109,
-//     userBusinessSubType: 'C',
-//     studentCnt: 129,
-//     courseSeq: 1
-//   },
-
-
-//   {
-//     step: 106,
-//     userBusinessSubType: 'D',
-//     studentCnt: 442,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 107,
-//     userBusinessSubType: 'D',
-//     studentCnt: 222,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 108,
-//     userBusinessSubType: 'D',
-//     studentCnt: 302,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 109,
-//     userBusinessSubType: 'D',
-//     studentCnt: 129,
-//     courseSeq: 1
-//   },
-
-//   {
-//     step: 106,
-//     userBusinessSubType: 'E',
-//     studentCnt: 442,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 107,
-//     userBusinessSubType: 'E',
-//     studentCnt: 222,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 108,
-//     userBusinessSubType: 'E',
-//     studentCnt: 302,
-//     courseSeq: 1
-//   },
-//   {
-//     step: 109,
-//     userBusinessSubType: 'E',
-//     studentCnt: 129,
-//     courseSeq: 1
-//   },
-// ]
-
 interface Props {
   data: IFluctuationByBusiness[]
 }
@@ -159,17 +25,19 @@ export default function FluctuationByBusiness({ data }: Props) {
 
   useEffect(() => {
     if(!data || data.length === 0) return;
-    const labelsArr = ['기수/업종', ...data.reduce((acc, cur) => {
+
+    // 업종
+    const labelsArr = ['', ...data.reduce((acc, cur) => {
       if(acc.includes(cur.userBusinessSubType)) return acc;
-      else return [...acc, cur.userBusinessSubType];
+      else return [...acc, ConvertEnum(cur.userBusinessSubType)];
     },[])];
     const periodArr:number[] = data.reduce((acc, cur) => {
       if(acc.includes(cur.step)) return acc;
-      else return [...acc, cur.step];
+      else return [...acc, cur.step ];
     },[])
 
-    const labels = labelsArr.map((period) => ConvertEnum(period));
-
+    const labels = periodArr.map((period) => ConvertEnum(period + '기'));
+    console.log(labelsArr);
     const chartData:ChartData = {
       labels,
       datasets: [
@@ -283,8 +151,9 @@ export default function FluctuationByBusiness({ data }: Props) {
         },
       ]
     };
+
     setChartData(chartData);
-    setLabels(labels);
+    setLabels([...new Set(labelsArr)]);
     setPeriod(periodArr);
   },[data])
 
@@ -314,7 +183,7 @@ export default function FluctuationByBusiness({ data }: Props) {
                 <Typography sx={{fontSize: 20, fontWeight:'bold'}}>{period} 기</Typography>
               </Column>
               {
-                data.map((item,index) => (
+                data?.map((item,index) => (
                   data[index].step === period && 
                   <Box key={item.userBusinessSubType} sx={{ flex:1, border:'1px solid #c7c7c7c7', boxSizing:'border-box', height: '40px', }}>
                     <Typography sx={{fontSize: 20, fontWeight:'bold', textAlign:'center'}}>{item.studentCnt}</Typography>

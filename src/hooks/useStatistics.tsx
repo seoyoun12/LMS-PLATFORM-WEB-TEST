@@ -2,6 +2,7 @@ import { GET } from "@common/httpClient"
 import { useState } from "react"
 import useSWR, { SWRResponse } from "swr"
 
+
 export interface Fluctuation{
     completedCnt: number,
     inCompletedCnt: number,
@@ -35,7 +36,7 @@ export interface RegistrationAddress {
   statisticsTransEduCarRegisteredRegionResponseDtoList: FluctuationByCarRegistrationAddress[],
   sumCompletedCntSum: number,
   sumInCompletedCnt: number,
-  sumTotalCntSum: 0
+  sumTotalCntSum: number
 }
 
 export interface TotalUserCnt {
@@ -98,19 +99,34 @@ interface Courses {
   }
 
 export default function useStatistics(props: Props) {
+  
   const [course, setCourse] = useState<Courses[]>(null);
-  const {data ,mutate} = useSWR<SWRResponse<StatisticsResponse>>(props?.year ? [
-    '/adm/statistics/trans-edu/integrated',
-    { params: {courseClassSeq: props?.courseClassSeq, courseSeq: props.courseSeq, year: props.year} }] : null,
-     GET
-     )
+  const [statistics, setStatistics] = useState<StatisticsResponse>(null);
+  const [isStatisticsLoading, setIsStatisticsLoading] = useState(false);
+  
+  const getStatistics = async (params: Props) => {
+    setIsStatisticsLoading(true);
+    try {
+      const { data } = await GET('/adm/statistics/trans-edu/integrated',{
+        params
+      });
+      setStatistics(data);
+      setIsStatisticsLoading(false);
+    } catch (error) {
+      console.log(error)
+      setIsStatisticsLoading(false);
+    }
+  }
+  
   
   // 해당년도에 해당하는 course list를 가져오는 함수
   // const {data: course, mutate: courseMutate,isValidating:isCourseValidating} =
   // useSWR<SWRResponse<Courses[]>>(props?.year ? [ '/course/adm/learning-info/courses',{ params: {year:props.year} }] : null, GET)
 
   // 해당 courseSeq에 해당하는 period list를 가져오는 함수
-  const {data: period, mutate: periodMutate,isValidating:isStepValidating} = useSWR<SWRResponse<PeriodInCourse[]>>(props?.courseSeq ? `/course/adm/learning-info/step/${props.courseSeq}` : null, GET)
+  const {data: period, mutate: periodMutate,isValidating:isStepValidating} = useSWR<SWRResponse<PeriodInCourse[]>>(
+    props?.courseSeq ? `/course/adm/learning-info/step/${props.courseSeq}` : null,
+    GET,)
   // 개설된 과정 전체 조회 /course/adm/learning-info/courses?year={year} => year를 주면 courseSeq를 준다
   // 개설된 과정에 대한 기수 전체 조회 /course/adm/leaning-info/step/{courseSeq} => courseSeq를 주면 courseClassSeq를 준다
 
@@ -120,12 +136,11 @@ export default function useStatistics(props: Props) {
       setCourse(data);
     } catch (error) {
       console.log(error)
-    }
-    
+    } 
   }
   
 
 
 
-  return {data, mutate, course, getCourses, period, periodMutate, isStepValidating}
+  return {data:statistics, course, getCourses, period, periodMutate, isStepValidating, getStatistics, isStatisticsLoading}
 }

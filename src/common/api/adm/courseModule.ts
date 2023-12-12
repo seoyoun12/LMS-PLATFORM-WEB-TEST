@@ -35,7 +35,7 @@ export interface CourseModuleFindRes {
 //swr get
 export function useCourseModule(courseSeq: number) {
   const { data, error, mutate } = useSWR<SWRResponse<CourseModuleFindRes[]>>(
-    [`/course-module/adm`, { params: { courseSeq } }],
+    `/course-module/adm?courseSeq=${courseSeq}`,
     GET
   );
   return {

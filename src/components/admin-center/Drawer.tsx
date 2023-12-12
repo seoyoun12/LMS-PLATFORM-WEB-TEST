@@ -352,11 +352,6 @@ export function Drawer({ children }: { children: ReactNode }) {
           href: '/admin-center/sms/message-settings',
           isActive: router.pathname === '',
         },
-        {
-          name: '수동 문자 발송',
-          href: '/admin-center/sms/send-message',
-          isActive: router.pathname === '',
-        },
       ],
       icon: <SmsOutlined sx={{ mr: '32px', color: tabIndex === 0 ? 'rgb(191,49,51)' : '#2d63e2' }} />,
     },

@@ -1,22 +1,14 @@
 
 import { Table } from '@components/ui';
-import { Box, Button, Chip, TableBody, TableHead, Typography } from '@mui/material';
+import { Box, Chip, TableBody, TableHead, Typography } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { useEffect, useState } from 'react';
-import { Link } from '@components/common';
-import { grey } from '@mui/material/colors';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useDialog } from '@hooks/useDialog';
-import * as React from 'react';
 import { useRouter } from 'next/router';
-import styles from '@styles/common.module.scss';
-import { Container } from '@mui/material';
 import dateFormat from 'dateformat';
-import { YN } from '@common/constant';
 import { Spinner } from '@components/ui';
-import { css } from '@emotion/css';
-
 import { useSurveyAdm } from '@common/api/adm/survey';
 import styled from '@emotion/styled';
 
@@ -153,13 +145,6 @@ export function StatisticsSurveyList() {
   );
 }
 
-// const spaceNoWrap = css`
-//   white-space: nowrap;
-// `;
-
-// const CustomTableRow = styled(TableRow)`
-//   cursor: pointer;
-// `;
 
 // 설문 목록 글자
 const StatisticsSurveyTypography = styled(Typography)`

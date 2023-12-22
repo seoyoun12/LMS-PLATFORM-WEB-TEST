@@ -181,7 +181,7 @@ export function UserManagement() {
     const a = document.createElement('a');
     setLoading(true);
     try {
-      const data = await getExcelUserList(typeValue);
+      const data = await getExcelUserList(RoleType.ROLE_TRAFFIC_SAFETY_USER);
       const excel = new Blob([data]);
       a.href = URL.createObjectURL(excel);
       // a.download = '충남_관리자_회원목록_리스트.xlsx';
@@ -233,7 +233,7 @@ export function UserManagement() {
       <Typography fontSize={30} fontWeight='bold'>
         회원구분
       </Typography>
-
+      
       <RadioGroup row sx={{ mb: 3 }}>
         {UserRadioConfig.map(({ name, value }) => (
           <FormControlLabel

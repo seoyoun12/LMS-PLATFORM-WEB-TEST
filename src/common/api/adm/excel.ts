@@ -30,12 +30,12 @@ export function getExcelCourseLearning(body:FormType) {
 
 
 // 학습현황(도민) 엑셀 다운로드
-export function getExcelCourseTrafficLearning(body:FormType) {
+export function getExcelCourseTrafficLearning(params: any) {
 
   const extractValidParams = {}
-  for(const key in body) {
-    if(body[key]) {
-      extractValidParams[key] = body[key];
+  for(const key in params) {
+    if(params[key]) {
+      extractValidParams[key] = params[key];
     }
   }
   return api.get(

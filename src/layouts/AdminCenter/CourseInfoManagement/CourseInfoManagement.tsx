@@ -64,7 +64,7 @@ export interface FormType {
   studyEndDate: string; //학습종료일
   phone: string | null; //전화번호
   identityNumber: string | null; //주민번호 (-포함)
-  year?: number;
+  year: number | string;
 }
 
 const defaultValues: FormType = {
@@ -84,10 +84,12 @@ const defaultValues: FormType = {
   studyEndDate: '',
   phone: null,
   identityNumber: null,
-  year: 0,
+  year: '',
 };
 
-
+interface ClearRef {
+  resetDisplay: () => void
+}
 
 export default function CourseInfoManagement() {
 
@@ -101,6 +103,7 @@ export default function CourseInfoManagement() {
   const { courses } = useLearningInfoCourses(+currentYear);
   const { steps } = useLearningInfoStep(watch().courseSeq);
   const [fileLoading, setFileLoading] = useState(false);
+  const clearRef = useRef<ClearRef>()
 
   const onChangeSeletedSeq = (e: SelectChangeEvent) => {
     onChageCourseSeq(Number(e.target.value));
@@ -118,7 +121,6 @@ export default function CourseInfoManagement() {
   const onChangeYear = (e: SelectChangeEvent) => {
     const { value } = e.target;
     if( value === '전체') return setCurrentYear(getYear(new Date()));
-
     setCurrentYear(+value);
     setValue('year', +value);
   }
@@ -127,6 +129,8 @@ export default function CourseInfoManagement() {
     const value = e.target.value as CourseType;
     setValue('courseType', value);
   };
+
+
 
   //과정 선택
   const onChageCourseSeq = (courseSeq: number | null) => {
@@ -147,6 +151,7 @@ export default function CourseInfoManagement() {
     setValue('notFound', false);
     setValue('businessType', value);
   };
+
   //차량등록지
   const onChangeCarRegitRegion = (e: SelectChangeEvent) => {
     const value = e.target.value;
@@ -183,7 +188,10 @@ export default function CourseInfoManagement() {
     setValue('notFound', false);
     
     if (isReload) {
+      // window.location.reload()
+      clearRef.current && clearRef.current.resetDisplay()
       reset();
+      clearRef.current.resetDisplay()
       setSubmitValue(watch());
       searchInputRef.current.value = '';
       return;
@@ -192,8 +200,6 @@ export default function CourseInfoManagement() {
     if (searchInputRef.current) {
       setValue('nameOrUsername', searchInputRef.current.value);
     }
-
-
 
     const { phone, identityNumber } = watch();
     if (!phone || phone.trim() === '') setValue('phone', null);
@@ -218,11 +224,8 @@ export default function CourseInfoManagement() {
           temp.push(course);
         }
       })
-
       return temp;
   },[courses]);
-
-  
 
   const onClickExcelDownload = async () => {
     setFileLoading(true);
@@ -251,16 +254,13 @@ export default function CourseInfoManagement() {
   if (!data) return <Spinner />;
 
 
-  console.log(watch());
-  
-
-
   return (
     <>
       <Title variant="h1">전체 수강생 학습현황(운수/저상)</Title>
       <ContainerWrapper>
         <LeftContainer>
           <CourseSelectBox
+            ref={clearRef}
             register={register}
             registerName="year"
             label="교육년도 선택"
@@ -273,6 +273,7 @@ export default function CourseInfoManagement() {
           />
         <DoubleInputBox>
           <CourseSelectBox
+            ref={clearRef}
             register={register}
             registerName="courseSeq"
             label="과정 선택"
@@ -284,6 +285,7 @@ export default function CourseInfoManagement() {
             itemName="courseName"
           />
           <CourseSelectBox
+            ref={clearRef}
             register={register}
             registerName="courseClassSeq"
             label="과정기수 선택"
@@ -297,6 +299,7 @@ export default function CourseInfoManagement() {
         </DoubleInputBox>
         <DoubleInputBox>
           <CourseSelectBox
+            ref={clearRef}
             register={register}
             registerName="businessType"
             label="업종"
@@ -308,10 +311,10 @@ export default function CourseInfoManagement() {
             itemName="type"
           />
           <CourseSelectBox
+            ref={clearRef}
             label="차량등록지"
             register={register}
             registerName="carRegitRegion"
-            
             menuItem={[...locationList,{ ko: '충남 전체 (세종 제외)', en: 'EXCEPTSEJONG'}]}
             onChange={onChangeCarRegitRegion}
             value={watch().carRegitRegion ?? ''}
@@ -452,7 +455,7 @@ export default function CourseInfoManagement() {
         >검색하기
       </Button>
       <ReloadButton
-        type='submit'
+        type='button'
         size='small'
         color='neutral'
         variant='text'

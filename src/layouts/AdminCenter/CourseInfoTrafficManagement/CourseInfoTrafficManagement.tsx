@@ -20,6 +20,7 @@ import useSelect from '@hooks/useSelect';
 import useDominCourse, { MainType, SubType } from '@hooks/useDominCourse';
 import { useNewInput } from '@hooks/useNewInput';
 import { RefreshOutlined } from '@material-ui/icons';
+import { getExcelCourseTrafficLearning } from '@common/api/adm/excel';
 
 
 const headRows: {
@@ -80,19 +81,40 @@ export default function CourseInfoTrafficManagement() {
   const snackbar = useSnackbar();
 
   
-  
+  // TODO: 도민 엑셀 다운로드
   const onClickExcelDownload = async () => {
     setLoading(true);
-    // try {
-    //   const data = await getExcelCourseTrafficLearning(watch());
-    //   const blob = new Blob([data.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    //   setLoading(false);
-    //   return saveAs(blob, format(new Date(), 'yyyy-MM-dd') + ' 학습현황.xlsx');
+    const params = {
+      year,
+      residence,
+      provincialEduTargetMain,
+      provincialEduTargetSub,
+      expectedToStartDtime,
+      expectedToEndDtime,
+      organization,
+      nameOrUsername,
+      completeType,
+      page,
+      courseSeq,
+    }
+    for (const key in params) {
+      if (params[key as keyof CourseInfoTrafficParams] === ''
+      || params[key as keyof CourseInfoTrafficParams] === undefined
+      || params[key as keyof CourseInfoTrafficParams] === null
+      ) {
+        delete params[key as keyof CourseInfoTrafficParams];
+      }
+    }
+    try {
+      const data = await getExcelCourseTrafficLearning(params);
+      const blob = new Blob([data.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      setLoading(false);
+      return saveAs(blob, format(new Date(), 'yyyy-MM-dd') + ' 학습현황.xlsx');
       
-    // } catch (e) {
-    //   snackbar({ variant: 'error', message: '다운로드 실패' });
-    //   setLoading(false);
-    // }
+    } catch (e) {
+      snackbar({ variant: 'error', message: '다운로드 실패' });
+      setLoading(false);
+    }
   };
 
   const onChangePage = async (page: number) => {
@@ -164,8 +186,6 @@ export default function CourseInfoTrafficManagement() {
   },[provincialEduTargetSub])
   if (error) return <div>Error</div>;
   if (!data) return <Spinner />;
-
-  
 
   return (
     <Box>

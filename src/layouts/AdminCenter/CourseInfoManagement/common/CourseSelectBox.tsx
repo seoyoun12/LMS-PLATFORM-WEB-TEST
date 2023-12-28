@@ -1,6 +1,6 @@
 import { Box, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
 import { ConvertEnum } from '@utils/convertEnumToHangle';
-import { useEffect, useState } from 'react'
+import { Ref, forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import { UseFormRegisterReturn, ValidationRule } from 'react-hook-form';
 
 interface Props<T> {
@@ -21,15 +21,17 @@ interface Props<T> {
   registerName: string;
 }
 
-function CourseSelectBox<T>({label, onChange, value, menuItem, itemValue, itemKey, itemName, register, registerName}: Props<T>) {
+const CourseSelectBox = forwardRef<unknown, Props<unknown>>(({label, onChange, value, menuItem, itemValue, itemKey, itemName, register, registerName},ref) => {
   const [currentValue, setCurrentValue] = useState<string | number>('');
   
-//  === Register Name === year
-//  === Register Name === courseSeq
-//  === Register Name === courseClassSeq
-//  === Register Name === businessType
-//  === Register Name === carRegitRegion
-  
+  useImperativeHandle(ref, () => ({
+    resetDisplay: () => {
+      console.log('excuted')
+      setCurrentValue('')
+    }
+    
+  }))
+
   const onClickMenuItem = (itemName: string) => {
     setCurrentValue(() => itemName);
   }
@@ -44,7 +46,7 @@ function CourseSelectBox<T>({label, onChange, value, menuItem, itemValue, itemKe
 
     // if(registerName === 'courseClassSeq') return setCurrentValue
     setCurrentValue(value);
-  },[])
+  },[itemKey, menuItem, registerName, value])
 
   return (
     <Box sx={{display:'flex',flexDirection:'column',width:'100%'}}>
@@ -66,6 +68,6 @@ function CourseSelectBox<T>({label, onChange, value, menuItem, itemValue, itemKe
       </Select>
     </Box>
   )
-}
-
+})
+CourseSelectBox.displayName = 'CourseSelectBox'
 export default CourseSelectBox

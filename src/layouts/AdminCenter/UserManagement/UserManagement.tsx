@@ -181,7 +181,7 @@ export function UserManagement() {
     const a = document.createElement('a');
     setLoading(true);
     try {
-      const data = await getExcelUserList(RoleType.ROLE_TRAFFIC_SAFETY_USER);
+      const data = await getExcelUserList(typeValue);
       const excel = new Blob([data]);
       a.href = URL.createObjectURL(excel);
       // a.download = '충남_관리자_회원목록_리스트.xlsx';

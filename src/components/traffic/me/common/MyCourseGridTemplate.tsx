@@ -15,15 +15,17 @@ export default function MyCourseGridTemplate<T extends { seq?: number, courseNam
 
 
   useEffect(() => {
-    const sortedList = list[0].seq ? list.slice().sort((a, b) => b.seq - a.seq) : list.slice().sort((a, b) => b.courseUserSeq - a.courseUserSeq);
-    setSortedlist(sortedList);
-  },[list])
+    if (list && list.length > 0) {
+      const sortedList = list[0].seq ? list.slice().sort((a, b) => b.seq - a.seq) : list.slice().sort((a, b) => b.courseUserSeq - a.courseUserSeq);
+      setSortedlist(sortedList);
+    }
+  }, [list]);
 
   
   return (
     <List>
       {
-        sortedlist.map((course) => (
+        sortedlist && Array.isArray(sortedlist) && sortedlist.map((course) => (
           <Item key={course.seq ?? course.courseUserSeq}>
               {(course.courseThumbnail || course.thumbnailImage) && <Image src={course.courseThumbnail || course.thumbnailImage} width={280} height={180} alt="과정 썸네일" style={{borderRadius:'16px'}} />}
             <Title>{course.courseName ?? course.courseTitle}</Title>

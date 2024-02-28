@@ -173,7 +173,7 @@ export function CourseInfomationTraffic() {
         </Button>
         <Button
           variant={editTarget ? "contained" : "outlined"}
-          onClick={onClickDelete}
+          onClick={()=>onClickDelete}
           sx={{margin:'0 5px'}}>
           교육취소
         </Button>

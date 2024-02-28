@@ -13,7 +13,8 @@ import { ConvertEnum } from "@utils/convertEnumToHangle";
 import { Box, Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
-import { useDialog } from "@hooks/useDialog";
+import { cancelEnrollProvincial} from '@common/api/provincialEnroll';
+import { useSnackbar } from '@hooks/useSnackbar';
 
 
 export interface CourseAudientCount {
@@ -24,11 +25,11 @@ export function CourseInfomationTraffic() {
   
   const [editTarget, setEditTarget] = useState(false);
   const navigation = useRouter();
-  const { detailCourseInfo, updateAplicantCourseInfo, updateDeleteLesson } = useDominDetailCourse({courseUserSeq: navigation?.query?.enrollSeq as string});
+  const { detailCourseInfo, updateAplicantCourseInfo } = useDominDetailCourse({courseUserSeq: navigation?.query?.enrollSeq as string});
   const { value: courseSubType,setValue:setCourseSubType, onChange: onChangeCourseSubType } = useNewInput({initialValue: detailCourseInfo?.userProvincialCourseInfoDetailCourseInfoDto?.eduTargetSub,type:'string'});
   const [courseAudientCount, setCourseAudientCount] = useState<CourseAudientCount>({});
   const [enrollSeq, setEnrollSeq] = useState<string>('');
-  const dialog = useDialog()
+  const snackbar = useSnackbar();
 
 
   //수정
@@ -44,24 +45,25 @@ export function CourseInfomationTraffic() {
     }
   }
 
+  //교육 취소
 
-  //삭제
-  const onClickDelete = async() => {
+  const onClickDelete = async (enrollSeq:number) => {
     try {
-      if (window.confirm('정말 취소하시겠습니까?')) {
-        // 삭제에 필요한 API 요청 (예시로 DELETE 메서드 사용)
-        await updateDeleteLesson();
+      if(window.confirm('정말 취소하시겠습니까?')){
+        await cancelEnrollProvincial(enrollSeq);
+        snackbar({
+          message: '취소가 완료되었습니다.',
+          variant:'success'
+        })
+        navigation.push('/admin-center/course-traffic');
       }
-    }
-    catch (error) {
-      // 삭제 실패 시 에러 메시지를 Snackbar를 사용하여 표시
-      dialog({
-        title: '삭제 실패',
-        description: '수강 내역 삭제에 실패하였습니다.',
-      });
-    }
+    } catch (error) {
+      snackbar({
+        message: '취소에 실패했습니다.',
+        variant:'error'
+      })  
+    } 
   }
-
   
 
   const onChangeCourseAudientCount = (e: ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +73,7 @@ export function CourseInfomationTraffic() {
   
   
   useEffect(() => {
-   if(!detailCourseInfo) return;
+  if(!detailCourseInfo) return;
     
     const { userProvincialCourseInfoDetailCourseInfoDto } = detailCourseInfo;
     
@@ -169,7 +171,6 @@ export function CourseInfomationTraffic() {
           sx={{margin:'0 5px'}}>
           {editTarget ? '수정완료' : '수정하기'}
         </Button>
-
         <Button
           variant={editTarget ? "contained" : "outlined"}
           onClick={onClickDelete}

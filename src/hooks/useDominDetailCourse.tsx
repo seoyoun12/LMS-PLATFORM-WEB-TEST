@@ -112,27 +112,6 @@ export default function useDominDetailCourse({courseUserSeq}:Props) {
     }
   }
 
-  //해당 과정 교육 신청 취소
-  const updateDeleteLesson = async (data: Partial<UpdateCourseInfoRequest>) => {
-    try {
-      // 삭제에 필요한 API 요청 (예시로 DELETE 메서드 사용)
-      await DELETE(`/user/adm/course-info/detail/provincial/${courseUserSeq}`,data)
-      // 삭제가 성공하면 상세 과정 정보를 갱신
-      detailCourseInfoMutate();
-      // 삭제 성공 메시지를 Snackbar를 사용하여 표시
-      snackBar({
-        message: '수강 내역이 삭제되었습니다.',
-        variant: 'success'
-      });
-    } catch (error) {
-      // 삭제 실패 시 에러 메시지를 Snackbar를 사용하여 표시
-      snackBar({
-        message: '수강 내역 삭제에 실패하였습니다.',
-        variant: 'error'
-      });
-    }
-  };
-
 
 
   // 이수처리 취소
@@ -209,7 +188,6 @@ export default function useDominDetailCourse({courseUserSeq}:Props) {
       detailCourseInfo: data?.data,
       isDetailCourseInfoValidating,
       detailCourseInfoMutate,
-      updateDeleteLesson,
       updateAplicantCourseInfo,
       updateCompletedLessonToCancel,
       updateIncompletedLessonToComplete,

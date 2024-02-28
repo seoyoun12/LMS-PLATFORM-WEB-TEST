@@ -116,7 +116,7 @@ export default function useDominDetailCourse({courseUserSeq}:Props) {
   const updateDeleteLesson = async () => {
     try {
       // 삭제에 필요한 API 요청 (예시로 DELETE 메서드 사용)
-      await DELETE(`/user/adm/course-info/detail/provincial/${courseUserSeq}`);
+      await DELETE(`/user/adm/course-info/detail/provincial/${courseUserSeq}`,data)
       // 삭제가 성공하면 상세 과정 정보를 갱신
       detailCourseInfoMutate();
       // 삭제 성공 메시지를 Snackbar를 사용하여 표시

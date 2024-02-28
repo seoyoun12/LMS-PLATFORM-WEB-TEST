@@ -51,23 +51,13 @@ export function CourseInfomationTraffic() {
       if (window.confirm('정말 취소하시겠습니까?')) {
         // 삭제에 필요한 API 요청 (예시로 DELETE 메서드 사용)
         await updateDeleteLesson();
-        // 삭제 성공 메시지를 Snackbar를 사용하여 표시
-        const confirm = await dialog({
-          title: '파일 삭제하기',
-          description: '정말로 삭제하시겠습니까?',
-          confirmText: '삭제하기',
-          cancelText: '취소',
-        });
-        dialog({
-          title: '삭제 성공',
-          description: '수강 내역이 삭제되었습니다.'
-        });
       }
-    } catch (error) {
+    }
+    catch (error) {
       // 삭제 실패 시 에러 메시지를 Snackbar를 사용하여 표시
       dialog({
         title: '삭제 실패',
-        description: '수강 내역 삭제에 실패하였습니다.'
+        description: '수강 내역 삭제에 실패하였습니다.',
       });
     }
   }

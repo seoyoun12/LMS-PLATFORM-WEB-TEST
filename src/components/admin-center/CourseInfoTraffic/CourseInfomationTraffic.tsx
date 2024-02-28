@@ -13,6 +13,7 @@ import { ConvertEnum } from "@utils/convertEnumToHangle";
 import { Box, Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
+import { useDialog } from "@hooks/useDialog";
 
 
 export interface CourseAudientCount {
@@ -23,11 +24,14 @@ export function CourseInfomationTraffic() {
   
   const [editTarget, setEditTarget] = useState(false);
   const navigation = useRouter();
-  const { detailCourseInfo, updateAplicantCourseInfo } = useDominDetailCourse({courseUserSeq: navigation?.query?.enrollSeq as string})
+  const { detailCourseInfo, updateAplicantCourseInfo, updateDeleteLesson } = useDominDetailCourse({courseUserSeq: navigation?.query?.enrollSeq as string});
   const { value: courseSubType,setValue:setCourseSubType, onChange: onChangeCourseSubType } = useNewInput({initialValue: detailCourseInfo?.userProvincialCourseInfoDetailCourseInfoDto?.eduTargetSub,type:'string'});
   const [courseAudientCount, setCourseAudientCount] = useState<CourseAudientCount>({});
   const [enrollSeq, setEnrollSeq] = useState<string>('');
+  const dialog = useDialog()
 
+
+  //수정
   const onClickEdit = async() => {
     setEditTarget(prev => !prev);
     if(editTarget) {
@@ -39,6 +43,36 @@ export function CourseInfomationTraffic() {
       }
     }
   }
+
+
+  //삭제
+  const onClickDelete = async() => {
+    try {
+      if (window.confirm('정말 취소하시겠습니까?')) {
+        // 삭제에 필요한 API 요청 (예시로 DELETE 메서드 사용)
+        await updateDeleteLesson();
+        // 삭제 성공 메시지를 Snackbar를 사용하여 표시
+        const confirm = await dialog({
+          title: '파일 삭제하기',
+          description: '정말로 삭제하시겠습니까?',
+          confirmText: '삭제하기',
+          cancelText: '취소',
+        });
+        dialog({
+          title: '삭제 성공',
+          description: '수강 내역이 삭제되었습니다.'
+        });
+      }
+    } catch (error) {
+      // 삭제 실패 시 에러 메시지를 Snackbar를 사용하여 표시
+      dialog({
+        title: '삭제 실패',
+        description: '수강 내역 삭제에 실패하였습니다.'
+      });
+    }
+  }
+
+  
 
   const onChangeCourseAudientCount = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -136,12 +170,23 @@ export function CourseInfomationTraffic() {
           onChangeCourseAudientCount={onChangeCourseAudientCount}
           />
       </Table>
-      <Button
-        variant={editTarget ? "contained" : "outlined"}
-        onClick={onClickEdit}
-        sx={{margin:'0 auto'}}>
-        {editTarget ? '수정완료' : '수정하기'}
-      </Button>
+      <Box
+        sx={{margin:'0 auto'}}
+      >
+        <Button
+          variant={editTarget ? "contained" : "outlined"}
+          onClick={onClickEdit}
+          sx={{margin:'0 5px'}}>
+          {editTarget ? '수정완료' : '수정하기'}
+        </Button>
+
+        <Button
+          variant={editTarget ? "contained" : "outlined"}
+          onClick={onClickDelete}
+          sx={{margin:'0 5px'}}>
+          교육취소
+        </Button>
+      </Box>
 
       <Table>
         <TableTitle>학습현황</TableTitle>

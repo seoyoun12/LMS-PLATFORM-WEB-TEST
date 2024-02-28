@@ -113,7 +113,7 @@ export default function useDominDetailCourse({courseUserSeq}:Props) {
   }
 
   //해당 과정 교육 신청 취소
-  const updateDeleteLesson = async () => {
+  const updateDeleteLesson = async (data: Partial<UpdateCourseInfoRequest>) => {
     try {
       // 삭제에 필요한 API 요청 (예시로 DELETE 메서드 사용)
       await DELETE(`/user/adm/course-info/detail/provincial/${courseUserSeq}`,data)

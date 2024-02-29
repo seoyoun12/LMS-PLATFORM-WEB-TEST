@@ -1,4 +1,4 @@
-import { DELETE, GET, PUT } from '@common/httpClient';
+import { GET, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { PaginationResult } from 'types/fetch';
 import {

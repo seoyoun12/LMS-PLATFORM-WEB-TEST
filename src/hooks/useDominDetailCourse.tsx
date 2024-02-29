@@ -111,23 +111,25 @@ export default function useDominDetailCourse({courseUserSeq}:Props) {
       });
     }
   }
-/*
-  const updateCourseDelete= async (data: Partial<UpdateCourseInfoRequest>) => {
+
+  const DeleteAplicantCourseInfo = async (enrollSeq : number) => {
     try {
-      await DELETE(`/provincial/enroll/${enrollSeq}`);
+      await DELETE(`/provincial/enroll/adm/${enrollSeq}`)
       detailCourseInfoMutate();
       snackBar({
-        message: '정보가 수정되었습니다.',
+        message: '취소가 완료되었습니다.',
         variant: 'success'
       });
     } catch (error) {
       snackBar({
-        message: '정보 수정에 실패하였습니다.',
+        message: '취소에 실패하였습니다.',
         variant: 'error'
       });
     }
   }
-*/
+
+
+
 
   // 이수처리 취소
   const updateCompletedLessonToCancel = async (courseProgressSeq: number) => {
@@ -204,6 +206,7 @@ export default function useDominDetailCourse({courseUserSeq}:Props) {
       isDetailCourseInfoValidating,
       detailCourseInfoMutate,
       updateAplicantCourseInfo,
+      DeleteAplicantCourseInfo,
       updateCompletedLessonToCancel,
       updateIncompletedLessonToComplete,
       updateAllCompletedLessonToCancel,

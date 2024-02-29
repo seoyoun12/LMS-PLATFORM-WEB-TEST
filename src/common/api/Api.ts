@@ -818,6 +818,32 @@ export interface CourseDetailResponseDto {
   modifiedDtime?: string;
 
   /**
+   *  *     TYPE_CHILDREN: 어린이
+   *  *     TYPE_TEENAGER: 청소년
+   *  *     TYPE_ELDERLY: 노인
+   *  *     TYPE_SELF_DRIVING: 자가운전자
+   *
+   */
+  provincialEduTargetMain?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+
+  /**
+   *
+   *  * TYPE_KINDERGARTEN: 유치원
+   *  * TYPE_ELEMENTARY: 초등학교
+   *  * TYPE_MIDDLE: 중학교
+   *  * TYPE_HIGH: 고등학교
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  provincialEduTargetSub?:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
+
+  /**
    * 도민교통 메인 사용 여부 - 도민 과정 등록만 해당
    * @example N
    */
@@ -985,7 +1011,8 @@ export interface CourseLearningInfoResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /** 수료번호 */
   completeNo?: string;
@@ -1082,7 +1109,8 @@ export interface CourseLearningInfoResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 기수
@@ -1547,6 +1575,246 @@ export interface CourseProgressUpdateRequestDto {
   studyLastTime?: number;
 }
 
+export interface CourseProvincialLearningInfoResponseDto {
+  /** 수료번호 */
+  completeNo?: string;
+
+  /** 과정명 */
+  courseName?: string;
+
+  /**
+   * 과정 시퀀스
+   * @format int64
+   */
+  courseSeq?: number;
+
+  /**
+   * 과정 타입
+   *  * TYPE_TRANS_WORKER: 운수종사자
+   *  * TYPE_LOW_FLOOR_BUS: 저상버스
+   *  * TYPE_PROVINCIAL: 도민교통
+   */
+  courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
+
+  /**
+   * 과정 유저 시퀀스
+   * @format int64
+   */
+  courseUserSeq?: number;
+
+  /** 수료 여부 */
+  displayCompleteYn?: "수료" | "미수료";
+
+  /** 상태 */
+  displayLearningStatus?: "정상" | "퇴교";
+
+  /** 진도율 (%) */
+  displayTotalProgress?: string;
+
+  /**
+   * 실명
+   * @example 홍길동
+   */
+  name?: string;
+
+  /** 소속(학교, 기관, 단체) */
+  organization?: string;
+
+  /**
+   * 휴대폰번호
+   * @example 01066793306
+   */
+  phone?: string;
+
+  /**
+   *  *     TYPE_CHILDREN: 어린이
+   *  *     TYPE_TEENAGER: 청소년
+   *  *     TYPE_ELDERLY: 노인
+   *  *     TYPE_SELF_DRIVING: 자가운전자
+   *
+   */
+  provincialEduTargetMain?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+
+  /**
+   *
+   *  * TYPE_KINDERGARTEN: 유치원
+   *  * TYPE_ELEMENTARY: 초등학교
+   *  * TYPE_MIDDLE: 중학교
+   *  * TYPE_HIGH: 고등학교
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  provincialEduTargetSub?:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
+
+  /** 교육신청자정보 - 지역 */
+  residence?:
+    | "CHEONAN"
+    | "GONGJU"
+    | "BORYEONG"
+    | "ASAN"
+    | "SEOSAN"
+    | "NONSAN"
+    | "GYERYONG"
+    | "DANGJIN"
+    | "GEUMSAN"
+    | "BUYEO"
+    | "SEOCHEON"
+    | "CHEONGYANG"
+    | "HONGSEONG"
+    | "YESAN"
+    | "TAEAN"
+    | "CHUNGNAM"
+    | "SEJONG"
+    | "SEOUL"
+    | "BUSAN"
+    | "DAEGU"
+    | "INCHEON"
+    | "GWANGJU"
+    | "DAEJEON"
+    | "ULSAN"
+    | "GYEONGGI"
+    | "GANGWON"
+    | "CHUNGBUK"
+    | "JEONBUK"
+    | "JEONNAM"
+    | "GYEONGBUK"
+    | "GYEONGNAM"
+    | "JEJU"
+    | "EXCEPTSEJONG";
+
+  /**
+   * 학습기간 (yyyy.MM.dd ~ yyyy.MM.dd)
+   * @example 2022.08.23 ~ 2022.09.10
+   */
+  studyDate?: string;
+
+  /**
+   * 유저 시퀀스
+   * @format int64
+   */
+  userSeq?: number;
+
+  /**
+   * 회원아이디 - 도민만 해당, 운수/저상은 null
+   * @example example
+   */
+  username?: string;
+}
+
+export interface CourseProvincialSaveRequestDto {
+  /** 과정 이름 */
+  courseName?: string;
+
+  /**
+   * 과정분류 운수종사자 / 저상버스 * TYPE_TRANS_WOKER: 운수종사자
+   *  * TYPE_LOW_FLOOR_BUS: 저상버스
+   * TYPE_PROVINCIAL: 도민교통
+   */
+  courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
+
+  /** 노출여부 */
+  displayYn?: string;
+
+  /**
+   * 과정 수료 인정 시간
+   * @format int32
+   */
+  lessonTime?: number;
+
+  /**
+   *  *     TYPE_CHILDREN: 어린이
+   *  *     TYPE_TEENAGER: 청소년
+   *  *     TYPE_ELDERLY: 노인
+   *  *     TYPE_SELF_DRIVING: 자가운전자
+   *
+   */
+  provincialEduTargetMain?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+
+  /**
+   *
+   *  * TYPE_KINDERGARTEN: 유치원
+   *  * TYPE_ELEMENTARY: 초등학교
+   *  * TYPE_MIDDLE: 중학교
+   *  * TYPE_HIGH: 고등학교
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  provincialEduTargetSub?:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
+
+  /**
+   * 사용 여부
+   * @format int32
+   */
+  status?: 1 | -1;
+
+  /**
+   * 년도
+   * @format int32
+   */
+  year?: number;
+}
+
+export interface CourseProvincialUpdateRequestDto {
+  /** 과정 이름 */
+  courseName?: string;
+
+  /** 노출여부 */
+  displayYn?: string;
+
+  /**
+   * 과정 수료 인정 시간
+   * @format int32
+   */
+  lessonTime?: number;
+
+  /**
+   *  *     TYPE_CHILDREN: 어린이
+   *  *     TYPE_TEENAGER: 청소년
+   *  *     TYPE_ELDERLY: 노인
+   *  *     TYPE_SELF_DRIVING: 자가운전자
+   *
+   */
+  provincialEduTargetMain?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+
+  /**
+   *
+   *  * TYPE_KINDERGARTEN: 유치원
+   *  * TYPE_ELEMENTARY: 초등학교
+   *  * TYPE_MIDDLE: 중학교
+   *  * TYPE_HIGH: 고등학교
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  provincialEduTargetSub?:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
+
+  /** S3 파일 */
+  s3Files?: FileRequestDto[];
+
+  /**
+   * 사용 여부
+   * @format int32
+   */
+  status?: 1 | -1;
+}
+
 export interface CourseResponseDto {
   /** 연결된 콘텐츠 이름 */
   contentName?: string;
@@ -1651,6 +1919,32 @@ export interface CourseResponseDto {
    * @format date-time
    */
   modifiedDtime?: string;
+
+  /**
+   *  *     TYPE_CHILDREN: 어린이
+   *  *     TYPE_TEENAGER: 청소년
+   *  *     TYPE_ELDERLY: 노인
+   *  *     TYPE_SELF_DRIVING: 자가운전자
+   *
+   */
+  provincialEduTargetMain?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+
+  /**
+   *
+   *  * TYPE_KINDERGARTEN: 유치원
+   *  * TYPE_ELEMENTARY: 초등학교
+   *  * TYPE_MIDDLE: 중학교
+   *  * TYPE_HIGH: 고등학교
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  provincialEduTargetSub?:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
 
   /**
    * 도민교통 메인 사용 여부 - 도민 과정 등록만 해당
@@ -1857,7 +2151,41 @@ export interface CourseUserCommonDetailsResponseDto {
   /** 교육신청자 정보 - 차량번호 */
   carNumber?: string;
 
-  
+  /**
+   * 교육신청자 정보 - 차량 등록지
+   * 천안 - CHEONAN
+   * 공주 - PRINCESS
+   * 보령 - BORYEONG
+   * 아산 - ASAN
+   * 서산 - SEOSAN
+   * 논산 - NONSAN
+   * 계룡 - GYERYONG
+   * 당진 - DANGJIN
+   * 금산 - GEUMSAN
+   * 부여 - GRANT
+   * 서천 - SEOCHEON
+   * 청양 - CHEONGYANG
+   * 홍성 - HONGSEONG
+   * 예산 - BUDGET
+   * 태안 - TAEAN
+   * 충남 - CHUNGNAM
+   * 세종 - SEJONG
+   * 서울 - SEOUL
+   * 부산 - BUSAN
+   * 대구 - DAEGU
+   * 인천 - INCHEON
+   * 광주 - GWANGJU
+   * 대전 - DAEJEON
+   * 울산 - ULSAN
+   * 경기 - GAME
+   * 강원 - GANGWON
+   * 충북 - CHUNGBUK
+   * 전북 - JEONBUK
+   * 전남 - JEONNAM
+   * 경북 - GYEONGBUK
+   * 경남 - GYEONGNAM
+   * 제주 - JEJU
+   */
   carRegisteredRegion?:
     | "CHEONAN"
     | "GONGJU"
@@ -1890,7 +2218,8 @@ export interface CourseUserCommonDetailsResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 교육정보 - 교육과정
@@ -1972,6 +2301,41 @@ export interface CourseUserCommonDetailsResponseDto {
    */
   regType?: "TYPE_INDIVIDUAL" | "TYPE_ORGANIZATION";
 
+  /**
+   * 교육신청자 정보 - 거주지
+   * 천안 - CHEONAN
+   * 공주 - PRINCESS
+   * 보령 - BORYEONG
+   * 아산 - ASAN
+   * 서산 - SEOSAN
+   * 논산 - NONSAN
+   * 계룡 - GYERYONG
+   * 당진 - DANGJIN
+   * 금산 - GEUMSAN
+   * 부여 - GRANT
+   * 서천 - SEOCHEON
+   * 청양 - CHEONGYANG
+   * 홍성 - HONGSEONG
+   * 예산 - BUDGET
+   * 태안 - TAEAN
+   * 충남 - CHUNGNAM
+   * 세종 - SEJONG
+   * 서울 - SEOUL
+   * 부산 - BUSAN
+   * 대구 - DAEGU
+   * 인천 - INCHEON
+   * 광주 - GWANGJU
+   * 대전 - DAEJEON
+   * 울산 - ULSAN
+   * 경기 - GAME
+   * 강원 - GANGWON
+   * 충북 - CHUNGBUK
+   * 전북 - JEONBUK
+   * 전남 - JEONNAM
+   * 경북 - GYEONGBUK
+   * 경남 - GYEONGNAM
+   * 제주 - JEJU
+   */
   residence?:
     | "CHEONAN"
     | "GONGJU"
@@ -2004,7 +2368,8 @@ export interface CourseUserCommonDetailsResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 과정 신청 시퀀스
@@ -2149,7 +2514,8 @@ export interface CourseUserCommonResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /** 신청 과정명 */
   courseTitle?: string;
@@ -2211,7 +2577,8 @@ export interface CourseUserCommonResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 과정 유저 시퀀스
@@ -2390,6 +2757,173 @@ export interface CourseUserMyInfoResponseDto {
   thumbnailImage?: string;
 }
 
+export interface CourseUserProvincialResponse {
+  /**
+   * 시퀀스
+   * @format int64
+   */
+  courseUserSeq?: number;
+
+  /** 도민 엔티티 */
+  provincialResponseDto?: ProvincialResponseDto;
+
+  /** 유저 엔티티 */
+  user?: UserResponseDto;
+}
+
+export interface CourseUserProvincialSaveRequestDto {
+  /**
+   * 만 3세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age3?: number;
+
+  /**
+   * 만 4세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age4?: number;
+
+  /**
+   * 만 5세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age5?: number;
+
+  /**
+   * 도민 과정 시퀀스
+   * @format int64
+   */
+  courseSeq?: number;
+
+  /**
+   * 교육대상자
+   *  * TYPE_CHILDREN: 어린이
+   *  * TYPE_TEENAGER: 청소년
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  eduTargetMain?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+
+  /**
+   * 교육대상자 세부 타입
+   *  * TYPE_KINDERGARTEN: 유치원
+   *  * TYPE_ELEMENTARY: 초등학교
+   *  * TYPE_MIDDLE: 중학교
+   *  * TYPE_HIGH: 고등학교
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  eduTargetSub?:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
+
+  /**
+   * 노인 인원 수 - 세부타입: 노인
+   * @format int32
+   */
+  elderly?: number;
+
+  /**
+   * 교육 종료 희망 일자
+   * @format date
+   * @example yyyy-MM-dd
+   */
+  expectedToEndDtime?: string;
+
+  /**
+   * 교육 시작 희망 일자
+   * @format date
+   * @example yyyy-MM-dd
+   */
+  expectedToStartDtime?: string;
+
+  /**
+   * 1학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade1?: number;
+
+  /**
+   * 2학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade2?: number;
+
+  /**
+   * 3학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade3?: number;
+
+  /**
+   * 4학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade4?: number;
+
+  /**
+   * 5학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade5?: number;
+
+  /**
+   * 6학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade6?: number;
+
+  /** 소속 */
+  organization?: string;
+
+  /** 지역 */
+  region?:
+    | "CHEONAN"
+    | "GONGJU"
+    | "BORYEONG"
+    | "ASAN"
+    | "SEOSAN"
+    | "NONSAN"
+    | "GYERYONG"
+    | "DANGJIN"
+    | "GEUMSAN"
+    | "BUYEO"
+    | "SEOCHEON"
+    | "CHEONGYANG"
+    | "HONGSEONG"
+    | "YESAN"
+    | "TAEAN"
+    | "CHUNGNAM"
+    | "SEJONG"
+    | "SEOUL"
+    | "BUSAN"
+    | "DAEGU"
+    | "INCHEON"
+    | "GWANGJU"
+    | "DAEJEON"
+    | "ULSAN"
+    | "GYEONGGI"
+    | "GANGWON"
+    | "CHUNGBUK"
+    | "JEONBUK"
+    | "JEONNAM"
+    | "GYEONGBUK"
+    | "GYEONGNAM"
+    | "JEJU"
+    | "EXCEPTSEJONG";
+
+  /**
+   * 자가 운전자 인원 수 - 세부타입: 자가운전자
+   * @format int32
+   */
+  selfDriver?: number;
+}
+
 export interface CourseUserResponseDto {
   /** 업체정보 - 회사명 */
   businessName?: string;
@@ -2451,7 +2985,8 @@ export interface CourseUserResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 수료일
@@ -2540,7 +3075,8 @@ export interface CourseUserResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 시퀀스
@@ -2659,7 +3195,8 @@ export interface CourseUserTransSaveRequestDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 과정 클래스 시퀀스
@@ -2750,7 +3287,8 @@ export interface CourseUserTransSaveRequestDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /** sms 수신 동의 여부 */
   smsYn?: "Y" | "N";
@@ -2817,7 +3355,8 @@ export interface CourseUserTransUpdateRequestDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 변경할 기수에 대한 과정 클래스 시퀀스
@@ -2862,7 +3401,8 @@ export interface CourseUserTransUpdateRequestDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /** SMS 수신 동의 여부 */
   smsYn?: string;
@@ -4626,7 +5166,7 @@ export interface LearningMaterialResponseDto {
 
   /** S3 파일 정보 */
   s3Files?: FileResponseDto[];
-  
+
   /**
    * 시퀀스
    * @format int64
@@ -5489,47 +6029,18 @@ export interface MainDisplayUpdateResponseDto {
   status?: 1 | -1;
 }
 
-export interface MessageAdmSendRequestDto {
-  /** 메세지 내용 */
+export interface MessageUpdateRequestDto {
   content?: string;
-
-  /**
-   * 메세지 구분 타입
-   *  * TYPE_COMM: 일반 메세지
-   *  * TYPE_AD: 광고 메세지
-   */
-  contentType?: "TYPE_COMM" | "TYPE_AD";
-
-  /**
-   * 예약일시(yyyy-MM-dd HH:mm)
-   * @example 2022-08-23 14:32
-   */
-  reserveTime?: string;
-
-  /** 메세지 제목 - LMS 일때만 해당 */
-  subject?: string;
-
-  /**
-   * 메세지 발송 타입
-   *  * TYPE_SMS: SMS
-   *  * TYPE_LMS: LMS
-   *  * TYPE_MMS: MMS -> 서버 내에서 지원하지 않음. 사용 X
-   */
-  type?: "TYPE_SMS" | "TYPE_LMS" | "TYPE_MMS";
-}
-
-export interface MessageAdmSendResponseDto {
-  /**
-   * 실패 건수
-   * @format int32
-   */
-  failCnt?: number;
-
-  /**
-   * 성공 건수
-   * @format int32
-   */
-  successCnt?: number;
+  messageEnums?:
+    | "DAILY_START_NOTIFICATION"
+    | "DAILY_COURSE_END_NOTIFICATION"
+    | "DAILY_INCOMPLETE_COURSE_NOTIFICATION"
+    | "ENROLLMENT_CONFIRMATION"
+    | "ADDITIONAL_ENROLLMENT_NOTIFICATION"
+    | "COURSE_COMPLETION_NOTIFICATION"
+    | "COURSE_MODIFICATION_NOTIFICATION"
+    | "COURSE_CANCELLATION_NOTIFICATION"
+    | "QNA_ANSWER_NOTIFICATION";
 }
 
 export interface MobileCourseClassResponseDto {
@@ -6114,6 +6625,304 @@ export interface ProvincialBoardUpdateRequestDto {
   youtubeLink?: string;
 }
 
+export interface ProvincialCourseResponseDto {
+  /** 연결된 콘텐츠 이름 */
+  contentName?: string;
+
+  /**
+   * 연결된 콘텐츠 시퀀스
+   * @format int64
+   */
+  contentSeq?: number;
+
+  /** 과정 이름 */
+  courseName?: string;
+
+  /**
+   * 과정분류 운수종사자 / 저상버스
+   *  * TYPE_TRANS_WOKER: 운수종사자
+   *  * TYPE_LOW_FLOOR_BUS: 저상버스
+   */
+  courseType?: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
+
+  /**
+   * 생성일
+   * @format date-time
+   */
+  createdDtime?: string;
+
+  /** 노출여부 */
+  displayYn?: string;
+
+  /**
+   * 수정일
+   * @format date-time
+   */
+  modifiedDtime?: string;
+
+  /**
+   *  *     TYPE_CHILDREN: 어린이
+   *  *     TYPE_TEENAGER: 청소년
+   *  *     TYPE_ELDERLY: 노인
+   *  *     TYPE_SELF_DRIVING: 자가운전자
+   *
+   */
+  provincialEduTargetMain?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+
+  /**
+   *
+   *  * TYPE_KINDERGARTEN: 유치원
+   *  * TYPE_ELEMENTARY: 초등학교
+   *  * TYPE_MIDDLE: 중학교
+   *  * TYPE_HIGH: 고등학교
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  provincialEduTargetSub?:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
+
+  /**
+   * 도민교통 메인 사용 여부 - 도민 과정 등록만 해당
+   * @example N
+   */
+  provincialUseYn?: "Y" | "N";
+
+  /** s3 파일 */
+  s3Files?: FileResponseDto[];
+
+  /**
+   * 과정 시퀀스
+   * @format int64
+   */
+  seq?: number;
+
+  /**
+   * 사용 상태
+   * @format int32
+   */
+  status?: number;
+}
+
+export interface ProvincialCourseUserResponseDto {
+  /**
+   * 시퀀스
+   * @format int64
+   */
+  courseUserSeq?: number;
+
+  /**
+   * 첫 번째 차시 시퀀스
+   * @format int64
+   */
+  firstChapterSeq?: number;
+
+  /** 퇴교 여부 */
+  outYn?: string;
+
+  /** 도민 엔티티 */
+  provincialResponseDto?: ProvincialResponseDto;
+
+  /**
+   * 상태
+   * @format int32
+   */
+  status?: number;
+
+  /** 유저 엔티티 */
+  user?: UserResponseDto;
+}
+
+export interface ProvincialEnrollListResponseDto {
+  /**
+   * 만 3세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age3?: number;
+
+  /**
+   * 만 4세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age4?: number;
+
+  /**
+   * 만 5세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age5?: number;
+
+  /** 코스 이름 */
+  courseName?: string;
+
+  /** 코스 썸네일 */
+  courseThumbnail?: string;
+
+  /**
+   * 생성일
+   * @format date-time
+   */
+  createdDtime?: string;
+
+  /**
+   * 교육대상자
+   *  * TYPE_CHILDREN: 어린이
+   *  * TYPE_TEENAGER: 청소년
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  eduTargetMain?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+
+  /**
+   * 교육대상자 세부 타입
+   *  * TYPE_KINDERGARTEN: 유치원
+   *  * TYPE_ELEMENTARY: 초등학교
+   *  * TYPE_MIDDLE: 중학교
+   *  * TYPE_HIGH: 고등학교
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  eduTargetSub?:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
+
+  /**
+   * 노인 인원 수 - 세부타입: 노인
+   * @format int32
+   */
+  elderly?: number;
+
+  /**
+   * 교육 시작 희망 일자
+   * @format date-time
+   * @example yyyy-MM-dd
+   */
+  expectedToStartDtime?: string;
+
+  /**
+   * 만료 기한
+   * @format date-time
+   * @example yyyy-MM-dd HH:mm:ss
+   */
+  expiredDtime?: string;
+
+  /**
+   * 1학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade1?: number;
+
+  /**
+   * 2학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade2?: number;
+
+  /**
+   * 3학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade3?: number;
+
+  /**
+   * 4학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade4?: number;
+
+  /**
+   * 5학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade5?: number;
+
+  /**
+   * 6학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade6?: number;
+
+  /**
+   * 수정일
+   * @format date-time
+   */
+  modifiedDtime?: string;
+
+  /** 소속 */
+  organization?: string;
+
+  /** 지역 */
+  region?:
+    | "CHEONAN"
+    | "GONGJU"
+    | "BORYEONG"
+    | "ASAN"
+    | "SEOSAN"
+    | "NONSAN"
+    | "GYERYONG"
+    | "DANGJIN"
+    | "GEUMSAN"
+    | "BUYEO"
+    | "SEOCHEON"
+    | "CHEONGYANG"
+    | "HONGSEONG"
+    | "YESAN"
+    | "TAEAN"
+    | "CHUNGNAM"
+    | "SEJONG"
+    | "SEOUL"
+    | "BUSAN"
+    | "DAEGU"
+    | "INCHEON"
+    | "GWANGJU"
+    | "DAEJEON"
+    | "ULSAN"
+    | "GYEONGGI"
+    | "GANGWON"
+    | "CHUNGBUK"
+    | "JEONBUK"
+    | "JEONNAM"
+    | "GYEONGBUK"
+    | "GYEONGNAM"
+    | "JEJU"
+    | "EXCEPTSEJONG";
+
+  /**
+   * 자가 운전자 인원 수 - 세부타입: 자가운전자
+   * @format int32
+   */
+  selfDriver?: number;
+
+  /**
+   * 도민 신청 시퀀스
+   * @format int64
+   */
+  seq?: number;
+
+  /**
+   * 상태
+   * @format int32
+   */
+  status?: number;
+
+  /** 등록 유저 정보 */
+  userInfo?: UserResponseDto;
+
+  /**
+   * 신청 유저 시퀀스
+   * @format int64
+   */
+  userSeq?: number;
+}
+
 export interface ProvincialEnrollResponseDto {
   /**
    * 만 3세 인원 수 - 세부타입: 유치원
@@ -6263,7 +7072,8 @@ export interface ProvincialEnrollResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 자가 운전자 인원 수 - 세부타입: 자가운전자
@@ -6350,8 +7160,7 @@ export interface ProvincialEnrollSaveRequestDto {
    * @example yyyy-MM-dd
    */
   expectedToStartDtime?: string;
-  expectedToEndDtime?: string;
-  
+
   /**
    * 1학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
    * @format int32
@@ -6424,7 +7233,8 @@ export interface ProvincialEnrollSaveRequestDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 자가 운전자 인원 수 - 세부타입: 자가운전자
@@ -6492,6 +7302,13 @@ export interface ProvincialEnrollUpdateRequestDto {
   expectedToStartDtime?: string;
 
   /**
+   * 교육 만료 기한
+   * @format date
+   * @example yyyy-MM-dd
+   */
+  expiredDtime?: string;
+
+  /**
    * 1학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
    * @format int32
    */
@@ -6563,7 +7380,8 @@ export interface ProvincialEnrollUpdateRequestDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 자가 운전자 인원 수 - 세부타입: 자가운전자
@@ -6572,18 +7390,42 @@ export interface ProvincialEnrollUpdateRequestDto {
   selfDriver?: number;
 }
 
-export interface ProvincialRoleResponseDto {
+export interface ProvincialResponseDto {
   /**
-   * 메인 권한
-   *  *     TYPE_CHILDREN: 어린이
-   *  *     TYPE_TEENAGER: 청소년
-   *  *     TYPE_ELDERLY: 노인
-   *  *     TYPE_SELF_DRIVING: 자가운전자
+   * 만 3세 인원 수 - 세부타입: 유치원
+   * @format int32
    */
-  mainRoles?: string[];
+  age3?: number;
 
   /**
-   * 서브 권한
+   * 만 4세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age4?: number;
+
+  /**
+   * 만 5세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age5?: number;
+
+  /**
+   * 생성일
+   * @format date-time
+   */
+  createdDtime?: string;
+
+  /**
+   * 교육대상자
+   *  * TYPE_CHILDREN: 어린이
+   *  * TYPE_TEENAGER: 청소년
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  eduTargetMain?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+
+  /**
+   * 교육대상자 세부 타입
    *  * TYPE_KINDERGARTEN: 유치원
    *  * TYPE_ELEMENTARY: 초등학교
    *  * TYPE_MIDDLE: 중학교
@@ -6591,13 +7433,126 @@ export interface ProvincialRoleResponseDto {
    *  * TYPE_SELF_DRIVER: 자가운전자
    *  * TYPE_ELDERLY: 노인
    */
-  subRoles?: string[];
+  eduTargetSub?:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
 
   /**
-   * 유저 시퀀스
-   * @format int64
+   * 노인 인원 수 - 세부타입: 노인
+   * @format int32
    */
-  userSeq?: number;
+  elderly?: number;
+
+  /**
+   * 희망 교육 시작일
+   * @format date-time
+   * @example yyyy-MM-dd
+   */
+  expectedToStartDtime?: string;
+
+  /**
+   * 희망 교육 시작일
+   * @format date-time
+   * @example yyyy-MM-dd
+   */
+  expiredDtime?: string;
+
+  /**
+   * 1학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade1?: number;
+
+  /**
+   * 2학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade2?: number;
+
+  /**
+   * 3학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade3?: number;
+
+  /**
+   * 4학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade4?: number;
+
+  /**
+   * 5학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade5?: number;
+
+  /**
+   * 6학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade6?: number;
+
+  /**
+   * 수정일
+   * @format date-time
+   */
+  modifiedDtime?: string;
+
+  /** 소속(학교, 기관, 단체 */
+  organization?: string;
+
+  /** 지역 */
+  region?:
+    | "CHEONAN"
+    | "GONGJU"
+    | "BORYEONG"
+    | "ASAN"
+    | "SEOSAN"
+    | "NONSAN"
+    | "GYERYONG"
+    | "DANGJIN"
+    | "GEUMSAN"
+    | "BUYEO"
+    | "SEOCHEON"
+    | "CHEONGYANG"
+    | "HONGSEONG"
+    | "YESAN"
+    | "TAEAN"
+    | "CHUNGNAM"
+    | "SEJONG"
+    | "SEOUL"
+    | "BUSAN"
+    | "DAEGU"
+    | "INCHEON"
+    | "GWANGJU"
+    | "DAEJEON"
+    | "ULSAN"
+    | "GYEONGGI"
+    | "GANGWON"
+    | "CHUNGBUK"
+    | "JEONBUK"
+    | "JEONNAM"
+    | "GYEONGBUK"
+    | "GYEONGNAM"
+    | "JEJU"
+    | "EXCEPTSEJONG";
+
+  /**
+   * 자가 운전자 인원 수 - 세부타입: 자가운전자
+   * @format int32
+   */
+  selfDriver?: number;
+
+  /**
+   * 상태
+   * @format int32
+   */
+  status?: number;
 }
 
 export interface QnaAnswerResponseDto {
@@ -7182,6 +8137,383 @@ export interface StatisticsSurveySubjDto {
   surveyQuestionSeq?: number;
 }
 
+export interface StatisticsTransEduCarRegisteredRegionResponseDto {
+  /**
+   * 이수자
+   * @format int32
+   */
+  completedCnt?: number;
+
+  /**
+   * 미이수자
+   * @format int32
+   */
+  inCompletedCnt?: number;
+
+  /**
+   * 전체
+   * @format int64
+   */
+  totalCnt?: number;
+
+  /** 지역 */
+  userRegistrationTypeEnum?:
+    | "CHEONAN"
+    | "GONGJU"
+    | "BORYEONG"
+    | "ASAN"
+    | "SEOSAN"
+    | "NONSAN"
+    | "GYERYONG"
+    | "DANGJIN"
+    | "GEUMSAN"
+    | "BUYEO"
+    | "SEOCHEON"
+    | "CHEONGYANG"
+    | "HONGSEONG"
+    | "YESAN"
+    | "TAEAN"
+    | "CHUNGNAM"
+    | "SEJONG"
+    | "SEOUL"
+    | "BUSAN"
+    | "DAEGU"
+    | "INCHEON"
+    | "GWANGJU"
+    | "DAEJEON"
+    | "ULSAN"
+    | "GYEONGGI"
+    | "GANGWON"
+    | "CHUNGBUK"
+    | "JEONBUK"
+    | "JEONNAM"
+    | "GYEONGBUK"
+    | "GYEONGNAM"
+    | "JEJU"
+    | "EXCEPTSEJONG";
+}
+
+export interface StatisticsTransEduCarRegisteredRegionResultResponseDto {
+  /**
+   * 차량등록지 전체 합산 세종제외 이수자 수
+   * @format int32
+   */
+  exceptSejongCompletedCntSum?: number;
+
+  /**
+   * 차량등록지 전체 합산 세종제외 미이수자 수
+   * @format int32
+   */
+  exceptSejongInCompletedCntSum?: number;
+
+  /**
+   * 차량등록지 전체 합산 세종제외 전체 수
+   * @format int64
+   */
+  exceptSejongTotalCntSum?: number;
+
+  /** 차량등록지 전체 (이수자 수 / 이수율) */
+  statisticsTransEduCarRegisteredRegionResponseDtoList?: StatisticsTransEduCarRegisteredRegionResponseDto[];
+
+  /**
+   * 차량등록지 전체 합산 이수자 수
+   * @format int32
+   */
+  sumCompletedCntSum?: number;
+
+  /**
+   * 차량등록지 전체 합산 미이수자 수
+   * @format int32
+   */
+  sumInCompletedCnt?: number;
+
+  /**
+   * 차량등록지 전체 합산 전체 수
+   * @format int64
+   */
+  sumTotalCntSum?: number;
+}
+
+export interface StatisticsTransEduCategoryAgeResponseDto {
+  /**
+   * 20대
+   * @format int32
+   */
+  age20s?: number;
+
+  /**
+   * 30대
+   * @format int32
+   */
+  age30s?: number;
+
+  /**
+   * 40대
+   * @format int32
+   */
+  age40s?: number;
+
+  /**
+   * 50대
+   * @format int32
+   */
+  age50s?: number;
+
+  /**
+   * 60대
+   * @format int32
+   */
+  age60s?: number;
+
+  /**
+   * 70대
+   * @format int32
+   */
+  age70s?: number;
+
+  /**
+   * 80대
+   * @format int32
+   */
+  age80s?: number;
+
+  /**
+   * 90대
+   * @format int32
+   */
+  age90s?: number;
+
+  /** 업종 */
+  userBusinessSubType?:
+    | "BUS"
+    | "CHARTER_BUS"
+    | "SPECIAL_PASSENGER"
+    | "CORPORATE_TAXI"
+    | "GENERAL_CARGO"
+    | "PRIVATE_TAXI"
+    | "INDIVIDUAL_CARGO"
+    | "CONSIGNMENT"
+    | "SPECIAL_TRANSPORTATION"
+    | "KNEELING_BUS"
+    | "DANGEROUS_GOODS"
+    | "DESIGNATED_WASTE"
+    | "HAZARDOUS_CHEMICALS"
+    | "HIGH_PRESSURE_GAS_FLAMMABLE"
+    | "HIGH_PRESSURE_GAS_TOXIC";
+}
+
+export interface StatisticsTransEduCategoryIncreaseResponseDto {
+  /**
+   * 과정 시퀀스
+   * @format int64
+   */
+  courseSeq?: number;
+
+  /**
+   * 기수
+   * @format int32
+   */
+  step?: number;
+
+  /**
+   * 수강자
+   * @format int64
+   */
+  studentCnt?: number;
+
+  /** 업종 */
+  userBusinessSubType?:
+    | "BUS"
+    | "CHARTER_BUS"
+    | "SPECIAL_PASSENGER"
+    | "CORPORATE_TAXI"
+    | "GENERAL_CARGO"
+    | "PRIVATE_TAXI"
+    | "INDIVIDUAL_CARGO"
+    | "CONSIGNMENT"
+    | "SPECIAL_TRANSPORTATION"
+    | "KNEELING_BUS"
+    | "DANGEROUS_GOODS"
+    | "DESIGNATED_WASTE"
+    | "HAZARDOUS_CHEMICALS"
+    | "HIGH_PRESSURE_GAS_FLAMMABLE"
+    | "HIGH_PRESSURE_GAS_TOXIC";
+}
+
+export interface StatisticsTransEduCategoryResponseDto {
+  /**
+   * 이수자
+   * @format int32
+   */
+  completedCnt?: number;
+
+  /**
+   * 미이수자
+   * @format int32
+   */
+  inCompletedCnt?: number;
+
+  /**
+   * 전체
+   * @format int64
+   */
+  totalCnt?: number;
+
+  /** 업종 */
+  userBusinessSubType?:
+    | "BUS"
+    | "CHARTER_BUS"
+    | "SPECIAL_PASSENGER"
+    | "CORPORATE_TAXI"
+    | "GENERAL_CARGO"
+    | "PRIVATE_TAXI"
+    | "INDIVIDUAL_CARGO"
+    | "CONSIGNMENT"
+    | "SPECIAL_TRANSPORTATION"
+    | "KNEELING_BUS"
+    | "DANGEROUS_GOODS"
+    | "DESIGNATED_WASTE"
+    | "HAZARDOUS_CHEMICALS"
+    | "HIGH_PRESSURE_GAS_FLAMMABLE"
+    | "HIGH_PRESSURE_GAS_TOXIC";
+}
+
+export interface StatisticsTransEduCategoryResultResponseDto {
+  /** 업종 (이수자 수 / 이수율) */
+  statisticsTransEduCategoryResponseDtoList?: StatisticsTransEduCategoryResponseDto[];
+
+  /**
+   * 업종 전체 합산 이수자 수
+   * @format int32
+   */
+  sumCompletedCntSum?: number;
+
+  /**
+   * 업종 전체 합산 미이수자 수
+   * @format int32
+   */
+  sumInCompletedCnt?: number;
+
+  /**
+   * 업종 전체 합산 전체 수
+   * @format int64
+   */
+  sumTotalCntSum?: number;
+}
+
+export interface StatisticsTransEduIntegratedResponseDto {
+  /**
+   * 수료자 수
+   * @format int32
+   */
+  completedCourseUserCnt?: number;
+
+  /**
+   * 미수료자 수
+   * @format int32
+   */
+  inCompletedCourseUserCnt?: number;
+
+  /**
+   * 전체 수강자 수
+   * @format int64
+   */
+  totalCourseUserCnt?: number;
+}
+
+export interface StatisticsTransEduResponseDto {
+  /** 차량등록지 전체 (이수자 수 / 이수율) */
+  statisticsTransEduCarRegisteredRegionResultResponseDto?: StatisticsTransEduCarRegisteredRegionResultResponseDto;
+
+  /** 년간 업종별 연령대 통계 */
+  statisticsTransEduCategoryAgeResponseDto?: StatisticsTransEduCategoryAgeResponseDto[];
+
+  /** 업종별 증감 */
+  statisticsTransEduCategoryIncreaseResponseDto?: StatisticsTransEduCategoryIncreaseResponseDto[];
+
+  /** 업종별 (이수자 수 / 이수율) */
+  statisticsTransEduCategoryResponseDto?: StatisticsTransEduCategoryResultResponseDto;
+
+  /** 통합 (이수자 수 / 이수율) */
+  statisticsTransEduIntegratedResponseDto?: StatisticsTransEduIntegratedResponseDto;
+
+  /** 기수별 증감 */
+  statisticsTransEduStepResponseDto?: StatisticsTransEduStepResponseDto[];
+
+  /** 년도별 연령비교 */
+  statisticsTransEduYearAgeResponseDto?: StatisticsTransEduYearAgeResponseDto[];
+}
+
+export interface StatisticsTransEduStepResponseDto {
+  /**
+   * 기수
+   * @format int32
+   */
+  step?: number;
+
+  /**
+   * 수강자
+   * @format int64
+   */
+  studentCnt?: number;
+}
+
+export interface StatisticsTransEduYearAgeResponseDto {
+  /**
+   * 20대
+   * @format int32
+   */
+  age20s?: number;
+
+  /**
+   * 30대
+   * @format int32
+   */
+  age30s?: number;
+
+  /**
+   * 40대
+   * @format int32
+   */
+  age40s?: number;
+
+  /**
+   * 50대
+   * @format int32
+   */
+  age50s?: number;
+
+  /**
+   * 60대
+   * @format int32
+   */
+  age60s?: number;
+
+  /**
+   * 70대
+   * @format int32
+   */
+  age70s?: number;
+
+  /**
+   * 80대
+   * @format int32
+   */
+  age80s?: number;
+
+  /**
+   * 90대
+   * @format int32
+   */
+  age90s?: number;
+
+  /**
+   * 년도
+   * @format int32
+   */
+  year?: number;
+}
+
 export interface StepsBySurveyForExcel {
   /**
    * 과정 클래스 시퀀스
@@ -7664,7 +8996,8 @@ export interface UserCourseInfoDetailCourseInfoDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /** 상태 */
   classLearningStatus?: "정상" | "퇴교";
@@ -7723,7 +9056,8 @@ export interface UserCourseInfoDetailCourseInfoDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 학습기간 (yyyy.MM.dd ~ yyyy.MM.dd)
@@ -7958,7 +9292,8 @@ export interface UserCourseInfoUpdateRequestDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /** 휴대전화 */
   phone?: string;
@@ -7996,7 +9331,8 @@ export interface UserCourseInfoUpdateRequestDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 }
 
 export interface UserCourseInfoUpdateResponseDto {
@@ -8057,7 +9393,8 @@ export interface UserCourseInfoUpdateResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /** 상태 */
   classLearningStatus?: "정상" | "퇴교";
@@ -8116,7 +9453,8 @@ export interface UserCourseInfoUpdateResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 학습기간 (yyyy.MM.dd ~ yyyy.MM.dd)
@@ -8528,6 +9866,500 @@ export interface UserPasswordModifyRequestDto {
   modifiedPw?: string;
 }
 
+export interface UserProvincialCourseInfoDetailCourseInfoDto {
+  /**
+   * 만 3세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age3?: number;
+
+  /**
+   * 만 4세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age4?: number;
+
+  /**
+   * 만 5세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age5?: number;
+
+  /** 수료 여부 */
+  completeYn?: "Y" | "N";
+
+  /** 과정명 */
+  courseName?: string;
+
+  /**
+   * 교육대상자
+   *  * TYPE_CHILDREN: 어린이
+   *  * TYPE_TEENAGER: 청소년
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  eduTargetMain?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+
+  /**
+   * 교육대상자 세부 타입
+   *  * TYPE_KINDERGARTEN: 유치원
+   *  * TYPE_ELEMENTARY: 초등학교
+   *  * TYPE_MIDDLE: 중학교
+   *  * TYPE_HIGH: 고등학교
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  eduTargetSub?:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
+
+  /**
+   * 노인 인원 수 - 세부타입: 노인
+   * @format int32
+   */
+  elderly?: number;
+
+  /**
+   * 1학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade1?: number;
+
+  /**
+   * 2학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade2?: number;
+
+  /**
+   * 3학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade3?: number;
+
+  /**
+   * 4학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade4?: number;
+
+  /**
+   * 5학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade5?: number;
+
+  /**
+   * 6학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade6?: number;
+
+  /** 상태 */
+  learningStatus?: "정상" | "퇴교";
+
+  /**
+   * 실명
+   * @example 홍길동
+   */
+  name?: string;
+
+  /** 소속(학교, 기관, 단체 */
+  organization?: string;
+
+  /** 휴대전화 */
+  phone?: string;
+
+  /**
+   * 신청일 (yyyy.MM.dd)
+   * @example 2022.08.20
+   */
+  regDate?: string;
+
+  /** 지역 */
+  region?:
+    | "CHEONAN"
+    | "GONGJU"
+    | "BORYEONG"
+    | "ASAN"
+    | "SEOSAN"
+    | "NONSAN"
+    | "GYERYONG"
+    | "DANGJIN"
+    | "GEUMSAN"
+    | "BUYEO"
+    | "SEOCHEON"
+    | "CHEONGYANG"
+    | "HONGSEONG"
+    | "YESAN"
+    | "TAEAN"
+    | "CHUNGNAM"
+    | "SEJONG"
+    | "SEOUL"
+    | "BUSAN"
+    | "DAEGU"
+    | "INCHEON"
+    | "GWANGJU"
+    | "DAEJEON"
+    | "ULSAN"
+    | "GYEONGGI"
+    | "GANGWON"
+    | "CHUNGBUK"
+    | "JEONBUK"
+    | "JEONNAM"
+    | "GYEONGBUK"
+    | "GYEONGNAM"
+    | "JEJU"
+    | "EXCEPTSEJONG";
+
+  /**
+   * 자가 운전자 인원 수 - 세부타입: 자가운전자
+   * @format int32
+   */
+  selfDriver?: number;
+
+  /**
+   * 학습기간 (yyyy.MM.dd ~ yyyy.MM.dd)
+   * @example 2022.08.23 ~ 2022.09.10
+   */
+  studyDate?: string;
+
+  /**
+   * 회원아이디 - 도민만 해당, 운수/저상은 null
+   * @example example
+   */
+  username?: string;
+
+  /**
+   * 년도
+   * @format int32
+   */
+  year?: number;
+}
+
+export interface UserProvincialCourseInfoDetailResponseDto {
+  /** 학습현황 리스트 */
+  learningStatusList?: UserCourseInfoDetailLearningStatusDto[];
+
+  /** 진도현황 리스트 */
+  progressStatusList?: UserCourseInfoDetailProgressStatusDto[];
+
+  /** 도민 수강정보 */
+  userProvincialCourseInfoDetailCourseInfoDto?: UserProvincialCourseInfoDetailCourseInfoDto;
+}
+
+export interface UserProvincialCourseInfoUpdateRequestDto {
+  /**
+   * 만 3세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age3?: number;
+
+  /**
+   * 만 4세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age4?: number;
+
+  /**
+   * 만 5세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age5?: number;
+
+  /**
+   * 교육대상자
+   *  * TYPE_CHILDREN: 어린이
+   *  * TYPE_TEENAGER: 청소년
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  eduTargetMain?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+
+  /**
+   * 교육대상자 세부 타입
+   *  * TYPE_KINDERGARTEN: 유치원
+   *  * TYPE_ELEMENTARY: 초등학교
+   *  * TYPE_MIDDLE: 중학교
+   *  * TYPE_HIGH: 고등학교
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  eduTargetSub?:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
+
+  /**
+   * 노인 인원 수 - 세부타입: 노인
+   * @format int32
+   */
+  elderly?: number;
+
+  /**
+   * 1학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade1?: number;
+
+  /**
+   * 2학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade2?: number;
+
+  /**
+   * 3학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade3?: number;
+
+  /**
+   * 4학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade4?: number;
+
+  /**
+   * 5학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade5?: number;
+
+  /**
+   * 6학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade6?: number;
+
+  /** 소속 */
+  organization?: string;
+
+  /** 지역 */
+  region?:
+    | "CHEONAN"
+    | "GONGJU"
+    | "BORYEONG"
+    | "ASAN"
+    | "SEOSAN"
+    | "NONSAN"
+    | "GYERYONG"
+    | "DANGJIN"
+    | "GEUMSAN"
+    | "BUYEO"
+    | "SEOCHEON"
+    | "CHEONGYANG"
+    | "HONGSEONG"
+    | "YESAN"
+    | "TAEAN"
+    | "CHUNGNAM"
+    | "SEJONG"
+    | "SEOUL"
+    | "BUSAN"
+    | "DAEGU"
+    | "INCHEON"
+    | "GWANGJU"
+    | "DAEJEON"
+    | "ULSAN"
+    | "GYEONGGI"
+    | "GANGWON"
+    | "CHUNGBUK"
+    | "JEONBUK"
+    | "JEONNAM"
+    | "GYEONGBUK"
+    | "GYEONGNAM"
+    | "JEJU"
+    | "EXCEPTSEJONG";
+
+  /**
+   * 자가 운전자 인원 수 - 세부타입: 자가운전자
+   * @format int32
+   */
+  selfDriver?: number;
+}
+
+export interface UserProvincialCourseInfoUpdateResponseDto {
+  /**
+   * 만 3세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age3?: number;
+
+  /**
+   * 만 4세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age4?: number;
+
+  /**
+   * 만 5세 인원 수 - 세부타입: 유치원
+   * @format int32
+   */
+  age5?: number;
+
+  /** 수료 여부 */
+  completeYn?: "Y" | "N";
+
+  /** 과정명 */
+  courseName?: string;
+
+  /**
+   * 교육대상자
+   *  * TYPE_CHILDREN: 어린이
+   *  * TYPE_TEENAGER: 청소년
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  eduTargetMain?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+
+  /**
+   * 교육대상자 세부 타입
+   *  * TYPE_KINDERGARTEN: 유치원
+   *  * TYPE_ELEMENTARY: 초등학교
+   *  * TYPE_MIDDLE: 중학교
+   *  * TYPE_HIGH: 고등학교
+   *  * TYPE_SELF_DRIVER: 자가운전자
+   *  * TYPE_ELDERLY: 노인
+   */
+  eduTargetSub?:
+    | "TYPE_KINDERGARTEN"
+    | "TYPE_ELEMENTARY"
+    | "TYPE_MIDDLE"
+    | "TYPE_HIGH"
+    | "TYPE_SELF_DRIVER"
+    | "TYPE_ELDERLY";
+
+  /**
+   * 노인 인원 수 - 세부타입: 노인
+   * @format int32
+   */
+  elderly?: number;
+
+  /**
+   * 1학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade1?: number;
+
+  /**
+   * 2학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade2?: number;
+
+  /**
+   * 3학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade3?: number;
+
+  /**
+   * 4학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade4?: number;
+
+  /**
+   * 5학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade5?: number;
+
+  /**
+   * 6학년 인원 수 - 세부타입: 초등학교, 중학교, 고등학교
+   * @format int32
+   */
+  grade6?: number;
+
+  /** 상태 */
+  learningStatus?: "정상" | "퇴교";
+
+  /**
+   * 실명
+   * @example 홍길동
+   */
+  name?: string;
+
+  /** 소속(학교, 기관, 단체 */
+  organization?: string;
+
+  /** 휴대전화 */
+  phone?: string;
+
+  /**
+   * 신청일 (yyyy.MM.dd)
+   * @example 2022.08.20
+   */
+  regDate?: string;
+
+  /** 지역 */
+  region?:
+    | "CHEONAN"
+    | "GONGJU"
+    | "BORYEONG"
+    | "ASAN"
+    | "SEOSAN"
+    | "NONSAN"
+    | "GYERYONG"
+    | "DANGJIN"
+    | "GEUMSAN"
+    | "BUYEO"
+    | "SEOCHEON"
+    | "CHEONGYANG"
+    | "HONGSEONG"
+    | "YESAN"
+    | "TAEAN"
+    | "CHUNGNAM"
+    | "SEJONG"
+    | "SEOUL"
+    | "BUSAN"
+    | "DAEGU"
+    | "INCHEON"
+    | "GWANGJU"
+    | "DAEJEON"
+    | "ULSAN"
+    | "GYEONGGI"
+    | "GANGWON"
+    | "CHUNGBUK"
+    | "JEONBUK"
+    | "JEONNAM"
+    | "GYEONGBUK"
+    | "GYEONGNAM"
+    | "JEJU"
+    | "EXCEPTSEJONG";
+
+  /**
+   * 자가 운전자 인원 수 - 세부타입: 자가운전자
+   * @format int32
+   */
+  selfDriver?: number;
+
+  /**
+   * 학습기간 (yyyy.MM.dd ~ yyyy.MM.dd)
+   * @example 2022.08.23 ~ 2022.09.10
+   */
+  studyDate?: string;
+
+  /**
+   * 회원아이디 - 도민만 해당, 운수/저상은 null
+   * @example example
+   */
+  username?: string;
+
+  /**
+   * 년도
+   * @format int32
+   */
+  year?: number;
+}
+
 export interface UserProvincialFindResponseDto {
   /** 회사 */
   company?: string;
@@ -8583,7 +10415,8 @@ export interface UserProvincialFindResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /** 아이디 */
   username?: string;
@@ -8641,7 +10474,8 @@ export interface UserProvincialUpdateRequestDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 유저 시퀀스
@@ -8702,7 +10536,8 @@ export interface UserProvincialUpdateResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 유저 시퀀스
@@ -8867,7 +10702,8 @@ export interface UserTransportFindResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 }
 
 export interface UserTransportUpdateRequestDto {
@@ -8940,7 +10776,8 @@ export interface UserTransportUpdateRequestDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 }
 
 export interface UserTransportUpdateResponseDto {
@@ -9016,7 +10853,8 @@ export interface UserTransportUpdateResponseDto {
     | "JEONNAM"
     | "GYEONGBUK"
     | "GYEONGNAM"
-    | "JEJU";
+    | "JEJU"
+    | "EXCEPTSEJONG";
 
   /**
    * 유저 시퀀스
@@ -9027,6 +10865,30 @@ export interface UserTransportUpdateResponseDto {
 
 export interface PageCourseLearningInfoResponseDto {
   content?: CourseLearningInfoResponseDto[];
+  empty?: boolean;
+  first?: boolean;
+  last?: boolean;
+
+  /** @format int32 */
+  number?: number;
+
+  /** @format int32 */
+  numberOfElements?: number;
+  pageable?: Pageable;
+
+  /** @format int32 */
+  size?: number;
+  sort?: Sort;
+
+  /** @format int64 */
+  totalElements?: number;
+
+  /** @format int32 */
+  totalPages?: number;
+}
+
+export interface PageCourseProvincialLearningInfoResponseDto {
+  content?: CourseProvincialLearningInfoResponseDto[];
   empty?: boolean;
   first?: boolean;
   last?: boolean;
@@ -9324,14 +11186,29 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description 개설된 과정-유저에 대한 모든 수강 인원에 대한 정보를 엑셀 다운로드한다.
      *
      * @tags [관리자] Excel 파일 다운로드 API
-     * @name AdmFindAllCourseLearningUsersUsingPost
+     * @name AdmFindAllCourseLearningUsersUsingGet1
      * @summary [관리자] 현 수강인원에 대한 정보 엑셀다운로드 API - JWT, Page
-     * @request POST:/adm/excel/download/course-learning-user
+     * @request GET:/adm/excel/download/course-learning-user
      */,
-    admFindAllCourseLearningUsersUsingPost: (
+    admFindAllCourseLearningUsersUsingGet1: (
       query?: {
         businessName?: string;
-        businessType?: "PASSENGER" | "FREIGHT";
+        businessType?:
+          | "BUS"
+          | "CHARTER_BUS"
+          | "SPECIAL_PASSENGER"
+          | "CORPORATE_TAXI"
+          | "GENERAL_CARGO"
+          | "PRIVATE_TAXI"
+          | "INDIVIDUAL_CARGO"
+          | "CONSIGNMENT"
+          | "SPECIAL_TRANSPORTATION"
+          | "KNEELING_BUS"
+          | "DANGEROUS_GOODS"
+          | "DESIGNATED_WASTE"
+          | "HAZARDOUS_CHEMICALS"
+          | "HIGH_PRESSURE_GAS_FLAMMABLE"
+          | "HIGH_PRESSURE_GAS_TOXIC";
         carNumber?: string;
         carRegitRegion?:
           | "CHEONAN"
@@ -9365,7 +11242,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           | "JEONNAM"
           | "GYEONGBUK"
           | "GYEONGNAM"
-          | "JEJU";
+          | "JEJU"
+          | "EXCEPTSEJONG";
         completeType?: "TYPE_INCOMPLETE" | "TYPE_COMPLETE";
         courseClassSeq?: number;
         courseSeq?: number;
@@ -9376,29 +11254,84 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         statusType?: "TYPE_NORMAL" | "TYPE_OUT";
         studyEndDate?: string;
         studyStartDate?: string;
+        year?: number;
       },
       params: RequestParams = {},
     ) =>
       this.request<ApiResponseWrapper<void>, any>({
         path: `/adm/excel/download/course-learning-user`,
-        method: "POST",
+        method: "GET",
         query: query,
-        type: ContentType.Json,
         ...params,
       })
     /**
      * @description 관리자페이지에서 학습 현황(도민) 탭에 대한 데이터를 엑셀로 다운로드한다. 현재 전체회원(도민)에 대한 엑셀다운로드이다. 추후에 필터기능이들어가서 부분적인 회원(도민)에대한 학습현황 엑셀다운로드를하고 싶다면 <b>추가 개발요망</b>
      *
      * @tags [관리자] Excel 파일 다운로드 API
-     * @name DownloadExcelOfProvincialLearningStatusUsingPost
+     * @name DownloadExcelOfProvincialLearningStatusUsingGet
      * @summary [관리자] 도민 학습현황 엑셀 다운로드
-     * @request POST:/adm/excel/download/provincial-learning-status
+     * @request GET:/adm/excel/download/provincial-learning-status
      */,
-    downloadExcelOfProvincialLearningStatusUsingPost: (params: RequestParams = {}) =>
+    downloadExcelOfProvincialLearningStatusUsingGet: (
+      query?: {
+        completeType?: "TYPE_INCOMPLETE" | "TYPE_COMPLETE";
+        courseSeq?: number;
+        expectedToEndDtime?: string;
+        expectedToStartDtime?: string;
+        nameOrUsername?: string;
+        organization?: string;
+        phone?: string;
+        provincialEduTargetMain?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+        provincialEduTargetSub?:
+          | "TYPE_KINDERGARTEN"
+          | "TYPE_ELEMENTARY"
+          | "TYPE_MIDDLE"
+          | "TYPE_HIGH"
+          | "TYPE_SELF_DRIVER"
+          | "TYPE_ELDERLY";
+        residence?:
+          | "CHEONAN"
+          | "GONGJU"
+          | "BORYEONG"
+          | "ASAN"
+          | "SEOSAN"
+          | "NONSAN"
+          | "GYERYONG"
+          | "DANGJIN"
+          | "GEUMSAN"
+          | "BUYEO"
+          | "SEOCHEON"
+          | "CHEONGYANG"
+          | "HONGSEONG"
+          | "YESAN"
+          | "TAEAN"
+          | "CHUNGNAM"
+          | "SEJONG"
+          | "SEOUL"
+          | "BUSAN"
+          | "DAEGU"
+          | "INCHEON"
+          | "GWANGJU"
+          | "DAEJEON"
+          | "ULSAN"
+          | "GYEONGGI"
+          | "GANGWON"
+          | "CHUNGBUK"
+          | "JEONBUK"
+          | "JEONNAM"
+          | "GYEONGBUK"
+          | "GYEONGNAM"
+          | "JEJU"
+          | "EXCEPTSEJONG";
+        statusType?: "TYPE_NORMAL" | "TYPE_OUT";
+        year?: number;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<ApiResponseWrapper<void>, any>({
         path: `/adm/excel/download/provincial-learning-status`,
-        method: "POST",
-        type: ContentType.Json,
+        method: "GET",
+        query: query,
         ...params,
       })
     /**
@@ -9521,17 +11454,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 관리자페이지에서 메세지를 발송한다. smsYn 이 Y 인 대상자에게만 발송이 가능하다.
+     * @description 주기적으로 발송하거나 자동 발송하는 메시지들에 대한 Content 조회
      *
-     * @tags [관리자] 메세지(SMS/LMS/MMS) API
-     * @name AdmSendMessageUsingPost
-     * @summary [관리자] 메세지 발송 API - JWT
-     * @request POST:/adm/message
+     * @tags [관리자] 메시지 API
+     * @name AdmFindAllMessageUsingGet
+     * @summary [관리자] 메시지 전체 조회 API - JWT
+     * @request GET:/adm/message
      */,
-    admSendMessageUsingPost: (requestDto: MessageAdmSendRequestDto, params: RequestParams = {}) =>
-      this.request<ApiResponseWrapper<MessageAdmSendResponseDto>, any>({
+    admFindAllMessageUsingGet: (params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/adm/message`,
-        method: "POST",
+        method: "GET",
+        ...params,
+      })
+    /**
+     * @description 주기적으로 발송하거나 자동 발송하는 메시지들에 대한 수정
+     *
+     * @tags [관리자] 메시지 API
+     * @name AdmModifyMessageUsingPut
+     * @summary [관리자] 메시지 수정 API - JWT
+     * @request PUT:/adm/message
+     */,
+    admModifyMessageUsingPut: (requestDto: MessageUpdateRequestDto, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<InputStream>, any>({
+        path: `/adm/message`,
+        method: "PUT",
         body: requestDto,
         type: ContentType.Json,
         ...params,
@@ -9548,6 +11495,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<ApiResponseWrapper<StatisticsSurveyResponseDto>, void>({
         path: `/adm/statistics/survey/${surveySeq}`,
         method: "GET",
+        ...params,
+      })
+    /**
+     * @description 관리자페이지에서 전체 유저의 현황 통계를 조회한다. 필터로는 년도, 과정, 과정분류가 있다.7가지의 통계로 구성된다.통합 (이수자 수 / 이수율) 업종별 (이수자 수 / 이수율) 차량등록지 전체 (이수자 수 / 이수율) 기수별 증감 업종별 증감 년간 업종별 연령대 통계
+     *
+     * @tags [관리자] 통계 API
+     * @name AdmTransEduIntegratedStatisticsUsingGet
+     * @summary [관리자] 운수/저상 통합 통계 조회 - JWT
+     * @request GET:/adm/statistics/trans-edu/integrated
+     */,
+    admTransEduIntegratedStatisticsUsingGet: (
+      query?: { courseClassSeq?: number; courseSeq?: number; year?: number },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<StatisticsTransEduResponseDto>, void>({
+        path: `/adm/statistics/trans-edu/integrated`,
+        method: "GET",
+        query: query,
         ...params,
       })
     /**
@@ -9867,7 +11832,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/course
      */
     findCoursesUsingGet: (
-      query: { contentTitle?: string; elementCnt?: number; page: number; sort?: string },
+      query: {
+        contentTitle?: string;
+        courseType: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
+        elementCnt?: number;
+        page: number;
+        sort?: string;
+      },
       params: RequestParams = {},
     ) =>
       this.request<ApiResponseWrapper<CourseResponseDto[]>, any>({
@@ -9885,7 +11856,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/course/adm
      */,
     findCoursesAdminUsingGet: (
-      query: { courseTitle?: string; elementCnt?: number; page: number; sort?: string },
+      query: {
+        courseTitle?: string;
+        courseType: "TYPE_TRANS_WORKER" | "TYPE_LOW_FLOOR_BUS" | "TYPE_PROVINCIAL";
+        elementCnt?: number;
+        page: number;
+        sort?: string;
+      },
       params: RequestParams = {},
     ) =>
       this.request<ApiResponseWrapper<CourseResponseDto[]>, any>({
@@ -9921,7 +11898,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     admFindAllCourseLearningUsersUsingGet: (
       query: {
         businessName?: string;
-        businessType?: "PASSENGER" | "FREIGHT";
+        businessType?:
+          | "BUS"
+          | "CHARTER_BUS"
+          | "SPECIAL_PASSENGER"
+          | "CORPORATE_TAXI"
+          | "GENERAL_CARGO"
+          | "PRIVATE_TAXI"
+          | "INDIVIDUAL_CARGO"
+          | "CONSIGNMENT"
+          | "SPECIAL_TRANSPORTATION"
+          | "KNEELING_BUS"
+          | "DANGEROUS_GOODS"
+          | "DESIGNATED_WASTE"
+          | "HAZARDOUS_CHEMICALS"
+          | "HIGH_PRESSURE_GAS_FLAMMABLE"
+          | "HIGH_PRESSURE_GAS_TOXIC";
         carNumber?: string;
         carRegitRegion?:
           | "CHEONAN"
@@ -9955,7 +11947,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           | "JEONNAM"
           | "GYEONGBUK"
           | "GYEONGNAM"
-          | "JEJU";
+          | "JEJU"
+          | "EXCEPTSEJONG";
         completeType?: "TYPE_INCOMPLETE" | "TYPE_COMPLETE";
         courseClassSeq?: number;
         courseSeq?: number;
@@ -9968,6 +11961,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         statusType?: "TYPE_NORMAL" | "TYPE_OUT";
         studyEndDate?: string;
         studyStartDate?: string;
+        year?: number;
       },
       params: RequestParams = {},
     ) =>
@@ -9988,6 +11982,78 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     admFindAllOpenCoursesUsingGet: (query?: { year?: number }, params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<CourseLearningInfoCoursesResponseDto[]>, any>({
         path: `/course/adm/learning-info/courses`,
+        method: "GET",
+        query: query,
+        ...params,
+      })
+    /**
+     * @description 개설된 <b>도민 과정<b>에 대한 모든 수강 인원을 조회한다. 수강 중인 과정명, 연도 및 기수, 실명, 수료 여부, 회원 아이디, 유저 시퀀스, 과정 클래스 시퀀스, 과정 유저 시퀀스, 학습기간, 신청일, 상태, 수료 여부 등을 반환한다. 이름, 아이디, 과정 시퀀스, 클래스 시퀀스, 수료 여부, 상태에 대한 파라미터를 받아 필터링을 수행한다. 필터에 대한 데이터가 null 일 경우 전체 검색으로 동작한다.
+     *
+     * @tags [관리자] 학습 현황 API
+     * @name AdmFindAllCourseProvincialLearningUsersUsingGet
+     * @summary [관리자] 수강 인원 전체 조회 API [도민] - JWT, Page
+     * @request GET:/course/adm/learning-info/provincial
+     */,
+    admFindAllCourseProvincialLearningUsersUsingGet: (
+      query: {
+        completeType?: "TYPE_INCOMPLETE" | "TYPE_COMPLETE";
+        courseSeq?: number;
+        elementCnt?: number;
+        expectedToEndDtime?: string;
+        expectedToStartDtime?: string;
+        nameOrUsername?: string;
+        organization?: string;
+        page: number;
+        phone?: string;
+        provincialEduTargetMain?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
+        provincialEduTargetSub?:
+          | "TYPE_KINDERGARTEN"
+          | "TYPE_ELEMENTARY"
+          | "TYPE_MIDDLE"
+          | "TYPE_HIGH"
+          | "TYPE_SELF_DRIVER"
+          | "TYPE_ELDERLY";
+        residence?:
+          | "CHEONAN"
+          | "GONGJU"
+          | "BORYEONG"
+          | "ASAN"
+          | "SEOSAN"
+          | "NONSAN"
+          | "GYERYONG"
+          | "DANGJIN"
+          | "GEUMSAN"
+          | "BUYEO"
+          | "SEOCHEON"
+          | "CHEONGYANG"
+          | "HONGSEONG"
+          | "YESAN"
+          | "TAEAN"
+          | "CHUNGNAM"
+          | "SEJONG"
+          | "SEOUL"
+          | "BUSAN"
+          | "DAEGU"
+          | "INCHEON"
+          | "GWANGJU"
+          | "DAEJEON"
+          | "ULSAN"
+          | "GYEONGGI"
+          | "GANGWON"
+          | "CHUNGBUK"
+          | "JEONBUK"
+          | "JEONNAM"
+          | "GYEONGBUK"
+          | "GYEONGNAM"
+          | "JEJU"
+          | "EXCEPTSEJONG";
+        statusType?: "TYPE_NORMAL" | "TYPE_OUT";
+        year?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<PageCourseProvincialLearningInfoResponseDto>, any>({
+        path: `/course/adm/learning-info/provincial`,
         method: "GET",
         query: query,
         ...params,
@@ -10067,6 +12133,45 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
+     * @description 관리자의 Access Token 을 통해 과정을 생성한다. 도민교통 과정을 생성한다.
+     *
+     * @tags [App & 관리자] 과정 API
+     * @name CreateProvincialCourseUsingPost
+     * @summary [관리자] 과정 생성 API [도민] - JWT 사용
+     * @request POST:/course/adm/provincial
+     */,
+    createProvincialCourseUsingPost: (
+      courseSaveRequestDto: CourseProvincialSaveRequestDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<CourseResponseDto>, any>({
+        path: `/course/adm/provincial`,
+        method: "POST",
+        body: courseSaveRequestDto,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 관리자의 Access Token 을 통해 과정을 생성한다. 도민교통 전용으로 쓰는 과정 수정 API 이다.
+     *
+     * @tags [App & 관리자] 과정 API
+     * @name UpdateCourseProvincialUsingPut
+     * @summary [관리자] 과정 수정 API - JWT 사용
+     * @request PUT:/course/adm/provincial/{seq}
+     */,
+    updateCourseProvincialUsingPut: (
+      seq: number,
+      courseProvincialUpdateRequestDto: CourseProvincialUpdateRequestDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<CourseResponseDto>, void>({
+        path: `/course/adm/provincial/${seq}`,
+        method: "PUT",
+        body: courseProvincialUpdateRequestDto,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
      * @description 관리자 페이지에서 특정 과정의 seq 를 Path Variable 로 전달받아 해당 과정에 대한 정보를 조회한다 <b>기능 변경 요구에 따라 현재 courseSubCategoryType 는 BUS 를 "여객" 타입으로, GENERAL_CARGO 를 "화물" 타입으로 사용 하고 있다... 다른 courseSubCategoryType 이넘 타입은 무시한다.</b>
      *
      * @tags [App & 관리자] 과정 API
@@ -10108,6 +12213,32 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<ApiResponseWrapper<InputStream>, any>({
         path: `/course/adm/${seq}`,
         method: "DELETE",
+        ...params,
+      })
+    /**
+     * @description 도민에 대한 교육신청시 셀렉트 박스에 ProvincialEduTargetSub 타입으로 보여줄 과정 리스트를 조회한다.
+     *
+     * @tags [App & 관리자] 과정 API
+     * @name FindProvincialCoursesUsingGet
+     * @summary [App] 도민 과정 서브타입 조회 API
+     * @request GET:/course/provincial
+     */,
+    findProvincialCoursesUsingGet: (
+      query: {
+        provincialEduTargetSub:
+          | "TYPE_KINDERGARTEN"
+          | "TYPE_ELEMENTARY"
+          | "TYPE_MIDDLE"
+          | "TYPE_HIGH"
+          | "TYPE_SELF_DRIVER"
+          | "TYPE_ELDERLY";
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<ProvincialCourseResponseDto[]>, any>({
+        path: `/course/provincial`,
+        method: "GET",
+        query: query,
         ...params,
       })
     /**
@@ -10580,6 +12711,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
+     * @description 클라이언트에서 도민교통에 대한 도민교육을 신청한다.
+     *
+     * @tags [App & 관리자] 과정 교육 신청 API
+     * @name EnrollProvincialUsingPost
+     * @summary [App] 도민교통 교육신청 API - JWT
+     * @request POST:/course-user/enroll/provincial
+     */,
+    enrollProvincialUsingPost: (requestDto: CourseUserProvincialSaveRequestDto, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<CourseUserProvincialResponse>, void>({
+        path: `/course-user/enroll/provincial`,
+        method: "POST",
+        body: requestDto,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
      * @description 해당 과정-유저가 존재하는지에 대한 체크 여부 존재 하지않으면 true 반환 존재하면 false 반환
      *
      * @tags [App & 관리자] 과정 교육 신청 API
@@ -10622,6 +12769,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
+     * @description 클라이언트에서 개인에 대한 특정 교육 신청 건에 대한 내용을 조회한다. outYn 이 'Y' 데이터는 조회되지 않는다. 요청자의 JWT 내 유저 시퀀스와 반환될 데이터의 userSeq 가 자기 자신이 아닐 경우 예외를 호출한다.
+     *
+     * @tags [App & 관리자] 과정 교육 신청 API
+     * @name FindProvincialCourseUserIndvUsingGet
+     * @summary [App] 도민 교육 신청 단건 조회 API - JWT
+     * @request GET:/course-user/find/provincial/{courseUserSeq}
+     */,
+    findProvincialCourseUserIndvUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<ProvincialCourseUserResponseDto>, void>({
+        path: `/course-user/find/provincial/${courseUserSeq}`,
+        method: "GET",
+        ...params,
+      })
+    /**
      * @description 개인의 특정 교육 신청 건에 대한 정보를 수정한다. 이름과 주민번호를 제외한 모든 정보를 수정 가능하다. 수정된 개인정보/추가정보는 유저 DB 데이터에 반영된다. 개인이 신청한 courseUserSeq 의 userSeq 와 요청자의 userSeq 를 비교하여 서로 일치하지 않을 경우 예외를 발생시킨다. 과정교육신청내용 수정 시, 기수를 변경할 수 있다. 현재 신청가능한 기수 정보는 "/course-class/step" 엔드포인트를 통해 조회 가능하다. 만일, 수강신청가능기간에 해당되지 않거나, 수강인원이 초과한 경우 예외를 발생시킨다. 또한, 이미 신청한 과정에 포함되어있을 경우 예외를 발생시킨다.
      *
      * @tags [App & 관리자] 과정 교육 신청 API
@@ -10659,6 +12820,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 클라이언트에서 특정 사용자가 신청한 과정 클래스 정보를 조회한다.
+     *
+     * @tags [App & 관리자] 과정 교육 신청 API
+     * @name FindAllTransCourseUsersUsingGet1
+     * @summary [App] 운수/저상 교육 전체 조회 API - JWT
+     * @request GET:/course-user/provincial
+     */,
+    findAllTransCourseUsersUsingGet1: (params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<CourseUserCommonResponseDto[]>, void>({
+        path: `/course-user/provincial`,
+        method: "GET",
         ...params,
       }),
   };
@@ -11318,6 +13493,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags 실험장 API
+     * @name RedisTestUsingGet
+     * @summary redisTest
+     * @request GET:/example/redis-test
+     */,
+    redisTestUsingGet: (params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<boolean>, any>({
+        path: `/example/redis-test`,
+        method: "GET",
+        ...params,
+      })
+    /**
+     * No description
+     *
+     * @tags 실험장 API
      * @name FindAllMultipartRequestsUsingGet
      * @summary [실험] 멀티파트 전체 요청 조회 API
      * @request GET:/example/s3/multipart/all
@@ -11915,10 +14104,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/learning-material
      */
     findAllLearningMaterialsUsingGet: (
-      query?: {
+      query: {
+        elementCnt?: number;
         keyword?: string;
         materialSubType?: "TYPE_CHILDREN" | "TYPE_TEENAGER" | "TYPE_ELDERLY" | "TYPE_SELF_DRIVING";
         materialType?: "TYPE_BY_AGE" | "TYPE_EDUCATIONAL" | "TYPE_VIDEO" | "TYPE_OTHER_ORGAN";
+        page: number;
       },
       params: RequestParams = {},
     ) =>
@@ -12629,66 +14820,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       })
     /**
-     * @description 도민 교통 교육 게시판의 데이터를 전체 조회한다. 이때, 접근하려는 특정 사용자의 권한에 해당되지 않는 게시판 조회 시, 403 예외를 반환한다.
-     *
-     * @tags [App & 관리자] 도민 교통 교육 게시판 API
-     * @name FindAllUsingGet
-     * @summary [App] 도민 교통 교육 게시판 전체 조회 API - JWT
-     * @request GET:/provincial/board/all/{eduTargetSub}
-     */,
-    findAllUsingGet: (
-      eduTargetSub:
-        | "TYPE_KINDERGARTEN"
-        | "TYPE_ELEMENTARY"
-        | "TYPE_MIDDLE"
-        | "TYPE_HIGH"
-        | "TYPE_SELF_DRIVER"
-        | "TYPE_ELDERLY",
-      params: RequestParams = {},
-    ) =>
-      this.request<ApiResponseWrapper<ProvincialBoardResponseDto[]>, void>({
-        path: `/provincial/board/all/${eduTargetSub}`,
-        method: "GET",
-        ...params,
-      })
-    /**
-     * @description 도민 교통 교육 게시판의 데이터를 단건 조회한다. 이때, 접근하려는 특정 사용자의 권한에 해당되지 않는 게시글 조회 시, 403 예외를 반환한다.
-     *
-     * @tags [App & 관리자] 도민 교통 교육 게시판 API
-     * @name FindOneUsingGet
-     * @summary [App] 도민 교통 교육 게시판 단건 조회 API - JWT
-     * @request GET:/provincial/board/one/{boardSeq}
-     */,
-    findOneUsingGet: (boardSeq: number, params: RequestParams = {}) =>
-      this.request<ApiResponseWrapper<ProvincialBoardResponseDto>, void>({
-        path: `/provincial/board/one/${boardSeq}`,
-        method: "GET",
-        ...params,
-      })
-    /**
-     * @description 해당 사용자에 대한 도민 권한을 조회한다.
-     *
-     * @tags [App & 관리자] 도민 교통 교육 게시판 API
-     * @name FindRolesUsingGet
-     * @summary [App] 도민 교통 권한 조회 API - JWT
-     * @request GET:/provincial/board/roles
-     */,
-    findRolesUsingGet: (params: RequestParams = {}) =>
-      this.request<ApiResponseWrapper<ProvincialRoleResponseDto>, void>({
-        path: `/provincial/board/roles`,
-        method: "GET",
-        ...params,
-      })
-    /**
      * @description 해당 사용자가 신청한 전체 교육 내역을 반환한다. 이때, 신청 유저 정보는 포함되지 않는다.
      *
      * @tags [App & 관리자] 도민교통 교육 신청 관련 API
-     * @name FindAllUsingGet1
+     * @name FindAllUsingGet
      * @summary [App] 도민 교통 교육 신청 내역 전체조회 API
      * @request GET:/provincial/enroll
      */,
-    findAllUsingGet1: (params: RequestParams = {}) =>
-      this.request<ApiResponseWrapper<ProvincialEnrollResponseDto[]>, any>({
+    findAllUsingGet: (params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<ProvincialEnrollListResponseDto[]>, any>({
         path: `/provincial/enroll`,
         method: "GET",
         ...params,
@@ -12697,11 +14837,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description 도민 교통 교육을 신청한다. 신청 즉시 신청한 교육 대상에 대한 접근 권한을 유저에게 부여한다. 동일한 교육 대상자의 세부 구분에 대하여 중복 신청은 불가능하다.
      *
      * @tags [App & 관리자] 도민교통 교육 신청 관련 API
-     * @name EnrollProvincialUsingPost
+     * @name EnrollProvincialUsingPost1
      * @summary [App] 도민 교통 교육 신청 API - JWT
      * @request POST:/provincial/enroll
      */,
-    enrollProvincialUsingPost: (requestDto: ProvincialEnrollSaveRequestDto, params: RequestParams = {}) =>
+    enrollProvincialUsingPost1: (requestDto: ProvincialEnrollSaveRequestDto, params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<ProvincialEnrollResponseDto>, void>({
         path: `/provincial/enroll`,
         method: "POST",
@@ -12772,11 +14912,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description 사용자가 신청한 특정 교육에 대한 내역을 반환한다. 이때, 신청 유저 정보도 함께 반환한다.
      *
      * @tags [App & 관리자] 도민교통 교육 신청 관련 API
-     * @name FindOneUsingGet1
+     * @name FindOneUsingGet
      * @summary [App] 도민 교통 교육 신청 내역 단건조회 API
      * @request GET:/provincial/enroll/{enrollSeq}
      */,
-    findOneUsingGet1: (enrollSeq: number, params: RequestParams = {}) =>
+    findOneUsingGet: (enrollSeq: number, params: RequestParams = {}) =>
       this.request<ApiResponseWrapper<ProvincialEnrollResponseDto>, void>({
         path: `/provincial/enroll/${enrollSeq}`,
         method: "GET",
@@ -12796,20 +14936,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "PUT",
         body: requestDto,
         type: ContentType.Json,
-        ...params,
-      })
-    /**
-     * @description 신청 시퀀스를 전달받아 해당하는 교육을 취소한다. 만일, 시작된 교육일 경우 취소가 불가능하다.
-     *
-     * @tags [App & 관리자] 도민교통 교육 신청 관련 API
-     * @name CancelUsingDelete
-     * @summary [App] 도민 교통 교육 신청 취소 API
-     * @request DELETE:/provincial/enroll/{enrollSeq}
-     */,
-    cancelUsingDelete: (enrollSeq: number, params: RequestParams = {}) =>
-      this.request<ApiResponseWrapper<ProvincialEnrollResponseDto>, void>({
-        path: `/provincial/enroll/${enrollSeq}`,
-        method: "DELETE",
         ...params,
       }),
   };
@@ -13306,6 +15432,40 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @description 관리자페이지의 수강 정보에서 특정 유저에 대한 전체 수강 리스트를 조회한 이후, courseUserSeq 를 Path Variable 로 전달받아 해당 유저의 상세 수강 정보를 조회한다. 반환되는 데이터는 수강정보, 학습현황, 진도현황이다. 수강정보란은 과정 클래스에 대한 유저의 메타데이터(과정명, 연도/기수, 실명, 학습기간 등)를 표시한다. 학습현황은 해당 과정 클래스에 대한 유저의 진도율, 시험, 설문 수행 여부 등의 데이터를 표시한다. 진도현황은 해당 과정 클래스 내 유저가 이수한 차시에 대한 정보를 표시한다. 진도현황의 경우, 각 차시의 진도율이 100%일 경우, 이수 삭제 API 를 호출하여 완료된 진도(0%로 만듦)를 제거할 수 있으며, 진도율이 100%가 아닐 경우 이수 처리 API 를 호출하여 현재 진도율을 100%로 변경 및 이수처리할 수 있다. 진도현황에서 "전체 이수처리" API 를 호출하여 모든 차시를 수료처리할 수 있으며, 반대로 "전체 미이수 처리" API 를 호출하여 모든 차시를 미수료처리 할 수 있다.
      *
      * @tags [관리자] 유저 수강 정보 API
+     * @name AdmFindDetailProvincialCourseInfoUsingGet
+     * @summary [관리자] 수강정보 상세 조회 [도민] API - JWT
+     * @request GET:/user/adm/course-info/detail/provincial/{courseUserSeq}
+     */,
+    admFindDetailProvincialCourseInfoUsingGet: (courseUserSeq: number, params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<UserProvincialCourseInfoDetailResponseDto>, void>({
+        path: `/user/adm/course-info/detail/provincial/${courseUserSeq}`,
+        method: "GET",
+        ...params,
+      })
+    /**
+     * @description 관리자페이지의 수강 정보에서 특정 유저에 대한 전체 수강 리스트를 조회한 이후, courseUserSeq 를 Path Variable 로 전달받아 해당 유저의 상세 수강 정보를 수정한다. 반환되는 데이터는 수강정보이다. 수강정보란은 과정 클래스에 대한 유저의 메타데이터(과정명, 연도/기수, 실명, 학습기간 등)를 표시한다. 관리자가 courseUser 정보를 수정 하기 위한 API 이다.
+     *
+     * @tags [관리자] 유저 수강 정보 API
+     * @name AdmUpdateDetailProvincialCourseInfoUsingPut
+     * @summary [관리자] 수강정보 상세 조회 수정 [도민] API - JWT
+     * @request PUT:/user/adm/course-info/detail/provincial/{courseUserSeq}
+     */,
+    admUpdateDetailProvincialCourseInfoUsingPut: (
+      courseUserSeq: number,
+      userCourseInfoUpdateRequestDto: UserProvincialCourseInfoUpdateRequestDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ApiResponseWrapper<UserProvincialCourseInfoUpdateResponseDto>, void>({
+        path: `/user/adm/course-info/detail/provincial/${courseUserSeq}`,
+        method: "PUT",
+        body: userCourseInfoUpdateRequestDto,
+        type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 관리자페이지의 수강 정보에서 특정 유저에 대한 전체 수강 리스트를 조회한 이후, courseUserSeq 를 Path Variable 로 전달받아 해당 유저의 상세 수강 정보를 조회한다. 반환되는 데이터는 수강정보, 학습현황, 진도현황이다. 수강정보란은 과정 클래스에 대한 유저의 메타데이터(과정명, 연도/기수, 실명, 학습기간 등)를 표시한다. 학습현황은 해당 과정 클래스에 대한 유저의 진도율, 시험, 설문 수행 여부 등의 데이터를 표시한다. 진도현황은 해당 과정 클래스 내 유저가 이수한 차시에 대한 정보를 표시한다. 진도현황의 경우, 각 차시의 진도율이 100%일 경우, 이수 삭제 API 를 호출하여 완료된 진도(0%로 만듦)를 제거할 수 있으며, 진도율이 100%가 아닐 경우 이수 처리 API 를 호출하여 현재 진도율을 100%로 변경 및 이수처리할 수 있다. 진도현황에서 "전체 이수처리" API 를 호출하여 모든 차시를 수료처리할 수 있으며, 반대로 "전체 미이수 처리" API 를 호출하여 모든 차시를 미수료처리 할 수 있다.
+     *
+     * @tags [관리자] 유저 수강 정보 API
      * @name AdmFindDetailCourseInfoUsingGet
      * @summary [관리자] 수강정보 상세 조회 API - JWT
      * @request GET:/user/adm/course-info/detail/{courseUserSeq}
@@ -13720,6 +15880,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "PUT",
         body: userPasswordModifyRequestDto,
         type: ContentType.Json,
+        ...params,
+      })
+    /**
+     * @description 클라이언트에서 현재 유저에 대한 aT 를 헤더로 전달받아 학습 중인 과정, 학습 종료 과정을 조회한다. 학습 중인 과정과 종료된 과정은 수강 가능 기간에 따라 구분된다.
+     *
+     * @tags [관리자 & App] 유저 API
+     * @name FindLearningStatusUsingGet1
+     * @summary [App] 학습현황 조회 API - JWT
+     * @request GET:/user/myinfo/provincial/learning-status
+     */,
+    findLearningStatusUsingGet1: (params: RequestParams = {}) =>
+      this.request<ApiResponseWrapper<CourseUserMyInfoResponseDto[]>, any>({
+        path: `/user/myinfo/provincial/learning-status`,
+        method: "GET",
         ...params,
       })
     /**

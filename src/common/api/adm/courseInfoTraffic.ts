@@ -77,9 +77,6 @@ export function getCourseInfoTrafficDetail(enrollSeq: number) {
   );
 }
 
-export function DeleteCourseInfoTrafficDetail(enrollSeq: number) {
-  return DELETE(`/provincial/enroll/adm/${enrollSeq}`);
-}
 
 export function updateCourseInfoTrafficDetail({
   enrollSeq,

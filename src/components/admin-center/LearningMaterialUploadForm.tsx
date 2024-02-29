@@ -567,7 +567,7 @@ const pt20 = css`
 
 const ThumbnailWrapper = styled.div`
   margin-top: 8px;
-`;
+`
 
 const SubTitle = styled(Typography)`
   margin-top: 4px;
@@ -575,4 +575,6 @@ const SubTitle = styled(Typography)`
   font-weight: 500;
   font-size: 16px;
   color:#a7a7a7;
-`;
+`
+
+// jenkins run devil run

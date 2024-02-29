@@ -13,7 +13,6 @@ import { ConvertEnum } from "@utils/convertEnumToHangle";
 import { Box, Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
-import { DeleteCourseInfoTrafficDetail } from "@common/api/adm/courseInfoTraffic";
 import { useSnackbar } from '@hooks/useSnackbar';
 
 
@@ -25,7 +24,7 @@ export function CourseInfomationTraffic() {
   
   const [editTarget, setEditTarget] = useState(false);
   const navigation = useRouter();
-  const { detailCourseInfo, updateAplicantCourseInfo } = useDominDetailCourse({courseUserSeq: navigation?.query?.enrollSeq as string})
+  const { detailCourseInfo, updateAplicantCourseInfo,DeleteAplicantCourseInfo } = useDominDetailCourse({courseUserSeq: navigation?.query?.enrollSeq as string})
   const { value: courseSubType,setValue:setCourseSubType, onChange: onChangeCourseSubType } = useNewInput({initialValue: detailCourseInfo?.userProvincialCourseInfoDetailCourseInfoDto?.eduTargetSub,type:'string'});
   const [courseAudientCount, setCourseAudientCount] = useState<CourseAudientCount>({});
   const [enrollSeq, setEnrollSeq] = useState<string>('');
@@ -47,23 +46,11 @@ export function CourseInfomationTraffic() {
     //교육 취소
 
     const onClickDelete = async (enrollSeq:number) => {
-      try {
-        if(window.confirm('정말 취소하시겠습니까?')){
-          await DeleteCourseInfoTrafficDetail(enrollSeq);
-          snackbar({
-            message: '취소가 완료되었습니다.',
-            variant:'success'
-          })
-          navigation.push('/admin-center/course-info-traffic');
-        }
-      } catch (error) {
-        snackbar({ 
-          message: '취소에 실패했습니다.',
-          variant:'error'
-        })  
-      } 
+      if(window.confirm('정말 취소하시겠습니까?')){
+          await DeleteAplicantCourseInfo(enrollSeq);
+      }
     }
-    
+  
 
   const onChangeCourseAudientCount = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -72,7 +59,7 @@ export function CourseInfomationTraffic() {
   
   
   useEffect(() => {
-   if(!detailCourseInfo) return;
+  if(!detailCourseInfo) return;
     
     const { userProvincialCourseInfoDetailCourseInfoDto } = detailCourseInfo;
     

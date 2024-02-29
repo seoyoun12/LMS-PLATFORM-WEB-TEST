@@ -40,12 +40,12 @@ export default function Lesson(props: LessonProps) {
   const [currentLessonPlayTime,setCurrentLessonPlayTime] = useState(0);
   const { getCheckAvailableLesson } = useLesson();
   const [isAvailableLesson,setIsAvailableLesson] = useState(true);
-
+  
   const getAvaliableLessonCheckResult = async ({courseUserSeq, contentSeq}) => {
     const data = await getCheckAvailableLesson({courseUserSeq, contentSeq});
+    
     setIsAvailableLesson(data);
   }
-
   
   useEffect(() => {
     const contentType = router.query.contentType;

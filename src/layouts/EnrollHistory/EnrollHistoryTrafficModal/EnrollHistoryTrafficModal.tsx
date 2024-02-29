@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import { CourseTrafficTargetType } from 'src/staticDataDescElements/staticType';
 import { isAllowedType } from '@utils/isAllowedType';
 
+
 interface Props {
   open: boolean;
   handleClose: () => void;

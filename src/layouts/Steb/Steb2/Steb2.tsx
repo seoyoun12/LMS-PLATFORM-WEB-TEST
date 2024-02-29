@@ -184,6 +184,7 @@ export default function Steb2() {
       return snackbar({ variant: 'error', message: '회사명을 입력해주세요!' });
     }
 
+
     if (rest.carRegisteredRegion === '' || !rest.carRegisteredRegion) {
       setCurrentIndex(5);
       setPageIndex(5)

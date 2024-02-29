@@ -13,7 +13,7 @@ import { ConvertEnum } from "@utils/convertEnumToHangle";
 import { Box, Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
-import { cancelEnrollProvincial} from '@common/api/provincialEnroll';
+import { DeleteCourseInfoTrafficDetail } from "@common/api/adm/courseInfoTraffic";
 import { useSnackbar } from '@hooks/useSnackbar';
 
 
@@ -49,7 +49,7 @@ export function CourseInfomationTraffic() {
     const onClickDelete = async (enrollSeq:number) => {
       try {
         if(window.confirm('정말 취소하시겠습니까?')){
-          await cancelEnrollProvincial(enrollSeq);
+          await DeleteCourseInfoTrafficDetail(enrollSeq);
           snackbar({
             message: '취소가 완료되었습니다.',
             variant:'success'

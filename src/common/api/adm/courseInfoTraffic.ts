@@ -1,4 +1,4 @@
-import { GET, PUT } from '@common/httpClient';
+import { DELETE, GET, PUT } from '@common/httpClient';
 import useSWR, { SWRResponse } from 'swr';
 import { PaginationResult } from 'types/fetch';
 import {
@@ -75,6 +75,10 @@ export function getCourseInfoTrafficDetail(enrollSeq: number) {
   return GET<{ data: ProvincialEnrollResponseDto }>(
     `/provincial/enroll/adm/${enrollSeq}`
   );
+}
+
+export function DeleteCourseInfoTrafficDetail(enrollSeq: number) {
+  return DELETE(`/provincial/enroll/adm/${enrollSeq}`);
 }
 
 export function updateCourseInfoTrafficDetail({

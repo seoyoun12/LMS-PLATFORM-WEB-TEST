@@ -49,8 +49,7 @@ export function CourseInfomationTraffic() {
     const onClickDelete = async (enrollSeq:number) => {
       try {
         if(window.confirm('정말 취소하시겠습니까?')){
-          console.log('enrollSeq : '+enrollSeq)
-          //await cancelEnrollProvincial(enrollSeq);
+          await cancelEnrollProvincial(enrollSeq);
           snackbar({
             message: '취소가 완료되었습니다.',
             variant:'success'
@@ -58,7 +57,7 @@ export function CourseInfomationTraffic() {
           navigation.push('/admin-center/course-info-traffic');
         }
       } catch (error) {
-        snackbar({
+        snackbar({ 
           message: '취소에 실패했습니다.',
           variant:'error'
         })  

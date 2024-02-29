@@ -25,14 +25,13 @@ export function CourseInfomationTraffic() {
   
   const [editTarget, setEditTarget] = useState(false);
   const navigation = useRouter();
-  const { detailCourseInfo, updateAplicantCourseInfo } = useDominDetailCourse({courseUserSeq: navigation?.query?.enrollSeq as string});
+  const { detailCourseInfo, updateAplicantCourseInfo } = useDominDetailCourse({courseUserSeq: navigation?.query?.enrollSeq as string})
   const { value: courseSubType,setValue:setCourseSubType, onChange: onChangeCourseSubType } = useNewInput({initialValue: detailCourseInfo?.userProvincialCourseInfoDetailCourseInfoDto?.eduTargetSub,type:'string'});
   const [courseAudientCount, setCourseAudientCount] = useState<CourseAudientCount>({});
   const [enrollSeq, setEnrollSeq] = useState<string>('');
   const snackbar = useSnackbar();
 
 
-  //수정
   const onClickEdit = async() => {
     setEditTarget(prev => !prev);
     if(editTarget) {
@@ -45,26 +44,27 @@ export function CourseInfomationTraffic() {
     }
   }
 
-  //교육 취소
+    //교육 취소
 
-  const onClickDelete = async (enrollSeq:number) => {
-    try {
-      if(window.confirm('정말 취소하시겠습니까?')){
-        await cancelEnrollProvincial(enrollSeq);
+    const onClickDelete = async (enrollSeq:number) => {
+      try {
+        if(window.confirm('정말 취소하시겠습니까?')){
+          console.log(enrollSeq)
+          //await cancelEnrollProvincial(enrollSeq);
+          snackbar({
+            message: '취소가 완료되었습니다.',
+            variant:'success'
+          })
+          navigation.push('/admin-center/course-traffic');
+        }
+      } catch (error) {
         snackbar({
-          message: '취소가 완료되었습니다.',
-          variant:'success'
-        })
-        navigation.push('/admin-center/course-traffic');
-      }
-    } catch (error) {
-      snackbar({
-        message: '취소에 실패했습니다.',
-        variant:'error'
-      })  
-    } 
-  }
-  
+          message: '취소에 실패했습니다.',
+          variant:'error'
+        })  
+      } 
+    }
+    
 
   const onChangeCourseAudientCount = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -73,7 +73,7 @@ export function CourseInfomationTraffic() {
   
   
   useEffect(() => {
-  if(!detailCourseInfo) return;
+   if(!detailCourseInfo) return;
     
     const { userProvincialCourseInfoDetailCourseInfoDto } = detailCourseInfo;
     
@@ -173,7 +173,7 @@ export function CourseInfomationTraffic() {
         </Button>
         <Button
           variant={editTarget ? "contained" : "outlined"}
-          onClick={()=>onClickDelete}
+          onClick={()=>onClickDelete()}
           sx={{margin:'0 5px'}}>
           교육취소
         </Button>
@@ -300,4 +300,3 @@ export const OutRow = styled(Row)`
   height: 48px;
   
 `;
-

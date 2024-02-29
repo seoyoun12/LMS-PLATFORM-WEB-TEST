@@ -1,4 +1,4 @@
-import { GET, POST, PUT, DELETE } from '@common/httpClient'
+import { GET, POST, PUT,DELETE } from '@common/httpClient'
 import useSWR, { SWRResponse } from 'swr'
 import { MainType, SubType } from './useDominCourse'
 import { useSnackbar } from './useSnackbar'
@@ -111,8 +111,23 @@ export default function useDominDetailCourse({courseUserSeq}:Props) {
       });
     }
   }
-
-
+/*
+  const updateCourseDelete= async (data: Partial<UpdateCourseInfoRequest>) => {
+    try {
+      await DELETE(`/provincial/enroll/${enrollSeq}`);
+      detailCourseInfoMutate();
+      snackBar({
+        message: '정보가 수정되었습니다.',
+        variant: 'success'
+      });
+    } catch (error) {
+      snackBar({
+        message: '정보 수정에 실패하였습니다.',
+        variant: 'error'
+      });
+    }
+  }
+*/
 
   // 이수처리 취소
   const updateCompletedLessonToCancel = async (courseProgressSeq: number) => {
@@ -192,7 +207,6 @@ export default function useDominDetailCourse({courseUserSeq}:Props) {
       updateCompletedLessonToCancel,
       updateIncompletedLessonToComplete,
       updateAllCompletedLessonToCancel,
-      updateAllIncompletedLessonToComplete,
-      
+      updateAllIncompletedLessonToComplete
     }
 }

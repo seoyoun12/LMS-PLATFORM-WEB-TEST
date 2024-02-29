@@ -49,7 +49,7 @@ export function CourseInfomationTraffic() {
     const onClickDelete = async (enrollSeq:number) => {
       try {
         if(window.confirm('정말 취소하시겠습니까?')){
-          console.log(enrollSeq)
+          console.log('enrollSeq : '+enrollSeq)
           //await cancelEnrollProvincial(enrollSeq);
           snackbar({
             message: '취소가 완료되었습니다.',
@@ -173,7 +173,7 @@ export function CourseInfomationTraffic() {
         </Button>
         <Button
           variant={editTarget ? "contained" : "outlined"}
-          onClick={()=>onClickDelete(enrollSeq)}
+          onClick={()=>onClickDelete(parseInt(enrollSeq))}
           sx={{margin:'0 5px'}}>
           교육취소
         </Button>

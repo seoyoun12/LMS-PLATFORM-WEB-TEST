@@ -49,6 +49,7 @@ export function CourseInfomationTraffic() {
     const onClickDelete = async (enrollSeq:number) => {
       try {
         if(window.confirm('정말 취소하시겠습니까?')){
+          setEnrollSeq(navigation.query.enrollSeq as string);
           console.log(enrollSeq)
           //await cancelEnrollProvincial(enrollSeq);
           snackbar({
@@ -173,7 +174,7 @@ export function CourseInfomationTraffic() {
         </Button>
         <Button
           variant={editTarget ? "contained" : "outlined"}
-          onClick={()=>onClickDelete()}
+          onClick={()=>onClickDelete(enrollSeq)}
           sx={{margin:'0 5px'}}>
           교육취소
         </Button>
